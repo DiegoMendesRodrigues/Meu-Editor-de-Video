@@ -1,0 +1,14 @@
+{
+  "$comment": "Dependências nativas fixadas (RNF014). Alterar versão exige atualizar URL, sha256 e documentation/DEPENDENCIAS.md.",
+  "dependencies": [
+    {
+      "name": "ffmpeg",
+      "version": "9.0.2",
+      "license": "GPL-3.0-or-later (full_build: inclui x264, x265, libvpx, SVT-AV1, LAME, Opus etc.)",
+      "url": "https://github.com/GyanD/codexffmpeg/releases/download/9.0.2/ffmpeg-9.0.2-full_build-shared.zip",
+      "sha256": "8d31e162f1616e37aab3fa2db991b97e1b8dbeb1c8465fd81a81be16ff91b328",
+      "extractSubdir": "ffmpeg-9.0.2-full_build-shared",
+      "target": "deps/ffmpeg"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>MeuEditorDeVideo</AssemblyName>
+    <RootNamespace>MeuEditorDeVideo.App</RootNamespace>
+    <ApplicationIcon>Assets\icone.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\**\*.png" />  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MeuEditorDeVideo.Application\MeuEditorDeVideo.Application.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.Infrastructure\MeuEditorDeVideo.Infrastructure.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.ProjectEngine\MeuEditorDeVideo.ProjectEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.MediaEngine\MeuEditorDeVideo.MediaEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.TimelineEngine\MeuEditorDeVideo.TimelineEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.ImageEngine\MeuEditorDeVideo.ImageEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.AudioEngine\MeuEditorDeVideo.AudioEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.AIEngine\MeuEditorDeVideo.AIEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.RenderingEngine\MeuEditorDeVideo.RenderingEngine.csproj" />
+  </ItemGroup>
+</Project>

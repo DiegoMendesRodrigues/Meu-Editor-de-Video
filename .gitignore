@@ -1,0 +1,22 @@
+# Build
+bin/
+obj/
+*.user
+*.suo
+.vs/
+TestResults/
+*.binlog
+
+# Dependências nativas baixadas por scripts/fetch-deps.ps1 (verificadas por hash)
+/deps/
+
+# Modelos de IA (distribuídos como pacotes .medmodel separados)
+/resources/ai-models/**/*.onnx
+/resources/ai-models/**/*.bin
+*.medmodel
+
+# Mídias de teste geradas
+/tests/media-samples/
+
+# Claude Code (configuração local pessoal)
+.claude/settings.local.json

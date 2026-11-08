@@ -1,0 +1,19 @@
+﻿<Application x:Class="MeuEditorDeVideo.App.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             ThemeMode="Dark"
+             ShutdownMode="OnMainWindowClose">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Paleta substituída em tempo de execução pelo ThemeService (Palette.Dark/Palette.Light), localizada pelo nome -->
+                <ResourceDictionary Source="Themes/Palette.Dark.xaml" />
+                <ResourceDictionary Source="Themes/Styles.xaml" />
+                <ResourceDictionary Source="Resources/Strings/Common.xaml" />
+                <ResourceDictionary Source="Resources/Strings/Home.xaml" />
+                <ResourceDictionary Source="Resources/Strings/Editor.xaml" />
+                <ResourceDictionary Source="Views/ViewMappings.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

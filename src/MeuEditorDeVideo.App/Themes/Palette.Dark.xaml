@@ -1,0 +1,21 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Paleta escura (baseada nos protótipos). Use sempre via DynamicResource. -->
+    <SolidColorBrush x:Key="Med.Background" Color="#0B1220" />
+    <SolidColorBrush x:Key="Med.Panel" Color="#121A2B" />
+    <SolidColorBrush x:Key="Med.PanelAlt" Color="#18223A" />
+    <SolidColorBrush x:Key="Med.PanelHover" Color="#1F2B47" />
+    <SolidColorBrush x:Key="Med.Border" Color="#26324D" />
+    <SolidColorBrush x:Key="Med.Text" Color="#E8EDF7" />
+    <SolidColorBrush x:Key="Med.TextMuted" Color="#8C99B3" />
+    <SolidColorBrush x:Key="Med.Accent" Color="#1E7BFF" />
+    <SolidColorBrush x:Key="Med.AccentHover" Color="#3D8EFF" />
+    <SolidColorBrush x:Key="Med.OnAccent" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Med.MonitorBackground" Color="#000000" />
+    <SolidColorBrush x:Key="Med.Playhead" Color="#3D9BFF" />
+    <SolidColorBrush x:Key="Med.ClipVideo" Color="#2F6FE0" />
+    <SolidColorBrush x:Key="Med.ClipImage" Color="#2E9E5B" />
+    <SolidColorBrush x:Key="Med.ClipAudio" Color="#6A3FD1" />
+    <SolidColorBrush x:Key="Med.ClipText" Color="#7B4FE0" />
+    <SolidColorBrush x:Key="Med.Danger" Color="#F0525F" />
+</ResourceDictionary>

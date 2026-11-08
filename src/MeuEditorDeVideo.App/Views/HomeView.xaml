@@ -1,0 +1,173 @@
+<UserControl x:Class="MeuEditorDeVideo.App.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+
+    <Grid Background="{DynamicResource Med.Background}">
+        <Grid HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Width="960"
+              Margin="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320" />
+                <ColumnDefinition Width="32" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Coluna esquerda: marca e ações principais -->
+            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                <Image Source="/Assets/logo-256.png"
+                       Width="120"
+                       Height="120"
+                       HorizontalAlignment="Left"
+                       Stretch="Uniform"
+                       AutomationProperties.Name="{StaticResource Home.Logotipo}" />
+
+                <TextBlock Text="{StaticResource Home.Titulo}"
+                           FontSize="32"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource Med.Text}"
+                           TextWrapping="Wrap"
+                           Margin="0,16,0,4" />
+
+                <TextBlock Text="{StaticResource Home.Slogan}"
+                           Style="{StaticResource Med.MutedText}"
+                           FontSize="16"
+                           Margin="0,0,0,32" />
+
+                <Button AutomationProperties.Name="{StaticResource Home.NovoProjeto}" Style="{StaticResource Med.AccentButton}"
+                        Height="44"
+                        HorizontalContentAlignment="Left"
+                        Margin="0,0,0,12"
+                        Command="{Binding NewProjectCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE710;" Margin="0,0,12,0" />
+                        <TextBlock Text="{StaticResource Home.NovoProjeto}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <Button AutomationProperties.Name="{StaticResource Home.AbrirProjeto}" Height="44"
+                        HorizontalContentAlignment="Left"
+                        Margin="0,0,0,12"
+                        Command="{Binding OpenProjectCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE8E5;" Margin="0,0,12,0" />
+                        <TextBlock Text="{StaticResource Home.AbrirProjeto}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <Button AutomationProperties.Name="{StaticResource Home.Configuracoes}" Height="44"
+                        HorizontalContentAlignment="Left"
+                        Command="{Binding OpenSettingsCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE713;" Margin="0,0,12,0" />
+                        <TextBlock Text="{StaticResource Home.Configuracoes}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <TextBlock Style="{StaticResource Med.MutedText}" Margin="0,32,0,0">
+                    <Run Text="{StaticResource Home.VersaoPrefixo}" /> <Run Text="{Binding Version, Mode=OneWay}" />
+                </TextBlock>
+            </StackPanel>
+
+            <!-- Coluna direita: aviso de recuperação e projetos recentes -->
+            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                <Border Style="{StaticResource Med.PanelBorder}"
+                        Padding="12"
+                        Margin="0,0,0,16"
+                        Visibility="{Binding HasRecoverableProject, Converter={StaticResource BoolToVis}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{StaticResource Home.ProjetoRecuperavel}"
+                                   Foreground="{DynamicResource Med.Text}"
+                                   VerticalAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <Button AutomationProperties.Name="{StaticResource Home.Recuperar}" Grid.Column="1"
+                                Content="{StaticResource Home.Recuperar}"
+                                IsEnabled="False"
+                                Margin="12,0,0,0"
+                                Padding="12,4" />
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource Med.PanelBorder}" Padding="16">
+                    <StackPanel>
+                        <TextBlock Text="{StaticResource Home.ProjetosRecentes}"
+                                   Style="{StaticResource Med.SectionTitle}"
+                                   Margin="0,0,0,12" />
+
+                        <ListBox ItemsSource="{Binding RecentProjects}"
+                                 MaxHeight="360"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="{DynamicResource Med.Text}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 Visibility="{Binding HasRecentProjects, Converter={StaticResource BoolToVis}}">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0,0,0,4" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Button AutomationProperties.Name="{Binding Name}" Style="{StaticResource Med.ToolbarButton}"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Stretch"
+                                            Padding="10,8"
+                                            Command="{Binding DataContext.OpenRecentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontWeight="Bold"
+                                                       Foreground="{DynamicResource Med.Text}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{Binding FullPath}"
+                                                       Style="{StaticResource Med.MutedText}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{StaticResource Home.ArquivoNaoEncontrado}"
+                                                       FontSize="12"
+                                                       Foreground="{DynamicResource Med.Danger}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Exists}" Value="False">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <TextBlock Text="{StaticResource Home.SemProjetosRecentes}"
+                                   TextWrapping="Wrap"
+                                   Margin="0,8,0,0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasRecentProjects}" Value="False">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

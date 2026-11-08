@@ -1,0 +1,86 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <!-- Textos pt-BR: Editor -->
+
+    <!-- Menu -->
+    <sys:String x:Key="Editor.Menu.Arquivo">_Arquivo</sys:String>
+    <sys:String x:Key="Editor.Menu.Editar">_Editar</sys:String>
+    <sys:String x:Key="Editor.Menu.Visualizar">_Visualizar</sys:String>
+    <sys:String x:Key="Editor.Menu.Projeto">_Projeto</sys:String>
+    <sys:String x:Key="Editor.Menu.Ferramentas">_Ferramentas</sys:String>
+    <sys:String x:Key="Editor.Menu.Ajuda">A_juda</sys:String>
+    <sys:String x:Key="Editor.Menu.Inicio">_Início</sys:String>
+    <sys:String x:Key="Editor.Menu.Abrir">_Abrir…</sys:String>
+    <sys:String x:Key="Editor.Menu.Salvar">_Salvar</sys:String>
+    <sys:String x:Key="Editor.Menu.Exportar">_Exportar…</sys:String>
+    <sys:String x:Key="Editor.Menu.Desfazer">_Desfazer</sys:String>
+    <sys:String x:Key="Editor.Menu.Refazer">_Refazer</sys:String>
+    <sys:String x:Key="Editor.Menu.AlternarTema">_Alternar tema claro/escuro</sys:String>
+
+    <!-- Barra de ações -->
+    <sys:String x:Key="Editor.Acao.Inicio">Início</sys:String>
+    <sys:String x:Key="Editor.Acao.Abrir">Abrir</sys:String>
+    <sys:String x:Key="Editor.Acao.Salvar">Salvar</sys:String>
+    <sys:String x:Key="Editor.Acao.Desfazer">Desfazer</sys:String>
+    <sys:String x:Key="Editor.Acao.Refazer">Refazer</sys:String>
+    <sys:String x:Key="Editor.Acao.ImportarMidia">Importar Mídia</sys:String>
+    <sys:String x:Key="Editor.Acao.Exportar">Exportar</sys:String>
+    <sys:String x:Key="Editor.Acao.AlternarTema">Alternar tema claro/escuro</sys:String>
+
+    <!-- Painel A: Biblioteca -->
+    <sys:String x:Key="Editor.Biblioteca.Midias">Biblioteca de Mídias</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Videos">Vídeos</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Imagens">Imagens</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Audios">Áudios</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.ElementosGraficos">Elementos Gráficos</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Textos">Textos</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Transicoes">Transições</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Efeitos">Efeitos</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Cor">Cor</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.IA">IA</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Pesquisar">Pesquisar…</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Vazia">Nenhuma mídia importada.</sys:String>
+
+    <!-- Painel B: Monitor -->
+    <sys:String x:Key="Editor.Monitor.PreVisualizacao">Pré-visualização</sys:String>
+    <sys:String x:Key="Editor.Monitor.IrInicio">Ir para o início</sys:String>
+    <sys:String x:Key="Editor.Monitor.Retroceder">Retroceder</sys:String>
+    <sys:String x:Key="Editor.Monitor.ReproduzirPausar">Reproduzir / pausar</sys:String>
+    <sys:String x:Key="Editor.Monitor.Avancar">Avançar</sys:String>
+    <sys:String x:Key="Editor.Monitor.IrFim">Ir para o fim</sys:String>
+    <sys:String x:Key="Editor.Monitor.Volume">Volume</sys:String>
+    <sys:String x:Key="Editor.Monitor.TelaCheia">Tela cheia</sys:String>
+
+    <!-- Painel C: Propriedades -->
+    <sys:String x:Key="Editor.Propriedades.Titulo">Propriedades</sys:String>
+    <sys:String x:Key="Editor.Propriedades.Video">Vídeo</sys:String>
+    <sys:String x:Key="Editor.Propriedades.Audio">Áudio</sys:String>
+    <sys:String x:Key="Editor.Propriedades.Efeitos">Efeitos</sys:String>
+    <sys:String x:Key="Editor.Propriedades.Selecione">Selecione um clipe na linha do tempo para editar suas propriedades.</sys:String>
+
+    <!-- Painel E: Ferramentas -->
+    <sys:String x:Key="Editor.Ferramenta.Selecao">Seleção</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Corte">Corte</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Divisao">Divisão</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Texto">Texto</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Mascara">Máscara</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Zoom">Zoom</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Movimentacao">Movimentação</sys:String>
+
+    <!-- Painel D: Linha do tempo -->
+    <sys:String x:Key="Editor.Timeline.Marca00">00:00:00</sys:String>
+    <sys:String x:Key="Editor.Timeline.Marca05">00:00:05</sys:String>
+    <sys:String x:Key="Editor.Timeline.Marca10">00:00:10</sys:String>
+    <sys:String x:Key="Editor.Timeline.Marca15">00:00:15</sys:String>
+    <sys:String x:Key="Editor.Timeline.Marca20">00:00:20</sys:String>
+    <sys:String x:Key="Editor.Timeline.Marca25">00:00:25</sys:String>
+    <sys:String x:Key="Editor.Timeline.Marca30">00:00:30</sys:String>
+    <sys:String x:Key="Editor.Timeline.Video1">Vídeo 1</sys:String>
+    <sys:String x:Key="Editor.Timeline.Video2">Vídeo 2</sys:String>
+    <sys:String x:Key="Editor.Timeline.Audio1">Áudio 1</sys:String>
+    <sys:String x:Key="Editor.Timeline.Texto1">Texto 1</sys:String>
+    <sys:String x:Key="Editor.Timeline.Visivel">Mostrar/ocultar trilha</sys:String>
+    <sys:String x:Key="Editor.Timeline.Silenciar">Silenciar trilha</sys:String>
+    <sys:String x:Key="Editor.Timeline.Bloquear">Bloquear trilha</sys:String>
+</ResourceDictionary>

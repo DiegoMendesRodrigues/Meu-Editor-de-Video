@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MeuEditorDeVideo.Core\MeuEditorDeVideo.Core.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.TimelineEngine\MeuEditorDeVideo.TimelineEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.MediaEngine\MeuEditorDeVideo.MediaEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.ImageEngine\MeuEditorDeVideo.ImageEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.AudioEngine\MeuEditorDeVideo.AudioEngine.csproj" />
+  </ItemGroup>
+</Project>

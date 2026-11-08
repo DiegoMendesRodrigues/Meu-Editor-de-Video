@@ -1,0 +1,50 @@
+# Dependências e licenças
+
+Relação das dependências do **Meu Editor de Vídeo** (ENT018, RNF014, RNF020).
+O produto é licenciado sob **GPL-3.0-or-later** (arquivo `LICENSE`). Toda dependência deve ser compatível com GPL-3.0.
+
+Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scripts/deps.lock.json` (com SHA-256).
+
+## Pacotes NuGet (produto)
+
+| Pacote | Versão | Licença | Uso |
+|---|---|---|---|
+| CommunityToolkit.Mvvm | 8.4.2 | MIT | MVVM (ObservableProperty, RelayCommand) |
+| Microsoft.Extensions.Hosting | 10.0.14 | MIT | Injeção de dependências, ciclo de vida |
+| Serilog.Extensions.Hosting | 10.0.0 | Apache-2.0 | Integração de logs |
+| Serilog.Sinks.File | 7.0.0 | Apache-2.0 | Logs técnicos locais rotativos |
+
+## Pacotes NuGet (somente testes)
+
+| Pacote | Versão | Licença |
+|---|---|---|
+| xunit / xunit.runner.visualstudio | 2.9.3 / 3.1.4 | Apache-2.0 |
+| Microsoft.NET.Test.Sdk | 17.14.1 | MIT |
+| coverlet.collector | 6.0.4 | MIT |
+| NetArchTest.Rules | 1.3.2 | MIT |
+
+## Binários nativos
+
+| Componente | Versão | Licença | Origem | Observação |
+|---|---|---|---|---|
+| FFmpeg (full_build, shared) | 9.0.2 | GPL-3.0-or-later | github.com/GyanD/codexffmpeg | Inclui x264, x265, libvpx, SVT-AV1, LAME, Opus. SHA-256 no lock. Usado a partir da F2 via FFmpeg.AutoGen 9.0.x. |
+
+## Planejadas (ainda não adicionadas)
+
+| Componente | Versão candidata | Licença | Fase |
+|---|---|---|---|
+| FFmpeg.AutoGen | 9.0.1.1 | LGPL-3.0 | F2 |
+| Vortice.Direct3D11 / DXGI / D2D / DirectWrite | 3.8.x | MIT | F4 |
+| NAudio | 3.3.0 | MIT | F4/F7 |
+| OpenCvSharp4 + runtime Windows | 4.13.x | Apache-2.0 | F9 |
+| Microsoft.ML.OnnxRuntime.DirectML | 1.24.x | MIT | F10 |
+| Whisper.net | 1.9.x | MIT | F10 |
+| Svg.Skia | — | MIT | F9 |
+| WiX Toolset | — | MS-RL | F12 |
+
+## Procedimento de atualização
+
+1. Alterar a versão em `Directory.Packages.props` ou `scripts/deps.lock.json` (URL + apagar `sha256`).
+2. Executar `pwsh scripts/fetch-deps.ps1` (grava o novo hash) e conferir a origem.
+3. Rodar todos os testes.
+4. Atualizar esta tabela e registrar no commit o motivo da atualização.

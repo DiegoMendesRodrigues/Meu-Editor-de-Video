@@ -1,0 +1,17 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <!-- Textos pt-BR: Home -->
+    <sys:String x:Key="Home.Logotipo">Logotipo do Meu Editor de Vídeo</sys:String>
+    <sys:String x:Key="Home.Titulo">Meu Editor de Vídeo</sys:String>
+    <sys:String x:Key="Home.Slogan">Crie. Edite. Compartilhe.</sys:String>
+    <sys:String x:Key="Home.NovoProjeto">Novo Projeto</sys:String>
+    <sys:String x:Key="Home.AbrirProjeto">Abrir Projeto</sys:String>
+    <sys:String x:Key="Home.Configuracoes">Configurações</sys:String>
+    <sys:String x:Key="Home.VersaoPrefixo">Versão</sys:String>
+    <sys:String x:Key="Home.ProjetosRecentes">Projetos recentes</sys:String>
+    <sys:String x:Key="Home.ArquivoNaoEncontrado">Arquivo não encontrado</sys:String>
+    <sys:String x:Key="Home.SemProjetosRecentes">Nenhum projeto recente. Crie um novo projeto para começar.</sys:String>
+    <sys:String x:Key="Home.ProjetoRecuperavel">Há um projeto que pode ser recuperado.</sys:String>
+    <sys:String x:Key="Home.Recuperar">Recuperar</sys:String>
+</ResourceDictionary>

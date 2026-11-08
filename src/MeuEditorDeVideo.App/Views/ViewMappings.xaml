@@ -1,0 +1,12 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:MeuEditorDeVideo.App.ViewModels"
+                    xmlns:v="clr-namespace:MeuEditorDeVideo.App.Views">
+    <!-- Associação ViewModel → View usada pela navegação -->
+    <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+        <v:HomeView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:EditorViewModel}">
+        <v:EditorView />
+    </DataTemplate>
+</ResourceDictionary>

@@ -1,0 +1,14 @@
+<Window x:Class="MeuEditorDeVideo.App.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:MeuEditorDeVideo.App.ViewModels"
+        x:Name="Root"
+        Title="{Binding Title}"
+        Icon="/Assets/logo-64.png"
+        Width="1440" Height="900"
+        MinWidth="1100" MinHeight="680"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Background="{DynamicResource Med.Background}">
+    <ContentControl Content="{Binding CurrentPage}" Focusable="False" />
+</Window>
