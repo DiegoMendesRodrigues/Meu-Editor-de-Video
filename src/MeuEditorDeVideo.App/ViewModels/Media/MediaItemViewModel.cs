@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -43,6 +43,9 @@ public sealed partial class MediaItemViewModel : ObservableObject
     public partial bool PreviewFailed { get; set; }
 
     public bool PreviewRequested { get; set; }
+
+    /// <summary>Picos de áudio completos (linha do tempo desenha o trecho usado por cada clipe).</summary>
+    public WaveformData? Peaks { get; private set; }
 
     public Guid Id => Asset.Id;
     public string Name => Asset.Name;
@@ -117,7 +120,12 @@ public sealed partial class MediaItemViewModel : ObservableObject
             Thumbnail = bmp;
         }
 
-        if (waveform is { Count: > 0 }) Waveform = BuildWaveform(waveform);
+        if (waveform is { Count: > 0 })
+        {
+            Peaks = waveform;
+            // Na biblioteca só arquivos de áudio exibem a forma de onda; vídeos mostram a miniatura.
+            if (Asset.Kind == MediaKind.Audio) Waveform = BuildWaveform(waveform);
+        }
         PreviewFailed = image is null && waveform is null;
     }
 

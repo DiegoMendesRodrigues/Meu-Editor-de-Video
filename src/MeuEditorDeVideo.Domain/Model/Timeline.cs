@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using MeuEditorDeVideo.Domain.Time;
 
 namespace MeuEditorDeVideo.Domain.Model;
@@ -54,6 +54,12 @@ public sealed record Clip
     public Transform Transform { get; init; } = Transform.Identity;
     public Guid? GroupId { get; init; }
 
+    /// <summary>
+    /// Clipes com o mesmo LinkId (ex.: vídeo e áudio da mesma mídia) são movidos, aparados e divididos juntos,
+    /// preservando a sincronização (RF059, RF064).
+    /// </summary>
+    public Guid? LinkId { get; init; }
+
     /// <summary>Conteúdo textual (clipes de texto/legenda).</summary>
     public string? Text { get; init; }
 
@@ -72,6 +78,9 @@ public sealed record Track
     public bool IsHidden { get; init; }
     public bool IsMuted { get; init; }
     public ImmutableList<Clip> Clips { get; init; } = [];
+
+    /// <summary>Tipos de trilha que exibem imagem (vídeo, imagens, textos, legendas, efeitos).</summary>
+    public bool IsVisual => Kind != TrackKind.Audio;
 }
 
 public sealed record Marker

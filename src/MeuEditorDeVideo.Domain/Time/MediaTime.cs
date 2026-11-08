@@ -13,6 +13,7 @@ public readonly record struct MediaTime(long Ticks) : IComparable<MediaTime>
 
     public static readonly MediaTime Zero = new(0);
     public static readonly MediaTime MaxValue = new(long.MaxValue);
+    public static readonly MediaTime MinValue = new(long.MinValue);
 
     public static MediaTime FromSeconds(long seconds) => new(checked(seconds * TicksPerSecond));
 

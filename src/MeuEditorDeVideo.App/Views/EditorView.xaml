@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:MeuEditorDeVideo.App.ViewModels"
              xmlns:media="clr-namespace:MeuEditorDeVideo.App.ViewModels.Media"
+             xmlns:tl="clr-namespace:MeuEditorDeVideo.App.ViewModels.Timeline"
+             xmlns:ctl="clr-namespace:MeuEditorDeVideo.App.Controls"
+             xmlns:model="clr-namespace:MeuEditorDeVideo.Domain.Model;assembly=MeuEditorDeVideo.Domain"
              Background="{DynamicResource Med.Background}"
              Foreground="{DynamicResource Med.Text}">
     <UserControl.InputBindings>
@@ -31,6 +34,57 @@
 
         <Style x:Key="Editor.Icone" TargetType="TextBlock" BasedOn="{StaticResource Med.Icon}">
             <Setter Property="FontSize" Value="14" />
+        </Style>
+
+        <BooleanToVisibilityConverter x:Key="Editor.BoolVisivel" />
+
+        <!-- Botão alternável da barra da linha do tempo (ímã, ripple) -->
+        <Style x:Key="Editor.Alternar" TargetType="ToggleButton">
+            <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="7,4" />
+            <Setter Property="Margin" Value="1,0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="Fundo" Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Fundo" Property="Background" Value="{DynamicResource Med.PanelHover}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Fundo" Property="Background" Value="{DynamicResource Med.Accent}" />
+                                <Setter Property="Foreground" Value="{DynamicResource Med.OnAccent}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Botões pequenos dos cabeçalhos de trilha -->
+        <Style x:Key="Editor.TrilhaBotao" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Fundo" Background="{TemplateBinding Background}" CornerRadius="3" Width="24" Height="22">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Fundo" Property="Background" Value="{DynamicResource Med.PanelHover}" />
+                                <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!-- Navegação vertical do painel A -->
@@ -476,6 +530,9 @@
                             <Grid>
                                 <ListBox ItemsSource="{Binding Library.ItemsView}"
                                          PreviewMouseRightButtonDown="Biblioteca_PreviewMouseRightButtonDown"
+                                         PreviewMouseLeftButtonDown="Biblioteca_PreviewMouseLeftButtonDown"
+                                         PreviewMouseMove="Biblioteca_PreviewMouseMove"
+                                         MouseDoubleClick="Biblioteca_MouseDoubleClick"
                                          SelectedItem="{Binding Library.SelectedItem}"
                                          AutomationProperties.Name="{StaticResource Editor.Biblioteca.Midias}"
                                          Background="Transparent" BorderThickness="0"
@@ -488,6 +545,9 @@
                                     </ListBox.InputBindings>
                                     <ListBox.ContextMenu>
                                         <ContextMenu>
+                                            <MenuItem Header="{StaticResource Editor.Ferramenta.AdicionarMidia}"
+                                                      Command="{Binding PlacementTarget.DataContext.Timeline.AddSelectedMediaCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                            <Separator />
                                             <MenuItem Header="{StaticResource Editor.Biblioteca.Renomear}"
                                                       Command="{Binding PlacementTarget.DataContext.Library.RenameSelectedCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                                             <MenuItem Header="{StaticResource Editor.Biblioteca.DefinirCategoria}"
@@ -671,19 +731,19 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.IrInicio}" Style="{StaticResource Editor.Controle}" IsEnabled="False" ToolTip="{StaticResource Editor.Monitor.IrInicio}">
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.IrInicio}" Style="{StaticResource Editor.Controle}" Command="{Binding Timeline.GoToStartCommand}" ToolTip="{StaticResource Editor.Monitor.IrInicio}">
                                 <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE892;" />
                             </Button>
-                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.Retroceder}" Style="{StaticResource Editor.Controle}" IsEnabled="False" ToolTip="{StaticResource Editor.Monitor.Retroceder}">
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.Retroceder}" Style="{StaticResource Editor.Controle}" Command="{Binding Timeline.StepBackCommand}" ToolTip="{StaticResource Editor.Monitor.Retroceder}">
                                 <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xEB9E;" />
                             </Button>
                             <Button AutomationProperties.Name="{StaticResource Editor.Monitor.ReproduzirPausar}" Style="{StaticResource Editor.Controle}" Command="{Binding PlayPauseCommand}" ToolTip="{StaticResource Editor.Monitor.ReproduzirPausar}">
                                 <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE768;" />
                             </Button>
-                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.Avancar}" Style="{StaticResource Editor.Controle}" IsEnabled="False" ToolTip="{StaticResource Editor.Monitor.Avancar}">
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.Avancar}" Style="{StaticResource Editor.Controle}" Command="{Binding Timeline.StepForwardCommand}" ToolTip="{StaticResource Editor.Monitor.Avancar}">
                                 <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xEB9D;" />
                             </Button>
-                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.IrFim}" Style="{StaticResource Editor.Controle}" IsEnabled="False" ToolTip="{StaticResource Editor.Monitor.IrFim}">
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.IrFim}" Style="{StaticResource Editor.Controle}" Command="{Binding Timeline.GoToEndCommand}" ToolTip="{StaticResource Editor.Monitor.IrFim}">
                                 <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE893;" />
                             </Button>
 
@@ -694,7 +754,7 @@
                                     ToolTipService.ShowOnDisabled="True" />
                         </StackPanel>
 
-                        <TextBlock Grid.Column="1" Text="{Binding TimeDisplay}"
+                        <TextBlock Grid.Column="1" Text="{Binding Timeline.TimeDisplay}"
                                    FontFamily="Consolas" FontSize="13"
                                    Foreground="{DynamicResource Med.Text}"
                                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8,0" />
@@ -840,143 +900,201 @@
                 <RowDefinition Height="*" MinHeight="160" />
             </Grid.RowDefinitions>
 
-            <!-- Painel E: Ferramentas -->
+            <!-- Painel E: Ferramentas da linha do tempo -->
             <Border Grid.Row="0" Style="{StaticResource Med.PanelBorder}" Height="40" Margin="4,4,4,0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
-                    <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Selecao}" Style="{StaticResource Editor.Controle}" IsEnabled="False" ToolTip="{StaticResource Editor.Ferramenta.Selecao}">
-                        <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE8B0;" />
-                    </Button>
-                    <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Corte}" Style="{StaticResource Editor.Controle}" IsEnabled="False" ToolTip="{StaticResource Editor.Ferramenta.Corte}">
-                        <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE8C6;" />
-                    </Button>
-                    <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Divisao}" Style="{StaticResource Editor.Controle}" IsEnabled="False" ToolTip="{StaticResource Editor.Ferramenta.Divisao}">
-                        <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE8C6;" />
-                    </Button>
-                    <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Texto}" Style="{StaticResource Editor.Controle}" IsEnabled="False" ToolTip="{StaticResource Editor.Ferramenta.Texto}">
-                        <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE8D2;" />
-                    </Button>
-                    <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Mascara}" Style="{StaticResource Editor.Controle}" IsEnabled="False" ToolTip="{StaticResource Editor.Ferramenta.Mascara}">
-                        <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE7B3;" />
-                    </Button>
-                    <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Zoom}" Style="{StaticResource Editor.Controle}" IsEnabled="False" ToolTip="{StaticResource Editor.Ferramenta.Zoom}">
-                        <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE71E;" />
-                    </Button>
-                    <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Movimentacao}" Style="{StaticResource Editor.Controle}" IsEnabled="False" ToolTip="{StaticResource Editor.Ferramenta.Movimentacao}">
-                        <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE7C2;" />
-                    </Button>
-                </StackPanel>
+                <Grid Margin="8,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.AdicionarMidia}" Style="{StaticResource Editor.Controle}"
+                                Command="{Binding Timeline.AddSelectedMediaCommand}" ToolTip="{StaticResource Editor.Ferramenta.AdicionarMidia}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE710;" />
+                        </Button>
+                        <Button x:Name="BotaoAdicionarTrilha" AutomationProperties.Name="{StaticResource Editor.Ferramenta.AdicionarTrilha}" Style="{StaticResource Editor.Controle}"
+                                IsEnabled="{Binding Timeline.HasSession}" Click="AdicionarTrilha_Click" ToolTip="{StaticResource Editor.Ferramenta.AdicionarTrilha}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE8A5;" />
+                                <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE70D;" FontSize="9" Margin="3,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaVideo}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Video}" />
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaAudio}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Audio}" />
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaImagem}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Image}" />
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaTexto}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Text}" />
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaLegenda}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Subtitle}" />
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaEfeitos}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Effect}" />
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+                        <Rectangle Width="1" Height="20" Margin="6,0" Fill="{DynamicResource Med.Border}" />
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Dividir}" Style="{StaticResource Editor.Controle}"
+                                Command="{Binding Timeline.SplitCommand}" ToolTip="{StaticResource Editor.Ferramenta.Dividir}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE8C6;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Excluir}" Style="{StaticResource Editor.Controle}"
+                                Command="{Binding Timeline.DeleteCommand}" ToolTip="{StaticResource Editor.Ferramenta.Excluir}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE74D;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.ExcluirRipple}" Style="{StaticResource Editor.Controle}"
+                                Command="{Binding Timeline.RippleDeleteCommand}" ToolTip="{StaticResource Editor.Ferramenta.ExcluirRipple}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE8BB;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Marcador}" Style="{StaticResource Editor.Controle}"
+                                Command="{Binding Timeline.AddMarkerCommand}" ToolTip="{StaticResource Editor.Ferramenta.Marcador}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE7C1;" />
+                        </Button>
+                        <Rectangle Width="1" Height="20" Margin="6,0" Fill="{DynamicResource Med.Border}" />
+                        <ToggleButton AutomationProperties.Name="{StaticResource Editor.Ferramenta.Ima}" Style="{StaticResource Editor.Alternar}"
+                                      IsChecked="{Binding Timeline.SnapEnabled}" ToolTip="{StaticResource Editor.Ferramenta.Ima}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE71B;" />
+                        </ToggleButton>
+                        <ToggleButton AutomationProperties.Name="{StaticResource Editor.Ferramenta.Ripple}" Style="{StaticResource Editor.Alternar}"
+                                      IsChecked="{Binding Timeline.RippleEnabled}" ToolTip="{StaticResource Editor.Ferramenta.Ripple}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE8AB;" />
+                        </ToggleButton>
+                        <TextBlock Text="{Binding Timeline.SelectionSummary}" Style="{StaticResource Med.MutedText}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.AfastarZoom}" Style="{StaticResource Editor.Controle}"
+                                Command="{Binding Timeline.ZoomOutCommand}" ToolTip="{StaticResource Editor.Ferramenta.AfastarZoom}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE71F;" />
+                        </Button>
+                        <Slider Width="140" Minimum="0" Maximum="100" VerticalAlignment="Center"
+                                AutomationProperties.Name="{StaticResource Editor.Ferramenta.Zoom}"
+                                Value="{Binding Timeline.ZoomSlider}" ToolTip="{Binding Timeline.ZoomLabel}" />
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.AproximarZoom}" Style="{StaticResource Editor.Controle}"
+                                Command="{Binding Timeline.ZoomInCommand}" ToolTip="{StaticResource Editor.Ferramenta.AproximarZoom}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE71E;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.AjustarZoom}" Style="{StaticResource Editor.Controle}"
+                                Command="{Binding Timeline.ZoomToFitCommand}" ToolTip="{StaticResource Editor.Ferramenta.AjustarZoom}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE9A6;" />
+                        </Button>
+                        <TextBlock Text="{Binding Timeline.ZoomLabel}" Style="{StaticResource Med.MutedText}" Width="64" Margin="6,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Grid>
             </Border>
 
-            <!-- Painel D: Linha do tempo (estrutura estática) -->
-            <Border Grid.Row="1" Style="{StaticResource Med.PanelBorder}" Margin="4">
+            <!-- Painel D: Linha do tempo -->
+            <Border Grid.Row="1" Style="{StaticResource Med.PanelBorder}" Margin="4" ClipToBounds="True">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="160" />
+                        <ColumnDefinition Width="176" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="28" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <!-- Régua -->
                     <Border Grid.Row="0" Grid.Column="0" Background="{DynamicResource Med.Panel}"
-                            BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,1,1" />
-                    <Border Grid.Row="0" Grid.Column="1" Background="{DynamicResource Med.Panel}"
-                            BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,0,1">
-                        <UniformGrid Columns="7">
-                            <TextBlock Text="{StaticResource Editor.Timeline.Marca00}" Style="{StaticResource Med.MutedText}" Margin="6,0,0,0" VerticalAlignment="Center" />
-                            <TextBlock Text="{StaticResource Editor.Timeline.Marca05}" Style="{StaticResource Med.MutedText}" Margin="6,0,0,0" VerticalAlignment="Center" />
-                            <TextBlock Text="{StaticResource Editor.Timeline.Marca10}" Style="{StaticResource Med.MutedText}" Margin="6,0,0,0" VerticalAlignment="Center" />
-                            <TextBlock Text="{StaticResource Editor.Timeline.Marca15}" Style="{StaticResource Med.MutedText}" Margin="6,0,0,0" VerticalAlignment="Center" />
-                            <TextBlock Text="{StaticResource Editor.Timeline.Marca20}" Style="{StaticResource Med.MutedText}" Margin="6,0,0,0" VerticalAlignment="Center" />
-                            <TextBlock Text="{StaticResource Editor.Timeline.Marca25}" Style="{StaticResource Med.MutedText}" Margin="6,0,0,0" VerticalAlignment="Center" />
-                            <TextBlock Text="{StaticResource Editor.Timeline.Marca30}" Style="{StaticResource Med.MutedText}" Margin="6,0,0,0" VerticalAlignment="Center" />
-                        </UniformGrid>
-                    </Border>
-
-                    <!-- Trilha 1: Vídeo 1 -->
-                    <Border Grid.Row="1" Grid.Column="0" Background="{DynamicResource Med.Panel}"
                             BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,1,1">
-                        <Grid Margin="8,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{StaticResource Editor.Timeline.Video1}" FontSize="12" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Style="{StaticResource Med.Icon}" Text="&#xE7B3;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Visivel}" />
-                            <TextBlock Grid.Column="2" Style="{StaticResource Med.Icon}" Text="&#xE767;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Silenciar}" />
-                            <TextBlock Grid.Column="3" Style="{StaticResource Med.Icon}" Text="&#xE72E;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Bloquear}" />
-                        </Grid>
+                        <TextBlock Text="{Binding Timeline.TimeDisplay}" FontFamily="Consolas" FontSize="11"
+                                   Foreground="{DynamicResource Med.TextMuted}" VerticalAlignment="Center" Margin="8,0" />
                     </Border>
-                    <Border Grid.Row="1" Grid.Column="1" Background="{DynamicResource Med.PanelAlt}"
-                            BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,0,1" />
 
-                    <!-- Trilha 2: Vídeo 2 -->
-                    <Border Grid.Row="2" Grid.Column="0" Background="{DynamicResource Med.Panel}"
-                            BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,1,1">
-                        <Grid Margin="8,0">
+                    <ctl:TimelineRuler x:Name="Regua" Grid.Row="0" Grid.Column="1" ViewModel="{Binding Timeline}"
+                                       AutomationProperties.Name="{StaticResource Editor.Timeline.Regua}">
+                        <ctl:TimelineRuler.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{StaticResource Editor.Timeline.RenomearMarcador}" Click="RenomearMarcador_Click" />
+                                <MenuItem Header="{StaticResource Editor.Timeline.RemoverMarcador}" Click="RemoverMarcador_Click" />
+                            </ContextMenu>
+                        </ctl:TimelineRuler.ContextMenu>
+                    </ctl:TimelineRuler>
+
+                    <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled" Focusable="False">
+                        <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="176" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{StaticResource Editor.Timeline.Video2}" FontSize="12" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Style="{StaticResource Med.Icon}" Text="&#xE7B3;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Visivel}" />
-                            <TextBlock Grid.Column="2" Style="{StaticResource Med.Icon}" Text="&#xE767;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Silenciar}" />
-                            <TextBlock Grid.Column="3" Style="{StaticResource Med.Icon}" Text="&#xE72E;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Bloquear}" />
-                        </Grid>
-                    </Border>
-                    <Border Grid.Row="2" Grid.Column="1" Background="{DynamicResource Med.PanelAlt}"
-                            BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,0,1" />
 
-                    <!-- Trilha 3: Áudio 1 -->
-                    <Border Grid.Row="3" Grid.Column="0" Background="{DynamicResource Med.Panel}"
-                            BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,1,1">
-                        <Grid Margin="8,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{StaticResource Editor.Timeline.Audio1}" FontSize="12" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Style="{StaticResource Med.Icon}" Text="&#xE7B3;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Visivel}" />
-                            <TextBlock Grid.Column="2" Style="{StaticResource Med.Icon}" Text="&#xE767;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Silenciar}" />
-                            <TextBlock Grid.Column="3" Style="{StaticResource Med.Icon}" Text="&#xE72E;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Bloquear}" />
-                        </Grid>
-                    </Border>
-                    <Border Grid.Row="3" Grid.Column="1" Background="{DynamicResource Med.PanelAlt}"
-                            BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,0,1" />
+                            <ItemsControl Grid.Column="0" ItemsSource="{Binding Timeline.Tracks}" Focusable="False"
+                                          AutomationProperties.Name="{StaticResource Editor.Timeline.Trilhas}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type tl:TrackHeaderViewModel}">
+                                        <Border Height="{Binding Height}" Background="{DynamicResource Med.Panel}"
+                                                BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,1,1"
+                                                AutomationProperties.Name="{Binding Name}">
+                                            <Border.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="{StaticResource Editor.Timeline.RenomearTrilha}" Command="{Binding RenameCommand}" />
+                                                    <MenuItem Header="{StaticResource Editor.Timeline.RemoverTrilha}" Command="{Binding RemoveCommand}" />
+                                                </ContextMenu>
+                                            </Border.ContextMenu>
+                                            <Grid Margin="6,0,2,0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Style="{StaticResource Med.Icon}" Text="{Binding KindGlyph}" FontSize="12"
+                                                           Foreground="{DynamicResource Med.TextMuted}" VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="12" Margin="6,0,2,0"
+                                                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                                <Button Grid.Column="2" Style="{StaticResource Editor.TrilhaBotao}" Command="{Binding ToggleHiddenCommand}"
+                                                        AutomationProperties.Name="{Binding HideToolTip}" ToolTip="{Binding HideToolTip}"
+                                                        Visibility="{Binding CanHide, Converter={StaticResource Editor.BoolVisivel}}">
+                                                    <TextBlock Style="{StaticResource Med.Icon}" Text="{Binding HideGlyph}" FontSize="12" />
+                                                </Button>
+                                                <Button Grid.Column="3" Style="{StaticResource Editor.TrilhaBotao}" Command="{Binding ToggleMutedCommand}"
+                                                        AutomationProperties.Name="{Binding MuteToolTip}" ToolTip="{Binding MuteToolTip}"
+                                                        Visibility="{Binding CanMute, Converter={StaticResource Editor.BoolVisivel}}">
+                                                    <TextBlock Style="{StaticResource Med.Icon}" Text="{Binding MuteGlyph}" FontSize="12" />
+                                                </Button>
+                                                <Button Grid.Column="4" Style="{StaticResource Editor.TrilhaBotao}" Command="{Binding ToggleLockCommand}"
+                                                        AutomationProperties.Name="{Binding LockToolTip}" ToolTip="{Binding LockToolTip}">
+                                                    <TextBlock Style="{StaticResource Med.Icon}" Text="{Binding LockGlyph}" FontSize="12" />
+                                                </Button>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
 
-                    <!-- Trilha 4: Texto 1 -->
-                    <Border Grid.Row="4" Grid.Column="0" Background="{DynamicResource Med.Panel}"
-                            BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,1,0">
-                        <Grid Margin="8,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{StaticResource Editor.Timeline.Texto1}" FontSize="12" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Style="{StaticResource Med.Icon}" Text="&#xE7B3;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Visivel}" />
-                            <TextBlock Grid.Column="2" Style="{StaticResource Med.Icon}" Text="&#xE767;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Silenciar}" />
-                            <TextBlock Grid.Column="3" Style="{StaticResource Med.Icon}" Text="&#xE72E;" FontSize="13" Margin="6,0" ToolTip="{StaticResource Editor.Timeline.Bloquear}" />
+                            <ctl:TimelineControl x:Name="LinhaDoTempo" Grid.Column="1" ViewModel="{Binding Timeline}"
+                                                 Height="{Binding Timeline.TracksHeight}" VerticalAlignment="Top"
+                                                 AutomationProperties.Name="{StaticResource Editor.Timeline.Nome}">
+                                <ctl:TimelineControl.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Dividir}" InputGestureText="S" Command="{Binding Timeline.SplitCommand}" />
+                                        <Separator />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Recortar}" InputGestureText="Ctrl+X" Command="{Binding Timeline.CutCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Copiar}" InputGestureText="Ctrl+C" Command="{Binding Timeline.CopyCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Colar}" InputGestureText="Ctrl+V" Command="{Binding Timeline.PasteCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Duplicar}" InputGestureText="Ctrl+D" Command="{Binding Timeline.DuplicateCommand}" />
+                                        <Separator />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Velocidade}" Command="{Binding Timeline.SetSpeedCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Agrupar}" InputGestureText="Ctrl+G" Command="{Binding Timeline.GroupCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Desagrupar}" InputGestureText="Ctrl+Shift+G" Command="{Binding Timeline.UngroupCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Vincular}" Command="{Binding Timeline.LinkCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Desvincular}" Command="{Binding Timeline.UnlinkCommand}" />
+                                        <Separator />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.SelecionarTudo}" InputGestureText="Ctrl+A" Command="{Binding Timeline.SelectAllCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Excluir}" InputGestureText="Delete" Command="{Binding Timeline.DeleteCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.ExcluirRipple}" InputGestureText="Shift+Delete" Command="{Binding Timeline.RippleDeleteCommand}" />
+                                    </ContextMenu>
+                                </ctl:TimelineControl.ContextMenu>
+                            </ctl:TimelineControl>
                         </Grid>
-                    </Border>
-                    <Border Grid.Row="4" Grid.Column="1" Background="{DynamicResource Med.PanelAlt}" />
+                    </ScrollViewer>
 
-                    <!-- Cursor (playhead) em x=0 da área de trilhas -->
-                    <Rectangle Grid.Row="0" Grid.RowSpan="5" Grid.Column="1" Width="2"
-                               HorizontalAlignment="Left" Fill="{DynamicResource Med.Playhead}"
-                               IsHitTestVisible="False" />
+                    <ScrollBar Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Minimum="0"
+                               AutomationProperties.Name="{StaticResource Editor.Timeline.Rolagem}"
+                               Maximum="{Binding Timeline.MaxHorizontalOffset, Mode=OneWay}"
+                               ViewportSize="{Binding Timeline.ViewportWidth, Mode=OneWay}"
+                               LargeChange="{Binding Timeline.ViewportWidth, Mode=OneWay}" SmallChange="40"
+                               Value="{Binding Timeline.HorizontalOffset}" />
                 </Grid>
             </Border>
         </Grid>

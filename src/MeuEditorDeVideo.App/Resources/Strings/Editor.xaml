@@ -82,28 +82,46 @@
     <sys:String x:Key="Editor.Propriedades.Efeitos">Efeitos</sys:String>
     <sys:String x:Key="Editor.Propriedades.Selecione">Selecione um clipe na linha do tempo para editar suas propriedades.</sys:String>
 
-    <!-- Painel E: Ferramentas -->
-    <sys:String x:Key="Editor.Ferramenta.Selecao">Seleção</sys:String>
-    <sys:String x:Key="Editor.Ferramenta.Corte">Corte</sys:String>
-    <sys:String x:Key="Editor.Ferramenta.Divisao">Divisão</sys:String>
-    <sys:String x:Key="Editor.Ferramenta.Texto">Texto</sys:String>
-    <sys:String x:Key="Editor.Ferramenta.Mascara">Máscara</sys:String>
-    <sys:String x:Key="Editor.Ferramenta.Zoom">Zoom</sys:String>
-    <sys:String x:Key="Editor.Ferramenta.Movimentacao">Movimentação</sys:String>
+    <!-- Painel E: Ferramentas da linha do tempo -->
+    <sys:String x:Key="Editor.Ferramenta.Dividir">Dividir no cursor (S)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Excluir">Excluir seleção (Delete)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.ExcluirRipple">Excluir e fechar espaço (Shift+Delete)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Ima">Ímã de alinhamento (N)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Ripple">Edição em cascata (ripple)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Marcador">Adicionar marcador (M)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.AdicionarTrilha">Adicionar trilha</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.AdicionarMidia">Adicionar à linha do tempo</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.AfastarZoom">Afastar (Ctrl+−)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.AproximarZoom">Aproximar (Ctrl+=)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.AjustarZoom">Ajustar à janela (Shift+Z)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Zoom">Zoom da linha do tempo</sys:String>
 
     <!-- Painel D: Linha do tempo -->
-    <sys:String x:Key="Editor.Timeline.Marca00">00:00:00</sys:String>
-    <sys:String x:Key="Editor.Timeline.Marca05">00:00:05</sys:String>
-    <sys:String x:Key="Editor.Timeline.Marca10">00:00:10</sys:String>
-    <sys:String x:Key="Editor.Timeline.Marca15">00:00:15</sys:String>
-    <sys:String x:Key="Editor.Timeline.Marca20">00:00:20</sys:String>
-    <sys:String x:Key="Editor.Timeline.Marca25">00:00:25</sys:String>
-    <sys:String x:Key="Editor.Timeline.Marca30">00:00:30</sys:String>
-    <sys:String x:Key="Editor.Timeline.Video1">Vídeo 1</sys:String>
-    <sys:String x:Key="Editor.Timeline.Video2">Vídeo 2</sys:String>
-    <sys:String x:Key="Editor.Timeline.Audio1">Áudio 1</sys:String>
-    <sys:String x:Key="Editor.Timeline.Texto1">Texto 1</sys:String>
-    <sys:String x:Key="Editor.Timeline.Visivel">Mostrar/ocultar trilha</sys:String>
-    <sys:String x:Key="Editor.Timeline.Silenciar">Silenciar trilha</sys:String>
-    <sys:String x:Key="Editor.Timeline.Bloquear">Bloquear trilha</sys:String>
+    <sys:String x:Key="Editor.Timeline.Nome">Linha do tempo</sys:String>
+    <sys:String x:Key="Editor.Timeline.Regua">Régua de tempo</sys:String>
+    <sys:String x:Key="Editor.Timeline.Trilhas">Trilhas</sys:String>
+    <sys:String x:Key="Editor.Timeline.Rolagem">Rolagem horizontal da linha do tempo</sys:String>
+    <sys:String x:Key="Editor.Timeline.TrilhaVideo">Trilha de vídeo</sys:String>
+    <sys:String x:Key="Editor.Timeline.TrilhaAudio">Trilha de áudio</sys:String>
+    <sys:String x:Key="Editor.Timeline.TrilhaImagem">Trilha de imagem</sys:String>
+    <sys:String x:Key="Editor.Timeline.TrilhaTexto">Trilha de texto</sys:String>
+    <sys:String x:Key="Editor.Timeline.TrilhaLegenda">Trilha de legenda</sys:String>
+    <sys:String x:Key="Editor.Timeline.TrilhaEfeitos">Trilha de efeitos</sys:String>
+    <sys:String x:Key="Editor.Timeline.RenomearTrilha">Renomear trilha…</sys:String>
+    <sys:String x:Key="Editor.Timeline.RemoverTrilha">Remover trilha</sys:String>
+    <sys:String x:Key="Editor.Timeline.Dividir">Dividir</sys:String>
+    <sys:String x:Key="Editor.Timeline.Recortar">Recortar</sys:String>
+    <sys:String x:Key="Editor.Timeline.Copiar">Copiar</sys:String>
+    <sys:String x:Key="Editor.Timeline.Colar">Colar no cursor</sys:String>
+    <sys:String x:Key="Editor.Timeline.Duplicar">Duplicar</sys:String>
+    <sys:String x:Key="Editor.Timeline.Excluir">Excluir</sys:String>
+    <sys:String x:Key="Editor.Timeline.ExcluirRipple">Excluir e fechar espaço</sys:String>
+    <sys:String x:Key="Editor.Timeline.Velocidade">Velocidade…</sys:String>
+    <sys:String x:Key="Editor.Timeline.Agrupar">Agrupar</sys:String>
+    <sys:String x:Key="Editor.Timeline.Desagrupar">Desagrupar</sys:String>
+    <sys:String x:Key="Editor.Timeline.Vincular">Vincular áudio e vídeo</sys:String>
+    <sys:String x:Key="Editor.Timeline.Desvincular">Desvincular áudio e vídeo</sys:String>
+    <sys:String x:Key="Editor.Timeline.SelecionarTudo">Selecionar tudo</sys:String>
+    <sys:String x:Key="Editor.Timeline.RenomearMarcador">Renomear marcador…</sys:String>
+    <sys:String x:Key="Editor.Timeline.RemoverMarcador">Remover marcador</sys:String>
 </ResourceDictionary>

@@ -1,8 +1,9 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.App.ViewModels.Media;
+using MeuEditorDeVideo.App.ViewModels.Timeline;
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Domain.Editing;
@@ -44,6 +45,10 @@ public sealed partial class EditorViewModel(
     [ObservableProperty]
     public partial MediaLibraryViewModel? Library { get; set; }
 
+    /// <summary>Linha do tempo (painel D).</summary>
+    [ObservableProperty]
+    public partial TimelineViewModel? Timeline { get; set; }
+
     partial void OnSelectedSectionChanged(LibrarySection value)
     {
         if (Library is not null) Library.Filter = FilterFor(value);
@@ -70,10 +75,6 @@ public sealed partial class EditorViewModel(
     [ObservableProperty]
     public partial LibrarySection SelectedSection { get; set; } = LibrarySection.Media;
 
-    /// <summary>Texto do tempo atual / duração exibido no monitor.</summary>
-    [ObservableProperty]
-    public partial string TimeDisplay { get; set; } = "00:00:00:00 / 00:00:00:00";
-
     [ObservableProperty]
     public partial string UndoToolTip { get; set; } = "Desfazer (Ctrl+Z)";
 
@@ -95,6 +96,7 @@ public sealed partial class EditorViewModel(
     {
         Library = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<MediaLibraryViewModel>(services);
         Library.Filter = FilterFor(SelectedSection);
+        Timeline = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<TimelineViewModel>(services, Library);
         projects.SessionChanged += OnSessionChanged;
         projects.Saved += OnSaved;
         AttachSession();
@@ -107,6 +109,8 @@ public sealed partial class EditorViewModel(
         if (_session is not null) _session.History.Changed -= OnHistoryChanged;
         _session = null;
         shell.Title = AppInfo.ProductName;
+        Timeline?.Dispose();
+        Timeline = null;
         Library?.Dispose();
         Library = null;
     }

@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -70,6 +70,7 @@ public sealed partial class MediaLibraryViewModel : ObservableObject, IDisposabl
         _projects.SessionChanged += OnSessionChanged;
         Attach();
     }
+
 
     public ObservableCollection<MediaItemViewModel> Items { get; } = [];
 
@@ -244,9 +245,10 @@ public sealed partial class MediaLibraryViewModel : ObservableObject, IDisposabl
                 : MediaTime.Min(MediaTime.FromSeconds(1), new MediaTime(asset.Duration.Ticks / 10));
 
             var thumbTask = asset.HasVideo ? _thumbnails.GetThumbnailAsync(asset, path, at, ThumbnailWidth, _cts.Token) : Task.FromResult<BgraImage?>(null);
-            var waveTask = asset.Kind == MediaKind.Audio ? _waveforms.GetWaveformAsync(asset, path, _cts.Token) : Task.FromResult<WaveformData?>(null);
+            var waveTask = asset.HasAudio ? _waveforms.GetWaveformAsync(asset, path, _cts.Token) : Task.FromResult<WaveformData?>(null);
             await Task.WhenAll(thumbTask, waveTask);
             item.SetPreview(thumbTask.Result, waveTask.Result);
+            PreviewsChanged?.Invoke(this, EventArgs.Empty);
         }
         catch (OperationCanceledException)
         {
@@ -382,6 +384,11 @@ public sealed partial class MediaLibraryViewModel : ObservableObject, IDisposabl
             _dialogs.ShowInfo("Não foi possível concluir", ex.Message);
         }
     }
+
+    /// <summary>Miniaturas/formas de onda carregadas (a linha do tempo redesenha).</summary>
+    public event EventHandler? PreviewsChanged;
+
+    public MediaItemViewModel? Find(Guid assetId) => _byId.GetValueOrDefault(assetId);
 
     public void Dispose()
     {
