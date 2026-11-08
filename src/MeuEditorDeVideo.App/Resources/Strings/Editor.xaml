@@ -26,6 +26,8 @@
     <sys:String x:Key="Editor.Menu.Desfazer">_Desfazer</sys:String>
     <sys:String x:Key="Editor.Menu.Refazer">_Refazer</sys:String>
     <sys:String x:Key="Editor.Menu.AlternarTema">_Alternar tema claro/escuro</sys:String>
+    <sys:String x:Key="Editor.Menu.ImportarMidia">_Importar mídia…</sys:String>
+    <sys:String x:Key="Editor.Menu.ImportarSequencia">Importar _sequência de imagens…</sys:String>
 
     <!-- Barra de ações -->
     <sys:String x:Key="Editor.Acao.Inicio">Início</sys:String>
@@ -36,6 +38,7 @@
     <sys:String x:Key="Editor.Acao.ImportarMidia">Importar Mídia</sys:String>
     <sys:String x:Key="Editor.Acao.Exportar">Exportar</sys:String>
     <sys:String x:Key="Editor.Acao.AlternarTema">Alternar tema claro/escuro</sys:String>
+    <sys:String x:Key="Editor.Acao.ImportarSequencia">Importar sequência de imagens</sys:String>
 
     <!-- Painel A: Biblioteca -->
     <sys:String x:Key="Editor.Biblioteca.Midias">Biblioteca de Mídias</sys:String>
@@ -50,6 +53,15 @@
     <sys:String x:Key="Editor.Biblioteca.IA">IA</sys:String>
     <sys:String x:Key="Editor.Biblioteca.Pesquisar">Pesquisar…</sys:String>
     <sys:String x:Key="Editor.Biblioteca.Vazia">Nenhuma mídia importada.</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Categoria">Categoria</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Renomear">Renomear…</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.DefinirCategoria">Definir categoria…</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.RemoverCategoria">Remover categoria</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.RemoverDoProjeto">Remover do projeto</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.ArquivoNaoEncontrado">Arquivo não encontrado</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.SoltarParaImportar">Solte para importar</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.ProgressoImportacao">Progresso da importação</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.SecaoIndisponivel">Esta seção estará disponível em uma próxima versão.</sys:String>
 
     <!-- Painel B: Monitor -->
     <sys:String x:Key="Editor.Monitor.PreVisualizacao">Pré-visualização</sys:String>
@@ -63,6 +75,8 @@
 
     <!-- Painel C: Propriedades -->
     <sys:String x:Key="Editor.Propriedades.Titulo">Propriedades</sys:String>
+    <sys:String x:Key="Editor.Propriedades.Midia">Mídia</sys:String>
+    <sys:String x:Key="Editor.Propriedades.SelecioneMidia">Selecione uma mídia na biblioteca para ver as informações.</sys:String>
     <sys:String x:Key="Editor.Propriedades.Video">Vídeo</sys:String>
     <sys:String x:Key="Editor.Propriedades.Audio">Áudio</sys:String>
     <sys:String x:Key="Editor.Propriedades.Efeitos">Efeitos</sys:String>

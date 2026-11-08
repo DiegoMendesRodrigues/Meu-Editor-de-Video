@@ -11,6 +11,8 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 |---|---|---|---|
 | CommunityToolkit.Mvvm | 8.4.2 | MIT | MVVM (ObservableProperty, RelayCommand) |
 | Microsoft.Extensions.Hosting | 10.0.14 | MIT | Injeção de dependências, ciclo de vida |
+| Microsoft.Extensions.DependencyInjection.Abstractions / Logging.Abstractions | 10.0.14 | MIT | Contratos de DI e log nas bibliotecas |
+| FFmpeg.AutoGen | 9.0.1.1 | LGPL-3.0 | Binding .NET das bibliotecas do FFmpeg (MediaEngine) |
 | Serilog.Extensions.Hosting | 10.0.0 | Apache-2.0 | Integração de logs |
 | Serilog.Sinks.File | 7.0.0 | Apache-2.0 | Logs técnicos locais rotativos |
 
@@ -27,13 +29,12 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 
 | Componente | Versão | Licença | Origem | Observação |
 |---|---|---|---|---|
-| FFmpeg (full_build, shared) | 9.0.2 | GPL-3.0-or-later | github.com/GyanD/codexffmpeg | Inclui x264, x265, libvpx, SVT-AV1, LAME, Opus. SHA-256 no lock. Usado a partir da F2 via FFmpeg.AutoGen 9.0.x. |
+| FFmpeg (full_build, shared) | 9.0.2 | GPL-3.0-or-later | github.com/GyanD/codexffmpeg | Inclui x264, x265, libvpx, SVT-AV1, LAME, Opus. SHA-256 no lock. Carregado pelo MediaEngine via FFmpeg.AutoGen; as DLLs são copiadas para `ffmpeg\` ao lado do executável. |
 
 ## Planejadas (ainda não adicionadas)
 
 | Componente | Versão candidata | Licença | Fase |
 |---|---|---|---|
-| FFmpeg.AutoGen | 9.0.1.1 | LGPL-3.0 | F2 |
 | Vortice.Direct3D11 / DXGI / D2D / DirectWrite | 3.8.x | MIT | F4 |
 | NAudio | 3.3.0 | MIT | F4/F7 |
 | OpenCvSharp4 + runtime Windows | 4.13.x | Apache-2.0 | F9 |

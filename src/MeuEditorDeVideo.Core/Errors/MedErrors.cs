@@ -1,4 +1,4 @@
-namespace MeuEditorDeVideo.Core.Errors;
+﻿namespace MeuEditorDeVideo.Core.Errors;
 
 /// <summary>Catálogo de erros com mensagens em Português do Brasil (§7.4).</summary>
 public static class MedErrors
@@ -35,4 +35,11 @@ public static class MedErrors
 
     public static MedError FileInUse(string path, Exception cause) =>
         new("MED-1010", $"O arquivo está em uso por outro programa:\n{path}", cause);
+
+    public static MedError SequencePackagingUnsupported(string name) =>
+        new("MED-1011", $"A sequência de imagens \"{name}\" ainda não pode ser empacotada no projeto. Mantenha as mídias vinculadas.");
+
+    // 2xxx — mídia
+    public static MedError MediaEngineUnavailable(string detail) =>
+        new("MED-2001", $"O mecanismo de mídia (FFmpeg) não pôde ser carregado. Reinstale o aplicativo.\n\nDetalhe: {detail}");
 }

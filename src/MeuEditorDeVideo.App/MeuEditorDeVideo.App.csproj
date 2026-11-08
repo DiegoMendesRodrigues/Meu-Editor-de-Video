@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
@@ -15,7 +15,15 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\**\*.png" />  </ItemGroup>
+    <Resource Include="Assets\**\*.png" />
+  </ItemGroup>
+  <!-- Bibliotecas nativas do FFmpeg (baixadas por scripts\fetch-deps.ps1) copiadas para a pasta ffmpeg\ do aplicativo. -->
+  <PropertyGroup>
+    <FFmpegBinDir>$(MSBuildThisFileDirectory)..\..\deps\ffmpeg\bin\</FFmpegBinDir>
+  </PropertyGroup>
+  <ItemGroup Condition="Exists('$(FFmpegBinDir)')">
+    <None Include="$(FFmpegBinDir)*.dll" Link="ffmpeg\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MeuEditorDeVideo.Application\MeuEditorDeVideo.Application.csproj" />
     <ProjectReference Include="..\MeuEditorDeVideo.Infrastructure\MeuEditorDeVideo.Infrastructure.csproj" />

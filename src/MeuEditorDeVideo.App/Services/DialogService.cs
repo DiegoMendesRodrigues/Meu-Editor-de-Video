@@ -30,6 +30,12 @@ public interface IDialogService
 
     string? PickFolder(string title, string? initialDirectory);
 
+    /// <summary>Seleção de vários arquivos (RF026). Lista vazia se cancelado.</summary>
+    IReadOnlyList<string> PickFiles(string title, string filter, string? initialDirectory);
+
+    /// <summary>Pede um texto ao usuário. Retorna null se cancelado.</summary>
+    string? Prompt(string title, string label, string initialValue);
+
     /// <summary>Mostra uma janela modal sobre a janela principal. Retorna DialogResult.</summary>
     bool? ShowModal(Window dialog);
 }
@@ -90,6 +96,18 @@ public sealed class DialogService : IDialogService
     {
         var dlg = new OpenFolderDialog { Title = title, InitialDirectory = initialDirectory ?? "" };
         return dlg.ShowDialog(Owner) == true ? dlg.FolderName : null;
+    }
+
+    public IReadOnlyList<string> PickFiles(string title, string filter, string? initialDirectory)
+    {
+        var dlg = new OpenFileDialog { Title = title, Filter = filter, Multiselect = true, InitialDirectory = initialDirectory ?? "" };
+        return dlg.ShowDialog(Owner) == true ? dlg.FileNames : [];
+    }
+
+    public string? Prompt(string title, string label, string initialValue)
+    {
+        var dialog = new Views.Dialogs.PromptWindow(title, label, initialValue);
+        return ShowModal(dialog) == true ? dialog.Value : null;
     }
 
     public bool? ShowModal(Window dialog)

@@ -157,6 +157,8 @@ public sealed class MedProjectStore(IAppPaths paths, ILogger<MedProjectStore> lo
             string? entry = null;
             if (request.IncludeMedia)
             {
+                if (asset.Kind == MediaKind.ImageSequence)
+                    throw new MedException(MedErrors.SequencePackagingUnsupported(asset.Name));
                 if (!request.MediaSources.TryGetValue(asset.Id, out var source) || !File.Exists(source))
                     throw new MedException(MedErrors.MediaUnavailableForPackaging(asset.Name));
                 entry = MedLayout.MediaFolder(asset.Kind) + asset.Id.ToString("N") + Path.GetExtension(source).ToLowerInvariant();

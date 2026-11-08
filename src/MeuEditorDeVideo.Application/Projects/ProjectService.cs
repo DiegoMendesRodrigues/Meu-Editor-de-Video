@@ -44,6 +44,9 @@ public interface IProjectService
     /// <summary>Procura mídias ausentes numa pasta; retorna quantas foram relocalizadas.</summary>
     Task<int> RelinkFromFolderAsync(string folder, CancellationToken cancellationToken = default);
 
+    /// <summary>Recalcula a localização das mídias (após importar ou relocalizar).</summary>
+    Task RefreshMediaAsync(CancellationToken cancellationToken = default);
+
     Task CloseAsync();
 
     IReadOnlyList<RecoverableProject> FindRecoverable();
@@ -132,6 +135,8 @@ public sealed class ProjectService(
     public Task PackageMediaAsync(IProgress<double>? progress = null, CancellationToken cancellationToken = default)
     {
         var session = RequireSession();
+        if (session.Project.Media.FirstOrDefault(m => m.Kind == MediaKind.ImageSequence) is { } seq)
+            throw new MedException(MedErrors.SequencePackagingUnsupported(seq.Name));
         var missing = session.Project.Media.FirstOrDefault(m => session.Media.Locations.GetValueOrDefault(m.Id)?.ResolvedPath is null);
         if (missing is not null) throw new MedException(MedErrors.MediaUnavailableForPackaging(missing.Name));
 
@@ -212,6 +217,9 @@ public sealed class ProjectService(
             relative = Path.GetRelativePath(Path.GetDirectoryName(p)!, file.FullName);
         return new RelinkMediaCommand(assetId, file.FullName, relative, file.Length, file.LastWriteTimeUtc);
     }
+
+    public Task RefreshMediaAsync(CancellationToken cancellationToken = default) =>
+        RefreshMediaAsync(RequireSession(), cancellationToken);
 
     private async Task RefreshMediaAsync(ProjectSession session, CancellationToken ct)
     {

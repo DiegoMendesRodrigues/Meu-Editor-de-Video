@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
+using MeuEditorDeVideo.App.ViewModels.Media;
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Domain.Editing;
@@ -33,10 +34,32 @@ public sealed partial class EditorViewModel(
     ISettingsService settings,
     IProjectService projects,
     IProjectWorkflow workflow,
-    ShellViewModel shell)
+    ShellViewModel shell,
+    IServiceProvider services)
     : PageViewModel
 {
     private ProjectSession? _session;
+
+    /// <summary>Biblioteca de mídias (painel A). Existe enquanto a tela de edição está aberta.</summary>
+    [ObservableProperty]
+    public partial MediaLibraryViewModel? Library { get; set; }
+
+    partial void OnSelectedSectionChanged(LibrarySection value)
+    {
+        if (Library is not null) Library.Filter = FilterFor(value);
+        OnPropertyChanged(nameof(IsMediaSection));
+    }
+
+    /// <summary>Seções de mídia mostram a biblioteca; as demais (gráficos, textos…) chegam em fases futuras.</summary>
+    public bool IsMediaSection => SelectedSection is LibrarySection.Media or LibrarySection.Videos or LibrarySection.Images or LibrarySection.Audio;
+
+    private static MediaFilter FilterFor(LibrarySection s) => s switch
+    {
+        LibrarySection.Videos => MediaFilter.Videos,
+        LibrarySection.Images => MediaFilter.Images,
+        LibrarySection.Audio => MediaFilter.Audio,
+        _ => MediaFilter.All,
+    };
 
     [ObservableProperty]
     public partial string ProjectName { get; set; } = "Sem título";
@@ -70,6 +93,8 @@ public sealed partial class EditorViewModel(
 
     public override void OnNavigatedTo()
     {
+        Library = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<MediaLibraryViewModel>(services);
+        Library.Filter = FilterFor(SelectedSection);
         projects.SessionChanged += OnSessionChanged;
         projects.Saved += OnSaved;
         AttachSession();
@@ -82,6 +107,8 @@ public sealed partial class EditorViewModel(
         if (_session is not null) _session.History.Changed -= OnHistoryChanged;
         _session = null;
         shell.Title = AppInfo.ProductName;
+        Library?.Dispose();
+        Library = null;
     }
 
     private void OnSessionChanged(object? sender, EventArgs e) => AttachSession();
@@ -127,6 +154,8 @@ public sealed partial class EditorViewModel(
         SaveCommand.NotifyCanExecuteChanged();
         SaveAsCommand.NotifyCanExecuteChanged();
         PackageMediaCommand.NotifyCanExecuteChanged();
+        ImportMediaCommand.NotifyCanExecuteChanged();
+        ImportSequenceCommand.NotifyCanExecuteChanged();
         CreateBackupCommand.NotifyCanExecuteChanged();
         ShowMissingMediaCommand.NotifyCanExecuteChanged();
         GoToHistoryCommand.NotifyCanExecuteChanged();
@@ -166,6 +195,12 @@ public sealed partial class EditorViewModel(
         await settings.SaveAsync(settings.Current with { Theme = next });
         OnPropertyChanged(nameof(IsDarkTheme));
     }
+
+    [RelayCommand(CanExecute = nameof(HasSession))]
+    private Task ImportMedia() => Library?.ImportFilesCommand.ExecuteAsync(null) ?? Task.CompletedTask;
+
+    [RelayCommand(CanExecute = nameof(HasSession))]
+    private Task ImportSequence() => Library?.ImportSequenceCommand.ExecuteAsync(null) ?? Task.CompletedTask;
 
     [RelayCommand]
     private Task NewProject() => workflow.NewProjectAsync();
@@ -214,7 +249,6 @@ public sealed partial class EditorViewModel(
     // Comandos das fases seguintes — desabilitados até existirem de verdade.
     private static bool NotYetAvailable() => false;
 
-    [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void ImportMedia() { }
     [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void Export() { }
     [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void PlayPause() { }
 

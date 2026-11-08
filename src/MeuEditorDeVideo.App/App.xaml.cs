@@ -5,6 +5,7 @@ using System.Windows.Threading;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.Application;
 using MeuEditorDeVideo.Application.Projects;
+using MeuEditorDeVideo.MediaEngine;
 using MeuEditorDeVideo.ProjectEngine;
 using MeuEditorDeVideo.App.ViewModels;
 using MeuEditorDeVideo.App.Views;
@@ -68,6 +69,7 @@ public partial class App : System.Windows.Application
     private static void ConfigureServices(IServiceCollection services)
     {
         services.AddProjectEngine();
+        services.AddMediaEngine();
         services.AddMeuEditorApplication();
 
         services.AddSingleton<IThemeService, ThemeService>();
@@ -76,6 +78,7 @@ public partial class App : System.Windows.Application
         services.AddSingleton<IProjectWorkflow, ProjectWorkflow>();
         services.AddTransient<NewProjectViewModel>();
         services.AddTransient<MissingMediaViewModel>();
+        services.AddTransient<ViewModels.Media.MediaLibraryViewModel>();
 
         services.AddSingleton<ShellViewModel>();
         services.AddTransient<HomeViewModel>();

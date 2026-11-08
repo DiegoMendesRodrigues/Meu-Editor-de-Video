@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 
@@ -85,6 +85,34 @@ public sealed record AddMediaAssetsCommand(IReadOnlyList<MediaAsset> Assets) : I
         if (Assets.Any(a => existing.Contains(a.Id)))
             throw new EditRejectedException("A mídia já faz parte do projeto.");
         return project with { Media = project.Media.AddRange(Assets) };
+    }
+}
+
+/// <summary>Define a categoria (pasta lógica) de uma ou mais mídias (RF033). Null remove a categoria.</summary>
+public sealed record SetMediaCategoryCommand(IReadOnlyList<Guid> AssetIds, string? Category) : IEditCommand
+{
+    public string Description => Category is null ? "Remover categoria" : $"Mover para \"{Category}\"";
+
+    public Project Apply(Project project)
+    {
+        var category = string.IsNullOrWhiteSpace(Category) ? null : Category.Trim();
+        var ids = AssetIds.ToHashSet();
+        if (!project.Media.Any(m => ids.Contains(m.Id))) throw new EditRejectedException("Mídia não encontrada.");
+        return project with { Media = [.. project.Media.Select(m => ids.Contains(m.Id) ? m with { Category = category } : m)] };
+    }
+}
+
+/// <summary>Renomeia a mídia na biblioteca (o arquivo original não é alterado).</summary>
+public sealed record RenameMediaCommand(Guid AssetId, string NewName) : IEditCommand
+{
+    public string Description => $"Renomear mídia para \"{NewName.Trim()}\"";
+
+    public Project Apply(Project project)
+    {
+        var name = NewName.Trim();
+        if (name.Length == 0) throw new EditRejectedException("Informe um nome para a mídia.");
+        var asset = project.FindMedia(AssetId) ?? throw new EditRejectedException("Mídia não encontrada.");
+        return project with { Media = project.Media.Replace(asset, asset with { Name = name }) };
     }
 }
 

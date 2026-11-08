@@ -2,10 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:MeuEditorDeVideo.App.ViewModels"
+             xmlns:media="clr-namespace:MeuEditorDeVideo.App.ViewModels.Media"
              Background="{DynamicResource Med.Background}"
              Foreground="{DynamicResource Med.Text}">
     <UserControl.InputBindings>
         <KeyBinding Key="N" Modifiers="Control" Command="{Binding NewProjectCommand}" />
+        <KeyBinding Key="I" Modifiers="Control" Command="{Binding ImportMediaCommand}" />
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}" />
         <KeyBinding Key="S" Modifiers="Control+Shift" Command="{Binding SaveAsCommand}" />
@@ -161,6 +163,9 @@
                 <MenuItem Header="{StaticResource Editor.Menu.NovoProjeto}" Command="{Binding NewProjectCommand}" InputGestureText="Ctrl+N" />
                 <MenuItem Header="{StaticResource Editor.Menu.Abrir}" Command="{Binding OpenCommand}" InputGestureText="Ctrl+O" />
                 <Separator />
+                <MenuItem Header="{StaticResource Editor.Menu.ImportarMidia}" Command="{Binding ImportMediaCommand}" InputGestureText="Ctrl+I" />
+                <MenuItem Header="{StaticResource Editor.Menu.ImportarSequencia}" Command="{Binding ImportSequenceCommand}" />
+                <Separator />
                 <MenuItem Header="{StaticResource Editor.Menu.Salvar}" Command="{Binding SaveCommand}" InputGestureText="Ctrl+S" />
                 <MenuItem Header="{StaticResource Editor.Menu.SalvarComo}" Command="{Binding SaveAsCommand}" InputGestureText="Ctrl+Shift+S" />
                 <MenuItem Header="{StaticResource Editor.Menu.CopiaSeguranca}" Command="{Binding CreateBackupCommand}" />
@@ -284,7 +289,7 @@
         <!-- 3. Área central: Biblioteca | Monitor | Propriedades -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="340" MinWidth="240" />
+                <ColumnDefinition Width="460" MinWidth="320" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" MinWidth="400" />
                 <ColumnDefinition Width="Auto" />
@@ -381,31 +386,257 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0">
-                            <Button AutomationProperties.Name="{StaticResource Editor.Acao.ImportarMidia}" Style="{StaticResource Editor.Acao}" Command="{Binding ImportMediaCommand}"
-                                    HorizontalAlignment="Left" Margin="0" Padding="8,5">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE8B5;" FontSize="14" />
-                                    <TextBlock Text="{StaticResource Editor.Acao.ImportarMidia}" Margin="6,0,0,0" FontSize="12" />
-                                </StackPanel>
-                            </Button>
+                            <StackPanel Orientation="Horizontal">
+                                <Button AutomationProperties.Name="{StaticResource Editor.Acao.ImportarMidia}" Style="{StaticResource Editor.Acao}" Command="{Binding ImportMediaCommand}"
+                                        HorizontalAlignment="Left" Margin="0" Padding="8,5">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE8B5;" FontSize="14" />
+                                        <TextBlock Text="{StaticResource Editor.Acao.ImportarMidia}" Margin="6,0,0,0" FontSize="12" />
+                                    </StackPanel>
+                                </Button>
+                                <Button AutomationProperties.Name="{StaticResource Editor.Acao.ImportarSequencia}"
+                                        ToolTip="{StaticResource Editor.Acao.ImportarSequencia}"
+                                        Style="{StaticResource Editor.Controle}" Command="{Binding ImportSequenceCommand}"
+                                        Margin="6,0,0,0">
+                                    <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE8B9;" />
+                                </Button>
+                            </StackPanel>
 
-                            <Grid Margin="0,8,0,0">
-                                <TextBox x:Name="CampoPesquisa"
-                                         AutomationProperties.Name="{StaticResource Editor.Biblioteca.Pesquisar}"
-                                         Background="{DynamicResource Med.PanelAlt}"
-                                         Foreground="{DynamicResource Med.Text}"
-                                         BorderBrush="{DynamicResource Med.Border}"
-                                         CaretBrush="{DynamicResource Med.Text}"
-                                         Padding="6,4" VerticalContentAlignment="Center" />
-                                <TextBlock Text="{StaticResource Editor.Biblioteca.Pesquisar}"
-                                           Style="{StaticResource Editor.Placeholder}" />
-                            </Grid>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsMediaSection}" Value="False">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+
+                                <Grid>
+                                    <TextBox x:Name="CampoPesquisa"
+                                             AutomationProperties.Name="{StaticResource Editor.Biblioteca.Pesquisar}"
+                                             Text="{Binding Library.SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                             Background="{DynamicResource Med.PanelAlt}"
+                                             Foreground="{DynamicResource Med.Text}"
+                                             BorderBrush="{DynamicResource Med.Border}"
+                                             CaretBrush="{DynamicResource Med.Text}"
+                                             Padding="6,4" VerticalContentAlignment="Center" />
+                                    <TextBlock Text="{StaticResource Editor.Biblioteca.Pesquisar}"
+                                               Style="{StaticResource Editor.Placeholder}" />
+                                </Grid>
+
+                                <ComboBox AutomationProperties.Name="{StaticResource Editor.Biblioteca.Categoria}"
+                                          ToolTip="{StaticResource Editor.Biblioteca.Categoria}"
+                                          ItemsSource="{Binding Library.Categories}"
+                                          SelectedItem="{Binding Library.SelectedCategory}"
+                                          Background="{DynamicResource Med.PanelAlt}"
+                                          Foreground="{DynamicResource Med.Text}"
+                                          BorderBrush="{DynamicResource Med.Border}"
+                                          Margin="0,6,0,0" />
+                            </StackPanel>
                         </StackPanel>
 
-                        <Border Grid.Row="1" Margin="0,8,0,0" Background="{DynamicResource Med.PanelAlt}" CornerRadius="6">
-                            <TextBlock Text="{StaticResource Editor.Biblioteca.Vazia}"
-                                       Style="{StaticResource Med.MutedText}"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <!-- Seções que ainda não são de mídia -->
+                        <TextBlock Grid.Row="1" Text="{StaticResource Editor.Biblioteca.SecaoIndisponivel}"
+                                   TextAlignment="Center" TextWrapping="Wrap" Margin="12"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMediaSection}" Value="False">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <!-- Área da biblioteca: lista, arrastar e soltar (RF027) -->
+                        <Border x:Name="BibliotecaArea" Grid.Row="1" Margin="0,8,0,0"
+                                Background="{DynamicResource Med.PanelAlt}" CornerRadius="6"
+                                AllowDrop="True"
+                                DragEnter="BibliotecaArea_DragOver"
+                                DragOver="BibliotecaArea_DragOver"
+                                DragLeave="BibliotecaArea_DragLeave"
+                                Drop="BibliotecaArea_Drop">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMediaSection}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+
+                            <Grid>
+                                <ListBox ItemsSource="{Binding Library.ItemsView}"
+                                         PreviewMouseRightButtonDown="Biblioteca_PreviewMouseRightButtonDown"
+                                         SelectedItem="{Binding Library.SelectedItem}"
+                                         AutomationProperties.Name="{StaticResource Editor.Biblioteca.Midias}"
+                                         Background="Transparent" BorderThickness="0"
+                                         Margin="4"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         VirtualizingPanel.IsVirtualizing="True">
+                                    <ListBox.InputBindings>
+                                        <KeyBinding Key="Delete" Command="{Binding Library.RemoveSelectedCommand}" />
+                                        <KeyBinding Key="F2" Command="{Binding Library.RenameSelectedCommand}" />
+                                    </ListBox.InputBindings>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.Renomear}"
+                                                      Command="{Binding PlacementTarget.DataContext.Library.RenameSelectedCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.DefinirCategoria}"
+                                                      Command="{Binding PlacementTarget.DataContext.Library.SetCategoryCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.RemoverCategoria}"
+                                                      Command="{Binding PlacementTarget.DataContext.Library.ClearCategoryCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                            <Separator />
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.RemoverDoProjeto}"
+                                                      Command="{Binding PlacementTarget.DataContext.Library.RemoveSelectedCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                            <Setter Property="Padding" Value="4" />
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type media:MediaItemViewModel}">
+                                            <Grid ToolTip="{Binding ToolTip}" Background="Transparent">
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Opacity" Value="1" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsMissing}" Value="True">
+                                                                <Setter Property="Opacity" Value="0.6" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Border Grid.Column="0" Width="72" Height="42" CornerRadius="4"
+                                                        Background="{DynamicResource Med.MonitorBackground}" ClipToBounds="True">
+                                                    <Grid>
+                                                        <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
+                                                        <Path Data="{Binding Waveform}" Stretch="Fill"
+                                                              Fill="{DynamicResource Med.ClipAudio}" Margin="2,4">
+                                                            <Path.Style>
+                                                                <Style TargetType="Path">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding Waveform}" Value="{x:Null}">
+                                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Path.Style>
+                                                        </Path>
+                                                        <TextBlock Text="{Binding KindGlyph}" FontSize="16"
+                                                                   HorizontalAlignment="Center" Foreground="{DynamicResource Med.TextMuted}">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock" BasedOn="{StaticResource Med.Icon}">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                    <Style.Triggers>
+                                                                        <MultiDataTrigger>
+                                                                            <MultiDataTrigger.Conditions>
+                                                                                <Condition Binding="{Binding Thumbnail}" Value="{x:Null}" />
+                                                                                <Condition Binding="{Binding Waveform}" Value="{x:Null}" />
+                                                                            </MultiDataTrigger.Conditions>
+                                                                            <Setter Property="Visibility" Value="Visible" />
+                                                                        </MultiDataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                        <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="3"
+                                                                Background="#99000000" Padding="3,0">
+                                                            <TextBlock Text="{Binding Badge}" FontSize="10" Foreground="White" />
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+
+                                                <Grid Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock Grid.Row="0" Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                                               Foreground="{DynamicResource Med.Text}" />
+                                                    <TextBlock Grid.Row="1" Text="{Binding Details}" Style="{StaticResource Med.MutedText}" TextTrimming="CharacterEllipsis" />
+                                                    <TextBlock Grid.Row="2" Text="{StaticResource Editor.Biblioteca.ArquivoNaoEncontrado}"
+                                                               Foreground="{DynamicResource Med.Danger}" FontSize="11">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsMissing}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </Grid>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                                <!-- Estado vazio -->
+                                <TextBlock Text="{Binding Library.EmptyMessage}"
+                                           TextAlignment="Center" TextWrapping="Wrap" Margin="12"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Library.VisibleCount}" Value="0">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+
+                                <!-- Progresso da importação -->
+                                <Border VerticalAlignment="Bottom" Background="{DynamicResource Med.Panel}" Padding="8">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Library.IsImporting}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Library.ImportStatus}" FontSize="11"
+                                                   Foreground="{DynamicResource Med.Text}" TextTrimming="CharacterEllipsis" />
+                                        <ProgressBar Height="4" Maximum="100" Margin="0,4,0,0"
+                                                     Value="{Binding Library.ImportPercent}"
+                                                     AutomationProperties.Name="{StaticResource Editor.Biblioteca.ProgressoImportacao}" />
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Dica ao arrastar arquivos sobre a área -->
+                                <Border x:Name="DicaSoltar" Visibility="Collapsed" IsHitTestVisible="False"
+                                        Margin="2" BorderBrush="{DynamicResource Med.Accent}" BorderThickness="2"
+                                        CornerRadius="6" Background="#333B82F6">
+                                    <TextBlock Text="{StaticResource Editor.Biblioteca.SoltarParaImportar}"
+                                               FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                            </Grid>
                         </Border>
                     </Grid>
                 </Grid>
@@ -493,6 +724,45 @@
                     <TabControl Grid.Row="1" Margin="8,0,8,8"
                                 Background="{DynamicResource Med.Panel}"
                                 BorderBrush="{DynamicResource Med.Border}">
+                        <TabItem Header="{StaticResource Editor.Propriedades.Midia}" IsSelected="True">
+                            <Grid>
+                                <TextBlock Text="{StaticResource Editor.Propriedades.SelecioneMidia}"
+                                           TextWrapping="Wrap" Margin="12">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Library.HasSelection}" Value="True">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="12">
+                                    <ScrollViewer.Style>
+                                        <Style TargetType="ScrollViewer" BasedOn="{StaticResource {x:Type ScrollViewer}}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Library.HasSelection}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ScrollViewer.Style>
+                                    <ItemsControl ItemsSource="{Binding Library.SelectedItem.InfoLines}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Margin="0,0,0,6">
+                                                    <TextBlock Text="{Binding Label}" Style="{StaticResource Med.MutedText}" FontSize="11" />
+                                                    <TextBlock Text="{Binding Value}" Foreground="{DynamicResource Med.Text}" TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Grid>
+                        </TabItem>
                         <TabItem Header="{StaticResource Editor.Propriedades.Video}">
                             <TextBlock Text="{StaticResource Editor.Propriedades.Selecione}"
                                        Style="{StaticResource Med.MutedText}" TextWrapping="Wrap"
