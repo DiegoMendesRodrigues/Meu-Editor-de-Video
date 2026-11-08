@@ -7,6 +7,7 @@ using MeuEditorDeVideo.Application;
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.MediaEngine;
 using MeuEditorDeVideo.ProjectEngine;
+using MeuEditorDeVideo.RenderingEngine;
 using MeuEditorDeVideo.App.ViewModels;
 using MeuEditorDeVideo.App.Views;
 using MeuEditorDeVideo.Core.Abstractions;
@@ -70,6 +71,7 @@ public partial class App : System.Windows.Application
     {
         services.AddProjectEngine();
         services.AddMediaEngine();
+        services.AddPreviewEngine();
         services.AddMeuEditorApplication();
 
         services.AddSingleton<IThemeService, ThemeService>();

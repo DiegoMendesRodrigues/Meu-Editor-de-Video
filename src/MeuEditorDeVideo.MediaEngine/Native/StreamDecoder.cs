@@ -1,4 +1,4 @@
-using FFmpeg.AutoGen;
+﻿using FFmpeg.AutoGen;
 
 namespace MeuEditorDeVideo.MediaEngine.Native;
 
@@ -14,9 +14,10 @@ internal unsafe class StreamDecoder : IDisposable
     private AVCodecContext* _codec;
     private AVPacket* _packet;
     private AVFrame* _frame;
+    private AVFrame* _received;
     private bool _flushing;
 
-    public StreamDecoder(MediaFile file, int streamIndex, int threads = 2)
+    public StreamDecoder(MediaFile file, int streamIndex, int threads = 2, bool hardware = false)
     {
         File = file;
         StreamIndex = streamIndex;
@@ -32,9 +33,11 @@ internal unsafe class StreamDecoder : IDisposable
             Av.Check(ffmpeg.avcodec_parameters_to_context(_codec, par), "configurar decodificador");
             _codec->pkt_timebase = Stream->time_base;
             _codec->thread_count = threads;
+            if (hardware && par->codec_type == AVMediaType.AVMEDIA_TYPE_VIDEO) UsesHardware = TryEnableHardware(decoder);
             Av.Check(ffmpeg.avcodec_open2(_codec, decoder, null), "abrir decodificador");
             _packet = ffmpeg.av_packet_alloc();
             _frame = ffmpeg.av_frame_alloc();
+            _received = ffmpeg.av_frame_alloc();
         }
         catch
         {
@@ -44,6 +47,30 @@ internal unsafe class StreamDecoder : IDisposable
     }
 
     public MediaFile File { get; }
+
+    /// <summary>Decodificação acelerada por GPU (D3D11VA) ativa para esta faixa.</summary>
+    public bool UsesHardware { get; private set; }
+
+    /// <summary>
+    /// Associa um dispositivo D3D11VA se o decodificador suportar. O formato de hardware é escolhido pelo
+    /// get_format padrão do FFmpeg; quadros na GPU são copiados para a memória em <see cref="ReadFrame"/>.
+    /// </summary>
+    private bool TryEnableHardware(AVCodec* decoder)
+    {
+        for (var i = 0; ; i++)
+        {
+            var config = ffmpeg.avcodec_get_hw_config(decoder, i);
+            if (config == null) return false;
+            if ((config->methods & 0x01) == 0 // AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX
+                || config->device_type != AVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA) continue;
+
+            AVBufferRef* device = null;
+            if (ffmpeg.av_hwdevice_ctx_create(&device, AVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA, null, null, 0) < 0) return false;
+            _codec->hw_device_ctx = ffmpeg.av_buffer_ref(device);
+            ffmpeg.av_buffer_unref(&device);
+            return true;
+        }
+    }
 
     public int StreamIndex { get; }
 
@@ -69,8 +96,22 @@ internal unsafe class StreamDecoder : IDisposable
         ffmpeg.av_frame_unref(_frame);
         while (true)
         {
-            var r = ffmpeg.avcodec_receive_frame(_codec, _frame);
-            if (r == 0) return true;
+            var r = ffmpeg.avcodec_receive_frame(_codec, _received);
+            if (r == 0)
+            {
+                if (_received->hw_frames_ctx != null)
+                {
+                    // Quadro na GPU: transfere para a memória (NV12/P010) mantendo carimbos de tempo.
+                    Av.Check(ffmpeg.av_hwframe_transfer_data(_frame, _received, 0), "transferir quadro da GPU");
+                    ffmpeg.av_frame_copy_props(_frame, _received);
+                    ffmpeg.av_frame_unref(_received);
+                }
+                else
+                {
+                    ffmpeg.av_frame_move_ref(_frame, _received);
+                }
+                return true;
+            }
             if (r == ffmpeg.AVERROR_EOF) return false;
             if (r != Av.EAgain) Av.Check(r, "decodificar");
 
@@ -101,6 +142,7 @@ internal unsafe class StreamDecoder : IDisposable
     public virtual void Dispose()
     {
         if (_frame != null) { var f = _frame; ffmpeg.av_frame_free(&f); _frame = null; }
+        if (_received != null) { var f = _received; ffmpeg.av_frame_free(&f); _received = null; }
         if (_packet != null) { var p = _packet; ffmpeg.av_packet_free(&p); _packet = null; }
         if (_codec != null) { var c = _codec; ffmpeg.avcodec_free_context(&c); _codec = null; }
         GC.SuppressFinalize(this);

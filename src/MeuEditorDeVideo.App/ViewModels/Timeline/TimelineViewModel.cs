@@ -80,6 +80,11 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
 
     public MediaLibraryViewModel Library { get; }
 
+    /// <summary>Espaço na linha do tempo: o monitor alterna reproduzir/pausar.</summary>
+    public event EventHandler? PlayPauseRequested;
+
+    public void RequestPlayPause() => PlayPauseRequested?.Invoke(this, EventArgs.Empty);
+
     /// <summary>Redesenho necessário (estado, seleção, cursor, zoom ou miniaturas mudaram).</summary>
     public event EventHandler? Invalidated;
 

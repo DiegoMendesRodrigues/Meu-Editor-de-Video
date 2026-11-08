@@ -1,4 +1,4 @@
-using FFmpeg.AutoGen;
+﻿using FFmpeg.AutoGen;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Time;
 
@@ -10,7 +10,75 @@ internal sealed unsafe class VideoFrameReader : StreamDecoder
     private SwsContext* _sws;
     private (int W, int H, AVPixelFormat F, int DW, int DH) _swsKey;
 
-    public VideoFrameReader(MediaFile file, int streamIndex) : base(file, streamIndex) { }
+    public VideoFrameReader(MediaFile file, int streamIndex, int threads = 2, bool hardware = false)
+        : base(file, streamIndex, threads, hardware) { }
+
+    private long _currentPts = long.MinValue;
+    private long _currentEnd = long.MinValue;
+    private bool _atEnd;
+
+    /// <summary>Há um quadro posicionado (resultado do último <see cref="Position"/>).</summary>
+    public bool HasFrame => _currentPts != long.MinValue;
+
+    /// <summary>
+    /// Posiciona no quadro que deve ser exibido em <paramref name="at"/> (o último com início até o instante).
+    /// Avança sem buscar quando o alvo está pouco à frente (reprodução); busca o quadro-chave caso contrário.
+    /// <paramref name="changed"/> indica se o quadro atual mudou. Retorna false se não houver quadro.
+    /// </summary>
+    public bool Position(MediaTime at, out bool changed)
+    {
+        changed = false;
+        var tb = Stream->time_base;
+        var start = Stream->start_time == ffmpeg.AV_NOPTS_VALUE ? 0 : Stream->start_time;
+        var target = start + ffmpeg.av_rescale_q(Av.ToMicroseconds(at), Av.TimeBaseQ, tb);
+
+        if (HasFrame && target >= _currentPts && (target < _currentEnd || _atEnd)) return true;
+
+        var forwardLimit = ffmpeg.av_rescale_q(3 * ffmpeg.AV_TIME_BASE, Av.TimeBaseQ, tb);
+        var sequential = HasFrame && !_atEnd && target > _currentPts && target - _currentPts < forwardLimit;
+        if (!sequential)
+        {
+            Seek(target);
+            _currentPts = long.MinValue;
+            _currentEnd = long.MinValue;
+            _atEnd = false;
+        }
+
+        // Decodifica até o quadro que cobre o alvo; guarda uma referência para o caso de fim de arquivo.
+        while (ReadFrame())
+        {
+            var pts = Frame->best_effort_timestamp;
+            if (pts == ffmpeg.AV_NOPTS_VALUE) pts = _currentEnd == long.MinValue ? target : _currentEnd;
+            var duration = Frame->duration > 0 ? Frame->duration : DefaultDuration(tb);
+            KeepCopy();
+            _currentPts = pts;
+            _currentEnd = pts + duration;
+            changed = true;
+            if (pts + duration > target) return true;
+        }
+
+        // Fim do arquivo: permanece no último quadro decodificado.
+        _atEnd = true;
+        return RestoreCopy();
+    }
+
+    private long DefaultDuration(AVRational tb)
+    {
+        var fr = Av.FrameRateOf(Stream) ?? new Domain.Time.FrameRate(30, 1);
+        return Math.Max(1, ffmpeg.av_rescale_q(1, new AVRational { num = fr.Denominator, den = fr.Numerator }, tb));
+    }
+
+    /// <summary>Converte o quadro atual cabendo em <paramref name="maxWidth"/> × <paramref name="maxHeight"/>.</summary>
+    public BgraImage ToBgraFit(int maxWidth, int maxHeight, int rotation)
+    {
+        var f = Frame;
+        var sar = f->sample_aspect_ratio;
+        var displayW = sar.num > 0 && sar.den > 0 ? f->width * (double)sar.num / sar.den : f->width;
+        double h = f->height;
+        var aspect = rotation is 90 or 270 ? h / displayW : displayW / h;
+        var width = Math.Max(2, (int)Math.Floor(Math.Min(maxWidth, maxHeight * aspect)));
+        return ToBgra(width, rotation);
+    }
 
     /// <summary>Decodifica o primeiro quadro a partir de <paramref name="at"/> (ou o último disponível, se passar do fim).</summary>
     public bool DecodeAt(MediaTime at)

@@ -52,6 +52,12 @@ public abstract class TimelineSurface : FrameworkElement
     {
         base.OnKeyDown(e);
         if (e.Handled || ViewModel is not { } vm) return;
+        if (e.Key == Key.Space && Keyboard.Modifiers == ModifierKeys.None)
+        {
+            vm.RequestPlayPause();
+            e.Handled = true;
+            return;
+        }
         var mods = Keyboard.Modifiers;
         var ctrl = mods.HasFlag(ModifierKeys.Control);
         var shift = mods.HasFlag(ModifierKeys.Shift);

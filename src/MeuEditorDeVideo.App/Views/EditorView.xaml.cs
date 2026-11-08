@@ -10,7 +10,43 @@ namespace MeuEditorDeVideo.App.Views;
 
 public partial class EditorView : UserControl
 {
-    public EditorView() => InitializeComponent();
+    public EditorView()
+    {
+        InitializeComponent();
+        PreviewKeyDown += EditorView_PreviewKeyDown;
+    }
+
+    /// <summary>Espaço reproduz/pausa e F11 abre a tela cheia, exceto enquanto se digita num campo de texto.</summary>
+    private void EditorView_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (Keyboard.FocusedElement is TextBox or PasswordBox || Keyboard.Modifiers != ModifierKeys.None) return;
+        if (DataContext is not EditorViewModel { Preview: { } preview }) return;
+        if (e.Key == Key.Space)
+        {
+            if (preview.PlayPauseCommand.CanExecute(null)) preview.PlayPauseCommand.Execute(null);
+            e.Handled = true;
+        }
+        else if (e.Key == Key.F11)
+        {
+            AbrirTelaCheia();
+            e.Handled = true;
+        }
+    }
+
+    private void TelaCheia_Click(object sender, RoutedEventArgs e) => AbrirTelaCheia();
+
+    /// <summary>Duplo clique no monitor abre a tela cheia.</summary>
+    private void Monitor_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ClickCount == 2) AbrirTelaCheia();
+    }
+
+    private void AbrirTelaCheia()
+    {
+        if (DataContext is not EditorViewModel { Preview: { HasContent: true } preview }) return;
+        var window = new FullScreenPreviewWindow(preview) { Owner = Window.GetWindow(this) };
+        window.ShowDialog();
+    }
 
     /// <summary>Arrastar arquivos sobre a biblioteca (RF027): aceita somente arquivos do Windows Explorer.</summary>
     private void BibliotecaArea_DragOver(object sender, DragEventArgs e)

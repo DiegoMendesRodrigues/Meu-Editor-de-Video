@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.App.ViewModels.Media;
+using MeuEditorDeVideo.App.ViewModels.Preview;
 using MeuEditorDeVideo.App.ViewModels.Timeline;
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.Abstractions;
@@ -44,6 +45,10 @@ public sealed partial class EditorViewModel(
     /// <summary>Biblioteca de mídias (painel A). Existe enquanto a tela de edição está aberta.</summary>
     [ObservableProperty]
     public partial MediaLibraryViewModel? Library { get; set; }
+
+    /// <summary>Monitor de pré-visualização (painel B).</summary>
+    [ObservableProperty]
+    public partial PreviewViewModel? Preview { get; set; }
 
     /// <summary>Linha do tempo (painel D).</summary>
     [ObservableProperty]
@@ -97,6 +102,7 @@ public sealed partial class EditorViewModel(
         Library = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<MediaLibraryViewModel>(services);
         Library.Filter = FilterFor(SelectedSection);
         Timeline = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<TimelineViewModel>(services, Library);
+        Preview = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<PreviewViewModel>(services, Timeline);
         projects.SessionChanged += OnSessionChanged;
         projects.Saved += OnSaved;
         AttachSession();
@@ -109,6 +115,8 @@ public sealed partial class EditorViewModel(
         if (_session is not null) _session.History.Changed -= OnHistoryChanged;
         _session = null;
         shell.Title = AppInfo.ProductName;
+        Preview?.Dispose();
+        Preview = null;
         Timeline?.Dispose();
         Timeline = null;
         Library?.Dispose();
@@ -254,7 +262,6 @@ public sealed partial class EditorViewModel(
     private static bool NotYetAvailable() => false;
 
     [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void Export() { }
-    [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void PlayPause() { }
 
     partial void OnMissingMediaCountChanged(int value) => ShowMissingMediaCommand.NotifyCanExecuteChanged();
 }

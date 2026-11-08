@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
   <!-- Versões fixadas (RNF014). Atualizações devem ser registradas em documentation/DEPENDENCIAS.md -->
   <ItemGroup>
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
@@ -6,6 +6,7 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.14" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.14" />
     <PackageVersion Include="FFmpeg.AutoGen" Version="9.0.1.1" />
+    <PackageVersion Include="NAudio.Wasapi" Version="2.2.1" />
     <PackageVersion Include="Serilog.Extensions.Hosting" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
     <!-- Testes -->

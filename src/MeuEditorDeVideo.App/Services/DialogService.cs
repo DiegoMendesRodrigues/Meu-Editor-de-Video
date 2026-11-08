@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using MeuEditorDeVideo.Core.Errors;
 using Microsoft.Win32;
 
@@ -27,6 +27,9 @@ public interface IDialogService
     string? PickSaveProject(string suggestedName, string? initialDirectory);
 
     string? PickFile(string title, string filter, string? initialDirectory);
+
+    /// <summary>Escolhe onde salvar um arquivo genérico (ex.: captura de quadro). Null se cancelado.</summary>
+    string? PickSaveFile(string title, string filter, string suggestedName, string? initialDirectory);
 
     string? PickFolder(string title, string? initialDirectory);
 
@@ -80,6 +83,20 @@ public sealed class DialogService : IDialogService
             DefaultExt = ".med",
             AddExtension = true,
             FileName = suggestedName,
+            InitialDirectory = initialDirectory ?? "",
+            OverwritePrompt = true,
+        };
+        return dlg.ShowDialog(Owner) == true ? dlg.FileName : null;
+    }
+
+    public string? PickSaveFile(string title, string filter, string suggestedName, string? initialDirectory)
+    {
+        var dlg = new SaveFileDialog
+        {
+            Title = title,
+            Filter = filter,
+            FileName = suggestedName,
+            AddExtension = true,
             InitialDirectory = initialDirectory ?? "",
             OverwritePrompt = true,
         };

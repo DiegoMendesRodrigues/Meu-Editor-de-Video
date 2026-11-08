@@ -713,14 +713,30 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" Background="{DynamicResource Med.MonitorBackground}" CornerRadius="4" ClipToBounds="True">
-                        <Viewbox Stretch="Uniform">
-                            <Border Width="1920" Height="1080" Background="{DynamicResource Med.MonitorBackground}">
-                                <TextBlock Text="{StaticResource Editor.Monitor.PreVisualizacao}"
-                                           Style="{StaticResource Med.MutedText}" FontSize="48"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Border>
-                        </Viewbox>
+                    <Border x:Name="Monitor" Grid.Row="0" Background="{DynamicResource Med.MonitorBackground}" CornerRadius="4" ClipToBounds="True"
+                            MouseLeftButtonDown="Monitor_MouseLeftButtonDown">
+                        <Grid>
+                            <Image Source="{Binding Preview.Image}" Stretch="Uniform" RenderOptions.BitmapScalingMode="Linear"
+                                   AutomationProperties.Name="{StaticResource Editor.Monitor.Imagem}" />
+                            <TextBlock Text="{StaticResource Editor.Monitor.PreVisualizacao}" FontSize="18"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Preview.HasContent}" Value="False">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Preview}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock Text="{Binding Preview.Status}" FontSize="10" Margin="6,4" Opacity="0.7"
+                                       Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                        </Grid>
                     </Border>
 
                     <Grid Grid.Row="1" Margin="0,8,0,0">
@@ -737,8 +753,8 @@
                             <Button AutomationProperties.Name="{StaticResource Editor.Monitor.Retroceder}" Style="{StaticResource Editor.Controle}" Command="{Binding Timeline.StepBackCommand}" ToolTip="{StaticResource Editor.Monitor.Retroceder}">
                                 <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xEB9E;" />
                             </Button>
-                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.ReproduzirPausar}" Style="{StaticResource Editor.Controle}" Command="{Binding PlayPauseCommand}" ToolTip="{StaticResource Editor.Monitor.ReproduzirPausar}">
-                                <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE768;" />
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.ReproduzirPausar}" Style="{StaticResource Editor.Controle}" Command="{Binding Preview.PlayPauseCommand}" ToolTip="{Binding Preview.PlayToolTip}">
+                                <TextBlock Style="{StaticResource Editor.Icone}" Text="{Binding Preview.PlayGlyph, FallbackValue=&#xE768;}" />
                             </Button>
                             <Button AutomationProperties.Name="{StaticResource Editor.Monitor.Avancar}" Style="{StaticResource Editor.Controle}" Command="{Binding Timeline.StepForwardCommand}" ToolTip="{StaticResource Editor.Monitor.Avancar}">
                                 <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xEB9D;" />
@@ -749,9 +765,9 @@
 
                             <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE767;" FontSize="14" Margin="10,0,6,0"
                                        ToolTip="{StaticResource Editor.Monitor.Volume}" />
-                            <Slider Width="90" Minimum="0" Maximum="100" Value="80" IsEnabled="False"
-                                    VerticalAlignment="Center" ToolTip="{StaticResource Editor.Monitor.Volume}"
-                                    ToolTipService.ShowOnDisabled="True" />
+                            <Slider Width="90" Minimum="0" Maximum="100" Value="{Binding Preview.Volume}"
+                                    AutomationProperties.Name="{StaticResource Editor.Monitor.Volume}"
+                                    VerticalAlignment="Center" ToolTip="{StaticResource Editor.Monitor.Volume}" />
                         </StackPanel>
 
                         <TextBlock Grid.Column="1" Text="{Binding Timeline.TimeDisplay}"
@@ -759,10 +775,21 @@
                                    Foreground="{DynamicResource Med.Text}"
                                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="8,0" />
 
-                        <Button AutomationProperties.Name="{StaticResource Editor.Monitor.TelaCheia}" Grid.Column="2" Style="{StaticResource Editor.Controle}" IsEnabled="False"
-                                ToolTip="{StaticResource Editor.Monitor.TelaCheia}">
-                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE740;" />
-                        </Button>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <ComboBox ItemsSource="{Binding Preview.Qualities}" SelectedItem="{Binding Preview.Quality}"
+                                      DisplayMemberPath="Label" MinWidth="88" Margin="0,0,4,0"
+                                      AutomationProperties.Name="{StaticResource Editor.Monitor.Qualidade}"
+                                      ToolTip="{StaticResource Editor.Monitor.Qualidade}" />
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.CapturarQuadro}" Style="{StaticResource Editor.Controle}"
+                                    Command="{Binding Preview.CaptureFrameCommand}" ToolTip="{StaticResource Editor.Monitor.CapturarQuadro}">
+                                <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE722;" />
+                            </Button>
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.TelaCheia}" Style="{StaticResource Editor.Controle}"
+                                    IsEnabled="{Binding Preview.HasContent, FallbackValue=False}" Click="TelaCheia_Click"
+                                    ToolTip="{StaticResource Editor.Monitor.TelaCheia}">
+                                <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE740;" />
+                            </Button>
+                        </StackPanel>
                     </Grid>
                 </Grid>
             </Border>

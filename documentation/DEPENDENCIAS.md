@@ -13,6 +13,7 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 | Microsoft.Extensions.Hosting | 10.0.14 | MIT | Injeção de dependências, ciclo de vida |
 | Microsoft.Extensions.DependencyInjection.Abstractions / Logging.Abstractions | 10.0.14 | MIT | Contratos de DI e log nas bibliotecas |
 | FFmpeg.AutoGen | 9.0.1.1 | LGPL-3.0 | Binding .NET das bibliotecas do FFmpeg (MediaEngine) |
+| NAudio.Wasapi (+ NAudio.Core) | 2.2.1 | MIT | Saída de áudio WASAPI da pré-visualização (AudioEngine) |
 | Serilog.Extensions.Hosting | 10.0.0 | Apache-2.0 | Integração de logs |
 | Serilog.Sinks.File | 7.0.0 | Apache-2.0 | Logs técnicos locais rotativos |
 

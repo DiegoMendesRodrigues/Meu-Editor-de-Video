@@ -71,7 +71,11 @@
     <sys:String x:Key="Editor.Monitor.Avancar">Avançar</sys:String>
     <sys:String x:Key="Editor.Monitor.IrFim">Ir para o fim</sys:String>
     <sys:String x:Key="Editor.Monitor.Volume">Volume</sys:String>
-    <sys:String x:Key="Editor.Monitor.TelaCheia">Tela cheia</sys:String>
+    <sys:String x:Key="Editor.Monitor.TelaCheia">Tela cheia (F11)</sys:String>
+    <sys:String x:Key="Editor.Monitor.Imagem">Quadro da pré-visualização</sys:String>
+    <sys:String x:Key="Editor.Monitor.Qualidade">Resolução da pré-visualização</sys:String>
+    <sys:String x:Key="Editor.Monitor.CapturarQuadro">Capturar quadro (PNG)</sys:String>
+    <sys:String x:Key="Editor.Monitor.SairTelaCheia">Esc ou F11 para sair · Espaço reproduz/pausa</sys:String>
 
     <!-- Painel C: Propriedades -->
     <sys:String x:Key="Editor.Propriedades.Titulo">Propriedades</sys:String>

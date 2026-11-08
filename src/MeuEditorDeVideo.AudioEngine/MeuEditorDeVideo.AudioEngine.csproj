@@ -1,8 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0-windows</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="NAudio.Wasapi" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MeuEditorDeVideo.Core\MeuEditorDeVideo.Core.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.TimelineEngine\MeuEditorDeVideo.TimelineEngine.csproj" />
   </ItemGroup>
 </Project>
