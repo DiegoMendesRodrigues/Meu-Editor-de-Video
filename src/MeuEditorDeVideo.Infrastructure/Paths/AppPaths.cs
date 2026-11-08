@@ -26,11 +26,12 @@ public sealed class AppPaths : IAppPaths
     public string Cache => Path.Combine(LocalData, "cache");
     public string Autosave => Path.Combine(LocalData, "autosave");
     public string AiModels => Path.Combine(LocalData, "ai-models");
+    public string Backups => Path.Combine(LocalData, "backups");
     public string SettingsFile => Path.Combine(RoamingData, "settings.json");
 
     public void EnsureCreated()
     {
-        foreach (var dir in new[] { RoamingData, LocalData, Logs, Cache, Autosave, AiModels })
+        foreach (var dir in new[] { RoamingData, LocalData, Logs, Cache, Autosave, AiModels, Backups })
             Directory.CreateDirectory(dir);
     }
 }

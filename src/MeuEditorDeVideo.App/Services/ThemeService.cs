@@ -29,7 +29,7 @@ public sealed class ThemeService : IThemeService
             _ => IsSystemDark(),
         };
 
-        var app = Application.Current;
+        var app = System.Windows.Application.Current;
         app.ThemeMode = dark ? ThemeMode.Dark : ThemeMode.Light;
 
         // O WPF insere o dicionário Fluent nos MergedDictionaries; localizar a paleta pelo nome, nunca pelo índice.

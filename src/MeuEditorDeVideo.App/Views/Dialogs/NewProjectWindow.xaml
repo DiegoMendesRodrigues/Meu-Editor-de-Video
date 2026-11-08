@@ -1,0 +1,211 @@
+<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.NewProjectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Novo projeto"
+        Width="560"
+        SizeToContent="Height"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Background="{DynamicResource Med.Background}"
+        Foreground="{DynamicResource Med.Text}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="16">
+
+            <!-- 1. Modelo de projeto -->
+            <TextBlock Text="Modelo de projeto" Margin="0,0,0,4" />
+            <ComboBox ItemsSource="{Binding Templates}"
+                      SelectedItem="{Binding SelectedTemplate, Mode=TwoWay}"
+                      AutomationProperties.Name="Modelo de projeto"
+                      Margin="0,0,0,12">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Label}" />
+                            <TextBlock Text="{Binding Description}" Style="{StaticResource Med.MutedText}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <!-- 2. Nome do projeto -->
+            <TextBlock Text="Nome do projeto" Margin="0,0,0,4" />
+            <TextBox x:Name="NameTextBox"
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                     AutomationProperties.Name="Nome do projeto"
+                     Padding="6,4"
+                     Margin="0,0,0,12" />
+
+            <!-- 3. Pasta -->
+            <TextBlock Text="Pasta" Margin="0,0,0,4" />
+            <Grid Margin="0,0,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         Text="{Binding Directory, UpdateSourceTrigger=PropertyChanged}"
+                         AutomationProperties.Name="Pasta do projeto"
+                         Padding="6,4"
+                         VerticalContentAlignment="Center" />
+                <Button Grid.Column="1"
+                        Content="Procurar…"
+                        Command="{Binding BrowseDirectoryCommand}"
+                        AutomationProperties.Name="Procurar pasta"
+                        Margin="8,0,0,0"
+                        Padding="12,4" />
+            </Grid>
+            <TextBlock Style="{StaticResource Med.MutedText}"
+                       TextWrapping="Wrap"
+                       Margin="0,0,0,12">
+                <Run Text="Arquivo: " />
+                <Run Text="{Binding TargetPath, Mode=OneWay}" />
+            </TextBlock>
+
+            <!-- 4. Proporção e resolução -->
+            <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Proporção" Margin="0,0,0,4" />
+                    <ComboBox ItemsSource="{Binding Aspects}"
+                              SelectedItem="{Binding SelectedAspect, Mode=TwoWay}"
+                              DisplayMemberPath="Label"
+                              AutomationProperties.Name="Proporção" />
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Resolução" Margin="0,0,0,4" />
+                    <ComboBox ItemsSource="{Binding SelectedAspect.Resolutions}"
+                              SelectedItem="{Binding SelectedResolution, Mode=TwoWay}"
+                              DisplayMemberPath="Label"
+                              AutomationProperties.Name="Resolução" />
+                </StackPanel>
+            </Grid>
+
+            <!-- 5. Resolução personalizada -->
+            <Grid Margin="0,0,0,12"
+                  Visibility="{Binding IsCustomResolution, Converter={StaticResource BoolToVis}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Largura" Margin="0,0,0,4" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding CustomWidth, UpdateSourceTrigger=PropertyChanged}"
+                                 AutomationProperties.Name="Largura personalizada em pixels"
+                                 Padding="6,4" />
+                        <TextBlock Grid.Column="1"
+                                   Text="px"
+                                   Style="{StaticResource Med.MutedText}"
+                                   VerticalAlignment="Center"
+                                   Margin="8,0,0,0" />
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Altura" Margin="0,0,0,4" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding CustomHeight, UpdateSourceTrigger=PropertyChanged}"
+                                 AutomationProperties.Name="Altura personalizada em pixels"
+                                 Padding="6,4" />
+                        <TextBlock Grid.Column="1"
+                                   Text="px"
+                                   Style="{StaticResource Med.MutedText}"
+                                   VerticalAlignment="Center"
+                                   Margin="8,0,0,0" />
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+            <!-- 6. FPS e perfil de cores -->
+            <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="FPS" Margin="0,0,0,4" />
+                    <ComboBox ItemsSource="{Binding FrameRates}"
+                              SelectedItem="{Binding SelectedFrameRate, Mode=TwoWay}"
+                              DisplayMemberPath="Label"
+                              AutomationProperties.Name="Quadros por segundo" />
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Perfil de cores" Margin="0,0,0,4" />
+                    <ComboBox ItemsSource="{Binding ColorProfiles}"
+                              SelectedItem="{Binding SelectedColorProfile, Mode=TwoWay}"
+                              DisplayMemberPath="Label"
+                              AutomationProperties.Name="Perfil de cores" />
+                </StackPanel>
+            </Grid>
+
+            <!-- 7. Armazenamento das mídias -->
+            <TextBlock Text="Armazenamento das mídias" Margin="0,0,0,4" />
+            <ComboBox ItemsSource="{Binding StorageModes}"
+                      SelectedItem="{Binding SelectedStorageMode, Mode=TwoWay}"
+                      DisplayMemberPath="Label"
+                      AutomationProperties.Name="Armazenamento das mídias"
+                      Margin="0,0,0,12" />
+
+            <!-- 8. Validação -->
+            <TextBlock Text="{Binding ValidationMessage}"
+                       Foreground="{DynamicResource Med.Danger}"
+                       TextWrapping="Wrap"
+                       Margin="0,0,0,4">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value="">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </StackPanel>
+
+        <!-- 9. Botões -->
+        <Border Grid.Row="1"
+                BorderBrush="{DynamicResource Med.Border}"
+                BorderThickness="0,1,0,0"
+                Padding="16,12">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Cancelar"
+                        AutomationProperties.Name="Cancelar"
+                        Command="{Binding CancelCommand}"
+                        IsCancel="True"
+                        Padding="16,8"
+                        Margin="0,0,8,0" />
+                <Button Content="Criar projeto"
+                        AutomationProperties.Name="Criar projeto"
+                        Style="{StaticResource Med.AccentButton}"
+                        Command="{Binding CreateCommand}"
+                        IsDefault="True" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

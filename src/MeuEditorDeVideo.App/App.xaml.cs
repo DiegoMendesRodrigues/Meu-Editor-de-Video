@@ -3,6 +3,9 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Threading;
 using MeuEditorDeVideo.App.Services;
+using MeuEditorDeVideo.Application;
+using MeuEditorDeVideo.Application.Projects;
+using MeuEditorDeVideo.ProjectEngine;
 using MeuEditorDeVideo.App.ViewModels;
 using MeuEditorDeVideo.App.Views;
 using MeuEditorDeVideo.Core.Abstractions;
@@ -15,7 +18,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MeuEditorDeVideo.App;
 
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
     private IHost? _host;
 
@@ -44,6 +47,8 @@ public partial class App : Application
         Services.GetRequiredService<INavigationService>().NavigateTo<HomeViewModel>();
         window.Show();
 
+        Services.GetRequiredService<AutosaveScheduler>().Start();
+
         base.OnStartup(e);
     }
 
@@ -51,6 +56,8 @@ public partial class App : Application
     {
         if (_host is not null)
         {
+            await Services.GetRequiredService<AutosaveScheduler>().DisposeAsync();
+            await Services.GetRequiredService<IProjectService>().CloseAsync();
             await _host.StopAsync(TimeSpan.FromSeconds(5));
             _host.Dispose();
         }
@@ -60,9 +67,15 @@ public partial class App : Application
 
     private static void ConfigureServices(IServiceCollection services)
     {
+        services.AddProjectEngine();
+        services.AddMeuEditorApplication();
+
         services.AddSingleton<IThemeService, ThemeService>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDialogService, DialogService>();
+        services.AddSingleton<IProjectWorkflow, ProjectWorkflow>();
+        services.AddTransient<NewProjectViewModel>();
+        services.AddTransient<MissingMediaViewModel>();
 
         services.AddSingleton<ShellViewModel>();
         services.AddTransient<HomeViewModel>();

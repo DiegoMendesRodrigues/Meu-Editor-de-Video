@@ -1,7 +1,10 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
+using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.Abstractions;
+using MeuEditorDeVideo.Domain.Editing;
 
 namespace MeuEditorDeVideo.App.ViewModels;
 
@@ -20,15 +23,26 @@ public enum LibrarySection
     AI,
 }
 
-/// <summary>
-/// Tela principal de edição (§5.3). Na F0 apenas a estrutura dos painéis A–E existe;
-/// os comandos ficam desabilitados até a fase que os implementa.
-/// </summary>
-public sealed partial class EditorViewModel(INavigationService navigation, IThemeService themes, ISettingsService settings)
+/// <summary>Item do painel de histórico (RF014). Index = quantidade de ações aplicadas após clicar.</summary>
+public sealed record HistoryItem(int Index, string Description, string Time, bool IsCurrent, bool IsUndone);
+
+/// <summary>Tela principal de edição (§5.3).</summary>
+public sealed partial class EditorViewModel(
+    INavigationService navigation,
+    IThemeService themes,
+    ISettingsService settings,
+    IProjectService projects,
+    IProjectWorkflow workflow,
+    ShellViewModel shell)
     : PageViewModel
 {
+    private ProjectSession? _session;
+
     [ObservableProperty]
     public partial string ProjectName { get; set; } = "Sem título";
+
+    [ObservableProperty]
+    public partial bool IsDirty { get; set; }
 
     [ObservableProperty]
     public partial LibrarySection SelectedSection { get; set; } = LibrarySection.Media;
@@ -37,10 +51,109 @@ public sealed partial class EditorViewModel(INavigationService navigation, IThem
     [ObservableProperty]
     public partial string TimeDisplay { get; set; } = "00:00:00:00 / 00:00:00:00";
 
+    [ObservableProperty]
+    public partial string UndoToolTip { get; set; } = "Desfazer (Ctrl+Z)";
+
+    [ObservableProperty]
+    public partial string RedoToolTip { get; set; } = "Refazer (Ctrl+Y)";
+
+    [ObservableProperty]
+    public partial int MissingMediaCount { get; set; }
+
+    /// <summary>Resumo das configurações técnicas: "1920 × 1080 · 30 FPS · Rec. 709".</summary>
+    [ObservableProperty]
+    public partial string ProjectSummary { get; set; } = "";
+
+    public ObservableCollection<HistoryItem> HistoryItems { get; } = [];
+
     public bool IsDarkTheme => themes.Current != AppTheme.Light;
 
+    public override void OnNavigatedTo()
+    {
+        projects.SessionChanged += OnSessionChanged;
+        projects.Saved += OnSaved;
+        AttachSession();
+    }
+
+    public override void OnNavigatedFrom()
+    {
+        projects.SessionChanged -= OnSessionChanged;
+        projects.Saved -= OnSaved;
+        if (_session is not null) _session.History.Changed -= OnHistoryChanged;
+        _session = null;
+        shell.Title = AppInfo.ProductName;
+    }
+
+    private void OnSessionChanged(object? sender, EventArgs e) => AttachSession();
+
+    private void OnSaved(object? sender, EventArgs e) => Refresh();
+
+    private void OnHistoryChanged(object? sender, EventArgs e) => Refresh();
+
+    private void AttachSession()
+    {
+        if (!ReferenceEquals(_session, projects.Current))
+        {
+            if (_session is not null) _session.History.Changed -= OnHistoryChanged;
+            _session = projects.Current;
+            if (_session is not null) _session.History.Changed += OnHistoryChanged;
+        }
+        Refresh();
+    }
+
+    private void Refresh()
+    {
+        var s = _session;
+        ProjectName = s?.Project.Name ?? "Sem título";
+        IsDirty = s?.IsDirty ?? false;
+        MissingMediaCount = s?.Media.Missing.Count() ?? 0;
+        shell.Title = s is null
+            ? AppInfo.ProductName
+            : $"{(IsDirty ? "• " : "")}{ProjectName} — {AppInfo.ProductName}";
+
+        if (s is not null)
+        {
+            var p = s.Project.Settings;
+            ProjectSummary = $"{p.Width} × {p.Height} · {p.FrameRate.ToString().Replace('.', ',')} FPS";
+        }
+
+        var history = s?.History;
+        UndoToolTip = history?.UndoDescription is { } u ? $"Desfazer: {u} (Ctrl+Z)" : "Desfazer (Ctrl+Z)";
+        RedoToolTip = history?.RedoDescription is { } r ? $"Refazer: {r} (Ctrl+Y)" : "Refazer (Ctrl+Y)";
+        RebuildHistory(history);
+
+        UndoCommand.NotifyCanExecuteChanged();
+        RedoCommand.NotifyCanExecuteChanged();
+        SaveCommand.NotifyCanExecuteChanged();
+        SaveAsCommand.NotifyCanExecuteChanged();
+        PackageMediaCommand.NotifyCanExecuteChanged();
+        CreateBackupCommand.NotifyCanExecuteChanged();
+        ShowMissingMediaCommand.NotifyCanExecuteChanged();
+        GoToHistoryCommand.NotifyCanExecuteChanged();
+    }
+
+    private void RebuildHistory(EditHistory? history)
+    {
+        HistoryItems.Clear();
+        if (history is null) return;
+        HistoryItems.Add(new HistoryItem(0, "Estado inicial", "", history.AppliedCount == 0, false));
+        var entries = history.Entries;
+        for (var i = 0; i < entries.Count; i++)
+        {
+            var applied = i + 1;
+            HistoryItems.Add(new HistoryItem(applied, entries[i].Description, entries[i].At.LocalDateTime.ToString("HH:mm:ss"),
+                applied == history.AppliedCount, applied > history.AppliedCount));
+        }
+    }
+
+    private bool HasSession => _session is not null;
+
     [RelayCommand]
-    private void GoHome() => navigation.NavigateTo<HomeViewModel>();
+    private async Task GoHome()
+    {
+        if (!await workflow.CloseProjectAsync()) return;
+        navigation.NavigateTo<HomeViewModel>();
+    }
 
     [RelayCommand]
     private void SelectSection(LibrarySection section) => SelectedSection = section;
@@ -54,14 +167,56 @@ public sealed partial class EditorViewModel(INavigationService navigation, IThem
         OnPropertyChanged(nameof(IsDarkTheme));
     }
 
+    [RelayCommand]
+    private Task NewProject() => workflow.NewProjectAsync();
+
+    [RelayCommand]
+    private Task Open() => workflow.OpenAsync();
+
+    [RelayCommand(CanExecute = nameof(HasSession))]
+    private Task Save() => workflow.SaveAsync();
+
+    [RelayCommand(CanExecute = nameof(HasSession))]
+    private Task SaveAs() => workflow.SaveAsAsync();
+
+    [RelayCommand(CanExecute = nameof(HasSession))]
+    private Task PackageMedia() => workflow.PackageMediaAsync();
+
+    [RelayCommand(CanExecute = nameof(HasSession))]
+    private Task CreateBackup() => workflow.CreateBackupAsync();
+
+    private bool HasMissingMedia() => MissingMediaCount > 0;
+
+    [RelayCommand(CanExecute = nameof(HasMissingMedia))]
+    private void ShowMissingMedia() => workflow.ShowMissingMedia();
+
+    private bool CanUndo() => _session?.History.CanUndo == true;
+
+    [RelayCommand(CanExecute = nameof(CanUndo))]
+    private void Undo() => _session?.History.Undo();
+
+    private bool CanRedo() => _session?.History.CanRedo == true;
+
+    [RelayCommand(CanExecute = nameof(CanRedo))]
+    private void Redo() => _session?.History.Redo();
+
+    private bool CanGoToHistory(HistoryItem? item) => item is not null && _session is not null && !item.IsCurrent;
+
+    [RelayCommand(CanExecute = nameof(CanGoToHistory))]
+    private void GoToHistory(HistoryItem? item)
+    {
+        if (item is not null) _session?.History.GoTo(item.Index);
+    }
+
+    /// <summary>Usado pela janela principal ao fechar o aplicativo.</summary>
+    public Task<bool> ConfirmCloseAsync() => workflow.ConfirmDiscardOrSaveAsync();
+
     // Comandos das fases seguintes — desabilitados até existirem de verdade.
     private static bool NotYetAvailable() => false;
 
-    [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void Save() { }
-    [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void Open() { }
-    [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void Undo() { }
-    [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void Redo() { }
     [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void ImportMedia() { }
     [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void Export() { }
     [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void PlayPause() { }
+
+    partial void OnMissingMediaCountChanged(int value) => ShowMissingMediaCommand.NotifyCanExecuteChanged();
 }

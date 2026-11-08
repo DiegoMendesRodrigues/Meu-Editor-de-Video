@@ -1,10 +1,20 @@
-<UserControl x:Class="MeuEditorDeVideo.App.Views.EditorView"
+﻿<UserControl x:Class="MeuEditorDeVideo.App.Views.EditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:MeuEditorDeVideo.App.ViewModels"
              Background="{DynamicResource Med.Background}"
              Foreground="{DynamicResource Med.Text}">
+    <UserControl.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="{Binding NewProjectCommand}" />
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}" />
+        <KeyBinding Key="S" Modifiers="Control+Shift" Command="{Binding SaveAsCommand}" />
+        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding UndoCommand}" />
+        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding RedoCommand}" />
+        <KeyBinding Key="Z" Modifiers="Control+Shift" Command="{Binding RedoCommand}" />
+    </UserControl.InputBindings>
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Editor.BoolToVis" />
         <!-- Botões da barra de ações e de controles -->
         <Style x:Key="Editor.Acao" TargetType="Button" BasedOn="{StaticResource Med.ToolbarButton}">
             <Setter Property="FontSize" Value="13" />
@@ -148,20 +158,28 @@
         <!-- 1. Menu -->
         <Menu Grid.Row="0">
             <MenuItem Header="{StaticResource Editor.Menu.Arquivo}">
-                <MenuItem Header="{StaticResource Editor.Menu.Inicio}" Command="{Binding GoHomeCommand}" />
-                <MenuItem Header="{StaticResource Editor.Menu.Abrir}" Command="{Binding OpenCommand}" />
-                <MenuItem Header="{StaticResource Editor.Menu.Salvar}" Command="{Binding SaveCommand}" />
+                <MenuItem Header="{StaticResource Editor.Menu.NovoProjeto}" Command="{Binding NewProjectCommand}" InputGestureText="Ctrl+N" />
+                <MenuItem Header="{StaticResource Editor.Menu.Abrir}" Command="{Binding OpenCommand}" InputGestureText="Ctrl+O" />
+                <Separator />
+                <MenuItem Header="{StaticResource Editor.Menu.Salvar}" Command="{Binding SaveCommand}" InputGestureText="Ctrl+S" />
+                <MenuItem Header="{StaticResource Editor.Menu.SalvarComo}" Command="{Binding SaveAsCommand}" InputGestureText="Ctrl+Shift+S" />
+                <MenuItem Header="{StaticResource Editor.Menu.CopiaSeguranca}" Command="{Binding CreateBackupCommand}" />
                 <Separator />
                 <MenuItem Header="{StaticResource Editor.Menu.Exportar}" Command="{Binding ExportCommand}" />
+                <Separator />
+                <MenuItem Header="{StaticResource Editor.Menu.Inicio}" Command="{Binding GoHomeCommand}" />
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Editar}">
-                <MenuItem Header="{StaticResource Editor.Menu.Desfazer}" Command="{Binding UndoCommand}" />
-                <MenuItem Header="{StaticResource Editor.Menu.Refazer}" Command="{Binding RedoCommand}" />
+                <MenuItem Header="{StaticResource Editor.Menu.Desfazer}" Command="{Binding UndoCommand}" InputGestureText="Ctrl+Z" ToolTip="{Binding UndoToolTip}" />
+                <MenuItem Header="{StaticResource Editor.Menu.Refazer}" Command="{Binding RedoCommand}" InputGestureText="Ctrl+Y" ToolTip="{Binding RedoToolTip}" />
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Visualizar}">
                 <MenuItem Header="{StaticResource Editor.Menu.AlternarTema}" Command="{Binding ToggleThemeCommand}" />
             </MenuItem>
-            <MenuItem Header="{StaticResource Editor.Menu.Projeto}" />
+            <MenuItem Header="{StaticResource Editor.Menu.Projeto}">
+                <MenuItem Header="{StaticResource Editor.Menu.EmpacotarMidias}" Command="{Binding PackageMediaCommand}" />
+                <MenuItem Header="{StaticResource Editor.Menu.MidiasAusentes}" Command="{Binding ShowMissingMediaCommand}" />
+            </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Ferramentas}" />
             <MenuItem Header="{StaticResource Editor.Menu.Ajuda}" />
         </Menu>
@@ -198,13 +216,13 @@
 
                     <Border Width="1" Background="{DynamicResource Med.Border}" Margin="8,10" />
 
-                    <Button AutomationProperties.Name="{StaticResource Editor.Acao.Desfazer}" Style="{StaticResource Editor.Acao}" Command="{Binding UndoCommand}">
+                    <Button AutomationProperties.Name="{StaticResource Editor.Acao.Desfazer}" Style="{StaticResource Editor.Acao}" Command="{Binding UndoCommand}" ToolTip="{Binding UndoToolTip}" ToolTipService.ShowOnDisabled="True">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE7A7;" />
                             <TextBlock Text="{StaticResource Editor.Acao.Desfazer}" Margin="6,0,0,0" />
                         </StackPanel>
                     </Button>
-                    <Button AutomationProperties.Name="{StaticResource Editor.Acao.Refazer}" Style="{StaticResource Editor.Acao}" Command="{Binding RedoCommand}">
+                    <Button AutomationProperties.Name="{StaticResource Editor.Acao.Refazer}" Style="{StaticResource Editor.Acao}" Command="{Binding RedoCommand}" ToolTip="{Binding RedoToolTip}" ToolTipService.ShowOnDisabled="True">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE7A6;" />
                             <TextBlock Text="{StaticResource Editor.Acao.Refazer}" Margin="6,0,0,0" />
@@ -221,9 +239,31 @@
                     </Button>
                 </StackPanel>
 
-                <TextBlock Grid.Column="1" Text="{Binding ProjectName}"
-                           Style="{StaticResource Med.MutedText}" FontSize="13"
-                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding ProjectName}" Foreground="{DynamicResource Med.Text}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <TextBlock Text="{StaticResource Editor.NaoSalvo}" FontSize="12" Margin="8,0,0,0" VerticalAlignment="Center"
+                               Foreground="{DynamicResource Med.Accent}"
+                               Visibility="{Binding IsDirty, Converter={StaticResource Editor.BoolToVis}}" />
+                    <TextBlock Text="{Binding ProjectSummary}" Style="{StaticResource Med.MutedText}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    <Button AutomationProperties.Name="{StaticResource Editor.MidiasAusentes}" Command="{Binding ShowMissingMediaCommand}"
+                            Margin="12,0,0,0" Padding="8,2">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource Editor.Acao}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding MissingMediaCount}" Value="0">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE7BA;" Foreground="{DynamicResource Med.Danger}" />
+                            <TextBlock Margin="6,0,0,0" Foreground="{DynamicResource Med.Danger}">
+                                <Run Text="{Binding MissingMediaCount, Mode=OneWay}" /><Run Text=" " /><Run Text="{StaticResource Editor.MidiasAusentesSufixo}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button AutomationProperties.Name="{StaticResource Editor.Acao.AlternarTema}" Style="{StaticResource Editor.Acao}" Command="{Binding ToggleThemeCommand}"
@@ -467,6 +507,51 @@
                             <TextBlock Text="{StaticResource Editor.Propriedades.Selecione}"
                                        Style="{StaticResource Med.MutedText}" TextWrapping="Wrap"
                                        Margin="12" />
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Historico}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}">
+                            <ListBox ItemsSource="{Binding HistoryItems}" Background="Transparent" BorderThickness="0"
+                                     AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource Med.ToolbarButton}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                                Padding="8,4" AutomationProperties.Name="{Binding Description}"
+                                                Command="{Binding DataContext.GoToHistoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsUndone}" Value="True">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+                                                                    <Setter Property="FontStyle" Value="Italic" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                                                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                                                    <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBlock Grid.Column="1" Text="{Binding Time}" Style="{StaticResource Med.MutedText}" Margin="8,0,0,0" />
+                                            </Grid>
+                                        </Button>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
                         </TabItem>
                     </TabControl>
                 </Grid>

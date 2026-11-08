@@ -13,5 +13,6 @@ public interface IAppPaths
     string Cache { get; }
     string Autosave { get; }
     string AiModels { get; }
+    string Backups { get; }
     string SettingsFile { get; }
 }
