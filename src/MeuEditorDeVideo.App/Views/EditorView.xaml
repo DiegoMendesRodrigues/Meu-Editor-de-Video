@@ -242,7 +242,12 @@
                 <MenuItem Header="{StaticResource Editor.Menu.EmpacotarMidias}" Command="{Binding PackageMediaCommand}" />
                 <MenuItem Header="{StaticResource Editor.Menu.MidiasAusentes}" Command="{Binding ShowMissingMediaCommand}" />
             </MenuItem>
-            <MenuItem Header="{StaticResource Editor.Menu.Ferramentas}" />
+            <MenuItem Header="{StaticResource Editor.Menu.Ferramentas}">
+                <MenuItem Header="{StaticResource Editor.Ferramenta.Mixer}" Click="Mixer_Click" />
+                <MenuItem Header="{StaticResource Editor.Ferramenta.EditorLegendas}" Click="EditorLegendas_Click" IsEnabled="{Binding Timeline.HasSession}" />
+                <MenuItem Header="{StaticResource Editor.Ferramenta.ImportarLegendas}" Command="{Binding TextLibrary.ImportSubtitlesCommand}" />
+                <MenuItem Header="{StaticResource Editor.Ferramenta.ExportarLegendas}" Command="{Binding TextLibrary.ExportSubtitlesCommand}" />
+            </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Ajuda}" />
         </Menu>
 
@@ -514,6 +519,51 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
+
+                        <!-- Textos: modelos (texto, título, tarja, créditos, legenda) e legendas SRT/VTT (F8) -->
+                        <DockPanel Grid.Row="1" Margin="0,8,0,0" DataContext="{Binding TextLibrary}"
+                                   Visibility="{Binding DataContext.IsTextSection, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource Editor.BoolToVis}}">
+                            <StackPanel DockPanel.Dock="Bottom" Margin="4,8,4,0">
+                                <Button Content="Adicionar no cursor" HorizontalAlignment="Stretch" AutomationProperties.Name="Adicionar texto no cursor"
+                                        Command="{Binding AddPresetCommand}" />
+                                <TextBlock Text="Legendas" Style="{StaticResource Med.SectionTitle}" FontSize="13" Margin="0,12,0,6" />
+                                <Button Content="Importar SRT/VTT…" HorizontalAlignment="Stretch" Margin="0,0,0,4" AutomationProperties.Name="Importar legendas SRT ou VTT"
+                                        Command="{Binding ImportSubtitlesCommand}" />
+                                <Button Content="Editor de legendas…" HorizontalAlignment="Stretch" Margin="0,0,0,4" AutomationProperties.Name="Abrir o editor de legendas"
+                                        Click="EditorLegendas_Click" />
+                                <Button Content="Exportar SRT/VTT…" HorizontalAlignment="Stretch" AutomationProperties.Name="Exportar legendas SRT ou VTT"
+                                        Command="{Binding ExportSubtitlesCommand}" />
+                            </StackPanel>
+                            <TextBlock DockPanel.Dock="Top" Style="{StaticResource Med.MutedText}" TextWrapping="Wrap" Margin="4,0,4,8"
+                                       Text="Clique duas vezes num modelo para inseri-lo no cursor. Edite o conteúdo e o estilo na aba Texto." />
+                            <ListBox ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset}" AutomationProperties.Name="Modelos de texto"
+                                     Background="{DynamicResource Med.PanelAlt}" BorderThickness="0" HorizontalContentAlignment="Stretch"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" MouseDoubleClick="ModelosTexto_MouseDoubleClick">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                        <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="2,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="40" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="34" Height="34" CornerRadius="4" Background="{DynamicResource Med.ClipText}" VerticalAlignment="Top">
+                                                <TextBlock Text="{Binding Sample}" Foreground="White" FontWeight="Bold" FontSize="14"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                            <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" />
+                                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Style="{StaticResource Med.MutedText}" FontSize="11" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
 
                         <!-- Transições, efeitos e cor: aplicam ao clipe selecionado na linha do tempo (F6) -->
                         <DockPanel Grid.Row="1" Margin="0,8,0,0">
@@ -909,6 +959,9 @@
                         <TabItem Header="{StaticResource Editor.Propriedades.Video}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Video}">
                             <panels:ClipVideoPanel DataContext="{Binding Inspector}" />
                         </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Texto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Texto}">
+                            <panels:ClipTextPanel DataContext="{Binding TextInspector}" />
+                        </TabItem>
                         <TabItem Header="{StaticResource Editor.Propriedades.Audio}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Audio}">
                             <panels:ClipAudioPanel DataContext="{Binding AudioInspector}" />
                         </TabItem>
@@ -1030,6 +1083,10 @@
                         <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Mixer}" Style="{StaticResource Editor.Controle}"
                                 Click="Mixer_Click" ToolTip="{StaticResource Editor.Ferramenta.Mixer}">
                             <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE9E9;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.EditorLegendas}" Style="{StaticResource Editor.Controle}"
+                                Click="EditorLegendas_Click" IsEnabled="{Binding Timeline.HasSession}" ToolTip="{StaticResource Editor.Ferramenta.EditorLegendas}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xED1E;" />
                         </Button>
                         <Rectangle Width="1" Height="20" Margin="6,0" Fill="{DynamicResource Med.Border}" />
                         <ToggleButton AutomationProperties.Name="{StaticResource Editor.Ferramenta.Ima}" Style="{StaticResource Editor.Alternar}"

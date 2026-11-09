@@ -5,7 +5,8 @@ using MeuEditorDeVideo.TimelineEngine;
 namespace MeuEditorDeVideo.RenderingEngine;
 
 /// <summary>Imagem já decodificada de uma camada, pronta para compor.</summary>
-public readonly record struct LayerImage(VisualLayer Layer, BgraImage Image, bool HasAlpha);
+/// <param name="NativeSize">A imagem já está em pixels de saída (textos): não é ajustada ao quadro.</param>
+public readonly record struct LayerImage(VisualLayer Layer, BgraImage Image, bool HasAlpha, bool NativeSize = false);
 
 /// <summary>Compositor de quadros: recebe as camadas de baixo para cima e produz o quadro final.</summary>
 public interface ICompositor
@@ -46,7 +47,7 @@ public sealed class CpuCompositor : ICompositor
         if (mask is { } m && TransitionMasks.IsHidden(m)) return;
 
         // Ajuste "contain" ao quadro, depois a escala do clipe.
-        var fit = Math.Min((double)dw / img.Width, (double)dh / img.Height);
+        var fit = layer.NativeSize ? 1 : Math.Min((double)dw / img.Width, (double)dh / img.Height);
         var sx = fit * t.ScaleX * (t.FlipHorizontal ? -1 : 1);
         var sy = fit * t.ScaleY * (t.FlipVertical ? -1 : 1);
         if (Math.Abs(sx) < 1e-9 || Math.Abs(sy) < 1e-9) return;

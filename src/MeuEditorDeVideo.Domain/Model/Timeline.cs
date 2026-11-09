@@ -63,6 +63,12 @@ public sealed record Clip
     /// <summary>Conteúdo textual (clipes de texto/legenda).</summary>
     public string? Text { get; init; }
 
+    /// <summary>Formatação do texto (estilo, posição, animações); nula = padrão (RF136–RF139).</summary>
+    public TextFormat? TextFormat { get; init; }
+
+    /// <summary>Clipe gerado de texto/título/créditos/tarja/legenda.</summary>
+    public bool IsText => Text is not null && MediaAssetId is null;
+
     /// <summary>Efeitos, correção de cor e chroma key, aplicados em ordem (RF077, RF088).</summary>
     public ImmutableList<EffectInstance> Effects { get; init; } = [];
 

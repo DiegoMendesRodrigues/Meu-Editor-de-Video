@@ -62,6 +62,14 @@ public enum RateControl
 }
 
 /// <summary>Parâmetros de uma exportação. Campos nulos herdam do projeto.</summary>
+/// <summary>Arquivo de legendas gerado ao lado do vídeo exportado.</summary>
+public enum SubtitleFileExport
+{
+    None,
+    Srt,
+    Vtt,
+}
+
 public sealed record ExportSettings
 {
     public ExportContainer Container { get; init; } = ExportContainer.Mp4;
@@ -99,6 +107,12 @@ public sealed record ExportSettings
 
     /// <summary>Tamanho alvo por arquivo; a taxa de bits do vídeo é calculada a partir dele.</summary>
     public double? TargetSizeMegabytes { get; init; }
+
+    /// <summary>Desenha as trilhas de legenda no vídeo ("legendas queimadas").</summary>
+    public bool BurnSubtitles { get; init; } = true;
+
+    /// <summary>Também grava as legendas em arquivo (.srt/.vtt) com o mesmo nome do vídeo.</summary>
+    public SubtitleFileExport SubtitleFile { get; init; }
 
     public int ResolveWidth(ProjectSettings project) => Width ?? project.Width;
 

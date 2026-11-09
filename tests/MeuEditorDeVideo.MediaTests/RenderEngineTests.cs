@@ -173,6 +173,48 @@ public sealed class RenderEngineTests(SampleMedia media) : IDisposable
         public void Report(RenderProgress value) => action(value);
     }
 
+    /// <summary>F8: legendas queimadas no vídeo ou só em arquivo .srt ao lado; títulos sempre desenhados.</summary>
+    [Fact]
+    public async Task Exporta_legendas_queimadas_ou_em_arquivo()
+    {
+        var (p, paths) = await ProjectAsync();
+        var seq = p.MainSequence;
+        p = new AddTextClipCommand(seq.Id, TextPresets.Create(TextKind.Title, p.Settings, MediaTime.Zero), TrackKind.Text).Apply(p);
+        var subs = SubtitleOps.ToClips([new SubtitleEntry(MediaTime.Zero, MediaTime.FromSeconds(3), "LEGENDA DE TESTE")], p.Settings);
+        p = new ImportSubtitlesCommand(seq.Id, subs).Apply(p);
+
+        var burned = await NewEngine().RenderAsync(Request(p, paths, new ExportSettings { VideoBitrateKbps = 2000 }, "queimada"));
+        var plain = await NewEngine().RenderAsync(Request(p, paths,
+            new ExportSettings { VideoBitrateKbps = 2000, BurnSubtitles = false, SubtitleFile = SubtitleFileExport.Srt }, "arquivo"));
+
+        var srt = Path.ChangeExtension(Assert.Single(plain.Files), ".srt");
+        Assert.True(File.Exists(srt));
+        var cue = Assert.Single(Core.Subtitles.SubtitleFile.Load(srt));
+        Assert.Equal("LEGENDA DE TESTE", cue.Text);
+        Assert.False(File.Exists(Path.ChangeExtension(Assert.Single(burned.Files), ".srt")));
+
+        // Faixa de baixo (onde fica a legenda) difere entre as duas exportações; o título (centro) aparece nas duas.
+        using var frames = new VideoFrameSourceFactory(NullLoggerFactory.Instance).Create(false);
+        async Task<Core.Media.BgraImage> FrameAsync(string file)
+        {
+            var r = await _probe.ProbeAsync(file);
+            var asset = new MediaAsset { Id = Guid.NewGuid(), Kind = r.Kind, Name = "e", OriginalPath = file, Duration = r.Duration, Width = r.Width, Height = r.Height, FrameRate = r.FrameRate, Info = r.Info };
+            return frames.GetFrame(asset, file, MediaTime.FromSecondsApprox(1.5), 320, 180)!;
+        }
+        var a = await FrameAsync(burned.Files[0]);
+        var b = await FrameAsync(plain.Files[0]);
+        double Diff(int y0, int y1)
+        {
+            long sum = 0;
+            for (var y = y0; y < y1; y++)
+                for (var x = 0; x < 320; x++)
+                    for (var c = 0; c < 3; c++) sum += Math.Abs(a.Pixels[(y * 320 + x) * 4 + c] - b.Pixels[(y * 320 + x) * 4 + c]);
+            return sum / ((y1 - y0) * 320 * 3.0);
+        }
+        Assert.True(Diff(150, 175) > 8, $"faixa da legenda: {Diff(150, 175)}");
+        Assert.True(Diff(60, 120) < 4, $"centro: {Diff(60, 120)}");
+    }
+
     public void Dispose()
     {
         try { Directory.Delete(_out, recursive: true); } catch (IOException) { } catch (UnauthorizedAccessException) { }

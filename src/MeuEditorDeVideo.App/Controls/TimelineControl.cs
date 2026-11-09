@@ -421,7 +421,7 @@ public sealed class TimelineControl : TimelineSurface
 
         // Faixa do título.
         dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(110, 0, 0, 0)), null, new Rect(rect.Left, rect.Top, rect.Width, 16));
-        var label = asset?.Name ?? "Clipe";
+        var label = asset?.Name ?? (clip.IsText ? ViewModels.Inspector.ClipInspectorViewModel.TextTitle(clip.Text!) : "Clipe");
         if (clip.Speed != Rational.One)
             label += " · " + clip.Speed.Value.ToString("0.##", CultureInfo.GetCultureInfo("pt-BR")) + "×";
         if (clip.GroupId is not null) label = "▣ " + label;

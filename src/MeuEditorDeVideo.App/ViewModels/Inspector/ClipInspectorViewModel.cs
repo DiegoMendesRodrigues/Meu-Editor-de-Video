@@ -174,9 +174,16 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         {
             if (!t.IsVisual) continue;
             foreach (var c in t.Clips)
-                if (Timeline.Selection.Contains(c.Id) && c.MediaAssetId is not null) return (t, c);
+                if (Timeline.Selection.Contains(c.Id) && (c.MediaAssetId is not null || c.IsText)) return (t, c);
         }
         return null;
+    }
+
+    /// <summary>Primeira linha do texto, para títulos de clipes de texto.</summary>
+    public static string TextTitle(string text)
+    {
+        var line = text.Replace("\r\n", "\n").Split('\n').FirstOrDefault(l => l.Trim().Length > 0)?.Trim() ?? "";
+        return "T  " + (line.Length > 40 ? line[..40] + "…" : line);
     }
 
     public MediaTime Offset(Clip c)
@@ -203,8 +210,8 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         _updating = true;
         try
         {
-            var asset = Timeline.Project?.FindMedia(clip.MediaAssetId!.Value);
-            ClipTitle = asset?.Name ?? "Clipe";
+            var asset = clip.MediaAssetId is { } id ? Timeline.Project?.FindMedia(id) : null;
+            ClipTitle = asset?.Name ?? (clip.IsText ? TextTitle(clip.Text!) : "Clipe");
             foreach (var a in Animated) a.Refresh(clip, offset);
             foreach (var c in Crop) c.Refresh(clip);
             foreach (var f in Fades) f.Refresh(clip);
@@ -420,7 +427,7 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     [RelayCommand]
     private void FillFrame()
     {
-        if (Current() is not { } cur || Timeline.Project is not { } project || project.FindMedia(cur.Clip.MediaAssetId!.Value) is not { } asset) return;
+        if (Current() is not { } cur || Timeline.Project is not { } project || cur.Clip.MediaAssetId is not { } assetId || project.FindMedia(assetId) is not { } asset) return;
         if (asset.Width <= 0 || asset.Height <= 0) return;
         double pw = project.Settings.Width, ph = project.Settings.Height;
         var contain = Math.Min(pw / asset.Width, ph / asset.Height);

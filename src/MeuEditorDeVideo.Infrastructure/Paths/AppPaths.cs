@@ -27,6 +27,8 @@ public sealed class AppPaths : IAppPaths
     public string Autosave => Path.Combine(LocalData, "autosave");
     public string AiModels => Path.Combine(LocalData, "ai-models");
     public string Backups => Path.Combine(LocalData, "backups");
+    /// <summary>Fontes adicionadas pelo usuário para textos (sem instalar no Windows).</summary>
+    public string Fonts => Path.Combine(RoamingData, "fonts");
     public string SettingsFile => Path.Combine(RoamingData, "settings.json");
 
     public void EnsureCreated()

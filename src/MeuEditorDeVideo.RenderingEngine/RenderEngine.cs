@@ -4,6 +4,8 @@ using MeuEditorDeVideo.AudioEngine;
 using MeuEditorDeVideo.Core.Errors;
 using MeuEditorDeVideo.Core.Export;
 using MeuEditorDeVideo.Core.Media;
+using MeuEditorDeVideo.Core.Subtitles;
+using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 using MeuEditorDeVideo.MediaEngine.Export;
@@ -179,11 +181,50 @@ public sealed class RenderEngine(
             }
         }
 
+        WriteSubtitleFiles(settings, sequence, parts, fps, warnings);
         TryDeleteDirectory(req.WorkDirectory);
         logger.LogInformation("Exportação concluída: {Files} arquivo(s), {Frames} quadros com {Encoder} em {Elapsed}.",
             files.Count, totalFrames, encoder, watch.Elapsed);
         return new RenderResult(files, EncoderCatalog.DisplayName(encoder!), watch.Elapsed, warnings);
     }
+
+    /// <summary>
+    /// Legendas em arquivo (.srt/.vtt) ao lado de cada parte exportada, com os tempos relativos ao início da parte
+    /// e cortados ao intervalo dela (RF140/RF141 no sentido inverso: legendas para players e plataformas).
+    /// </summary>
+    public static IReadOnlyList<string> WriteSubtitleFiles(ExportSettings settings, Sequence sequence, IEnumerable<(string Output, MediaTime Start, MediaTime End)> parts,
+        ICollection<string>? warnings = null)
+    {
+        var written = new List<string>();
+        if (settings.SubtitleFile == SubtitleFileExport.None) return written;
+        var entries = SubtitleOps.FromSequence(sequence);
+        if (entries.Count == 0)
+        {
+            warnings?.Add("Não há legendas na sequência; o arquivo de legendas não foi criado.");
+            return written;
+        }
+        var format = settings.SubtitleFile == SubtitleFileExport.Vtt ? SubtitleFormat.Vtt : SubtitleFormat.Srt;
+        foreach (var (output, start, end) in parts)
+        {
+            var cues = entries.Where(e => e.End > start && e.Start < end)
+                .Select(e => new SubtitleCue(MediaTime.Max(e.Start, start) - start, MediaTime.Min(e.End, end) - start, e.Text))
+                .ToList();
+            var path = Path.ChangeExtension(output, format == SubtitleFormat.Vtt ? ".vtt" : ".srt");
+            try
+            {
+                SubtitleFile.Save(path, cues, format);
+                written.Add(path);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                warnings?.Add($"Não foi possível gravar as legendas em \"{path}\": {ex.Message}");
+            }
+        }
+        return written;
+    }
+
+    private static void WriteSubtitleFiles(ExportSettings settings, Sequence sequence, IReadOnlyList<Part> parts, FrameRate fps, List<string> warnings) =>
+        WriteSubtitleFiles(settings, sequence, parts.Select(p => (p.Output, fps.FrameToTime(p.StartFrame), fps.FrameToTime(p.EndFrame))), warnings);
 
     // ------------------------------------------------------------------ codificação
 
@@ -228,7 +269,8 @@ public sealed class RenderEngine(
 
     private BgraImage RenderFrame(IVideoFrameSource video, Project project, Sequence sequence, IReadOnlyDictionary<Guid, string> paths,
         VideoEncodeSpec spec, MediaTime t) =>
-        _frames.Render(video, project, sequence, paths, t, spec.Width, spec.Height, spec.Alpha);
+        _frames.Render(video, project, sequence, paths, t, spec.Width, spec.Height, spec.Alpha,
+            includeSubtitles: spec.Settings.BurnSubtitles);
 
     private static List<Part> SplitParts(string output, ExportSettings settings, FrameRate fps, long first, long end)
     {

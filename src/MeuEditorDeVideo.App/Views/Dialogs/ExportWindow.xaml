@@ -173,6 +173,15 @@
                           Visibility="{Binding SupportsAlpha, Converter={StaticResource BoolToVis}}"
                           AutomationProperties.Name="Exportar transparência" />
 
+                <StackPanel Visibility="{Binding HasSubtitles, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="Legendas" Style="{StaticResource Section}" />
+                    <CheckBox Content="Desenhar as legendas no vídeo (legendas queimadas)" IsChecked="{Binding BurnSubtitles}" Margin="0,0,0,8"
+                              AutomationProperties.Name="Legendas queimadas no vídeo" />
+                    <TextBlock Text="Arquivo de legendas ao lado do vídeo" Style="{StaticResource Label}" />
+                    <ComboBox ItemsSource="{Binding SubtitleFiles}" SelectedItem="{Binding SubtitleFile}" DisplayMemberPath="Label"
+                              AutomationProperties.Name="Arquivo de legendas" Style="{StaticResource Field}" Margin="0,0,0,12" HorizontalAlignment="Left" MinWidth="200" />
+                </StackPanel>
+
                 <TextBlock Text="Áudio" Style="{StaticResource Section}" />
                 <Grid>
                     <Grid.ColumnDefinitions>

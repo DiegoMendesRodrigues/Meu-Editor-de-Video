@@ -67,11 +67,20 @@ public sealed partial class EditorViewModel(
     [ObservableProperty]
     public partial AudioInspectorViewModel? AudioInspector { get; set; }
 
+    /// <summary>Propriedades do texto/legenda selecionado (painel C: Texto — F8).</summary>
+    [ObservableProperty]
+    public partial TextInspectorViewModel? TextInspector { get; set; }
+
+    /// <summary>Seção Textos da biblioteca: modelos e legendas (F8).</summary>
+    [ObservableProperty]
+    public partial TextLibraryViewModel? TextLibrary { get; set; }
+
     partial void OnSelectedSectionChanged(LibrarySection value)
     {
         if (Library is not null) Library.Filter = FilterFor(value);
         OnPropertyChanged(nameof(IsMediaSection));
         OnPropertyChanged(nameof(IsEffectSection));
+        OnPropertyChanged(nameof(IsTextSection));
         OnPropertyChanged(nameof(IsUnavailableSection));
         OnPropertyChanged(nameof(SectionItems));
     }
@@ -84,8 +93,11 @@ public sealed partial class EditorViewModel(
     /// <summary>Transições, efeitos e cor: catálogo aplicável ao clipe selecionado (F6).</summary>
     public bool IsEffectSection => SelectedSection is LibrarySection.Transitions or LibrarySection.Effects or LibrarySection.Color;
 
-    /// <summary>Seções que chegam em fases futuras (gráficos, textos, IA).</summary>
-    public bool IsUnavailableSection => !IsMediaSection && !IsEffectSection;
+    /// <summary>Textos, títulos, créditos, tarjas e legendas (F8).</summary>
+    public bool IsTextSection => SelectedSection == LibrarySection.Texts;
+
+    /// <summary>Seções que chegam em fases futuras (gráficos, IA).</summary>
+    public bool IsUnavailableSection => !IsMediaSection && !IsEffectSection && !IsTextSection;
 
     public IReadOnlyList<LibraryEffectItem> SectionItems => (SelectedSection, Inspector) switch
     {
@@ -146,6 +158,8 @@ public sealed partial class EditorViewModel(
         Preview = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<PreviewViewModel>(services, Timeline);
         Inspector = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<ClipInspectorViewModel>(services, Timeline, Preview);
         AudioInspector = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<AudioInspectorViewModel>(services, Timeline);
+        TextInspector = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<TextInspectorViewModel>(services, Timeline);
+        TextLibrary = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<TextLibraryViewModel>(services, Timeline);
         projects.SessionChanged += OnSessionChanged;
         projects.Saved += OnSaved;
         AttachSession();
@@ -162,6 +176,9 @@ public sealed partial class EditorViewModel(
         Inspector = null;
         AudioInspector?.Dispose();
         AudioInspector = null;
+        TextInspector?.Dispose();
+        TextInspector = null;
+        TextLibrary = null;
         Preview?.Dispose();
         Preview = null;
         Timeline?.Dispose();

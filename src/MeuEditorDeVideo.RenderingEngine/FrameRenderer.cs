@@ -2,6 +2,7 @@ using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 using MeuEditorDeVideo.ImageEngine.Effects;
+using MeuEditorDeVideo.ImageEngine.Text;
 using MeuEditorDeVideo.TimelineEngine;
 
 namespace MeuEditorDeVideo.RenderingEngine;
@@ -15,14 +16,25 @@ public sealed class FrameRenderer(ICompositor compositor)
 {
     /// <param name="bypassEffects">Ignora efeitos e correção de cor (lado "antes" da comparação, RF101).</param>
     public BgraImage Render(IVideoFrameSource video, Project project, Sequence sequence, IReadOnlyDictionary<Guid, string> paths,
-        MediaTime t, int width, int height, bool transparentBackground = false, bool bypassEffects = false)
+        MediaTime t, int width, int height, bool transparentBackground = false, bool bypassEffects = false, bool includeSubtitles = true)
     {
-        var graph = TimelineEvaluator.Evaluate(project, sequence, t);
+        var graph = TimelineEvaluator.Evaluate(project, sequence, t, includeSubtitles);
         var layers = new List<LayerImage>(graph.Layers.Count);
         var ctx = new EffectContext(graph.Width > 0 ? (double)width / graph.Width : 1, project.Settings.FrameRate.TimeToFrame(t));
-        foreach (var layer in graph.Layers)
+        foreach (var visual in graph.Layers)
         {
-            if (!paths.TryGetValue(layer.Asset.Id, out var path)) continue;
+            var layer = visual;
+            if (layer.Text is { } text)
+            {
+                if (TextImage(layer, text, graph, width, height) is { } textLayer)
+                {
+                    var (img, positioned) = textLayer;
+                    if (!bypassEffects && positioned.Effects.Count > 0) img = EffectProcessor.Apply(img, positioned.Effects, ctx).Image;
+                    layers.Add(new LayerImage(positioned, img, HasAlpha: true, NativeSize: true));
+                }
+                continue;
+            }
+            if (layer.Asset is null || !paths.TryGetValue(layer.Asset.Id, out var path)) continue;
             var image = video.GetFrame(layer.Asset, path, layer.SourceTime, width, height);
             if (image is null) continue;
 
@@ -39,6 +51,39 @@ public sealed class FrameRenderer(ICompositor compositor)
             layers.Add(new LayerImage(layer, image, hasAlpha));
         }
         return compositor.Compose(width, height, graph.Width, layers, transparentBackground);
+    }
+
+    /// <summary>
+    /// Rasteriza o texto na escala de saída e converte a posição do clipe (ponto de ancoragem do bloco, conforme
+    /// alinhamento e âncora vertical) no centro da imagem; nos créditos, calcula a rolagem de baixo para cima.
+    /// </summary>
+    private static (BgraImage Image, VisualLayer Layer)? TextImage(VisualLayer layer, TextLayer text, CompositionGraph graph, int width, int height)
+    {
+        var scale = graph.Width > 0 ? (double)width / graph.Width : 1;
+        var raster = TextRasterizer.Render(text.Text, text.VisibleCharacters, text.Format.Style, scale, width);
+        var boxW = raster.BoxWidth / scale;
+        var boxH = raster.BoxHeight / scale;
+        var t = layer.Transform;
+        var x = text.Format.Style.Align switch
+        {
+            TextAlign.Left => t.X + boxW / 2,
+            TextAlign.Right => t.X - boxW / 2,
+            _ => t.X,
+        };
+        var y = text.Format.Anchor switch
+        {
+            TextAnchor.Top => t.Y + boxH / 2,
+            TextAnchor.Bottom => t.Y - boxH / 2,
+            _ => t.Y,
+        };
+        if (text.Roll is { } roll)
+        {
+            // Entra pela base (bloco todo abaixo do quadro) e sai pelo topo.
+            var h = graph.Height;
+            y = t.Y + (h / 2.0 + boxH / 2) - roll * (h + boxH);
+            if (Math.Abs(y - t.Y) > h / 2.0 + boxH / 2 + 1) return null;
+        }
+        return (raster.Image, layer with { Transform = t with { X = x, Y = y } });
     }
 
     /// <summary>Comparação antes/depois lado a lado: metade esquerda sem efeitos, metade direita com efeitos (RF101).</summary>

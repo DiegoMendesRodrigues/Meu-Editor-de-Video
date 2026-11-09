@@ -96,6 +96,10 @@
     <sys:String x:Key="Editor.Biblioteca.GerarProxy">Gerar proxy de edição (540p)</sys:String>
     <sys:String x:Key="Editor.Biblioteca.ExcluirProxy">Excluir proxy</sys:String>
     <sys:String x:Key="Editor.Monitor.UsarProxies">Usar proxies na pré-visualização (vídeos grandes ficam mais leves; a exportação usa sempre o original)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.EditorLegendas">Editor de legendas</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.ImportarLegendas">Importar legendas (SRT/VTT)…</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.ExportarLegendas">Exportar legendas (SRT/VTT)…</sys:String>
+    <sys:String x:Key="Editor.Propriedades.Texto">Texto</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Mixer">Mixer de áudio</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Ima">Ímã de alinhamento (N)</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Ripple">Edição em cascata (ripple)</sys:String>

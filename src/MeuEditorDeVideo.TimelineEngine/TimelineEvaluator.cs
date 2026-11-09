@@ -8,11 +8,17 @@ namespace MeuEditorDeVideo.TimelineEngine;
 /// <summary>Máscara de transição avaliada em coordenadas do quadro de saída (cortinas e formas geométricas).</summary>
 public readonly record struct TransitionMask(TransitionKind Kind, double Progress);
 
-/// <summary>Camada visual de um quadro: mídia, instante de origem, transformação, opacidade e efeitos ativos.</summary>
+/// <summary>
+/// Texto a desenhar numa camada (RF132–RF139): conteúdo completo (define o tamanho do bloco), quantos caracteres
+/// aparecem (máquina de escrever) e, nos créditos, o progresso da rolagem (0 = abaixo do quadro, 1 = acima).
+/// </summary>
+public sealed record TextLayer(string Text, int VisibleCharacters, TextFormat Format, double? Roll = null);
+
+/// <summary>Camada visual de um quadro: mídia (ou texto), instante de origem, transformação, opacidade e efeitos ativos.</summary>
 public sealed record VisualLayer(
     Guid ClipId,
     Guid TrackId,
-    MediaAsset Asset,
+    MediaAsset? Asset,
     MediaTime SourceTime,
     Transform Transform,
     double Opacity,
@@ -26,6 +32,9 @@ public sealed record VisualLayer(
     public double BlendWeight { get; init; }
 
     public TransitionMask? Mask { get; init; }
+
+    /// <summary>Camada de texto gerado (sem mídia).</summary>
+    public TextLayer? Text { get; init; }
 }
 
 /// <summary>
@@ -64,16 +73,28 @@ public static class TimelineEvaluator
     public static MediaTime SourceTimeAt(Clip clip, MediaTime t) =>
         clip.SourceIn + clip.Speed.SourceDurationOf(t - clip.Start);
 
-    public static CompositionGraph Evaluate(Project project, Sequence sequence, MediaTime t)
+    /// <summary>
+    /// Ordem de composição das trilhas, de baixo para cima: mídias (vídeo, imagem, efeito), depois textos e por fim
+    /// legendas — textos e legendas ficam sempre na frente do vídeo. Dentro de cada grupo vale a ordem da linha do tempo.
+    /// </summary>
+    public static IEnumerable<Track> CompositionOrder(Sequence sequence)
+    {
+        static int Group(TrackKind k) => k switch { TrackKind.Subtitle => 2, TrackKind.Text => 1, _ => 0 };
+        return Enumerable.Range(0, sequence.Tracks.Count).Reverse()
+            .Select(i => sequence.Tracks[i])
+            .Where(t => t.IsVisual)
+            .OrderBy(t => Group(t.Kind)); // OrderBy é estável: preserva a ordem de baixo para cima em cada grupo
+    }
+
+    /// <param name="includeSubtitles">Falso na exportação sem legendas "queimadas" (as legendas vão para um arquivo).</param>
+    public static CompositionGraph Evaluate(Project project, Sequence sequence, MediaTime t, bool includeSubtitles = true)
     {
         var width = project.Settings.Width;
         var height = project.Settings.Height;
         var layers = new List<VisualLayer>();
-        // De baixo para cima: percorre as trilhas da última para a primeira.
-        for (var i = sequence.Tracks.Count - 1; i >= 0; i--)
+        foreach (var track in CompositionOrder(sequence))
         {
-            var track = sequence.Tracks[i];
-            if (!track.IsVisual || track.IsHidden) continue;
+            if (track.IsHidden || (!includeSubtitles && track.Kind == TrackKind.Subtitle)) continue;
 
             if (ActiveTransition(track, t) is { } active)
             {
@@ -159,6 +180,7 @@ public static class TimelineEvaluator
     /// <summary>Camada de um clipe no instante (aceita instantes fora do clipe, usados pelas transições).</summary>
     public static VisualLayer? Layer(Project project, Track track, Clip clip, MediaTime t)
     {
+        if (clip.IsText) return TextLayerOf(project, track, clip, t);
         if (clip.MediaAssetId is not { } id || project.FindMedia(id) is not { HasVideo: true } asset) return null;
 
         var offset = MediaTime.Max(MediaTime.Zero, MediaTime.Min(clip.Duration, t - clip.Start));
@@ -192,6 +214,38 @@ public static class TimelineEvaluator
             BlendMode = clip.BlendMode,
             BlendSourceTime = blendSource,
             BlendWeight = blendWeight,
+        };
+    }
+
+    /// <summary>Camada de um clipe de texto: animações de entrada/saída, keyframes, entrada/saída gradual e rolagem dos créditos.</summary>
+    private static VisualLayer? TextLayerOf(Project project, Track track, Clip clip, MediaTime t)
+    {
+        var text = clip.Text ?? "";
+        if (text.Trim().Length == 0) return null;
+        var offset = MediaTime.Max(MediaTime.Zero, MediaTime.Min(clip.Duration, t - clip.Start));
+        var anim = TextAnimator.At(clip, offset, project.Settings.Width, project.Settings.Height);
+        var opacity = ClipAnimation.OpacityAt(clip, offset) * anim.Opacity;
+        if (opacity <= 0) return null;
+        var visible = TextAnimator.VisibleCharacters(text, anim.Visible);
+        if (visible == 0) return null;
+
+        var transform = ClipAnimation.TransformAt(clip, offset);
+        transform = transform with
+        {
+            X = transform.X + anim.OffsetX,
+            Y = transform.Y + anim.OffsetY,
+            ScaleX = transform.ScaleX * anim.Scale,
+            ScaleY = transform.ScaleY * anim.Scale,
+        };
+        var format = clip.TextFormat ?? TextFormat.Default;
+        double? roll = format.Kind == TextKind.Credits && clip.Duration > MediaTime.Zero
+            ? Math.Clamp((double)offset.Ticks / clip.Duration.Ticks, 0, 1)
+            : null;
+
+        return new VisualLayer(clip.Id, track.Id, null, offset, transform, opacity, EffectCatalog.ActiveEffects(clip))
+        {
+            BlendMode = clip.BlendMode,
+            Text = new TextLayer(text, visible, format, roll),
         };
     }
 

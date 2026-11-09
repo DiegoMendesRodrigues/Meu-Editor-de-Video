@@ -54,6 +54,34 @@ public partial class EditorView : UserControl
         _mixer.Show();
     }
 
+    private Dialogs.SubtitleEditorWindow? _legendas;
+
+    /// <summary>Abre (ou traz para a frente) o editor de legendas (RF143).</summary>
+    private void EditorLegendas_Click(object sender, RoutedEventArgs e)
+    {
+        if (_legendas is not null)
+        {
+            _legendas.Activate();
+            return;
+        }
+        if (DataContext is not EditorViewModel { Timeline: { } timeline, TextLibrary: { } library } editor) return;
+        _legendas = new Dialogs.SubtitleEditorWindow(new ViewModels.Timeline.SubtitleEditorViewModel(timeline, library, library.Dialogs),
+            editor.UndoCommand, editor.RedoCommand)
+        {
+            Owner = Window.GetWindow(this),
+        };
+        _legendas.Closed += (_, _) => _legendas = null;
+        _legendas.Show();
+    }
+
+    /// <summary>Duplo clique num modelo de texto insere-o no cursor.</summary>
+    private void ModelosTexto_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (e.OriginalSource is DependencyObject d && ItemsControl.ContainerFromElement((ItemsControl)sender, d) is ListBoxItem { DataContext: ViewModels.Timeline.TextPresetItem item }
+            && DataContext is EditorViewModel { TextLibrary: { } library })
+            library.AddPresetCommand.Execute(item);
+    }
+
     /// <summary>Duplo clique no monitor abre a tela cheia.</summary>
     private void Monitor_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {

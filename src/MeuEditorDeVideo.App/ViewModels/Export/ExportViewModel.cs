@@ -97,6 +97,12 @@ public sealed partial class ExportViewModel : ObservableObject
 
     public IReadOnlyList<Choice<int>> ChannelOptions { get; } = [new(1, "Mono"), new(2, "Estéreo"), new(6, "5.1")];
 
+    public IReadOnlyList<Choice<SubtitleFileExport>> SubtitleFiles { get; } =
+        [new(SubtitleFileExport.None, "Nenhum"), new(SubtitleFileExport.Srt, "SubRip (.srt)"), new(SubtitleFileExport.Vtt, "WebVTT (.vtt)")];
+
+    /// <summary>A sequência tem trilhas de legenda com conteúdo (mostra as opções de legenda).</summary>
+    public bool HasSubtitles => _session.Project.MainSequence.Tracks.Exists(t => t.Kind == Domain.Model.TrackKind.Subtitle && t.Clips.Count > 0);
+
     public IReadOnlyList<Choice<string?>> Profiles { get; } = [new(null, "Padrão"), new("high", "High"), new("main", "Main"), new("baseline", "Baseline")];
 
     public ObservableCollection<Choice<VideoCodec>> VideoCodecs { get; } = [];
@@ -121,6 +127,8 @@ public sealed partial class ExportViewModel : ObservableObject
     [ObservableProperty] public partial Choice<int>? SampleRate { get; set; }
     [ObservableProperty] public partial Choice<int>? Channels { get; set; }
     [ObservableProperty] public partial bool Alpha { get; set; }
+    [ObservableProperty] public partial bool BurnSubtitles { get; set; } = true;
+    [ObservableProperty] public partial Choice<SubtitleFileExport>? SubtitleFile { get; set; }
     [ObservableProperty] public partial bool SplitByDuration { get; set; }
     [ObservableProperty] public partial string MaxSecondsText { get; set; } = "60";
     [ObservableProperty] public partial bool LimitSize { get; set; }
@@ -214,6 +222,8 @@ public sealed partial class ExportViewModel : ObservableObject
             SampleRate = SampleRates.FirstOrDefault(r => r.Value == s.SampleRate) ?? SampleRates[1];
             Channels = ChannelOptions.FirstOrDefault(c => c.Value == s.AudioChannels) ?? ChannelOptions[1];
             Alpha = s.Alpha;
+            BurnSubtitles = s.BurnSubtitles;
+            SubtitleFile = SubtitleFiles.First(f => f.Value == s.SubtitleFile);
             SplitByDuration = s.MaxSecondsPerFile is not null;
             MaxSecondsText = (s.MaxSecondsPerFile ?? 60).ToString("0.##", PtBr);
             LimitSize = s.TargetSizeMegabytes is not null;
@@ -261,6 +271,8 @@ public sealed partial class ExportViewModel : ObservableObject
     partial void OnSampleRateChanged(Choice<int>? value) => Changed();
     partial void OnChannelsChanged(Choice<int>? value) => Changed();
     partial void OnAlphaChanged(bool value) => Changed();
+    partial void OnBurnSubtitlesChanged(bool value) => Changed();
+    partial void OnSubtitleFileChanged(Choice<SubtitleFileExport>? value) => Changed();
     partial void OnSplitByDurationChanged(bool value) => Changed();
     partial void OnMaxSecondsTextChanged(string value) => Changed();
     partial void OnLimitSizeChanged(bool value) => Changed();
@@ -351,6 +363,8 @@ public sealed partial class ExportViewModel : ObservableObject
             SampleRate = SampleRate?.Value ?? 48_000,
             AudioChannels = Channels?.Value ?? 2,
             Alpha = Alpha && SupportsAlpha,
+            BurnSubtitles = BurnSubtitles,
+            SubtitleFile = SubtitleFile?.Value ?? SubtitleFileExport.None,
             MaxSecondsPerFile = maxSeconds,
             TargetSizeMegabytes = target,
         };

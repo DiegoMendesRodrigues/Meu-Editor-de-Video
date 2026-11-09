@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Threading;
@@ -31,8 +31,10 @@ public partial class App : System.Windows.Application
     {
         ApplyPortugueseCulture();
 
+        var paths = new AppPaths();
+        ImageEngine.Text.FontCatalog.UserFontsFolder = paths.Fonts;
         _host = Host.CreateDefaultBuilder(e.Args)
-            .UseMeuEditorInfrastructure(new AppPaths())
+            .UseMeuEditorInfrastructure(paths)
             .ConfigureServices(ConfigureServices)
             .Build();
 
