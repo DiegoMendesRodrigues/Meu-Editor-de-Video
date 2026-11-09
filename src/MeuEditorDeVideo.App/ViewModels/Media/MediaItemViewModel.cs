@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -41,6 +41,27 @@ public sealed partial class MediaItemViewModel : ObservableObject
 
     [ObservableProperty]
     public partial bool PreviewFailed { get; set; }
+
+    /// <summary>Situação do proxy 540p (pré-visualização leve de vídeos grandes).</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ProxyLabel), nameof(HasProxyLabel), nameof(InfoLines), nameof(HasProxy), nameof(CanGenerateProxy))]
+    public partial ProxyStatus? Proxy { get; set; }
+
+    public bool HasProxy => Proxy?.State == ProxyState.Ready;
+
+    public bool CanGenerateProxy => ProxyPolicy.Supports(Asset) && Proxy?.State is null or ProxyState.None or ProxyState.Failed;
+
+    /// <summary>Selo na miniatura: "Proxy", "Proxy 45%" ou "Proxy falhou".</summary>
+    public string ProxyLabel => Proxy?.State switch
+    {
+        ProxyState.Ready => "Proxy",
+        ProxyState.Queued => "Proxy na fila",
+        ProxyState.Generating => $"Proxy {Proxy.Progress * 100:0}%",
+        ProxyState.Failed => "Proxy falhou",
+        _ => "",
+    };
+
+    public bool HasProxyLabel => ProxyLabel.Length > 0;
 
     public bool PreviewRequested { get; set; }
 
@@ -106,6 +127,15 @@ public sealed partial class MediaItemViewModel : ObservableObject
             if (i.BitRate > 0) lines.Add(new("Taxa de bits", FormatBitRate(i.BitRate)));
             if (i.VideoStreams + i.AudioStreams + i.SubtitleStreams > 1)
                 lines.Add(new("Faixas", $"{i.VideoStreams} de vídeo, {i.AudioStreams} de áudio, {i.SubtitleStreams} de legenda"));
+            if (ProxyPolicy.Supports(a))
+                lines.Add(new("Proxy de edição", Proxy?.State switch
+                {
+                    ProxyState.Ready => "Pronto (540p, usado na pré-visualização)",
+                    ProxyState.Queued => "Na fila",
+                    ProxyState.Generating => $"Gerando ({Proxy.Progress * 100:0}%)",
+                    ProxyState.Failed => $"Falhou: {Proxy.Error}",
+                    _ => ProxyPolicy.IsRecommended(a) ? "Não gerado (recomendado para esta resolução)" : "Não gerado",
+                }));
             lines.Add(new("Categoria", a.Category ?? "Sem categoria"));
             return lines;
         }

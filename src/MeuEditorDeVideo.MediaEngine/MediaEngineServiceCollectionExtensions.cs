@@ -12,6 +12,7 @@ public static class MediaEngineServiceCollectionExtensions
         services.AddSingleton<IMediaProbe, MediaProbe>();
         services.AddSingleton<IThumbnailProvider, ThumbnailProvider>();
         services.AddSingleton<IWaveformProvider, WaveformProvider>();
+        services.AddSingleton<IProxyService, ProxyService>();
         services.AddSingleton<IVideoFrameSourceFactory, VideoFrameSourceFactory>();
         services.AddSingleton<IAudioSampleSourceFactory, AudioSampleSourceFactory>();
         return services;

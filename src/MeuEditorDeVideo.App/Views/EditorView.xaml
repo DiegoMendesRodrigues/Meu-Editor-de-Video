@@ -594,6 +594,11 @@
                                             <MenuItem Header="{StaticResource Editor.Biblioteca.RemoverCategoria}"
                                                       Command="{Binding PlacementTarget.DataContext.Library.ClearCategoryCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                                             <Separator />
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.GerarProxy}"
+                                                      Command="{Binding PlacementTarget.DataContext.Library.GenerateProxyCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.ExcluirProxy}"
+                                                      Command="{Binding PlacementTarget.DataContext.Library.DeleteProxyCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                            <Separator />
                                             <MenuItem Header="{StaticResource Editor.Biblioteca.RemoverDoProjeto}"
                                                       Command="{Binding PlacementTarget.DataContext.Library.RemoveSelectedCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                                         </ContextMenu>
@@ -658,6 +663,13 @@
                                                         <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="3"
                                                                 Background="#99000000" Padding="3,0">
                                                             <TextBlock Text="{Binding Badge}" FontSize="10" Foreground="White" />
+                                                        </Border>
+                                                        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3"
+                                                                Background="#CC1E6FD9" Padding="3,0" CornerRadius="2"
+                                                                Visibility="{Binding HasProxyLabel, Converter={StaticResource Editor.BoolToVis}}"
+                                                                ToolTip="Proxy de edição 540p (usado só na pré-visualização)">
+                                                            <TextBlock Text="{Binding ProxyLabel}" FontSize="10" Foreground="White"
+                                                                       AutomationProperties.Name="{Binding ProxyLabel}" />
                                                         </Border>
                                                     </Grid>
                                                 </Border>
@@ -819,6 +831,11 @@
                                       DisplayMemberPath="Label" MinWidth="88" Margin="0,0,4,0"
                                       AutomationProperties.Name="{StaticResource Editor.Monitor.Qualidade}"
                                       ToolTip="{StaticResource Editor.Monitor.Qualidade}" />
+                            <ToggleButton Style="{StaticResource Editor.Alternar}" IsChecked="{Binding Preview.UseProxies}" Margin="0,0,4,0"
+                                          AutomationProperties.Name="{StaticResource Editor.Monitor.UsarProxies}"
+                                          ToolTip="{StaticResource Editor.Monitor.UsarProxies}">
+                                <TextBlock Text="Proxy" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            </ToggleButton>
                             <Button AutomationProperties.Name="{StaticResource Editor.Monitor.CapturarQuadro}" Style="{StaticResource Editor.Controle}"
                                     Command="{Binding Preview.CaptureFrameCommand}" ToolTip="{StaticResource Editor.Monitor.CapturarQuadro}">
                                 <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE722;" />

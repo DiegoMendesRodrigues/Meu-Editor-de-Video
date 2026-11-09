@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.Application.Media;
 using MeuEditorDeVideo.Application.Projects;
+using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.Errors;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Core.Projects;
@@ -40,6 +41,9 @@ public sealed partial class MediaLibraryViewModel : ObservableObject, IDisposabl
     private readonly IThumbnailProvider _thumbnails;
     private readonly IWaveformProvider _waveforms;
     private readonly IDialogService _dialogs;
+    private readonly IProxyService _proxies;
+    private readonly ISettingsService _settings;
+    private readonly System.Windows.Threading.Dispatcher _dispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
     private readonly ILogger<MediaLibraryViewModel> _logger;
     private readonly Dictionary<Guid, MediaItemViewModel> _byId = [];
     private readonly CancellationTokenSource _cts = new();
@@ -54,8 +58,13 @@ public sealed partial class MediaLibraryViewModel : ObservableObject, IDisposabl
         IThumbnailProvider thumbnails,
         IWaveformProvider waveforms,
         IDialogService dialogs,
+        IProxyService proxies,
+        ISettingsService settings,
         ILogger<MediaLibraryViewModel> logger)
     {
+        _proxies = proxies;
+        _settings = settings;
+        _proxies.StatusChanged += OnProxyStatusChanged;
         _projects = projects;
         _import = import;
         _thumbnails = thumbnails;
@@ -91,6 +100,7 @@ public sealed partial class MediaLibraryViewModel : ObservableObject, IDisposabl
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RemoveSelectedCommand), nameof(RenameSelectedCommand), nameof(SetCategoryCommand), nameof(ClearCategoryCommand))]
     [NotifyPropertyChangedFor(nameof(HasSelection))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateProxyCommand), nameof(DeleteProxyCommand))]
     public partial MediaItemViewModel? SelectedItem { get; set; }
 
     public bool HasSelection => SelectedItem is not null;
@@ -210,6 +220,7 @@ public sealed partial class MediaLibraryViewModel : ObservableObject, IDisposabl
                 Items.Add(item);
             }
             if (!item.IsMissing && !item.PreviewRequested) _ = LoadPreviewAsync(item);
+            UpdateProxy(item, autoGenerate: true);
         }
 
         var categories = media.Select(m => m.Category).OfType<string>().Distinct(StringComparer.CurrentCultureIgnoreCase)
@@ -388,11 +399,71 @@ public sealed partial class MediaLibraryViewModel : ObservableObject, IDisposabl
     /// <summary>Miniaturas/formas de onda carregadas (a linha do tempo redesenha).</summary>
     public event EventHandler? PreviewsChanged;
 
+    // ---------------------------------------------------------------- proxies
+
+    private string? PathOf(Guid assetId) => _session?.Media.Locations.GetValueOrDefault(assetId)?.ResolvedPath;
+
+    /// <summary>Atualiza o selo do proxy; vídeos acima de 1080p entram na fila automaticamente (se configurado).</summary>
+    private void UpdateProxy(MediaItemViewModel item, bool autoGenerate)
+    {
+        if (item.IsMissing || PathOf(item.Id) is not { } path || !ProxyPolicy.Supports(item.Asset))
+        {
+            item.Proxy = null;
+            return;
+        }
+        var status = _proxies.StatusOf(item.Asset, path);
+        if (autoGenerate && status.State == ProxyState.None && _settings.Current.AutoGenerateProxies && ProxyPolicy.IsRecommended(item.Asset))
+        {
+            _proxies.Request(item.Asset, path);
+            status = _proxies.StatusOf(item.Asset, path);
+        }
+        item.Proxy = status;
+    }
+
+    private void OnProxyStatusChanged(object? sender, ProxyStatus status) =>
+        _dispatcher.BeginInvoke(() =>
+        {
+            if (!_byId.TryGetValue(status.AssetId, out var item)) return;
+            item.Proxy = status.State == ProxyState.None ? null : status;
+            if (status.State == ProxyState.Ready) ProxiesChanged?.Invoke(this, EventArgs.Empty);
+            GenerateProxyCommand.NotifyCanExecuteChanged();
+            DeleteProxyCommand.NotifyCanExecuteChanged();
+        });
+
+    /// <summary>Um proxy ficou pronto (a pré-visualização passa a usá-lo).</summary>
+    public event EventHandler? ProxiesChanged;
+
+    private bool CanGenerateProxy() => SelectedItem is { IsMissing: false, CanGenerateProxy: true };
+
+    private bool CanDeleteProxy() => SelectedItem?.Proxy?.State is ProxyState.Ready or ProxyState.Queued or ProxyState.Generating or ProxyState.Failed;
+
+    /// <summary>Gera o proxy 540p do vídeo selecionado (RF — proxies opcionais, §3.2).</summary>
+    [RelayCommand(CanExecute = nameof(CanGenerateProxy))]
+    private void GenerateProxy()
+    {
+        if (SelectedItem is not { } item || PathOf(item.Id) is not { } path) return;
+        _proxies.Request(item.Asset, path);
+        item.Proxy = _proxies.StatusOf(item.Asset, path);
+        DeleteProxyCommand.NotifyCanExecuteChanged();
+    }
+
+    /// <summary>Cancela a geração ou apaga o proxy (a pré-visualização volta a usar o original).</summary>
+    [RelayCommand(CanExecute = nameof(CanDeleteProxy))]
+    private void DeleteProxy()
+    {
+        if (SelectedItem is not { } item || PathOf(item.Id) is not { } path) return;
+        _proxies.Delete(item.Asset, path);
+        item.Proxy = null;
+        ProxiesChanged?.Invoke(this, EventArgs.Empty);
+        GenerateProxyCommand.NotifyCanExecuteChanged();
+    }
+
     public MediaItemViewModel? Find(Guid assetId) => _byId.GetValueOrDefault(assetId);
 
     public void Dispose()
     {
         _projects.SessionChanged -= OnSessionChanged;
+        _proxies.StatusChanged -= OnProxyStatusChanged;
         if (_session is not null) _session.History.Changed -= OnHistoryChanged;
         _cts.Cancel();
         _cts.Dispose();

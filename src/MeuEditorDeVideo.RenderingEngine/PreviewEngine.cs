@@ -11,7 +11,17 @@ namespace MeuEditorDeVideo.RenderingEngine;
 /// <summary>Estado imutável que a pré-visualização desenha: projeto, sequência e caminhos resolvidos das mídias.</summary>
 public sealed record PreviewSnapshot(Project Project, Sequence Sequence, IReadOnlyDictionary<Guid, string> Paths)
 {
+    private IReadOnlyDictionary<Guid, string>? _videoPaths;
+
     public FrameRate FrameRate => Project.Settings.FrameRate;
+
+    /// <summary>Proxies prontos (mídia → arquivo 540p), usados só nos quadros da pré-visualização.</summary>
+    public IReadOnlyDictionary<Guid, string> ProxyPaths { get; init; } = new Dictionary<Guid, string>();
+
+    /// <summary>Caminhos para os quadros da pré-visualização: o proxy quando houver, senão o original.</summary>
+    public IReadOnlyDictionary<Guid, string> VideoPaths => _videoPaths ??= ProxyPaths.Count == 0
+        ? Paths
+        : Paths.ToDictionary(p => p.Key, p => ProxyPaths.TryGetValue(p.Key, out var proxy) ? proxy : p.Value);
 }
 
 /// <summary>Quadro pronto para exibir.</summary>
@@ -363,26 +373,28 @@ public sealed class PreviewEngine : IDisposable
 
     private PreviewFrame Render(IVideoFrameSource video, PreviewSnapshot snapshot, MediaTime t, int w, int h, bool useCache)
     {
-        var key = new CacheKey(snapshot.Sequence, snapshot.Project.Media, snapshot.FrameRate.TimeToFrame(t), w, h, CompareMode);
+        // Capturas (useCache = false) sempre usam o original em resolução total, nunca o proxy.
+        var paths = useCache ? snapshot.VideoPaths : snapshot.Paths;
+        var key = new CacheKey(snapshot.Sequence, snapshot.Project.Media, paths, snapshot.FrameRate.TimeToFrame(t), w, h, CompareMode);
         if (useCache && TryCache(key) is { } cached) return cached;
 
         var watch = Stopwatch.StartNew();
         var image = CompareMode
-            ? _frames.RenderCompare(video, snapshot.Project, snapshot.Sequence, snapshot.Paths, t, w, h)
-            : _frames.Render(video, snapshot.Project, snapshot.Sequence, snapshot.Paths, t, w, h);
+            ? _frames.RenderCompare(video, snapshot.Project, snapshot.Sequence, paths, t, w, h)
+            : _frames.Render(video, snapshot.Project, snapshot.Sequence, paths, t, w, h);
         var result = new PreviewFrame(image, t, watch.Elapsed);
         if (useCache) AddCache(key, result);
         return result;
     }
 
-    private readonly record struct CacheKey(Sequence Sequence, object Media, long Frame, int W, int H, bool Compare);
+    private readonly record struct CacheKey(Sequence Sequence, object Media, object Paths, long Frame, int W, int H, bool Compare);
 
     private PreviewFrame? TryCache(CacheKey key)
     {
         for (var n = _cache.First; n is not null; n = n.Next)
         {
             var k = n.Value.Key;
-            if (ReferenceEquals(k.Sequence, key.Sequence) && ReferenceEquals(k.Media, key.Media) && k.Frame == key.Frame && k.W == key.W && k.H == key.H && k.Compare == key.Compare)
+            if (ReferenceEquals(k.Sequence, key.Sequence) && ReferenceEquals(k.Media, key.Media) && ReferenceEquals(k.Paths, key.Paths) && k.Frame == key.Frame && k.W == key.W && k.H == key.H && k.Compare == key.Compare)
             {
                 _cache.Remove(n);
                 _cache.AddFirst(n);

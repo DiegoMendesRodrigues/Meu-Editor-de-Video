@@ -15,6 +15,12 @@ public sealed record AppSettings
     public bool OpenLastProjectOnStartup { get; init; }
     public bool UseGpuAcceleration { get; init; } = true;
     public int PreviewCacheGigabytes { get; init; } = 4;
+
+    /// <summary>A pré-visualização usa proxies 540p quando existirem.</summary>
+    public bool UseProxies { get; init; } = true;
+
+    /// <summary>Gera proxies automaticamente para vídeos acima de 1080p ao importar/abrir.</summary>
+    public bool AutoGenerateProxies { get; init; } = true;
     public bool BackgroundRendering { get; init; } = true;
     public bool AutosaveEnabled { get; init; } = true;
     public int AutosaveIntervalMinutes { get; init; } = 5;

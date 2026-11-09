@@ -39,6 +39,8 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
     private readonly IDialogService _dialogs;
     private readonly ILogger<PreviewViewModel> _logger;
     private readonly Dispatcher _dispatcher;
+    private readonly IProxyService _proxies;
+    private readonly ISettingsService _settings;
     private ProjectSession? _session;
     private PreviewFrame? _latest;
     private int _presentQueued;
@@ -46,8 +48,12 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
     private static string? s_lastCaptureDirectory;
 
     public PreviewViewModel(PreviewEngine engine, IProjectService projects, IDialogService dialogs, ISettingsService settings,
-        ILogger<PreviewViewModel> logger, TimelineViewModel timeline)
+        IProxyService proxies, ILogger<PreviewViewModel> logger, TimelineViewModel timeline)
     {
+        _proxies = proxies;
+        _settings = settings;
+        UseProxies = settings.Current.UseProxies;
+        _proxies.StatusChanged += OnProxyStatusChanged;
         _engine = engine;
         _projects = projects;
         _dialogs = dialogs;
@@ -110,6 +116,32 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
     /// <summary>Níveis de áudio no instante ouvido (medidores do mixer).</summary>
     public MeuEditorDeVideo.AudioEngine.MixerLevels Levels => _engine.CurrentLevels;
 
+    /// <summary>Usa proxies 540p prontos nos quadros da pré-visualização (a exportação usa sempre o original).</summary>
+    [ObservableProperty]
+    public partial bool UseProxies { get; set; }
+
+    partial void OnUseProxiesChanged(bool value)
+    {
+        PushSnapshot();
+        if (_settings.Current.UseProxies != value) _ = _settings.SaveAsync(_settings.Current with { UseProxies = value });
+    }
+
+    private void OnProxyStatusChanged(object? sender, ProxyStatus status)
+    {
+        if (status.State is ProxyState.Ready or ProxyState.None) _dispatcher.BeginInvoke(PushSnapshot);
+    }
+
+    /// <summary>Mídias com proxy pronto (quando o uso de proxies está ligado).</summary>
+    private Dictionary<Guid, string> ProxyPaths(ProjectSession s)
+    {
+        var result = new Dictionary<Guid, string>();
+        if (!UseProxies) return result;
+        foreach (var (id, path) in s.Media.AvailablePaths)
+            if (s.Project.FindMedia(id) is { } asset && _proxies.ReadyPath(asset, path) is { } proxy)
+                result[id] = proxy;
+        return result;
+    }
+
     /// <summary>Comparação antes/depois dos efeitos e da correção de cor (RF101): metade esquerda sem efeitos.</summary>
     [ObservableProperty]
     public partial bool CompareMode { get; set; }
@@ -141,7 +173,7 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
     {
         var s = _session;
         if (s?.Project.Sequences.FirstOrDefault() is not { } seq) return;
-        _engine.SetSnapshot(new PreviewSnapshot(s.Project, seq, s.Media.AvailablePaths));
+        _engine.SetSnapshot(new PreviewSnapshot(s.Project, seq, s.Media.AvailablePaths) { ProxyPaths = ProxyPaths(s) });
         OnPropertyChanged(nameof(HasContent));
         if (!IsPlaying) _engine.Seek(Timeline.Playhead);
         PlayPauseCommand.NotifyCanExecuteChanged();
@@ -283,6 +315,7 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
         CompositionTarget.Rendering -= OnRendering;
         _engine.FrameReady -= OnFrameReady;
         _engine.PlaybackEnded -= OnPlaybackEnded;
+        _proxies.StatusChanged -= OnProxyStatusChanged;
         _projects.SessionChanged -= OnSessionChanged;
         Timeline.PropertyChanged -= OnTimelinePropertyChanged;
         Timeline.PlayPauseRequested -= OnPlayPauseRequested;

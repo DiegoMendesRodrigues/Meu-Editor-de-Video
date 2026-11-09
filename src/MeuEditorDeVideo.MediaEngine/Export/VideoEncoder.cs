@@ -10,6 +10,12 @@ namespace MeuEditorDeVideo.MediaEngine.Export;
 /// <summary>Parâmetros já resolvidos do vídeo de saída (resolução, taxa de quadros e taxa de bits efetiva).</summary>
 public sealed record VideoEncodeSpec(ExportSettings Settings, int Width, int Height, FrameRate FrameRate, int VideoBitrateKbps)
 {
+    /// <summary>Intervalo entre quadros-chave (nulo = ~2 s). Proxies usam GOP curto para busca rápida.</summary>
+    public int? GopSize { get; init; }
+
+    /// <summary>Predefinição rápida do codificador (proxies: velocidade importa mais que eficiência).</summary>
+    public bool FastPreset { get; init; }
+
     public bool Alpha => Settings.Alpha && ExportFormats.SupportsAlpha(Settings.Container, Settings.VideoCodec);
 }
 
@@ -122,6 +128,7 @@ internal sealed unsafe class VideoEncoder : IDisposable
         c->gop_size = s.VideoCodec is VideoCodec.ProRes or VideoCodec.Ffv1 or VideoCodec.Mjpeg ? 1 : Math.Max(1, (int)Math.Round(spec.FrameRate.Value * 2));
         if (s.VideoCodec == VideoCodec.Mpeg2) c->gop_size = Math.Min(c->gop_size, 15);
         if (s.Container == ExportContainer.Avi) c->max_b_frames = 0; // AVI não guarda reordenação de quadros
+        if (spec.GopSize is { } gop) c->gop_size = Math.Max(1, gop);
 
         if (ExportFormats.HasBitrate(s.VideoCodec))
         {
@@ -167,7 +174,7 @@ internal sealed unsafe class VideoEncoder : IDisposable
         switch (name)
         {
             case "libx264":
-                Set("preset", "medium");
+                Set("preset", spec.FastPreset ? "veryfast" : "medium");
                 if (cq) Set("crf", q);
                 if (s.RateControl == RateControl.Cbr) Set("nal-hrd", "cbr");
                 if (s.Container == ExportContainer.Avi) Set("bf", "0");
