@@ -1,8 +1,9 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.App.ViewModels.Export;
+using MeuEditorDeVideo.App.ViewModels.Inspector;
 using MeuEditorDeVideo.App.ViewModels.Media;
 using MeuEditorDeVideo.App.Views.Dialogs;
 using MeuEditorDeVideo.Application.Export;
@@ -58,14 +59,46 @@ public sealed partial class EditorViewModel(
     [ObservableProperty]
     public partial TimelineViewModel? Timeline { get; set; }
 
+    /// <summary>Propriedades do clipe selecionado (painel C: Vídeo, Efeitos, Cor).</summary>
+    [ObservableProperty]
+    public partial ClipInspectorViewModel? Inspector { get; set; }
+
     partial void OnSelectedSectionChanged(LibrarySection value)
     {
         if (Library is not null) Library.Filter = FilterFor(value);
         OnPropertyChanged(nameof(IsMediaSection));
+        OnPropertyChanged(nameof(IsEffectSection));
+        OnPropertyChanged(nameof(IsUnavailableSection));
+        OnPropertyChanged(nameof(SectionItems));
     }
 
-    /// <summary>Seções de mídia mostram a biblioteca; as demais (gráficos, textos…) chegam em fases futuras.</summary>
+    partial void OnInspectorChanged(ClipInspectorViewModel? value) => OnPropertyChanged(nameof(SectionItems));
+
+    /// <summary>Seções de mídia mostram a biblioteca.</summary>
     public bool IsMediaSection => SelectedSection is LibrarySection.Media or LibrarySection.Videos or LibrarySection.Images or LibrarySection.Audio;
+
+    /// <summary>Transições, efeitos e cor: catálogo aplicável ao clipe selecionado (F6).</summary>
+    public bool IsEffectSection => SelectedSection is LibrarySection.Transitions or LibrarySection.Effects or LibrarySection.Color;
+
+    /// <summary>Seções que chegam em fases futuras (gráficos, textos, IA).</summary>
+    public bool IsUnavailableSection => !IsMediaSection && !IsEffectSection;
+
+    public IReadOnlyList<LibraryEffectItem> SectionItems => (SelectedSection, Inspector) switch
+    {
+        (LibrarySection.Transitions, { } i) => i.LibraryTransitions,
+        (LibrarySection.Effects, { } i) => i.LibraryEffects,
+        (LibrarySection.Color, { } i) => i.LibraryColor,
+        _ => [],
+    };
+
+    /// <summary>Aplica o item da biblioteca de efeitos/cor/transições ao clipe selecionado.</summary>
+    [RelayCommand]
+    private void ApplySectionItem(LibraryEffectItem? item)
+    {
+        if (item is null || Inspector is null) return;
+        if (SelectedSection == LibrarySection.Transitions) Inspector.ApplyLibraryTransitionCommand.Execute(item.Key);
+        else Inspector.AddEffectCommand.Execute(item.Key);
+    }
 
     private static MediaFilter FilterFor(LibrarySection s) => s switch
     {
@@ -107,6 +140,7 @@ public sealed partial class EditorViewModel(
         Library.Filter = FilterFor(SelectedSection);
         Timeline = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<TimelineViewModel>(services, Library);
         Preview = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<PreviewViewModel>(services, Timeline);
+        Inspector = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<ClipInspectorViewModel>(services, Timeline, Preview);
         projects.SessionChanged += OnSessionChanged;
         projects.Saved += OnSaved;
         AttachSession();
@@ -119,6 +153,8 @@ public sealed partial class EditorViewModel(
         if (_session is not null) _session.History.Changed -= OnHistoryChanged;
         _session = null;
         shell.Title = AppInfo.ProductName;
+        Inspector?.Dispose();
+        Inspector = null;
         Preview?.Dispose();
         Preview = null;
         Timeline?.Dispose();

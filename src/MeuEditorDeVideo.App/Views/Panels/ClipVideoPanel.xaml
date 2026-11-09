@@ -1,0 +1,130 @@
+<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipVideoPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Aba "Vídeo" do painel C: transformação, keyframes, recorte, mistura, velocidade, congelar/repetir, transição (F6). -->
+    <UserControl.Resources>
+        <ResourceDictionary Source="InspectorTemplates.xaml" />
+    </UserControl.Resources>
+    <Grid>
+        <TextBlock Text="Selecione um clipe de vídeo ou imagem na linha do tempo para editar transformação, keyframes, velocidade e transições."
+                   TextWrapping="Wrap" Margin="12">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasClip}" Value="False">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10,4,10,10"
+                      Visibility="{Binding HasClip, Converter={StaticResource Ins.BoolToVis}}">
+            <StackPanel>
+                <TextBlock Text="{Binding ClipTitle}" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" TextTrimming="CharacterEllipsis" Margin="0,6,0,0" />
+
+                <!-- Transformação e animação -->
+                <DockPanel Margin="0,14,0,6">
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                        <Button Content="&#xE892;" Style="{StaticResource Ins.IconButton}" Command="{Binding PreviousKeyframeCommand}"
+                                ToolTip="Keyframe anterior" AutomationProperties.Name="Keyframe anterior" />
+                        <Button Content="&#xE893;" Style="{StaticResource Ins.IconButton}" Command="{Binding NextKeyframeCommand}"
+                                ToolTip="Próximo keyframe" AutomationProperties.Name="Próximo keyframe" />
+                    </StackPanel>
+                    <TextBlock Text="Transformação" Style="{StaticResource Ins.Section}" Margin="0" VerticalAlignment="Center" />
+                </DockPanel>
+                <ItemsControl ItemsSource="{Binding Animated}" />
+                <TextBlock Style="{StaticResource Ins.Label}" TextWrapping="Wrap" Margin="0,2,0,6"
+                           Text="◇ cria um keyframe no instante do cursor; com keyframes, alterar o valor grava um novo keyframe." />
+                <Grid Margin="0,0,0,6" Visibility="{Binding IsAnyAnimated, Converter={StaticResource Ins.BoolToVis}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Interpolação" Style="{StaticResource Ins.Label}" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding Easings}" SelectedItem="{Binding SelectedEasing}" DisplayMemberPath="Label"
+                              AutomationProperties.Name="Interpolação do keyframe" ToolTip="Curva do keyframe no cursor (ou do anterior) até o próximo" />
+                </Grid>
+                <WrapPanel>
+                    <Button Content="Girar 90° ↺" Style="{StaticResource Ins.SmallButton}" Command="{Binding RotateLeftCommand}" AutomationProperties.Name="Girar 90 graus à esquerda" />
+                    <Button Content="Girar 90° ↻" Style="{StaticResource Ins.SmallButton}" Command="{Binding RotateRightCommand}" AutomationProperties.Name="Girar 90 graus à direita" />
+                    <Button Content="Preencher quadro" Style="{StaticResource Ins.SmallButton}" Command="{Binding FillFrameCommand}" AutomationProperties.Name="Preencher quadro" />
+                    <Button Content="Redefinir" Style="{StaticResource Ins.SmallButton}" Command="{Binding ResetTransformCommand}" AutomationProperties.Name="Redefinir transformação" />
+                </WrapPanel>
+                <WrapPanel Margin="0,2,0,0">
+                    <CheckBox Content="Espelhar horizontalmente" IsChecked="{Binding FlipHorizontal}" Margin="0,0,12,4" AutomationProperties.Name="Espelhar horizontalmente" />
+                    <CheckBox Content="Espelhar verticalmente" IsChecked="{Binding FlipVertical}" Margin="0,0,0,4" AutomationProperties.Name="Espelhar verticalmente" />
+                </WrapPanel>
+
+                <TextBlock Text="Recorte" Style="{StaticResource Ins.Section}" />
+                <ItemsControl ItemsSource="{Binding Crop}" />
+
+                <TextBlock Text="Composição" Style="{StaticResource Ins.Section}" />
+                <Grid Margin="0,0,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="92" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Mistura" Style="{StaticResource Ins.Label}" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding BlendModes}" SelectedItem="{Binding SelectedBlendMode}" DisplayMemberPath="Label"
+                              AutomationProperties.Name="Modo de mistura" />
+                </Grid>
+                <ItemsControl ItemsSource="{Binding Fades}" />
+
+                <TextBlock Text="Velocidade" Style="{StaticResource Ins.Section}" />
+                <Grid Margin="0,0,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="92" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding SpeedText, StringFormat='Atual: {0}'}" Style="{StaticResource Ins.Label}" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding SpeedPresets}" SelectedItem="{Binding SelectedSpeed}" DisplayMemberPath="Label"
+                              AutomationProperties.Name="Velocidade predefinida" />
+                    <Button Grid.Column="2" Content="Outra…" Style="{StaticResource Ins.SmallButton}" Margin="6,0,0,0" Command="{Binding CustomSpeedCommand}"
+                            AutomationProperties.Name="Outra velocidade" />
+                </Grid>
+                <CheckBox Content="Câmera lenta suavizada (mistura de quadros)" IsChecked="{Binding FrameBlending}" Margin="0,0,0,8"
+                          AutomationProperties.Name="Câmera lenta suavizada" ToolTip="Abaixo de 1×, mistura quadros vizinhos para reduzir os saltos" />
+                <WrapPanel>
+                    <Button Content="Congelar quadro" Style="{StaticResource Ins.SmallButton}" Command="{Binding FreezeFrameCommand}"
+                            AutomationProperties.Name="Congelar quadro" ToolTip="Insere o quadro do cursor parado por alguns segundos" />
+                    <Button Content="Repetir trecho" Style="{StaticResource Ins.SmallButton}" Command="{Binding RepeatClipCommand}"
+                            AutomationProperties.Name="Repetir trecho" ToolTip="Repete o clipe logo depois dele" />
+                </WrapPanel>
+                <TextBlock Text="Este clipe é um quadro congelado." Style="{StaticResource Ins.Label}"
+                           Visibility="{Binding IsFrozen, Converter={StaticResource Ins.BoolToVis}}" />
+
+                <TextBlock Text="Transição de entrada" Style="{StaticResource Ins.Section}" />
+                <StackPanel Visibility="{Binding HasTransitionSlot, Converter={StaticResource Ins.BoolToVis}}">
+                    <ComboBox ItemsSource="{Binding TransitionOptions}" SelectedItem="{Binding SelectedTransition}" DisplayMemberPath="Label"
+                              AutomationProperties.Name="Transição de entrada" Margin="0,0,0,6" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="92" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="56" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Duração" Style="{StaticResource Ins.Label}" />
+                        <Slider Grid.Column="1" Minimum="0.1" Maximum="{Binding TransitionMaxSeconds}" Value="{Binding TransitionSeconds}"
+                                SmallChange="0.1" LargeChange="0.5" IsMoveToPointEnabled="True" AutomationProperties.Name="Duração da transição" />
+                        <TextBlock Grid.Column="2" Text="{Binding TransitionDisplay}" Style="{StaticResource Ins.Label}" TextAlignment="Right" />
+                    </Grid>
+                </StackPanel>
+                <TextBlock TextWrapping="Wrap" Text="Encoste outro clipe antes deste, na mesma trilha, para usar uma transição.">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource Ins.Label}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasTransitionSlot}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

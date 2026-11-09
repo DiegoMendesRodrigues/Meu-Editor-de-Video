@@ -29,6 +29,8 @@ public sealed class RenderEngine(
     /// <summary>Duração de cada trecho codificado (granularidade da retomada).</summary>
     public static readonly TimeSpan SegmentLength = TimeSpan.FromSeconds(10);
 
+    private readonly FrameRenderer _frames = new(compositor);
+
     private const double MuxWeight = 0.04;
     private const string StateFile = "state.json";
 
@@ -225,19 +227,8 @@ public sealed class RenderEngine(
     }
 
     private BgraImage RenderFrame(IVideoFrameSource video, Project project, Sequence sequence, IReadOnlyDictionary<Guid, string> paths,
-        VideoEncodeSpec spec, MediaTime t)
-    {
-        var graph = TimelineEvaluator.Evaluate(project, sequence, t);
-        var layers = new List<LayerImage>(graph.Layers.Count);
-        foreach (var layer in graph.Layers)
-        {
-            if (!paths.TryGetValue(layer.Asset.Id, out var path)) continue;
-            var image = video.GetFrame(layer.Asset, path, layer.SourceTime, spec.Width, spec.Height);
-            if (image is not null)
-                layers.Add(new LayerImage(layer, image, layer.Asset.Info?.HasAlpha == true || layer.Asset.Kind == MediaKind.Image));
-        }
-        return compositor.Compose(spec.Width, spec.Height, graph.Width, layers, spec.Alpha);
-    }
+        VideoEncodeSpec spec, MediaTime t) =>
+        _frames.Render(video, project, sequence, paths, t, spec.Width, spec.Height, spec.Alpha);
 
     private static List<Part> SplitParts(string output, ExportSettings settings, FrameRate fps, long first, long end)
     {

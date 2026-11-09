@@ -63,6 +63,27 @@ public sealed record Clip
     /// <summary>Conteúdo textual (clipes de texto/legenda).</summary>
     public string? Text { get; init; }
 
+    /// <summary>Efeitos, correção de cor e chroma key, aplicados em ordem (RF077, RF088).</summary>
+    public ImmutableList<EffectInstance> Effects { get; init; } = [];
+
+    /// <summary>Modo de mistura com as camadas abaixo (RF151).</summary>
+    public BlendMode BlendMode { get; init; }
+
+    /// <summary>Keyframes por propriedade animada (<see cref="AnimatedProperty"/>); offsets relativos ao início do clipe.</summary>
+    public ImmutableDictionary<string, ImmutableList<Keyframe>> Keyframes { get; init; } = ImmutableDictionary<string, ImmutableList<Keyframe>>.Empty;
+
+    /// <summary>Congelamento de quadro (RF073): instante fixo da mídia mostrado durante todo o clipe.</summary>
+    public MediaTime? FreezeAt { get; init; }
+
+    /// <summary>Câmera lenta suavizada: mistura quadros vizinhos quando a velocidade é menor que 1 (RF071).</summary>
+    public bool FrameBlending { get; init; }
+
+    /// <summary>Entrada gradual a partir do transparente (RF079).</summary>
+    public MediaTime FadeIn { get; init; }
+
+    /// <summary>Saída gradual para o transparente (RF079).</summary>
+    public MediaTime FadeOut { get; init; }
+
     public MediaTime End => Start + Duration;
 
     /// <summary>Ponto final dentro da mídia de origem.</summary>
@@ -78,6 +99,9 @@ public sealed record Track
     public bool IsHidden { get; init; }
     public bool IsMuted { get; init; }
     public ImmutableList<Clip> Clips { get; init; } = [];
+
+    /// <summary>Transições entre clipes adjacentes desta trilha (RF078–RF085).</summary>
+    public ImmutableList<Transition> Transitions { get; init; } = [];
 
     /// <summary>Tipos de trilha que exibem imagem (vídeo, imagens, textos, legendas, efeitos).</summary>
     public bool IsVisual => Kind != TrackKind.Audio;

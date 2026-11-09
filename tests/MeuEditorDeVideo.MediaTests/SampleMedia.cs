@@ -21,6 +21,8 @@ public sealed class SampleMedia : IDisposable
         Run($"-display_rotation 90 -i \"{VideoNoAudio}\" -c copy \"{Rotated}\"");
         Run($"-f lavfi -i sine=frequency=220:sample_rate=44100 -t 2 \"{Audio}\"");
         Run($"-f lavfi -i testsrc2=size=320x240:rate=1 -frames:v 1 \"{Image}\"");
+        // Fundo verde de estúdio com um "apresentador" (retângulo cor de pele) no centro, para o chroma key.
+        Run($"-f lavfi -i color=c=0x00B140:size=320x180:rate=25 -vf drawbox=x=110:y=50:w=100:h=80:color=0xDCAA8C:t=fill -t 2 -c:v libx264 -pix_fmt yuv420p \"{GreenScreen}\"");
         Run($"-f lavfi -i testsrc2=size=160x120:rate=10 -frames:v 10 \"{AnimatedGif}\"");
         Run($"-f lavfi -i testsrc2=size=160x120:rate=10 -frames:v 1 \"{StillGif}\"");
         Run($"-f lavfi -i testsrc2=size=320x180:rate=10 -frames:v 12 \"{Path.Combine(seqDir, "quadro_%04d.png")}\"");
@@ -39,12 +41,16 @@ public sealed class SampleMedia : IDisposable
     public string Rotated => Path.Combine(Root, "girado.mp4");
     public string Audio => Path.Combine(Root, "som.wav");
     public string Image => Path.Combine(Root, "imagem.png");
+    public string GreenScreen => Path.Combine(Root, "fundo verde.mp4");
     public string AnimatedGif => Path.Combine(Root, "animado.gif");
     public string StillGif => Path.Combine(Root, "estatico.gif");
     public string Truncated => Path.Combine(Root, "cortado.mp4");
     public string Garbage => Path.Combine(Root, "lixo.mp4");
     public string TextFile => Path.Combine(Root, "texto.xyz");
     public string SequenceFirstFrame { get; }
+
+    /// <summary>Executa o ffmpeg.exe (utilitário para testes que precisam converter arquivos).</summary>
+    public static void Ffmpeg(string args) => Run(args);
 
     public static string FFmpegExe
     {

@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -328,6 +328,19 @@ public sealed class TimelineControl : TimelineSurface
                     clip.LinkId is not null ? linkedPen : null, ghost: isMoving ? 0.35 : 1);
             }
 
+            // Transições: faixa centrada no corte (RF084).
+            foreach (var tr in track.Transitions)
+            {
+                var to = track.Clips.Find(c => c.Id == tr.ToClipId);
+                if (to is null) continue;
+                var half = tr.Duration.TotalSeconds * vm.PixelsPerSecond / 2;
+                var cx = vm.TimeToX(to.Start);
+                if (cx + half < 0 || cx - half > w) continue;
+                var band = new Rect(cx - half, top + th / 2 - 7, Math.Max(4, half * 2), 14);
+                dc.DrawRoundedRectangle(new SolidColorBrush(Color.FromArgb(220, 255, 255, 255)), MakePen(Brushes.Black, 1), band, 3, 3);
+                dc.DrawLine(MakePen(Brushes.Black, 1), new Point(band.Left + 2, band.Bottom - 2), new Point(band.Right - 2, band.Top + 2));
+            }
+
             if (track.IsLocked)
                 dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(70, 0, 0, 0)), null, new Rect(0, top, w, th - 1));
             top += th;
@@ -412,12 +425,41 @@ public sealed class TimelineControl : TimelineSurface
         if (clip.Speed != Rational.One)
             label += " · " + clip.Speed.Value.ToString("0.##", CultureInfo.GetCultureInfo("pt-BR")) + "×";
         if (clip.GroupId is not null) label = "▣ " + label;
+        if (clip.FreezeAt is not null) label = "❄ " + label;
+        if (!clip.Effects.IsEmpty) label = "fx " + label;
         if (asset is null && clip.MediaAssetId is not null) label = "⚠ Mídia removida";
         var ft = Text(label, 11, text, bold: true);
         ft.MaxTextWidth = Math.Max(1, rect.Width - 8);
         ft.MaxLineCount = 1;
         ft.Trimming = TextTrimming.CharacterEllipsis;
         dc.DrawText(ft, new Point(Math.Max(rect.Left, 0) + 4, rect.Top + 1));
+
+        // Entrada/saída gradual: rampas no canto superior.
+        var fadePen = MakePen(new SolidColorBrush(Color.FromArgb(200, 255, 255, 255)), 1);
+        if (clip.FadeIn > MediaTime.Zero)
+            dc.DrawLine(fadePen, new Point(rect.Left, rect.Bottom), new Point(rect.Left + clip.FadeIn.TotalSeconds * vm.PixelsPerSecond, rect.Top + 16));
+        if (clip.FadeOut > MediaTime.Zero)
+            dc.DrawLine(fadePen, new Point(rect.Right - clip.FadeOut.TotalSeconds * vm.PixelsPerSecond, rect.Top + 16), new Point(rect.Right, rect.Bottom));
+
+        // Keyframes (losangos na base do clipe).
+        if (!clip.Keyframes.IsEmpty)
+        {
+            var diamond = new SolidColorBrush(Color.FromRgb(0xFF, 0xD2, 0x4A));
+            foreach (var offset in clip.Keyframes.Values.SelectMany(k => k).Select(k => k.Offset).Distinct())
+            {
+                var kx = vm.TimeToX(clip.Start + offset);
+                var ky = rect.Bottom - 6;
+                var g = new StreamGeometry();
+                using (var ctx = g.Open())
+                {
+                    ctx.BeginFigure(new Point(kx, ky - 4), true, true);
+                    ctx.LineTo(new Point(kx + 4, ky), true, false);
+                    ctx.LineTo(new Point(kx, ky + 4), true, false);
+                    ctx.LineTo(new Point(kx - 4, ky), true, false);
+                }
+                dc.DrawGeometry(diamond, MakePen(Brushes.Black, 1), g);
+            }
+        }
         dc.Pop();
 
         if (linked is not null) dc.DrawGeometry(null, linked, shape);

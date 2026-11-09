@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using MeuEditorDeVideo.AudioEngine;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Model;
@@ -30,7 +30,7 @@ public sealed class PreviewEngine : IDisposable
     private readonly IVideoFrameSourceFactory _videoFactory;
     private readonly IAudioSampleSourceFactory _audioFactory;
     private readonly IAudioOutputFactory _outputFactory;
-    private readonly ICompositor _compositor;
+    private readonly FrameRenderer _frames;
     private readonly ILogger<PreviewEngine> _logger;
 
     private readonly Thread _renderThread;
@@ -64,7 +64,7 @@ public sealed class PreviewEngine : IDisposable
         _videoFactory = videoFactory;
         _audioFactory = audioFactory;
         _outputFactory = outputFactory;
-        _compositor = compositor;
+        _frames = new FrameRenderer(compositor);
         _logger = logger;
         _renderThread = new Thread(RenderLoop) { IsBackground = true, Name = "Pré-visualização", Priority = ThreadPriority.AboveNormal };
         _renderThread.Start();
@@ -124,6 +124,21 @@ public sealed class PreviewEngine : IDisposable
         }
         _renderSignal.Set();
     }
+
+    /// <summary>Comparação antes/depois dos efeitos e da correção de cor (RF101).</summary>
+    public bool CompareMode
+    {
+        get => _compareMode;
+        set
+        {
+            if (_compareMode == value) return;
+            _compareMode = value;
+            lock (_gate) _forceRender = true;
+            _renderSignal.Set();
+        }
+    }
+
+    private volatile bool _compareMode;
 
     public void SetHardwareDecoding(bool enabled)
     {
@@ -326,31 +341,26 @@ public sealed class PreviewEngine : IDisposable
 
     private PreviewFrame Render(IVideoFrameSource video, PreviewSnapshot snapshot, MediaTime t, int w, int h, bool useCache)
     {
-        var key = new CacheKey(snapshot.Sequence, snapshot.Project.Media, snapshot.FrameRate.TimeToFrame(t), w, h);
+        var key = new CacheKey(snapshot.Sequence, snapshot.Project.Media, snapshot.FrameRate.TimeToFrame(t), w, h, CompareMode);
         if (useCache && TryCache(key) is { } cached) return cached;
 
         var watch = Stopwatch.StartNew();
-        var graph = TimelineEvaluator.Evaluate(snapshot.Project, snapshot.Sequence, t);
-        var layers = new List<LayerImage>(graph.Layers.Count);
-        foreach (var layer in graph.Layers)
-        {
-            if (!snapshot.Paths.TryGetValue(layer.Asset.Id, out var path)) continue;
-            var image = video.GetFrame(layer.Asset, path, layer.SourceTime, w, h);
-            if (image is not null) layers.Add(new LayerImage(layer, image, layer.Asset.Info?.HasAlpha == true || layer.Asset.Kind == MediaKind.Image));
-        }
-        var result = new PreviewFrame(_compositor.Compose(w, h, graph.Width, layers), t, watch.Elapsed);
+        var image = CompareMode
+            ? _frames.RenderCompare(video, snapshot.Project, snapshot.Sequence, snapshot.Paths, t, w, h)
+            : _frames.Render(video, snapshot.Project, snapshot.Sequence, snapshot.Paths, t, w, h);
+        var result = new PreviewFrame(image, t, watch.Elapsed);
         if (useCache) AddCache(key, result);
         return result;
     }
 
-    private readonly record struct CacheKey(Sequence Sequence, object Media, long Frame, int W, int H);
+    private readonly record struct CacheKey(Sequence Sequence, object Media, long Frame, int W, int H, bool Compare);
 
     private PreviewFrame? TryCache(CacheKey key)
     {
         for (var n = _cache.First; n is not null; n = n.Next)
         {
             var k = n.Value.Key;
-            if (ReferenceEquals(k.Sequence, key.Sequence) && ReferenceEquals(k.Media, key.Media) && k.Frame == key.Frame && k.W == key.W && k.H == key.H)
+            if (ReferenceEquals(k.Sequence, key.Sequence) && ReferenceEquals(k.Media, key.Media) && k.Frame == key.Frame && k.W == key.W && k.H == key.H && k.Compare == key.Compare)
             {
                 _cache.Remove(n);
                 _cache.AddFirst(n);

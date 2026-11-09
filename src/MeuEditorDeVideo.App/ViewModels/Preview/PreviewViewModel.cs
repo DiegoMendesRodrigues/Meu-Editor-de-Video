@@ -107,6 +107,12 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
 
     partial void OnVolumeChanged(double value) => _engine.Volume = (float)(Math.Clamp(value, 0, 100) / 100);
 
+    /// <summary>Comparação antes/depois dos efeitos e da correção de cor (RF101): metade esquerda sem efeitos.</summary>
+    [ObservableProperty]
+    public partial bool CompareMode { get; set; }
+
+    partial void OnCompareModeChanged(bool value) => _engine.CompareMode = value;
+
     // ---------------------------------------------------------------- sessão
 
     private void OnSessionChanged(object? sender, EventArgs e) => _dispatcher.Invoke(Attach);

@@ -1,4 +1,4 @@
-﻿using MeuEditorDeVideo.Core.Media;
+using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.TimelineEngine;
 
@@ -42,6 +42,8 @@ public sealed class CpuCompositor : ICompositor
         var t = layer.Layer.Transform;
         var opacity = layer.Layer.Opacity;
         if (opacity <= 0 || img.Width <= 0 || img.Height <= 0) return;
+        var mask = layer.Layer.Mask;
+        if (mask is { } m && TransitionMasks.IsHidden(m)) return;
 
         // Ajuste "contain" ao quadro, depois a escala do clipe.
         var fit = Math.Min((double)dw / img.Width, (double)dh / img.Height);
@@ -52,8 +54,18 @@ public sealed class CpuCompositor : ICompositor
         var cy = dh / 2.0 + t.Y * projectScale;
         var angle = t.RotationDegrees * Math.PI / 180;
 
+        // Recorte (RF065): frações de cada borda da imagem de origem.
+        var crop = new CropRect(
+            Math.Clamp(t.CropLeft, 0, 1) * img.Width,
+            Math.Clamp(t.CropTop, 0, 1) * img.Height,
+            img.Width - Math.Clamp(t.CropRight, 0, 1) * img.Width,
+            img.Height - Math.Clamp(t.CropBottom, 0, 1) * img.Height);
+        if (crop.Right <= crop.Left || crop.Bottom <= crop.Top) return;
+        var hasCrop = t.CropLeft > 0 || t.CropTop > 0 || t.CropRight > 0 || t.CropBottom > 0;
+
+        var simple = !hasCrop && mask is null && layer.Layer.BlendMode == BlendMode.Normal;
         var identityScale = Math.Abs(sx - 1) < 1e-6 && Math.Abs(sy - 1) < 1e-6;
-        if (identityScale && Math.Abs(angle) < 1e-9)
+        if (simple && identityScale && Math.Abs(angle) < 1e-9)
         {
             var left = cx - img.Width / 2.0;
             var top = cy - img.Height / 2.0;
@@ -64,8 +76,10 @@ public sealed class CpuCompositor : ICompositor
             }
         }
 
-        DrawAffine(dst, dw, dh, img, cx, cy, sx, sy, angle, opacity);
+        DrawAffine(dst, dw, dh, img, cx, cy, sx, sy, angle, opacity, crop, mask, layer.Layer.BlendMode);
     }
+
+    private readonly record struct CropRect(double Left, double Top, double Right, double Bottom);
 
     /// <summary>Cópia 1:1 com recorte nas bordas; mistura alfa só quando necessário.</summary>
     private static void Blit(byte[] dst, int dw, int dh, BgraImage img, int left, int top, double opacity, bool hasAlpha)
@@ -97,16 +111,20 @@ public sealed class CpuCompositor : ICompositor
         });
     }
 
-    /// <summary>Mapeamento inverso com interpolação bilinear para escala/rotação arbitrárias.</summary>
-    private static void DrawAffine(byte[] dst, int dw, int dh, BgraImage img, double cx, double cy, double sx, double sy, double angle, double opacity)
+    /// <summary>
+    /// Mapeamento inverso com interpolação bilinear para escala/rotação arbitrárias, com recorte da origem,
+    /// máscara de transição (em coordenadas de saída) e modo de mistura.
+    /// </summary>
+    private static void DrawAffine(byte[] dst, int dw, int dh, BgraImage img, double cx, double cy, double sx, double sy, double angle,
+        double opacity, CropRect crop, TransitionMask? mask, BlendMode mode)
     {
         var cos = Math.Cos(angle);
         var sin = Math.Sin(angle);
         double hw = img.Width / 2.0, hh = img.Height / 2.0;
 
-        // Caixa delimitadora do retângulo transformado.
+        // Caixa delimitadora do retângulo (recortado) transformado.
         double minX = double.MaxValue, minY = double.MaxValue, maxX = double.MinValue, maxY = double.MinValue;
-        foreach (var (px, py) in new[] { (-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh) })
+        foreach (var (px, py) in new[] { (crop.Left - hw, crop.Top - hh), (crop.Right - hw, crop.Top - hh), (crop.Right - hw, crop.Bottom - hh), (crop.Left - hw, crop.Bottom - hh) })
         {
             var x = px * sx;
             var y = py * sy;
@@ -124,6 +142,10 @@ public sealed class CpuCompositor : ICompositor
         var src = img.Pixels;
         int iw = img.Width, ih = img.Height;
         var a = (int)Math.Round(opacity * 255);
+        var cl = crop.Left - 0.5;
+        var ct = crop.Top - 0.5;
+        var cr = crop.Right - 0.5;
+        var cb = crop.Bottom - 0.5;
 
         Parallel.For(y0, y1, y =>
         {
@@ -134,7 +156,14 @@ public sealed class CpuCompositor : ICompositor
                 var dy = y + 0.5 - cy;
                 var ux = (dx * cos + dy * sin) / sx + hw - 0.5;
                 var uy = (-dx * sin + dy * cos) / sy + hh - 0.5;
-                if (ux < -0.5 || uy < -0.5 || ux > iw - 0.5 || uy > ih - 0.5) continue;
+                if (ux < cl || uy < ct || ux > cr || uy > cb) continue;
+
+                var coverage = 1.0;
+                if (mask is { } m)
+                {
+                    coverage = TransitionMasks.Coverage(m, (x + 0.5) / dw, (y + 0.5) / dh, (double)dw / dh);
+                    if (coverage <= 0) continue;
+                }
 
                 var ix = (int)Math.Floor(ux);
                 var iy = (int)Math.Floor(uy);
@@ -149,10 +178,44 @@ public sealed class CpuCompositor : ICompositor
                 double Sample(int c) =>
                     (src[p00 + c] * (1 - fx) + src[p10 + c] * fx) * (1 - fy) + (src[p01 + c] * (1 - fx) + src[p11 + c] * fx) * fy;
 
-                var alpha = (int)(Sample(3) * a / 255);
-                BlendPixel(dst, (y * dw + x) * 4, (byte)Sample(0), (byte)Sample(1), (byte)Sample(2), alpha);
+                var alpha = (int)(Sample(3) * a / 255 * coverage);
+                var di = (y * dw + x) * 4;
+                byte b = (byte)Sample(0), g = (byte)Sample(1), r = (byte)Sample(2);
+                if (mode != BlendMode.Normal)
+                {
+                    b = Blend(mode, b, dst[di]);
+                    g = Blend(mode, g, dst[di + 1]);
+                    r = Blend(mode, r, dst[di + 2]);
+                }
+                BlendPixel(dst, di, b, g, r, alpha);
             }
         });
+    }
+
+    /// <summary>Modos de mistura (RF151), por canal: s = camada, d = fundo.</summary>
+    internal static byte Blend(BlendMode mode, byte s, byte d)
+    {
+        int si = s, di = d;
+        var v = mode switch
+        {
+            BlendMode.Multiply => si * di / 255,
+            BlendMode.Screen => 255 - (255 - si) * (255 - di) / 255,
+            BlendMode.Overlay => di < 128 ? 2 * si * di / 255 : 255 - 2 * (255 - si) * (255 - di) / 255,
+            BlendMode.SoftLight => SoftLight(si, di),
+            BlendMode.Add => Math.Min(255, si + di),
+            BlendMode.Darken => Math.Min(si, di),
+            BlendMode.Lighten => Math.Max(si, di),
+            BlendMode.Difference => Math.Abs(si - di),
+            _ => si,
+        };
+        return (byte)v;
+
+        static int SoftLight(int s, int d)
+        {
+            double sf = s / 255.0, df = d / 255.0;
+            var r = sf <= 0.5 ? df - (1 - 2 * sf) * df * (1 - df) : df + (2 * sf - 1) * ((df <= 0.25 ? ((16 * df - 12) * df + 4) * df : Math.Sqrt(df)) - df);
+            return (int)Math.Round(Math.Clamp(r, 0, 1) * 255);
+        }
     }
 
     private static void BlendPixel(byte[] dst, int i, byte b, byte g, byte r, int alpha)

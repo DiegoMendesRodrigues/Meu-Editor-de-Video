@@ -41,7 +41,7 @@ public static class TimelineOps
     public static Sequence ReplaceTrack(Sequence sequence, Track track)
     {
         var index = sequence.Tracks.FindIndex(t => t.Id == track.Id);
-        return sequence with { Tracks = sequence.Tracks.SetItem(index, track) };
+        return sequence with { Tracks = sequence.Tracks.SetItem(index, TransitionOps.Normalize(track)) };
     }
 
     public static Track WithClips(Track track, IEnumerable<Clip> clips) =>

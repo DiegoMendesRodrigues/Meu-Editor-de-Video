@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -58,6 +58,13 @@ public partial class EditorView : UserControl
     }
 
     private void BibliotecaArea_DragLeave(object sender, DragEventArgs e) => DicaSoltar.Visibility = Visibility.Collapsed;
+
+    /// <summary>Duplo clique num item do catálogo de transições/efeitos/cor aplica ao clipe selecionado.</summary>
+    private void ListaEfeitos_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (DataContext is ViewModels.EditorViewModel vm && ListaEfeitos.SelectedItem is ViewModels.Inspector.LibraryEffectItem item)
+            vm.ApplySectionItemCommand.Execute(item);
+    }
 
     private async void BibliotecaArea_Drop(object sender, DragEventArgs e)
     {

@@ -1,0 +1,56 @@
+<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipEffectsPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        Pilha de efeitos do clipe (abas "Efeitos" e "Cor" do painel C). Mode="Color" mostra correção/gradação de cor,
+        comparação antes/depois e LUT; Mode="Effects" mostra efeitos visuais e chroma key.
+    -->
+    <UserControl.Resources>
+        <ResourceDictionary Source="InspectorTemplates.xaml" />
+    </UserControl.Resources>
+    <Grid>
+        <TextBlock x:Name="Vazio" TextWrapping="Wrap" Margin="12"
+                   Text="Selecione um clipe de vídeo ou imagem na linha do tempo para aplicar efeitos e corrigir a cor.">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasClip}" Value="False">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10,4,10,10"
+                      Visibility="{Binding HasClip, Converter={StaticResource Ins.BoolToVis}}">
+            <StackPanel>
+                <TextBlock Text="{Binding ClipTitle}" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" TextTrimming="CharacterEllipsis" Margin="0,6,0,0" />
+
+                <CheckBox x:Name="Comparar" Content="Comparar antes/depois no monitor" IsChecked="{Binding Preview.CompareMode}" Margin="0,10,0,0"
+                          AutomationProperties.Name="Comparar antes e depois" ToolTip="Metade esquerda do monitor sem efeitos e sem correção de cor" />
+
+                <TextBlock x:Name="TituloAdicionar" Style="{StaticResource Ins.Section}" />
+                <ItemsControl x:Name="Catalogo">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding Name}" Style="{StaticResource Ins.SmallButton}" ToolTip="{Binding Description}"
+                                    AutomationProperties.Name="{Binding Name, StringFormat='Adicionar {0}'}"
+                                    Command="{Binding DataContext.AddEffectCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding Key}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock x:Name="TituloPilha" Style="{StaticResource Ins.Section}" />
+                <TextBlock x:Name="PilhaVazia" Style="{StaticResource Ins.Label}" TextWrapping="Wrap" Margin="0,0,0,6" />
+                <ItemsControl x:Name="Pilha" AutomationProperties.Name="Efeitos aplicados" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

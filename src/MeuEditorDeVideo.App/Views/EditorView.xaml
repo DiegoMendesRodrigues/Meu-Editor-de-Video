@@ -1,10 +1,11 @@
-﻿<UserControl x:Class="MeuEditorDeVideo.App.Views.EditorView"
+<UserControl x:Class="MeuEditorDeVideo.App.Views.EditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:MeuEditorDeVideo.App.ViewModels"
              xmlns:media="clr-namespace:MeuEditorDeVideo.App.ViewModels.Media"
              xmlns:tl="clr-namespace:MeuEditorDeVideo.App.ViewModels.Timeline"
              xmlns:ctl="clr-namespace:MeuEditorDeVideo.App.Controls"
+             xmlns:panels="clr-namespace:MeuEditorDeVideo.App.Views.Panels"
              xmlns:model="clr-namespace:MeuEditorDeVideo.Domain.Model;assembly=MeuEditorDeVideo.Domain"
              Background="{DynamicResource Med.Background}"
              Foreground="{DynamicResource Med.Text}">
@@ -506,13 +507,45 @@
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsMediaSection}" Value="False">
+                                        <DataTrigger Binding="{Binding IsUnavailableSection}" Value="True">
                                             <Setter Property="Visibility" Value="Visible" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
+
+                        <!-- Transições, efeitos e cor: aplicam ao clipe selecionado na linha do tempo (F6) -->
+                        <DockPanel Grid.Row="1" Margin="0,8,0,0">
+                            <DockPanel.Style>
+                                <Style TargetType="DockPanel">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsEffectSection}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DockPanel.Style>
+                            <TextBlock DockPanel.Dock="Top" Style="{StaticResource Med.MutedText}" TextWrapping="Wrap" Margin="4,0,4,8"
+                                       Text="Selecione um clipe na linha do tempo e clique duas vezes num item (ou use Aplicar)." />
+                            <Button DockPanel.Dock="Bottom" Content="Aplicar ao clipe selecionado" Margin="4,8,4,0" HorizontalAlignment="Stretch"
+                                    AutomationProperties.Name="Aplicar ao clipe selecionado"
+                                    Command="{Binding ApplySectionItemCommand}" CommandParameter="{Binding SelectedItem, ElementName=ListaEfeitos}" />
+                            <ListBox x:Name="ListaEfeitos" ItemsSource="{Binding SectionItems}" AutomationProperties.Name="Catálogo"
+                                     Background="{DynamicResource Med.PanelAlt}" BorderThickness="0"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     MouseDoubleClick="ListaEfeitos_MouseDoubleClick">
+                                <ListBox.Resources>
+                                    <ResourceDictionary Source="Panels/InspectorTemplates.xaml" />
+                                </ListBox.Resources>
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                        <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                        </DockPanel>
 
                         <!-- Área da biblioteca: lista, arrastar e soltar (RF027) -->
                         <Border x:Name="BibliotecaArea" Grid.Row="1" Margin="0,8,0,0"
@@ -856,20 +889,19 @@
                                 </ScrollViewer>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Video}">
-                            <TextBlock Text="{StaticResource Editor.Propriedades.Selecione}"
-                                       Style="{StaticResource Med.MutedText}" TextWrapping="Wrap"
-                                       Margin="12" />
+                        <TabItem Header="{StaticResource Editor.Propriedades.Video}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Video}">
+                            <panels:ClipVideoPanel DataContext="{Binding Inspector}" />
                         </TabItem>
                         <TabItem Header="{StaticResource Editor.Propriedades.Audio}">
                             <TextBlock Text="{StaticResource Editor.Propriedades.Selecione}"
                                        Style="{StaticResource Med.MutedText}" TextWrapping="Wrap"
                                        Margin="12" />
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Efeitos}">
-                            <TextBlock Text="{StaticResource Editor.Propriedades.Selecione}"
-                                       Style="{StaticResource Med.MutedText}" TextWrapping="Wrap"
-                                       Margin="12" />
+                        <TabItem Header="{StaticResource Editor.Propriedades.Efeitos}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Efeitos}">
+                            <panels:ClipEffectsPanel Mode="Effects" DataContext="{Binding Inspector}" />
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Cor}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Cor}">
+                            <panels:ClipEffectsPanel Mode="Color" DataContext="{Binding Inspector}" />
                         </TabItem>
                         <TabItem Header="{StaticResource Editor.Propriedades.Historico}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}">
                             <ListBox ItemsSource="{Binding HistoryItems}" Background="Transparent" BorderThickness="0"
