@@ -27,6 +27,8 @@ public sealed unsafe class MediaProbe(ILogger<MediaProbe> logger) : IMediaProbe
         if (!File.Exists(path))
             return MediaProbeResult.Failed(path, MediaProbeStatus.Corrupted, "O arquivo não foi encontrado.");
 
+        if (SvgRenderer.IsSvg(path)) return ProbeSvg(path);
+
         if (new FileInfo(path).Length == 0)
             return MediaProbeResult.Failed(path, MediaProbeStatus.Corrupted, "O arquivo está vazio.");
 
@@ -51,6 +53,21 @@ public sealed unsafe class MediaProbe(ILogger<MediaProbe> logger) : IMediaProbe
         {
             return Analyze(path, file, sequence: null, sequenceRate: null);
         }
+    }
+
+    /// <summary>SVG é imagem vetorial: as dimensões vêm do Skia, não do FFmpeg.</summary>
+    private static MediaProbeResult ProbeSvg(string path)
+    {
+        if (SvgRenderer.Probe(path) is not { } size)
+            return MediaProbeResult.Failed(path, MediaProbeStatus.Corrupted, "O arquivo SVG não pôde ser lido.");
+
+        var info = new MediaTechnicalInfo
+        {
+            VideoCodec = "svg",
+            VideoCodecLongName = "Gráfico vetorial SVG",
+            HasAlpha = true,
+        };
+        return new MediaProbeResult(path, MediaProbeStatus.Ok, MediaKind.Image, MediaTime.Zero, size.Width, size.Height, null, info);
     }
 
     private MediaProbeResult ProbeSequence(ImageSequenceInfo sequence, FrameRate frameRate)

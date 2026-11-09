@@ -1,0 +1,216 @@
+<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipCompositionPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Aba "Composição" do painel C (F9): elemento gráfico, máscaras, rastreamento, vínculo ao movimento e estabilização. -->
+    <UserControl.Resources>
+        <ResourceDictionary Source="InspectorTemplates.xaml" />
+    </UserControl.Resources>
+    <Grid>
+        <TextBlock Text="Selecione um clipe de vídeo, imagem, texto ou elemento gráfico na linha do tempo para usar máscaras, rastreamento e estabilização."
+                   TextWrapping="Wrap" Margin="12">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasClip}" Value="False">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="10,4,10,10"
+                      Visibility="{Binding HasClip, Converter={StaticResource Ins.BoolToVis}}">
+            <StackPanel>
+                <TextBlock Text="{Binding ClipTitle}" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" TextTrimming="CharacterEllipsis" Margin="0,6,0,0" />
+
+                <!-- Análise em andamento -->
+                <Border Visibility="{Binding IsBusy, Converter={StaticResource Ins.BoolToVis}}" Background="{DynamicResource Med.PanelAlt}"
+                        CornerRadius="4" Padding="8" Margin="0,10,0,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding BusyText}" Foreground="{DynamicResource Med.Text}" />
+                        <DockPanel Margin="0,6,0,0">
+                            <Button DockPanel.Dock="Right" Content="Cancelar" Style="{StaticResource Ins.SmallButton}" Margin="6,0,0,0"
+                                    Command="{Binding CancelAnalysisCommand}" AutomationProperties.Name="Cancelar análise" />
+                            <ProgressBar Value="{Binding Progress}" Maximum="100" Height="8" VerticalAlignment="Center"
+                                         AutomationProperties.Name="Progresso da análise" />
+                        </DockPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Elemento gráfico -->
+                <StackPanel Visibility="{Binding IsShape, Converter={StaticResource Ins.BoolToVis}}">
+                    <TextBlock Text="Elemento gráfico" Style="{StaticResource Ins.Section}" />
+                    <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="92" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Forma" Style="{StaticResource Ins.Label}" />
+                        <ComboBox Grid.Column="1" ItemsSource="{Binding ShapeKinds}" SelectedItem="{Binding SelectedShapeKind}" DisplayMemberPath="Label"
+                                  AutomationProperties.Name="Forma do elemento" Margin="0,0,0,4" />
+                        <TextBlock Grid.Row="1" Text="Preenchimento" Style="{StaticResource Ins.Label}" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FillColor, UpdateSourceTrigger=LostFocus}" Margin="0,0,0,4"
+                                 AutomationProperties.Name="Cor de preenchimento" ToolTip="Cor em #RRGGBB" />
+                        <TextBlock Grid.Row="2" Text="Cor do contorno" Style="{StaticResource Ins.Label}" />
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding StrokeColor, UpdateSourceTrigger=LostFocus}"
+                                 AutomationProperties.Name="Cor do contorno" ToolTip="Cor em #RRGGBB" />
+                    </Grid>
+                    <ItemsControl ItemsSource="{Binding ShapeValues}" />
+                </StackPanel>
+
+                <!-- Máscaras -->
+                <TextBlock Text="Máscaras" Style="{StaticResource Ins.Section}" />
+                <StackPanel Visibility="{Binding CanMask, Converter={StaticResource Ins.BoolToVis}}">
+                    <WrapPanel>
+                        <Button Content="+ Retângulo" Style="{StaticResource Ins.SmallButton}" Command="{Binding AddMaskCommand}" CommandParameter="Rectangle"
+                                AutomationProperties.Name="Adicionar máscara retangular" />
+                        <Button Content="+ Elipse" Style="{StaticResource Ins.SmallButton}" Command="{Binding AddMaskCommand}" CommandParameter="Ellipse"
+                                AutomationProperties.Name="Adicionar máscara elíptica" />
+                        <Button Content="+ Livre" Style="{StaticResource Ins.SmallButton}" Command="{Binding AddMaskCommand}" CommandParameter="Path"
+                                AutomationProperties.Name="Adicionar máscara livre" ToolTip="Contorno por pontos: Ctrl+clique no monitor adiciona um ponto; botão direito remove" />
+                    </WrapPanel>
+                    <ListBox ItemsSource="{Binding Masks}" SelectedItem="{Binding SelectedMask}" AutomationProperties.Name="Máscaras"
+                             Background="{DynamicResource Med.PanelAlt}" BorderThickness="0" MaxHeight="120" Margin="0,4,0,4"
+                             HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="{Binding Summary}" Style="{StaticResource Ins.Label}" Margin="6,0,0,0" />
+                                    <TextBlock Text="{Binding Name}" Foreground="{DynamicResource Med.Text}" />
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Visibility="{Binding HasSelectedMask, Converter={StaticResource Ins.BoolToVis}}">
+                        <WrapPanel>
+                            <Button Content="Editar no monitor" Style="{StaticResource Ins.SmallButton}" Command="{Binding EditMaskOnMonitorCommand}"
+                                    AutomationProperties.Name="Editar máscara no monitor" ToolTip="Arraste as alças ou a forma sobre o monitor" />
+                            <Button Content="◇ Forma-chave" Style="{StaticResource Ins.SmallButton}" Command="{Binding ToggleMaskKeyCommand}"
+                                    AutomationProperties.Name="Forma-chave da máscara no cursor" ToolTip="Liga/desliga uma forma-chave no instante do cursor (máscara animada)" />
+                            <Button Content="↑" Style="{StaticResource Ins.SmallButton}" Command="{Binding MoveMaskUpCommand}" AutomationProperties.Name="Subir máscara" />
+                            <Button Content="↓" Style="{StaticResource Ins.SmallButton}" Command="{Binding MoveMaskDownCommand}" AutomationProperties.Name="Descer máscara" />
+                            <Button Content="Remover" Style="{StaticResource Ins.SmallButton}" Command="{Binding RemoveMaskCommand}" AutomationProperties.Name="Remover máscara" />
+                        </WrapPanel>
+                        <TextBlock Style="{StaticResource Ins.Label}" Text="Forma-chave neste instante: a máscara está animada." Margin="0,2,0,4"
+                                   Visibility="{Binding MaskKeyHere, Converter={StaticResource Ins.BoolToVis}}" />
+                        <Grid Margin="0,4,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="92" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Combinação" Style="{StaticResource Ins.Label}" />
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding MaskModes}" SelectedItem="{Binding SelectedMaskMode}" DisplayMemberPath="Label"
+                                      AutomationProperties.Name="Combinação da máscara" Margin="0,0,0,4" />
+                            <TextBlock Grid.Row="1" Text="Seguir" Style="{StaticResource Ins.Label}" />
+                            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding MaskTrackerOptions}" SelectedItem="{Binding SelectedMaskTracker}"
+                                      DisplayMemberPath="Label" AutomationProperties.Name="Rastreamento seguido pela máscara"
+                                      ToolTip="A máscara acompanha o objeto rastreado neste clipe" />
+                        </Grid>
+                        <WrapPanel>
+                            <CheckBox Content="Inverter" IsChecked="{Binding MaskInvert}" Margin="0,0,12,4" AutomationProperties.Name="Inverter máscara" />
+                            <CheckBox Content="Contorno suave" IsChecked="{Binding MaskSmooth}" Margin="0,0,0,4" AutomationProperties.Name="Contorno suave"
+                                      Visibility="{Binding MaskIsPath, Converter={StaticResource Ins.BoolToVis}}" />
+                        </WrapPanel>
+                        <ItemsControl ItemsSource="{Binding MaskValues}" />
+                    </StackPanel>
+                    <CheckBox Content="Mostrar a edição no monitor" IsChecked="{Binding EditOnMonitor}" Margin="0,2,0,0"
+                              AutomationProperties.Name="Mostrar a edição no monitor" />
+                    <TextBlock Style="{StaticResource Ins.Label}" TextWrapping="Wrap" Margin="0,4,0,0"
+                               Text="Para refinar o recorte, aplique o efeito Refinar bordas (aba Efeitos)." />
+                </StackPanel>
+                <TextBlock TextWrapping="Wrap" Text="Máscaras estão disponíveis para vídeos, imagens e elementos gráficos.">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource Ins.Label}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CanMask}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <!-- Rastreamento de movimento -->
+                <StackPanel Visibility="{Binding IsVideo, Converter={StaticResource Ins.BoolToVis}}">
+                    <TextBlock Text="Rastreamento de movimento" Style="{StaticResource Ins.Section}" />
+                    <TextBlock Style="{StaticResource Ins.Label}" TextWrapping="Wrap" Margin="0,0,0,4"
+                               Text="Marque o objeto no monitor (arraste a região) e clique em Rastrear. Máscaras e outros elementos podem segui-lo." />
+                    <WrapPanel>
+                        <Button Content="+ Novo rastreamento" Style="{StaticResource Ins.SmallButton}" Command="{Binding AddTrackerCommand}"
+                                AutomationProperties.Name="Novo rastreamento" />
+                        <Button Content="Rastrear" Style="{StaticResource Ins.SmallButton}" Command="{Binding TrackCommand}"
+                                AutomationProperties.Name="Rastrear movimento" ToolTip="Segue a região em todo o clipe, a partir do quadro onde ela foi marcada" />
+                    </WrapPanel>
+                    <ListBox ItemsSource="{Binding Trackers}" SelectedItem="{Binding SelectedTracker}" AutomationProperties.Name="Rastreamentos"
+                             Background="{DynamicResource Med.PanelAlt}" BorderThickness="0" MaxHeight="100" Margin="0,4,0,4"
+                             HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="{Binding Summary}" Style="{StaticResource Ins.Label}" Margin="6,0,0,0" />
+                                    <TextBlock Text="{Binding Name}" Foreground="{DynamicResource Med.Text}" />
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <WrapPanel Visibility="{Binding HasSelectedTracker, Converter={StaticResource Ins.BoolToVis}}">
+                        <Button Content="Mostrar região no monitor" Style="{StaticResource Ins.SmallButton}" Command="{Binding EditTrackerOnMonitorCommand}"
+                                AutomationProperties.Name="Mostrar região no monitor" />
+                        <Button Content="Remover" Style="{StaticResource Ins.SmallButton}" Command="{Binding RemoveTrackerCommand}"
+                                AutomationProperties.Name="Remover rastreamento" />
+                    </WrapPanel>
+                </StackPanel>
+
+                <!-- Vínculo ao movimento -->
+                <TextBlock Text="Seguir movimento" Style="{StaticResource Ins.Section}" />
+                <TextBlock Style="{StaticResource Ins.Label}" TextWrapping="Wrap" Margin="0,0,0,4"
+                           Text="Faz este clipe acompanhar um objeto rastreado em outro clipe, a partir da posição atual (no cursor)." />
+                <ComboBox ItemsSource="{Binding LinkOptions}" SelectedItem="{Binding SelectedLink}" DisplayMemberPath="Label"
+                          AutomationProperties.Name="Rastreamento a seguir" Margin="0,0,0,4" />
+                <WrapPanel>
+                    <Button Content="Seguir" Style="{StaticResource Ins.SmallButton}" Command="{Binding ApplyLinkCommand}" AutomationProperties.Name="Seguir rastreamento" />
+                    <Button Content="Soltar" Style="{StaticResource Ins.SmallButton}" Command="{Binding UnlinkCommand}" AutomationProperties.Name="Soltar do rastreamento"
+                            Visibility="{Binding IsLinked, Converter={StaticResource Ins.BoolToVis}}" />
+                    <CheckBox Content="Acompanhar a escala" IsChecked="{Binding LinkFollowScale}" Margin="6,3,0,4" AutomationProperties.Name="Acompanhar a escala do objeto" />
+                </WrapPanel>
+
+                <!-- Estabilização -->
+                <StackPanel Visibility="{Binding IsVideo, Converter={StaticResource Ins.BoolToVis}}">
+                    <TextBlock Text="Estabilização" Style="{StaticResource Ins.Section}" />
+                    <WrapPanel>
+                        <Button Content="Analisar e estabilizar" Style="{StaticResource Ins.SmallButton}" Command="{Binding StabilizeCommand}"
+                                AutomationProperties.Name="Analisar e estabilizar" ToolTip="Mede o movimento da câmera em todo o clipe e compensa os tremores" />
+                        <Button Content="Remover" Style="{StaticResource Ins.SmallButton}" Command="{Binding RemoveStabilizationCommand}"
+                                AutomationProperties.Name="Remover estabilização" Visibility="{Binding HasStabilization, Converter={StaticResource Ins.BoolToVis}}" />
+                    </WrapPanel>
+                    <StackPanel Visibility="{Binding HasStabilization, Converter={StaticResource Ins.BoolToVis}}">
+                        <CheckBox Content="Estabilização ativa" IsChecked="{Binding StabilizationEnabled}" Margin="0,2,0,4" AutomationProperties.Name="Estabilização ativa" />
+                        <ItemsControl ItemsSource="{Binding StabilizationValues}" />
+                        <TextBlock Text="{Binding StabilizationSummary}" Style="{StaticResource Ins.Label}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

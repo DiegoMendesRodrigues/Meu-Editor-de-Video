@@ -91,6 +91,9 @@ public static class ClipAnimation
         AnimatedProperty.Rotation => clip.Transform.RotationDegrees,
         AnimatedProperty.Opacity => clip.Opacity,
         AnimatedProperty.Volume => clip.Volume,
+        AnimatedProperty.RotationX => clip.Transform.RotationX,
+        AnimatedProperty.RotationY => clip.Transform.RotationY,
+        AnimatedProperty.Depth => clip.Transform.Depth,
         _ => throw new ArgumentException($"Propriedade não animável: {property}", nameof(property)),
     };
 
@@ -116,6 +119,9 @@ public static class ClipAnimation
             ScaleX = scale,
             ScaleY = IsAnimated(clip, AnimatedProperty.Scale) ? scale * ratio : t.ScaleY,
             RotationDegrees = ValueAt(clip, AnimatedProperty.Rotation, offset),
+            RotationX = ValueAt(clip, AnimatedProperty.RotationX, offset),
+            RotationY = ValueAt(clip, AnimatedProperty.RotationY, offset),
+            Depth = ValueAt(clip, AnimatedProperty.Depth, offset),
         };
     }
 
@@ -193,6 +199,8 @@ public static class ClipAnimation
         AnimatedProperty.Volume => Math.Clamp(value, 0, MaxVolume),
         AnimatedProperty.Scale => Math.Clamp(value, 0.01, 20),
         AnimatedProperty.Rotation => Math.Clamp(value, -3600, 3600),
+        AnimatedProperty.RotationX or AnimatedProperty.RotationY => Math.Clamp(value, -180, 180),
+        AnimatedProperty.Depth => Math.Clamp(value, -5000, 20000),
         _ => Math.Clamp(value, -20000, 20000),
     };
 
@@ -210,6 +218,9 @@ public static class ClipAnimation
             AnimatedProperty.Rotation => clip with { Transform = t with { RotationDegrees = value } },
             AnimatedProperty.Opacity => clip with { Opacity = value },
             AnimatedProperty.Volume => clip with { Volume = value },
+            AnimatedProperty.RotationX => clip with { Transform = t with { RotationX = value } },
+            AnimatedProperty.RotationY => clip with { Transform = t with { RotationY = value } },
+            AnimatedProperty.Depth => clip with { Transform = t with { Depth = value } },
             _ => throw new ArgumentException($"Propriedade não animável: {property}", nameof(property)),
         };
     }

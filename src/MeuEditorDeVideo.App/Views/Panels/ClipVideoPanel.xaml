@@ -57,6 +57,25 @@
                     <CheckBox Content="Espelhar verticalmente" IsChecked="{Binding FlipVertical}" Margin="0,0,0,4" AutomationProperties.Name="Espelhar verticalmente" />
                 </WrapPanel>
 
+                <TextBlock Text="Animações prontas" Style="{StaticResource Ins.Section}" />
+                <Grid Margin="0,0,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox ItemsSource="{Binding AnimationPresetOptions}" SelectedItem="{Binding SelectedAnimationPreset}" DisplayMemberPath="Label"
+                              AutomationProperties.Name="Animação pronta" ToolTip="{Binding SelectedAnimationPreset.Value.Description}" />
+                    <Button Grid.Column="1" Content="Aplicar" Style="{StaticResource Ins.SmallButton}" Margin="6,0,0,0"
+                            Command="{Binding ApplyAnimationPresetCommand}" AutomationProperties.Name="Aplicar animação pronta" />
+                </Grid>
+
+                <TextBlock Text="3D (perspectiva)" Style="{StaticResource Ins.Section}" />
+                <ItemsControl ItemsSource="{Binding Animated3D}" />
+                <WrapPanel>
+                    <Button Content="Virar cartão 3D" Style="{StaticResource Ins.SmallButton}" Command="{Binding ApplyCardFlipCommand}"
+                            AutomationProperties.Name="Virar cartão 3D" ToolTip="Entrada girando como um cartão (keyframes de Giro Y)" />
+                </WrapPanel>
+
                 <TextBlock Text="Recorte" Style="{StaticResource Ins.Section}" />
                 <ItemsControl ItemsSource="{Binding Crop}" />
 

@@ -100,6 +100,7 @@
     <sys:String x:Key="Editor.Ferramenta.ImportarLegendas">Importar legendas (SRT/VTT)…</sys:String>
     <sys:String x:Key="Editor.Ferramenta.ExportarLegendas">Exportar legendas (SRT/VTT)…</sys:String>
     <sys:String x:Key="Editor.Propriedades.Texto">Texto</sys:String>
+    <sys:String x:Key="Editor.Propriedades.Composicao">Composição</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Mixer">Mixer de áudio</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Ima">Ímã de alinhamento (N)</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Ripple">Edição em cascata (ripple)</sys:String>

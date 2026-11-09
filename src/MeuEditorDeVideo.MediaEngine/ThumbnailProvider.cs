@@ -29,6 +29,9 @@ public sealed class ThumbnailProvider(MediaCache cache, ILogger<ThumbnailProvide
 
     private BgraImage? Decode(MediaAsset asset, string sourcePath, MediaTime at, int maxWidth)
     {
+        // SVG é vetorial: rasterizado diretamente no tamanho da miniatura (quadrado de largura máxima).
+        if (SvgRenderer.IsSvg(sourcePath)) return SvgRenderer.Render(sourcePath, maxWidth, maxWidth);
+
         try
         {
             // Sequência: abre diretamente a imagem correspondente ao instante.

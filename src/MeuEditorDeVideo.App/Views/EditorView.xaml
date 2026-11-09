@@ -565,6 +565,39 @@
                             </ListBox>
                         </DockPanel>
 
+                        <!-- Elementos gráficos: formas vetoriais e SVG (F9) -->
+                        <DockPanel Grid.Row="1" Margin="0,8,0,0" DataContext="{Binding GraphicsLibrary}"
+                                   Visibility="{Binding DataContext.IsGraphicsSection, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource Editor.BoolToVis}}">
+                            <StackPanel DockPanel.Dock="Bottom" Margin="4,8,4,0">
+                                <Button Content="Adicionar no cursor" HorizontalAlignment="Stretch" AutomationProperties.Name="Adicionar elemento gráfico no cursor"
+                                        Command="{Binding AddPresetCommand}" />
+                                <Button Content="Importar SVG…" HorizontalAlignment="Stretch" Margin="0,4,0,0" AutomationProperties.Name="Importar gráfico vetorial SVG"
+                                        Command="{Binding ImportSvgCommand}" />
+                            </StackPanel>
+                            <TextBlock DockPanel.Dock="Top" Style="{StaticResource Med.MutedText}" TextWrapping="Wrap" Margin="4,0,4,8"
+                                       Text="Clique duas vezes numa forma para inseri-la no cursor. Ajuste forma, cores e máscaras na aba Composição." />
+                            <ListBox ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset}" AutomationProperties.Name="Elementos gráficos"
+                                     Background="{DynamicResource Med.PanelAlt}" BorderThickness="0" HorizontalContentAlignment="Stretch"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" MouseDoubleClick="ElementosGraficos_MouseDoubleClick">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                        <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="2,3">
+                                            <Border Width="30" Height="30" CornerRadius="4" Background="{DynamicResource Med.MonitorBackground}">
+                                                <TextBlock Text="{Binding Glyph}" Foreground="{Binding Color}" FontSize="16"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                            <TextBlock Text="{Binding Name}" Foreground="{DynamicResource Med.Text}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
+
                         <!-- Transições, efeitos e cor: aplicam ao clipe selecionado na linha do tempo (F6) -->
                         <DockPanel Grid.Row="1" Margin="0,8,0,0">
                             <DockPanel.Style>
@@ -819,6 +852,8 @@
                         <Grid>
                             <Image Source="{Binding Preview.Image}" Stretch="Uniform" RenderOptions.BitmapScalingMode="Linear"
                                    AutomationProperties.Name="{StaticResource Editor.Monitor.Imagem}" />
+                            <!-- Edição de máscaras e regiões de rastreamento sobre a imagem (F9) -->
+                            <ctl:CompositionOverlay Editor="{Binding CompositionInspector}" />
                             <TextBlock Text="{StaticResource Editor.Monitor.PreVisualizacao}" FontSize="18"
                                        HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock.Style>
@@ -961,6 +996,9 @@
                         </TabItem>
                         <TabItem Header="{StaticResource Editor.Propriedades.Texto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Texto}">
                             <panels:ClipTextPanel DataContext="{Binding TextInspector}" />
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Composicao}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Composicao}">
+                            <panels:ClipCompositionPanel DataContext="{Binding CompositionInspector}" />
                         </TabItem>
                         <TabItem Header="{StaticResource Editor.Propriedades.Audio}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Audio}">
                             <panels:ClipAudioPanel DataContext="{Binding AudioInspector}" />

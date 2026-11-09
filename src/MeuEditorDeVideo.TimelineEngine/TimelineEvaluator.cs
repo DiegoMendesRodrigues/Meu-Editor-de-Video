@@ -35,6 +35,12 @@ public sealed record VisualLayer(
 
     /// <summary>Camada de texto gerado (sem mídia).</summary>
     public TextLayer? Text { get; init; }
+
+    /// <summary>Elemento gráfico vetorial gerado (sem mídia, RF152).</summary>
+    public ShapeStyle? Shape { get; init; }
+
+    /// <summary>Máscaras com a forma já resolvida no instante (animação e rastreamento aplicados).</summary>
+    public IReadOnlyList<Mask> Masks { get; init; } = [];
 }
 
 /// <summary>
@@ -99,11 +105,11 @@ public static class TimelineEvaluator
             if (ActiveTransition(track, t) is { } active)
             {
                 var (transition, from, to, progress) = active;
-                AddTransitionLayers(project, track, transition.Kind, from, to, progress, t, width, height, layers);
+                AddTransitionLayers(project, sequence, track, transition.Kind, from, to, progress, t, width, height, layers);
                 continue;
             }
 
-            if (ClipAt(track, t) is { } clip && Layer(project, track, clip, t) is { } layer)
+            if (ClipAt(track, t) is { } clip && Layer(project, track, clip, t, sequence) is { } layer)
                 layers.Add(layer);
         }
         return new CompositionGraph(t, width, height, layers);
@@ -126,11 +132,11 @@ public static class TimelineEvaluator
         return null;
     }
 
-    private static void AddTransitionLayers(Project project, Track track, TransitionKind kind, Clip from, Clip to, double p,
+    private static void AddTransitionLayers(Project project, Sequence sequence, Track track, TransitionKind kind, Clip from, Clip to, double p,
         MediaTime t, int width, int height, List<VisualLayer> layers)
     {
-        var a = Layer(project, track, from, t);
-        var b = Layer(project, track, to, t);
+        var a = Layer(project, track, from, t, sequence);
+        var b = Layer(project, track, to, t, sequence);
         var eased = ClipAnimation.Ease(Easing.EaseInOut, p);
 
         static VisualLayer? Move(VisualLayer? l, double dx, double dy) =>
@@ -178,9 +184,32 @@ public static class TimelineEvaluator
     }
 
     /// <summary>Camada de um clipe no instante (aceita instantes fora do clipe, usados pelas transições).</summary>
-    public static VisualLayer? Layer(Project project, Track track, Clip clip, MediaTime t)
+    /// <param name="sequence">Sequência (resolve vínculos ao rastreamento de outros clipes); nula = sem vínculos.</param>
+    public static VisualLayer? Layer(Project project, Track track, Clip clip, MediaTime t, Sequence? sequence = null)
+    {
+        var layer = BaseLayer(project, track, clip, t);
+        if (layer is null) return null;
+        var offset = MediaTime.Max(MediaTime.Zero, MediaTime.Min(clip.Duration, t - clip.Start));
+        if (clip.Masks.Count > 0)
+        {
+            var masks = clip.Masks.Where(m => m.Enabled).Select(m => CompositionMath.Resolve(m, clip, offset, layer.SourceTime)).ToList();
+            layer = layer with { Masks = masks };
+        }
+        if (sequence is not null && clip.MotionLink is { } link && CompositionMath.LinkOffset(project, sequence, link, t) is { } follow)
+        {
+            var tr = layer.Transform;
+            layer = layer with
+            {
+                Transform = tr with { X = tr.X + follow.Dx, Y = tr.Y + follow.Dy, ScaleX = tr.ScaleX * follow.Scale, ScaleY = tr.ScaleY * follow.Scale },
+            };
+        }
+        return layer;
+    }
+
+    private static VisualLayer? BaseLayer(Project project, Track track, Clip clip, MediaTime t)
     {
         if (clip.IsText) return TextLayerOf(project, track, clip, t);
+        if (clip.IsShape) return ShapeLayerOf(track, clip, t);
         if (clip.MediaAssetId is not { } id || project.FindMedia(id) is not { HasVideo: true } asset) return null;
 
         var offset = MediaTime.Max(MediaTime.Zero, MediaTime.Min(clip.Duration, t - clip.Start));
@@ -208,12 +237,33 @@ public static class TimelineEvaluator
             }
         }
 
-        return new VisualLayer(clip.Id, track.Id, asset, source, ClipAnimation.TransformAt(clip, offset), opacity,
+        var transform = ClipAnimation.TransformAt(clip, offset);
+        if (clip.Stabilization is { } stab && asset.Width > 0 && asset.Height > 0)
+        {
+            var correction = CompositionMath.Correction(stab, source, (double)asset.Width / asset.Height);
+            var fitted = asset.Width * CompositionMath.FitScale(asset.Width, asset.Height, project.Settings.Width, project.Settings.Height);
+            transform = CompositionMath.Apply(transform, correction, fitted);
+        }
+
+        return new VisualLayer(clip.Id, track.Id, asset, source, transform, opacity,
             EffectCatalog.ActiveEffects(clip))
         {
             BlendMode = clip.BlendMode,
             BlendSourceTime = blendSource,
             BlendWeight = blendWeight,
+        };
+    }
+
+    /// <summary>Camada de um elemento gráfico gerado (forma vetorial).</summary>
+    private static VisualLayer? ShapeLayerOf(Track track, Clip clip, MediaTime t)
+    {
+        var offset = MediaTime.Max(MediaTime.Zero, MediaTime.Min(clip.Duration, t - clip.Start));
+        var opacity = ClipAnimation.OpacityAt(clip, offset);
+        if (opacity <= 0) return null;
+        return new VisualLayer(clip.Id, track.Id, null, offset, ClipAnimation.TransformAt(clip, offset), opacity, EffectCatalog.ActiveEffects(clip))
+        {
+            BlendMode = clip.BlendMode,
+            Shape = clip.Shape,
         };
     }
 

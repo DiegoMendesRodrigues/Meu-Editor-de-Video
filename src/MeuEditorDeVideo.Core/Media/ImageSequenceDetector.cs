@@ -15,7 +15,7 @@ public static partial class ImageSequenceDetector
     /// </summary>
     public static ImageSequenceInfo? Detect(string anyFrame)
     {
-        if (!MediaFormats.IsImage(anyFrame)) return null;
+        if (!MediaFormats.IsImage(anyFrame) || anyFrame.EndsWith(".svg", StringComparison.OrdinalIgnoreCase)) return null; // SVG é vetorial (não vira sequência)
         var directory = Path.GetDirectoryName(Path.GetFullPath(anyFrame));
         if (directory is null || !Directory.Exists(directory)) return null;
 

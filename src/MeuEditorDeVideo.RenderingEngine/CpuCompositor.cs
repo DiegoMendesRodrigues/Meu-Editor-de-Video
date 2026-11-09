@@ -64,7 +64,7 @@ public sealed class CpuCompositor : ICompositor
         if (crop.Right <= crop.Left || crop.Bottom <= crop.Top) return;
         var hasCrop = t.CropLeft > 0 || t.CropTop > 0 || t.CropRight > 0 || t.CropBottom > 0;
 
-        var simple = !hasCrop && mask is null && layer.Layer.BlendMode == BlendMode.Normal;
+        var simple = !hasCrop && mask is null && layer.Layer.BlendMode == BlendMode.Normal && !t.Is3D;
         var identityScale = Math.Abs(sx - 1) < 1e-6 && Math.Abs(sy - 1) < 1e-6;
         if (simple && identityScale && Math.Abs(angle) < 1e-9)
         {
@@ -77,10 +77,63 @@ public sealed class CpuCompositor : ICompositor
             }
         }
 
-        DrawAffine(dst, dw, dh, img, cx, cy, sx, sy, angle, opacity, crop, mask, layer.Layer.BlendMode);
+        var h = Projection(img.Width, img.Height, cx, cy, sx, sy, angle, t.RotationX, t.RotationY, t.Depth * projectScale, dw);
+        DrawProjective(dst, dw, dh, img, h, opacity, crop, mask, layer.Layer.BlendMode);
     }
 
     private readonly record struct CropRect(double Left, double Top, double Right, double Bottom);
+
+    /// <summary>Distância focal da câmera virtual da composição 2,5D, em larguras do quadro.</summary>
+    public const double FocalWidths = 2.0;
+
+    /// <summary>
+    /// Homografia (3×3, linha a linha) que leva um ponto (u, v, 1) da imagem de origem — em pixels — ao quadro de saída
+    /// em coordenadas homogêneas: escala/espelhamento, giros 3D (Y, depois X), giro no plano, profundidade e perspectiva.
+    /// Sem giros 3D nem profundidade, é a transformação afim usual (w = 1).
+    /// </summary>
+    public static double[] Projection(int iw, int ih, double cx, double cy, double sx, double sy, double angle,
+        double rotX, double rotY, double depth, int frameWidth)
+    {
+        double rx = rotX * Math.PI / 180, ry = rotY * Math.PI / 180;
+        double crx = Math.Cos(rx), srx = Math.Sin(rx), cry = Math.Cos(ry), sry = Math.Sin(ry);
+        double cos = Math.Cos(angle), sin = Math.Sin(angle);
+        // Coeficientes em (x, y) locais, com x = sx·(u − iw/2) e y = sy·(v − ih/2).
+        double xa = cry * cos - sry * srx * sin, xb = -crx * sin;
+        double ya = cry * sin + sry * srx * cos, yb = crx * cos;
+        double za = -sry * crx, zb = srx;
+        double hw = iw / 2.0, hh = ih / 2.0;
+        var f = FocalWidths * frameWidth;
+
+        // Linhas afins em (u, v, 1) para X, Y, Z.
+        double[] X = [xa * sx, xb * sy, -(xa * sx * hw + xb * sy * hh)];
+        double[] Y = [ya * sx, yb * sy, -(ya * sx * hw + yb * sy * hh)];
+        double[] Z = [za * sx, zb * sy, -(za * sx * hw + zb * sy * hh) + depth];
+        // w = (f + Z) / f; saída = (X + cx·w, Y + cy·w, w).
+        double[] w = [Z[0] / f, Z[1] / f, 1 + Z[2] / f];
+        return
+        [
+            X[0] + cx * w[0], X[1] + cx * w[1], X[2] + cx * w[2],
+            Y[0] + cy * w[0], Y[1] + cy * w[1], Y[2] + cy * w[2],
+            w[0], w[1], w[2],
+        ];
+    }
+
+    /// <summary>Inversa de uma matriz 3×3 (nula se singular).</summary>
+    public static double[]? Invert(double[] m)
+    {
+        var a = m[4] * m[8] - m[5] * m[7];
+        var b = m[5] * m[6] - m[3] * m[8];
+        var c = m[3] * m[7] - m[4] * m[6];
+        var det = m[0] * a + m[1] * b + m[2] * c;
+        if (Math.Abs(det) < 1e-12) return null;
+        var k = 1 / det;
+        return
+        [
+            a * k, (m[2] * m[7] - m[1] * m[8]) * k, (m[1] * m[5] - m[2] * m[4]) * k,
+            b * k, (m[0] * m[8] - m[2] * m[6]) * k, (m[2] * m[3] - m[0] * m[5]) * k,
+            c * k, (m[1] * m[6] - m[0] * m[7]) * k, (m[0] * m[4] - m[1] * m[3]) * k,
+        ];
+    }
 
     /// <summary>Cópia 1:1 com recorte nas bordas; mistura alfa só quando necessário.</summary>
     private static void Blit(byte[] dst, int dw, int dh, BgraImage img, int left, int top, double opacity, bool hasAlpha)
@@ -113,31 +166,43 @@ public sealed class CpuCompositor : ICompositor
     }
 
     /// <summary>
-    /// Mapeamento inverso com interpolação bilinear para escala/rotação arbitrárias, com recorte da origem,
-    /// máscara de transição (em coordenadas de saída) e modo de mistura.
+    /// Mapeamento inverso (homografia) com interpolação bilinear: escala, giros (2D e 3D), perspectiva, recorte da
+    /// origem, máscara de transição (em coordenadas de saída) e modo de mistura.
     /// </summary>
-    private static void DrawAffine(byte[] dst, int dw, int dh, BgraImage img, double cx, double cy, double sx, double sy, double angle,
-        double opacity, CropRect crop, TransitionMask? mask, BlendMode mode)
+    private static void DrawProjective(byte[] dst, int dw, int dh, BgraImage img, double[] h, double opacity, CropRect crop,
+        TransitionMask? mask, BlendMode mode)
     {
-        var cos = Math.Cos(angle);
-        var sin = Math.Sin(angle);
-        double hw = img.Width / 2.0, hh = img.Height / 2.0;
+        if (Invert(h) is not { } inv) return;
+        const double minW = 0.05; // atrás da câmera (ou rente a ela): não desenha
 
-        // Caixa delimitadora do retângulo (recortado) transformado.
+        // Caixa delimitadora do retângulo (recortado) projetado.
         double minX = double.MaxValue, minY = double.MaxValue, maxX = double.MinValue, maxY = double.MinValue;
-        foreach (var (px, py) in new[] { (crop.Left - hw, crop.Top - hh), (crop.Right - hw, crop.Top - hh), (crop.Right - hw, crop.Bottom - hh), (crop.Left - hw, crop.Bottom - hh) })
+        var behind = false;
+        foreach (var (u, v) in new[] { (crop.Left, crop.Top), (crop.Right, crop.Top), (crop.Right, crop.Bottom), (crop.Left, crop.Bottom) })
         {
-            var x = px * sx;
-            var y = py * sy;
-            var rx = x * cos - y * sin + cx;
-            var ry = x * sin + y * cos + cy;
-            minX = Math.Min(minX, rx); maxX = Math.Max(maxX, rx);
-            minY = Math.Min(minY, ry); maxY = Math.Max(maxY, ry);
+            var w = h[6] * u + h[7] * v + h[8];
+            if (w <= minW)
+            {
+                behind = true;
+                continue;
+            }
+            var x = (h[0] * u + h[1] * v + h[2]) / w;
+            var y = (h[3] * u + h[4] * v + h[5]) / w;
+            minX = Math.Min(minX, x); maxX = Math.Max(maxX, x);
+            minY = Math.Min(minY, y); maxY = Math.Max(maxY, y);
         }
-        var x0 = Math.Max(0, (int)Math.Floor(minX));
-        var x1 = Math.Min(dw, (int)Math.Ceiling(maxX));
-        var y0 = Math.Max(0, (int)Math.Floor(minY));
-        var y1 = Math.Min(dh, (int)Math.Ceiling(maxY));
+        int x0, x1, y0, y1;
+        if (behind)
+        {
+            x0 = 0; y0 = 0; x1 = dw; y1 = dh;
+        }
+        else
+        {
+            x0 = Math.Max(0, (int)Math.Floor(minX));
+            x1 = Math.Min(dw, (int)Math.Ceiling(maxX));
+            y0 = Math.Max(0, (int)Math.Floor(minY));
+            y1 = Math.Min(dh, (int)Math.Ceiling(maxY));
+        }
         if (x1 <= x0 || y1 <= y0) return;
 
         var src = img.Pixels;
@@ -150,19 +215,24 @@ public sealed class CpuCompositor : ICompositor
 
         Parallel.For(y0, y1, y =>
         {
+            var py = y + 0.5;
             for (var x = x0; x < x1; x++)
             {
-                // Destino → origem (inverso de rotação e escala), amostrando no centro do pixel.
-                var dx = x + 0.5 - cx;
-                var dy = y + 0.5 - cy;
-                var ux = (dx * cos + dy * sin) / sx + hw - 0.5;
-                var uy = (-dx * sin + dy * cos) / sy + hh - 0.5;
+                // Destino → origem, amostrando no centro do pixel.
+                var px = x + 0.5;
+                var hz = inv[6] * px + inv[7] * py + inv[8];
+                if (Math.Abs(hz) < 1e-12) continue;
+                var u = (inv[0] * px + inv[1] * py + inv[2]) / hz;
+                var v = (inv[3] * px + inv[4] * py + inv[5]) / hz;
+                if (h[6] * u + h[7] * v + h[8] <= minW) continue;
+                var ux = u - 0.5;
+                var uy = v - 0.5;
                 if (ux < cl || uy < ct || ux > cr || uy > cb) continue;
 
                 var coverage = 1.0;
                 if (mask is { } m)
                 {
-                    coverage = TransitionMasks.Coverage(m, (x + 0.5) / dw, (y + 0.5) / dh, (double)dw / dh);
+                    coverage = TransitionMasks.Coverage(m, px / dw, py / dh, (double)dw / dh);
                     if (coverage <= 0) continue;
                 }
 

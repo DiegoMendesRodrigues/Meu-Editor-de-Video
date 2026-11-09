@@ -96,7 +96,7 @@ public static class TextPresets
     /// <summary>Nome padrão de uma nova trilha do tipo (ex.: "Texto 2", "Legendas 1").</summary>
     public static string NewTrackName(Sequence seq, TrackKind kind)
     {
-        var prefix = kind == TrackKind.Subtitle ? "Legendas" : "Texto";
+        var prefix = kind switch { TrackKind.Subtitle => "Legendas", TrackKind.Image => "Gráficos", _ => "Texto" };
         var n = seq.Tracks.Count(t => t.Kind == kind) + 1;
         while (seq.Tracks.Exists(t => t.Name == $"{prefix} {n}")) n++;
         return $"{prefix} {n}";
@@ -104,12 +104,12 @@ public static class TextPresets
 }
 
 /// <summary>
-/// Insere um clipe de texto/legenda na primeira trilha do tipo que esteja livre no intervalo;
+/// Insere um clipe gerado (texto/legenda ou elemento gráfico) na primeira trilha do tipo que esteja livre no intervalo;
 /// se nenhuma estiver, cria uma trilha nova no topo (na frente das demais).
 /// </summary>
 public sealed record AddTextClipCommand(Guid SequenceId, Clip Clip, TrackKind Kind) : IEditCommand
 {
-    public string Description { get; init; } = Clip.TextFormat?.Kind switch
+    public string Description { get; init; } = Clip.IsShape ? "Adicionar elemento gráfico" : Clip.TextFormat?.Kind switch
     {
         TextKind.Title => "Adicionar título",
         TextKind.Credits => "Adicionar créditos",
@@ -126,8 +126,15 @@ public sealed record AddTextClipCommand(Guid SequenceId, Clip Clip, TrackKind Ki
 
     public Project Apply(Project project)
     {
-        if (Kind is not (TrackKind.Text or TrackKind.Subtitle)) throw new EditRejectedException("Textos só entram em trilhas de texto ou de legendas.");
-        if (!Clip.IsText) throw new EditRejectedException("O clipe não é um texto.");
+        if (Clip.IsShape)
+        {
+            if (Kind != TrackKind.Image) throw new EditRejectedException("Elementos gráficos entram em trilhas de imagem.");
+        }
+        else
+        {
+            if (Kind is not (TrackKind.Text or TrackKind.Subtitle)) throw new EditRejectedException("Textos só entram em trilhas de texto ou de legendas.");
+            if (!Clip.IsText) throw new EditRejectedException("O clipe não é um texto.");
+        }
         var seq = RequireSequence(project, SequenceId);
 
         bool Free(Track t) => t.Kind == Kind && !t.IsLocked && !t.Clips.Exists(c => c.Start < Clip.End && c.End > Clip.Start);

@@ -78,7 +78,7 @@ public static class MediaFormats
         ".mp3", ".wav", ".aac", ".m4a", ".flac", ".ogg", ".oga", ".opus", ".wma", ".aiff", ".aif", ".ac3", ".amr");
 
     public static readonly IReadOnlySet<string> Image = Set(
-        ".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp", ".tga", ".jfif");
+        ".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp", ".tga", ".jfif", ".svg");
 
     public static readonly IReadOnlySet<string> Gif = Set(".gif");
 

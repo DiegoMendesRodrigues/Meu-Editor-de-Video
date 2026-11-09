@@ -84,6 +84,25 @@ public static class TextRasterizer
         return result;
     }
 
+    /// <summary>Executa na thread STA de desenho (WPF) e devolve o resultado; reentrante na própria thread.</summary>
+    internal static T OnWorker<T>(Func<T> func)
+    {
+        if (Thread.CurrentThread == Worker) return func();
+        var done = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
+        Work.Add(() =>
+        {
+            try
+            {
+                done.SetResult(func());
+            }
+            catch (Exception ex)
+            {
+                done.SetException(ex);
+            }
+        });
+        return done.Task.GetAwaiter().GetResult();
+    }
+
     /// <summary>Converte "#AARRGGBB"/"#RRGGBB"/nome de cor; inválida = <paramref name="fallback"/>.</summary>
     public static Color ParseColor(string? value, Color fallback)
     {
@@ -98,7 +117,7 @@ public static class TextRasterizer
         }
     }
 
-    private static SolidColorBrush Brush(Color c)
+    internal static SolidColorBrush Brush(Color c)
     {
         var b = new SolidColorBrush(c);
         b.Freeze();
@@ -213,7 +232,7 @@ public static class TextRasterizer
         return new TextRaster(new BgraImage(width, height, pixels), boxW, boxH);
     }
 
-    private static byte[] Rasterize(Visual visual, int width, int height)
+    internal static byte[] Rasterize(Visual visual, int width, int height)
     {
         var bitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
         bitmap.Render(visual);
@@ -270,7 +289,7 @@ public static class TextRasterizer
         });
     }
 
-    private static void Unpremultiply(byte[] px)
+    internal static void Unpremultiply(byte[] px)
     {
         for (var i = 0; i < px.Length; i += 4)
         {

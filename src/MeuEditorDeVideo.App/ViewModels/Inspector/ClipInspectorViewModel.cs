@@ -39,6 +39,12 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
             new(this, AnimatedProperty.Rotation, "Rotação", -360, 360, "°", 1, 0),
             new(this, AnimatedProperty.Opacity, "Opacidade", 0, 100, "%", 100, 1),
         ];
+        Animated3D =
+        [
+            new(this, AnimatedProperty.RotationX, "Giro X", -180, 180, "°", 1, 0),
+            new(this, AnimatedProperty.RotationY, "Giro Y", -180, 180, "°", 1, 0),
+            new(this, AnimatedProperty.Depth, "Profundidade", -1500, 5000, " px", 1, 0),
+        ];
         Crop =
         [
             new(this, "crop.l", "Esquerda", 0, 95, "%", c => c.Transform.CropLeft * 100, (c, v) => c with { Transform = c.Transform with { CropLeft = v / 100 } }),
@@ -64,6 +70,40 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     public PreviewViewModel Preview { get; }
 
     public IReadOnlyList<AnimatedValueViewModel> Animated { get; }
+
+    /// <summary>Giros 3D e profundidade (composição 2,5D, RF154).</summary>
+    public IReadOnlyList<AnimatedValueViewModel> Animated3D { get; }
+
+    /// <summary>Animações 2D prontas (RF153).</summary>
+    public IReadOnlyList<Option<AnimationPreset>> AnimationPresetOptions { get; } =
+        AnimationPresets.All.Select(p => new Option<AnimationPreset>(p, p.Name)).ToList();
+
+    [ObservableProperty]
+    public partial Option<AnimationPreset>? SelectedAnimationPreset { get; set; }
+
+    /// <summary>Aplica a animação pronta escolhida (substitui os keyframes das propriedades que ela usa).</summary>
+    [RelayCommand]
+    private void ApplyAnimationPreset()
+    {
+        if (SelectedAnimationPreset?.Value is not { } preset || Timeline.Project is not { } project) return;
+        UpdateClip(c => AnimationPresets.Apply(c, preset.Id, project.Settings), $"Animação: {preset.Name}");
+    }
+
+    /// <summary>Efeito 3D pronto: o clipe vira como um cartão (giro Y de 90° a 0° na entrada), RF154.</summary>
+    [RelayCommand]
+    private void ApplyCardFlip()
+    {
+        if (Current() is not { } cur || Timeline.Project is not { } project) return;
+        var fr = project.Settings.FrameRate;
+        var d = cur.Clip.Duration;
+        var t = fr.SnapToFrame(MediaTime.Min(MediaTime.FromSecondsApprox(0.8), new MediaTime(d.Ticks / 2)));
+        if (t <= MediaTime.Zero) return;
+        UpdateClip(c => c with
+        {
+            Keyframes = c.Keyframes.SetItem(AnimatedProperty.RotationY,
+                [new Keyframe(MediaTime.Zero, 90, Easing.EaseOut), new Keyframe(t, c.Transform.RotationY, Easing.EaseInOut)]),
+        }, "Animação: virar cartão 3D");
+    }
     public IReadOnlyList<ClipValueViewModel> Crop { get; }
     public IReadOnlyList<ClipValueViewModel> Fades { get; }
     public ObservableCollection<EffectItemViewModel> ColorEffects { get; } = [];
@@ -174,7 +214,7 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         {
             if (!t.IsVisual) continue;
             foreach (var c in t.Clips)
-                if (Timeline.Selection.Contains(c.Id) && (c.MediaAssetId is not null || c.IsText)) return (t, c);
+                if (Timeline.Selection.Contains(c.Id) && (c.MediaAssetId is not null || c.IsText || c.IsShape)) return (t, c);
         }
         return null;
     }
@@ -211,8 +251,9 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         try
         {
             var asset = clip.MediaAssetId is { } id ? Timeline.Project?.FindMedia(id) : null;
-            ClipTitle = asset?.Name ?? (clip.IsText ? TextTitle(clip.Text!) : "Clipe");
+            ClipTitle = asset?.Name ?? (clip.IsText ? TextTitle(clip.Text!) : clip.Shape is { } shape ? "◆  " + ShapePresets.Name(shape.Kind) : "Clipe");
             foreach (var a in Animated) a.Refresh(clip, offset);
+            foreach (var a in Animated3D) a.Refresh(clip, offset);
             foreach (var c in Crop) c.Refresh(clip);
             foreach (var f in Fades) f.Refresh(clip);
             FlipHorizontal = clip.Transform.FlipHorizontal;

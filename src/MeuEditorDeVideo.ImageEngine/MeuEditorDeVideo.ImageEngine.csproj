@@ -4,6 +4,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="OpenCvSharp4" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MeuEditorDeVideo.Core\MeuEditorDeVideo.Core.csproj" />
   </ItemGroup>
 </Project>

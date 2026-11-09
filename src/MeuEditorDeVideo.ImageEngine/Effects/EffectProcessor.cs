@@ -44,6 +44,11 @@ public static class EffectProcessor
                 case Posterize: PosterizeFx(px, (int)Math.Round(Value(e, "levels"))); break;
                 case Glow: GlowFx(px, w, h, Value(e, "amount") / 100, Value(e, "radius") * ctx.PixelScale, Value(e, "threshold") / 100); break;
                 case ChromaKey: alpha |= ChromaKeyFx(px, w, h, e, ctx.PixelScale); break;
+                case EdgeRefine:
+                    px = EdgeRefiner.Apply(new BgraImage(w, h, px), Value(e, "choke") * ctx.PixelScale, Value(e, "feather") * ctx.PixelScale,
+                        Value(e, "decontaminate") / 100).Pixels;
+                    alpha = true;
+                    break;
             }
         }
         return (new BgraImage(w, h, px), alpha);

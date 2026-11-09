@@ -64,6 +64,7 @@ public static class EffectCatalog
     public const string Posterize = "fx.posterize";
     public const string Glow = "fx.glow";
     public const string ChromaKey = "key.chroma";
+    public const string EdgeRefine = "edgeRefine";
     public const string Equalizer = "audio.eq";
     public const string Compressor = "audio.compressor";
     public const string Denoise = "audio.denoise";
@@ -142,6 +143,12 @@ public static class EffectCatalog
             new("transparency", "Transparência do fundo removido", ParameterKind.Slider, 0, 100, 100, "%"),
             new("background", "Fundo", ParameterKind.Choice, 0, 1, 0, Options: ["Transparente (mostra as trilhas abaixo)", "Cor sólida"]),
             new("backgroundColor", "Cor do fundo", ParameterKind.Color, DefaultColor: (0.0, 0.0, 0.0)),
+        ], AffectsAlpha: true),
+        new(EdgeRefine, "Refinar bordas", "Contrai ou expande, suaviza e limpa as bordas da transparência (use depois do chroma key ou de máscaras).", EffectCategory.Key,
+        [
+            new("choke", "Contrair/expandir", ParameterKind.Slider, -20, 20, 0, " px"),
+            new("feather", "Suavizar", ParameterKind.Slider, 0, 30, 2, " px"),
+            new("decontaminate", "Limpar cor das bordas", ParameterKind.Slider, 0, 100, 50, "%"),
         ], AffectsAlpha: true),
 
         new(Equalizer, "Equalizador", "Equalizador paramétrico: graves, médios ajustáveis, agudos e corte de graves.", EffectCategory.Audio,
@@ -282,6 +289,7 @@ public static class EffectCatalog
             Wheels => new[] { "lift", "gamma", "gain" }.All(k => WheelValue(e, k) == (0, 0, 0)),
             Lut => string.IsNullOrEmpty(e.Resource) || Value(e, "intensity") <= 0,
             Blur => Value(e, "radius") <= 0,
+            EdgeRefine => Math.Abs(Value(e, "choke")) < 0.5 && Value(e, "feather") < 0.5 && Value(e, "decontaminate") <= 0,
             Equalizer => new[] { "lowGain", "midGain", "highGain", "lowcut" }.All(k => Math.Abs(Value(e, k)) < 1e-9),
             Denoise or Telephone => Value(e, e.Type == Denoise ? "amount" : "intensity") <= 0,
             Echo or Reverb or Distortion => Value(e, "mix") <= 0,

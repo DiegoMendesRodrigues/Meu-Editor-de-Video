@@ -25,8 +25,13 @@ public sealed class VideoFrameSource(bool hardwareDecoding, ILogger<VideoFrameSo
     /// <summary>Quantas mídias estão sendo decodificadas pela GPU (diagnóstico).</summary>
     public int HardwareDecoders => _entries.Values.Count(e => e.Reader?.UsesHardware == true);
 
+    private string? _svgPath;
+    private int _svgWidth, _svgHeight;
+    private BgraImage? _svgImage;
+
     public BgraImage? GetFrame(MediaAsset asset, string path, MediaTime sourceTime, int maxWidth, int maxHeight)
     {
+        if (SvgRenderer.IsSvg(path)) return SvgFrame(path, maxWidth, maxHeight);
         if (!asset.HasVideo || _failed.Contains(asset.Id)) return null;
         try
         {
@@ -52,6 +57,17 @@ public sealed class VideoFrameSource(bool hardwareDecoding, ILogger<VideoFrameSo
             if (_entries.Remove(asset.Id, out var broken)) broken.Dispose();
             return null;
         }
+    }
+
+    /// <summary>SVG é rasterizado pelo Skia (sem FFmpeg); o último render fica em cache enquanto caminho e tamanho não mudarem.</summary>
+    private BgraImage? SvgFrame(string path, int maxWidth, int maxHeight)
+    {
+        if (_svgImage is not null && _svgPath == path && _svgWidth == maxWidth && _svgHeight == maxHeight) return _svgImage;
+        _svgImage = SvgRenderer.Render(path, maxWidth, maxHeight);
+        _svgPath = path;
+        _svgWidth = maxWidth;
+        _svgHeight = maxHeight;
+        return _svgImage;
     }
 
     public void Trim(IReadOnlySet<Guid> inUse)

@@ -41,11 +41,20 @@ public static class AnimatedProperty
     public const string Rotation = "rotation";
     public const string Opacity = "opacity";
 
+    /// <summary>Giro 3D em torno do eixo horizontal (RF154).</summary>
+    public const string RotationX = "rotationX";
+
+    /// <summary>Giro 3D em torno do eixo vertical (RF154).</summary>
+    public const string RotationY = "rotationY";
+
+    /// <summary>Profundidade (RF154).</summary>
+    public const string Depth = "depth";
+
     /// <summary>Volume do clipe de áudio (RF121).</summary>
     public const string Volume = "volume";
 
     /// <summary>Propriedades visuais.</summary>
-    public static IReadOnlyList<string> All { get; } = [X, Y, Scale, Rotation, Opacity];
+    public static IReadOnlyList<string> All { get; } = [X, Y, Scale, Rotation, Opacity, RotationX, RotationY, Depth];
 }
 
 /// <summary>

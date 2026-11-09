@@ -1,4 +1,4 @@
-﻿# Dependências e licenças
+# Dependências e licenças
 
 Relação das dependências do **Meu Editor de Vídeo** (ENT018, RNF014, RNF020).
 O produto é licenciado sob **GPL-3.0-or-later** (arquivo `LICENSE`). Toda dependência deve ser compatível com GPL-3.0.
@@ -16,6 +16,8 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 | NAudio.Wasapi (+ NAudio.Core) | 2.2.1 | MIT | Saída de áudio WASAPI da pré-visualização (AudioEngine) |
 | Serilog.Extensions.Hosting | 10.0.0 | Apache-2.0 | Integração de logs |
 | Serilog.Sinks.File | 7.0.0 | Apache-2.0 | Logs técnicos locais rotativos |
+| OpenCvSharp4 + OpenCvSharp4.runtime.win | 4.13.0.20260627 | Apache-2.0 (OpenCV: Apache-2.0) | Visão computacional (ImageEngine, F9): rastreamento de movimento (CSRT/correspondência de modelo), estabilização (fluxo óptico), máscaras e "Refinar bordas". Inclui `OpenCvSharpExtern.dll` nativa |
+| Svg.Skia (+ SkiaSharp, HarfBuzzSharp) | 5.2.3 | MIT | Importação e rasterização de gráficos vetoriais SVG (MediaEngine, F9). Inclui `libSkiaSharp.dll` e `libHarfBuzzSharp.dll` nativas |
 
 ## Pacotes NuGet (somente testes)
 
@@ -38,10 +40,8 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 |---|---|---|---|
 | Vortice.Direct3D11 / DXGI / D2D / DirectWrite | 3.8.x | MIT | F4 |
 | NAudio | 3.3.0 | MIT | F4/F7 |
-| OpenCvSharp4 + runtime Windows | 4.13.x | Apache-2.0 | F9 |
 | Microsoft.ML.OnnxRuntime.DirectML | 1.24.x | MIT | F10 |
 | Whisper.net | 1.9.x | MIT | F10 |
-| Svg.Skia | — | MIT | F9 |
 | WiX Toolset | — | MS-RL | F12 |
 
 ## Procedimento de atualização

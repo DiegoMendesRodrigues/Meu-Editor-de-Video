@@ -29,6 +29,18 @@ public sealed record Transform
     public double CropTop { get; init; }
     public double CropRight { get; init; }
     public double CropBottom { get; init; }
+
+    /// <summary>Giro em torno do eixo horizontal, em graus (composição 2,5D, RF154).</summary>
+    public double RotationX { get; init; }
+
+    /// <summary>Giro em torno do eixo vertical, em graus (composição 2,5D, RF154).</summary>
+    public double RotationY { get; init; }
+
+    /// <summary>Profundidade em pixels do projeto: positivo afasta (fica menor), negativo aproxima (RF154).</summary>
+    public double Depth { get; init; }
+
+    /// <summary>Usa a projeção em perspectiva (giros X/Y ou profundidade).</summary>
+    public bool Is3D => RotationX != 0 || RotationY != 0 || Depth != 0;
 }
 
 /// <summary>Clipe na timeline (§6.3).</summary>
@@ -68,6 +80,23 @@ public sealed record Clip
 
     /// <summary>Clipe gerado de texto/título/créditos/tarja/legenda.</summary>
     public bool IsText => Text is not null && MediaAssetId is null;
+
+    /// <summary>Elemento gráfico vetorial gerado (RF152).</summary>
+    public ShapeStyle? Shape { get; init; }
+
+    public bool IsShape => Shape is not null && MediaAssetId is null && Text is null;
+
+    /// <summary>Máscaras de recorte, aplicadas em ordem (RF110, RF149, RF111).</summary>
+    public ImmutableList<Mask> Masks { get; init; } = [];
+
+    /// <summary>Rastreamentos de movimento calculados neste clipe (RF150).</summary>
+    public ImmutableList<MotionTracker> Trackers { get; init; } = [];
+
+    /// <summary>Segue o movimento rastreado de outro clipe (RF150).</summary>
+    public TrackerLink? MotionLink { get; init; }
+
+    /// <summary>Estabilização de vídeo (RF075).</summary>
+    public Stabilization? Stabilization { get; init; }
 
     /// <summary>Efeitos, correção de cor e chroma key, aplicados em ordem (RF077, RF088).</summary>
     public ImmutableList<EffectInstance> Effects { get; init; } = [];

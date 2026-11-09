@@ -1,6 +1,7 @@
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
+using MeuEditorDeVideo.ImageEngine.Composition;
 using MeuEditorDeVideo.ImageEngine.Effects;
 using MeuEditorDeVideo.ImageEngine.Text;
 using MeuEditorDeVideo.TimelineEngine;
@@ -29,9 +30,18 @@ public sealed class FrameRenderer(ICompositor compositor)
                 if (TextImage(layer, text, graph, width, height) is { } textLayer)
                 {
                     var (img, positioned) = textLayer;
+                    if (layer.Masks.Count > 0) img = MaskRenderer.Apply(img, layer.Masks);
                     if (!bypassEffects && positioned.Effects.Count > 0) img = EffectProcessor.Apply(img, positioned.Effects, ctx).Image;
                     layers.Add(new LayerImage(positioned, img, HasAlpha: true, NativeSize: true));
                 }
+                continue;
+            }
+            if (layer.Shape is { } shape)
+            {
+                var img = ShapeRasterizer.Render(shape, graph.Width > 0 ? (double)width / graph.Width : 1);
+                if (layer.Masks.Count > 0) img = MaskRenderer.Apply(img, layer.Masks);
+                if (!bypassEffects && layer.Effects.Count > 0) img = EffectProcessor.Apply(img, layer.Effects, ctx).Image;
+                layers.Add(new LayerImage(layer, img, HasAlpha: true, NativeSize: true));
                 continue;
             }
             if (layer.Asset is null || !paths.TryGetValue(layer.Asset.Id, out var path)) continue;
@@ -42,6 +52,12 @@ public sealed class FrameRenderer(ICompositor compositor)
                 image = EffectProcessor.Mix(image, second, layer.BlendWeight);
 
             var hasAlpha = layer.Asset.Info?.HasAlpha == true || layer.Asset.Kind == MediaKind.Image;
+            if (layer.Masks.Count > 0)
+            {
+                // Máscaras antes dos efeitos: "Refinar bordas" e desfoques atuam sobre o recorte.
+                image = MaskRenderer.Apply(image, layer.Masks);
+                hasAlpha = true;
+            }
             if (!bypassEffects && layer.Effects.Count > 0)
             {
                 var (processed, alphaChanged) = EffectProcessor.Apply(image, layer.Effects, ctx);

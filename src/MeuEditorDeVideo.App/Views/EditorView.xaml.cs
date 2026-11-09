@@ -88,6 +88,11 @@ public partial class EditorView : UserControl
         if (e.ClickCount == 2) AbrirTelaCheia();
     }
 
+    private void ElementosGraficos_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (DataContext is EditorViewModel { GraphicsLibrary: { } g } && g.AddPresetCommand.CanExecute(null)) g.AddPresetCommand.Execute(null);
+    }
+
     private void AbrirTelaCheia()
     {
         if (DataContext is not EditorViewModel { Preview: { HasContent: true } preview }) return;
