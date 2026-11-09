@@ -1,8 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0-windows</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Execução local de modelos (§8.1): ONNX Runtime com DirectML (GPU) e CPU; Whisper (whisper.cpp) para fala. -->
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" />
+    <PackageReference Include="Whisper.net" />
+    <PackageReference Include="Whisper.net.Runtime" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MeuEditorDeVideo.Core\MeuEditorDeVideo.Core.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.ImageEngine\MeuEditorDeVideo.ImageEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.AudioEngine\MeuEditorDeVideo.AudioEngine.csproj" />
   </ItemGroup>
 </Project>

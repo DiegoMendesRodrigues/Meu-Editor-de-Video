@@ -18,6 +18,8 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 | Serilog.Sinks.File | 7.0.0 | Apache-2.0 | Logs técnicos locais rotativos |
 | OpenCvSharp4 + OpenCvSharp4.runtime.win | 4.13.0.20260627 | Apache-2.0 (OpenCV: Apache-2.0) | Visão computacional (ImageEngine, F9): rastreamento de movimento (CSRT/correspondência de modelo), estabilização (fluxo óptico), máscaras e "Refinar bordas". Inclui `OpenCvSharpExtern.dll` nativa |
 | Svg.Skia (+ SkiaSharp, HarfBuzzSharp) | 5.2.3 | MIT | Importação e rasterização de gráficos vetoriais SVG (MediaEngine, F9). Inclui `libSkiaSharp.dll` e `libHarfBuzzSharp.dll` nativas |
+| Microsoft.ML.OnnxRuntime.DirectML (+ Microsoft.AI.DirectML) | 1.24.4 | MIT | Execução local dos modelos ONNX (AIEngine, F10) na CPU ou na GPU via DirectML, com recuo automático para CPU. Última versão da linha DirectML. Inclui `onnxruntime.dll` e `DirectML.dll` nativas |
+| Whisper.net + Whisper.net.Runtime | 1.9.1 | MIT | Reconhecimento de fala local com whisper.cpp (AIEngine, F10): legendas automáticas. Inclui as bibliotecas nativas do whisper.cpp (CPU) |
 
 ## Pacotes NuGet (somente testes)
 
@@ -34,14 +36,27 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 |---|---|---|---|---|
 | FFmpeg (full_build, shared) | 9.0.2 | GPL-3.0-or-later | github.com/GyanD/codexffmpeg | Inclui x264, x265, libvpx, SVT-AV1, libaom, LAME, Opus, Vorbis. Exportação (F5): codificadores sondados em tempo de execução — NVENC/AMF/Quick Sync/Media Foundation quando houver GPU, com recuo automático para software. SHA-256 no lock. Carregado pelo MediaEngine via FFmpeg.AutoGen; as DLLs são copiadas para `ffmpeg\` ao lado do executável. |
 
+## Modelos de IA (pacotes `.medmodel`, fora do instalador)
+
+Não fazem parte do repositório nem do instalador (decisão §8 nº 5). São empacotados com `tools\Build-ModelPackages.ps1`
+a partir do catálogo `resources\ai-models\modelos.json`, com o texto da licença em `resources\ai-models\licencas\`.
+Detalhes e uso em [MODELOS_IA.md](MODELOS_IA.md).
+
+| Modelo | Origem | Licença | Recurso |
+|---|---|---|---|
+| MODNet | ZHKKKe/MODNet (ONNX: Xenova/modnet) | Apache-2.0 | Remoção/substituição de fundo, segmentação, rastreamento de pessoa |
+| Whisper base (GGML) | OpenAI Whisper / ggerganov/whisper.cpp | MIT | Legendas automáticas |
+| GTCRN | Xiaobin Rong (ONNX de streaming: andrelgomes/gtcrn-stream) | MIT | Isolamento de voz e redução de ruído |
+| Silero VAD 5 | snakers4/silero-vad | MIT | Detecção de fala / remoção de silêncios |
+| TransNetV2 | Tomáš Souček (ONNX: elya5/transnetv2) | MIT | Detecção de cenas |
+| Swin2SR leve 2× | mv-lab/swin2sr (ONNX: Xenova/swin2SR-lightweight-x2-64) | Apache-2.0 | Melhoria de imagem |
+
 ## Planejadas (ainda não adicionadas)
 
 | Componente | Versão candidata | Licença | Fase |
 |---|---|---|---|
 | Vortice.Direct3D11 / DXGI / D2D / DirectWrite | 3.8.x | MIT | F4 |
 | NAudio | 3.3.0 | MIT | F4/F7 |
-| Microsoft.ML.OnnxRuntime.DirectML | 1.24.x | MIT | F10 |
-| Whisper.net | 1.9.x | MIT | F10 |
 | WiX Toolset | — | MS-RL | F12 |
 
 ## Procedimento de atualização

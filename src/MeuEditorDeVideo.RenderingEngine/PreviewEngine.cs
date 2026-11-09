@@ -1,3 +1,4 @@
+using MeuEditorDeVideo.Core.AI;
 using System.Diagnostics;
 using MeuEditorDeVideo.AudioEngine;
 using MeuEditorDeVideo.Core.Media;
@@ -71,12 +72,12 @@ public sealed class PreviewEngine : IDisposable
     private MixerLevels _currentLevels = MixerLevels.Empty;
 
     public PreviewEngine(IVideoFrameSourceFactory videoFactory, IAudioSampleSourceFactory audioFactory,
-        IAudioOutputFactory outputFactory, ICompositor compositor, ILogger<PreviewEngine> logger)
+        IAudioOutputFactory outputFactory, ICompositor compositor, ILogger<PreviewEngine> logger, IAiFrameProcessor? ai = null)
     {
         _videoFactory = videoFactory;
         _audioFactory = audioFactory;
         _outputFactory = outputFactory;
-        _frames = new FrameRenderer(compositor);
+        _frames = new FrameRenderer(compositor, ai);
         _logger = logger;
         _renderThread = new Thread(RenderLoop) { IsBackground = true, Name = "Pré-visualização", Priority = ThreadPriority.AboveNormal };
         _renderThread.Start();

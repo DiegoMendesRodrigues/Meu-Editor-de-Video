@@ -1,3 +1,5 @@
+using MeuEditorDeVideo.Core.AI;
+
 namespace MeuEditorDeVideo.Core.Abstractions;
 
 public enum AppTheme
@@ -22,6 +24,9 @@ public sealed record AppSettings
     /// <summary>Gera proxies automaticamente para vídeos acima de 1080p ao importar/abrir.</summary>
     public bool AutoGenerateProxies { get; init; } = true;
     public bool BackgroundRendering { get; init; } = true;
+
+    /// <summary>Dispositivo para os modelos de IA (RF167). GPU (DirectML) volta para CPU automaticamente se falhar.</summary>
+    public AiDevice AiDevice { get; init; } = AiDevice.Gpu;
     public bool AutosaveEnabled { get; init; } = true;
     public int AutosaveIntervalMinutes { get; init; } = 5;
     public string? DefaultProjectsDirectory { get; init; }

@@ -247,6 +247,8 @@
                 <MenuItem Header="{StaticResource Editor.Ferramenta.EditorLegendas}" Click="EditorLegendas_Click" IsEnabled="{Binding Timeline.HasSession}" />
                 <MenuItem Header="{StaticResource Editor.Ferramenta.ImportarLegendas}" Command="{Binding TextLibrary.ImportSubtitlesCommand}" />
                 <MenuItem Header="{StaticResource Editor.Ferramenta.ExportarLegendas}" Command="{Binding TextLibrary.ExportSubtitlesCommand}" />
+                <Separator />
+                <MenuItem Header="{StaticResource Editor.Ferramenta.ModelosIA}" Click="ModelosIA_Click" AutomationProperties.Name="Modelos de IA" />
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Ajuda}" />
         </Menu>
@@ -999,6 +1001,9 @@
                         </TabItem>
                         <TabItem Header="{StaticResource Editor.Propriedades.Composicao}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Composicao}">
                             <panels:ClipCompositionPanel DataContext="{Binding CompositionInspector}" />
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.IA}" AutomationProperties.Name="Inteligência artificial">
+                            <panels:ClipAiPanel DataContext="{Binding AiInspector}" />
                         </TabItem>
                         <TabItem Header="{StaticResource Editor.Propriedades.Audio}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Audio}">
                             <panels:ClipAudioPanel DataContext="{Binding AudioInspector}" />

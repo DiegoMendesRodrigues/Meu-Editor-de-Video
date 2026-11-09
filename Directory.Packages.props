@@ -10,6 +10,9 @@
     <PackageVersion Include="OpenCvSharp4" Version="4.13.0.20260627" />
     <PackageVersion Include="OpenCvSharp4.runtime.win" Version="4.13.0.20260627" />
     <PackageVersion Include="Svg.Skia" Version="5.2.3" />
+    <PackageVersion Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.24.4" />
+    <PackageVersion Include="Whisper.net" Version="1.9.1" />
+    <PackageVersion Include="Whisper.net.Runtime" Version="1.9.1" />
     <PackageVersion Include="Serilog.Extensions.Hosting" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
     <!-- Testes -->

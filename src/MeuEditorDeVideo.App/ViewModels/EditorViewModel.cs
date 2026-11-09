@@ -75,6 +75,10 @@ public sealed partial class EditorViewModel(
     [ObservableProperty]
     public partial CompositionInspectorViewModel? CompositionInspector { get; set; }
 
+    /// <summary>Aba IA: recursos de inteligência artificial local do clipe selecionado (F10).</summary>
+    [ObservableProperty]
+    public partial AiInspectorViewModel? AiInspector { get; set; }
+
     /// <summary>Seção Elementos gráficos da biblioteca: formas vetoriais e SVG (F9).</summary>
     [ObservableProperty]
     public partial GraphicsLibraryViewModel? GraphicsLibrary { get; set; }
@@ -173,6 +177,7 @@ public sealed partial class EditorViewModel(
         TextInspector = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<TextInspectorViewModel>(services, Timeline);
         TextLibrary = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<TextLibraryViewModel>(services, Timeline);
         CompositionInspector = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<CompositionInspectorViewModel>(services, Timeline);
+        AiInspector = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<AiInspectorViewModel>(services, Timeline);
         GraphicsLibrary = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<GraphicsLibraryViewModel>(services, Timeline, Library);
         projects.SessionChanged += OnSessionChanged;
         projects.Saved += OnSaved;
@@ -195,6 +200,8 @@ public sealed partial class EditorViewModel(
         TextLibrary = null;
         CompositionInspector?.Dispose();
         CompositionInspector = null;
+        AiInspector?.Dispose();
+        AiInspector = null;
         GraphicsLibrary = null;
         Preview?.Dispose();
         Preview = null;

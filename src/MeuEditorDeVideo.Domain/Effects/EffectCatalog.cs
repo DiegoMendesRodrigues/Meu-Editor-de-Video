@@ -17,6 +17,9 @@ public enum EffectCategory
 
     /// <summary>Processamento de áudio: equalizador, compressor, redução de ruído e efeitos sonoros (RF123–RF125, RF131).</summary>
     Audio,
+
+    /// <summary>Efeitos que dependem de um modelo de IA local (RF102–RF109, RF156). Inseridos pela aba IA.</summary>
+    Ai,
 }
 
 public enum ParameterKind
@@ -65,6 +68,7 @@ public static class EffectCatalog
     public const string Glow = "fx.glow";
     public const string ChromaKey = "key.chroma";
     public const string EdgeRefine = "edgeRefine";
+    public const string AiBackground = "ai.background";
     public const string Equalizer = "audio.eq";
     public const string Compressor = "audio.compressor";
     public const string Denoise = "audio.denoise";
@@ -143,6 +147,16 @@ public static class EffectCatalog
             new("transparency", "Transparência do fundo removido", ParameterKind.Slider, 0, 100, 100, "%"),
             new("background", "Fundo", ParameterKind.Choice, 0, 1, 0, Options: ["Transparente (mostra as trilhas abaixo)", "Cor sólida"]),
             new("backgroundColor", "Cor do fundo", ParameterKind.Color, DefaultColor: (0.0, 0.0, 0.0)),
+        ], AffectsAlpha: true),
+        new(AiBackground, "Remover fundo (IA)", "Separa a pessoa do fundo com um modelo de segmentação local e deixa o fundo transparente, com cor, desfocado ou trocado por outra imagem/vídeo (RF102–RF109).", EffectCategory.Ai,
+        [
+            new("mode", "Fundo", ParameterKind.Choice, 0, 3, 0, Options: ["Transparente", "Cor sólida", "Desfoque", "Imagem ou vídeo da biblioteca"]),
+            new("color", "Cor do fundo", ParameterKind.Color, DefaultColor: (0.0, 0.69, 0.25)),
+            new("blur", "Desfoque do fundo", ParameterKind.Slider, 1, 100, 25, " px"),
+            new("keep", "Manter", ParameterKind.Choice, 0, 1, 0, Options: ["A pessoa (primeiro plano)", "O fundo (remove a pessoa)"]),
+            new("choke", "Contrair/expandir borda", ParameterKind.Slider, -20, 20, 0, " px"),
+            new("feather", "Suavizar borda", ParameterKind.Slider, 0, 30, 2, " px"),
+            new("threshold", "Limiar da máscara", ParameterKind.Slider, 0, 100, 0, "%"),
         ], AffectsAlpha: true),
         new(EdgeRefine, "Refinar bordas", "Contrai ou expande, suaviza e limpa as bordas da transparência (use depois do chroma key ou de máscaras).", EffectCategory.Key,
         [

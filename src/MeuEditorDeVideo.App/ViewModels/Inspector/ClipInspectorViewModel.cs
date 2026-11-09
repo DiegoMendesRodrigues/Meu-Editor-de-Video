@@ -149,7 +149,7 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         AllTransitions.Skip(1).Select(o => new LibraryEffectItem(o.Value!.Value.ToString(), o.Label, "Aplica ao corte antes do clipe selecionado.", "")).ToList();
 
     public IReadOnlyList<LibraryEffectItem> LibraryEffects { get; } =
-        EffectCatalog.All.Where(d => d.Category is not (EffectCategory.Color or EffectCategory.Audio)).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "")).ToList();
+        EffectCatalog.All.Where(d => d.Category is not (EffectCategory.Color or EffectCategory.Audio or EffectCategory.Ai)).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "")).ToList();
 
     public IReadOnlyList<LibraryEffectItem> LibraryColor { get; } =
         EffectCatalog.All.Where(d => d.Category == EffectCategory.Color).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "")).ToList();

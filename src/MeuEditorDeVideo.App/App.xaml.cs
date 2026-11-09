@@ -6,6 +6,7 @@ using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.Application;
 using MeuEditorDeVideo.Application.Export;
 using MeuEditorDeVideo.Application.Projects;
+using MeuEditorDeVideo.AIEngine;
 using MeuEditorDeVideo.MediaEngine;
 using MeuEditorDeVideo.ProjectEngine;
 using MeuEditorDeVideo.RenderingEngine;
@@ -77,6 +78,7 @@ public partial class App : System.Windows.Application
         services.AddMediaEngine();
         services.AddPreviewEngine();
         services.AddMeuEditorApplication();
+        services.AddAiEngine();
 
         services.AddSingleton<IThemeService, ThemeService>();
         services.AddSingleton<INavigationService, NavigationService>();

@@ -1,4 +1,6 @@
+using MeuEditorDeVideo.Core.AI;
 using MeuEditorDeVideo.Core.Media;
+using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 using MeuEditorDeVideo.ImageEngine.Composition;
@@ -11,9 +13,10 @@ namespace MeuEditorDeVideo.RenderingEngine;
 /// <summary>
 /// Renderiza um quadro da sequência: avalia a timeline, decodifica as camadas, mistura quadros (câmera lenta suavizada),
 /// aplica efeitos/cor/chroma key e compõe. Compartilhado pela pré-visualização e pela exportação, garantindo que
-/// o resultado exportado seja o mesmo que se vê na tela.
+/// o resultado exportado seja o mesmo que se vê na tela. Efeitos de IA (<c>ai.*</c>) são executados por
+/// <see cref="IAiFrameProcessor"/> na posição em que estão na pilha de efeitos.
 /// </summary>
-public sealed class FrameRenderer(ICompositor compositor)
+public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai = null)
 {
     /// <param name="bypassEffects">Ignora efeitos e correção de cor (lado "antes" da comparação, RF101).</param>
     public BgraImage Render(IVideoFrameSource video, Project project, Sequence sequence, IReadOnlyDictionary<Guid, string> paths,
@@ -60,13 +63,87 @@ public sealed class FrameRenderer(ICompositor compositor)
             }
             if (!bypassEffects && layer.Effects.Count > 0)
             {
-                var (processed, alphaChanged) = EffectProcessor.Apply(image, layer.Effects, ctx);
+                var (processed, alphaChanged) = ApplyEffects(image, layer, ctx, video, project, sequence, paths, t);
                 image = processed;
                 hasAlpha |= alphaChanged;
             }
             layers.Add(new LayerImage(layer, image, hasAlpha));
         }
         return compositor.Compose(width, height, graph.Width, layers, transparentBackground);
+    }
+
+    /// <summary>Efeitos comuns em blocos, intercalados com os efeitos de IA na ordem da pilha.</summary>
+    private (BgraImage Image, bool AlphaChanged) ApplyEffects(BgraImage image, VisualLayer layer, EffectContext ctx,
+        IVideoFrameSource video, Project project, Sequence sequence, IReadOnlyDictionary<Guid, string> paths, MediaTime t)
+    {
+        var effects = layer.Effects;
+        if (!effects.Any(e => e.Enabled && EffectCatalog.Find(e.Type)?.Category == EffectCategory.Ai))
+            return EffectProcessor.Apply(image, effects, ctx);
+
+        var alpha = false;
+        var pending = new List<EffectInstance>();
+        void Flush()
+        {
+            if (pending.Count == 0) return;
+            var (img, changed) = EffectProcessor.Apply(image, pending, ctx);
+            image = img;
+            alpha |= changed;
+            pending.Clear();
+        }
+        foreach (var e in effects)
+        {
+            if (EffectCatalog.Find(e.Type)?.Category != EffectCategory.Ai)
+            {
+                pending.Add(e);
+                continue;
+            }
+            Flush();
+            if (!e.Enabled || ai is null || layer.Asset is null) continue;
+            var (processed, changed) = ai.Apply(e, image, layer.Asset, layer.SourceTime,
+                (w, h) => BackgroundFrame(e, video, project, sequence, paths, t, layer, w, h), ctx.PixelScale);
+            image = processed;
+            alpha |= changed;
+        }
+        Flush();
+        return (image, alpha);
+    }
+
+    /// <summary>
+    /// Quadro de fundo do modo "imagem ou vídeo" (<see cref="EffectInstance.Resource"/> = Id da mídia): preenche o tamanho
+    /// pedido (recorte central). Vídeos acompanham o tempo do clipe e repetem quando acabam.
+    /// </summary>
+    private static BgraImage? BackgroundFrame(EffectInstance e, IVideoFrameSource video, Project project, Sequence sequence, IReadOnlyDictionary<Guid, string> paths,
+        MediaTime t, VisualLayer layer, int width, int height)
+    {
+        if (!Guid.TryParse(e.Resource, out var id) || project.FindMedia(id) is not { } asset || !paths.TryGetValue(id, out var path)) return null;
+        var local = MediaTime.Zero;
+        if (asset.Kind == MediaKind.Video && asset.Duration.Ticks > 0 
+            && sequence.Tracks.SelectMany(tr => tr.Clips).FirstOrDefault(c => c.Id == layer.ClipId) is { } clip)
+            local = new MediaTime(Math.Max(0, (t - clip.Start).Ticks) % asset.Duration.Ticks);
+        // Decodifica maior que o alvo para recortar sem bordas.
+        var (sw, sh) = (asset.Width, asset.Height);
+        var cover = sw > 0 && sh > 0 ? Math.Max((double)width / sw, (double)height / sh) : 1;
+        var frame = video.GetFrame(asset, path, local, (int)Math.Ceiling(sw * cover), (int)Math.Ceiling(sh * cover));
+        return frame is null ? null : CoverCrop(frame, width, height);
+    }
+
+    private static BgraImage CoverCrop(BgraImage src, int width, int height)
+    {
+        if (src.Width == width && src.Height == height) return src;
+        var scale = Math.Max((double)width / src.Width, (double)height / src.Height);
+        var px = new byte[width * height * 4];
+        var ox = (src.Width * scale - width) / 2;
+        var oy = (src.Height * scale - height) / 2;
+        Parallel.For(0, height, y =>
+        {
+            var sy = Math.Clamp((int)((y + oy) / scale), 0, src.Height - 1);
+            for (var x = 0; x < width; x++)
+            {
+                var sx = Math.Clamp((int)((x + ox) / scale), 0, src.Width - 1);
+                Buffer.BlockCopy(src.Pixels, (sy * src.Width + sx) * 4, px, (y * width + x) * 4, 4);
+            }
+        });
+        return new BgraImage(width, height, px);
     }
 
     /// <summary>

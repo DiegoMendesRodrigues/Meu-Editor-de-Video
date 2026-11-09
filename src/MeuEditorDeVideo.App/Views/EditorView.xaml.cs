@@ -55,6 +55,21 @@ public partial class EditorView : UserControl
     }
 
     private Dialogs.SubtitleEditorWindow? _legendas;
+    private Dialogs.ModelManagerWindow? _modelos;
+
+    /// <summary>Gerenciador de modelos de IA (RF166–RF170).</summary>
+    private void ModelosIA_Click(object sender, RoutedEventArgs e)
+    {
+        if (_modelos is not null)
+        {
+            _modelos.Activate();
+            return;
+        }
+        var vm = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<ViewModels.ModelManagerViewModel>(App.Services);
+        _modelos = new Dialogs.ModelManagerWindow(vm) { Owner = Window.GetWindow(this) };
+        _modelos.Closed += (_, _) => _modelos = null;
+        _modelos.Show();
+    }
 
     /// <summary>Abre (ou traz para a frente) o editor de legendas (RF143).</summary>
     private void EditorLegendas_Click(object sender, RoutedEventArgs e)
