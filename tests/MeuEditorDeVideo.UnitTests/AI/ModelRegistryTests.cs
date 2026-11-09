@@ -306,6 +306,85 @@ public sealed class ModelRegistryTests : IDisposable
         Assert.Throws<InvalidDataException>(() => ModelManifestJson.Parse(json));
     }
 
+    // ---------- modelos incluídos no aplicativo ----------
+
+    /// <summary>Cria a pasta de um modelo incluído (como a cópia do build em ai-models\ ao lado do executável).</summary>
+    private string BuiltIn(byte[] model, ModelManifest manifest)
+    {
+        var dir = Path.Combine(_root, "builtin", manifest.Id);
+        Directory.CreateDirectory(dir);
+        File.WriteAllText(Path.Combine(dir, "manifest.json"), ModelManifestJson.Serialize(manifest));
+        File.WriteAllBytes(Path.Combine(dir, manifest.File), model);
+        File.WriteAllText(Path.Combine(dir, "LICENSE.txt"), "Licença de teste.");
+        return Path.Combine(_root, "builtin");
+    }
+
+    [Fact]
+    public async Task Built_in_model_is_available_without_installing_and_cannot_be_removed()
+    {
+        var model = FakeModel(10);
+        var registry = new ModelRegistry(_modelsDir, builtInDirectory: BuiltIn(model, Manifest(model, id: "modnet-retrato")));
+
+        var found = registry.Find(ModelCapability.PersonSegmentation);
+        Assert.NotNull(found);
+        Assert.True(found.BuiltIn);
+        Assert.True(registry.IsAvailable(ModelCapability.PersonSegmentation));
+        Assert.True(await registry.VerifyAsync("modnet-retrato"));
+
+        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => registry.RemoveAsync("modnet-retrato"));
+        Assert.Contains("vem com o aplicativo", ex.Message);
+        Assert.True(registry.IsAvailable(ModelCapability.PersonSegmentation));
+    }
+
+    [Fact]
+    public async Task User_package_with_same_id_overrides_built_in_and_removing_it_restores_built_in()
+    {
+        var builtInModel = FakeModel(11);
+        var registry = new ModelRegistry(_modelsDir, builtInDirectory: BuiltIn(builtInModel, Manifest(builtInModel, id: "modnet-retrato")));
+        var userModel = FakeModel(12);
+        await registry.InstallAsync(Package("novo.medmodel", Manifest(userModel, id: "modnet-retrato", version: "2.0"), userModel, Standard()));
+
+        var installed = Assert.Single(registry.Installed);
+        Assert.False(installed.BuiltIn);
+        Assert.Equal("2.0", installed.Manifest.Version);
+
+        await registry.RemoveAsync("modnet-retrato");
+        Assert.True(Assert.Single(registry.Installed).BuiltIn);
+    }
+
+    [Fact]
+    public void Built_in_model_with_missing_or_truncated_file_is_ignored()
+    {
+        var model = FakeModel(13);
+        var dir = BuiltIn(model, Manifest(model, id: "modnet-retrato"));
+        File.WriteAllBytes(Path.Combine(dir, "modnet-retrato", "model.onnx"), model[..100]);
+
+        var registry = new ModelRegistry(_modelsDir, builtInDirectory: dir);
+        Assert.Empty(registry.Installed);
+        Assert.False(registry.IsAvailable(ModelCapability.PersonSegmentation));
+    }
+
+    [Fact]
+    public void Missing_built_in_directory_is_fine()
+    {
+        var registry = new ModelRegistry(_modelsDir, builtInDirectory: Path.Combine(_root, "nao-existe"));
+        Assert.Empty(registry.Installed);
+    }
+
+    [Fact]
+    public void Repository_built_in_manifest_matches_the_pinned_model()
+    {
+        // O manifesto do MODNet incluído e o lock de dependências devem fixar o mesmo SHA-256.
+        var repo = AppContext.BaseDirectory;
+        while (repo is not null && !File.Exists(Path.Combine(repo, "scripts", "deps.lock.json"))) repo = Path.GetDirectoryName(repo);
+        Assert.NotNull(repo);
+        var manifest = ModelManifestJson.Parse(File.ReadAllText(Path.Combine(repo, "resources", "ai-models", "incluidos", "modnet-retrato", "manifest.json")));
+        var lockText = File.ReadAllText(Path.Combine(repo, "scripts", "deps.lock.json"));
+        Assert.Equal(ModelCapability.PersonSegmentation, manifest.Capability);
+        Assert.Contains(manifest.Sha256, lockText, StringComparison.OrdinalIgnoreCase);
+        Assert.True(File.Exists(Path.Combine(repo, "resources", "ai-models", "incluidos", "modnet-retrato", manifest.LicenseFile!)));
+    }
+
     // ---------- auxiliares ----------
 
     private static byte[] Bytes(string text) => Encoding.UTF8.GetBytes(text);

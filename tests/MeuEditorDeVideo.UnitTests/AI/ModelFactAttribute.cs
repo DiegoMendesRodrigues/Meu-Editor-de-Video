@@ -4,7 +4,8 @@ namespace MeuEditorDeVideo.UnitTests.AI;
 
 /// <summary>
 /// Localiza arquivos de modelos de IA para os testes. Os modelos não fazem parte do repositório (pacotes .medmodel
-/// separados): procura em <c>%MED_MODELS_DIR%</c> e nas pastas dos modelos instalados
+/// separados): procura em <c>%MED_MODELS_DIR%</c>, nos modelos incluídos baixados por <c>scripts\fetch-deps.ps1</c>
+/// (<c>deps\ai-models</c>, ex.: MODNet) e nas pastas dos modelos instalados
 /// (<c>%LOCALAPPDATA%\MeuEditorDeVideo\ai-models\*\</c>).
 /// </summary>
 public static class TestModels
@@ -15,6 +16,13 @@ public static class TestModels
         {
             var p = Path.Combine(dir, fileName);
             if (File.Exists(p)) return p;
+        }
+        for (var up = AppContext.BaseDirectory; up is not null; up = Path.GetDirectoryName(up))
+        {
+            var deps = Path.Combine(up, "deps", "ai-models");
+            if (!Directory.Exists(deps)) continue;
+            if (Directory.EnumerateFiles(deps, fileName, SearchOption.AllDirectories).FirstOrDefault() is { } builtIn) return builtIn;
+            break;
         }
         var installed = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MeuEditorDeVideo", "ai-models");
         if (!Directory.Exists(installed)) return null;

@@ -1,6 +1,6 @@
-<#
+﻿<#
 .SYNOPSIS
-  Baixa e verifica as dependências nativas fixadas em scripts/deps.lock.json (FFmpeg etc.).
+  Baixa e verifica as dependências nativas fixadas em scripts/deps.lock.json (FFmpeg e o modelo MODNet incluído).
 
 .DESCRIPTION
   Uso exclusivo em tempo de desenvolvimento/build. O aplicativo em execução nunca acessa a rede (RNF003/RNF005).
@@ -33,7 +33,9 @@ foreach ($dep in $lock.dependencies) {
         continue
     }
 
-    $file = Join-Path $cache ([IO.Path]::GetFileName(([Uri]$dep.url).AbsolutePath))
+    # Arquivo avulso (sem extração) quando o lock define fileName; senão, zip.
+    $name = if ($dep.fileName) { "$($dep.name)-$($dep.fileName)" } else { [IO.Path]::GetFileName(([Uri]$dep.url).AbsolutePath) }
+    $file = Join-Path $cache $name
     if (-not (Test-Path $file)) {
         Write-Host "[download] $($dep.name) $($dep.version) ..."
         Invoke-WebRequest -Uri $dep.url -OutFile "$file.part" -UseBasicParsing
@@ -50,6 +52,15 @@ foreach ($dep in $lock.dependencies) {
     elseif ($hash -ne $dep.sha256.ToLowerInvariant()) {
         Remove-Item $file -Force
         throw "SHA-256 inválido para $($dep.name): esperado $($dep.sha256), obtido $hash. Arquivo descartado."
+    }
+
+    if ($dep.fileName) {
+        if (Test-Path $target) { Remove-Item $target -Recurse -Force }
+        New-Item -ItemType Directory -Force $target | Out-Null
+        Copy-Item $file (Join-Path $target $dep.fileName)
+        Set-Content $stamp "$($dep.version)|$($dep.sha256)"
+        Write-Host "[ok] $($dep.name) $($dep.version)"
+        continue
     }
 
     Write-Host "[extract] $($dep.name) -> $($dep.target)"

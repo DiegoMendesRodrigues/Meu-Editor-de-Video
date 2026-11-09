@@ -1,4 +1,6 @@
 using System.IO;
+using MeuEditorDeVideo.AIEngine;
+using MeuEditorDeVideo.AIEngine.Models;
 using MeuEditorDeVideo.AIEngine.Runtime;
 using MeuEditorDeVideo.AIEngine.Vision;
 using MeuEditorDeVideo.App.ViewModels.Inspector;
@@ -140,7 +142,7 @@ public sealed class VisionTests : IDisposable
         var img = Solid(8, 8, 1, 2, 3);
         var processor = new AiFrameProcessor(new NoSegmentation());
         var asset = new MediaAsset { Id = Guid.NewGuid(), Kind = MediaKind.Image, Name = "a.png", OriginalPath = "a.png" };
-        var (result, alpha) = processor.Apply(Effect(0), img, asset, MediaTime.Zero, (_, _) => null, 1);
+        var (result, alpha) = processor.Apply(Effect(0), img, asset, null, MediaTime.Zero, (_, _) => null, 1);
         Assert.Same(img, result);
         Assert.False(alpha);
     }
@@ -148,10 +150,57 @@ public sealed class VisionTests : IDisposable
     private sealed class NoSegmentation : ISegmentationService
     {
         public bool IsAvailable => false;
-        public Matte? GetMatte(MediaAsset asset, MediaTime sourceTime, BgraImage frame) => null;
+        public Matte? GetMatte(MediaAsset asset, string? path, MediaTime sourceTime, BgraImage frame, double temporalSmoothing = 0) => null;
         public Task PrecomputeAsync(Project p, Clip c, IReadOnlyDictionary<Guid, string> paths, IProgress<double>? progress = null, CancellationToken ct = default) => Task.CompletedTask;
         public Task<IReadOnlyList<TrackSample>> TrackPersonAsync(Project p, Clip c, IReadOnlyDictionary<Guid, string> paths, IProgress<double>? progress = null, CancellationToken ct = default) => Task.FromResult<IReadOnlyList<TrackSample>>([]);
         public void ClearCache(Guid assetId) { }
+    }
+
+    // ---------------------------------------------------------------- suavização temporal
+
+    private static Matte Flat(byte v, int w = 4, int h = 2) => new(w, h, Enumerable.Repeat(v, w * h).ToArray());
+
+    [Fact]
+    public void Suavizacao_temporal_reduz_a_oscilacao_entre_quadros()
+    {
+        // Borda que oscila 110 ↔ 150 entre quadros: o quadro central fica perto da média.
+        var center = Flat(150);
+        var smoothed = MatteSmoothing.Blend(center, [(-2, Flat(150)), (-1, Flat(110)), (1, Flat(110)), (2, Flat(150))], 0.5);
+        Assert.InRange(smoothed.Alpha[0], 125, 140);
+        Assert.All(smoothed.Alpha, a => Assert.Equal(smoothed.Alpha[0], a));
+    }
+
+    [Fact]
+    public void Suavizacao_temporal_nao_deixa_rastro_quando_a_pessoa_se_move()
+    {
+        // Pixel que era pessoa (255) e agora é fundo (0): a diferença grande fica fora da média.
+        var smoothed = MatteSmoothing.Blend(Flat(0), [(-2, Flat(255)), (-1, Flat(255)), (1, Flat(0)), (2, Flat(0))], 1);
+        Assert.All(smoothed.Alpha, a => Assert.Equal(0, a));
+        var person = MatteSmoothing.Blend(Flat(255), [(-1, Flat(0)), (1, Flat(255))], 1);
+        Assert.All(person.Alpha, a => Assert.Equal(255, a));
+    }
+
+    [Fact]
+    public void Suavizacao_temporal_desligada_ou_sem_vizinhos_devolve_a_mascara()
+    {
+        var center = Flat(100);
+        Assert.Same(center, MatteSmoothing.Blend(center, [(-1, Flat(120))], 0));
+        Assert.Same(center, MatteSmoothing.Blend(center, [], 0.8));
+        Assert.Same(center, MatteSmoothing.Blend(center, [(1, Flat(120, 2, 2))], 0.8)); // tamanho diferente
+        // Intensidade baixa usa só ±1 quadro.
+        Assert.Equal(1, MatteSmoothing.Radius(0.2));
+        Assert.Equal(2, MatteSmoothing.Radius(0.5));
+        Assert.Equal(0, MatteSmoothing.Radius(0));
+        var r1 = MatteSmoothing.Blend(center, [(-2, Flat(120)), (2, Flat(120))], 0.2);
+        Assert.Same(center, r1);
+    }
+
+    [Fact]
+    public void Remover_fundo_tem_suavizacao_entre_quadros_ligada_por_padrao()
+    {
+        var p = EffectCatalog.Find(EffectCatalog.AiBackground)!.Parameters.Single(x => x.Key == "temporal");
+        Assert.Equal(50, p.Default);
+        Assert.Equal(0.5, EffectCatalog.Value(new EffectInstance { Id = Guid.NewGuid(), Type = EffectCatalog.AiBackground }, "temporal") / 100);
     }
 
     // ---------------------------------------------------------------- cache e tamanhos
@@ -251,6 +300,54 @@ public sealed class VisionTests : IDisposable
         var matte = seg.Segment(Scene(0, 5));
         Assert.Equal(ModnetSegmenter.InferenceSize(64, 36, 256), (matte.Width, matte.Height));
         Assert.Equal(matte.Width * matte.Height, matte.Alpha.Length);
+    }
+
+    /// <summary>Fonte de quadros fictícia: um quadrado que se move 1 px por quadro; registra os quadros pedidos.</summary>
+    private sealed class MovingFrames : IVideoFrameSourceFactory, IVideoFrameSource
+    {
+        public List<long> Requested { get; } = [];
+        public IVideoFrameSource Create(bool hardwareDecoding) => this;
+        public BgraImage? GetFrame(MediaAsset asset, string path, MediaTime sourceTime, int maxWidth, int maxHeight)
+        {
+            var f = FrameRate.Fps30.TimeToFrame(sourceTime);
+            lock (Requested) Requested.Add(f);
+            return Scene(0, (int)f);
+        }
+        public void Trim(IReadOnlySet<Guid> inUse) { }
+        public void Dispose() { }
+    }
+
+    [ModelFact("modnet.onnx")]
+    public void MODNet_incluido_no_aplicativo_esta_disponivel_e_a_mascara_nao_depende_do_quadro_da_previa()
+    {
+        // O build copia o MODNet para ai-models\ ao lado do executável (aqui, a pasta dos testes).
+        var registry = new ModelRegistry(Path.Combine(_dir, "modelos"), builtInDirectory: AiEngineServiceCollectionExtensions.BuiltInModelsDirectory);
+        var model = registry.Find(ModelCapability.PersonSegmentation);
+        Assert.NotNull(model);
+        Assert.True(model.BuiltIn);
+
+        var frames = new MovingFrames();
+        using var service = new SegmentationService(registry, new OnnxSessionFactory(), frames, new MatteCache(null));
+        var asset = new MediaAsset
+        {
+            Id = Guid.NewGuid(), Kind = MediaKind.Video, Name = "v.mp4", OriginalPath = "v.mp4",
+            FrameRate = FrameRate.Fps30, Duration = FrameRate.Fps30.FrameToTime(30),
+        };
+        var t = FrameRate.Fps30.FrameToTime(10);
+
+        // Com o arquivo disponível, a máscara vem do quadro de origem: o quadro da prévia (qualquer tamanho) não muda nada.
+        var preview = service.GetMatte(asset, "v.mp4", t, Solid(32, 18, 0, 0, 0), 0)!;
+        service.ClearCache(asset.Id);
+        var export = service.GetMatte(asset, "v.mp4", t, Solid(128, 72, 255, 255, 255), 0)!;
+        Assert.Equal(preview.Alpha, export.Alpha);
+
+        // Com suavização, os quadros vizinhos (±2) também são segmentados.
+        frames.Requested.Clear();
+        var smoothed = service.GetMatte(asset, "v.mp4", t, Solid(32, 18, 0, 0, 0), 0.5)!;
+        Assert.Equal((preview.Width, preview.Height), (smoothed.Width, smoothed.Height));
+        Assert.Equal([8L, 9L, 11L, 12L], frames.Requested.Order());
+        // Determinística: repetir dá o mesmo resultado (agora tudo vem do cache).
+        Assert.Equal(smoothed.Alpha, service.GetMatte(asset, "v.mp4", t, Solid(8, 8, 0, 0, 0), 0.5)!.Alpha);
     }
 
     [ModelFact("swin2sr-x2.onnx")]

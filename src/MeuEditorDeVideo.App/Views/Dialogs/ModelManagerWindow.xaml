@@ -102,7 +102,7 @@
                         <DataTemplate>
                             <StackPanel Margin="2,4">
                                 <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
-                                <TextBlock Text="{Binding Capability}" FontSize="11" Foreground="{DynamicResource Med.TextMuted}" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding Subtitle}" FontSize="11" Foreground="{DynamicResource Med.TextMuted}" TextWrapping="Wrap" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -120,7 +120,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition />
-                            <RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition />
+                            <RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Style="{StaticResource Mm.Label}" Text="Identificador" />
                         <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource Mm.Value}" Text="{Binding Id, Mode=OneWay}" AutomationProperties.Name="Identificador" />
@@ -164,6 +164,8 @@
                         <TextBox Grid.Row="12" Grid.Column="1" Style="{StaticResource Mm.Value}" Text="{Binding Integrity, Mode=OneWay}" AutomationProperties.Name="Integridade" />
                         <TextBlock Grid.Row="13" Style="{StaticResource Mm.Label}" Text="Localização" />
                         <TextBox Grid.Row="13" Grid.Column="1" Style="{StaticResource Mm.Value}" Text="{Binding Location, Mode=OneWay}" AutomationProperties.Name="Localização" />
+                        <TextBlock Grid.Row="14" Style="{StaticResource Mm.Label}" Text="Instalação" />
+                        <TextBox Grid.Row="14" Grid.Column="1" Style="{StaticResource Mm.Value}" Text="{Binding Installation, Mode=OneWay}" AutomationProperties.Name="Instalação" />
                     </Grid>
                     <TextBlock Text="Documentação" FontWeight="SemiBold" Margin="0,12,0,4" />
                     <TextBox Text="{Binding Documentation, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" MinHeight="120" MaxHeight="260"

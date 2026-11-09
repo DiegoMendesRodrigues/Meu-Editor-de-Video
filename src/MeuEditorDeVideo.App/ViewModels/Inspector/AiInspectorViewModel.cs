@@ -333,7 +333,7 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
         // Primeiro da pilha: os demais efeitos (cor, refinamento) atuam sobre o recorte.
         Timeline.Execute(new UpdateClipCommand(Timeline.SequenceId, cur.Clip.Id, c => c with { Effects = c.Effects.Insert(0, effect) },
             "Remover fundo (IA)"));
-        Status = "Fundo removido. Ajuste bordas e cor no efeito \"Remover fundo (IA)\" da aba Vídeo.";
+        Status = "Fundo removido. Ajuste bordas, cor e suavização entre quadros no efeito \"Remover fundo (IA)\" da aba Efeitos.";
     }
 
     partial void OnSelectedBackgroundModeChanged(Option<int> value)

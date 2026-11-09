@@ -1,31 +1,17 @@
 [
   {
-    "file": "modnet.onnx",
-    "id": "modnet-retrato",
-    "name": "MODNet (recorte de pessoas)",
-    "version": "1.0",
-    "source": "ZHKKKe/MODNet (exportação ONNX Xenova/modnet)",
-    "capability": "PersonSegmentation",
-    "purpose": "Separa pessoas do fundo para remover ou trocar o fundo e rastrear a pessoa.",
-    "license": "Apache-2.0",
-    "licenseFile": "modnet.txt",
-    "memoryMb": 900,
-    "gpu": true,
-    "parameters": { "referenceSize": "512", "input": "RGB [1,3,H,W] normalizado -1..1, H e W múltiplos de 32", "output": "alfa [1,1,H,W] 0..1" }
-  },
-  {
-    "file": "ggml-base.bin",
-    "id": "whisper-base",
-    "name": "Whisper base (multilíngue)",
-    "version": "1.0",
-    "source": "OpenAI Whisper, formato GGML de ggerganov/whisper.cpp",
+    "file": "ggml-large-v3-turbo-q5_0.bin",
+    "id": "whisper-large-v3-turbo",
+    "name": "Whisper large-v3 turbo (multilíngue)",
+    "version": "3.1",
+    "source": "OpenAI Whisper large-v3-turbo, formato GGML quantizado (q5_0) de ggerganov/whisper.cpp",
     "capability": "SpeechRecognition",
-    "purpose": "Transcreve a fala do áudio (português e outros idiomas) para gerar legendas automaticamente.",
+    "purpose": "Transcreve a fala do áudio (português e outros idiomas) para gerar legendas automaticamente, com alta precisão.",
     "license": "MIT",
-    "licenseFile": "whisper-base.txt",
-    "memoryMb": 500,
+    "licenseFile": "whisper.txt",
+    "memoryMb": 1500,
     "gpu": false,
-    "parameters": { "sampleRate": "16000", "languages": "multilíngue (pt, en, es…)" }
+    "parameters": { "sampleRate": "16000", "languages": "multilíngue (pt, en, es…)", "quantization": "q5_0" }
   },
   {
     "file": "gtcrn_simple.onnx",

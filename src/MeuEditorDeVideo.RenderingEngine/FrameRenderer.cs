@@ -99,7 +99,7 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
             }
             Flush();
             if (!e.Enabled || ai is null || layer.Asset is null) continue;
-            var (processed, changed) = ai.Apply(e, image, layer.Asset, layer.SourceTime,
+            var (processed, changed) = ai.Apply(e, image, layer.Asset, paths.GetValueOrDefault(layer.Asset.Id), layer.SourceTime,
                 (w, h) => BackgroundFrame(e, video, project, sequence, paths, t, layer, w, h), ctx.PixelScale);
             image = processed;
             alpha |= changed;

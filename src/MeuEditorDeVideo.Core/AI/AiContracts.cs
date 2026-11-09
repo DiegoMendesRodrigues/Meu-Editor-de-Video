@@ -88,7 +88,8 @@ public sealed record ModelManifest
 }
 
 /// <summary>Modelo instalado em <c>%LOCALAPPDATA%\MeuEditorDeVideo\models\&lt;id&gt;</c>.</summary>
-public sealed record InstalledModel(ModelManifest Manifest, string Directory)
+/// <param name="BuiltIn">Modelo que vem com o aplicativo (pasta <c>ai-models</c> ao lado do executável): sempre disponível e não pode ser removido.</param>
+public sealed record InstalledModel(ModelManifest Manifest, string Directory, bool BuiltIn = false)
 {
     public string ModelPath => Path.Combine(Directory, Manifest.File);
     public string? DocumentationPath => Manifest.Documentation is { } d ? Path.Combine(Directory, d) : null;
@@ -115,6 +116,7 @@ public interface IModelRegistry
     /// </summary>
     Task<InstalledModel> InstallAsync(string packagePath, CancellationToken cancellationToken = default);
 
+    /// <summary>Remove um modelo instalado pelo usuário. Modelos incluídos no aplicativo não podem ser removidos (<see cref="InvalidOperationException"/>).</summary>
     Task RemoveAsync(string id, CancellationToken cancellationToken = default);
 
     /// <summary>Recalcula o hash do arquivo instalado e compara com o manifesto.</summary>
@@ -191,8 +193,13 @@ public interface ISegmentationService
 {
     bool IsAvailable { get; }
 
-    /// <summary>Máscara do quadro (do cache quando existir). <paramref name="frame"/> é o quadro decodificado já disponível.</summary>
-    Matte? GetMatte(MediaAsset asset, MediaTime sourceTime, BgraImage frame);
+    /// <summary>
+    /// Máscara do quadro (do cache quando existir). Com <paramref name="path"/>, as máscaras são calculadas sempre a partir
+    /// do quadro de origem decodificado no tamanho de análise, para que a pré-visualização e a exportação tenham o mesmo
+    /// resultado; <paramref name="frame"/> é usado só quando a mídia não pode ser lida. <paramref name="temporalSmoothing"/>
+    /// (0…1) mistura a máscara com as dos quadros vizinhos para reduzir a oscilação da borda.
+    /// </summary>
+    Matte? GetMatte(MediaAsset asset, string? path, MediaTime sourceTime, BgraImage frame, double temporalSmoothing = 0);
 
     /// <summary>Calcula em segundo plano as máscaras de todos os quadros do clipe e guarda no cache em disco.</summary>
     Task PrecomputeAsync(Project project, Clip clip, IReadOnlyDictionary<Guid, string> paths, IProgress<double>? progress = null,
@@ -212,9 +219,10 @@ public interface IAiFrameProcessor
     /// <summary>
     /// Aplica <paramref name="effect"/> a <paramref name="image"/> (quadro de <paramref name="asset"/> em
     /// <paramref name="sourceTime"/>). <paramref name="background"/> fornece, sob demanda, o quadro de fundo do modo
-    /// "imagem ou vídeo" já no tamanho da imagem. Retorna a imagem original quando o modelo não está disponível.
+    /// "imagem ou vídeo" já no tamanho da imagem. <paramref name="path"/> é o arquivo da mídia (para ler quadros vizinhos).
+    /// Retorna a imagem original quando o modelo não está disponível.
     /// </summary>
-    (BgraImage Image, bool AlphaChanged) Apply(EffectInstance effect, BgraImage image, MediaAsset asset, MediaTime sourceTime,
+    (BgraImage Image, bool AlphaChanged) Apply(EffectInstance effect, BgraImage image, MediaAsset asset, string? path, MediaTime sourceTime,
         Func<int, int, BgraImage?> background, double pixelScale);
 }
 

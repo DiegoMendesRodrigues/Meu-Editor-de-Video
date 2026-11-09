@@ -157,6 +157,7 @@ public static class EffectCatalog
             new("choke", "Contrair/expandir borda", ParameterKind.Slider, -20, 20, 0, " px"),
             new("feather", "Suavizar borda", ParameterKind.Slider, 0, 30, 2, " px"),
             new("threshold", "Limiar da máscara", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("temporal", "Suavização entre quadros", ParameterKind.Slider, 0, 100, 50, "%"),
         ], AffectsAlpha: true),
         new(EdgeRefine, "Refinar bordas", "Contrai ou expande, suaviza e limpa as bordas da transparência (use depois do chroma key ou de máscaras).", EffectCategory.Key,
         [

@@ -13,6 +13,8 @@ namespace MeuEditorDeVideo.AIEngine.Models;
 /// locais) validando manifesto, compatibilidade, caminhos e SHA-256 antes de copiar. Nunca baixa nada.
 /// Thread-safe: consultas podem ser feitas de qualquer thread; <see cref="Changed"/> é disparado a partir da thread
 /// de segundo plano que concluiu a operação (assine com despacho para a UI, se necessário).
+/// Também lê, somente para leitura, os modelos incluídos no aplicativo (<c>builtInDirectory</c>, ex.: MODNet): eles ficam
+/// sempre disponíveis e não podem ser removidos; um pacote instalado pelo usuário com o mesmo Id tem prioridade.
 /// </summary>
 public sealed class ModelRegistry : IModelRegistry
 {
@@ -26,6 +28,7 @@ public sealed class ModelRegistry : IModelRegistry
     private static readonly Regex IdPattern = new(@"^[a-z0-9][a-z0-9._-]{1,63}\z", RegexOptions.CultureInvariant);
 
     private readonly string _root;
+    private readonly string? _builtInRoot;
     private readonly ILogger<ModelRegistry> _logger;
     private readonly object _gate = new();     // protege a lista em memória
     private readonly object _ioGate = new();   // serializa instalações e remoções
@@ -33,10 +36,12 @@ public sealed class ModelRegistry : IModelRegistry
 
     /// <param name="modelsDirectory">Pasta raiz dos modelos instalados (criada se não existir).</param>
     /// <param name="logger">Logger opcional.</param>
-    public ModelRegistry(string modelsDirectory, ILogger<ModelRegistry>? logger = null)
+    /// <param name="builtInDirectory">Pasta somente leitura dos modelos incluídos no aplicativo (opcional).</param>
+    public ModelRegistry(string modelsDirectory, ILogger<ModelRegistry>? logger = null, string? builtInDirectory = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(modelsDirectory);
         _root = Path.GetFullPath(modelsDirectory);
+        _builtInRoot = string.IsNullOrWhiteSpace(builtInDirectory) ? null : Path.GetFullPath(builtInDirectory);
         _logger = logger ?? NullLogger<ModelRegistry>.Instance;
         Directory.CreateDirectory(_root);
         _installed = Scan();
@@ -112,8 +117,17 @@ public sealed class ModelRegistry : IModelRegistry
 
     private List<InstalledModel> Scan()
     {
+        var user = ScanFolder(_root, builtIn: false);
+        if (_builtInRoot is null || !Directory.Exists(_builtInRoot)) return user;
+        var builtIn = ScanFolder(_builtInRoot, builtIn: true)
+            .Where(b => !user.Any(u => string.Equals(u.Manifest.Id, b.Manifest.Id, StringComparison.OrdinalIgnoreCase)));
+        return [.. builtIn, .. user];
+    }
+
+    private List<InstalledModel> ScanFolder(string root, bool builtIn)
+    {
         var models = new List<InstalledModel>();
-        foreach (var dir in Directory.EnumerateDirectories(_root))
+        foreach (var dir in Directory.EnumerateDirectories(root))
         {
             var name = Path.GetFileName(dir);
             if (name.StartsWith('.')) continue; // pastas temporárias de instalação e ocultas
@@ -133,7 +147,13 @@ public sealed class ModelRegistry : IModelRegistry
                     _logger.LogWarning("Pasta de modelo ignorada: o Id '{Id}' não corresponde ao nome da pasta {Pasta}.", manifest.Id, dir);
                     continue;
                 }
-                models.Add(new InstalledModel(manifest, dir));
+                var model = new InstalledModel(manifest, dir, builtIn);
+                if (builtIn && (!File.Exists(model.ModelPath) || (manifest.SizeBytes > 0 && new FileInfo(model.ModelPath).Length != manifest.SizeBytes)))
+                {
+                    _logger.LogWarning("Modelo incluído ignorado: o arquivo {Arquivo} está ausente ou com tamanho diferente do manifesto.", model.ModelPath);
+                    continue;
+                }
+                models.Add(model);
             }
             catch (Exception ex) when (ex is InvalidDataException or IOException or UnauthorizedAccessException)
             {
@@ -314,6 +334,8 @@ public sealed class ModelRegistry : IModelRegistry
         {
             ct.ThrowIfCancellationRequested();
             var folder = Path.Combine(_root, id);
+            if (!Directory.Exists(folder) && Installed.Any(m => m.BuiltIn && string.Equals(m.Manifest.Id, id, StringComparison.OrdinalIgnoreCase)))
+                throw new InvalidOperationException("Este modelo vem com o aplicativo e não pode ser removido.");
             if (Directory.Exists(folder)) Directory.Delete(folder, recursive: true);
             SetInstalled(Scan());
         }

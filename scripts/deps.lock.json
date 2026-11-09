@@ -9,6 +9,15 @@
       "sha256": "8d31e162f1616e37aab3fa2db991b97e1b8dbeb1c8465fd81a81be16ff91b328",
       "extractSubdir": "ffmpeg-9.0.2-full_build-shared",
       "target": "deps/ffmpeg"
+    },
+    {
+      "name": "modnet",
+      "version": "1.0 (Xenova/modnet fa2fa546)",
+      "license": "Apache-2.0 (modelo incluído no aplicativo: Remover fundo com IA)",
+      "url": "https://huggingface.co/Xenova/modnet/resolve/fa2fa546052fba4c08921230a26cc69a333fca12/onnx/model.onnx",
+      "sha256": "07c308cf0fc7e6e8b2065a12ed7fc07e1de8febb7dc7839d7b7f15dd66584df9",
+      "fileName": "modnet.onnx",
+      "target": "deps/ai-models/modnet-retrato"
     }
   ]
 }

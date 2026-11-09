@@ -36,6 +36,12 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 |---|---|---|---|---|
 | FFmpeg (full_build, shared) | 9.0.2 | GPL-3.0-or-later | github.com/GyanD/codexffmpeg | Inclui x264, x265, libvpx, SVT-AV1, libaom, LAME, Opus, Vorbis. Exportação (F5): codificadores sondados em tempo de execução — NVENC/AMF/Quick Sync/Media Foundation quando houver GPU, com recuo automático para software. SHA-256 no lock. Carregado pelo MediaEngine via FFmpeg.AutoGen; as DLLs são copiadas para `ffmpeg\` ao lado do executável. |
 
+## Modelo de IA incluído no aplicativo
+
+| Modelo | Versão | Licença | Origem | Observação |
+|---|---|---|---|---|
+| MODNet (`modnet.onnx`, 25,9 MB) | 1.0 | Apache-2.0 | huggingface.co/Xenova/modnet, revisão `fa2fa546` (ZHKKKe/MODNet) | Remover fundo, máscaras e rastreamento disponíveis desde a instalação. Baixado por `scripts/fetch-deps.ps1` (SHA-256 no lock) para `deps/ai-models/` e copiado para `ai-models\modnet-retrato\` ao lado do executável, com o manifesto, a licença e a documentação de `resources/ai-models/incluidos/`. |
+
 ## Modelos de IA (pacotes `.medmodel`, fora do instalador)
 
 Não fazem parte do repositório nem do instalador (decisão §8 nº 5). São empacotados com `tools\Build-ModelPackages.ps1`
@@ -44,8 +50,7 @@ Detalhes e uso em [MODELOS_IA.md](MODELOS_IA.md).
 
 | Modelo | Origem | Licença | Recurso |
 |---|---|---|---|
-| MODNet | ZHKKKe/MODNet (ONNX: Xenova/modnet) | Apache-2.0 | Remoção/substituição de fundo, segmentação, rastreamento de pessoa |
-| Whisper base (GGML) | OpenAI Whisper / ggerganov/whisper.cpp | MIT | Legendas automáticas |
+| Whisper large-v3 turbo (GGML q5_0, 547 MB) | OpenAI Whisper / ggerganov/whisper.cpp | MIT | Legendas automáticas (com Silero VAD, quando instalado, para localizar a fala) |
 | GTCRN | Xiaobin Rong (ONNX de streaming: andrelgomes/gtcrn-stream) | MIT | Isolamento de voz e redução de ruído |
 | Silero VAD 5 | snakers4/silero-vad | MIT | Detecção de fala / remoção de silêncios |
 | TransNetV2 | Tomáš Souček (ONNX: elya5/transnetv2) | MIT | Detecção de cenas |

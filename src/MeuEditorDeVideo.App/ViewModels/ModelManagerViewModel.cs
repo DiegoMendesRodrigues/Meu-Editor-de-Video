@@ -31,6 +31,9 @@ public sealed partial class ModelItemViewModel(InstalledModel model, ulong avail
     public string License => Manifest.License;
     public string Hash => Manifest.Sha256;
     public string Location => Model.ModelPath;
+    public bool BuiltIn => Model.BuiltIn;
+    public string Installation => Model.BuiltIn ? "Incluído no aplicativo (não pode ser removido)" : "Instalado pelo usuário (pacote .medmodel)";
+    public string Subtitle => Model.BuiltIn ? $"{Capability} · incluído no aplicativo" : Capability;
 
     /// <summary>Aviso quando a memória livre do computador é menor que a exigida.</summary>
     public string MemoryCheck => availableMemory == 0 ? ""
@@ -187,7 +190,9 @@ public sealed partial class ModelManagerViewModel : ObservableObject, IDisposabl
 
     private bool HasSelection() => !IsBusy && Selected is not null;
 
-    [RelayCommand(CanExecute = nameof(HasSelection))]
+    private bool CanRemove() => HasSelection() && Selected?.BuiltIn == false;
+
+    [RelayCommand(CanExecute = nameof(CanRemove))]
     private async Task RemoveAsync()
     {
         if (Selected is not { } item) return;

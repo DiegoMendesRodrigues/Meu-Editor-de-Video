@@ -1,25 +1,30 @@
 # Modelos de IA local (F10)
 
 Todos os recursos de inteligência artificial rodam **somente no computador do usuário** (RF155, RF169). Nenhum
-áudio, vídeo, imagem ou texto é enviado para a internet, e o aplicativo não baixa modelos sozinho: eles são
-instalados a partir de **pacotes `.medmodel` locais** (RF170), distribuídos separadamente do instalador (decisão §8 nº 5).
+áudio, vídeo, imagem ou texto é enviado para a internet, e o aplicativo não baixa modelos sozinho.
+
+- **Incluído no aplicativo:** o **MODNet** (Remover fundo, Calcular máscaras, Rastrear pessoa) vem junto com o
+  aplicativo, na pasta `ai-models\` ao lado do executável, e funciona desde a primeira execução.
+- **Demais modelos:** são instalados a partir de **pacotes `.medmodel` locais** (RF170), distribuídos separadamente do
+  instalador (decisão §8 nº 5).
+
 O teste de arquitetura `PrivacyTests` garante que nenhum assembly do produto, inclusive o `AIEngine`, usa APIs de rede.
 
 ## Recursos e modelos
 
 | Recurso (aba **IA** das propriedades) | Requisitos | Capacidade | Modelo do catálogo |
 |---|---|---|---|
-| Remover fundo: transparente, cor sólida, desfoque, imagem ou vídeo da biblioteca; manter a pessoa ou o fundo; limiar, contração/expansão e suavização da borda | RF102–RF109, RF156, RF162 | `PersonSegmentation` | MODNet |
+| Remover fundo: transparente, cor sólida, desfoque, imagem ou vídeo da biblioteca; manter a pessoa ou o fundo; limiar, contração/expansão, suavização da borda e suavização entre quadros | RF102–RF109, RF156, RF162 | `PersonSegmentation` | MODNet (incluído) |
 | Calcular máscaras em segundo plano (lote, com cache em memória e disco) | §8.2, F10 | `PersonSegmentation` | MODNet |
 | Rastrear pessoa (gera um rastreamento usável na aba Composição) | RF163 | `PersonSegmentation` | MODNet |
-| Gerar legendas (português, inglês, espanhol ou automático) | RF142, RF157, RF158 | `SpeechRecognition` | Whisper base |
+| Gerar legendas (português, inglês, espanhol ou automático) | RF142, RF157, RF158 | `SpeechRecognition` | Whisper large-v3 turbo (+ Silero VAD, se instalado) |
 | Isolar voz (voz e ambiente em trilhas separadas) | RF127, RF159 | `SpeechEnhancement` | GTCRN |
 | Reduzir ruído (com intensidade) | RF160 | `SpeechEnhancement` | GTCRN |
 | Remover trechos sem fala | RF165 | `VoiceActivity` | Silero VAD 5 |
 | Detectar cenas → marcadores (e dividir o clipe) | RF161 | `SceneDetection` | TransNetV2; sem modelo, comparação de histogramas |
 | Melhorar imagem (ampliar fotos 2×) | RF164 | `ImageEnhancement` | Swin2SR leve 2× |
 
-Sem o modelo correspondente, o recurso aparece como **"Indisponível — instale o modelo em Ferramentas › Modelos de IA"**
+Sem o modelo correspondente (exceto o MODNet, que é incluído), o recurso aparece como **"Indisponível — instale o modelo em Ferramentas › Modelos de IA"**
 e o botão fica desativado (§8.3). A detecção de cenas é a exceção: funciona sem modelo, com precisão menor.
 
 ## Gerenciador de modelos (Ferramentas › Modelos de IA)
@@ -31,10 +36,15 @@ e o botão fica desativado (§8.3). A detecção de cenas é a exceção: funcio
 - **Instalar pacote…** valida o pacote antes de copiar: manifesto, licença obrigatória, versão do formato, nomes de
   arquivo seguros e **SHA-256 do modelo**. Pacotes corrompidos ou adulterados são recusados.
 - **Verificar integridade** recalcula o hash do arquivo instalado; **Remover** desinstala.
+- Modelos **incluídos no aplicativo** aparecem como "incluído no aplicativo" e não podem ser removidos. Um pacote
+  instalado com o mesmo identificador (ex.: uma versão nova do `modnet-retrato`) passa a ser usado no lugar do incluído;
+  ao removê-lo, o incluído volta a valer. Na inicialização, o modelo incluído com arquivo ausente ou de tamanho
+  diferente do manifesto é ignorado.
 - **Executar modelos em:** GPU (DirectML) ou somente CPU (RF167). Na GPU, se a placa ou o driver falharem, o modelo é
   carregado na CPU automaticamente. Modelos que declaram `gpu: false` sempre usam a CPU.
 
-Os modelos ficam em `%LOCALAPPDATA%\MeuEditorDeVideo\ai-models\<id>\` e o cache de máscaras em
+Os modelos instalados ficam em `%LOCALAPPDATA%\MeuEditorDeVideo\ai-models\<id>\`, os incluídos em
+`<pasta do aplicativo>\ai-models\<id>\`, e o cache de máscaras em
 `%LOCALAPPDATA%\MeuEditorDeVideo\cache\mattes\`.
 
 ## Formato do pacote `.medmodel`
@@ -74,6 +84,14 @@ Um arquivo ZIP com, na raiz:
 `capability` é uma de: `PersonSegmentation`, `SpeechRecognition`, `SpeechEnhancement`, `VoiceActivity`,
 `SceneDetection`, `ImageEnhancement`. Quando há mais de um modelo com a mesma capacidade, usa-se a versão mais alta.
 
+## MODNet incluído no aplicativo
+
+O arquivo `modnet.onnx` não fica no repositório. `scripts\fetch-deps.ps1` o baixa da revisão fixada em
+`scripts\deps.lock.json` (com verificação do SHA-256), em tempo de desenvolvimento, para `deps\ai-models\modnet-retrato\`.
+O build do aplicativo copia esse arquivo, junto com o manifesto, a licença e a documentação de
+`resources\ai-models\incluidos\modnet-retrato\`, para `ai-models\modnet-retrato\` na pasta do executável. O teste
+`Repository_built_in_manifest_matches_the_pinned_model` garante que o manifesto e o lock tenham o mesmo hash.
+
 ## Gerar os pacotes
 
 1. Baixe os arquivos dos modelos das origens abaixo para uma pasta (ex.: `C:\modelos`).
@@ -84,8 +102,7 @@ Um arquivo ZIP com, na raiz:
 
 | Arquivo | Origem | Licença |
 |---|---|---|
-| `modnet.onnx` | huggingface.co/Xenova/modnet (`onnx/model.onnx`) | Apache-2.0 |
-| `ggml-base.bin` | huggingface.co/ggerganov/whisper.cpp | MIT |
+| `ggml-large-v3-turbo-q5_0.bin` | huggingface.co/ggerganov/whisper.cpp | MIT |
 | `gtcrn_simple.onnx` | github.com/andrelgomes/gtcrn-stream (GTCRN de Xiaobin Rong) | MIT |
 | `silero_vad.onnx` | github.com/snakers4/silero-vad | MIT |
 | `transnetv2.onnx` | github.com/elya5/transnetv2 (TransNetV2 de Tomáš Souček) | MIT |
@@ -97,12 +114,22 @@ Um arquivo ZIP com, na raiz:
   dispositivo mudam (`ModelSessionHolder`).
 - **Remover fundo** é o efeito `ai.background` na pilha de efeitos do clipe. O `FrameRenderer` o executa por meio de
   `IAiFrameProcessor` na posição em que está na pilha, por isso a pré-visualização e a exportação têm o mesmo resultado.
-  As máscaras do MODNet (lado menor 512 px, múltiplos de 32) ficam em cache por quadro de origem da mídia, e assim
-  servem tanto ao proxy quanto ao original. Os ajustes do efeito (limiar, manter fundo, contrair/expandir, suavizar)
-  são editados na aba Vídeo.
+  As máscaras do MODNet (lado menor 512 px, múltiplos de 32) são calculadas sempre a partir do quadro de origem
+  decodificado em até 960×540 (um decodificador próprio, com leitura sequencial) e ficam em cache por quadro de origem
+  da mídia. Assim, o tamanho da prévia, o proxy e a resolução da exportação não mudam a máscara.
+- **Suavização entre quadros** (parâmetro do efeito, padrão 50 %): a máscara de cada quadro é misturada com as dos
+  quadros vizinhos (±1 quadro até 39 %, ±2 a partir de 40 %), com peso gaussiano pela distância no tempo e, em cada
+  pixel, pela semelhança com o quadro central. Diferenças pequenas (a borda que oscila) são suavizadas; diferenças
+  grandes (a pessoa se moveu) ficam fora da média, sem rastro. O resultado depende só das máscaras de origem, então é
+  o mesmo na reprodução, ao saltar na timeline e na exportação. Em 0 % fica desligada.
+- Os ajustes do efeito (limiar, manter fundo, contrair/expandir, suavizar borda, suavização entre quadros) são editados
+  na aba Efeitos.
 - **Fala:** o áudio do clipe é renderizado como soa na timeline (velocidade e efeitos de áudio), convertido para mono
   16 kHz (FIR 63 taps) e processado:
-  - Whisper.net/whisper.cpp na CPU;
+  - Whisper.net/whisper.cpp na CPU com large-v3 turbo quantizado (q5_0, 547 MB). Antes de transcrever, os trechos com
+    fala são localizados (Silero VAD quando instalado; sem ele, só o silêncio abaixo de −50 dBFS é descartado) e
+    agrupados em blocos (pausas de até 3 s, blocos de até 28 s). Só os blocos são transcritos, o que evita frases
+    inventadas no silêncio e prende o início das legendas ao início real da fala;
   - Silero VAD em janelas de 512 amostras com 64 de contexto, com histerese;
   - GTCRN quadro a quadro: STFT 512/256 com janela raiz de Hann, reconstrução exata.
   Os WAVs gerados (48 kHz estéreo) vão para `Mídias geradas (IA)`, ao lado do projeto, são importados e colocados em
@@ -116,8 +143,9 @@ Um arquivo ZIP com, na raiz:
 
 - O isolamento de voz trabalha em 16 kHz: a trilha de voz não tem conteúdo acima de 8 kHz, e a trilha de ambiente
   contém esses agudos da voz.
-- Whisper base é o modelo pequeno: a transcrição precisa de revisão no Editor de legendas, e modelos maiores (`small`,
-  `medium`) podem ser empacotados com o mesmo script.
-- A segmentação não tem suavização temporal, então pode haver leve oscilação na borda entre quadros. O MODNet é
-  treinado para retratos e pode manter partes do fundo que lembram pessoas ou objetos próximos.
+- Whisper large-v3 turbo leva cerca de 0,4 s de processamento por segundo de áudio na CPU (≈ 4 min para 10 min).
+  Sem o Silero VAD instalado, um trecho só de ruído ainda pode gerar uma frase curta inventada.
+- O MODNet é treinado para retratos e pode manter partes do fundo que lembram pessoas ou objetos próximos. Com a
+  suavização entre quadros, a primeira exibição de um quadro fora do cache segmenta também os vizinhos (mais lenta ao
+  saltar na timeline; na reprodução contínua, é um quadro novo por quadro).
 - Whisper e GTCRN rodam só na CPU.

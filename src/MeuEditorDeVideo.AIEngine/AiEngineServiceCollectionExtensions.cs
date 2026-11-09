@@ -11,6 +11,9 @@ namespace MeuEditorDeVideo.AIEngine;
 
 public static class AiEngineServiceCollectionExtensions
 {
+    /// <summary>Modelos incluídos no aplicativo (MODNet): pasta <c>ai-models</c> ao lado do executável, somente leitura.</summary>
+    public static string BuiltInModelsDirectory => Path.Combine(AppContext.BaseDirectory, "ai-models");
+
     /// <summary>
     /// Motor de IA local (§8): gerenciador de modelos, sessões ONNX (CPU/GPU) e os serviços de cada recurso.
     /// Tudo roda no computador do usuário; nenhum serviço acessa a rede (RF169).
@@ -18,7 +21,7 @@ public static class AiEngineServiceCollectionExtensions
     public static IServiceCollection AddAiEngine(this IServiceCollection services)
     {
         services.AddSingleton<IModelRegistry>(sp =>
-            new ModelRegistry(sp.GetRequiredService<IAppPaths>().AiModels, sp.GetService<ILogger<ModelRegistry>>()));
+            new ModelRegistry(sp.GetRequiredService<IAppPaths>().AiModels, sp.GetService<ILogger<ModelRegistry>>(), BuiltInModelsDirectory));
         services.AddSingleton(sp => new OnnxSessionFactory(sp.GetService<ISettingsService>(), sp.GetService<ILogger<OnnxSessionFactory>>()));
         services.AddSingleton(sp => new MatteCache(Path.Combine(sp.GetRequiredService<IAppPaths>().Cache, "mattes")));
         services.AddSingleton<ISegmentationService, SegmentationService>();

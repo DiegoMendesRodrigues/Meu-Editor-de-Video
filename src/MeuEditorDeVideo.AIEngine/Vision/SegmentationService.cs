@@ -19,6 +19,9 @@ public sealed class SegmentationService : ISegmentationService, IDisposable
 
     private readonly ModelSessionHolder<ModnetSegmenter> _model;
     private readonly IVideoFrameSourceFactory _frames;
+    private readonly object _decodeGate = new();
+    private IVideoFrameSource? _decoder;
+    private readonly List<Guid> _recent = [];
 
     public SegmentationService(IModelRegistry registry, OnnxSessionFactory sessions, IVideoFrameSourceFactory frames, MatteCache cache)
     {
@@ -37,15 +40,57 @@ public sealed class SegmentationService : ISegmentationService, IDisposable
     public static long FrameKey(MediaAsset asset, MediaTime sourceTime) =>
         asset.Kind == MediaKind.Image ? 0 : (asset.FrameRate ?? FrameRate.Fps30).TimeToFrame(sourceTime);
 
-    public Matte? GetMatte(MediaAsset asset, MediaTime sourceTime, BgraImage frame)
+    public Matte? GetMatte(MediaAsset asset, string? path, MediaTime sourceTime, BgraImage frame, double temporalSmoothing = 0)
     {
         var key = FrameKey(asset, sourceTime);
+        if (Raw(asset, path, key, frame) is not { } center) return null;
+        var radius = asset.Kind == MediaKind.Image || path is null ? 0 : MatteSmoothing.Radius(temporalSmoothing);
+        if (radius == 0) return center;
+
+        var last = LastFrame(asset);
+        var neighbors = new List<(int, Matte)>(2 * radius);
+        for (var k = -radius; k <= radius; k++)
+        {
+            var f = key + k;
+            if (k == 0 || f < 0 || f > last) continue;
+            if (Raw(asset, path, f, null) is { } m) neighbors.Add((k, m));
+        }
+        return MatteSmoothing.Blend(center, neighbors, temporalSmoothing);
+    }
+
+    /// <summary>Máscara sem suavização do quadro de origem <paramref name="key"/> (cache ou modelo).</summary>
+    private Matte? Raw(MediaAsset asset, string? path, long key, BgraImage? fallback)
+    {
         if (Cache.Get(asset.Id, key) is { } cached) return cached;
         if (_model.Get() is not { } segmenter) return null;
-        var matte = segmenter.Segment(frame);
+        var input = (path is null ? null : Decode(asset, path, key)) ?? fallback;
+        if (input is null) return null;
+        var matte = segmenter.Segment(input);
         Cache.Put(asset.Id, key, matte);
         return matte;
     }
+
+    /// <summary>Lê o quadro de origem no tamanho de análise com um decodificador próprio (acesso sequencial eficiente).</summary>
+    private BgraImage? Decode(MediaAsset asset, string path, long key)
+    {
+        var time = asset.Kind == MediaKind.Image ? MediaTime.Zero : (asset.FrameRate ?? FrameRate.Fps30).FrameToTime(key);
+        lock (_decodeGate)
+        {
+            _decoder ??= _frames.Create(false);
+            // Mantém abertos só os decodificadores das últimas mídias usadas.
+            _recent.Remove(asset.Id);
+            _recent.Insert(0, asset.Id);
+            if (_recent.Count > 3)
+            {
+                _recent.RemoveRange(3, _recent.Count - 3);
+                _decoder.Trim(_recent.ToHashSet());
+            }
+            return _decoder.GetFrame(asset, path, time, AnalysisWidth, AnalysisHeight);
+        }
+    }
+
+    private static long LastFrame(MediaAsset asset) =>
+        asset.Duration > MediaTime.Zero ? Math.Max(0, (asset.FrameRate ?? FrameRate.Fps30).TimeToFrame(asset.Duration) - 1) : long.MaxValue;
 
     public Task PrecomputeAsync(Project project, Clip clip, IReadOnlyDictionary<Guid, string> paths, IProgress<double>? progress = null,
         CancellationToken cancellationToken = default) => Task.Run(() =>
@@ -57,7 +102,7 @@ public sealed class SegmentationService : ISegmentationService, IDisposable
             cancellationToken.ThrowIfCancellationRequested();
             var key = FrameKey(asset, times[i]);
             if (!Cache.Contains(asset.Id, key) && source.GetFrame(asset, path, times[i], AnalysisWidth, AnalysisHeight) is { } frame)
-                GetMatte(asset, times[i], frame);
+                Raw(asset, null, key, frame);
             progress?.Report((i + 1.0) / times.Count);
         }
     }, cancellationToken);
@@ -74,7 +119,7 @@ public sealed class SegmentationService : ISegmentationService, IDisposable
             var key = FrameKey(asset, times[i]);
             var matte = Cache.Get(asset.Id, key);
             if (matte is null && source.GetFrame(asset, path, times[i], AnalysisWidth, AnalysisHeight) is { } frame)
-                matte = GetMatte(asset, times[i], frame);
+                matte = Raw(asset, null, key, frame);
             if (matte is not null && ModnetSegmenter.Bounds(matte) is { } b)
                 samples.Add(new TrackSample(times[i], b.X, b.Y, b.W, b.H));
             progress?.Report((i + 1.0) / times.Count);
@@ -96,5 +141,13 @@ public sealed class SegmentationService : ISegmentationService, IDisposable
         return (asset, path, times);
     }
 
-    public void Dispose() => _model.Dispose();
+    public void Dispose()
+    {
+        _model.Dispose();
+        lock (_decodeGate)
+        {
+            _decoder?.Dispose();
+            _decoder = null;
+        }
+    }
 }

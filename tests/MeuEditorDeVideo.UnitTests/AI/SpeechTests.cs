@@ -1,7 +1,6 @@
 using System.IO;
 using MeuEditorDeVideo.AIEngine.Runtime;
 using MeuEditorDeVideo.AIEngine.Speech;
-using Whisper.net;
 
 namespace MeuEditorDeVideo.UnitTests.AI;
 
@@ -287,16 +286,38 @@ public sealed class SpeechTests
         Assert.True(Rms(output) < 0.5 * Rms(noise), $"RMS saída {Rms(output):F5} vs entrada {Rms(noise):F5}");
     }
 
-    [ModelFact("ggml-base.bin")]
-    public async Task Whisper_silence_yields_no_speech_text()
+    // ---------------------------------------------------------------- preparação para o Whisper
+
+    [Fact]
+    public void Silencio_nao_gera_blocos_para_o_Whisper()
     {
-        using var factory = WhisperFactory.FromPath(TestModels.Require("ggml-base.bin"));
-        await using var processor = factory.CreateBuilder().WithLanguage("pt").Build();
+        var silence = new float[5 * 16000];
+        var probs = SpeechChunks.EnergyProbabilities(silence, SileroVad.WindowSamples);
+        var regions = SpeechSegments.FromProbabilities(probs, SileroVad.WindowSamples, silence.Length, 0.5f, 16000, 200, 500, 250);
+        Assert.Empty(SpeechChunks.Group(regions, 16000));
+    }
 
-        var texts = new List<string>();
-        await foreach (var s in processor.ProcessAsync(new float[3 * 16000], default))
-            texts.Add(TranscriptCleanup.Clean(s.Text));
+    [Fact]
+    public void Detector_por_energia_mantem_fala_com_ruido_e_descarta_o_silencio()
+    {
+        // 2 s de silêncio, 3 s de "fala" (tom) com ruído, 2 s de silêncio.
+        var rng = new Random(3);
+        var audio = new float[7 * 16000];
+        for (var i = 2 * 16000; i < 5 * 16000; i++)
+            audio[i] = 0.3f * MathF.Sin(2 * MathF.PI * 220 * i / 16000) + 0.05f * (float)(rng.NextDouble() - 0.5);
+        var probs = SpeechChunks.EnergyProbabilities(audio, SileroVad.WindowSamples);
+        var regions = SpeechSegments.FromProbabilities(probs, SileroVad.WindowSamples, audio.Length, 0.5f, 16000, 200, 500, 250);
+        var chunk = Assert.Single(SpeechChunks.Group(regions, 16000));
+        Assert.InRange(chunk.Start / 16000.0, 1.6, 2.0);
+        Assert.InRange(chunk.End / 16000.0, 5.0, 5.4);
+    }
 
-        Assert.All(texts, t => Assert.Equal("", t));
+    [Fact]
+    public void Blocos_juntam_pausas_curtas_e_respeitam_o_tamanho_maximo()
+    {
+        const int r = 16000;
+        var regions = new List<(long, long)> { (0, 2 * r), (3 * r, 5 * r), (20 * r, 22 * r), (24 * r, 50 * r), (60 * r, 61 * r) };
+        var chunks = SpeechChunks.Group(regions, r);
+        Assert.Equal([(0L, 5L * r), (20L * r, 22L * r), (24L * r, 50L * r), (60L * r, 61L * r)], chunks);
     }
 }
