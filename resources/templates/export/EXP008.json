@@ -1,0 +1,24 @@
+{
+  "id": "EXP008",
+  "name": "Facebook Feed",
+  "description": "Vídeo quadrado 1:1 para o feed do Facebook.",
+  "settings": {
+    "container": "Mp4",
+    "videoCodec": "H264",
+    "encoder": "Auto",
+    "width": 1080,
+    "height": 1080,
+    "frameRate": "30",
+    "rateControl": "Vbr",
+    "videoBitrateKbps": 6000,
+    "quality": 23,
+    "profile": "high",
+    "audioCodec": "Aac",
+    "audioBitrateKbps": 128,
+    "sampleRate": 48000,
+    "audioChannels": 2,
+    "alpha": false,
+    "maxSecondsPerFile": null,
+    "targetSizeMegabytes": null
+  }
+}

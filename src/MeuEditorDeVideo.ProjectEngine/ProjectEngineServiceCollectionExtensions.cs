@@ -10,6 +10,7 @@ public static class ProjectEngineServiceCollectionExtensions
         services.AddSingleton<IProjectStore, MedProjectStore>();
         services.AddSingleton<IMediaLocator, MediaLocator>();
         services.AddSingleton<IAutosaveStore, AutosaveStore>();
+        services.AddSingleton<IDomainJson, Format.DomainJson>();
         return services;
     }
 }

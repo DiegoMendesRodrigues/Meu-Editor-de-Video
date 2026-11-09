@@ -42,4 +42,41 @@ public static class MedErrors
     // 2xxx — mídia
     public static MedError MediaEngineUnavailable(string detail) =>
         new("MED-2001", $"O mecanismo de mídia (FFmpeg) não pôde ser carregado. Reinstale o aplicativo.\n\nDetalhe: {detail}");
+
+    // 3xxx — renderização e exportação (§7.4)
+    public static MedError RenderMissingMedia(IEnumerable<string> names) =>
+        new("MED-3001", "Não é possível exportar: as mídias abaixo não foram encontradas. Localize-as e tente novamente.\n• " +
+                        string.Join("\n• ", names));
+
+    public static MedError EncoderUnavailable(string codec) =>
+        new("MED-3002", $"Nenhum codificador disponível para {codec} neste computador. Escolha outro codec ou formato.");
+
+    public static MedError RenderDecodeFailed(string media, Exception cause) =>
+        new("MED-3003", $"Falha ao decodificar a mídia \"{media}\" durante a exportação. O arquivo pode estar danificado.", cause);
+
+    public static MedError RenderDiskFull(string folder, Exception? cause = null) =>
+        new("MED-3004", $"Não há espaço suficiente em disco para concluir a exportação em:\n{folder}\n" +
+                        "Libere espaço e retome a exportação; os trechos já prontos serão aproveitados.", cause);
+
+    public static MedError RenderOutOfMemory(Exception cause) =>
+        new("MED-3005", "Memória insuficiente para continuar a exportação. Feche outros programas ou reduza a resolução e tente novamente.", cause);
+
+    public static MedError EncodeFailed(string encoder, Exception cause) =>
+        new("MED-3006", $"O codificador \"{encoder}\" falhou durante a exportação.\n\nDetalhe: {cause.Message}", cause);
+
+    public static MedError GpuEncoderFailed(string encoder, Exception cause) =>
+        new("MED-3007", $"O codificador de vídeo da placa de vídeo (\"{encoder}\") falhou. " +
+                        "Tente novamente com o codificador por software (opção \"Codificador: software\").", cause);
+
+    public static MedError InvalidExportSettings(IEnumerable<string> problems) =>
+        new("MED-3008", "As configurações de exportação são inválidas:\n• " + string.Join("\n• ", problems));
+
+    public static MedError OutputValidationFailed(string path, string detail) =>
+        new("MED-3009", $"O arquivo exportado não passou na verificação final:\n{path}\n\nDetalhe: {detail}");
+
+    public static MedError OutputNotWritable(string path, Exception cause) =>
+        new("MED-3010", $"Não foi possível gravar o arquivo de saída (sem permissão ou em uso por outro programa):\n{path}", cause);
+
+    public static MedError NothingToRender() =>
+        new("MED-3011", "Não há nada para exportar: a sequência (ou o intervalo escolhido) está vazia.");
 }

@@ -37,6 +37,8 @@
     <sys:String x:Key="Editor.Acao.Refazer">Refazer</sys:String>
     <sys:String x:Key="Editor.Acao.ImportarMidia">Importar Mídia</sys:String>
     <sys:String x:Key="Editor.Acao.Exportar">Exportar</sys:String>
+    <sys:String x:Key="Editor.Acao.FilaRenderizacao">Fila de renderização</sys:String>
+    <sys:String x:Key="Editor.Menu.FilaRenderizacao">_Fila de renderização…</sys:String>
     <sys:String x:Key="Editor.Acao.AlternarTema">Alternar tema claro/escuro</sys:String>
     <sys:String x:Key="Editor.Acao.ImportarSequencia">Importar sequência de imagens</sys:String>
 

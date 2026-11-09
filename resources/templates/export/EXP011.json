@@ -1,0 +1,24 @@
+{
+  "id": "EXP011",
+  "name": "Computadores e notebooks",
+  "description": "Alta qualidade constante para assistir no computador.",
+  "settings": {
+    "container": "Mp4",
+    "videoCodec": "H264",
+    "encoder": "Auto",
+    "width": 1920,
+    "height": 1080,
+    "frameRate": null,
+    "rateControl": "ConstantQuality",
+    "videoBitrateKbps": 8000,
+    "quality": 20,
+    "profile": null,
+    "audioCodec": "Aac",
+    "audioBitrateKbps": 256,
+    "sampleRate": 48000,
+    "audioChannels": 2,
+    "alpha": false,
+    "maxSecondsPerFile": null,
+    "targetSizeMegabytes": null
+  }
+}

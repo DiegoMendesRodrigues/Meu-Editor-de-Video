@@ -1,0 +1,24 @@
+{
+  "id": "EXP012",
+  "name": "Exportação personalizada",
+  "description": "Resolução e taxa de quadros do projeto; ajuste todos os parâmetros livremente.",
+  "settings": {
+    "container": "Mp4",
+    "videoCodec": "H264",
+    "encoder": "Auto",
+    "width": null,
+    "height": null,
+    "frameRate": null,
+    "rateControl": "Vbr",
+    "videoBitrateKbps": 8000,
+    "quality": 23,
+    "profile": null,
+    "audioCodec": "Aac",
+    "audioBitrateKbps": 192,
+    "sampleRate": 48000,
+    "audioChannels": 2,
+    "alpha": false,
+    "maxSecondsPerFile": null,
+    "targetSizeMegabytes": null
+  }
+}

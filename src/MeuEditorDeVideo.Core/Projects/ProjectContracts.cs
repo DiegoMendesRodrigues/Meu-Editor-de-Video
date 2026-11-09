@@ -107,3 +107,11 @@ public interface IAutosaveStore
 
     void Discard(Guid projectId);
 }
+
+/// <summary>Serialização JSON do domínio (mesmas regras do .med): usada pela fila de renderização para guardar fotos do projeto.</summary>
+public interface IDomainJson
+{
+    string Serialize<T>(T value);
+
+    T? Deserialize<T>(string json);
+}

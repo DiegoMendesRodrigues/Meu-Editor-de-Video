@@ -11,6 +11,7 @@ public static class RenderingEngineServiceCollectionExtensions
         services.AddSingleton<ICompositor, CpuCompositor>();
         services.AddSingleton<IAudioOutputFactory, AudioOutputFactory>();
         services.AddTransient<PreviewEngine>();
+        services.AddSingleton<MeuEditorDeVideo.Core.Export.IRenderEngine, RenderEngine>();
         return services;
     }
 }

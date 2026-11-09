@@ -1,0 +1,24 @@
+{
+  "id": "EXP006",
+  "name": "WhatsApp Status",
+  "description": "Vídeo vertical leve, dividido em arquivos de até 60 segundos.",
+  "settings": {
+    "container": "Mp4",
+    "videoCodec": "H264",
+    "encoder": "Auto",
+    "width": 720,
+    "height": 1280,
+    "frameRate": "30",
+    "rateControl": "Vbr",
+    "videoBitrateKbps": 2000,
+    "quality": 23,
+    "profile": "main",
+    "audioCodec": "Aac",
+    "audioBitrateKbps": 128,
+    "sampleRate": 48000,
+    "audioChannels": 2,
+    "alpha": false,
+    "maxSecondsPerFile": 60,
+    "targetSizeMegabytes": null
+  }
+}

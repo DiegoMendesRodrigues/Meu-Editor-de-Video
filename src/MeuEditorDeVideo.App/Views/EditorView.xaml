@@ -17,6 +17,7 @@
         <KeyBinding Key="Z" Modifiers="Control" Command="{Binding UndoCommand}" />
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding RedoCommand}" />
         <KeyBinding Key="Z" Modifiers="Control+Shift" Command="{Binding RedoCommand}" />
+        <KeyBinding Key="E" Modifiers="Control" Command="{Binding ExportCommand}" />
     </UserControl.InputBindings>
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Editor.BoolToVis" />
@@ -224,7 +225,8 @@
                 <MenuItem Header="{StaticResource Editor.Menu.SalvarComo}" Command="{Binding SaveAsCommand}" InputGestureText="Ctrl+Shift+S" />
                 <MenuItem Header="{StaticResource Editor.Menu.CopiaSeguranca}" Command="{Binding CreateBackupCommand}" />
                 <Separator />
-                <MenuItem Header="{StaticResource Editor.Menu.Exportar}" Command="{Binding ExportCommand}" />
+                <MenuItem Header="{StaticResource Editor.Menu.Exportar}" Command="{Binding ExportCommand}" InputGestureText="Ctrl+E" />
+                <MenuItem Header="{StaticResource Editor.Menu.FilaRenderizacao}" Command="{Binding ShowRenderQueueCommand}" />
                 <Separator />
                 <MenuItem Header="{StaticResource Editor.Menu.Inicio}" Command="{Binding GoHomeCommand}" />
             </MenuItem>
@@ -328,6 +330,10 @@
                     <Button AutomationProperties.Name="{StaticResource Editor.Acao.AlternarTema}" Style="{StaticResource Editor.Acao}" Command="{Binding ToggleThemeCommand}"
                             ToolTip="{StaticResource Editor.Acao.AlternarTema}" ToolTipService.ShowOnDisabled="True">
                         <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE793;" />
+                    </Button>
+                    <Button AutomationProperties.Name="{StaticResource Editor.Acao.FilaRenderizacao}" Style="{StaticResource Editor.Acao}" Command="{Binding ShowRenderQueueCommand}"
+                            ToolTip="{StaticResource Editor.Acao.FilaRenderizacao}" Margin="4,0,0,0">
+                        <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE896;" />
                     </Button>
                     <Button AutomationProperties.Name="{StaticResource Editor.Acao.Exportar}" Style="{StaticResource Med.AccentButton}" Command="{Binding ExportCommand}"
                             Margin="8,0,0,0" Padding="12,6">

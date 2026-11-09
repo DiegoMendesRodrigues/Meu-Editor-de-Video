@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Core.Media;
+﻿using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.TimelineEngine;
 
@@ -10,7 +10,8 @@ public readonly record struct LayerImage(VisualLayer Layer, BgraImage Image, boo
 /// <summary>Compositor de quadros: recebe as camadas de baixo para cima e produz o quadro final.</summary>
 public interface ICompositor
 {
-    BgraImage Compose(int width, int height, int projectWidth, IReadOnlyList<LayerImage> layers);
+    /// <param name="transparentBackground">Fundo transparente (exportação com canal alfa) em vez de preto opaco.</param>
+    BgraImage Compose(int width, int height, int projectWidth, IReadOnlyList<LayerImage> layers, bool transparentBackground = false);
 }
 
 /// <summary>
@@ -21,11 +22,12 @@ public interface ICompositor
 /// </summary>
 public sealed class CpuCompositor : ICompositor
 {
-    public BgraImage Compose(int width, int height, int projectWidth, IReadOnlyList<LayerImage> layers)
+    public BgraImage Compose(int width, int height, int projectWidth, IReadOnlyList<LayerImage> layers, bool transparentBackground = false)
     {
         var output = new byte[width * height * 4];
-        // Fundo preto opaco.
-        for (var i = 3; i < output.Length; i += 4) output[i] = 255;
+        // Fundo preto opaco (ou totalmente transparente na exportação com alfa).
+        if (!transparentBackground)
+            for (var i = 3; i < output.Length; i += 4) output[i] = 255;
 
         var projectScale = projectWidth > 0 ? (double)width / projectWidth : 1;
         foreach (var layer in layers)
@@ -162,9 +164,22 @@ public sealed class CpuCompositor : ICompositor
             return;
         }
         var inv = 255 - alpha;
-        dst[i] = (byte)((b * alpha + dst[i] * inv) / 255);
-        dst[i + 1] = (byte)((g * alpha + dst[i + 1] * inv) / 255);
-        dst[i + 2] = (byte)((r * alpha + dst[i + 2] * inv) / 255);
-        dst[i + 3] = 255;
+        var da = dst[i + 3];
+        if (da == 255)
+        {
+            dst[i] = (byte)((b * alpha + dst[i] * inv) / 255);
+            dst[i + 1] = (byte)((g * alpha + dst[i + 1] * inv) / 255);
+            dst[i + 2] = (byte)((r * alpha + dst[i + 2] * inv) / 255);
+            return;
+        }
+
+        // Destino translúcido (fundo transparente): operador "over" com alfa não pré-multiplicado.
+        var wd = da * inv / 255;
+        var oa = alpha + wd;
+        if (oa <= 0) return;
+        dst[i] = (byte)((b * alpha + dst[i] * wd) / oa);
+        dst[i + 1] = (byte)((g * alpha + dst[i + 1] * wd) / oa);
+        dst[i + 2] = (byte)((r * alpha + dst[i + 2] * wd) / oa);
+        dst[i + 3] = (byte)oa;
     }
 }

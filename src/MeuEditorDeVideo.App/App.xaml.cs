@@ -4,6 +4,7 @@ using System.Windows.Markup;
 using System.Windows.Threading;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.Application;
+using MeuEditorDeVideo.Application.Export;
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.MediaEngine;
 using MeuEditorDeVideo.ProjectEngine;
@@ -50,6 +51,7 @@ public partial class App : System.Windows.Application
         window.Show();
 
         Services.GetRequiredService<AutosaveScheduler>().Start();
+        await Services.GetRequiredService<IRenderQueueService>().InitializeAsync();
 
         base.OnStartup(e);
     }

@@ -1,4 +1,6 @@
-using MeuEditorDeVideo.Core.Abstractions;
+﻿using MeuEditorDeVideo.Core.Abstractions;
+using MeuEditorDeVideo.Core.Export;
+using MeuEditorDeVideo.Infrastructure.Export;
 using MeuEditorDeVideo.Infrastructure.Paths;
 using MeuEditorDeVideo.Infrastructure.Settings;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +36,7 @@ public static class InfrastructureServiceCollectionExtensions
         {
             services.AddSingleton<IAppPaths>(paths);
             services.AddSingleton<ISettingsService, JsonSettingsService>();
+            services.AddSingleton<IExportTemplateStore, JsonExportTemplateStore>();
         });
 
         return builder;

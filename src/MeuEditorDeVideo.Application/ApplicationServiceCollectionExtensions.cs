@@ -1,3 +1,4 @@
+﻿using MeuEditorDeVideo.Application.Export;
 using MeuEditorDeVideo.Application.Media;
 using MeuEditorDeVideo.Application.Projects;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ public static class ApplicationServiceCollectionExtensions
         services.AddSingleton<IProjectService, ProjectService>();
         services.AddSingleton<AutosaveScheduler>();
         services.AddSingleton<IMediaImportService, MediaImportService>();
+        services.AddSingleton<IRenderQueueService, RenderQueueService>();
         return services;
     }
 }

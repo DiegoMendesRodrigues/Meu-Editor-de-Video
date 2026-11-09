@@ -1,4 +1,4 @@
-# Dependências e licenças
+﻿# Dependências e licenças
 
 Relação das dependências do **Meu Editor de Vídeo** (ENT018, RNF014, RNF020).
 O produto é licenciado sob **GPL-3.0-or-later** (arquivo `LICENSE`). Toda dependência deve ser compatível com GPL-3.0.
@@ -30,7 +30,7 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 
 | Componente | Versão | Licença | Origem | Observação |
 |---|---|---|---|---|
-| FFmpeg (full_build, shared) | 9.0.2 | GPL-3.0-or-later | github.com/GyanD/codexffmpeg | Inclui x264, x265, libvpx, SVT-AV1, LAME, Opus. SHA-256 no lock. Carregado pelo MediaEngine via FFmpeg.AutoGen; as DLLs são copiadas para `ffmpeg\` ao lado do executável. |
+| FFmpeg (full_build, shared) | 9.0.2 | GPL-3.0-or-later | github.com/GyanD/codexffmpeg | Inclui x264, x265, libvpx, SVT-AV1, libaom, LAME, Opus, Vorbis. Exportação (F5): codificadores sondados em tempo de execução — NVENC/AMF/Quick Sync/Media Foundation quando houver GPU, com recuo automático para software. SHA-256 no lock. Carregado pelo MediaEngine via FFmpeg.AutoGen; as DLLs são copiadas para `ffmpeg\` ao lado do executável. |
 
 ## Planejadas (ainda não adicionadas)
 

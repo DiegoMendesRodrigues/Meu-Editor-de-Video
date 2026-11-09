@@ -1,0 +1,24 @@
+{
+  "id": "EXP002",
+  "name": "YouTube Shorts",
+  "description": "Vídeo vertical 9:16 para Shorts.",
+  "settings": {
+    "container": "Mp4",
+    "videoCodec": "H264",
+    "encoder": "Auto",
+    "width": 1080,
+    "height": 1920,
+    "frameRate": "30",
+    "rateControl": "Vbr",
+    "videoBitrateKbps": 8000,
+    "quality": 23,
+    "profile": "high",
+    "audioCodec": "Aac",
+    "audioBitrateKbps": 192,
+    "sampleRate": 48000,
+    "audioChannels": 2,
+    "alpha": false,
+    "maxSecondsPerFile": null,
+    "targetSizeMegabytes": null
+  }
+}

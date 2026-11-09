@@ -25,6 +25,9 @@
     <None Include="$(FFmpegBinDir)*.dll" Link="ffmpeg\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\resources\templates\export\*.json" Link="templates\export\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MeuEditorDeVideo.Application\MeuEditorDeVideo.Application.csproj" />
     <ProjectReference Include="..\MeuEditorDeVideo.Infrastructure\MeuEditorDeVideo.Infrastructure.csproj" />
     <ProjectReference Include="..\MeuEditorDeVideo.ProjectEngine\MeuEditorDeVideo.ProjectEngine.csproj" />

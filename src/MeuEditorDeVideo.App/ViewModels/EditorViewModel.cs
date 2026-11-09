@@ -2,12 +2,16 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
+using MeuEditorDeVideo.App.ViewModels.Export;
 using MeuEditorDeVideo.App.ViewModels.Media;
+using MeuEditorDeVideo.App.Views.Dialogs;
+using MeuEditorDeVideo.Application.Export;
 using MeuEditorDeVideo.App.ViewModels.Preview;
 using MeuEditorDeVideo.App.ViewModels.Timeline;
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Domain.Editing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MeuEditorDeVideo.App.ViewModels;
 
@@ -171,6 +175,7 @@ public sealed partial class EditorViewModel(
         CreateBackupCommand.NotifyCanExecuteChanged();
         ShowMissingMediaCommand.NotifyCanExecuteChanged();
         GoToHistoryCommand.NotifyCanExecuteChanged();
+        ExportCommand.NotifyCanExecuteChanged();
     }
 
     private void RebuildHistory(EditHistory? history)
@@ -258,10 +263,67 @@ public sealed partial class EditorViewModel(
     /// <summary>Usado pela janela principal ao fechar o aplicativo.</summary>
     public Task<bool> ConfirmCloseAsync() => workflow.ConfirmDiscardOrSaveAsync();
 
-    // Comandos das fases seguintes — desabilitados até existirem de verdade.
-    private static bool NotYetAvailable() => false;
+    private bool CanExport() => _session is not null && Timeline is { } t && t.Duration > Domain.Time.MediaTime.Zero;
 
-    [RelayCommand(CanExecute = nameof(NotYetAvailable))] private void Export() { }
+    /// <summary>Tela de exportação (§5.4); o trabalho vai para a fila e é acompanhado na janela da fila.</summary>
+    [RelayCommand(CanExecute = nameof(CanExport))]
+    private void Export()
+    {
+        if (Preview?.IsPlaying == true) Preview.PlayPauseCommand.Execute(null);
+        var vm = ActivatorUtilities.CreateInstance<ExportViewModel>(services, Timeline?.Playhead ?? Domain.Time.MediaTime.Zero);
+        var dialogs = services.GetRequiredService<IDialogService>();
+        if (dialogs.ShowModal(new ExportWindow(vm)) != true || vm.CreatedJob is not { } job) return;
+
+        if (vm.Background)
+        {
+            ShowRenderQueue();
+            return;
+        }
+
+        // Sem segundo plano: a fila fica aberta (modal) até esta exportação terminar.
+        var queue = ActivatorUtilities.CreateInstance<RenderQueueViewModel>(services);
+        queue.FollowJob = job.Id;
+        var window = new RenderQueueWindow(queue) { Title = "Exportando…" };
+        queue.FollowedJobFinished += (_, finished) =>
+        {
+            if (!window.IsVisible) return;
+            window.Close();
+            ReportFinished(dialogs, finished);
+        };
+        dialogs.ShowModal(window);
+    }
+
+    private static void ReportFinished(IDialogService dialogs, RenderJob job)
+    {
+        switch (job.Status)
+        {
+            case RenderJobStatus.Completed:
+                dialogs.ShowInfo("Exportação concluída", "Arquivo gerado:\n" + string.Join("\n", job.Files));
+                break;
+            case RenderJobStatus.Failed:
+                dialogs.ShowInfo("Não foi possível exportar", job.Error ?? "Erro desconhecido.");
+                break;
+        }
+    }
+
+    private RenderQueueWindow? _queueWindow;
+
+    /// <summary>Fila de renderização em segundo plano (não modal).</summary>
+    [RelayCommand]
+    private void ShowRenderQueue()
+    {
+        if (_queueWindow is { IsLoaded: true })
+        {
+            _queueWindow.Activate();
+            return;
+        }
+        _queueWindow = new RenderQueueWindow(ActivatorUtilities.CreateInstance<RenderQueueViewModel>(services))
+        {
+            Owner = System.Windows.Application.Current.MainWindow,
+        };
+        _queueWindow.Closed += (_, _) => _queueWindow = null;
+        _queueWindow.Show();
+    }
 
     partial void OnMissingMediaCountChanged(int value) => ShowMissingMediaCommand.NotifyCanExecuteChanged();
 }
