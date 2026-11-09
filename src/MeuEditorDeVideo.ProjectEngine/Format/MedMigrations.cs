@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text.Json.Nodes;
 
 namespace MeuEditorDeVideo.ProjectEngine.Format;
@@ -39,9 +39,9 @@ public readonly record struct MedVersion(int Major, int Minor) : IComparable<Med
 public sealed class MedMigrator(IEnumerable<IMedMigration> migrations)
 {
     /// <summary>Versão gravada por este aplicativo.</summary>
-    public static readonly MedVersion Current = new(1, 1);
+    public static readonly MedVersion Current = new(1, 2);
 
-    public static MedMigrator Default { get; } = new([new Migration1_0To1_1()]);
+    public static MedMigrator Default { get; } = new([new Migration1_0To1_1(), new Migration1_1To1_2()]);
 
     private readonly IReadOnlyList<IMedMigration> _migrations = migrations.OrderBy(m => m.From).ToList();
 
@@ -86,6 +86,21 @@ public sealed class Migration1_0To1_1 : IMedMigration
 {
     public MedVersion From => new(1, 0);
     public MedVersion To => new(1, 1);
+
+    public void Migrate(JsonObject project)
+    {
+        // Sem alterações estruturais.
+    }
+}
+
+/// <summary>
+/// 1.1 → 1.2 (F7): volume/panorâmica/solo da trilha, preservação de tom e efeitos de áudio.
+/// Campos novos têm padrão neutro (volume 1, pan 0, sem solo); nada a converter.
+/// </summary>
+public sealed class Migration1_1To1_2 : IMedMigration
+{
+    public MedVersion From => new(1, 1);
+    public MedVersion To => new(1, 2);
 
     public void Migrate(JsonObject project)
     {

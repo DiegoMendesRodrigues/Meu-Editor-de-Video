@@ -892,10 +892,8 @@
                         <TabItem Header="{StaticResource Editor.Propriedades.Video}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Video}">
                             <panels:ClipVideoPanel DataContext="{Binding Inspector}" />
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Audio}">
-                            <TextBlock Text="{StaticResource Editor.Propriedades.Selecione}"
-                                       Style="{StaticResource Med.MutedText}" TextWrapping="Wrap"
-                                       Margin="12" />
+                        <TabItem Header="{StaticResource Editor.Propriedades.Audio}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Audio}">
+                            <panels:ClipAudioPanel DataContext="{Binding AudioInspector}" />
                         </TabItem>
                         <TabItem Header="{StaticResource Editor.Propriedades.Efeitos}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Efeitos}">
                             <panels:ClipEffectsPanel Mode="Effects" DataContext="{Binding Inspector}" />
@@ -1011,6 +1009,10 @@
                         <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Marcador}" Style="{StaticResource Editor.Controle}"
                                 Command="{Binding Timeline.AddMarkerCommand}" ToolTip="{StaticResource Editor.Ferramenta.Marcador}">
                             <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE7C1;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Mixer}" Style="{StaticResource Editor.Controle}"
+                                Click="Mixer_Click" ToolTip="{StaticResource Editor.Ferramenta.Mixer}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE9E9;" />
                         </Button>
                         <Rectangle Width="1" Height="20" Margin="6,0" Fill="{DynamicResource Med.Border}" />
                         <ToggleButton AutomationProperties.Name="{StaticResource Editor.Ferramenta.Ima}" Style="{StaticResource Editor.Alternar}"

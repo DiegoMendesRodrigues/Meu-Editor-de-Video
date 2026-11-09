@@ -45,7 +45,14 @@ public sealed record AudioSegment(
     MediaTime TimelineEnd,
     MediaTime SourceStart,
     Rational Speed,
-    double Volume);
+    double Volume)
+{
+    /// <summary>Clipe completo (efeitos, keyframes de volume, rampas, preservação de tom).</summary>
+    public Clip Clip { get; init; } = null!;
+
+    /// <summary>Trilha (volume e panorâmica do mixer).</summary>
+    public Track Track { get; init; } = null!;
+}
 
 /// <summary>
 /// Traduz a sequência em "o que aparece/soa em cada instante" (§6.5, §7.2).
@@ -213,23 +220,32 @@ public static class TimelineEvaluator
         return null;
     }
 
-    /// <summary>Trechos de áudio audíveis em [<paramref name="from"/>, <paramref name="to"/>).</summary>
+    /// <summary>
+    /// Trechos de áudio audíveis em [<paramref name="from"/>, <paramref name="to"/>).
+    /// Com alguma trilha em solo, só as trilhas em solo soam; trilhas mudas nunca soam (RF130).
+    /// </summary>
     public static IReadOnlyList<AudioSegment> AudioIn(Project project, Sequence sequence, MediaTime from, MediaTime to)
     {
         var result = new List<AudioSegment>();
         if (to <= from) return result;
+        var anySolo = sequence.Tracks.Exists(t => t.Kind == TrackKind.Audio && t.IsSolo);
         foreach (var track in sequence.Tracks)
         {
-            if (track.Kind != TrackKind.Audio || track.IsMuted) continue;
+            if (track.Kind != TrackKind.Audio || track.IsMuted || track.Volume <= 0) continue;
+            if (anySolo && !track.IsSolo) continue;
             foreach (var clip in track.Clips)
             {
                 if (clip.End <= from) continue;
                 if (clip.Start >= to) break;
                 if (clip.MediaAssetId is not { } id || project.FindMedia(id) is not { HasAudio: true } asset) continue;
-                if (clip.Volume <= 0) continue;
+                if (clip.Volume <= 0 && !ClipAnimation.IsAnimated(clip, AnimatedProperty.Volume)) continue;
                 var start = MediaTime.Max(from, clip.Start);
                 var end = MediaTime.Min(to, clip.End);
-                result.Add(new AudioSegment(clip.Id, asset, start, end, SourceTimeAt(clip, start), clip.Speed, clip.Volume));
+                result.Add(new AudioSegment(clip.Id, asset, start, end, SourceTimeAt(clip, start), clip.Speed, clip.Volume)
+                {
+                    Clip = clip,
+                    Track = track,
+                });
             }
         }
         return result;

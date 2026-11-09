@@ -16,6 +16,17 @@ public sealed record Option<T>(T Value, string Label)
     public override string ToString() => Label;
 }
 
+/// <summary>Editor do clipe dono dos itens do inspetor (vídeo ou áudio).</summary>
+public interface IClipEditor
+{
+    void UpdateClip(Func<Clip, Clip> change, string description, string? mergeKey = null);
+    MediaTime Offset(Clip clip);
+    void UpdateEffect(Guid effectId, Func<EffectInstance, EffectInstance> change, string description, string? mergeKey);
+    void RemoveEffect(Guid effectId);
+    void MoveEffect(Guid effectId, int direction);
+    void ChooseLut(EffectItemViewModel item);
+}
+
 /// <summary>Valor numérico exibido num controle deslizante; evita reenvio ao atualizar a partir do modelo.</summary>
 public abstract partial class ValueItemViewModel : ObservableObject
 {
@@ -69,7 +80,7 @@ public abstract partial class ValueItemViewModel : ObservableObject
 }
 
 /// <summary>Propriedade animável por keyframes (posição, escala, rotação, opacidade — RF144–RF148).</summary>
-public sealed partial class AnimatedValueViewModel(ClipInspectorViewModel owner, string property, string label, double min, double max,
+public sealed partial class AnimatedValueViewModel(IClipEditor owner, string property, string label, double min, double max,
     string unit, double factor, double defaultValue, double step = 1)
     : ValueItemViewModel(label, min, max, unit, step)
 {
@@ -109,7 +120,7 @@ public sealed partial class AnimatedValueViewModel(ClipInspectorViewModel owner,
 }
 
 /// <summary>Propriedade simples do clipe (recorte, entrada/saída gradual).</summary>
-public sealed partial class ClipValueViewModel(ClipInspectorViewModel owner, string key, string label, double min, double max, string unit,
+public sealed partial class ClipValueViewModel(IClipEditor owner, string key, string label, double min, double max, string unit,
     Func<Clip, double> get, Func<Clip, double, Clip> set, double defaultValue = 0, double step = 1)
     : ValueItemViewModel(label, min, max, unit, step)
 {
@@ -123,10 +134,10 @@ public sealed partial class ClipValueViewModel(ClipInspectorViewModel owner, str
 /// <summary>Efeito na pilha do clipe (RF086–RF089).</summary>
 public sealed partial class EffectItemViewModel : ObservableObject
 {
-    private readonly ClipInspectorViewModel _owner;
+    private readonly IClipEditor _owner;
     private bool _updating;
 
-    public EffectItemViewModel(ClipInspectorViewModel owner, EffectInstance effect)
+    public EffectItemViewModel(IClipEditor owner, EffectInstance effect)
     {
         _owner = owner;
         Effect = effect;

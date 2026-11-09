@@ -57,6 +57,8 @@ public sealed class PreviewEngine : IDisposable
     private Thread? _audioThread;
     private AudioRingBuffer? _ring;
     private float _volume = 1;
+    private readonly Queue<(long Frame, MixerLevels Levels)> _levels = new();
+    private MixerLevels _currentLevels = MixerLevels.Empty;
 
     public PreviewEngine(IVideoFrameSourceFactory videoFactory, IAudioSampleSourceFactory audioFactory,
         IAudioOutputFactory outputFactory, ICompositor compositor, ILogger<PreviewEngine> logger)
@@ -91,6 +93,21 @@ public sealed class PreviewEngine : IDisposable
                 if (!_clockRunning || _output is null) return _pendingTime ?? _playFrom;
                 var elapsed = Math.Max(0, _output.PlayedSeconds - _clockBase);
                 return _playFrom + MediaTime.FromSecondsApprox(elapsed);
+            }
+        }
+    }
+
+    /// <summary>Níveis das trilhas e do total no instante que está sendo ouvido (vazio quando pausado).</summary>
+    public MixerLevels CurrentLevels
+    {
+        get
+        {
+            if (!_playing) return MixerLevels.Empty;
+            var now = AudioFormat.ToFrames(Position);
+            lock (_levels)
+            {
+                while (_levels.Count > 0 && _levels.Peek().Frame <= now) _currentLevels = _levels.Dequeue().Levels;
+                return _currentLevels;
             }
         }
     }
@@ -220,6 +237,11 @@ public sealed class PreviewEngine : IDisposable
         _audioThread = null;
         _output?.Stop();
         _ring = null;
+        lock (_levels)
+        {
+            _levels.Clear();
+            _currentLevels = MixerLevels.Empty;
+        }
     }
 
     /// <summary>Captura um quadro numa resolução específica (ex.: resolução total do projeto para salvar PNG).</summary>
@@ -410,6 +432,11 @@ public sealed class PreviewEngine : IDisposable
                 }
                 mixer.Mix(snapshot.Project, snapshot.Sequence, snapshot.Paths, next, chunk);
                 ring.Write(chunk);
+                lock (_levels)
+                {
+                    _levels.Enqueue((next, mixer.LastLevels));
+                    while (_levels.Count > 64) _levels.Dequeue();
+                }
                 next += AudioChunkFrames;
             }
         }

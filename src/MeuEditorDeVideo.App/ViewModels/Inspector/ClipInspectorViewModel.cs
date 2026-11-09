@@ -18,7 +18,7 @@ namespace MeuEditorDeVideo.App.ViewModels.Inspector;
 /// Propriedades do clipe visual selecionado (painel C): transformação e keyframes, recorte, opacidade, mistura,
 /// velocidade, congelamento, repetição, transição de entrada, efeitos e correção de cor (F6).
 /// </summary>
-public sealed partial class ClipInspectorViewModel : ObservableObject, IDisposable
+public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEditor, IDisposable
 {
     private static readonly CultureInfo Pt = CultureInfo.GetCultureInfo("pt-BR");
     private readonly IDialogService _dialogs;
@@ -109,7 +109,7 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IDisposab
         AllTransitions.Skip(1).Select(o => new LibraryEffectItem(o.Value!.Value.ToString(), o.Label, "Aplica ao corte antes do clipe selecionado.", "")).ToList();
 
     public IReadOnlyList<LibraryEffectItem> LibraryEffects { get; } =
-        EffectCatalog.All.Where(d => d.Category != EffectCategory.Color).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "")).ToList();
+        EffectCatalog.All.Where(d => d.Category is not (EffectCategory.Color or EffectCategory.Audio)).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "")).ToList();
 
     public IReadOnlyList<LibraryEffectItem> LibraryColor { get; } =
         EffectCatalog.All.Where(d => d.Category == EffectCategory.Color).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "")).ToList();
@@ -238,7 +238,7 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IDisposab
     private void SyncEffects(Clip clip)
     {
         var color = clip.Effects.Where(e => EffectCatalog.Find(e.Type)?.Category == EffectCategory.Color).ToList();
-        var other = clip.Effects.Where(e => EffectCatalog.Find(e.Type) is { Category: not EffectCategory.Color }).ToList();
+        var other = clip.Effects.Where(e => EffectCatalog.Find(e.Type) is { Category: not (EffectCategory.Color or EffectCategory.Audio) }).ToList();
         var sameClip = _clipId == clip.Id;
         _clipId = clip.Id;
         Sync(ColorEffects, color, sameClip);

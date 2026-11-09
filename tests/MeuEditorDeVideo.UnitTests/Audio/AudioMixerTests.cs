@@ -222,7 +222,7 @@ public sealed class AudioMixerTests
     {
         // 4800 quadros de timeline a 2x consomem ~9600 quadros de origem.
         var media = MediaWithAudio();
-        var p = PlaceOn(Setup(media), Audio1, MakeClip(media, 0, 0.1, speed: new Rational(2, 1)));
+        var p = PlaceOn(Setup(media), Audio1, MakeClip(media, 0, 0.1, speed: new Rational(2, 1)) with { PreservePitch = false });
         var source = new FakeAudioSource(0.25f);
         var mixer = new AudioMixer(source);
 

@@ -52,3 +52,28 @@ public interface IAudioSampleSourceFactory
 {
     IAudioSampleSource Create();
 }
+
+/// <summary>Medição de loudness de um clipe (EBU R128) já com efeitos e volume aplicados.</summary>
+public sealed record LoudnessMeasurement(double IntegratedLufs, double PeakDbfs)
+{
+    public bool HasSignal => !double.IsNegativeInfinity(IntegratedLufs);
+}
+
+/// <summary>Resultado da sincronização por áudio: novo início do clipe e confiança (0…1).</summary>
+public sealed record AudioSyncResult(MediaTime NewStart, double Confidence);
+
+/// <summary>Análises de áudio de clipes (RF126 normalização, RF128 silêncios, RF129 sincronização).</summary>
+public interface IAudioAnalysisService
+{
+    Task<LoudnessMeasurement> MeasureLoudnessAsync(Project project, Clip clip, IReadOnlyDictionary<Guid, string> paths,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Trechos silenciosos do clipe, em tempo da timeline.</summary>
+    Task<IReadOnlyList<MeuEditorDeVideo.Domain.Editing.TimeRange>> DetectSilenceAsync(Project project, Clip clip,
+        IReadOnlyDictionary<Guid, string> paths, double thresholdDb, MediaTime minDuration, MediaTime padding,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>Onde o clipe <paramref name="other"/> deve começar para que seu áudio coincida com o de <paramref name="reference"/>.</summary>
+    Task<AudioSyncResult?> FindSyncAsync(Project project, Clip reference, Clip other, IReadOnlyDictionary<Guid, string> paths,
+        CancellationToken cancellationToken = default);
+}

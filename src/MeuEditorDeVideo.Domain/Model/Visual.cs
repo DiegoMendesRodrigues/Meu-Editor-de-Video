@@ -41,6 +41,10 @@ public static class AnimatedProperty
     public const string Rotation = "rotation";
     public const string Opacity = "opacity";
 
+    /// <summary>Volume do clipe de áudio (RF121).</summary>
+    public const string Volume = "volume";
+
+    /// <summary>Propriedades visuais.</summary>
     public static IReadOnlyList<string> All { get; } = [X, Y, Scale, Rotation, Opacity];
 }
 

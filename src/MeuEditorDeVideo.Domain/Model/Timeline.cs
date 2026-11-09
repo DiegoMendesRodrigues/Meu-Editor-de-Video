@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using MeuEditorDeVideo.Domain.Time;
 
 namespace MeuEditorDeVideo.Domain.Model;
@@ -84,6 +84,9 @@ public sealed record Clip
     /// <summary>Saída gradual para o transparente (RF079).</summary>
     public MediaTime FadeOut { get; init; }
 
+    /// <summary>Com velocidade diferente de 1×, mantém o tom original da voz/música (esticamento de tempo).</summary>
+    public bool PreservePitch { get; init; } = true;
+
     public MediaTime End => Start + Duration;
 
     /// <summary>Ponto final dentro da mídia de origem.</summary>
@@ -98,6 +101,16 @@ public sealed record Track
     public bool IsLocked { get; init; }
     public bool IsHidden { get; init; }
     public bool IsMuted { get; init; }
+
+    /// <summary>Faixa solo: com alguma trilha em solo, só as trilhas em solo soam (mixer, RF130).</summary>
+    public bool IsSolo { get; init; }
+
+    /// <summary>Volume da trilha no mixer (1 = 0 dB; até 4 = +12 dB).</summary>
+    public double Volume { get; init; } = 1;
+
+    /// <summary>Panorâmica: −1 = esquerda, 0 = centro, 1 = direita.</summary>
+    public double Pan { get; init; }
+
     public ImmutableList<Clip> Clips { get; init; } = [];
 
     /// <summary>Transições entre clipes adjacentes desta trilha (RF078–RF085).</summary>

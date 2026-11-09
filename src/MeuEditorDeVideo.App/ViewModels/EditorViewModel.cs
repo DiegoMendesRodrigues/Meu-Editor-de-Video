@@ -63,6 +63,10 @@ public sealed partial class EditorViewModel(
     [ObservableProperty]
     public partial ClipInspectorViewModel? Inspector { get; set; }
 
+    /// <summary>Propriedades de áudio do clipe selecionado (painel C: Áudio — F7).</summary>
+    [ObservableProperty]
+    public partial AudioInspectorViewModel? AudioInspector { get; set; }
+
     partial void OnSelectedSectionChanged(LibrarySection value)
     {
         if (Library is not null) Library.Filter = FilterFor(value);
@@ -141,6 +145,7 @@ public sealed partial class EditorViewModel(
         Timeline = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<TimelineViewModel>(services, Library);
         Preview = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<PreviewViewModel>(services, Timeline);
         Inspector = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<ClipInspectorViewModel>(services, Timeline, Preview);
+        AudioInspector = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<AudioInspectorViewModel>(services, Timeline);
         projects.SessionChanged += OnSessionChanged;
         projects.Saved += OnSaved;
         AttachSession();
@@ -155,6 +160,8 @@ public sealed partial class EditorViewModel(
         shell.Title = AppInfo.ProductName;
         Inspector?.Dispose();
         Inspector = null;
+        AudioInspector?.Dispose();
+        AudioInspector = null;
         Preview?.Dispose();
         Preview = null;
         Timeline?.Dispose();

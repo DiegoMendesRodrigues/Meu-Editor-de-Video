@@ -93,6 +93,7 @@
     <sys:String x:Key="Editor.Ferramenta.Dividir">Dividir no cursor (S)</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Excluir">Excluir seleção (Delete)</sys:String>
     <sys:String x:Key="Editor.Ferramenta.ExcluirRipple">Excluir e fechar espaço (Shift+Delete)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Mixer">Mixer de áudio</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Ima">Ímã de alinhamento (N)</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Ripple">Edição em cascata (ripple)</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Marcador">Adicionar marcador (M)</sys:String>

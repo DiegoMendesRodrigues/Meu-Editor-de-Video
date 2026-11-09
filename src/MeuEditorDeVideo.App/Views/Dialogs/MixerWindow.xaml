@@ -1,0 +1,132 @@
+<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.MixerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="clr-namespace:MeuEditorDeVideo.App.Controls"
+        Title="Mixer de áudio"
+        Width="640"
+        Height="440"
+        MinWidth="300"
+        MinHeight="360"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        AutomationProperties.Name="Mixer de áudio"
+        Background="{DynamicResource Med.Background}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Mixer (RF130): um canal por trilha de áudio — medidor, fader, panorâmica, mudo e solo — e o total (master). -->
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <Style x:Key="Mx.Small" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="Mx.Toggle" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Margin" Value="2,0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+    </Window.Resources>
+
+    <DockPanel Margin="12">
+        <TextBlock DockPanel.Dock="Bottom" Margin="0,8,0,0" TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource Med.TextMuted}"
+                   Text="M silencia a trilha; S (solo) faz só as trilhas em solo soarem. Duplo clique no fader ou na panorâmica volta ao padrão. Os medidores se movem durante a reprodução." />
+
+        <!-- Total -->
+        <Border DockPanel.Dock="Right" Width="96" Margin="12,0,0,0" Padding="8" CornerRadius="6" Background="{DynamicResource Med.PanelAlt}">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="Total" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,6" />
+                <TextBlock DockPanel.Dock="Bottom" Style="{StaticResource Mx.Small}" Margin="0,6,0,0">
+                    <Run Text="Monitor " /><Run Text="{Binding Preview.Volume, StringFormat=0, Mode=OneWay}" /><Run Text="%" />
+                </TextBlock>
+                <TextBlock DockPanel.Dock="Bottom" Text="{Binding MasterPeak}" Style="{StaticResource Mx.Small}" Margin="0,4,0,0"
+                           AutomationProperties.AutomationId="PicoTotal" />
+                <Grid HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="3" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ctl:LevelMeter Grid.Column="0" Level="{Binding MasterL}" AutomationProperties.Name="Nível total esquerdo" />
+                    <ctl:LevelMeter Grid.Column="2" Level="{Binding MasterR}" AutomationProperties.Name="Nível total direito" />
+                    <Slider Grid.Column="4" Orientation="Vertical" Minimum="0" Maximum="100" Value="{Binding Preview.Volume}"
+                            IsMoveToPointEnabled="True" AutomationProperties.Name="Volume do monitor" ToolTip="Volume do monitor (não afeta a exportação)" />
+                </Grid>
+            </DockPanel>
+        </Border>
+
+        <Grid>
+            <TextBlock Text="Não há trilhas de áudio. Adicione uma trilha de áudio na linha do tempo." TextWrapping="Wrap"
+                       Foreground="{DynamicResource Med.TextMuted}" Margin="4">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasTracks}" Value="False">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                <ItemsControl ItemsSource="{Binding Strips}" AutomationProperties.Name="Canais do mixer">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="104" Margin="0,0,8,0" Padding="8" CornerRadius="6" Background="{DynamicResource Med.PanelAlt}"
+                                    AutomationProperties.Name="{Binding Name, StringFormat='Canal {0}'}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                               HorizontalAlignment="Center" ToolTip="{Binding Name}" Margin="0,0,0,6" />
+                                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
+                                        <ToggleButton Content="M" Style="{StaticResource Mx.Toggle}" IsChecked="{Binding IsMuted}"
+                                                      ToolTip="Silenciar trilha" AutomationProperties.Name="{Binding Name, StringFormat='Silenciar {0}'}" />
+                                        <ToggleButton Content="S" Style="{StaticResource Mx.Toggle}" IsChecked="{Binding IsSolo}"
+                                                      ToolTip="Solo: ouvir só as trilhas em solo" AutomationProperties.Name="{Binding Name, StringFormat='Solo {0}'}" />
+                                    </StackPanel>
+                                    <StackPanel DockPanel.Dock="Bottom" Margin="0,6,0,0">
+                                        <Slider Minimum="-100" Maximum="100" Value="{Binding Pan}" SmallChange="5" LargeChange="20"
+                                                IsMoveToPointEnabled="True" ToolTip="Panorâmica (esquerda/direita)"
+                                                AutomationProperties.Name="{Binding Name, StringFormat='Panorâmica {0}'}">
+                                            <Slider.InputBindings>
+                                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ResetPanCommand}" />
+                                            </Slider.InputBindings>
+                                        </Slider>
+                                        <TextBlock Text="{Binding PanDisplay}" Style="{StaticResource Mx.Small}" />
+                                        <TextBlock Text="{Binding VolumeDisplay}" Style="{StaticResource Mx.Small}" Margin="0,4,0,0" />
+                                    </StackPanel>
+                                    <Grid HorizontalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="9" />
+                                            <ColumnDefinition Width="3" />
+                                            <ColumnDefinition Width="9" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <ctl:LevelMeter Grid.Column="0" Level="{Binding LevelL}" />
+                                        <ctl:LevelMeter Grid.Column="2" Level="{Binding LevelR}" />
+                                        <Slider Grid.Column="4" Orientation="Vertical" Minimum="-60" Maximum="12" Value="{Binding VolumeDb}"
+                                                SmallChange="0.5" LargeChange="3" IsMoveToPointEnabled="True" ToolTip="Volume da trilha (dB)"
+                                                AutomationProperties.Name="{Binding Name, StringFormat='Volume {0}'}">
+                                            <Slider.InputBindings>
+                                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ResetVolumeCommand}" />
+                                            </Slider.InputBindings>
+                                        </Slider>
+                                    </Grid>
+                                </DockPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Window>

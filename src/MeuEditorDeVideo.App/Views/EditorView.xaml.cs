@@ -35,6 +35,25 @@ public partial class EditorView : UserControl
 
     private void TelaCheia_Click(object sender, RoutedEventArgs e) => AbrirTelaCheia();
 
+    private Dialogs.MixerWindow? _mixer;
+
+    /// <summary>Abre (ou traz para a frente) a janela não modal do mixer (RF130).</summary>
+    private void Mixer_Click(object sender, RoutedEventArgs e)
+    {
+        if (_mixer is not null)
+        {
+            _mixer.Activate();
+            return;
+        }
+        if (DataContext is not EditorViewModel { Timeline: { } timeline, Preview: { } preview } editor) return;
+        _mixer = new Dialogs.MixerWindow(new ViewModels.Timeline.MixerViewModel(timeline, preview), editor.UndoCommand, editor.RedoCommand)
+        {
+            Owner = Window.GetWindow(this),
+        };
+        _mixer.Closed += (_, _) => _mixer = null;
+        _mixer.Show();
+    }
+
     /// <summary>Duplo clique no monitor abre a tela cheia.</summary>
     private void Monitor_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {

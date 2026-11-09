@@ -107,6 +107,9 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
 
     partial void OnVolumeChanged(double value) => _engine.Volume = (float)(Math.Clamp(value, 0, 100) / 100);
 
+    /// <summary>Níveis de áudio no instante ouvido (medidores do mixer).</summary>
+    public MeuEditorDeVideo.AudioEngine.MixerLevels Levels => _engine.CurrentLevels;
+
     /// <summary>Comparação antes/depois dos efeitos e da correção de cor (RF101): metade esquerda sem efeitos.</summary>
     [ObservableProperty]
     public partial bool CompareMode { get; set; }

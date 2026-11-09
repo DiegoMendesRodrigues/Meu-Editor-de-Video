@@ -96,6 +96,9 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
     public FrameRate FrameRate => _session?.Project.Settings.FrameRate ?? FrameRate.Fps30;
     public bool HasSession => _session is not null;
     public IReadOnlySet<Guid> Selection => _selection;
+
+    /// <summary>Caminhos resolvidos das mídias do projeto aberto (para análises de áudio).</summary>
+    public IReadOnlyDictionary<Guid, string> MediaPaths => _session?.Media.AvailablePaths ?? new Dictionary<Guid, string>();
     public bool HasSelection => _selection.Count > 0;
 
     /// <summary>Zoom: pixels por segundo (RF057).</summary>

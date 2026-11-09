@@ -11,6 +11,44 @@ namespace MeuEditorDeVideo.Domain.Editing;
 /// </summary>
 public static class ClipAnimation
 {
+    /// <summary>Volume máximo do clipe (+12 dB).</summary>
+    public const double MaxVolume = 4;
+
+    /// <summary>
+    /// Ganho do áudio no offset: volume (com keyframes) × entrada/saída gradual (RF121, RF122).
+    /// A curva das rampas é quadrática (percebida como mais natural que a linear).
+    /// </summary>
+    public static double GainAt(Clip clip, MediaTime offset)
+    {
+        var g = Math.Clamp(ValueAt(clip, AnimatedProperty.Volume, offset), 0, MaxVolume);
+        if (clip.FadeIn > MediaTime.Zero && offset < clip.FadeIn)
+        {
+            var t = Math.Clamp((double)offset.Ticks / clip.FadeIn.Ticks, 0, 1);
+            g *= t * t;
+        }
+        var remaining = clip.Duration - offset;
+        if (clip.FadeOut > MediaTime.Zero && remaining < clip.FadeOut)
+        {
+            var t = Math.Clamp((double)remaining.Ticks / clip.FadeOut.Ticks, 0, 1);
+            g *= t * t;
+        }
+        return g;
+    }
+
+    /// <summary>
+    /// Multiplica o volume do clipe (valor base e todos os keyframes de volume) por <paramref name="factor"/>,
+    /// preservando a forma do envelope — usado na normalização (RF126). Limitado a <see cref="MaxVolume"/>.
+    /// </summary>
+    public static Clip ScaleVolume(Clip clip, double factor)
+    {
+        if (factor < 0 || double.IsNaN(factor) || double.IsInfinity(factor)) throw new ArgumentOutOfRangeException(nameof(factor));
+        var scaled = clip with { Volume = Math.Clamp(clip.Volume * factor, 0, MaxVolume) };
+        if (KeysOf(clip, AnimatedProperty.Volume) is { } keys)
+            scaled = WithKeys(scaled, AnimatedProperty.Volume,
+                [.. keys.Select(k => k with { Value = Math.Clamp(k.Value * factor, 0, MaxVolume) })]);
+        return scaled;
+    }
+
     public static double Ease(Easing easing, double t)
     {
         t = Math.Clamp(t, 0, 1);
@@ -52,6 +90,7 @@ public static class ClipAnimation
         AnimatedProperty.Scale => clip.Transform.ScaleX,
         AnimatedProperty.Rotation => clip.Transform.RotationDegrees,
         AnimatedProperty.Opacity => clip.Opacity,
+        AnimatedProperty.Volume => clip.Volume,
         _ => throw new ArgumentException($"Propriedade não animável: {property}", nameof(property)),
     };
 
@@ -151,6 +190,7 @@ public static class ClipAnimation
     public static double Clamp(string property, double value) => property switch
     {
         AnimatedProperty.Opacity => Math.Clamp(value, 0, 1),
+        AnimatedProperty.Volume => Math.Clamp(value, 0, MaxVolume),
         AnimatedProperty.Scale => Math.Clamp(value, 0.01, 20),
         AnimatedProperty.Rotation => Math.Clamp(value, -3600, 3600),
         _ => Math.Clamp(value, -20000, 20000),
@@ -169,6 +209,7 @@ public static class ClipAnimation
             AnimatedProperty.Scale => clip with { Transform = t with { ScaleX = value, ScaleY = t.ScaleX == 0 ? value : value * t.ScaleY / t.ScaleX } },
             AnimatedProperty.Rotation => clip with { Transform = t with { RotationDegrees = value } },
             AnimatedProperty.Opacity => clip with { Opacity = value },
+            AnimatedProperty.Volume => clip with { Volume = value },
             _ => throw new ArgumentException($"Propriedade não animável: {property}", nameof(property)),
         };
     }

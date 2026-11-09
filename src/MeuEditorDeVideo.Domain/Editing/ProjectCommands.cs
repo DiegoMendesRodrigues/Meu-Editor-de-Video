@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 
@@ -179,6 +179,9 @@ public sealed record RemoveTrackCommand(Guid SequenceId, Guid TrackId) : IEditCo
 /// <summary>Renomeia, bloqueia, oculta ou silencia uma trilha (RF054–RF056).</summary>
 public sealed record UpdateTrackCommand(Guid SequenceId, Guid TrackId, Func<Track, Track> Update, string Description) : IEditCommand
 {
+    /// <summary>Ajustes contínuos (fader, pan) com a mesma chave viram uma única entrada no histórico.</summary>
+    public string? MergeKey { get; init; }
+
     public Project Apply(Project project)
     {
         var seq = project.Sequences.Find(s => s.Id == SequenceId) ?? throw new EditRejectedException("Sequência não encontrada.");
@@ -198,6 +201,15 @@ public sealed record UpdateTrackCommand(Guid SequenceId, Guid TrackId, Func<Trac
 
     public static UpdateTrackCommand SetMuted(Guid seq, Guid track, bool value) =>
         new(seq, track, t => t with { IsMuted = value }, value ? "Silenciar trilha" : "Ativar som da trilha");
+
+    public static UpdateTrackCommand SetVolume(Guid seq, Guid track, double value) =>
+        new(seq, track, t => t with { Volume = Math.Clamp(value, 0, 4) }, "Volume da trilha") { MergeKey = $"track-volume:{track}" };
+
+    public static UpdateTrackCommand SetPan(Guid seq, Guid track, double value) =>
+        new(seq, track, t => t with { Pan = Math.Clamp(value, -1, 1) }, "Panorâmica da trilha") { MergeKey = $"track-pan:{track}" };
+
+    public static UpdateTrackCommand SetSolo(Guid seq, Guid track, bool value) =>
+        new(seq, track, t => t with { IsSolo = value }, value ? "Solo da trilha" : "Desativar solo da trilha");
 
     public static UpdateTrackCommand Rename(Guid seq, Guid track, string name) =>
         new(seq, track, t => t with { Name = name.Trim().Length > 0 ? name.Trim() : t.Name }, "Renomear trilha");

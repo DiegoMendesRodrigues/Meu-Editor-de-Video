@@ -14,6 +14,9 @@ public enum EffectCategory
 
     /// <summary>Remoção de fundo por cor (RF112–RF118).</summary>
     Key,
+
+    /// <summary>Processamento de áudio: equalizador, compressor, redução de ruído e efeitos sonoros (RF123–RF125, RF131).</summary>
+    Audio,
 }
 
 public enum ParameterKind
@@ -61,6 +64,13 @@ public static class EffectCatalog
     public const string Posterize = "fx.posterize";
     public const string Glow = "fx.glow";
     public const string ChromaKey = "key.chroma";
+    public const string Equalizer = "audio.eq";
+    public const string Compressor = "audio.compressor";
+    public const string Denoise = "audio.denoise";
+    public const string Echo = "audio.echo";
+    public const string Reverb = "audio.reverb";
+    public const string Telephone = "audio.telephone";
+    public const string Distortion = "audio.distortion";
 
     public static IReadOnlyList<string> CurveChannels { get; } = ["master", "r", "g", "b"];
 
@@ -133,7 +143,59 @@ public static class EffectCatalog
             new("background", "Fundo", ParameterKind.Choice, 0, 1, 0, Options: ["Transparente (mostra as trilhas abaixo)", "Cor sólida"]),
             new("backgroundColor", "Cor do fundo", ParameterKind.Color, DefaultColor: (0.0, 0.0, 0.0)),
         ], AffectsAlpha: true),
+
+        new(Equalizer, "Equalizador", "Equalizador paramétrico: graves, médios ajustáveis, agudos e corte de graves.", EffectCategory.Audio,
+        [
+            new("lowcut", "Corte de graves", ParameterKind.Slider, 0, 400, 0, " Hz"),
+            new("lowGain", "Graves", ParameterKind.Slider, -15, 15, 0, " dB"),
+            new("lowFreq", "Frequência dos graves", ParameterKind.Slider, 40, 500, 120, " Hz"),
+            new("midGain", "Médios", ParameterKind.Slider, -15, 15, 0, " dB"),
+            new("midFreq", "Frequência dos médios", ParameterKind.Slider, 200, 8000, 1000, " Hz"),
+            new("midQ", "Largura dos médios (Q)", ParameterKind.Slider, 0.3, 8, 1),
+            new("highGain", "Agudos", ParameterKind.Slider, -15, 15, 0, " dB"),
+            new("highFreq", "Frequência dos agudos", ParameterKind.Slider, 2000, 16000, 8000, " Hz"),
+        ]),
+        new(Compressor, "Compressor", "Compressão dinâmica: aproxima trechos fortes e fracos.", EffectCategory.Audio,
+        [
+            new("threshold", "Limiar", ParameterKind.Slider, -60, 0, -18, " dB"),
+            new("ratio", "Razão", ParameterKind.Slider, 1, 20, 4, ":1"),
+            new("attack", "Ataque", ParameterKind.Slider, 0.1, 100, 10, " ms"),
+            new("release", "Liberação", ParameterKind.Slider, 10, 1000, 150, " ms"),
+            new("makeup", "Ganho de compensação", ParameterKind.Slider, 0, 24, 0, " dB"),
+        ]),
+        new(Denoise, "Redução de ruído", "Reduz chiado e ruído de fundo constante (ventilador, ar-condicionado).", EffectCategory.Audio,
+        [
+            new("amount", "Intensidade", ParameterKind.Slider, 0, 100, 70, "%"),
+            new("sensitivity", "Sensibilidade", ParameterKind.Slider, 0, 100, 50, "%"),
+        ]),
+        new(Echo, "Eco", "Repetições do som com atraso.", EffectCategory.Audio,
+        [
+            new("delay", "Atraso", ParameterKind.Slider, 20, 2000, 300, " ms"),
+            new("feedback", "Repetições", ParameterKind.Slider, 0, 90, 35, "%"),
+            new("mix", "Mistura", ParameterKind.Slider, 0, 100, 35, "%"),
+        ]),
+        new(Reverb, "Reverberação", "Simula a ambiência de uma sala.", EffectCategory.Audio,
+        [
+            new("room", "Tamanho da sala", ParameterKind.Slider, 0, 100, 60, "%"),
+            new("damping", "Abafamento", ParameterKind.Slider, 0, 100, 50, "%"),
+            new("mix", "Mistura", ParameterKind.Slider, 0, 100, 25, "%"),
+        ]),
+        new(Telephone, "Telefone / rádio", "Som de telefone ou rádio antigo (banda estreita).", EffectCategory.Audio,
+        [
+            new("intensity", "Intensidade", ParameterKind.Slider, 0, 100, 100, "%"),
+        ]),
+        new(Distortion, "Distorção", "Saturação do som.", EffectCategory.Audio,
+        [
+            new("drive", "Intensidade", ParameterKind.Slider, 0, 100, 40, "%"),
+            new("mix", "Mistura", ParameterKind.Slider, 0, 100, 100, "%"),
+        ]),
     ];
+
+    /// <summary>Efeitos de áudio do clipe (ativos), na ordem de aplicação.</summary>
+    public static ImmutableList<EffectInstance> ActiveAudioEffects(Clip clip) =>
+        clip.Effects.Where(e => !IsNeutral(e) && Find(e.Type)?.Category == EffectCategory.Audio).ToImmutableList();
+
+    public static bool IsAudio(string type) => Find(type)?.Category == EffectCategory.Audio;
 
     public static EffectDefinition? Find(string type) => All.FirstOrDefault(d => d.Type == type);
 
@@ -220,9 +282,14 @@ public static class EffectCatalog
             Wheels => new[] { "lift", "gamma", "gain" }.All(k => WheelValue(e, k) == (0, 0, 0)),
             Lut => string.IsNullOrEmpty(e.Resource) || Value(e, "intensity") <= 0,
             Blur => Value(e, "radius") <= 0,
+            Equalizer => new[] { "lowGain", "midGain", "highGain", "lowcut" }.All(k => Math.Abs(Value(e, k)) < 1e-9),
+            Denoise or Telephone => Value(e, e.Type == Denoise ? "amount" : "intensity") <= 0,
+            Echo or Reverb or Distortion => Value(e, "mix") <= 0,
             _ => false,
         };
     }
 
-    public static ImmutableList<EffectInstance> ActiveEffects(Clip clip) => clip.Effects.Where(e => !IsNeutral(e)).ToImmutableList();
+    /// <summary>Efeitos visuais ativos do clipe.</summary>
+    public static ImmutableList<EffectInstance> ActiveEffects(Clip clip) =>
+        clip.Effects.Where(e => !IsNeutral(e) && Find(e.Type)?.Category != EffectCategory.Audio).ToImmutableList();
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 
@@ -114,7 +114,30 @@ public static class TimelineOps
             Start = start,
             Duration = c.End - start,
             SourceIn = delta.Ticks >= 0 ? c.SourceIn + sourceDelta : MediaTime.Max(MediaTime.Zero, c.SourceIn - sourceDelta),
+            Keyframes = ShiftKeyframes(c, delta),
         };
+    }
+
+    /// <summary>
+    /// Mantém a animação presa ao conteúdo quando o início do clipe muda: os offsets recuam <paramref name="delta"/>;
+    /// keyframes que ficariam antes do novo início são trocados por um keyframe no início com o valor daquele instante.
+    /// </summary>
+    private static System.Collections.Immutable.ImmutableDictionary<string, System.Collections.Immutable.ImmutableList<Keyframe>> ShiftKeyframes(Clip c, MediaTime delta)
+    {
+        if (c.Keyframes.IsEmpty || delta == MediaTime.Zero) return c.Keyframes;
+        var result = c.Keyframes;
+        foreach (var (property, keys) in c.Keyframes)
+        {
+            var shifted = keys.Select(k => k with { Offset = k.Offset - delta }).ToList();
+            if (shifted.Exists(k => k.Offset < MediaTime.Zero))
+            {
+                var valueAtStart = ClipAnimation.Evaluate(keys, delta, ClipAnimation.BaseValue(c, property));
+                var easing = keys.FindLast(k => k.Offset <= delta)?.Easing ?? Easing.EaseInOut;
+                shifted = [new Keyframe(MediaTime.Zero, valueAtStart, easing), .. shifted.Where(k => k.Offset > MediaTime.Zero)];
+            }
+            result = result.SetItem(property, [.. shifted]);
+        }
+        return result;
     }
 
     /// <summary>Coloca o clipe na trilha sobrescrevendo o que estiver no intervalo.</summary>
