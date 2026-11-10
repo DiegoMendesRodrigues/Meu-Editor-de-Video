@@ -1,14 +1,18 @@
 # Modelos de IA local (F10)
 
 Todos os recursos de inteligência artificial rodam **somente no computador do usuário** (RF155, RF169). Nenhum
-áudio, vídeo, imagem ou texto é enviado para a internet, e o aplicativo não baixa modelos sozinho.
+áudio, vídeo, imagem ou texto é enviado para a internet.
 
 - **Incluído no aplicativo:** o **MODNet** (Remover fundo, Calcular máscaras, Rastrear pessoa) vem junto com o
   aplicativo, na pasta `ai-models\` ao lado do executável, e funciona desde a primeira execução.
-- **Demais modelos:** são instalados a partir de **pacotes `.medmodel` locais** (RF170), distribuídos separadamente do
-  instalador (decisão §8 nº 5).
+- **Demais modelos:** são instalados a partir de **pacotes `.medmodel`** (RF170), distribuídos separadamente do
+  instalador (decisão §8 nº 5). A ferramenta **Baixar modelos de IA** gera esses pacotes sem terminal (abaixo).
 
-O teste de arquitetura `PrivacyTests` garante que nenhum assembly do produto, inclusive o `AIEngine`, usa APIs de rede.
+**Rede:** a única parte do aplicativo que acessa a internet é o assembly `MeuEditorDeVideo.ModelDownloads`
+(decisão de 10/11/2026), usado só quando o usuário clica em **Instalar** na ferramenta de download. O teste de arquitetura
+`PrivacyTests` garante que:
+- nenhum outro assembly do produto (inclusive o `AIEngine` e o próprio aplicativo) usa ou referencia APIs de rede;
+- o `ModelDownloads` depende só do `Core` (não tem acesso a mídias, projetos, áudio nem IA) e usa só HTTP.
 
 ## Recursos e modelos
 
@@ -92,7 +96,47 @@ O build do aplicativo copia esse arquivo, junto com o manifesto, a licença e a 
 `resources\ai-models\incluidos\modnet-retrato\`, para `ai-models\modnet-retrato\` na pasta do executável. O teste
 `Repository_built_in_manifest_matches_the_pinned_model` garante que o manifesto e o lock tenham o mesmo hash.
 
-## Gerar os pacotes
+## Baixar modelos de IA (sem terminal)
+
+Em **Ferramentas › Modelos de IA › Baixar modelos…**:
+
+1. A ferramenta lista os modelos do catálogo oficial. Para cada um, mostra:
+   - os recursos do editor que ele habilita;
+   - o tamanho do download, a memória necessária, onde executa (CPU/GPU) e as dependências;
+   - a licença, a origem e o site de onde é baixado;
+   - a situação: não instalado, instalado ou versão nova disponível.
+2. **Instalar** (ou **Instalar todos**) monta o plano: as dependências que faltam vêm antes de quem depende delas (ex.:
+   Whisper → Silero VAD primeiro). Uma confirmação mostra a ordem e quanto será baixado.
+3. Para cada modelo, nessa ordem, a ferramenta:
+   1. baixa o arquivo do endereço fixado numa revisão da origem oficial (HTTPS, só `huggingface.co` e `github.com`);
+   2. confere o tamanho e o **SHA-256** do catálogo;
+   3. gera o pacote `.medmodel`, no mesmo formato de `tools\New-MedModel.ps1`, com licença e README;
+   4. instala o pacote pelo gerenciador, com as mesmas validações de um pacote instalado à mão.
+4. Um download interrompido é retomado de onde parou. Um arquivo com hash diferente é descartado. **Cancelar download**
+   interrompe a instalação, e os modelos já instalados continuam valendo.
+
+Os pacotes gerados ficam em `%LOCALAPPDATA%\MeuEditorDeVideo\modelos-baixados\pacotes\`. O botão **Abrir pasta dos
+pacotes** abre essa pasta. Esses pacotes podem ser copiados para outro computador e instalados por **Instalar pacote…**,
+sem internet. Se o pacote já existe e está íntegro, reinstalar não baixa de novo.
+
+O catálogo fica em `resources\ai-models\modelos.json` e é copiado para `catalogo-ia\` ao lado do executável, junto com as
+licenças. Cada entrada traz:
+- `url`, fixada num commit, nunca em `main`;
+- `sha256` e `sizeBytes`;
+- `features` (recursos do editor);
+- `dependsOn` (ids que devem ser instalados antes).
+
+O teste `Catalogo_do_repositorio_e_valido_e_tem_licencas` valida o catálogo.
+
+| Modelo | Download | Depende de |
+|---|---|---|
+| Whisper large-v3 turbo | 547,4 MB | Silero VAD 5 |
+| GTCRN | 523 KB | — |
+| Silero VAD 5 | 2,2 MB | — |
+| TransNetV2 | 29,8 MB | — |
+| Swin2SR leve 2× | 7,7 MB | — |
+
+## Gerar os pacotes (alternativa pelo terminal)
 
 1. Baixe os arquivos dos modelos das origens abaixo para uma pasta (ex.: `C:\modelos`).
 2. Rode `.\tools\Build-ModelPackages.ps1 -ModelsDir C:\modelos -Output C:\pacotes`. O script lê

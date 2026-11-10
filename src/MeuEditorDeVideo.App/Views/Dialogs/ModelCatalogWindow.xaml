@@ -1,0 +1,150 @@
+<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.ModelCatalogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Baixar modelos de IA"
+        Width="1040"
+        Height="680"
+        MinWidth="760"
+        MinHeight="480"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        AutomationProperties.Name="Baixar modelos de IA"
+        Background="{DynamicResource Med.Background}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Catálogo oficial: recursos de cada modelo; Instalar = baixar, conferir SHA-256, gerar .medmodel e instalar com as dependências. -->
+    <Window.Resources>
+        <Style x:Key="Mc.Label" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+            <Setter Property="Margin" Value="0,3,12,3" />
+        </Style>
+        <Style x:Key="Mc.Value" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,3" />
+        </Style>
+    </Window.Resources>
+    <DockPanel Margin="14">
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Notice}" Foreground="{DynamicResource Med.TextMuted}" TextWrapping="Wrap" Margin="0,0,0,12" />
+
+        <!-- Rodapé: progresso e ações (coluna dos botões em Auto para caberem sempre) -->
+        <Grid DockPanel.Dock="Bottom" Margin="0,12,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Margin="0,0,16,0" VerticalAlignment="Center">
+                <ProgressBar Height="8" Minimum="0" Maximum="100" Value="{Binding Percent}" AutomationProperties.Name="Progresso da instalação">
+                    <ProgressBar.Style>
+                        <Style TargetType="ProgressBar" BasedOn="{StaticResource {x:Type ProgressBar}}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ProgressBar.Style>
+                </ProgressBar>
+                <TextBlock x:Name="StatusText" Text="{Binding Status}" TextWrapping="Wrap" Margin="0,6,0,0" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                <Button Content="Abrir pasta dos pacotes" Command="{Binding OpenPackagesFolderCommand}" Margin="0,0,8,0" Padding="12,4" />
+                <Button Content="Cancelar download" Command="{Binding CancelCommand}" Margin="0,0,8,0" Padding="12,4" />
+                <Button Content="Instalar todos" Command="{Binding InstallAllCommand}" Style="{DynamicResource Med.AccentButton}" Margin="0,0,8,0" Padding="12,4"
+                        AutomationProperties.Name="Instalar todos os modelos" />
+                <Button Content="Fechar" IsCancel="True" Click="Fechar_Click" Padding="12,4" />
+            </StackPanel>
+        </Grid>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="360" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" AutomationProperties.Name="Modelos disponíveis"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="2,4">
+                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                            <TextBlock Foreground="{DynamicResource Med.TextMuted}" TextWrapping="Wrap">
+                                <Run Text="{Binding Capability, Mode=OneWay}" /><Run Text=" · " /><Run Text="{Binding Download, Mode=OneWay}" />
+                            </TextBlock>
+                            <TextBlock x:Name="Estado" Text="{Binding StateText}" Foreground="{DynamicResource Med.TextMuted}" />
+                            <TextBlock Text="{Binding Progress}" Foreground="{DynamicResource Med.Accent}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsInstalled}" Value="True">
+                                <Setter TargetName="Estado" Property="Foreground" Value="{DynamicResource Med.Accent}" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <ScrollViewer Grid.Column="1" Margin="16,0,0,0" VerticalScrollBarVisibility="Auto" DataContext="{Binding Selected}">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <Button DockPanel.Dock="Right" Content="{Binding ActionText}" Command="{Binding InstallCommand}" VerticalAlignment="Top"
+                                Style="{DynamicResource Med.AccentButton}" Padding="18,4" Margin="12,0,0,0"
+                                IsEnabled="{Binding DataContext.IsIdle, RelativeSource={RelativeSource AncestorType=Window}}"
+                                AutomationProperties.Name="{Binding Name, StringFormat=Instalar {0}}" />
+                        <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap" />
+                    </DockPanel>
+                    <TextBlock Text="{Binding Purpose}" TextWrapping="Wrap" Margin="0,8,0,10" />
+
+                    <TextBlock Text="Recursos do editor" FontWeight="SemiBold" Foreground="{DynamicResource Med.Accent}" Margin="0,4,0,4" />
+                    <ItemsControl ItemsSource="{Binding Features}" AutomationProperties.Name="Recursos do modelo">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding StringFormat=• {0}}" TextWrapping="Wrap" Margin="0,1" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock Text="Detalhes" FontWeight="SemiBold" Foreground="{DynamicResource Med.Accent}" Margin="0,14,0,4" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Situação" Style="{StaticResource Mc.Label}" />
+                        <TextBlock Grid.Column="1" Text="{Binding StateText}" Style="{StaticResource Mc.Value}" />
+                        <TextBlock Grid.Row="1" Text="Versão" Style="{StaticResource Mc.Label}" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Version}" Style="{StaticResource Mc.Value}" />
+                        <TextBlock Grid.Row="2" Text="Download" Style="{StaticResource Mc.Label}" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Download}" Style="{StaticResource Mc.Value}" />
+                        <TextBlock Grid.Row="3" Text="Memória necessária" Style="{StaticResource Mc.Label}" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Memory}" Style="{StaticResource Mc.Value}" />
+                        <TextBlock Grid.Row="4" Text="Executa em" Style="{StaticResource Mc.Label}" />
+                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Device}" Style="{StaticResource Mc.Value}" />
+                        <TextBlock Grid.Row="5" Text="Dependências" Style="{StaticResource Mc.Label}" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Dependencies}" Style="{StaticResource Mc.Value}" />
+                        <TextBlock Grid.Row="6" Text="Licença" Style="{StaticResource Mc.Label}" />
+                        <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding License}" Style="{StaticResource Mc.Value}" />
+                        <TextBlock Grid.Row="7" Text="Origem" Style="{StaticResource Mc.Label}" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Source}" Style="{StaticResource Mc.Value}" />
+                        <TextBlock Grid.Row="8" Text="Baixado de" Style="{StaticResource Mc.Label}" />
+                        <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding Origin}" Style="{StaticResource Mc.Value}" />
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Window>

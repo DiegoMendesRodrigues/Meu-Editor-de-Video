@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -130,7 +130,7 @@ public sealed partial class ModelManagerViewModel : ObservableObject, IDisposabl
         ? $"Memória livre agora: {ModelItemViewModel.FormatBytes((long)free)}."
         : "";
 
-    public string Privacy => "Os modelos rodam somente neste computador. Nenhum arquivo, áudio ou vídeo é enviado para a internet.";
+    public string Privacy => "Os modelos rodam somente neste computador. Nenhum arquivo, áudio ou vídeo é enviado para a internet; ela só é usada para baixar modelos quando você pede, em \"Baixar modelos…\".";
 
     public static string CapabilityName(ModelCapability c) => c switch
     {
@@ -157,7 +157,7 @@ public sealed partial class ModelManagerViewModel : ObservableObject, IDisposabl
                 ? new CapabilityStatus(CapabilityName(c), $"Disponível · {m.Manifest.Name} {m.Manifest.Version}", true)
                 : new CapabilityStatus(CapabilityName(c), c == ModelCapability.SceneDetection
                     ? "Sem modelo: usa comparação de cores (menos precisa)"
-                    : "Indisponível — instale um pacote .medmodel", false))
+                    : "Indisponível — instale em \"Baixar modelos…\"", false))
             .ToList();
         OnPropertyChanged(nameof(MemorySummary));
     }

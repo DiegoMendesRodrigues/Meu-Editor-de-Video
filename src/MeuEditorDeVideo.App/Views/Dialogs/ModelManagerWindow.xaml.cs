@@ -14,4 +14,11 @@ public partial class ModelManagerWindow
     }
 
     private void Fechar_Click(object sender, RoutedEventArgs e) => Close();
+
+    /// <summary>Ferramenta de download e instalação dos modelos do catálogo.</summary>
+    private void BaixarModelos_Click(object sender, RoutedEventArgs e)
+    {
+        var vm = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<ModelCatalogViewModel>(App.Services);
+        new ModelCatalogWindow(vm) { Owner = this }.ShowDialog();
+    }
 }

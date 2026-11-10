@@ -33,6 +33,12 @@
     <None Include="..\..\resources\ai-models\incluidos\**\*" Link="ai-models\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
     <None Include="$(BuiltInModelsDir)**\*.onnx" Link="ai-models\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
+  <!-- Catálogo oficial de modelos (endereços fixos, SHA-256, recursos, dependências) e licenças, para a ferramenta
+       "Baixar modelos" gerar os pacotes .medmodel. -->
+  <ItemGroup>
+    <None Include="..\..\resources\ai-models\modelos.json" Link="catalogo-ia\modelos.json" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="..\..\resources\ai-models\licencas\*.txt" Link="catalogo-ia\licencas\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="..\..\resources\templates\export\*.json" Link="templates\export\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
@@ -46,5 +52,6 @@
     <ProjectReference Include="..\MeuEditorDeVideo.AudioEngine\MeuEditorDeVideo.AudioEngine.csproj" />
     <ProjectReference Include="..\MeuEditorDeVideo.AIEngine\MeuEditorDeVideo.AIEngine.csproj" />
     <ProjectReference Include="..\MeuEditorDeVideo.RenderingEngine\MeuEditorDeVideo.RenderingEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.ModelDownloads\MeuEditorDeVideo.ModelDownloads.csproj" />
   </ItemGroup>
 </Project>

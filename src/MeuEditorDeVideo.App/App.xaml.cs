@@ -120,6 +120,12 @@ public partial class App : System.Windows.Application
         services.AddPreviewEngine();
         services.AddMeuEditorApplication();
         services.AddAiEngine();
+        // Instalador de modelos a partir do catálogo oficial: o download (única parte com rede) só roda quando o usuário pede.
+        ModelDownloads.ModelDownloadsServiceCollectionExtensions.AddModelDownloads(services, AIEngine.Models.ModelCatalog.AllowedHosts);
+        services.AddSingleton(sp => new AIEngine.Models.CatalogModelInstaller(
+            AIEngine.Models.ModelCatalog.Load(), sp.GetRequiredService<Core.AI.IModelRegistry>(), sp.GetRequiredService<Core.AI.IModelDownloader>(),
+            System.IO.Path.Combine(sp.GetRequiredService<IAppPaths>().LocalData, "modelos-baixados"),
+            sp.GetService<ILogger<AIEngine.Models.CatalogModelInstaller>>()));
 
         services.AddSingleton<IThemeService, ThemeService>();
         services.AddSingleton<INavigationService, NavigationService>();

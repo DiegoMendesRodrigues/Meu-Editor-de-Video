@@ -7,11 +7,24 @@
     "source": "OpenAI Whisper large-v3-turbo, formato GGML quantizado (q5_0) de ggerganov/whisper.cpp",
     "capability": "SpeechRecognition",
     "purpose": "Transcreve a fala do áudio (português e outros idiomas) para gerar legendas automaticamente, com alta precisão.",
+    "features": [
+      "Gerar legendas a partir da fala (português, inglês, espanhol ou idioma automático)"
+    ],
     "license": "MIT",
     "licenseFile": "whisper.txt",
     "memoryMb": 1500,
     "gpu": false,
-    "parameters": { "sampleRate": "16000", "languages": "multilíngue (pt, en, es…)", "quantization": "q5_0" }
+    "parameters": {
+      "sampleRate": "16000",
+      "languages": "multilíngue (pt, en, es…)",
+      "quantization": "q5_0"
+    },
+    "dependsOn": [
+      "silero-vad"
+    ],
+    "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/5359861c739e955e79d9a303bcbc70fb988958b1/ggml-large-v3-turbo-q5_0.bin",
+    "sha256": "394221709cd5ad1f40c46e6031ca61bce88931e6e088c188294c6d5a55ffa7e2",
+    "sizeBytes": 574041195
   },
   {
     "file": "gtcrn_simple.onnx",
@@ -21,11 +34,24 @@
     "source": "Xiaobin Rong / GTCRN (exportação de streaming andrelgomes/gtcrn-stream)",
     "capability": "SpeechEnhancement",
     "purpose": "Separa a voz dos demais sons e reduz ruído de fundo.",
+    "features": [
+      "Isolar voz (voz e ambiente em trilhas separadas)",
+      "Reduzir ruído com intensidade ajustável"
+    ],
     "license": "MIT",
     "licenseFile": "gtcrn.txt",
     "memoryMb": 150,
     "gpu": false,
-    "parameters": { "sampleRate": "16000", "fft": "512", "hop": "256", "window": "raiz de Hann" }
+    "parameters": {
+      "sampleRate": "16000",
+      "fft": "512",
+      "hop": "256",
+      "window": "raiz de Hann"
+    },
+    "dependsOn": [],
+    "url": "https://huggingface.co/andrelgomes/gtcrn-stream/resolve/af53b933a7c79c34d488b384c9a8744f1b734395/gtcrn_simple.onnx",
+    "sha256": "b4718df6228e7bdf1a8a435cf98f838636eb2fd331acabf86ba87c5192ebcb87",
+    "sizeBytes": 535190
   },
   {
     "file": "silero_vad.onnx",
@@ -35,11 +61,22 @@
     "source": "snakers4/silero-vad",
     "capability": "VoiceActivity",
     "purpose": "Identifica os trechos com fala e os silêncios entre eles.",
+    "features": [
+      "Remover trechos sem fala",
+      "Separar a fala dos silêncios ao gerar legendas (menos texto inventado em trechos sem fala)"
+    ],
     "license": "MIT",
     "licenseFile": "silero-vad.txt",
     "memoryMb": 100,
     "gpu": false,
-    "parameters": { "sampleRate": "16000", "window": "512 amostras + 64 de contexto" }
+    "parameters": {
+      "sampleRate": "16000",
+      "window": "512 amostras + 64 de contexto"
+    },
+    "dependsOn": [],
+    "url": "https://github.com/snakers4/silero-vad/raw/066409f3d9db45a30d21dfcbf9147826ffdd7052/src/silero_vad/data/silero_vad.onnx",
+    "sha256": "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3",
+    "sizeBytes": 2327524
   },
   {
     "file": "transnetv2.onnx",
@@ -49,11 +86,20 @@
     "source": "Tomáš Souček / TransNetV2 (exportação ONNX elya5/transnetv2)",
     "capability": "SceneDetection",
     "purpose": "Encontra as mudanças de cena (cortes e transições) para criar marcadores e dividir clipes.",
+    "features": [
+      "Detectar cenas com mais precisão (marcadores e divisão de clipes)"
+    ],
     "license": "MIT",
     "licenseFile": "transnetv2.txt",
     "memoryMb": 400,
     "gpu": true,
-    "parameters": { "input": "janelas de 100 quadros RGB 48x27" }
+    "parameters": {
+      "input": "janelas de 100 quadros RGB 48x27"
+    },
+    "dependsOn": [],
+    "url": "https://huggingface.co/elya5/transnetv2/resolve/e1cfcb717af91e41ffb84b5fd851505682c576ee/transnetv2.onnx",
+    "sha256": "c4d54a682bace32f25136ef83ca2c9d403e8f8193775efeb995172a0d95a8e0c",
+    "sizeBytes": 31250929
   },
   {
     "file": "swin2sr-x2.onnx",
@@ -63,10 +109,20 @@
     "source": "mv-lab/swin2sr (exportação ONNX Xenova/swin2SR-lightweight-x2-64)",
     "capability": "ImageEnhancement",
     "purpose": "Amplia fotos em 2× reconstruindo detalhes (melhoria de imagem).",
+    "features": [
+      "Melhorar imagem: ampliar fotos 2× reconstruindo detalhes"
+    ],
     "license": "Apache-2.0",
     "licenseFile": "swin2sr.txt",
     "memoryMb": 1200,
     "gpu": true,
-    "parameters": { "scale": "2", "tile": "192 px com sobreposição de 16 px" }
+    "parameters": {
+      "scale": "2",
+      "tile": "192 px com sobreposição de 16 px"
+    },
+    "dependsOn": [],
+    "url": "https://huggingface.co/Xenova/swin2SR-lightweight-x2-64/resolve/92a21aca5713f20faf9a87590cdfbdce2e34112c/onnx/model.onnx",
+    "sha256": "c2abbfe0cc8e685b5e11964970f8ebe3d24072e904fd5545a30ac31ec1e110db",
+    "sizeBytes": 8078888
   }
 ]
