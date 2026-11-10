@@ -1,0 +1,65 @@
+<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Sobre o Meu Editor de Vídeo"
+        Width="720"
+        Height="640"
+        MinWidth="560"
+        MinHeight="420"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="CanResize"
+        AutomationProperties.Name="Sobre"
+        Background="{DynamicResource Med.Background}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Informações do aplicativo (RF215). -->
+    <Window.Resources>
+        <DataTemplate x:Key="ComponentRow">
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Margin="0,0,10,0" />
+                <TextBlock Grid.Column="1" Text="{Binding License}" Foreground="{DynamicResource Med.Accent}" />
+                <TextBlock Grid.Column="2" Text="{Binding Use}" Foreground="{DynamicResource Med.TextMuted}" TextWrapping="Wrap" />
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="Ab.Section" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+            <Setter Property="Margin" Value="0,16,0,6" />
+        </Style>
+    </Window.Resources>
+    <DockPanel Margin="18">
+        <Button DockPanel.Dock="Bottom" Content="Fechar" IsCancel="True" IsDefault="True" Click="Fechar_Click" HorizontalAlignment="Right" Padding="18,4" Margin="0,12,0,0" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <DockPanel>
+                    <Image DockPanel.Dock="Left" Source="/Assets/logo-64.png" Width="64" Height="64" Margin="0,0,16,0" VerticalAlignment="Top" />
+                    <StackPanel>
+                        <TextBlock Text="{Binding Product}" FontSize="22" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding Version}" Foreground="{DynamicResource Med.TextMuted}" Margin="0,2,0,0" />
+                        <TextBlock Text="{Binding DeveloperText}" FontWeight="SemiBold" Margin="0,8,0,0" />
+                        <TextBlock Text="{Binding Copyright}" Foreground="{DynamicResource Med.TextMuted}" Margin="0,2,0,0" TextWrapping="Wrap" />
+                    </StackPanel>
+                </DockPanel>
+
+                <TextBlock Text="Licença" Style="{StaticResource Ab.Section}" />
+                <TextBlock Text="{Binding License}" TextWrapping="Wrap" />
+
+                <TextBlock Text="Privacidade" Style="{StaticResource Ab.Section}" />
+                <TextBlock Text="{Binding Privacy}" TextWrapping="Wrap" />
+
+                <TextBlock Text="Componentes de terceiros" Style="{StaticResource Ab.Section}" />
+                <ItemsControl ItemsSource="{Binding Components}" ItemTemplate="{StaticResource ComponentRow}" AutomationProperties.Name="Componentes de terceiros" />
+
+                <TextBlock Text="Modelos de IA" Style="{StaticResource Ab.Section}" />
+                <ItemsControl ItemsSource="{Binding Models}" ItemTemplate="{StaticResource ComponentRow}" AutomationProperties.Name="Modelos de IA" />
+
+                <TextBlock Text="{Binding Runtime}" Foreground="{DynamicResource Med.TextMuted}" Margin="0,16,0,0" />
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

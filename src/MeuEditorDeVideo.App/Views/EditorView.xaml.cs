@@ -97,6 +97,9 @@ public partial class EditorView : UserControl
 
     private void Configuracoes_Click(object sender, RoutedEventArgs e) => AbrirConfiguracoes();
 
+    /// <summary>Informações do aplicativo (RF215).</summary>
+    private void Sobre_Click(object sender, RoutedEventArgs e) => Dialogs.AboutWindow.ShowFor(Window.GetWindow(this));
+
     /// <summary>Configurações do aplicativo (RF208–RF214).</summary>
     private void AbrirConfiguracoes() => Dialogs.SettingsWindow.ShowFor(Window.GetWindow(this));
 

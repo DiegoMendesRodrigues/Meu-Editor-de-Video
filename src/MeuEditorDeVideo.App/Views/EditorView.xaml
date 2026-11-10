@@ -241,7 +241,9 @@
                 <Separator />
                 <MenuItem Header="Configurações…" Click="Configuracoes_Click" AutomationProperties.Name="Configurações" ctl:ShortcutText.Action="app.configuracoes" />
             </MenuItem>
-            <MenuItem Header="{StaticResource Editor.Menu.Ajuda}" />
+            <MenuItem Header="{StaticResource Editor.Menu.Ajuda}">
+                <MenuItem Header="Sobre o Meu Editor de Vídeo…" Click="Sobre_Click" AutomationProperties.Name="Sobre" />
+            </MenuItem>
         </Menu>
 
         <!-- 2. Barra de ações -->
