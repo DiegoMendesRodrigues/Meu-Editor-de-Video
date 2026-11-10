@@ -29,6 +29,12 @@ public interface IVideoFrameSource : IDisposable
 
     /// <summary>Libera decodificadores de mídias que não estão mais em uso.</summary>
     void Trim(IReadOnlySet<Guid> inUse);
+
+    /// <summary>
+    /// Primeira mídia que não pôde ser decodificada (e a causa). A pré-visualização segue sem ela; a exportação usa isto
+    /// para falhar com erro claro em vez de gravar quadros pretos.
+    /// </summary>
+    (string Media, Exception Error)? Failure => null;
 }
 
 /// <summary>Fonte de amostras de áudio no formato <see cref="AudioFormat"/>. Não é thread-safe.</summary>

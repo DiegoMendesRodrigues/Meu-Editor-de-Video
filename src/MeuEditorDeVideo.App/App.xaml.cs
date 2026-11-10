@@ -34,7 +34,8 @@ public partial class App : System.Windows.Application
 
         var paths = new AppPaths();
         ImageEngine.Text.FontCatalog.UserFontsFolder = paths.Fonts;
-        _host = Host.CreateDefaultBuilder(e.Args)
+        // Os argumentos não vão para o host: o único argumento esperado é o caminho de um .med (associação de arquivos).
+        _host = Host.CreateDefaultBuilder()
             .UseMeuEditorInfrastructure(paths)
             .ConfigureServices(ConfigureServices)
             .Build();
@@ -56,7 +57,10 @@ public partial class App : System.Windows.Application
         Services.GetRequiredService<AutosaveScheduler>().Start();
         await Services.GetRequiredService<IRenderQueueService>().InitializeAsync();
         StartBackgroundMaintenance(logger);
-        await OpenLastProjectAsync(logger);
+        if (StartupArguments.ProjectPath(e.Args) is { } project)
+            await OpenProjectAsync(project, logger);
+        else
+            await OpenLastProjectAsync(logger);
 
         base.OnStartup(e);
     }
@@ -103,13 +107,19 @@ public partial class App : System.Windows.Application
     {
         var settings = Services.GetRequiredService<ISettingsService>().Current;
         if (!settings.OpenLastProjectOnStartup || settings.RecentProjects.FirstOrDefault() is not { } last || !System.IO.File.Exists(last)) return;
+        await OpenProjectAsync(last, logger);
+    }
+
+    /// <summary>Abre um projeto na inicialização (arquivo .med aberto pelo Windows ou o último projeto).</summary>
+    private static async Task OpenProjectAsync(string path, ILogger logger)
+    {
         try
         {
-            await Services.GetRequiredService<IProjectWorkflow>().OpenAsync(last);
+            await Services.GetRequiredService<IProjectWorkflow>().OpenAsync(path);
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Não foi possível abrir o último projeto {Caminho}.", last);
+            logger.LogWarning(ex, "Não foi possível abrir o projeto {Caminho} na inicialização.", path);
         }
     }
 

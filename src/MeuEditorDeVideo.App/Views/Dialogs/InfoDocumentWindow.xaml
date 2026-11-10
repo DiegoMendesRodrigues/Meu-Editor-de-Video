@@ -1,0 +1,24 @@
+<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.InfoDocumentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="760"
+        Height="640"
+        MinWidth="480"
+        MinHeight="320"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        ResizeMode="CanResize"
+        Background="{DynamicResource Med.Background}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Atalhos de teclado e Informações do sistema (menu Ajuda). -->
+    <DockPanel Margin="12">
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" LastChildFill="False">
+            <TextBlock x:Name="Status" DockPanel.Dock="Left" VerticalAlignment="Center" Foreground="{DynamicResource Med.TextMuted}" />
+            <Button DockPanel.Dock="Right" Content="Fechar" IsCancel="True" IsDefault="True" Click="Fechar_Click" Padding="18,4" Margin="8,0,0,0" />
+            <Button x:Name="Copiar" DockPanel.Dock="Right" Content="Copiar" Click="Copiar_Click" Padding="18,4" Visibility="Collapsed"
+                    AutomationProperties.Name="Copiar para a área de transferência" />
+        </DockPanel>
+        <FlowDocumentScrollViewer x:Name="Visualizador" VerticalScrollBarVisibility="Auto" IsToolBarVisible="False"
+                                  Background="{DynamicResource Med.Background}" Foreground="{DynamicResource Med.Text}" />
+    </DockPanel>
+</Window>

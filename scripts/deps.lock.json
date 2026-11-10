@@ -18,6 +18,15 @@
       "sha256": "07c308cf0fc7e6e8b2065a12ed7fc07e1de8febb7dc7839d7b7f15dd66584df9",
       "fileName": "modnet.onnx",
       "target": "deps/ai-models/modnet-retrato"
+    },
+    {
+      "name": "vcredist",
+      "version": "14.5x (Visual C++ 2015-2026, x64)",
+      "license": "Microsoft Visual C++ Redistributable (redistribuição permitida; usado só pelo instalador Setup.exe)",
+      "url": "https://download.visualstudio.microsoft.com/download/pr/ebdab8e5-1d7b-4d9f-a11b-cbb1720c3b12/843068991DAAA1F73AD9F6239BCE4D0F6A07A51F18C37EA2A867E9BECA71295C/VC_redist.x64.exe",
+      "sha256": "843068991daaa1f73ad9f6239bce4d0f6a07a51f18c37ea2a867e9beca71295c",
+      "fileName": "VC_redist.x64.exe",
+      "target": "deps/vcredist"
     }
   ]
 }

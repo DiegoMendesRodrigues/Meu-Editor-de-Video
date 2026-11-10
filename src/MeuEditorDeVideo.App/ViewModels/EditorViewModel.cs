@@ -94,7 +94,7 @@ public sealed partial class EditorViewModel(
         OnPropertyChanged(nameof(IsEffectSection));
         OnPropertyChanged(nameof(IsTextSection));
         OnPropertyChanged(nameof(IsGraphicsSection));
-        OnPropertyChanged(nameof(IsUnavailableSection));
+        OnPropertyChanged(nameof(IsAiSection));
         OnPropertyChanged(nameof(SectionItems));
     }
 
@@ -112,8 +112,8 @@ public sealed partial class EditorViewModel(
     /// <summary>Elementos gráficos: formas vetoriais e SVG (F9).</summary>
     public bool IsGraphicsSection => SelectedSection == LibrarySection.Graphics;
 
-    /// <summary>Seções que chegam em fases futuras (IA).</summary>
-    public bool IsUnavailableSection => !IsMediaSection && !IsEffectSection && !IsTextSection && !IsGraphicsSection;
+    /// <summary>Seção IA: guia dos recursos (aplicados na aba IA das propriedades) e acesso ao gerenciador de modelos.</summary>
+    public bool IsAiSection => SelectedSection == LibrarySection.AI;
 
     public IReadOnlyList<LibraryEffectItem> SectionItems => (SelectedSection, Inspector) switch
     {

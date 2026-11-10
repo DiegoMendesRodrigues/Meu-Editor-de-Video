@@ -63,7 +63,10 @@
     <sys:String x:Key="Editor.Biblioteca.ArquivoNaoEncontrado">Arquivo não encontrado</sys:String>
     <sys:String x:Key="Editor.Biblioteca.SoltarParaImportar">Solte para importar</sys:String>
     <sys:String x:Key="Editor.Biblioteca.ProgressoImportacao">Progresso da importação</sys:String>
-    <sys:String x:Key="Editor.Biblioteca.SecaoIndisponivel">Esta seção estará disponível em uma próxima versão.</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.IA.Titulo">Inteligência artificial local</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.IA.Texto">Selecione um clipe na linha do tempo e abra a aba IA nas propriedades. Tudo é processado neste computador.</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.IA.Recursos">Recursos: remover ou substituir o fundo, legendas automáticas, isolar a voz, reduzir ruído, detectar cenas, remover silêncios, rastrear a pessoa e melhorar a imagem. Só "Remover fundo" vem instalado; os demais modelos são instalados pelo gerenciador.</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.IA.Modelos">Gerenciar modelos de IA…</sys:String>
 
     <!-- Painel B: Monitor -->
     <sys:String x:Key="Editor.Monitor.PreVisualizacao">Pré-visualização</sys:String>

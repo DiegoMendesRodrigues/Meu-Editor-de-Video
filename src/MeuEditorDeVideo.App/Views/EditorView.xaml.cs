@@ -78,6 +78,12 @@ public partial class EditorView : UserControl
             e.Handled = true;
             return;
         }
+        if (action == ShortcutCatalog.Help)
+        {
+            Dialogs.HelpWindow.ShowFor(Window.GetWindow(this));
+            e.Handled = true;
+            return;
+        }
         System.Windows.Input.ICommand? command = action switch
         {
             ShortcutCatalog.NewProject => vm.NewProjectCommand,
@@ -99,6 +105,41 @@ public partial class EditorView : UserControl
 
     /// <summary>Informações do aplicativo (RF215).</summary>
     private void Sobre_Click(object sender, RoutedEventArgs e) => Dialogs.AboutWindow.ShowFor(Window.GetWindow(this));
+
+    /// <summary>Manual do usuário offline (F1).</summary>
+    private void Manual_Click(object sender, RoutedEventArgs e) => Dialogs.HelpWindow.ShowFor(Window.GetWindow(this));
+
+    private void Atalhos_Click(object sender, RoutedEventArgs e) => Dialogs.InfoDocumentWindow.ShowShortcuts(Window.GetWindow(this));
+
+    private void InformacoesSistema_Click(object sender, RoutedEventArgs e) => Dialogs.InfoDocumentWindow.ShowSystemInfo(Window.GetWindow(this));
+
+    private void PastaLogs_Click(object sender, RoutedEventArgs e)
+    {
+        var logs = ((Core.Abstractions.IAppPaths)App.Services.GetService(typeof(Core.Abstractions.IAppPaths))!).Logs;
+        System.IO.Directory.CreateDirectory(logs);
+        AbrirNoWindows(logs);
+    }
+
+    /// <summary>Avisos e licenças dos componentes de terceiros (THIRD-PARTY-NOTICES.txt, instalado com o aplicativo).</summary>
+    private void Licencas_Click(object sender, RoutedEventArgs e)
+    {
+        var notices = System.IO.Path.Combine(AppContext.BaseDirectory, "THIRD-PARTY-NOTICES.txt");
+        if (System.IO.File.Exists(notices)) AbrirNoWindows(notices);
+        else Dialogs.AboutWindow.ShowFor(Window.GetWindow(this));
+    }
+
+    /// <summary>Abre uma pasta no Explorador ou um arquivo de texto no programa padrão do Windows (nada sai do computador).</summary>
+    private static void AbrirNoWindows(string path)
+    {
+        try
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(path) { UseShellExecute = true })?.Dispose();
+        }
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
+        {
+            MessageBox.Show($"Não foi possível abrir \"{path}\".", "Meu Editor de Vídeo", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+    }
 
     /// <summary>Configurações do aplicativo (RF208–RF214).</summary>
     private void AbrirConfiguracoes() => Dialogs.SettingsWindow.ShowFor(Window.GetWindow(this));

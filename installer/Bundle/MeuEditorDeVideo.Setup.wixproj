@@ -1,0 +1,17 @@
+<Project Sdk="WixToolset.Sdk/6.0.2">
+  <!-- Setup.exe (Burn): Visual C++ Redistributable + MSI. Gerado por scripts\build-installer.ps1 depois do MSI. -->
+  <PropertyGroup>
+    <OutputType>Bundle</OutputType>
+    <OutputName>MeuEditorDeVideo-$(Version)-Setup</OutputName>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <LicenseRtf Condition="'$(LicenseRtf)' == ''">$(MSBuildThisFileDirectory)..\..\artifacts\License.rtf</LicenseRtf>
+    <DefineConstants>Version=$(Version);MsiPath=$(MsiPath);LicenseRtf=$(LicenseRtf);RepoRoot=$(MSBuildThisFileDirectory)..\..\</DefineConstants>
+    <!-- WIX1133: o MSI é "perUserOrMachine" (para instalar sem administrador quando usado sozinho). Pelo Setup.exe ele
+         roda elevado, sem interface e sem MSIINSTALLPERUSER, ou seja, sempre para todos os usuários, como o bundle assume. -->
+    <SuppressSpecificWarnings>1133</SuppressSpecificWarnings>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.BootstrapperApplications.wixext" />
+    <PackageReference Include="WixToolset.Util.wixext" />
+  </ItemGroup>
+</Project>

@@ -42,6 +42,13 @@
   <ItemGroup>
     <None Include="..\..\resources\templates\export\*.json" Link="templates\export\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <!-- Avisos de terceiros (gerados por scripts\generate-notices.ps1) e licença do aplicativo. -->
+  <ItemGroup>
+    <None Include="..\..\THIRD-PARTY-NOTICES.txt" Link="THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="..\..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <!-- Manual do usuário offline (Ajuda › Manual do usuário, F1). -->
+    <None Include="..\..\documentation\MANUAL_DO_USUARIO.md" Link="ajuda\MANUAL_DO_USUARIO.md" CopyToOutputDirectory="PreserveNewest" Visible="false" Condition="Exists('..\..\documentation\MANUAL_DO_USUARIO.md')" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MeuEditorDeVideo.Application\MeuEditorDeVideo.Application.csproj" />
     <ProjectReference Include="..\MeuEditorDeVideo.Infrastructure\MeuEditorDeVideo.Infrastructure.csproj" />

@@ -20,3 +20,6 @@ TestResults/
 
 # Claude Code (configuração local pessoal)
 .claude/settings.local.json
+
+# Saídas do instalador (scripts/build-installer.ps1)
+/artifacts/

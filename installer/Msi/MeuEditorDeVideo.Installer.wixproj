@@ -1,0 +1,16 @@
+<Project Sdk="WixToolset.Sdk/6.0.2">
+  <!-- MSI do aplicativo. Gerado por scripts\build-installer.ps1, que publica o aplicativo e passa as variáveis abaixo. -->
+  <PropertyGroup>
+    <OutputName>MeuEditorDeVideo-$(Version)-x64</OutputName>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <Cultures>pt-BR</Cultures>
+    <AppPublishDir Condition="'$(AppPublishDir)' == ''">$(MSBuildThisFileDirectory)..\..\artifacts\publish\</AppPublishDir>
+    <LicenseRtf Condition="'$(LicenseRtf)' == ''">$(MSBuildThisFileDirectory)..\..\artifacts\License.rtf</LicenseRtf>
+    <DefineConstants>Version=$(Version);AppPublishDir=$(AppPublishDir);LicenseRtf=$(LicenseRtf);RepoRoot=$(MSBuildThisFileDirectory)..\..\</DefineConstants>
+    <!-- Pacote "perUserOrMachine": os atalhos e o registro usam HKMU, que as ICEs de perfil por usuário não reconhecem. -->
+    <SuppressIces>ICE38;ICE43;ICE57;ICE64;ICE91</SuppressIces>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" />
+  </ItemGroup>
+</Project>

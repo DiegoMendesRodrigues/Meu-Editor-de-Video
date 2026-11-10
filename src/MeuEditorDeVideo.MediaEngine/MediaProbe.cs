@@ -185,7 +185,8 @@ public sealed unsafe class MediaProbe(ILogger<MediaProbe> logger) : IMediaProbe
         }
 
         // Verificação de integridade: decodificar o primeiro quadro/bloco de áudio (RF036).
-        var verify = VerifyDecodable(file, kind == MediaKind.Audio ? -1 : vIndex, kind == MediaKind.Audio ? aIndex : -1);
+        var verify = VerifyDecodable(file, kind == MediaKind.Audio ? -1 : vIndex, kind == MediaKind.Audio ? aIndex : -1,
+            rewind: demuxer is "gif" or "webp");
         if (verify is not null)
             return MediaProbeResult.Failed(path, verify.Value.Status, verify.Value.Message) with { Kind = kind, Info = info };
 
@@ -195,13 +196,15 @@ public sealed unsafe class MediaProbe(ILogger<MediaProbe> logger) : IMediaProbe
         return new MediaProbeResult(path, MediaProbeStatus.Ok, kind, duration, width, height, fps, info);
     }
 
-    private (MediaProbeStatus Status, string Message)? VerifyDecodable(MediaFile file, int videoIndex, int audioIndex)
+    private (MediaProbeStatus Status, string Message)? VerifyDecodable(MediaFile file, int videoIndex, int audioIndex, bool rewind)
     {
         var index = videoIndex >= 0 ? videoIndex : audioIndex;
         try
         {
-            // Volta ao início (CountFrames pode ter avançado a leitura).
-            ffmpeg.av_seek_frame(file.Context, -1, file.Context->start_time == ffmpeg.AV_NOPTS_VALUE ? 0 : file.Context->start_time, ffmpeg.AVSEEK_FLAG_BACKWARD);
+            // Volta ao início só quando CountFrames avançou a leitura (GIF/WebP). Demuxers sem busca, como o "jpeg_pipe",
+            // perdiam o pacote já armazenado por avformat_find_stream_info e nenhum quadro era decodificado.
+            if (rewind)
+                ffmpeg.av_seek_frame(file.Context, -1, file.Context->start_time == ffmpeg.AV_NOPTS_VALUE ? 0 : file.Context->start_time, ffmpeg.AVSEEK_FLAG_BACKWARD);
             using var decoder = new StreamDecoder(file, index, threads: 1);
             return decoder.ReadFrame() ? null : (MediaProbeStatus.Corrupted, "Nenhum quadro pôde ser decodificado: o arquivo parece danificado.");
         }

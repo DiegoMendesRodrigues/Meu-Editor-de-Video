@@ -35,6 +35,7 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 | Componente | Versão | Licença | Origem | Observação |
 |---|---|---|---|---|
 | FFmpeg (full_build, shared) | 9.0.2 | GPL-3.0-or-later | github.com/GyanD/codexffmpeg | Inclui x264, x265, libvpx, SVT-AV1, libaom, LAME, Opus, Vorbis. Exportação (F5): codificadores sondados em tempo de execução — NVENC/AMF/Quick Sync/Media Foundation quando houver GPU, com recuo automático para software. SHA-256 no lock. Carregado pelo MediaEngine via FFmpeg.AutoGen; as DLLs são copiadas para `ffmpeg\` ao lado do executável. |
+| Microsoft Visual C++ Redistributable x64 (`VC_redist.x64.exe`) | 14.51.36247.0 | Licença de redistribuição da Microsoft | download.visualstudio.microsoft.com | Exigido pelas DLLs nativas do ONNX Runtime e do whisper.cpp (MSVCP140, VCRUNTIME140, VCOMP140). Só é usado pelo `Setup.exe` (encadeado antes do MSI, instalado apenas quando falta a versão 14.40 ou mais nova). SHA-256 no lock. |
 
 ## Modelo de IA incluído no aplicativo
 
@@ -44,9 +45,10 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 
 ## Modelos de IA (pacotes `.medmodel`, fora do instalador)
 
-Não fazem parte do repositório nem do instalador (decisão §8 nº 5). São empacotados com `tools\Build-ModelPackages.ps1`
-a partir do catálogo `resources\ai-models\modelos.json`, com o texto da licença em `resources\ai-models\licencas\`.
-Detalhes e uso em [MODELOS_IA.md](MODELOS_IA.md).
+Não fazem parte do repositório nem do instalador (decisão §8 nº 5). O usuário os instala pela ferramenta
+**Baixar modelos de IA** (download das URLs oficiais fixadas no catálogo, com SHA-256, só quando clica em Instalar) ou por
+pacotes gerados com `tools\Build-ModelPackages.ps1` a partir do catálogo `resources\ai-models\modelos.json`, com o texto da
+licença em `resources\ai-models\licencas\`. Detalhes e uso em [MODELOS_IA.md](MODELOS_IA.md).
 
 | Modelo | Origem | Licença | Recurso |
 |---|---|---|---|
@@ -56,17 +58,30 @@ Detalhes e uso em [MODELOS_IA.md](MODELOS_IA.md).
 | TransNetV2 | Tomáš Souček (ONNX: elya5/transnetv2) | MIT | Detecção de cenas |
 | Swin2SR leve 2× | mv-lab/swin2sr (ONNX: Xenova/swin2SR-lightweight-x2-64) | Apache-2.0 | Melhoria de imagem |
 
-## Planejadas (ainda não adicionadas)
+## Ferramentas de compilação do instalador (não fazem parte do aplicativo)
 
-| Componente | Versão candidata | Licença | Fase |
+| Pacote | Versão | Licença | Uso |
 |---|---|---|---|
-| Vortice.Direct3D11 / DXGI / D2D / DirectWrite | 3.8.x | MIT | F4 |
-| NAudio | 3.3.0 | MIT | F4/F7 |
-| WiX Toolset | — | MS-RL | F12 |
+| WixToolset.Sdk | 6.0.2 | MS-RL | Compila o MSI (`installer\Msi`) e o `Setup.exe` (`installer\Bundle`) |
+| WixToolset.UI.wixext | 6.0.2 | MS-RL | Telas do instalador (WixUI_Advanced, em pt-BR) |
+| WixToolset.Util.wixext / BootstrapperApplications.wixext | 6.0.2 | MS-RL | Detecção do Visual C++ e interface padrão do `Setup.exe` |
+
+> O motor do `Setup.exe` (Burn) e a interface padrão do WiX ficam embutidos no `Setup.exe` (MS-RL). A partir da versão 6, os
+> binários do WiX são distribuídos pela FireGiant com o **Open Source Maintenance Fee (OSMF)**: o uso é livre, mas projetos
+> que geram receita devem contribuir com a taxa de manutenção. O WiX 7 passou a exigir aceitar o EULA na compilação; por isso
+> a versão fica fixada em 6.0.2. Reavaliar se o projeto passar a ter fins comerciais.
+
+## Avisos de terceiros
+
+`THIRD-PARTY-NOTICES.txt` (raiz do repositório, instalado ao lado do executável e aberto por **Ajuda › Licenças de
+terceiros**) é gerado por `pwsh scripts/generate-notices.ps1` a partir dos pacotes NuGet efetivamente distribuídos
+(`project.assets.json` do aplicativo), do FFmpeg, do MODNet e dos modelos opcionais. Rodar o script depois de qualquer
+atualização de dependência e versionar o resultado.
 
 ## Procedimento de atualização
 
 1. Alterar a versão em `Directory.Packages.props` ou `scripts/deps.lock.json` (URL + apagar `sha256`).
 2. Executar `pwsh scripts/fetch-deps.ps1` (grava o novo hash) e conferir a origem.
 3. Rodar todos os testes.
-4. Atualizar esta tabela e registrar no commit o motivo da atualização.
+4. Regenerar `THIRD-PARTY-NOTICES.txt` (`pwsh scripts/generate-notices.ps1`).
+5. Atualizar esta tabela e registrar no commit o motivo da atualização.

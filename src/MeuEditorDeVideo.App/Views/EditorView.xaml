@@ -242,6 +242,13 @@
                 <MenuItem Header="Configurações…" Click="Configuracoes_Click" AutomationProperties.Name="Configurações" ctl:ShortcutText.Action="app.configuracoes" />
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Ajuda}">
+                <MenuItem Header="Manual do usuário" Click="Manual_Click" AutomationProperties.Name="Manual do usuário" ctl:ShortcutText.Action="app.ajuda" />
+                <MenuItem Header="Atalhos de teclado…" Click="Atalhos_Click" AutomationProperties.Name="Atalhos de teclado" />
+                <Separator />
+                <MenuItem Header="Informações do sistema…" Click="InformacoesSistema_Click" AutomationProperties.Name="Informações do sistema" />
+                <MenuItem Header="Abrir pasta de logs" Click="PastaLogs_Click" AutomationProperties.Name="Abrir pasta de logs" />
+                <MenuItem Header="Licenças de terceiros" Click="Licencas_Click" AutomationProperties.Name="Licenças de terceiros" />
+                <Separator />
                 <MenuItem Header="Sobre o Meu Editor de Vídeo…" Click="Sobre_Click" AutomationProperties.Name="Sobre" />
             </MenuItem>
         </Menu>
@@ -499,21 +506,15 @@
                             </StackPanel>
                         </StackPanel>
 
-                        <!-- Seções que ainda não são de mídia -->
-                        <TextBlock Grid.Row="1" Text="{StaticResource Editor.Biblioteca.SecaoIndisponivel}"
-                                   TextAlignment="Center" TextWrapping="Wrap" Margin="12"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsUnavailableSection}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
+                        <!-- IA: os recursos são aplicados ao clipe selecionado (aba IA das propriedades); aqui ficam o guia e os modelos. -->
+                        <StackPanel Grid.Row="1" Margin="12" VerticalAlignment="Top" AutomationProperties.Name="Inteligência artificial"
+                                    Visibility="{Binding IsAiSection, Converter={StaticResource Editor.BoolToVis}}">
+                            <TextBlock Text="{StaticResource Editor.Biblioteca.IA.Titulo}" FontWeight="SemiBold" Margin="0,0,0,6" />
+                            <TextBlock Text="{StaticResource Editor.Biblioteca.IA.Texto}" TextWrapping="Wrap" Style="{StaticResource Med.MutedText}" />
+                            <TextBlock Text="{StaticResource Editor.Biblioteca.IA.Recursos}" TextWrapping="Wrap" Margin="0,10,0,0" Style="{StaticResource Med.MutedText}" />
+                            <Button Content="{StaticResource Editor.Biblioteca.IA.Modelos}" Click="ModelosIA_Click" Margin="0,12,0,0"
+                                    HorizontalAlignment="Stretch" AutomationProperties.Name="Gerenciar modelos de IA" />
+                        </StackPanel>
 
                         <!-- Textos: modelos (texto, título, tarja, créditos, legenda) e legendas SRT/VTT (F8) -->
                         <DockPanel Grid.Row="1" Margin="0,8,0,0" DataContext="{Binding TextLibrary}"

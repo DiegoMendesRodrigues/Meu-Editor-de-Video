@@ -108,7 +108,7 @@ Em **Ferramentas › Modelos de IA › Baixar modelos…**:
 2. **Instalar** (ou **Instalar todos**) monta o plano: as dependências que faltam vêm antes de quem depende delas (ex.:
    Whisper → Silero VAD primeiro). Uma confirmação mostra a ordem e quanto será baixado.
 3. Para cada modelo, nessa ordem, a ferramenta:
-   1. baixa o arquivo do endereço fixado numa revisão da origem oficial (HTTPS, só `huggingface.co` e `github.com`);
+   1. baixa o arquivo do endereço fixado numa revisão da origem oficial (HTTPS; o endereço inicial precisa ser de `huggingface.co` ou `github.com`, e os redirecionamentos dessas origens para as suas CDNs, como `cdn-lfs.huggingface.co` e `raw.githubusercontent.com`, também precisam ser HTTPS. A garantia de integridade é o SHA-256 fixado no catálogo: um arquivo diferente é descartado);
    2. confere o tamanho e o **SHA-256** do catálogo;
    3. gera o pacote `.medmodel`, no mesmo formato de `tools\New-MedModel.ps1`, com licença e README;
    4. instala o pacote pelo gerenciador, com as mesmas validações de um pacote instalado à mão.

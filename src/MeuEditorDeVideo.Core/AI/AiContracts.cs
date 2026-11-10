@@ -87,7 +87,7 @@ public sealed record ModelManifest
     public IReadOnlyDictionary<string, string> Parameters { get; init; } = new Dictionary<string, string>();
 }
 
-/// <summary>Modelo instalado em <c>%LOCALAPPDATA%\MeuEditorDeVideo\models\&lt;id&gt;</c>.</summary>
+/// <summary>Modelo instalado em <c>%LOCALAPPDATA%\MeuEditorDeVideo\ai-models\&lt;id&gt;</c>.</summary>
 /// <param name="BuiltIn">Modelo que vem com o aplicativo (pasta <c>ai-models</c> ao lado do executável): sempre disponível e não pode ser removido.</param>
 public sealed record InstalledModel(ModelManifest Manifest, string Directory, bool BuiltIn = false)
 {
@@ -96,7 +96,7 @@ public sealed record InstalledModel(ModelManifest Manifest, string Directory, bo
     public string? LicensePath => Manifest.LicenseFile is { } l ? Path.Combine(Directory, l) : null;
 }
 
-/// <summary>Gerenciador de modelos (RF166, RF168, RF170). Só instala a partir de pacotes locais; nunca baixa nada.</summary>
+/// <summary>Gerenciador de modelos (RF166, RF168, RF170). Só instala a partir de pacotes locais; o download do catálogo oficial fica em <see cref="IModelDownloader"/>.</summary>
 public interface IModelRegistry
 {
     /// <summary>Formato de pacote suportado por esta versão do aplicativo.</summary>

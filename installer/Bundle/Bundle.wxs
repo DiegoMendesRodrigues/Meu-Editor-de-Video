@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Setup.exe (Burn) do Meu Editor de Vídeo: instala o Visual C++ Redistributable x64 (exigido pelas bibliotecas
+  nativas de IA — Whisper e ONNX Runtime) quando ele ainda não existe e, em seguida, o MSI do aplicativo.
+  O MSI também pode ser instalado sozinho em computadores que já têm o Visual C++ 2015-2026.
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:bal="http://wixtoolset.org/schemas/v4/wxs/bal"
+     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+  <Bundle Name="Meu Editor de Vídeo"
+          Manufacturer="Diego Mendes Rodrigues"
+          Version="$(var.Version)"
+          UpgradeCode="9D2E4F60-3B1A-4C7D-8E5F-1A2B3C4D5E6F"
+          IconSourceFile="$(var.RepoRoot)src\MeuEditorDeVideo.App\Assets\icone.ico">
+    <BootstrapperApplication>
+      <bal:WixStandardBootstrapperApplication Theme="rtfLicense" LicenseFile="$(var.LicenseRtf)" ShowVersion="yes" SuppressOptionsUI="yes" />
+    </BootstrapperApplication>
+
+    <!-- Visual C++ 14.x x64 já instalado? (chave documentada pela Microsoft; Major = 14, Minor >= 40 cobre as DLLs exigidas pelo ONNX Runtime/Whisper) -->
+    <util:RegistrySearch Id="VcRedistInstalado" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64"
+                         Value="Installed" Variable="VcRedistInstalado" Bitness="always64" />
+    <util:RegistrySearch Id="VcRedistMinor" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64"
+                         Value="Minor" Variable="VcRedistMinor" Bitness="always64" After="VcRedistInstalado" />
+
+    <Chain>
+      <ExePackage Id="VcRedist" DisplayName="Microsoft Visual C++ Redistributable (x64)"
+                  SourceFile="$(var.RepoRoot)deps\vcredist\VC_redist.x64.exe"
+                  Permanent="yes" PerMachine="yes" Vital="yes" Compressed="yes"
+                  DetectCondition="VcRedistInstalado = 1 AND VcRedistMinor &gt;= 40"
+                  InstallArguments="/install /quiet /norestart">
+        <ExitCode Value="1638" Behavior="success" />
+        <ExitCode Value="3010" Behavior="scheduleReboot" />
+      </ExePackage>
+      <!-- Pelo Setup.exe (que já pede elevação para o Visual C++), o MSI "perUserOrMachine" é instalado para todos os usuários. -->
+      <MsiPackage Id="Aplicativo" SourceFile="$(var.MsiPath)" Vital="yes" Compressed="yes" />
+    </Chain>
+  </Bundle>
+</Wix>

@@ -22,6 +22,8 @@ public sealed class VideoFrameSource(bool hardwareDecoding, ILogger<VideoFrameSo
     private readonly Dictionary<Guid, Entry> _entries = [];
     private readonly HashSet<Guid> _failed = [];
 
+    public (string Media, Exception Error)? Failure { get; private set; }
+
     /// <summary>Quantas mídias estão sendo decodificadas pela GPU (diagnóstico).</summary>
     public int HardwareDecoders => _entries.Values.Count(e => e.Reader?.UsesHardware == true);
 
@@ -54,6 +56,7 @@ public sealed class VideoFrameSource(bool hardwareDecoding, ILogger<VideoFrameSo
             // Mídia problemática não deve travar a reprodução: registra e passa a ignorá-la nesta sessão.
             logger.LogWarning(ex, "Falha ao decodificar {Name} para a pré-visualização.", asset.Name);
             _failed.Add(asset.Id);
+            Failure ??= (asset.Name, ex);
             if (_entries.Remove(asset.Id, out var broken)) broken.Dispose();
             return null;
         }

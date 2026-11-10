@@ -270,13 +270,20 @@ public sealed class RenderEngine(
     }
 
     private BgraImage RenderFrame(IVideoFrameSource video, Project project, Sequence sequence, IReadOnlyDictionary<Guid, string> paths,
-        VideoEncodeSpec spec, MediaTime t) =>
-        _frames.Render(video, project, sequence, paths, t, spec.Width, spec.Height, spec.Alpha,
+        VideoEncodeSpec spec, MediaTime t)
+    {
+        var frame = _frames.Render(video, project, sequence, paths, t, spec.Width, spec.Height, spec.Alpha,
             includeSubtitles: spec.Settings.BurnSubtitles);
+        // Mídia danificada: a pré-visualização a ignora, mas a exportação não pode sair com quadros pretos sem aviso.
+        if (video.Failure is { } failure) throw new MedException(MedErrors.RenderDecodeFailed(failure.Media, failure.Error));
+        return frame;
+    }
 
     private static List<Part> SplitParts(string output, ExportSettings settings, FrameRate fps, long first, long end)
     {
-        var perPart = settings.MaxSecondsPerFile is { } max ? Math.Max(1, (long)Math.Floor(max * fps.Value)) : long.MaxValue;
+        // Sem divisão, uma única parte com o intervalo inteiro (long.MaxValue estourava em "s + perPart" quando o
+        // intervalo não começava no quadro 0).
+        var perPart = settings.MaxSecondsPerFile is { } max ? Math.Max(1, (long)Math.Floor(max * fps.Value)) : Math.Max(1, end - first);
         var count = (int)Math.Max(1, (end - first + perPart - 1) / perPart);
         var parts = new List<Part>(count);
         for (var i = 0; i < count; i++)

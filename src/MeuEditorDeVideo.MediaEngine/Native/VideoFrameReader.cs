@@ -16,6 +16,7 @@ internal sealed unsafe class VideoFrameReader : StreamDecoder
     private long _currentPts = long.MinValue;
     private long _currentEnd = long.MinValue;
     private bool _atEnd;
+    private bool _positioned;
 
     /// <summary>Há um quadro posicionado (resultado do último <see cref="Position"/>).</summary>
     public bool HasFrame => _currentPts != long.MinValue;
@@ -36,7 +37,11 @@ internal sealed unsafe class VideoFrameReader : StreamDecoder
 
         var forwardLimit = ffmpeg.av_rescale_q(3 * ffmpeg.AV_TIME_BASE, Av.TimeBaseQ, tb);
         var sequential = HasFrame && !_atEnd && target > _currentPts && target - _currentPts < forwardLimit;
-        if (!sequential)
+        // Leitor recém-aberto pedindo o início: a leitura já está lá, então não busca. Imagens únicas (JPEG pelo image2) perdiam
+        // na busca o pacote lido por avformat_find_stream_info e não decodificavam nenhum quadro.
+        var atStart = !_positioned && target <= start;
+        _positioned = true;
+        if (!sequential && !atStart)
         {
             Seek(target);
             _currentPts = long.MinValue;

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Instalador MSI do Meu Editor de Vídeo (F12, CA022, RNF017).
+  - Aplicativo publicado "self-contained" (.NET incluído), FFmpeg, MODNet (IA incluída), catálogo de modelos e avisos de terceiros.
+  - Instalação para o usuário atual (sem administrador) ou para todos (Arquivos de Programas), à escolha (WixUI_Advanced).
+  - Atalhos no menu Iniciar e (opcional) na área de trabalho; associação dos arquivos .med; desinstalação pelo Windows.
+  - Os dados do usuário (projetos, configurações, modelos baixados, cache) não são apagados na desinstalação.
+  Gerado por scripts/build-installer.ps1 (variáveis: Version, AppPublishDir, LicenseRtf, RepoRoot).
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+  <Package Name="Meu Editor de Vídeo"
+           Manufacturer="Diego Mendes Rodrigues"
+           Version="$(var.Version)"
+           UpgradeCode="5B0F3C61-8E5A-4D2B-9C1E-7A4F2D9E6B10"
+           Language="1046"
+           Codepage="1252"
+           Scope="perUserOrMachine"
+           Compressed="yes">
+    <SummaryInformation Description="Meu Editor de Vídeo $(var.Version) — editor de vídeo com IA local" Manufacturer="Diego Mendes Rodrigues" />
+
+    <MajorUpgrade DowngradeErrorMessage="Uma versão mais nova do Meu Editor de Vídeo já está instalada." />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Icon Id="AppIcon.ico" SourceFile="$(var.RepoRoot)src\MeuEditorDeVideo.App\Assets\icone.ico" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
+    <Property Id="ARPCONTACT" Value="Diego Mendes Rodrigues" />
+    <Property Id="ARPCOMMENTS" Value="Editor de vídeo para Windows 11 com processamento local (inclusive IA). Software livre (GPL-3.0-or-later)." />
+
+    <!-- WixUI_Advanced: escolha entre "somente para mim" e "para todos os usuários", pasta e recursos. -->
+    <Property Id="ApplicationFolderName" Value="Meu Editor de Vídeo" />
+    <Property Id="WixAppFolder" Value="WixPerUserFolder" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.LicenseRtf)" />
+    <ui:WixUI Id="WixUI_Advanced" />
+
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="APPLICATIONFOLDER" Name="Meu Editor de Vídeo" />
+    </StandardDirectory>
+
+    <Feature Id="Aplicativo" Title="Meu Editor de Vídeo"
+             Description="Aplicativo, FFmpeg, modelo de IA MODNet (Remover fundo) e catálogo de modelos opcionais."
+             AllowAbsent="no" Display="expand" ConfigurableDirectory="APPLICATIONFOLDER">
+      <ComponentGroupRef Id="ArquivosDoAplicativo" />
+      <ComponentRef Id="Executavel" />
+      <ComponentRef Id="AtalhoMenuIniciar" />
+      <Feature Id="AreaDeTrabalho" Title="Atalho na área de trabalho" Description="Cria um atalho do Meu Editor de Vídeo na área de trabalho.">
+        <ComponentRef Id="AtalhoAreaDeTrabalho" />
+      </Feature>
+    </Feature>
+
+    <!-- Executável + associação dos arquivos de projeto .med (abre o projeto com um duplo clique). -->
+    <Component Id="Executavel" Directory="APPLICATIONFOLDER">
+      <File Id="MeuEditorDeVideoExe" Source="$(var.AppPublishDir)MeuEditorDeVideo.exe" KeyPath="yes" />
+      <ProgId Id="MeuEditorDeVideo.Projeto" Description="Projeto do Meu Editor de Vídeo" Icon="MeuEditorDeVideoExe" IconIndex="0">
+        <Extension Id="med" ContentType="application/x-meu-editor-de-video">
+          <Verb Id="open" Command="Abrir" TargetFile="MeuEditorDeVideoExe" Argument="&quot;%1&quot;" />
+        </Extension>
+      </ProgId>
+    </Component>
+
+    <!-- Demais arquivos publicados (sem símbolos de depuração e sem bibliotecas de outras arquiteturas). -->
+    <ComponentGroup Id="ArquivosDoAplicativo" Directory="APPLICATIONFOLDER">
+      <Files Include="$(var.AppPublishDir)**">
+        <Exclude Files="$(var.AppPublishDir)MeuEditorDeVideo.exe" />
+        <Exclude Files="$(var.AppPublishDir)**\*.pdb" />
+        <Exclude Files="$(var.AppPublishDir)runtimes\win-x86\**" />
+        <Exclude Files="$(var.AppPublishDir)runtimes\win-arm64\**" />
+      </Files>
+    </ComponentGroup>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Component Id="AtalhoMenuIniciar" Guid="7E3A2C1B-4D5F-4A6B-8C9D-0E1F2A3B4C5D">
+        <Shortcut Id="AtalhoMenuIniciar" Name="Meu Editor de Vídeo" Description="Editor de vídeo com IA local"
+                  Target="[APPLICATIONFOLDER]MeuEditorDeVideo.exe" WorkingDirectory="APPLICATIONFOLDER" />
+        <RegistryValue Root="HKMU" Key="Software\Meu Editor de Vídeo" Name="AtalhoMenuIniciar" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder">
+      <Component Id="AtalhoAreaDeTrabalho" Guid="2C4E6A8B-1D3F-4B5A-9E7C-6F8A0B2C4D6E">
+        <Shortcut Id="AtalhoAreaDeTrabalho" Name="Meu Editor de Vídeo" Description="Editor de vídeo com IA local"
+                  Target="[APPLICATIONFOLDER]MeuEditorDeVideo.exe" WorkingDirectory="APPLICATIONFOLDER" />
+        <RegistryValue Root="HKMU" Key="Software\Meu Editor de Vídeo" Name="AtalhoAreaDeTrabalho" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
+  </Package>
+</Wix>

@@ -1,0 +1,51 @@
+<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.HelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Manual do usuário — Meu Editor de Vídeo"
+        Width="1040"
+        Height="760"
+        MinWidth="640"
+        MinHeight="420"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        AutomationProperties.Name="Manual do usuário"
+        Background="{DynamicResource Med.Background}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Ajuda offline (F12): o manual vem junto com o aplicativo (pasta "ajuda"); a busca (Ctrl+F) é a do próprio leitor. -->
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260" MinWidth="160" />
+            <ColumnDefinition Width="6" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Top" Text="Sumário" FontWeight="SemiBold" Foreground="{DynamicResource Med.Accent}" Margin="4,0,0,6" />
+            <ListBox x:Name="Sumario" AutomationProperties.Name="Sumário" SelectionChanged="Sumario_SelectionChanged"
+                     Background="{DynamicResource Med.Panel}" BorderBrush="{DynamicResource Med.Border}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="{Binding Indent}" FontWeight="{Binding Weight}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+
+        <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" Background="Transparent" />
+
+        <FlowDocumentReader x:Name="Leitor" Grid.Column="2" ViewingMode="Scroll" IsFindEnabled="True" IsPrintEnabled="True"
+                            IsPageViewEnabled="False" IsTwoPageViewEnabled="False" AutomationProperties.Name="Conteúdo do manual"
+                            Background="{DynamicResource Med.Background}" Foreground="{DynamicResource Med.Text}" />
+
+        <DockPanel Grid.Row="1" Grid.ColumnSpan="3" Margin="0,10,0,0" LastChildFill="False">
+            <TextBlock x:Name="Origem" DockPanel.Dock="Left" VerticalAlignment="Center" Foreground="{DynamicResource Med.TextMuted}"
+                       Text="Pressione Ctrl+F para procurar no manual." />
+            <Button DockPanel.Dock="Right" Content="Fechar" IsCancel="True" Click="Fechar_Click" Padding="18,4" />
+        </DockPanel>
+    </Grid>
+</Window>

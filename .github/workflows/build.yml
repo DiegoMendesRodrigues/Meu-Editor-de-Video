@@ -21,7 +21,7 @@ jobs:
           path: deps
           key: deps-${{ hashFiles('scripts/deps.lock.json') }}
 
-      - name: Baixar e verificar dependências nativas (FFmpeg)
+      - name: Baixar e verificar dependências nativas (FFmpeg, MODNet, Visual C++)
         shell: pwsh
         run: ./scripts/fetch-deps.ps1 -Strict
 
@@ -39,3 +39,17 @@ jobs:
         with:
           name: test-results
           path: TestResults
+
+      - name: Gerar o instalador (MSI + Setup.exe, sem assinatura)
+        if: github.event_name == 'push'
+        shell: pwsh
+        run: ./scripts/build-installer.ps1
+
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push'
+        with:
+          name: instalador
+          path: |
+            artifacts/installer/*.msi
+            artifacts/installer/*.exe
+            artifacts/installer/SHA256SUMS.txt
