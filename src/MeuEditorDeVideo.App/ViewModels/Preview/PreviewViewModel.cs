@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Windows;
@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.App.ViewModels.Timeline;
+using MeuEditorDeVideo.Application.Performance;
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.Media;
@@ -26,7 +27,8 @@ public enum PreviewQuality
     Quarter = 4,
 }
 
-public sealed record PreviewQualityOption(PreviewQuality Value, string Label);
+/// <summary>Opção do seletor de qualidade; <paramref name="IsAuto"/> = escolhida pelo hardware e ajustada durante a reprodução (§12.3).</summary>
+public sealed record PreviewQualityOption(PreviewQuality Value, string Label, bool IsAuto = false);
 
 /// <summary>
 /// Monitor (painel B): mostra o quadro da posição do cursor, reproduz com áudio sincronizado,
@@ -41,15 +43,22 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
     private readonly Dispatcher _dispatcher;
     private readonly IProxyService _proxies;
     private readonly ISettingsService _settings;
+    private readonly IHardwareInfoService? _hardware;
     private ProjectSession? _session;
+    private PerformanceProfile? _profile;
+
+    /// <summary>Divisor recomendado pelo hardware para o projeto atual e divisor após as reduções automáticas.</summary>
+    private int _autoDivisor = 2, _adaptiveDivisor = 2;
+    private readonly Queue<double> _renderTimes = new();
     private PreviewFrame? _latest;
     private int _presentQueued;
     private bool _syncingPlayhead;
     private static string? s_lastCaptureDirectory;
 
     public PreviewViewModel(PreviewEngine engine, IProjectService projects, IDialogService dialogs, ISettingsService settings,
-        IProxyService proxies, ILogger<PreviewViewModel> logger, TimelineViewModel timeline)
+        IProxyService proxies, ILogger<PreviewViewModel> logger, TimelineViewModel timeline, IHardwareInfoService? hardware = null)
     {
+        _hardware = hardware;
         _proxies = proxies;
         _settings = settings;
         UseProxies = settings.Current.UseProxies;
@@ -62,6 +71,7 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
         Timeline = timeline;
 
         _engine.SetHardwareDecoding(settings.Current.UseGpuAcceleration);
+        _settings.Changed += OnSettingsChanged;
         _engine.FrameReady += OnFrameReady;
         _engine.PlaybackEnded += OnPlaybackEnded;
         _projects.SessionChanged += OnSessionChanged;
@@ -74,6 +84,7 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
 
     public IReadOnlyList<PreviewQualityOption> Qualities { get; } =
     [
+        new(PreviewQuality.Half, "Automática", IsAuto: true),
         new(PreviewQuality.Full, "Completa"),
         new(PreviewQuality.Half, "1/2"),
         new(PreviewQuality.Quarter, "1/4"),
@@ -109,7 +120,94 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(PlayToolTip));
     }
 
-    partial void OnQualityChanged(PreviewQualityOption value) => ApplyPreviewSize();
+    partial void OnQualityChanged(PreviewQualityOption value)
+    {
+        // Escolher "Automática" de novo recomeça das recomendações do hardware.
+        _adaptiveDivisor = _autoDivisor;
+        _renderTimes.Clear();
+        AutoNotice = "";
+        ApplyPreviewSize();
+    }
+
+    /// <summary>Aviso quando a qualidade automática foi reduzida porque o computador não acompanhou a reprodução.</summary>
+    [ObservableProperty]
+    public partial string AutoNotice { get; set; } = "";
+
+    /// <summary>Divisor da resolução em uso (1, 2 ou 4).</summary>
+    public int EffectiveDivisor => Quality is { IsAuto: true } ? Math.Max(_autoDivisor, _adaptiveDivisor) : (int)(Quality?.Value ?? PreviewQuality.Half);
+
+    private static string DivisorLabel(int div) => div switch { 1 => "Completa", 2 => "1/2", _ => "1/4" };
+
+    private static int Divisor(PreviewQualityMode mode) => mode switch
+    {
+        PreviewQualityMode.Full => 1,
+        PreviewQualityMode.Quarter => 4,
+        _ => 2,
+    };
+
+    private PreviewQualityOption OptionFor(PreviewQualityMode mode) => mode switch
+    {
+        PreviewQualityMode.Auto => Qualities[0],
+        PreviewQualityMode.Full => Qualities[1],
+        PreviewQualityMode.Quarter => Qualities[3],
+        _ => Qualities[2],
+    };
+
+    /// <summary>Recalcula a recomendação (§12.3) para o projeto e aplica a memória dos quadros prontos (RNF013).</summary>
+    private async Task EvaluateHardwareAsync()
+    {
+        var settings = _session?.Project.Settings;
+        if (_hardware is null || settings is null) return;
+        try
+        {
+            // A primeira detecção testa os codificadores: fora da thread da interface.
+            var hardware = _hardware;
+            var info = await Task.Run(() => hardware.Get());
+            _profile = PerformanceAdvisor.Evaluate(info, settings.Width, settings.Height);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Não foi possível avaliar o hardware para a pré-visualização.");
+            return;
+        }
+        _autoDivisor = Divisor(_profile.Preview);
+        _adaptiveDivisor = _autoDivisor;
+        _renderTimes.Clear();
+        _engine.CacheBudgetBytes = (long)PerformanceAdvisor.ResolvePreviewMemory(_settings.Current.PreviewMemoryMegabytes, _profile) << 20;
+        if (Quality is { IsAuto: true }) ApplyPreviewSize();
+    }
+
+    private void OnSettingsChanged(object? sender, AppSettings value) => _dispatcher.BeginInvoke(() =>
+    {
+        _engine.SetHardwareDecoding(value.UseGpuAcceleration);
+        if (_profile is not null)
+            _engine.CacheBudgetBytes = (long)PerformanceAdvisor.ResolvePreviewMemory(value.PreviewMemoryMegabytes, _profile) << 20;
+        if (_lastQualitySetting != value.PreviewQuality)
+        {
+            _lastQualitySetting = value.PreviewQuality;
+            Quality = OptionFor(value.PreviewQuality);
+        }
+    });
+
+    private PreviewQualityMode _lastQualitySetting;
+
+    /// <summary>
+    /// Qualidade automática (§12.3): se a renderização média dos últimos quadros passar de 1,5 × a duração do quadro
+    /// durante a reprodução, a resolução cai um nível (até 1/4). Não volta a subir sozinha, para não oscilar.
+    /// </summary>
+    private void TrackRenderTime(PreviewFrame frame)
+    {
+        if (!IsPlaying || Quality is not { IsAuto: true } || _session is null || EffectiveDivisor >= 4) return;
+        _renderTimes.Enqueue(frame.RenderTime.TotalMilliseconds);
+        if (_renderTimes.Count > 24) _renderTimes.Dequeue();
+        if (_renderTimes.Count < 24) return;
+        var budget = 1000 * _session.Project.Settings.FrameRate.FrameDuration.TotalSeconds;
+        if (_renderTimes.Average() <= 1.5 * budget) return;
+        _adaptiveDivisor = EffectiveDivisor * 2;
+        _renderTimes.Clear();
+        AutoNotice = $"Qualidade reduzida automaticamente para {DivisorLabel(EffectiveDivisor)}: o computador não acompanhou a reprodução.";
+        ApplyPreviewSize();
+    }
 
     partial void OnVolumeChanged(double value) => _engine.Volume = (float)(Math.Clamp(value, 0, 100) / 100);
 
@@ -162,7 +260,12 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
             if (_session is not null) _session.History.Changed -= OnHistoryChanged;
             _session = _projects.Current;
             if (_session is not null) _session.History.Changed += OnHistoryChanged;
-            Quality ??= Qualities[1];
+            _ = EvaluateHardwareAsync();
+            if (Quality is null)
+            {
+                _lastQualitySetting = _settings.Current.PreviewQuality;
+                Quality = OptionFor(_lastQualitySetting);
+            }
             Volume = Volume;
         }
         ApplyPreviewSize();
@@ -184,7 +287,7 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
     {
         var settings = _session?.Project.Settings;
         if (settings is null || Quality is null) return;
-        var div = (int)Quality.Value;
+        var div = EffectiveDivisor;
         // Tamanhos pares para conversões de cor; limite inferior para não ficar ilegível.
         var w = Math.Max(160, settings.Width / div / 2 * 2);
         var h = Math.Max(90, settings.Height / div / 2 * 2);
@@ -215,8 +318,10 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
         if (Image is null || Image.PixelWidth != img.Width || Image.PixelHeight != img.Height)
             Image = new WriteableBitmap(img.Width, img.Height, 96, 96, PixelFormats.Bgra32, null);
         Image.WritePixels(new Int32Rect(0, 0, img.Width, img.Height), img.Pixels, img.Stride, 0);
+        var label = Quality is { IsAuto: true } ? $"Auto {DivisorLabel(EffectiveDivisor)}" : Quality?.Label;
         Status = string.Create(CultureInfo.GetCultureInfo("pt-BR"),
-            $"{Quality?.Label} · {img.Width} × {img.Height} · {frame.RenderTime.TotalMilliseconds:0} ms");
+            $"{label} · {img.Width} × {img.Height} · {frame.RenderTime.TotalMilliseconds:0} ms");
+        TrackRenderTime(frame);
     }
 
     // ---------------------------------------------------------------- reprodução
@@ -317,6 +422,7 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
         _engine.PlaybackEnded -= OnPlaybackEnded;
         _proxies.StatusChanged -= OnProxyStatusChanged;
         _projects.SessionChanged -= OnSessionChanged;
+        _settings.Changed -= OnSettingsChanged;
         Timeline.PropertyChanged -= OnTimelinePropertyChanged;
         Timeline.PlayPauseRequested -= OnPlayPauseRequested;
         if (_session is not null) _session.History.Changed -= OnHistoryChanged;

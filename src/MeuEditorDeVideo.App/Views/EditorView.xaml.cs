@@ -1,8 +1,9 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using MeuEditorDeVideo.App.Controls;
+using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.App.ViewModels;
 using MeuEditorDeVideo.App.ViewModels.Media;
 
@@ -13,25 +14,91 @@ public partial class EditorView : UserControl
     public EditorView()
     {
         InitializeComponent();
-        PreviewKeyDown += EditorView_PreviewKeyDown;
+        // Os atalhos ficam na janela: funcionam mesmo com o foco fora do editor (ex.: depois de fechar um menu).
+        Loaded += (_, _) =>
+        {
+            if (Window.GetWindow(this) is not { } window || ReferenceEquals(window, _host)) return;
+            Unhook();
+            _host = window;
+            window.PreviewKeyDown += EditorView_PreviewKeyDown;
+            window.KeyDown += EditorView_KeyDown;
+        };
+        Unloaded += (_, _) => Unhook();
     }
 
-    /// <summary>Espaço reproduz/pausa e F11 abre a tela cheia, exceto enquanto se digita num campo de texto.</summary>
+    private Window? _host;
+
+    private void Unhook()
+    {
+        if (_host is null) return;
+        _host.PreviewKeyDown -= EditorView_PreviewKeyDown;
+        _host.KeyDown -= EditorView_KeyDown;
+        _host = null;
+    }
+
+    private static ShortcutService? Shortcuts =>
+        System.Windows.Application.Current is App ? App.Services.GetService(typeof(ShortcutService)) as ShortcutService : null;
+
+    private static Key RealKey(KeyEventArgs e) => e.Key == Key.System ? e.SystemKey : e.Key;
+
+    /// <summary>
+    /// Reproduzir/pausar e tela cheia (RF212) antes dos controles, para que o Espaço não acione o botão em foco — exceto
+    /// enquanto se digita num campo de texto.
+    /// </summary>
     private void EditorView_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-        if (Keyboard.FocusedElement is TextBox or PasswordBox || Keyboard.Modifiers != ModifierKeys.None) return;
+        if (Keyboard.FocusedElement is TextBox or PasswordBox) return;
         if (DataContext is not EditorViewModel { Preview: { } preview }) return;
-        if (e.Key == Key.Space)
+        switch (Shortcuts?.Find(RealKey(e), Keyboard.Modifiers))
         {
-            if (preview.PlayPauseCommand.CanExecute(null)) preview.PlayPauseCommand.Execute(null);
-            e.Handled = true;
-        }
-        else if (e.Key == Key.F11)
-        {
-            AbrirTelaCheia();
-            e.Handled = true;
+            case ShortcutCatalog.PlayPause:
+                if (preview.PlayPauseCommand.CanExecute(null)) preview.PlayPauseCommand.Execute(null);
+                e.Handled = true;
+                break;
+            case ShortcutCatalog.FullScreen:
+                AbrirTelaCheia();
+                e.Handled = true;
+                break;
         }
     }
+
+    /// <summary>
+    /// Atalhos gerais do editor (RF212), depois dos controles: uma caixa de texto em foco trata primeiro as próprias
+    /// teclas (ex.: Ctrl+Z desfaz a digitação). Os atalhos da linha do tempo ficam no <see cref="TimelineControl"/>.
+    /// </summary>
+    private void EditorView_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Handled || DataContext is not EditorViewModel vm) return;
+        var action = Shortcuts?.Find(RealKey(e), Keyboard.Modifiers);
+        // Teclas sem modificador não disparam ações gerais enquanto se digita.
+        if (action is null || (Keyboard.Modifiers == ModifierKeys.None && Keyboard.FocusedElement is TextBox or PasswordBox)) return;
+        if (action == ShortcutCatalog.Settings)
+        {
+            AbrirConfiguracoes();
+            e.Handled = true;
+            return;
+        }
+        System.Windows.Input.ICommand? command = action switch
+        {
+            ShortcutCatalog.NewProject => vm.NewProjectCommand,
+            ShortcutCatalog.OpenProject => vm.OpenCommand,
+            ShortcutCatalog.Save => vm.SaveCommand,
+            ShortcutCatalog.SaveAs => vm.SaveAsCommand,
+            ShortcutCatalog.Import => vm.ImportMediaCommand,
+            ShortcutCatalog.Export => vm.ExportCommand,
+            ShortcutCatalog.Undo => vm.UndoCommand,
+            ShortcutCatalog.Redo => vm.RedoCommand,
+            _ => null,
+        };
+        if (command is null) return;
+        if (command.CanExecute(null)) command.Execute(null);
+        e.Handled = true;
+    }
+
+    private void Configuracoes_Click(object sender, RoutedEventArgs e) => AbrirConfiguracoes();
+
+    /// <summary>Configurações do aplicativo (RF208–RF214).</summary>
+    private void AbrirConfiguracoes() => Dialogs.SettingsWindow.ShowFor(Window.GetWindow(this));
 
     private void TelaCheia_Click(object sender, RoutedEventArgs e) => AbrirTelaCheia();
 

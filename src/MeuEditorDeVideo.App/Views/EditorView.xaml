@@ -1,4 +1,4 @@
-<UserControl x:Class="MeuEditorDeVideo.App.Views.EditorView"
+﻿<UserControl x:Class="MeuEditorDeVideo.App.Views.EditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:MeuEditorDeVideo.App.ViewModels"
@@ -9,17 +9,6 @@
              xmlns:model="clr-namespace:MeuEditorDeVideo.Domain.Model;assembly=MeuEditorDeVideo.Domain"
              Background="{DynamicResource Med.Background}"
              Foreground="{DynamicResource Med.Text}">
-    <UserControl.InputBindings>
-        <KeyBinding Key="N" Modifiers="Control" Command="{Binding NewProjectCommand}" />
-        <KeyBinding Key="I" Modifiers="Control" Command="{Binding ImportMediaCommand}" />
-        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}" />
-        <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}" />
-        <KeyBinding Key="S" Modifiers="Control+Shift" Command="{Binding SaveAsCommand}" />
-        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding UndoCommand}" />
-        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding RedoCommand}" />
-        <KeyBinding Key="Z" Modifiers="Control+Shift" Command="{Binding RedoCommand}" />
-        <KeyBinding Key="E" Modifiers="Control" Command="{Binding ExportCommand}" />
-    </UserControl.InputBindings>
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Editor.BoolToVis" />
         <!-- Botões da barra de ações e de controles -->
@@ -216,24 +205,24 @@
         <!-- 1. Menu -->
         <Menu Grid.Row="0">
             <MenuItem Header="{StaticResource Editor.Menu.Arquivo}">
-                <MenuItem Header="{StaticResource Editor.Menu.NovoProjeto}" Command="{Binding NewProjectCommand}" InputGestureText="Ctrl+N" />
-                <MenuItem Header="{StaticResource Editor.Menu.Abrir}" Command="{Binding OpenCommand}" InputGestureText="Ctrl+O" />
+                <MenuItem Header="{StaticResource Editor.Menu.NovoProjeto}" Command="{Binding NewProjectCommand}" ctl:ShortcutText.Action="projeto.novo" />
+                <MenuItem Header="{StaticResource Editor.Menu.Abrir}" Command="{Binding OpenCommand}" ctl:ShortcutText.Action="projeto.abrir" />
                 <Separator />
-                <MenuItem Header="{StaticResource Editor.Menu.ImportarMidia}" Command="{Binding ImportMediaCommand}" InputGestureText="Ctrl+I" />
+                <MenuItem Header="{StaticResource Editor.Menu.ImportarMidia}" Command="{Binding ImportMediaCommand}" ctl:ShortcutText.Action="midia.importar" />
                 <MenuItem Header="{StaticResource Editor.Menu.ImportarSequencia}" Command="{Binding ImportSequenceCommand}" />
                 <Separator />
-                <MenuItem Header="{StaticResource Editor.Menu.Salvar}" Command="{Binding SaveCommand}" InputGestureText="Ctrl+S" />
-                <MenuItem Header="{StaticResource Editor.Menu.SalvarComo}" Command="{Binding SaveAsCommand}" InputGestureText="Ctrl+Shift+S" />
+                <MenuItem Header="{StaticResource Editor.Menu.Salvar}" Command="{Binding SaveCommand}" ctl:ShortcutText.Action="projeto.salvar" />
+                <MenuItem Header="{StaticResource Editor.Menu.SalvarComo}" Command="{Binding SaveAsCommand}" ctl:ShortcutText.Action="projeto.salvarComo" />
                 <MenuItem Header="{StaticResource Editor.Menu.CopiaSeguranca}" Command="{Binding CreateBackupCommand}" />
                 <Separator />
-                <MenuItem Header="{StaticResource Editor.Menu.Exportar}" Command="{Binding ExportCommand}" InputGestureText="Ctrl+E" />
+                <MenuItem Header="{StaticResource Editor.Menu.Exportar}" Command="{Binding ExportCommand}" ctl:ShortcutText.Action="projeto.exportar" />
                 <MenuItem Header="{StaticResource Editor.Menu.FilaRenderizacao}" Command="{Binding ShowRenderQueueCommand}" />
                 <Separator />
                 <MenuItem Header="{StaticResource Editor.Menu.Inicio}" Command="{Binding GoHomeCommand}" />
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Editar}">
-                <MenuItem Header="{StaticResource Editor.Menu.Desfazer}" Command="{Binding UndoCommand}" InputGestureText="Ctrl+Z" ToolTip="{Binding UndoToolTip}" />
-                <MenuItem Header="{StaticResource Editor.Menu.Refazer}" Command="{Binding RedoCommand}" InputGestureText="Ctrl+Y" ToolTip="{Binding RedoToolTip}" />
+                <MenuItem Header="{StaticResource Editor.Menu.Desfazer}" Command="{Binding UndoCommand}" ctl:ShortcutText.Action="editar.desfazer" ToolTip="{Binding UndoToolTip}" />
+                <MenuItem Header="{StaticResource Editor.Menu.Refazer}" Command="{Binding RedoCommand}" ctl:ShortcutText.Action="editar.refazer" ToolTip="{Binding RedoToolTip}" />
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Visualizar}">
                 <MenuItem Header="{StaticResource Editor.Menu.AlternarTema}" Command="{Binding ToggleThemeCommand}" />
@@ -249,6 +238,8 @@
                 <MenuItem Header="{StaticResource Editor.Ferramenta.ExportarLegendas}" Command="{Binding TextLibrary.ExportSubtitlesCommand}" />
                 <Separator />
                 <MenuItem Header="{StaticResource Editor.Ferramenta.ModelosIA}" Click="ModelosIA_Click" AutomationProperties.Name="Modelos de IA" />
+                <Separator />
+                <MenuItem Header="Configurações…" Click="Configuracoes_Click" AutomationProperties.Name="Configurações" ctl:ShortcutText.Action="app.configuracoes" />
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Ajuda}" />
         </Menu>
@@ -874,6 +865,18 @@
                             </TextBlock>
                             <TextBlock Text="{Binding Preview.Status}" FontSize="10" Margin="6,4" Opacity="0.7"
                                        Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                            <TextBlock Text="{Binding Preview.AutoNotice}" FontSize="11" Margin="6,4" TextWrapping="Wrap" MaxWidth="420"
+                                       Foreground="#FFD54F" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Grid>
                     </Border>
 
@@ -1251,22 +1254,22 @@
                                                  AutomationProperties.Name="{StaticResource Editor.Timeline.Nome}">
                                 <ctl:TimelineControl.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="{StaticResource Editor.Timeline.Dividir}" InputGestureText="S" Command="{Binding Timeline.SplitCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Dividir}" ctl:ShortcutText.Action="linha.dividir" Command="{Binding Timeline.SplitCommand}" />
                                         <Separator />
-                                        <MenuItem Header="{StaticResource Editor.Timeline.Recortar}" InputGestureText="Ctrl+X" Command="{Binding Timeline.CutCommand}" />
-                                        <MenuItem Header="{StaticResource Editor.Timeline.Copiar}" InputGestureText="Ctrl+C" Command="{Binding Timeline.CopyCommand}" />
-                                        <MenuItem Header="{StaticResource Editor.Timeline.Colar}" InputGestureText="Ctrl+V" Command="{Binding Timeline.PasteCommand}" />
-                                        <MenuItem Header="{StaticResource Editor.Timeline.Duplicar}" InputGestureText="Ctrl+D" Command="{Binding Timeline.DuplicateCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Recortar}" ctl:ShortcutText.Action="linha.recortar" Command="{Binding Timeline.CutCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Copiar}" ctl:ShortcutText.Action="linha.copiar" Command="{Binding Timeline.CopyCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Colar}" ctl:ShortcutText.Action="linha.colar" Command="{Binding Timeline.PasteCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Duplicar}" ctl:ShortcutText.Action="linha.duplicar" Command="{Binding Timeline.DuplicateCommand}" />
                                         <Separator />
                                         <MenuItem Header="{StaticResource Editor.Timeline.Velocidade}" Command="{Binding Timeline.SetSpeedCommand}" />
-                                        <MenuItem Header="{StaticResource Editor.Timeline.Agrupar}" InputGestureText="Ctrl+G" Command="{Binding Timeline.GroupCommand}" />
-                                        <MenuItem Header="{StaticResource Editor.Timeline.Desagrupar}" InputGestureText="Ctrl+Shift+G" Command="{Binding Timeline.UngroupCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Agrupar}" ctl:ShortcutText.Action="linha.agrupar" Command="{Binding Timeline.GroupCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Desagrupar}" ctl:ShortcutText.Action="linha.desagrupar" Command="{Binding Timeline.UngroupCommand}" />
                                         <MenuItem Header="{StaticResource Editor.Timeline.Vincular}" Command="{Binding Timeline.LinkCommand}" />
                                         <MenuItem Header="{StaticResource Editor.Timeline.Desvincular}" Command="{Binding Timeline.UnlinkCommand}" />
                                         <Separator />
-                                        <MenuItem Header="{StaticResource Editor.Timeline.SelecionarTudo}" InputGestureText="Ctrl+A" Command="{Binding Timeline.SelectAllCommand}" />
-                                        <MenuItem Header="{StaticResource Editor.Timeline.Excluir}" InputGestureText="Delete" Command="{Binding Timeline.DeleteCommand}" />
-                                        <MenuItem Header="{StaticResource Editor.Timeline.ExcluirRipple}" InputGestureText="Shift+Delete" Command="{Binding Timeline.RippleDeleteCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.SelecionarTudo}" ctl:ShortcutText.Action="linha.selecionarTudo" Command="{Binding Timeline.SelectAllCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Excluir}" ctl:ShortcutText.Action="linha.excluir" Command="{Binding Timeline.DeleteCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.ExcluirRipple}" ctl:ShortcutText.Action="linha.excluirFechando" Command="{Binding Timeline.RippleDeleteCommand}" />
                                     </ContextMenu>
                                 </ctl:TimelineControl.ContextMenu>
                             </ctl:TimelineControl>

@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using FFmpeg.AutoGen;
 using MeuEditorDeVideo.Core.Export;
 using MeuEditorDeVideo.MediaEngine.Native;
@@ -42,6 +42,20 @@ public static unsafe class EncoderCatalog
     };
 
     public static bool IsHardware(string encoder) => Names.Values.Any(n => n.Hardware.Contains(encoder));
+
+    /// <summary>
+    /// Codificadores por hardware que funcionam nesta máquina (§12.3), por fabricante e codec — ex.:
+    /// "NVIDIA NVENC (GPU): H.264, HEVC, AV1". A primeira chamada testa cada codificador (pode levar alguns segundos).
+    /// </summary>
+    public static IReadOnlyList<string> HardwareSummary()
+    {
+        var codecs = new[] { (VideoCodec.H264, "H.264"), (VideoCodec.Hevc, "HEVC"), (VideoCodec.Av1, "AV1") };
+        return codecs
+            .SelectMany(c => Names[c.Item1].Hardware.Where(Works).Select(n => (Family: DisplayName(n), Codec: c.Item2)))
+            .GroupBy(x => x.Family)
+            .Select(g => $"{g.Key}: {string.Join(", ", g.Select(x => x.Codec))}")
+            .ToList();
+    }
 
     /// <summary>Todos os codificadores que funcionam nesta máquina para o codec (hardware primeiro).</summary>
     public static IReadOnlyList<EncoderInfo> Available(VideoCodec codec)

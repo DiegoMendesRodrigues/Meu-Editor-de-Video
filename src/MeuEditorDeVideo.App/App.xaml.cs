@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Threading;
@@ -55,6 +55,8 @@ public partial class App : System.Windows.Application
 
         Services.GetRequiredService<AutosaveScheduler>().Start();
         await Services.GetRequiredService<IRenderQueueService>().InitializeAsync();
+        StartBackgroundMaintenance(logger);
+        await OpenLastProjectAsync(logger);
 
         base.OnStartup(e);
     }
@@ -70,6 +72,45 @@ public partial class App : System.Windows.Application
         }
 
         base.OnExit(e);
+    }
+
+    /// <summary>
+    /// Em segundo plano: detecta o hardware (§12.3, inclui testar os codificadores) e aplica o limite do cache em disco
+    /// (RF209). Nada disso bloqueia a interface.
+    /// </summary>
+    private static void StartBackgroundMaintenance(ILogger logger)
+    {
+        var hardware = Services.GetRequiredService<IHardwareInfoService>();
+        var cache = Services.GetRequiredService<ICacheMaintenance>();
+        var limit = (long)Math.Max(1, Services.GetRequiredService<ISettingsService>().Current.PreviewCacheGigabytes) << 30;
+        _ = Task.Run(() =>
+        {
+            try
+            {
+                hardware.Get();
+                var freed = cache.Trim(limit);
+                if (freed > 0) logger.LogInformation("Cache em disco reduzido ao limite: {Bytes} bytes liberados.", freed);
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning(ex, "Falha na manutenção em segundo plano.");
+            }
+        });
+    }
+
+    /// <summary>"Abrir o último projeto ao iniciar" (configurações › Geral).</summary>
+    private static async Task OpenLastProjectAsync(ILogger logger)
+    {
+        var settings = Services.GetRequiredService<ISettingsService>().Current;
+        if (!settings.OpenLastProjectOnStartup || settings.RecentProjects.FirstOrDefault() is not { } last || !System.IO.File.Exists(last)) return;
+        try
+        {
+            await Services.GetRequiredService<IProjectWorkflow>().OpenAsync(last);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Não foi possível abrir o último projeto {Caminho}.", last);
+        }
     }
 
     private static void ConfigureServices(IServiceCollection services)
@@ -93,6 +134,23 @@ public partial class App : System.Windows.Application
         services.AddTransient<EditorViewModel>();
 
         services.AddSingleton<MainWindow>();
+
+        // F11: configurações e desempenho.
+        services.AddSingleton<ShortcutService>();
+        services.AddSingleton<ICacheMaintenance>(sp => new Infrastructure.Cache.CacheMaintenance(
+            sp.GetRequiredService<IAppPaths>(), sp.GetService<ILogger<Infrastructure.Cache.CacheMaintenance>>()));
+        services.AddSingleton<IHardwareInfoService>(sp =>
+        {
+            var paths = sp.GetRequiredService<IAppPaths>();
+            var settings = sp.GetRequiredService<ISettingsService>().Current;
+            var projects = settings.DefaultProjectsDirectory
+                ?? System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "Meu Editor de Vídeo");
+            return new Infrastructure.Hardware.HardwareDetector(
+                [("Cache", paths.Cache), ("Projetos", projects)],
+                MediaEngine.Export.EncoderCatalog.HardwareSummary,
+                MediaEngine.Native.HardwareProbe.D3D11VideoDecoding,
+                sp.GetService<ILogger<Infrastructure.Hardware.HardwareDetector>>());
+        });
     }
 
     private static void ApplyPortugueseCulture()

@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Core.AI;
+﻿using MeuEditorDeVideo.Core.AI;
 using System.Diagnostics;
 using MeuEditorDeVideo.AudioEngine;
 using MeuEditorDeVideo.Core.Media;
@@ -35,7 +35,8 @@ public sealed record PreviewFrame(BgraImage Image, MediaTime Time, TimeSpan Rend
 /// </summary>
 public sealed class PreviewEngine : IDisposable
 {
-    private const int CacheCapacity = 48;
+    /// <summary>Orçamento padrão de memória para quadros prontos (RNF013); ajustado pelo hardware em <see cref="CacheBudgetBytes"/>.</summary>
+    public const long DefaultCacheBudgetBytes = 256L << 20;
     private const int AudioChunkFrames = 1024;
 
     private readonly IVideoFrameSourceFactory _videoFactory;
@@ -48,6 +49,8 @@ public sealed class PreviewEngine : IDisposable
     private readonly AutoResetEvent _renderSignal = new(false);
     private readonly Lock _gate = new();
     private readonly LinkedList<(CacheKey Key, PreviewFrame Frame)> _cache = new();
+    private long _cacheBytes;
+    private long _cacheBudget = DefaultCacheBudgetBytes;
     private readonly Queue<(MediaTime Time, int W, int H, TaskCompletionSource<BgraImage?> Done)> _captures = new();
 
     private volatile PreviewSnapshot? _snapshot;
@@ -408,13 +411,41 @@ public sealed class PreviewEngine : IDisposable
     private void AddCache(CacheKey key, PreviewFrame frame)
     {
         _cache.AddFirst((key, frame));
-        while (_cache.Count > CacheCapacity) _cache.RemoveLast();
+        _cacheBytes += frame.Image.Pixels.Length;
+        TrimCacheTo(Interlocked.Read(ref _cacheBudget));
     }
 
-    private void ClearCache() => _cache.Clear();
+    /// <summary>Remove os quadros usados há mais tempo até caber no orçamento (sempre mantém o mais recente).</summary>
+    private void TrimCacheTo(long budget)
+    {
+        while (_cache.Count > 1 && _cacheBytes > budget && _cache.Last is { } last)
+        {
+            _cacheBytes -= last.Value.Frame.Image.Pixels.Length;
+            _cache.RemoveLast();
+        }
+    }
+
+    private void ClearCache()
+    {
+        _cache.Clear();
+        _cacheBytes = 0;
+    }
+
+    /// <summary>
+    /// Memória máxima para quadros prontos da pré-visualização (RNF013). Ao reduzir, o excesso é liberado no próximo
+    /// quadro renderizado.
+    /// </summary>
+    public long CacheBudgetBytes
+    {
+        get => Interlocked.Read(ref _cacheBudget);
+        set => Interlocked.Exchange(ref _cacheBudget, Math.Max(8L << 20, value));
+    }
 
     /// <summary>Quadros em cache (diagnóstico/testes).</summary>
     public int CachedFrames => _cache.Count;
+
+    /// <summary>Memória ocupada pelos quadros em cache (diagnóstico/testes).</summary>
+    public long CachedBytes => _cacheBytes;
 
     // ------------------------------------------------------------------ áudio
 

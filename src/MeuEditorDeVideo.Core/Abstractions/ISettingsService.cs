@@ -1,6 +1,15 @@
-using MeuEditorDeVideo.Core.AI;
+﻿using MeuEditorDeVideo.Core.AI;
 
 namespace MeuEditorDeVideo.Core.Abstractions;
+
+/// <summary>Qualidade padrão da pré-visualização (RF210). Automática escolhe pelo hardware e pela resolução do projeto (§12.3).</summary>
+public enum PreviewQualityMode
+{
+    Auto,
+    Full,
+    Half,
+    Quarter,
+}
 
 public enum AppTheme
 {
@@ -16,7 +25,17 @@ public sealed record AppSettings
     public AppTheme Theme { get; init; } = AppTheme.Dark;
     public bool OpenLastProjectOnStartup { get; init; }
     public bool UseGpuAcceleration { get; init; } = true;
+    /// <summary>Limite do cache em disco (miniaturas, formas de onda, proxies e máscaras de IA), em GB (RF209).</summary>
     public int PreviewCacheGigabytes { get; init; } = 4;
+
+    /// <summary>Qualidade padrão da pré-visualização (RF210).</summary>
+    public PreviewQualityMode PreviewQuality { get; init; } = PreviewQualityMode.Auto;
+
+    /// <summary>Memória para quadros prontos da pré-visualização, em MB; 0 = automática pelo hardware (RNF013).</summary>
+    public int PreviewMemoryMegabytes { get; init; }
+
+    /// <summary>Atalhos alterados pelo usuário: ação → combinação (ex.: "Ctrl+Shift+S"); vazio = sem atalho (RF212).</summary>
+    public IReadOnlyDictionary<string, string> Shortcuts { get; init; } = new Dictionary<string, string>();
 
     /// <summary>A pré-visualização usa proxies 540p quando existirem.</summary>
     public bool UseProxies { get; init; } = true;

@@ -1,6 +1,7 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
+using MeuEditorDeVideo.App.Services;
 using System.Windows.Media;
 using MeuEditorDeVideo.App.ViewModels.Timeline;
 using MeuEditorDeVideo.Domain.Editing;
@@ -47,45 +48,49 @@ public abstract class TimelineSurface : FrameworkElement
 
     private void OnInvalidated(object? sender, EventArgs e) => InvalidateVisual();
 
-    /// <summary>Atalhos da linha do tempo (RF049, RF058, RF060): só valem com o foco na régua ou nas trilhas.</summary>
+    /// <summary>Atalhos configuráveis (RF212); nulo fora do aplicativo (ex.: testes de desenho).</summary>
+    private static ShortcutService? Shortcuts =>
+        System.Windows.Application.Current is App ? App.Services.GetService(typeof(ShortcutService)) as ShortcutService : null;
+
+    /// <summary>Atalhos da linha do tempo (RF049, RF058, RF060, RF212): só valem com o foco na régua ou nas trilhas.</summary>
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
         if (e.Handled || ViewModel is not { } vm) return;
-        if (e.Key == Key.Space && Keyboard.Modifiers == ModifierKeys.None)
+        var shortcuts = Shortcuts;
+        var key = e.Key == Key.System ? e.SystemKey : e.Key;
+        var action = shortcuts?.Find(key, Keyboard.Modifiers);
+        if (action == ShortcutCatalog.PlayPause)
         {
             vm.RequestPlayPause();
             e.Handled = true;
             return;
         }
-        var mods = Keyboard.Modifiers;
-        var ctrl = mods.HasFlag(ModifierKeys.Control);
-        var shift = mods.HasFlag(ModifierKeys.Shift);
-        System.Windows.Input.ICommand? command = (e.Key, ctrl, shift) switch
+        System.Windows.Input.ICommand? command = action switch
         {
-            (Key.Left, false, false) => vm.StepBackCommand,
-            (Key.Right, false, false) => vm.StepForwardCommand,
-            (Key.Left, false, true) => vm.StepBackSecondCommand,
-            (Key.Right, false, true) => vm.StepForwardSecondCommand,
-            (Key.Home, _, _) => vm.GoToStartCommand,
-            (Key.End, _, _) => vm.GoToEndCommand,
-            (Key.Up, false, false) => vm.PreviousEditPointCommand,
-            (Key.Down, false, false) => vm.NextEditPointCommand,
-            (Key.S, false, false) or (Key.K, true, false) => vm.SplitCommand,
-            (Key.Delete, false, false) or (Key.Back, false, false) => vm.DeleteCommand,
-            (Key.Delete, false, true) => vm.RippleDeleteCommand,
-            (Key.C, true, false) => vm.CopyCommand,
-            (Key.X, true, false) => vm.CutCommand,
-            (Key.V, true, false) => vm.PasteCommand,
-            (Key.D, true, false) => vm.DuplicateCommand,
-            (Key.A, true, false) => vm.SelectAllCommand,
-            (Key.G, true, false) => vm.GroupCommand,
-            (Key.G, true, true) => vm.UngroupCommand,
-            (Key.M, false, false) => vm.AddMarkerCommand,
-            (Key.N, false, false) => vm.ToggleSnapCommand,
-            (Key.OemPlus or Key.Add, true, false) => vm.ZoomInCommand,
-            (Key.OemMinus or Key.Subtract, true, false) => vm.ZoomOutCommand,
-            (Key.Z, false, true) => vm.ZoomToFitCommand,
+            ShortcutCatalog.StepBack => vm.StepBackCommand,
+            ShortcutCatalog.StepForward => vm.StepForwardCommand,
+            ShortcutCatalog.StepBackSecond => vm.StepBackSecondCommand,
+            ShortcutCatalog.StepForwardSecond => vm.StepForwardSecondCommand,
+            ShortcutCatalog.GoToStart => vm.GoToStartCommand,
+            ShortcutCatalog.GoToEnd => vm.GoToEndCommand,
+            ShortcutCatalog.PreviousEdit => vm.PreviousEditPointCommand,
+            ShortcutCatalog.NextEdit => vm.NextEditPointCommand,
+            ShortcutCatalog.Split => vm.SplitCommand,
+            ShortcutCatalog.Delete => vm.DeleteCommand,
+            ShortcutCatalog.RippleDelete => vm.RippleDeleteCommand,
+            ShortcutCatalog.Copy => vm.CopyCommand,
+            ShortcutCatalog.Cut => vm.CutCommand,
+            ShortcutCatalog.Paste => vm.PasteCommand,
+            ShortcutCatalog.Duplicate => vm.DuplicateCommand,
+            ShortcutCatalog.SelectAll => vm.SelectAllCommand,
+            ShortcutCatalog.Group => vm.GroupCommand,
+            ShortcutCatalog.Ungroup => vm.UngroupCommand,
+            ShortcutCatalog.Marker => vm.AddMarkerCommand,
+            ShortcutCatalog.Snap => vm.ToggleSnapCommand,
+            ShortcutCatalog.ZoomIn => vm.ZoomInCommand,
+            ShortcutCatalog.ZoomOut => vm.ZoomOutCommand,
+            ShortcutCatalog.ZoomFit => vm.ZoomToFitCommand,
             _ => null,
         };
         if (command is null) return;
