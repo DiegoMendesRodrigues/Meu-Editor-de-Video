@@ -46,4 +46,4 @@ Mudanças nesta política serão publicadas neste mesmo endereço, com a data de
 
 ## Contato
 
-Dúvidas sobre esta política: [informe aqui o e-mail ou a página de suporte].
+Dúvidas sobre esta política: diego.m.rodrigues@gmail.com.
