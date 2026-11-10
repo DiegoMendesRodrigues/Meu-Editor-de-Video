@@ -121,7 +121,7 @@
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  Visibility="{Binding HasRecentProjects, Converter={StaticResource BoolToVis}}">
                             <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
+                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                     <Setter Property="Padding" Value="0" />
                                     <Setter Property="Margin" Value="0,0,0,4" />
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />

@@ -17,9 +17,6 @@
         <Style x:Key="Label" TargetType="TextBlock">
             <Setter Property="Margin" Value="0,0,0,4" />
         </Style>
-        <Style x:Key="Field" TargetType="FrameworkElement">
-            <Setter Property="Margin" Value="0,0,0,12" />
-        </Style>
         <Style x:Key="Section" TargetType="TextBlock" BasedOn="{StaticResource Med.SectionTitle}">
             <Setter Property="Margin" Value="0,4,0,8" />
         </Style>
@@ -70,7 +67,7 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                     <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
+                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                             <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
                         </Style>
                     </ListBox.ItemContainerStyle>
@@ -93,12 +90,12 @@
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="Formato" Style="{StaticResource Label}" />
                         <ComboBox ItemsSource="{Binding Containers}" SelectedItem="{Binding Container, Mode=TwoWay}"
-                                  AutomationProperties.Name="Formato do arquivo" Style="{StaticResource Field}" />
+                                  AutomationProperties.Name="Formato do arquivo" Margin="0,0,0,12" />
                     </StackPanel>
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="Codec de vídeo" Style="{StaticResource Label}" />
                         <ComboBox ItemsSource="{Binding VideoCodecs}" SelectedItem="{Binding VideoCodec, Mode=TwoWay}"
-                                  AutomationProperties.Name="Codec de vídeo" Style="{StaticResource Field}" />
+                                  AutomationProperties.Name="Codec de vídeo" Margin="0,0,0,12" />
                     </StackPanel>
                 </Grid>
 
@@ -120,12 +117,12 @@
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="Largura (px)" Style="{StaticResource Label}" />
                         <TextBox Text="{Binding WidthText, UpdateSourceTrigger=PropertyChanged}" Padding="6,4"
-                                 AutomationProperties.Name="Largura em pixels" Style="{StaticResource Field}" />
+                                 AutomationProperties.Name="Largura em pixels" Margin="0,0,0,12" />
                     </StackPanel>
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="Altura (px)" Style="{StaticResource Label}" />
                         <TextBox Text="{Binding HeightText, UpdateSourceTrigger=PropertyChanged}" Padding="6,4"
-                                 AutomationProperties.Name="Altura em pixels" Style="{StaticResource Field}" />
+                                 AutomationProperties.Name="Altura em pixels" Margin="0,0,0,12" />
                     </StackPanel>
                 </Grid>
                 <Grid>
@@ -137,12 +134,12 @@
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="Taxa de quadros" Style="{StaticResource Label}" />
                         <ComboBox ItemsSource="{Binding FrameRates}" SelectedItem="{Binding FrameRate, Mode=TwoWay}"
-                                  AutomationProperties.Name="Taxa de quadros" Style="{StaticResource Field}" />
+                                  AutomationProperties.Name="Taxa de quadros" Margin="0,0,0,12" />
                     </StackPanel>
                     <StackPanel Grid.Column="2" Visibility="{Binding HasProfile, Converter={StaticResource BoolToVis}}">
                         <TextBlock Text="Perfil" Style="{StaticResource Label}" />
                         <ComboBox ItemsSource="{Binding Profiles}" SelectedItem="{Binding Profile, Mode=TwoWay}"
-                                  AutomationProperties.Name="Perfil do codec" Style="{StaticResource Field}" />
+                                  AutomationProperties.Name="Perfil do codec" Margin="0,0,0,12" />
                     </StackPanel>
                 </Grid>
 
@@ -155,17 +152,17 @@
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="Controle de taxa" Style="{StaticResource Label}" />
                         <ComboBox ItemsSource="{Binding RateControls}" SelectedItem="{Binding RateControl, Mode=TwoWay}"
-                                  AutomationProperties.Name="Controle de taxa" Style="{StaticResource Field}" />
+                                  AutomationProperties.Name="Controle de taxa" Margin="0,0,0,12" />
                     </StackPanel>
                     <StackPanel Grid.Column="2" Visibility="{Binding HasBitrate, Converter={StaticResource BoolToVis}}">
                         <TextBlock Text="Taxa de bits do vídeo (kbps)" Style="{StaticResource Label}" />
                         <TextBox Text="{Binding BitrateText, UpdateSourceTrigger=PropertyChanged}" Padding="6,4"
-                                 AutomationProperties.Name="Taxa de bits do vídeo em kbps" Style="{StaticResource Field}" />
+                                 AutomationProperties.Name="Taxa de bits do vídeo em kbps" Margin="0,0,0,12" />
                     </StackPanel>
                     <StackPanel Grid.Column="2" Visibility="{Binding HasQuality, Converter={StaticResource BoolToVis}}">
                         <TextBlock Text="{Binding QualityLabel}" Style="{StaticResource Label}" />
                         <Slider Minimum="0" Maximum="51" Value="{Binding Quality}" IsSnapToTickEnabled="True" TickFrequency="1"
-                                AutomationProperties.Name="Qualidade constante" Style="{StaticResource Field}" />
+                                AutomationProperties.Name="Qualidade constante" Margin="0,0,0,12" />
                     </StackPanel>
                 </Grid>
 
@@ -179,7 +176,7 @@
                               AutomationProperties.Name="Legendas queimadas no vídeo" />
                     <TextBlock Text="Arquivo de legendas ao lado do vídeo" Style="{StaticResource Label}" />
                     <ComboBox ItemsSource="{Binding SubtitleFiles}" SelectedItem="{Binding SubtitleFile}" DisplayMemberPath="Label"
-                              AutomationProperties.Name="Arquivo de legendas" Style="{StaticResource Field}" Margin="0,0,0,12" HorizontalAlignment="Left" MinWidth="200" />
+                              AutomationProperties.Name="Arquivo de legendas" Margin="0,0,0,12" HorizontalAlignment="Left" MinWidth="200" />
                 </StackPanel>
 
                 <TextBlock Text="Áudio" Style="{StaticResource Section}" />
@@ -192,12 +189,12 @@
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="Codec de áudio" Style="{StaticResource Label}" />
                         <ComboBox ItemsSource="{Binding AudioCodecs}" SelectedItem="{Binding AudioCodec, Mode=TwoWay}"
-                                  AutomationProperties.Name="Codec de áudio" Style="{StaticResource Field}" />
+                                  AutomationProperties.Name="Codec de áudio" Margin="0,0,0,12" />
                     </StackPanel>
                     <StackPanel Grid.Column="2" Visibility="{Binding HasAudioBitrate, Converter={StaticResource BoolToVis}}">
                         <TextBlock Text="Taxa de bits do áudio (kbps)" Style="{StaticResource Label}" />
                         <TextBox Text="{Binding AudioBitrateText, UpdateSourceTrigger=PropertyChanged}" Padding="6,4"
-                                 AutomationProperties.Name="Taxa de bits do áudio em kbps" Style="{StaticResource Field}" />
+                                 AutomationProperties.Name="Taxa de bits do áudio em kbps" Margin="0,0,0,12" />
                     </StackPanel>
                 </Grid>
                 <Grid Visibility="{Binding HasAudio, Converter={StaticResource BoolToVis}}">
@@ -209,12 +206,12 @@
                     <StackPanel Grid.Column="0">
                         <TextBlock Text="Taxa de amostragem" Style="{StaticResource Label}" />
                         <ComboBox ItemsSource="{Binding SampleRates}" SelectedItem="{Binding SampleRate, Mode=TwoWay}"
-                                  AutomationProperties.Name="Taxa de amostragem" Style="{StaticResource Field}" />
+                                  AutomationProperties.Name="Taxa de amostragem" Margin="0,0,0,12" />
                     </StackPanel>
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="Canais" Style="{StaticResource Label}" />
                         <ComboBox ItemsSource="{Binding ChannelOptions}" SelectedItem="{Binding Channels, Mode=TwoWay}"
-                                  AutomationProperties.Name="Canais de áudio" Style="{StaticResource Field}" />
+                                  AutomationProperties.Name="Canais de áudio" Margin="0,0,0,12" />
                     </StackPanel>
                 </Grid>
 
