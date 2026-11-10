@@ -53,6 +53,7 @@ public sealed class RecentProjectRemovalTests : IDisposable
         public IReadOnlyList<string> PickFiles(string title, string filter, string? initialDirectory) => [];
         public string? Prompt(string title, string label, string initialValue) => null;
         public bool? ShowModal(Window dialog) => null;
+        public bool ShowSettings() => false;
     }
 
     private sealed class FakeAutosave(params RecoverableProject[] recoverable) : IAutosaveStore

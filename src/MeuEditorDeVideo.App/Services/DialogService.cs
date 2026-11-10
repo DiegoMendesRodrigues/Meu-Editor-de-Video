@@ -42,6 +42,9 @@ public interface IDialogService
     /// <summary>Remover projeto recente: só da lista, também o arquivo, ou cancelar.</summary>
     RecentRemovalChoice AskRemoveRecent(string projectName, string path, bool fileExists);
 
+    /// <summary>Abre a janela de configurações. Retorna true se o usuário salvou.</summary>
+    bool ShowSettings();
+
     /// <summary>Mostra uma janela modal sobre a janela principal. Retorna DialogResult.</summary>
     bool? ShowModal(Window dialog);
 }
@@ -135,6 +138,8 @@ public sealed class DialogService : IDialogService
         var dialog = new Views.Dialogs.RecentRemovalWindow(projectName, path, fileExists);
         return ShowModal(dialog) == true ? dialog.Choice : RecentRemovalChoice.Cancel;
     }
+
+    public bool ShowSettings() => Views.Dialogs.SettingsWindow.ShowFor(Owner);
 
     public bool? ShowModal(Window dialog)
     {

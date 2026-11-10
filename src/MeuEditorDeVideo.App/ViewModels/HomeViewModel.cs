@@ -85,11 +85,9 @@ public sealed partial class HomeViewModel(
         Recoverable = projects.FindRecoverable().FirstOrDefault();
     }
 
-    // F11: tela de configurações.
-    [RelayCommand(CanExecute = nameof(CanOpenSettings))]
+    [RelayCommand]
     private void OpenSettings()
     {
+        if (dialogs.ShowSettings()) OnNavigatedTo();
     }
-
-    private static bool CanOpenSettings() => false;
 }
