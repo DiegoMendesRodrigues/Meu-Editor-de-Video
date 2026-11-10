@@ -1,7 +1,7 @@
 {
   "//": "Identidade do produto na Microsoft Store. Copie os valores de Partner Center › (o aplicativo) › Gerenciamento de produto › Identidade do produto. Ver documentation/MICROSOFT_STORE.md.",
-  "identityName": "PREENCHER-Package/Identity/Name",
-  "publisher": "PREENCHER-Package/Identity/Publisher (CN=...)",
-  "publisherDisplayName": "PREENCHER-Package/Properties/PublisherDisplayName",
+  "identityName": "DiegoMendesRodrigues.MeuEditordeVdeo",
+  "publisher": "CN=9B7A62C5-2D2E-42C3-AEAC-C3C5FFA0E614",
+  "publisherDisplayName": "Diego Mendes Rodrigues",
   "displayName": "Meu Editor de Vídeo"
 }
