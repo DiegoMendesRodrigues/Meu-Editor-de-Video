@@ -73,6 +73,9 @@ Hoje **não há certificado** de assinatura de código (decisão do produto). Se
 "O Windows protegeu o computador / Editor desconhecido" no primeiro download; o usuário segue em **Mais informações ›
 Executar assim mesmo**. A instalação e o funcionamento não mudam.
 
+Pela **Microsoft Store** não há esse aviso: a Microsoft assina o pacote MSIX na publicação, sem certificado próprio.
+Ver [MICROSOFT_STORE.md](MICROSOFT_STORE.md).
+
 Quando houver um certificado (OV ou EV, emitido para "Diego Mendes Rodrigues"), a assinatura já está pronta no script:
 
 ```powershell

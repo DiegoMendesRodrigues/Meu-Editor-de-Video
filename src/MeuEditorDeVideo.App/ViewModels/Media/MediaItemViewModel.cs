@@ -70,6 +70,9 @@ public sealed partial class MediaItemViewModel : ObservableObject
 
     public Guid Id => Asset.Id;
     public string Name => Asset.Name;
+
+    /// <summary>Nome lido pelos leitores de tela (o item da lista da biblioteca usa ToString).</summary>
+    public override string ToString() => Name;
     public MediaKind Kind => Asset.Kind;
     public string? Category => Asset.Category;
     public bool IsAudio => Asset.Kind == MediaKind.Audio;
