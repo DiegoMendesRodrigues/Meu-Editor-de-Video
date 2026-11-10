@@ -11,6 +11,7 @@
     <sys:String x:Key="Home.VersaoPrefixo">Versão</sys:String>
     <sys:String x:Key="Home.ProjetosRecentes">Projetos recentes</sys:String>
     <sys:String x:Key="Home.ArquivoNaoEncontrado">Arquivo não encontrado</sys:String>
+    <sys:String x:Key="Home.RemoverRecente">Remover da lista ou excluir o projeto</sys:String>
     <sys:String x:Key="Home.SemProjetosRecentes">Nenhum projeto recente. Crie um novo projeto para começar.</sys:String>
     <sys:String x:Key="Home.ProjetoRecuperavel">Há um projeto que pode ser recuperado</sys:String>
     <sys:String x:Key="Home.Descartar">Descartar</sys:String>

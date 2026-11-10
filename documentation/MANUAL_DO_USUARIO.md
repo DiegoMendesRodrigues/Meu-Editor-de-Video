@@ -32,6 +32,10 @@ Ao abrir o programa, aparece a tela inicial. Ela tem estes elementos:
 - **Abrir Projeto**: abre um projeto salvo anteriormente (arquivo com a extensão .med).
 - **Configurações**: abre as configurações do programa.
 - **Projetos recentes**: lista os últimos projetos abertos. Clique num deles para abrir. Se o arquivo tiver sido movido ou apagado, aparece a mensagem "Arquivo não encontrado".
+  - Para tirar um projeto da lista, clique no ícone de **lixeira** ao lado dele. O programa pergunta o que fazer:
+    - **Remover da lista**: o projeto some de "Projetos recentes", mas o arquivo continua no disco e pode ser aberto de novo por **Abrir Projeto**.
+    - **Excluir também o arquivo**: além de tirar da lista, o arquivo do projeto (`.med`) vai para a **Lixeira do Windows**, de onde pode ser restaurado. As mídias originais (vídeos, fotos, músicas) usadas no projeto **não** são apagadas. Esta opção fica indisponível quando o arquivo não é encontrado.
+    - **Cancelar**: nada muda.
 - **Recuperação**: aparece uma faixa com o botão **Recuperar** e o botão **Descartar** quando existe uma cópia de um projeto que não foi salvo corretamente. Veja a seção Salvar, salvamento automático e recuperação.
 
 ### Criar um projeto

@@ -44,6 +44,7 @@ public sealed class SettingsViewModelTests
         public IReadOnlyList<string> PickFiles(string title, string filter, string? initialDirectory) => [];
         public string? Prompt(string title, string label, string initialValue) => null;
         public bool? ShowModal(Window dialog) => null;
+        public RecentRemovalChoice AskRemoveRecent(string projectName, string path, bool fileExists) => RecentRemovalChoice.Cancel;
     }
 
     private sealed class FakeTheme : IThemeService

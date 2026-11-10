@@ -17,7 +17,8 @@ public sealed partial class HomeViewModel(
     ISettingsService settings,
     IProjectService projects,
     IProjectWorkflow workflow,
-    IDialogService dialogs) : PageViewModel
+    IDialogService dialogs,
+    RecentProjectRemoval removal) : PageViewModel
 {
     public string Version => AppInfo.Version;
 
@@ -58,6 +59,14 @@ public sealed partial class HomeViewModel(
     {
         if (item is null) return;
         if (!await workflow.OpenAsync(item.FullPath)) OnNavigatedTo(); // atualiza a lista (arquivo pode ter sumido)
+    }
+
+    /// <summary>Remove da lista de recentes e, se o usuário escolher, exclui o arquivo do projeto.</summary>
+    [RelayCommand]
+    private async Task RemoveRecent(RecentProjectItem? item)
+    {
+        if (item is null) return;
+        if (await removal.RemoveAsync(item.FullPath, projects.Current?.FilePath)) OnNavigatedTo();
     }
 
     [RelayCommand(CanExecute = nameof(HasRecoverableProject))]

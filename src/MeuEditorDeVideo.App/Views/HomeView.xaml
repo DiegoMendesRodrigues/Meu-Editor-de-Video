@@ -129,36 +129,53 @@
                             </ListBox.ItemContainerStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Button AutomationProperties.Name="{Binding Name}" Style="{StaticResource Med.ToolbarButton}"
-                                            HorizontalAlignment="Stretch"
-                                            HorizontalContentAlignment="Stretch"
-                                            Padding="10,8"
-                                            Command="{Binding DataContext.OpenRecentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}">
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding Name}"
-                                                       FontWeight="Bold"
-                                                       Foreground="{DynamicResource Med.Text}"
-                                                       TextTrimming="CharacterEllipsis" />
-                                            <TextBlock Text="{Binding FullPath}"
-                                                       Style="{StaticResource Med.MutedText}"
-                                                       TextTrimming="CharacterEllipsis" />
-                                            <TextBlock Text="{StaticResource Home.ArquivoNaoEncontrado}"
-                                                       FontSize="12"
-                                                       Foreground="{DynamicResource Med.Danger}">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Exists}" Value="False">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </StackPanel>
-                                    </Button>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button AutomationProperties.Name="{Binding Name}" Style="{StaticResource Med.ToolbarButton}"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Stretch"
+                                                Padding="10,8"
+                                                Command="{Binding DataContext.OpenRecentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontWeight="Bold"
+                                                           Foreground="{DynamicResource Med.Text}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Text="{Binding FullPath}"
+                                                           Style="{StaticResource Med.MutedText}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Text="{StaticResource Home.ArquivoNaoEncontrado}"
+                                                           FontSize="12"
+                                                           Foreground="{DynamicResource Med.Danger}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Exists}" Value="False">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Grid.Column="1"
+                                                Style="{StaticResource Med.ToolbarButton}"
+                                                AutomationProperties.Name="{Binding Name, StringFormat=Remover {0}}"
+                                                ToolTip="{StaticResource Home.RemoverRecente}"
+                                                Margin="4,0,0,0"
+                                                Padding="10,8"
+                                                VerticalAlignment="Stretch"
+                                                Command="{Binding DataContext.RemoveRecentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}">
+                                            <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE74D;" />
+                                        </Button>
+                                    </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>

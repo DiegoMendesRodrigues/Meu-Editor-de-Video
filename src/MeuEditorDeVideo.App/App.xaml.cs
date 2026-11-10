@@ -141,6 +141,8 @@ public partial class App : System.Windows.Application
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IProjectWorkflow, ProjectWorkflow>();
+        services.AddSingleton<IFileRecycler, RecycleBinFileRecycler>();
+        services.AddTransient<RecentProjectRemoval>();
         services.AddTransient<NewProjectViewModel>();
         services.AddTransient<MissingMediaViewModel>();
         services.AddTransient<ViewModels.Media.MediaLibraryViewModel>();
