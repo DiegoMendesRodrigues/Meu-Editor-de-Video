@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
@@ -26,7 +26,7 @@ public sealed record AspectOption(string Label, int W, int H, IReadOnlyList<Reso
 }
 
 /// <summary>Modelo de projeto: preenche proporção, resolução e FPS (ícones genéricos, sem marcas).</summary>
-public sealed record ProjectTemplate(string Label, string Description, int Width, int Height, FrameRate FrameRate)
+public sealed record ProjectTemplate(string Label, string Description, int Width, int Height, FrameRate FrameRate, string Group = "Geral")
 {
     public bool IsCustom => Width == 0;
     public override string ToString() => Label;
@@ -55,7 +55,25 @@ public sealed partial class NewProjectViewModel : ObservableObject
         new("Vídeo quadrado", "1080 × 1080 · 30 FPS · redes sociais", 1080, 1080, FrameRate.Fps30),
         new("Publicação retrato", "1080 × 1350 · 30 FPS · redes sociais", 1080, 1350, FrameRate.Fps30),
         new("Cinema", "3840 × 2160 · 24 FPS", 3840, 2160, FrameRate.Fps24),
-        new("Personalizado", "Defina todas as opções manualmente", 0, 0, FrameRate.Fps30),
+        // Internet: mesmas resoluções dos modelos de exportação (resources/templates/export).
+        new("YouTube", "1920 × 1080 · 30 FPS · vídeo horizontal 16:9", 1920, 1080, FrameRate.Fps30, "Internet e redes sociais"),
+        new("YouTube 4K", "3840 × 2160 · 30 FPS · vídeo horizontal 16:9", 3840, 2160, FrameRate.Fps30, "Internet e redes sociais"),
+        new("YouTube Shorts", "1080 × 1920 · 30 FPS · vertical 9:16", 1080, 1920, FrameRate.Fps30, "Internet e redes sociais"),
+        new("Instagram Reels", "1080 × 1920 · 30 FPS · vertical 9:16", 1080, 1920, FrameRate.Fps30, "Internet e redes sociais"),
+        new("Instagram Stories", "1080 × 1920 · 30 FPS · vertical 9:16", 1080, 1920, FrameRate.Fps30, "Internet e redes sociais"),
+        new("Instagram Feed", "1080 × 1350 · 30 FPS · retrato 4:5", 1080, 1350, FrameRate.Fps30, "Internet e redes sociais"),
+        new("Instagram Feed quadrado", "1080 × 1080 · 30 FPS · quadrado 1:1", 1080, 1080, FrameRate.Fps30, "Internet e redes sociais"),
+        new("TikTok", "1080 × 1920 · 30 FPS · vertical 9:16", 1080, 1920, FrameRate.Fps30, "Internet e redes sociais"),
+        new("Kwai", "1080 × 1920 · 30 FPS · vertical 9:16", 1080, 1920, FrameRate.Fps30, "Internet e redes sociais"),
+        new("WhatsApp Status", "720 × 1280 · 30 FPS · vertical 9:16, arquivo leve", 720, 1280, FrameRate.Fps30, "Internet e redes sociais"),
+        new("WhatsApp compartilhamento", "1280 × 720 · 30 FPS · horizontal, arquivo leve", 1280, 720, FrameRate.Fps30, "Internet e redes sociais"),
+        new("Facebook Feed", "1080 × 1080 · 30 FPS · quadrado 1:1", 1080, 1080, FrameRate.Fps30, "Internet e redes sociais"),
+        new("Facebook Reels", "1080 × 1920 · 30 FPS · vertical 9:16", 1080, 1920, FrameRate.Fps30, "Internet e redes sociais"),
+        new("Facebook Stories", "1080 × 1920 · 30 FPS · vertical 9:16", 1080, 1920, FrameRate.Fps30, "Internet e redes sociais"),
+        new("LinkedIn", "1920 × 1080 · 30 FPS · horizontal 16:9", 1920, 1080, FrameRate.Fps30, "Internet e redes sociais"),
+        new("X (Twitter)", "1920 × 1080 · 30 FPS · horizontal 16:9", 1920, 1080, FrameRate.Fps30, "Internet e redes sociais"),
+        new("Pinterest", "1000 × 1500 · 30 FPS · retrato 2:3", 1000, 1500, FrameRate.Fps30, "Internet e redes sociais"),
+        new("Personalizado", "Defina todas as opções manualmente", 0, 0, FrameRate.Fps30, "Personalizado"),
     ];
 
     public IReadOnlyList<AspectOption> Aspects { get; } =

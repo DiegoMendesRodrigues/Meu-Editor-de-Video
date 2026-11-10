@@ -1,4 +1,4 @@
-<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.NewProjectWindow"
+﻿<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.NewProjectWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Novo projeto"
@@ -10,6 +10,12 @@
         Background="{DynamicResource Med.Background}"
         Foreground="{DynamicResource Med.Text}">
     <Window.Resources>
+        <!-- Modelos de projeto agrupados: geral, internet e redes sociais, personalizado. -->
+        <CollectionViewSource x:Key="TemplatesView" Source="{Binding Templates}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Group" />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
 
@@ -23,10 +29,21 @@
 
             <!-- 1. Modelo de projeto -->
             <TextBlock Text="Modelo de projeto" Margin="0,0,0,4" />
-            <ComboBox ItemsSource="{Binding Templates}"
+            <ComboBox ItemsSource="{Binding Source={StaticResource TemplatesView}}"
                       SelectedItem="{Binding SelectedTemplate, Mode=TwoWay}"
                       AutomationProperties.Name="Modelo de projeto"
+                      MaxDropDownHeight="460"
                       Margin="0,0,0,12">
+                <ComboBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Margin="6,8,0,2"
+                                           Foreground="{DynamicResource Med.Accent}" />
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ComboBox.GroupStyle>
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
