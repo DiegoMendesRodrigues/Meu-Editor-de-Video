@@ -253,7 +253,7 @@ Classe `MedManifest` (`src/MeuEditorDeVideo.ProjectEngine/Format/MedManifest.cs`
 | Campo | Conteúdo |
 |---|---|
 | `format` | sempre `"MED"` (outro valor é recusado) |
-| `formatVersion` | versão do formato, ex.: `"1.2"` |
+| `formatVersion` | versão do formato, ex.: `"1.3"` |
 | `projectId`, `name`, `createdAt`, `modifiedAt` | identificação |
 | `storageMode` | `Linked` ou `Packaged` |
 | `appVersion` | versão do aplicativo que gravou |
@@ -286,8 +286,8 @@ Erros de formato viram `MED-1002` (não é projeto ou está danificado). Erros d
 
 ### Versionamento e migrações
 
-- Versão atual gravada: `MedMigrator.Current = 1.2` (`Format/MedMigrations.cs`).
-- Migrações são `IMedMigration` (`From`, `To`, `Migrate(JsonObject)`), registradas em `MedMigrator.Default`. As existentes são `Migration1_0To1_1` e `Migration1_1To1_2`. Hoje as duas não alteram estrutura: campos novos têm valor neutro (volume 1, panorâmica 0 etc.).
+- Versão atual gravada: `MedMigrator.Current = 1.3` (`Format/MedMigrations.cs`).
+- Migrações são `IMedMigration` (`From`, `To`, `Migrate(JsonObject)`), registradas em `MedMigrator.Default`. As existentes são `Migration1_0To1_1`, `Migration1_1To1_2` e `Migration1_2To1_3` (cor de identificação do clipe, `Clip.LabelColor`). Hoje nenhuma altera estrutura: campos novos têm valor neutro (volume 1, panorâmica 0, cor nula = automática etc.).
 - Regras de compatibilidade:
   - **Major maior que o suportado**: recusado (`MED-1003`).
   - **Minor maior que o suportado**: aberto, com aviso de que campos desconhecidos podem se perder ao salvar.

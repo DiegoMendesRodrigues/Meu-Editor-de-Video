@@ -134,6 +134,16 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
 
     public MediaTime Duration => Sequence?.Duration ?? MediaTime.Zero;
 
+    /// <summary>Duração em segundos (máximo da barra de posição do monitor).</summary>
+    public double DurationSeconds => Duration.TotalSeconds;
+
+    /// <summary>Posição do cursor em segundos, para a barra de posição do monitor.</summary>
+    public double PlayheadSeconds
+    {
+        get => Playhead.TotalSeconds;
+        set => SetPlayhead(MediaTime.FromSecondsApprox(Math.Clamp(value, 0, DurationSeconds)));
+    }
+
     /// <summary>Largura total rolável (duração + folga de 30 s ou uma tela).</summary>
     public double ContentWidth => Math.Max(ViewportWidth, (Duration.TotalSeconds + 30) * PixelsPerSecond);
 
@@ -246,6 +256,7 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
 
         OnPropertyChanged(nameof(HasSession));
         OnPropertyChanged(nameof(Duration));
+        OnPropertyChanged(nameof(DurationSeconds));
         UpdateTexts();
         NotifyCommands();
         Invalidate();
@@ -271,6 +282,7 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
 
     partial void OnPlayheadChanged(MediaTime value)
     {
+        OnPropertyChanged(nameof(PlayheadSeconds));
         UpdateTexts();
         Invalidate();
     }
@@ -292,7 +304,7 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
         {
             SplitCommand, DeleteCommand, RippleDeleteCommand, CopyCommand, CutCommand, PasteCommand, DuplicateCommand,
             AddMarkerCommand, GroupCommand, UngroupCommand, LinkCommand, UnlinkCommand, SetSpeedCommand,
-            AddSelectedMediaCommand, AddTrackCommand,
+            AddSelectedMediaCommand, AddTrackCommand, SetClipColorCommand,
         })
         {
             c.NotifyCanExecuteChanged();
@@ -422,6 +434,18 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
 
     [RelayCommand(CanExecute = nameof(CanEditSelection))]
     private void Delete() => Execute(new RemoveClipsCommand(SequenceId, [.. _selection], RippleEnabled));
+
+    /// <summary>Define a cor de identificação dos clipes selecionados ("#RRGGBB"; vazio = automática).</summary>
+    [RelayCommand(CanExecute = nameof(CanEditSelection))]
+    private void SetClipColor(string? color)
+    {
+        var value = string.IsNullOrWhiteSpace(color) ? null : color;
+        var commands = _selection
+            .Select(id => (IEditCommand)new UpdateClipCommand(SequenceId, id, c => c with { LabelColor = value }, "Cor do clipe"))
+            .ToList();
+        if (commands.Count == 0) return;
+        Execute(commands.Count == 1 ? commands[0] : new CompositeCommand("Cor do clipe", commands));
+    }
 
     [RelayCommand(CanExecute = nameof(CanEditSelection))]
     private void RippleDelete() => Execute(new RemoveClipsCommand(SequenceId, [.. _selection], Ripple: true));

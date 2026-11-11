@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using MeuEditorDeVideo.Domain.Time;
 
 namespace MeuEditorDeVideo.Domain.Model;
@@ -85,6 +85,9 @@ public sealed record Clip
     public ShapeStyle? Shape { get; init; }
 
     public bool IsShape => Shape is not null && MediaAssetId is null && Text is null;
+
+    /// <summary>Cor de identificação do clipe na linha do tempo ("#RRGGBB"); nula = cor automática pelo tipo.</summary>
+    public string? LabelColor { get; init; }
 
     /// <summary>Máscaras de recorte, aplicadas em ordem (RF110, RF149, RF111).</summary>
     public ImmutableList<Mask> Masks { get; init; } = [];

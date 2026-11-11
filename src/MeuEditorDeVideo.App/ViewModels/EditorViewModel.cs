@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
@@ -228,6 +228,34 @@ public sealed partial class EditorViewModel(
         Refresh();
     }
 
+    /// <summary>Linhas da aba "Projeto" do painel de propriedades.</summary>
+    [ObservableProperty]
+    public partial IReadOnlyList<MediaInfoLine> ProjectInfoLines { get; set; } = [];
+
+    internal static IReadOnlyList<MediaInfoLine> BuildProjectInfo(ProjectSession? s)
+    {
+        if (s is null) return [];
+        var project = s.Project;
+        var p = project.Settings;
+        var seq = project.MainSequence;
+        var dur = TimeSpan.FromSeconds(Math.Round(seq.Duration.TotalSeconds));
+        var clips = seq.Tracks.Sum(t => t.Clips.Count);
+        var br = System.Globalization.CultureInfo.GetCultureInfo("pt-BR");
+        return
+        [
+            new("Nome", project.Name),
+            new("Resolução", $"{p.Width} × {p.Height}"),
+            new("Taxa de quadros", $"{p.FrameRate.ToString().Replace('.', ',')} FPS"),
+            new("Duração", dur.ToString(@"hh\:mm\:ss")),
+            new("Mídias", project.Media.Count.ToString(br)),
+            new("Trilhas", seq.Tracks.Count.ToString(br)),
+            new("Clipes", clips.ToString(br)),
+            new("Criado em", project.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm", br)),
+            new("Modificado em", project.ModifiedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm", br)),
+            new("Arquivo", s.FilePath ?? "Ainda não salvo"),
+        ];
+    }
+
     private void Refresh()
     {
         var s = _session;
@@ -243,6 +271,7 @@ public sealed partial class EditorViewModel(
             var p = s.Project.Settings;
             ProjectSummary = $"{p.Width} × {p.Height} · {p.FrameRate.ToString().Replace('.', ',')} FPS";
         }
+        ProjectInfoLines = BuildProjectInfo(s);
 
         var history = s?.History;
         UndoToolTip = history?.UndoDescription is { } u ? $"Desfazer: {u} (Ctrl+Z)" : "Desfazer (Ctrl+Z)";

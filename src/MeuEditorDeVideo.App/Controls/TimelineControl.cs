@@ -173,16 +173,26 @@ public sealed class TimelineRuler : TimelineSurface
 
         var px = vm.TimeToX(vm.Playhead);
         var playhead = Res("Med.Playhead", Brushes.DodgerBlue);
-        var head = new StreamGeometry();
-        using (var c = head.Open())
+        // Alça arredondada no alto da régua, com a linha descendo até as trilhas
+        var lx = Math.Round(px) + 0.5;
+        dc.DrawLine(MakePen(playhead, 2), new Point(lx, 8), new Point(lx, h));
+        dc.DrawRoundedRectangle(playhead, null, new Rect(px - 6, 1, 12, 14), 6, 6);
+    }
+
+    /// <summary>Pincel da cor de identificação do clipe; nulo quando automática ou inválida.</summary>
+    internal static Brush? LabelBrush(string? color)
+    {
+        if (string.IsNullOrEmpty(color)) return null;
+        try
         {
-            c.BeginFigure(new Point(px - 6, 0), true, true);
-            c.LineTo(new Point(px + 6, 0), false, false);
-            c.LineTo(new Point(px + 6, h - 10), false, false);
-            c.LineTo(new Point(px, h), false, false);
-            c.LineTo(new Point(px - 6, h - 10), false, false);
+            var b = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
+            b.Freeze();
+            return b;
         }
-        dc.DrawGeometry(playhead, null, head);
+        catch (FormatException)
+        {
+            return null;
+        }
     }
 
     internal static Brush MarkerBrush(Marker m)
@@ -397,7 +407,7 @@ public sealed class TimelineControl : TimelineSurface
 
         var asset = clip.MediaAssetId is { } id ? vm.Project?.FindMedia(id) : null;
         var item = asset is not null ? vm.Library.Find(asset.Id) : null;
-        var fill = track.Kind switch
+        var fill = TimelineRuler.LabelBrush(clip.LabelColor) ?? track.Kind switch
         {
             TrackKind.Audio => Res("Med.ClipAudio", Brushes.MediumPurple),
             TrackKind.Text or TrackKind.Subtitle => Res("Med.ClipText", Brushes.MediumPurple),

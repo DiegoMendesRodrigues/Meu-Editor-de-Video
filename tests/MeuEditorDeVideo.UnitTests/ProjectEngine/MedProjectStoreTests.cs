@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using MeuEditorDeVideo.Core.Errors;
 using MeuEditorDeVideo.Core.Projects;
@@ -12,7 +12,7 @@ namespace MeuEditorDeVideo.UnitTests.ProjectEngine;
 
 public sealed class MedProjectStoreTests : IDisposable
 {
-    private const string MedJsonVersion = "1.2";
+    private const string MedJsonVersion = "1.3";
     private static readonly DateTimeOffset Now = new(2026, 3, 4, 5, 6, 7, TimeSpan.Zero);
 
     private readonly string _root = Path.Combine(Path.GetTempPath(), "med-store-tests-" + Guid.NewGuid().ToString("N"));
@@ -67,6 +67,7 @@ public sealed class MedProjectStoreTests : IDisposable
             Speed = new Rational(1, 2),
             Opacity = 0.5,
             Transform = new Transform { X = 12.5, ScaleX = 1.5, CropLeft = 3 },
+            LabelColor = "#C0474F",
         };
 
         var tracks = seq.Tracks
@@ -202,11 +203,11 @@ public sealed class MedProjectStoreTests : IDisposable
     public async Task Manifesto_com_major_mais_novo_e_recusado()
     {
         var target = await SaveLinkedAsync("future.med");
-        RewriteEntry(target, "manifest.json", text => text.Replace("\"formatVersion\": \"1.2\"", "\"formatVersion\": \"2.0\""));
+        RewriteEntry(target, "manifest.json", text => text.Replace($"\"formatVersion\": \"{MedJsonVersion}\"", "\"formatVersion\": \"2.0\""));
 
         var ex = await Assert.ThrowsAsync<MedException>(() => _store.LoadAsync(target));
 
-        Assert.Equal(MedErrors.NewerFormat("2.0", "1.2").Code, ex.Error.Code);
+        Assert.Equal(MedErrors.NewerFormat("2.0", "1.3").Code, ex.Error.Code);
     }
 
     [Fact]

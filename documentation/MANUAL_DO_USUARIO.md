@@ -62,11 +62,10 @@ Há três maneiras:
 
 Depois de criar ou abrir um projeto, a tela de edição aparece. Ela é dividida em áreas:
 
-- **Menus** (no topo): **Arquivo**, **Editar**, **Visualizar**, **Projeto**, **Ferramentas** e **Ajuda**.
-- **Barra de ações** (logo abaixo dos menus): botões para as ações mais usadas, como **Salvar**, **Desfazer**, **Refazer**, **Importar Mídia**, **Fila de renderização** e **Exportar**.
-- **Biblioteca de mídias** (à esquerda): tem os arquivos importados e uma lista de seções, como Vídeos, Imagens, Áudios, Elementos Gráficos, Textos, Transições, Efeitos, Cor e IA.
-- **Pré-visualização** (no centro, em cima): mostra o resultado do vídeo, com os botões de reproduzir, pausar e avançar quadro a quadro, o volume e a resolução da pré-visualização.
-- **Propriedades** (à direita): mostra as informações e as configurações do item selecionado. Está dividida em abas: **Mídia**, **Vídeo**, **Texto**, **Composição**, **IA**, **Áudio**, **Efeitos**, **Cor** e **Histórico**.
+- **Barra superior** (no topo da janela): à esquerda, os menus **Arquivo**, **Editar**, **Visualizar**, **Projeto**, **Ferramentas** e **Ajuda** e os botões **Salvar**, **Desfazer** e **Refazer**; no centro, o nome do projeto; à direita, **Tema**, **Fila de renderização**, **Exportar** e os botões de minimizar, maximizar e fechar a janela. Arraste a barra para mover a janela e dê um duplo clique nela para maximizar ou restaurar.
+- **Biblioteca de mídias** (à esquerda): no alto ficam as abas Biblioteca de Mídias, Vídeos, Imagens, Áudios, Elementos Gráficos, Textos, Transições, Efeitos, Cor e IA. Passe o mouse sobre uma aba para ver o nome completo. As mídias importadas aparecem em grade, com miniatura e duração.
+- **Pré-visualização** (no centro, em cima): mostra o resultado do vídeo. Em cima ficam a resolução da pré-visualização e o botão Proxy; embaixo, a barra de posição (arraste para ir a qualquer ponto), os botões de reproduzir, pausar e avançar quadro a quadro, o volume, a captura de quadro e a tela cheia.
+- **Propriedades** (à direita): mostra as informações e as configurações do item selecionado. Está dividida em abas: **Projeto** (resolução, taxa de quadros, duração, quantidade de mídias e clipes, arquivo), **Mídia**, **Vídeo**, **Texto**, **Composição**, **IA**, **Áudio**, **Efeitos**, **Cor** e **Histórico**.
 - **Linha do tempo** (embaixo): onde você monta o vídeo. Cada linha horizontal é uma trilha. Há uma barra de ferramentas logo acima dela.
 
 > Quando o nome do projeto aparece com a marca "● não salvo", existem alterações que ainda não foram gravadas. Use **Arquivo › Salvar** ou Ctrl+S.
@@ -100,7 +99,7 @@ Arquivos de outros formatos são recusados, com a mensagem "Formato de arquivo n
 
 ### Como importar
 
-1. Clique em **Importar Mídia** na barra de ações, ou use **Arquivo › Importar mídia…** (atalho Ctrl+I).
+1. Clique em **Importar Mídia** no painel da biblioteca, ou use **Arquivo › Importar mídia…** (atalho Ctrl+I).
 2. Escolha um ou vários arquivos e confirme.
 3. Acompanhe o progresso. A mensagem "Importando 3 de 10" mostra quantos arquivos já foram lidos.
 
@@ -186,6 +185,12 @@ Clique com o botão direito no nome da trilha para **Renomear trilha…** ou **R
 ### Velocidade do clipe
 
 Clique com o botão direito no clipe e escolha **Velocidade…** para deixá-lo mais rápido ou mais lento. Na aba **Vídeo** das propriedades, a lista de velocidades vai de 0,25× (câmera lenta) a 8× (acelerado).
+
+### Cor do clipe
+
+Para identificar clipes de um jeito visual, selecione um ou mais clipes, clique com o botão direito e escolha **Cor do clipe**. A cor fica salva no projeto e pode ser desfeita com Ctrl+Z. Escolha **Automática (pelo tipo)** para voltar à cor padrão (vídeo, imagem, áudio ou texto).
+
+Projetos com cores de clipe usam o formato 1.3. Versões anteriores do programa abrem esses projetos com um aviso e ignoram as cores.
 
 ### Marcadores
 
@@ -426,7 +431,7 @@ Enquanto um recurso de IA está rodando, aparece uma barra de progresso. Clique 
 
 ## Exportar o vídeo
 
-Exportar é gerar o arquivo final do vídeo. Clique em **Exportar** na barra de ações, ou use **Arquivo › Exportar…** (atalho Ctrl+E).
+Exportar é gerar o arquivo final do vídeo. Clique em **Exportar** no canto superior direito da janela, ou use **Arquivo › Exportar…** (atalho Ctrl+E).
 
 ### Modelos de exportação
 
@@ -615,7 +620,7 @@ Abra **Baixar modelos…** de novo e clique em **Instalar**. O download continua
 
 ### A pré-visualização está travando ou lenta
 
-- Na barra do monitor, em **Resolução da pré-visualização**, escolha **1/2** ou **1/4**.
+- No alto do monitor, em **Resolução da pré-visualização**, escolha **1/2** ou **1/4**.
 - Ative o uso de proxies, criando proxies dos vídeos grandes com **Gerar proxy de edição (540p)**.
 - Feche outros programas pesados enquanto edita.
 - Em **Configurações › Desempenho**, confira se a aceleração por placa de vídeo está ligada.
