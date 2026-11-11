@@ -218,11 +218,16 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="300" MinHeight="200" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="760" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="320" MinWidth="260" />
+        </Grid.ColumnDefinitions>
 
         <!-- 1. Barra de título: logotipo, menu, ações rápidas, projeto e Exportar.
              Fica sob a área de legenda da janela (WindowChrome); os botões de
              minimizar/maximizar/fechar são desenhados pela MainWindow à direita. -->
-        <Border Grid.Row="0" Background="{DynamicResource Med.Panel}" MinHeight="40"
+        <Border Grid.Row="0" Grid.ColumnSpan="3" Background="{DynamicResource Med.Panel}" MinHeight="40"
                 BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,0,1">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -354,8 +359,6 @@
                 <ColumnDefinition Width="560" MinWidth="360" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" MinWidth="400" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="320" MinWidth="260" />
             </Grid.ColumnDefinitions>
 
             <!-- Painel A: Biblioteca -->
@@ -964,132 +967,6 @@
                     </Grid>
                 </Grid>
             </Border>
-
-            <GridSplitter Grid.Column="3" Width="6" HorizontalAlignment="Center" VerticalAlignment="Stretch"
-                          ResizeBehavior="PreviousAndNext" Background="{DynamicResource Med.Background}" />
-
-            <!-- Painel C: Propriedades -->
-            <Border Grid.Column="4" Style="{StaticResource Editor.Painel}" Margin="1">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Grid.Row="0" Text="{StaticResource Editor.Propriedades.Titulo}"
-                               Style="{StaticResource Med.SectionTitle}" Margin="12,10,12,8" />
-
-                    <TabControl Grid.Row="1" Margin="8,0,8,8"
-                                Background="{DynamicResource Med.Panel}"
-                                BorderBrush="{DynamicResource Med.Border}">
-                        <TabItem Header="{StaticResource Editor.Propriedades.Projeto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.InfoProjeto}" IsSelected="True">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="12">
-                                <ItemsControl ItemsSource="{Binding ProjectInfoLines}" ItemTemplate="{StaticResource Editor.LinhaInfo}" />
-                            </ScrollViewer>
-                        </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Midia}" AutomationProperties.Name="{StaticResource Editor.Propriedades.InfoMidia}">
-                            <Grid>
-                                <TextBlock Text="{StaticResource Editor.Propriedades.SelecioneMidia}"
-                                           TextWrapping="Wrap" Margin="12">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
-                                            <Setter Property="Visibility" Value="Visible" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Library.HasSelection}" Value="True">
-                                                    <Setter Property="Visibility" Value="Collapsed" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="12">
-                                    <ScrollViewer.Style>
-                                        <Style TargetType="ScrollViewer" BasedOn="{StaticResource {x:Type ScrollViewer}}">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Library.HasSelection}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ScrollViewer.Style>
-                                    <ItemsControl ItemsSource="{Binding Library.SelectedItem.InfoLines}">
-                                        <ItemsControl.ItemTemplate>
-                                            <StaticResource ResourceKey="Editor.LinhaInfo" />
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Video}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Video}">
-                            <panels:ClipVideoPanel DataContext="{Binding Inspector}" />
-                        </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Texto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Texto}">
-                            <panels:ClipTextPanel DataContext="{Binding TextInspector}" />
-                        </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Composicao}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Composicao}">
-                            <panels:ClipCompositionPanel DataContext="{Binding CompositionInspector}" />
-                        </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.IA}" AutomationProperties.Name="Inteligência artificial">
-                            <panels:ClipAiPanel DataContext="{Binding AiInspector}" />
-                        </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Audio}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Audio}">
-                            <panels:ClipAudioPanel DataContext="{Binding AudioInspector}" />
-                        </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Efeitos}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Efeitos}">
-                            <panels:ClipEffectsPanel Mode="Effects" DataContext="{Binding Inspector}" />
-                        </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Cor}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Cor}">
-                            <panels:ClipEffectsPanel Mode="Color" DataContext="{Binding Inspector}" />
-                        </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Historico}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}">
-                            <ListBox ItemsSource="{Binding HistoryItems}" Background="Transparent" BorderThickness="0"
-                                     AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                                        <Setter Property="Padding" Value="0" />
-                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Button Style="{StaticResource Med.ToolbarButton}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                                                Padding="8,4" AutomationProperties.Name="{Binding Description}"
-                                                Command="{Binding DataContext.GoToHistoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsUndone}" Value="True">
-                                                                    <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
-                                                                    <Setter Property="FontStyle" Value="Italic" />
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
-                                                                    <Setter Property="FontWeight" Value="SemiBold" />
-                                                                    <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
-                                                <TextBlock Grid.Column="1" Text="{Binding Time}" Style="{StaticResource Med.MutedText}" Margin="8,0,0,0" />
-                                            </Grid>
-                                        </Button>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </TabItem>
-                    </TabControl>
-                </Grid>
-            </Border>
         </Grid>
 
         <!-- 4. Divisor horizontal entre a área central e a parte inferior -->
@@ -1341,5 +1218,131 @@
                 </Grid>
             </Border>
         </Grid>
+
+            <GridSplitter Grid.Row="1" Grid.RowSpan="3" Grid.Column="1" Width="6" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                          ResizeBehavior="PreviousAndNext" Background="{DynamicResource Med.Background}" />
+
+            <!-- Painel C: Propriedades (altura total, do topo até a linha do tempo) -->
+            <Border Grid.Row="1" Grid.RowSpan="3" Grid.Column="2" Style="{StaticResource Editor.Painel}" Margin="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="{StaticResource Editor.Propriedades.Titulo}"
+                               Style="{StaticResource Med.SectionTitle}" Margin="12,10,12,8" />
+
+                    <TabControl Grid.Row="1" Margin="8,0,8,8"
+                                Background="{DynamicResource Med.Panel}"
+                                BorderBrush="{DynamicResource Med.Border}">
+                        <TabItem Header="{StaticResource Editor.Propriedades.Projeto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.InfoProjeto}" IsSelected="True">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="12">
+                                <ItemsControl ItemsSource="{Binding ProjectInfoLines}" ItemTemplate="{StaticResource Editor.LinhaInfo}" />
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Midia}" AutomationProperties.Name="{StaticResource Editor.Propriedades.InfoMidia}">
+                            <Grid>
+                                <TextBlock Text="{StaticResource Editor.Propriedades.SelecioneMidia}"
+                                           TextWrapping="Wrap" Margin="12">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource Med.MutedText}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Library.HasSelection}" Value="True">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="12">
+                                    <ScrollViewer.Style>
+                                        <Style TargetType="ScrollViewer" BasedOn="{StaticResource {x:Type ScrollViewer}}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Library.HasSelection}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ScrollViewer.Style>
+                                    <ItemsControl ItemsSource="{Binding Library.SelectedItem.InfoLines}">
+                                        <ItemsControl.ItemTemplate>
+                                            <StaticResource ResourceKey="Editor.LinhaInfo" />
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Video}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Video}">
+                            <panels:ClipVideoPanel DataContext="{Binding Inspector}" />
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Texto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Texto}">
+                            <panels:ClipTextPanel DataContext="{Binding TextInspector}" />
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Composicao}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Composicao}">
+                            <panels:ClipCompositionPanel DataContext="{Binding CompositionInspector}" />
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.IA}" AutomationProperties.Name="Inteligência artificial">
+                            <panels:ClipAiPanel DataContext="{Binding AiInspector}" />
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Audio}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Audio}">
+                            <panels:ClipAudioPanel DataContext="{Binding AudioInspector}" />
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Efeitos}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Efeitos}">
+                            <panels:ClipEffectsPanel Mode="Effects" DataContext="{Binding Inspector}" />
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Cor}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Cor}">
+                            <panels:ClipEffectsPanel Mode="Color" DataContext="{Binding Inspector}" />
+                        </TabItem>
+                        <TabItem Header="{StaticResource Editor.Propriedades.Historico}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}">
+                            <ListBox ItemsSource="{Binding HistoryItems}" Background="Transparent" BorderThickness="0"
+                                     AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource Med.ToolbarButton}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                                Padding="8,4" AutomationProperties.Name="{Binding Description}"
+                                                Command="{Binding DataContext.GoToHistoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsUndone}" Value="True">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+                                                                    <Setter Property="FontStyle" Value="Italic" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                                                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                                                    <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBlock Grid.Column="1" Text="{Binding Time}" Style="{StaticResource Med.MutedText}" Margin="8,0,0,0" />
+                                            </Grid>
+                                        </Button>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </Border>
     </Grid>
 </UserControl>
