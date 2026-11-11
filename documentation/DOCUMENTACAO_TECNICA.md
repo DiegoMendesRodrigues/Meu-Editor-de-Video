@@ -28,7 +28,7 @@ Características fundamentais:
 | Áudio | NAudio.Wasapi 2.2.1 (saída) e DSP próprio em `src/MeuEditorDeVideo.AudioEngine/Dsp` |
 | Visão computacional | OpenCvSharp4 4.13 |
 | Logs | Serilog (arquivo rotativo local) |
-| Licença | GPL-3.0-or-later (`LICENSE`; `Directory.Build.props`, `Copyright`) |
+| Licença | GPL-3.0-or-later (`LICENSE.md`; `Directory.Build.props`, `Copyright`) |
 | Plataforma alvo | Windows 11 x64 (`RuntimeIdentifier win-x64` no App) |
 | Processamento | 100% local. O único código com rede é o downloader de modelos (ver [Privacidade e segurança](#privacidade-e-segurança)) |
 
@@ -836,7 +836,7 @@ O CI não baixa modelos de IA, então os testes de IA que dependem de modelo sã
    - copia `deps\ai-models\` (MODNet) para `ai-models\`, além de `resources\ai-models\incluidos\`;
    - copia `resources\ai-models\modelos.json` e `licencas\*.txt` para `catalogo-ia\`;
    - copia `resources\templates\export\*.json` para `templates\export\`;
-   - copia `THIRD-PARTY-NOTICES.txt`, `LICENSE` e o manual (`ajuda\`).
+   - copia `THIRD-PARTY-NOTICES.txt`, `LICENSE.md` e o manual (`ajuda\`).
 
 ### Versionamento
 
@@ -854,7 +854,7 @@ O CI não baixa modelos de IA, então os testes de IA que dependem de modelo sã
 `pwsh scripts/build-installer.ps1` (detalhes em [INSTALADOR.md](INSTALADOR.md)):
 
 1. `dotnet publish` do `App` (Release, `win-x64`, self-contained) em `artifacts\publish`.
-2. Converte `LICENSE` para RTF (`artifacts\License.rtf`).
+2. Converte `LICENSE.md` para RTF (`artifacts\License.rtf`).
 3. Compila o MSI (`installer\Msi\MeuEditorDeVideo.Installer.wixproj`, WiX 6) em `artifacts\installer\MeuEditorDeVideo-{versão}-x64.msi`.
 4. Compila o `Setup.exe` (`installer\Bundle\MeuEditorDeVideo.Setup.wixproj`, Burn), que encadeia o Visual C++ Redistributable.
 5. Assinatura opcional (`-CertificateThumbprint` ou `-CertificatePath`), aplicada ao executável, ao MSI e ao bundle (com `wix burn detach/reattach`).

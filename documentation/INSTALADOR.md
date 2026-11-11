@@ -15,7 +15,7 @@ Instalador do **Meu Editor de Vídeo** para Windows 11 x64 (CA022, RNF017, ENT00
 O script:
 
 1. publica o aplicativo (`dotnet publish`, Release, win-x64, self-contained: o .NET vai junto) em `artifacts\publish`;
-2. converte `LICENSE` (GPL-3.0) em RTF para a tela de licença;
+2. converte `LICENSE.md` (GPL-3.0) em RTF para a tela de licença;
 3. compila `installer\Msi\MeuEditorDeVideo.Installer.wixproj` e `installer\Bundle\MeuEditorDeVideo.Setup.wixproj`;
 4. assina, se houver certificado (ver abaixo).
 

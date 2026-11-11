@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**Meu Editor de Vídeo** — non-linear video editor for Windows 11 x64. C#/.NET 10, WPF with the Fluent theme (`ThemeMode`), MVVM via CommunityToolkit.Mvvm, DI via Microsoft.Extensions.Hosting. FFmpeg (via FFmpeg.AutoGen), ONNX Runtime (DirectML/CPU), Whisper.net, NAudio (WASAPI), OpenCvSharp. License GPL-3.0-or-later.
+**Meu Editor de Vídeo** — non-linear video editor for Windows 11 x64. C#/.NET 10, WPF with the Fluent theme (`ThemeMode`), MVVM via CommunityToolkit.Mvvm, DI via Microsoft.Extensions.Hosting. FFmpeg (via FFmpeg.AutoGen), ONNX Runtime (DirectML/CPU), Whisper.net, NAudio (WASAPI), OpenCvSharp. License GPL-3.0-or-later (`LICENSE.md`; the build copies it as `LICENSE.txt` next to the exe, and `build-installer.ps1` / `generate-notices.ps1` read it).
 
 - UI text, docs (`documentation/`), code comments, and commit messages are in **Portuguese (pt-BR)**.
 - Spec: `ESPECIFICACAO_TECNICA_E_FUNCIONAL.zip` (RF/RNF/CA ids referenced in code and comments).
@@ -22,7 +22,7 @@ dotnet test tests/MeuEditorDeVideo.MediaTests --filter "Categoria=Desempenho"
 dotnet run --project src/MeuEditorDeVideo.App     # exe: src/MeuEditorDeVideo.App/bin/Debug/net10.0-windows/win-x64/MeuEditorDeVideo.exe
 pwsh scripts/build-installer.ps1                  # publish + WiX MSI (installer/Msi) + Burn Setup.exe (installer/Bundle) into artifacts/installer
 pwsh scripts/build-msix.ps1                      # MSIX for the Microsoft Store into artifacts/store (-TestSign for a local install test); see documentation/MICROSOFT_STORE.md
-pwsh scripts/generate-notices.ps1                 # regenerate THIRD-PARTY-NOTICES.txt after any dependency change
+pwsh scripts/generate-notices.ps1                 # regenerate THIRD-PARTY-NOTICES.txt after any dependency change (GPL text comes from LICENSE.md)
 pwsh scripts/offline-check.ps1                    # runtime check that the app opens no network connections
 ```
 

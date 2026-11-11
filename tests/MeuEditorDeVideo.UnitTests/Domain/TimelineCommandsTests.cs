@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Domain.Editing;
+﻿using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 
@@ -498,6 +498,64 @@ public sealed class TimelineCommandsTests
         Assert.Equal(2, TrackOf(result, Video1).Clips.Count);
         Assert.Equal(S(0), ClipOf(result, Video1, a.Id).Start);
         Assert.Equal(S(4), ClipOf(result, Video1, c.Id).Start);
+    }
+
+    [Fact]
+    public void Join_cuts_undoes_a_split()
+    {
+        var v = Asset("v.mp4", MediaKind.Video, 20);
+        var a = NewClip(v, S(0), S(10));
+        var p = PlaceClips(NewProject(v), Video1, a);
+        var split = new SplitClipsCommand(p.MainSequence.Id, S(4)).Apply(p);
+        Assert.Equal(2, TrackOf(split, Video1).Clips.Count);
+        Assert.Equal(S(4), JoinClipsCommand.FindCut(split.MainSequence, S(4), MediaTime.Zero));
+
+        var joined = new JoinClipsCommand(p.MainSequence.Id, S(4)).Apply(split);
+        var only = Assert.Single(TrackOf(joined, Video1).Clips);
+        Assert.Equal(S(0), only.Start);
+        Assert.Equal(S(10), only.Duration);
+        Assert.Equal(a.SourceIn, only.SourceIn);
+    }
+
+    [Fact]
+    public void Join_cuts_is_rejected_between_different_clips()
+    {
+        var v = Asset("v.mp4", MediaKind.Video, 20);
+        var p = PlaceClips(NewProject(v), Video1, NewClip(v, S(0), S(4)), NewClip(v, S(4), S(4)));
+        Assert.Null(JoinClipsCommand.FindCut(p.MainSequence, S(4), S(1)));
+        Assert.Throws<EditRejectedException>(() => new JoinClipsCommand(p.MainSequence.Id, S(4)).Apply(p));
+    }
+
+    [Fact]
+    public void Remove_and_join_closes_the_gap_on_every_track()
+    {
+        var v = Asset("v.mp4", MediaKind.Video, 20);
+        var a = NewClip(v, S(0), S(4));
+        var b = NewClip(v, S(4), S(4));
+        var c = NewClip(v, S(8), S(4));
+        var title = NewClip(v, S(6), S(1));    // começa dentro do trecho removido (4–8 s)
+        var overlay = NewClip(v, S(10), S(2));
+        var music = NewClip(v, S(9), S(3));
+        var p = PlaceClips(PlaceClips(PlaceClips(NewProject(v), Video1, a, b, c), Video2, title, overlay), Audio1, music);
+
+        var result = new RemoveClipsCommand(p.MainSequence.Id, [b.Id], Ripple: true, AllTracks: true).Apply(p);
+
+        Assert.Equal(S(4), ClipOf(result, Video1, c.Id).Start);
+        Assert.Equal(S(6), ClipOf(result, Video2, overlay.Id).Start); // outras trilhas também andam 4 s
+        Assert.Equal(S(5), ClipOf(result, Audio1, music.Id).Start);
+        Assert.Equal(S(4), ClipOf(result, Video2, title.Id).Start);
+    }
+
+    [Fact]
+    public void Remove_and_join_is_rejected_when_another_track_would_overlap()
+    {
+        var v = Asset("v.mp4", MediaKind.Video, 20);
+        var b = NewClip(v, S(4), S(4));
+        var spanning = NewClip(v, S(2), S(4)); // cruza o trecho removido (4–8 s)
+        var after = NewClip(v, S(8), S(2));    // depois de andar 4 s, cairia em cima do anterior
+        var p = PlaceClips(PlaceClips(NewProject(v), Video1, b), Video2, spanning, after);
+
+        Assert.Throws<EditRejectedException>(() => new RemoveClipsCommand(p.MainSequence.Id, [b.Id], Ripple: true, AllTracks: true).Apply(p));
     }
 
     // ---------------------------------------------------------------- PasteClipsCommand

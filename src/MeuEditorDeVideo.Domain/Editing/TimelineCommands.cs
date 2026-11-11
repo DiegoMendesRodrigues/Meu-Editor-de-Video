@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Domain.Model;
+﻿using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 using static MeuEditorDeVideo.Domain.Editing.TimelineOps;
 
@@ -248,16 +248,94 @@ public sealed record SplitClipsCommand(Guid SequenceId, MediaTime At, IReadOnlyL
     }
 }
 
-/// <summary>Remove clipes (RF048). Com ripple, fecha o espaço deixado em cada trilha afetada.</summary>
-public sealed record RemoveClipsCommand(Guid SequenceId, IReadOnlyList<Guid> ClipIds, bool Ripple = false) : IEditCommand
+/// <summary>
+/// Juntar os cortes: desfaz uma divisão, unindo dois clipes vizinhos na mesma trilha que continuam a mesma mídia
+/// (o segundo começa na origem exatamente onde o primeiro termina e tem os mesmos ajustes). Sem lista, junta todos
+/// os cortes no instante nas trilhas desbloqueadas; com lista, só os que tocam esses clipes (e os vinculados).
+/// </summary>
+public sealed record JoinClipsCommand(Guid SequenceId, MediaTime At, IReadOnlyList<Guid>? ClipIds = null) : IEditCommand
 {
-    public string Description => Ripple ? "Excluir e fechar espaço" : ClipIds.Count == 1 ? "Excluir clipe" : "Excluir clipes";
+    public string Description => "Juntar os cortes";
+
+    public Project Apply(Project project)
+    {
+        var seq = RequireSequence(project, SequenceId);
+        var targets = ClipIds is null ? null : Expand(seq, ClipIds, linked: true, groups: false);
+        var count = 0;
+        foreach (var track in seq.Tracks)
+        {
+            if (track.IsLocked) continue;
+            var pairs = JoinablePairs(track, At)
+                .Where(p => targets is null || targets.Contains(p.Left.Id) || targets.Contains(p.Right.Id)).ToList();
+            if (pairs.Count == 0) continue;
+            var clips = track.Clips.ToList();
+            foreach (var (left, right) in pairs)
+            {
+                clips.RemoveAll(c => c.Id == right.Id);
+                clips[clips.FindIndex(c => c.Id == left.Id)] = left with { Duration = left.Duration + right.Duration, FadeOut = right.FadeOut };
+                count++;
+            }
+            seq = ReplaceTrack(seq, WithClips(track, clips));
+        }
+        if (count == 0) throw new EditRejectedException("Não há um corte para juntar neste ponto.");
+        return Commit(project, seq);
+    }
+
+    /// <summary>Instante de um corte que pode ser juntado a até <paramref name="tolerance"/> de <paramref name="at"/> (o mais próximo).</summary>
+    public static MediaTime? FindCut(Sequence sequence, MediaTime at, MediaTime tolerance)
+    {
+        MediaTime? best = null;
+        foreach (var track in sequence.Tracks)
+        {
+            if (track.IsLocked) continue;
+            var ordered = track.Clips.OrderBy(c => c.Start).ToList();
+            for (var i = 1; i < ordered.Count; i++)
+            {
+                var cut = ordered[i].Start;
+                var d = cut > at ? cut - at : at - cut;
+                if (d > tolerance || !CanJoin(ordered[i - 1], ordered[i])) continue;
+                if (best is not { } b || d < (b > at ? b - at : at - b)) best = cut;
+            }
+        }
+        return best;
+    }
+
+    private static IEnumerable<(Clip Left, Clip Right)> JoinablePairs(Track track, MediaTime at)
+    {
+        var left = track.Clips.FirstOrDefault(c => c.End == at);
+        var right = track.Clips.FirstOrDefault(c => c.Start == at);
+        if (left is not null && right is not null && CanJoin(left, right)) yield return (left, right);
+    }
+
+    /// <summary>O segundo clipe é a continuação do primeiro (mesma mídia, origem contínua e mesmos ajustes)?</summary>
+    public static bool CanJoin(Clip left, Clip right) =>
+        left.End == right.Start
+        && right.SourceIn == left.SourceOut
+        && left.FreezeAt is null && right.FreezeAt is null
+        && left.FadeOut == MediaTime.Zero && right.FadeIn == MediaTime.Zero
+        && (right with
+        {
+            Id = left.Id, Start = left.Start, Duration = left.Duration, SourceIn = left.SourceIn, LinkId = left.LinkId,
+            Keyframes = left.Keyframes, FadeOut = left.FadeOut,
+        }) == left;
+}
+
+/// <summary>Remove clipes (RF048). Com ripple, fecha o espaço deixado em cada trilha afetada.</summary>
+/// <summary>
+/// Exclui clipes. <paramref name="Ripple"/>: fecha o espaço puxando os clipes seguintes da mesma trilha.
+/// <paramref name="AllTracks"/> ("Excluir e juntar"): fecha o espaço em todas as trilhas destravadas, mantendo a
+/// sincronia; é recusado se isso fizer clipes de outra trilha se sobreporem.
+/// </summary>
+public sealed record RemoveClipsCommand(Guid SequenceId, IReadOnlyList<Guid> ClipIds, bool Ripple = false, bool AllTracks = false) : IEditCommand
+{
+    public string Description => AllTracks ? "Excluir e juntar" : Ripple ? "Excluir e fechar espaço" : ClipIds.Count == 1 ? "Excluir clipe" : "Excluir clipes";
 
     public Project Apply(Project project)
     {
         var seq = RequireSequence(project, SequenceId);
         var ids = Expand(seq, ClipIds);
         if (ids.Count == 0) return project;
+        if (AllTracks) return Commit(project, RemoveAndJoin(seq, ids));
 
         foreach (var track in seq.Tracks)
         {
@@ -278,6 +356,43 @@ public sealed record RemoveClipsCommand(Guid SequenceId, IReadOnlyList<Guid> Cli
         }
 
         return Commit(project, seq);
+    }
+
+    private static Sequence RemoveAndJoin(Sequence seq, IReadOnlySet<Guid> ids)
+    {
+        // Trechos removidos (união dos intervalos de todos os clipes excluídos).
+        var gaps = new List<(MediaTime Start, MediaTime End)>();
+        foreach (var c in seq.Tracks.SelectMany(t => t.Clips).Where(c => ids.Contains(c.Id)).OrderBy(c => c.Start))
+        {
+            if (gaps.Count > 0 && c.Start <= gaps[^1].End)
+                gaps[^1] = (gaps[^1].Start, c.End > gaps[^1].End ? c.End : gaps[^1].End);
+            else
+                gaps.Add((c.Start, c.End));
+        }
+
+        foreach (var track in seq.Tracks)
+        {
+            var hasRemoved = track.Clips.Any(c => ids.Contains(c.Id));
+            if (hasRemoved) EnsureUnlocked(track);
+            else if (track.IsLocked) continue; // trilhas travadas não se movem
+
+            var kept = track.Clips.Where(c => !ids.Contains(c.Id)).Select(c =>
+            {
+                // Anda o tanto de trecho removido que fica antes do início do clipe (quem começa dentro de um trecho
+                // removido vai para o início dele).
+                var shift = gaps.Where(g => g.Start < c.Start)
+                    .Aggregate(MediaTime.Zero, (s, g) => s + ((g.End < c.Start ? g.End : c.Start) - g.Start));
+                return c with { Start = c.Start - shift };
+            }).OrderBy(c => c.Start).ToList();
+            for (var i = 1; i < kept.Count; i++)
+            {
+                if (kept[i].Start < kept[i - 1].End)
+                    throw new EditRejectedException(
+                        $"Não foi possível excluir e juntar: na trilha \"{track.Name}\", um clipe ocupa parte do trecho removido. Use \"Excluir e fechar o espaço\".");
+            }
+            seq = ReplaceTrack(seq, WithClips(track, kept));
+        }
+        return seq;
     }
 }
 

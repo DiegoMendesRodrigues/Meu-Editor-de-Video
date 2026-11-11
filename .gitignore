@@ -6,6 +6,12 @@ obj/
 .vs/
 TestResults/
 *.binlog
+.idea/
+*.DotSettings.user
+
+# Arquivos do Windows
+Thumbs.db
+desktop.ini
 
 # Dependências nativas baixadas por scripts/fetch-deps.ps1 (verificadas por hash)
 /deps/

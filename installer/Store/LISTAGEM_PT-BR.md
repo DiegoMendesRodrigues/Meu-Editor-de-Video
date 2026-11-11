@@ -111,7 +111,7 @@ inteligência artificial
 | Campo | Valor sugerido |
 |---|---|
 | Direitos autorais e marca comercial | `Copyright © 2026 Diego Mendes Rodrigues. Licenciado sob GPL-3.0-or-later.` |
-| Termos de licença adicionais | Deixe em branco (usa os termos padrão da Store) ou informe o link para o arquivo `LICENSE` publicado junto do código-fonte. |
+| Termos de licença adicionais | Deixe em branco (usa os termos padrão da Store) ou informe o link para o arquivo `LICENSE.md` publicado junto do código-fonte. |
 | Site | Endereço onde o código-fonte e o manual estão publicados. |
 | Informações de contato de suporte | Seu e-mail ou página de suporte (obrigatório). |
 | URL da política de privacidade | Endereço público de `POLITICA_DE_PRIVACIDADE.md` (ver `documentation/MICROSOFT_STORE.md`). |

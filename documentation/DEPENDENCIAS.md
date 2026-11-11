@@ -1,7 +1,7 @@
 # Dependências e licenças
 
 Relação das dependências do **Meu Editor de Vídeo** (ENT018, RNF014, RNF020).
-O produto é licenciado sob **GPL-3.0-or-later** (arquivo `LICENSE`). Toda dependência deve ser compatível com GPL-3.0.
+O produto é licenciado sob **GPL-3.0-or-later** (arquivo `LICENSE.md`). Toda dependência deve ser compatível com GPL-3.0.
 
 Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scripts/deps.lock.json` (com SHA-256).
 

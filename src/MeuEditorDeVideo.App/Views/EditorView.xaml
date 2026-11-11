@@ -211,7 +211,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid x:Name="GradeEditor">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition x:Name="LinhaCentral" Height="*" />
@@ -219,9 +219,9 @@
             <RowDefinition x:Name="LinhaInferior" Height="300" MinHeight="200" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="760" />
+            <ColumnDefinition x:Name="ColunaPrincipal" Width="*" MinWidth="760" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="400" MinWidth="340" />
+            <ColumnDefinition x:Name="ColunaPropriedades" Width="400" MinWidth="340" />
         </Grid.ColumnDefinitions>
 
         <!-- 1. Barra de título: logotipo, menu, ações rápidas, projeto e Exportar.
@@ -261,9 +261,47 @@
             <MenuItem Header="{StaticResource Editor.Menu.Editar}">
                 <MenuItem Header="{StaticResource Editor.Menu.Desfazer}" Command="{Binding UndoCommand}" ctl:ShortcutText.Action="editar.desfazer" ToolTip="{Binding UndoToolTip}" />
                 <MenuItem Header="{StaticResource Editor.Menu.Refazer}" Command="{Binding RedoCommand}" ctl:ShortcutText.Action="editar.refazer" ToolTip="{Binding RedoToolTip}" />
+                <Separator />
+                <MenuItem Header="{StaticResource Editor.Menu.SelecionarTudo}" Command="{Binding Timeline.SelectAllCommand}" ctl:ShortcutText.Action="linha.selecionarTudo" AutomationProperties.Name="Selecionar tudo" />
+                <Separator />
+                <MenuItem Header="{StaticResource Editor.Menu.Dividir}" Command="{Binding Timeline.SplitCommand}" ctl:ShortcutText.Action="linha.dividir" AutomationProperties.Name="Dividir" />
+                <MenuItem Header="{StaticResource Editor.Menu.JuntarCortes}" Command="{Binding Timeline.JoinCutsCommand}" ToolTip="{StaticResource Editor.Menu.JuntarCortes.Dica}" ToolTipService.ShowOnDisabled="True" AutomationProperties.Name="Juntar os cortes" />
+                <MenuItem Header="{StaticResource Editor.Menu.Recortar}" Command="{Binding Timeline.CutCommand}" ctl:ShortcutText.Action="linha.recortar" AutomationProperties.Name="Recortar" />
+                <MenuItem Header="{StaticResource Editor.Menu.Copiar}" Command="{Binding Timeline.CopyCommand}" ctl:ShortcutText.Action="linha.copiar" AutomationProperties.Name="Copiar" />
+                <MenuItem Header="{StaticResource Editor.Menu.ColarNoCursor}" Command="{Binding Timeline.PasteCommand}" ctl:ShortcutText.Action="linha.colar" AutomationProperties.Name="Colar no cursor" />
+                <MenuItem Header="{StaticResource Editor.Menu.Duplicar}" Command="{Binding Timeline.DuplicateCommand}" ctl:ShortcutText.Action="linha.duplicar" AutomationProperties.Name="Duplicar" />
+                <Separator />
+                <MenuItem Header="{StaticResource Editor.Menu.Excluir}" Command="{Binding Timeline.DeleteCommand}" ctl:ShortcutText.Action="linha.excluir" AutomationProperties.Name="Excluir" />
+                <MenuItem Header="{StaticResource Editor.Menu.ExcluirFechando}" Command="{Binding Timeline.RippleDeleteCommand}" ctl:ShortcutText.Action="linha.excluirFechando" AutomationProperties.Name="Excluir e fechar o espaço" />
+                <MenuItem Header="{StaticResource Editor.Menu.ExcluirJuntando}" Command="{Binding Timeline.DeleteAndJoinCommand}" AutomationProperties.Name="Excluir e juntar"
+                          ToolTip="{StaticResource Editor.Menu.ExcluirJuntando.Dica}" />
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Visualizar}">
-                <MenuItem Header="{StaticResource Editor.Menu.AlternarTema}" Command="{Binding ToggleThemeCommand}" />
+                <MenuItem x:Name="MenuModoLayout" Header="{StaticResource Editor.Menu.ModoLayout}" AutomationProperties.Name="Modo do layout">
+                    <MenuItem Header="{StaticResource Editor.Layout.Padrao}" Tag="Padrao" IsCheckable="True" IsChecked="True" Click="ModoLayout_Click" AutomationProperties.Name="Layout padrão" />
+                    <MenuItem Header="{StaticResource Editor.Layout.LinhaDoTempo}" Tag="LinhaDoTempo" IsCheckable="True" Click="ModoLayout_Click" AutomationProperties.Name="Layout linha do tempo" />
+                    <MenuItem Header="{StaticResource Editor.Layout.Video}" Tag="Video" IsCheckable="True" Click="ModoLayout_Click" AutomationProperties.Name="Layout vídeo" />
+                </MenuItem>
+                <MenuItem x:Name="MenuQualidade" Header="{StaticResource Editor.Menu.QualidadeReproducao}" AutomationProperties.Name="Qualidade de reprodução"
+                          SubmenuOpened="MenuQualidade_SubmenuOpened">
+                    <MenuItem Header="…" />
+                </MenuItem>
+                <MenuItem x:Name="MenuZoomVideo" Header="{StaticResource Editor.Menu.ZoomVideo}" AutomationProperties.Name="Nível de zoom no vídeo">
+                    <MenuItem Header="{StaticResource Editor.Zoom.Ajuste}" Tag="0" IsCheckable="True" IsChecked="True" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom: ajuste" />
+                    <MenuItem Header="10%" Tag="0.1" IsCheckable="True" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 10%" />
+                    <MenuItem Header="25%" Tag="0.25" IsCheckable="True" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 25%" />
+                    <MenuItem Header="50%" Tag="0.5" IsCheckable="True" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 50%" />
+                    <MenuItem Header="75%" Tag="0.75" IsCheckable="True" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 75%" />
+                    <MenuItem Header="100%" Tag="1" IsCheckable="True" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 100%" />
+                    <MenuItem Header="200%" Tag="2" IsCheckable="True" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 200%" />
+                    <MenuItem Header="400%" Tag="4" IsCheckable="True" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 400%" />
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="{StaticResource Editor.Menu.ReproduzirPausar}" Command="{Binding Preview.PlayPauseCommand}" ctl:ShortcutText.Action="reproducao.reproduzir" AutomationProperties.Name="Reproduzir/Pausar" />
+                <MenuItem Header="{StaticResource Editor.Menu.Parar}" Command="{Binding Preview.StopCommand}" AutomationProperties.Name="Parar" />
+                <MenuItem Header="{StaticResource Editor.Menu.Loop}" IsCheckable="True" IsChecked="{Binding Preview.LoopPlayback}" AutomationProperties.Name="Intervalo de reprodução em loop"
+                          ToolTip="{StaticResource Editor.Menu.Loop.Dica}" />
+                <MenuItem x:Name="MenuRegua" Header="{StaticResource Editor.Menu.Regua}" IsCheckable="True" Click="Regua_Click" AutomationProperties.Name="Régua" />
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Projeto}">
                 <MenuItem Header="{StaticResource Editor.Menu.EmpacotarMidias}" Command="{Binding PackageMediaCommand}" />
@@ -288,6 +326,8 @@
                 <MenuItem Header="Licenças de terceiros" Click="Licencas_Click" AutomationProperties.Name="Licenças de terceiros" />
                 <Separator />
                 <MenuItem Header="Sobre o Meu Editor de Vídeo…" Click="Sobre_Click" AutomationProperties.Name="Sobre" />
+                <MenuItem Header="{StaticResource Editor.Menu.VerificarAtualizacoes}" IsEnabled="False" AutomationProperties.Name="Verificar atualizações" />
+                <MenuItem Header="{StaticResource Editor.Menu.NotasLancamento}" IsEnabled="False" AutomationProperties.Name="Notas de lançamento" />
             </MenuItem>
             </Menu>
 
@@ -841,7 +881,7 @@
                           ResizeBehavior="PreviousAndNext" Background="{DynamicResource Med.Background}" />
 
             <!-- Painel B: Monitor -->
-            <Border Grid.Column="2" Style="{StaticResource Editor.Painel}" Margin="1">
+            <Border x:Name="PainelMonitor" Grid.Column="2" Style="{StaticResource Editor.Painel}" Margin="1">
                 <Grid Margin="8,0,8,6">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -879,6 +919,10 @@
                     <Border x:Name="Monitor" Grid.Row="1" Background="{DynamicResource Med.MonitorBackground}" CornerRadius="4" ClipToBounds="True"
                             MouseLeftButtonDown="Monitor_MouseLeftButtonDown">
                         <Grid>
+                            <!-- Nível de zoom (Visualizar): em "Ajuste" o conteúdo ocupa o monitor; nos percentuais tem tamanho fixo e rola -->
+                            <ScrollViewer x:Name="RolagemMonitor" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled"
+                                          Focusable="False" AutomationProperties.Name="{StaticResource Editor.Menu.ZoomVideo}">
+                            <Grid x:Name="ConteudoMonitor" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Image x:Name="ImagemMonitor" Source="{Binding Preview.Image}" Stretch="Uniform" RenderOptions.BitmapScalingMode="Linear"
                                    AutomationProperties.Name="{StaticResource Editor.Monitor.Imagem}" SizeChanged="ImagemMonitor_SizeChanged" />
                             <!-- Edição de máscaras e regiões de rastreamento sobre a imagem (F9) -->
@@ -900,6 +944,13 @@
                                     </Border>
                                 </Border>
                             </Canvas>
+                            <!-- Régua (Visualizar › Régua): graduada em pixels do vídeo -->
+                            <ctl:MonitorRuler x:Name="ReguaMonitor" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Width="{Binding ActualWidth, ElementName=ImagemMonitor}" Height="{Binding ActualHeight, ElementName=ImagemMonitor}"
+                                              VideoWidth="{Binding Timeline.Project.Settings.Width, FallbackValue=1920}"
+                                              VideoHeight="{Binding Timeline.Project.Settings.Height, FallbackValue=1080}" />
+                            </Grid>
+                            </ScrollViewer>
                             <TextBlock Text="{StaticResource Editor.Monitor.PreVisualizacao}" FontSize="18"
                                        HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock.Style>
@@ -1243,11 +1294,11 @@
             </Border>
         </Grid>
 
-            <GridSplitter Grid.Row="1" Grid.RowSpan="3" Grid.Column="1" Width="3" MinWidth="0" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+            <GridSplitter x:Name="DivisorPropriedades" Grid.Row="1" Grid.RowSpan="3" Grid.Column="1" Width="3" MinWidth="0" HorizontalAlignment="Center" VerticalAlignment="Stretch"
                           ResizeBehavior="PreviousAndNext" Background="{DynamicResource Med.Background}" />
 
             <!-- Painel C: Propriedades (altura total, do topo até a linha do tempo) -->
-            <Border Grid.Row="1" Grid.RowSpan="3" Grid.Column="2" Style="{StaticResource Editor.Painel}" Margin="1">
+            <Border x:Name="PainelPropriedades" Grid.Row="1" Grid.RowSpan="3" Grid.Column="2" Style="{StaticResource Editor.Painel}" Margin="1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />

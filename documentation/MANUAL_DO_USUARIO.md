@@ -73,11 +73,16 @@ Depois de criar ou abrir um projeto, a tela de edição aparece. Ela é dividida
 ### Menus
 
 - **Arquivo**: novo projeto, abrir, importar mídia, importar sequência de imagens, salvar, salvar como, criar cópia de segurança, exportar, fila de renderização e voltar ao início.
-- **Editar**: desfazer e refazer.
-- **Visualizar**: alterna o tema claro e escuro.
+- **Editar**: desfazer e refazer; selecionar tudo; dividir; **juntar os cortes** (desfaz uma divisão: clique na régua sobre o ponto do corte; só fica disponível quando os dois lados são a continuação da mesma mídia, sem ajustes diferentes); recortar, copiar, colar no cursor e duplicar; excluir, excluir e fechar o espaço (só na trilha do clipe) e **excluir e juntar** (fecha o espaço em todas as trilhas, mantendo a sincronia; trilhas bloqueadas não se movem e a operação é recusada se um clipe de outra trilha ocupar parte do trecho removido).
+- **Visualizar**:
+  - **Modo do layout**: **Padrão**; **Linha do tempo** (a linha do tempo ocupa toda a largura); **Vídeo** (o monitor ocupa a metade direita, na altura toda).
+  - **Qualidade de reprodução**: Automática, Completa, 1/2 ou 1/4.
+  - **Nível de zoom no vídeo**: Ajuste (cabe no monitor) ou 10% a 400%; acima do tamanho do monitor aparecem barras de rolagem.
+  - **Reproduzir/Pausar**, **Parar** (volta ao ponto onde a reprodução começou) e **Intervalo de reprodução em loop** (repete a seleção da linha do tempo ou, sem seleção, o projeto inteiro).
+  - **Régua**: réguas em pixels do vídeo no alto e à esquerda da imagem.
 - **Projeto**: empacotar mídias no projeto e localizar mídias ausentes.
 - **Ferramentas**: mixer de áudio, editor de legendas, importar e exportar legendas, modelos de IA e configurações.
-- **Ajuda**: **Manual do usuário** (F1), **Atalhos de teclado…**, **Informações do sistema…**, **Abrir pasta de logs**, **Licenças de terceiros** e **Sobre o Meu Editor de Vídeo…**.
+- **Ajuda**: **Manual do usuário** (F1), **Atalhos de teclado…**, **Informações do sistema…**, **Abrir pasta de logs**, **Licenças de terceiros**, **Sobre o Meu Editor de Vídeo…**, **Verificar atualizações** e **Notas de lançamento** (estes dois ainda não estão disponíveis e aparecem desativados).
 
 O **Manual do usuário** abre este manual dentro do programa, sem internet. A lista à esquerda leva a cada assunto e Ctrl+F procura uma palavra. A janela pode ficar aberta enquanto você edita.
 
@@ -544,7 +549,7 @@ Abra as configurações em **Ferramentas › Configurações…** (atalho Ctrl+,
 
 ### Aba Geral
 
-- **Tema**: **Escuro**, **Claro** ou **Igual ao Windows**. Você também pode alternar pelo menu **Visualizar › Alternar tema claro/escuro**.
+- **Tema**: **Escuro**, **Claro** ou **Igual ao Windows**. Você também pode alternar pelo botão **Tema** na barra superior.
 - **Abrir o último projeto ao iniciar**.
 - **Pastas padrão**: a pasta dos projetos e a pasta das exportações.
 - **Salvamento automático**: ligar ou desligar a cópia de recuperação e definir o intervalo.

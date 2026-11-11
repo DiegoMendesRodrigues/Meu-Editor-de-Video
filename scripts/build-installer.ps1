@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   1. dotnet publish do aplicativo (Release, win-x64, self-contained) em artifacts\publish.
-  2. Converte LICENSE (GPL-3.0) em RTF para a tela de licença do instalador (artifacts\License.rtf).
+  2. Converte LICENSE.md (GPL-3.0) em RTF para a tela de licença do instalador (artifacts\License.rtf).
   3. Compila installer\Msi\MeuEditorDeVideo.Installer.wixproj -> artifacts\installer\MeuEditorDeVideo-<versão>-x64.msi.
   4. Compila installer\Bundle\MeuEditorDeVideo.Setup.wixproj -> artifacts\installer\MeuEditorDeVideo-<versão>-Setup.exe.
   5. (Opcional) Assina executável, MSI e Setup.exe com signtool quando um certificado é informado
@@ -60,7 +60,7 @@ if (-not $SkipPublish) {
 if (-not (Test-Path (Join-Path $publish 'MeuEditorDeVideo.exe'))) { throw "Publicação não encontrada em $publish." }
 
 # 2. Licença em RTF (texto puro com escapes RTF; caracteres fora do ASCII como \uN?).
-$license = Get-Content -Raw -Encoding UTF8 (Join-Path $root 'LICENSE')
+$license = Get-Content -Raw -Encoding UTF8 (Join-Path $root 'LICENSE.md')
 $sb = [System.Text.StringBuilder]::new()
 [void]$sb.Append('{\rtf1\ansi\ansicpg1252\deff0{\fonttbl{\f0\fnil Segoe UI;}}\viewkind4\uc1\pard\fs16 ')
 foreach ($ch in $license.Replace("`r`n", "`n").ToCharArray()) {

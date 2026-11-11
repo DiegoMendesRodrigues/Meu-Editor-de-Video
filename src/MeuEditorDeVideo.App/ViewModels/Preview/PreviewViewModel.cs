@@ -286,6 +286,7 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(HasContent));
         if (!IsPlaying) _engine.Seek(Timeline.Playhead);
         PlayPauseCommand.NotifyCanExecuteChanged();
+        StopCommand.NotifyCanExecuteChanged();
         CaptureFrameCommand.NotifyCanExecuteChanged();
     }
 
@@ -346,9 +347,32 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
         if (PlayPauseCommand.CanExecute(null)) PlayPause();
     }
 
+    /// <summary>Parar: interrompe a reprodução e volta o cursor ao ponto onde ela começou (ou ao início).</summary>
+    [RelayCommand(CanExecute = nameof(CanPlay))]
+    private void Stop()
+    {
+        if (IsPlaying) Pause();
+        Timeline.SetPlayhead(_playStart ?? (LoopPlayback ? LoopRange().Start : MediaTime.Zero));
+        _playStart = null;
+    }
+
+    /// <summary>Reprodução em loop: repete o trecho dos clipes selecionados ou, sem seleção, a sequência inteira.</summary>
+    [ObservableProperty]
+    public partial bool LoopPlayback { get; set; }
+
+    private MediaTime? _playStart;
+
+    private (MediaTime Start, MediaTime End) LoopRange() => Timeline.SelectionRange() ?? (MediaTime.Zero, Timeline.Duration);
+
     private void Play()
     {
         var from = Timeline.Playhead >= Timeline.Duration ? MediaTime.Zero : Timeline.Playhead;
+        if (LoopPlayback)
+        {
+            var (start, end) = LoopRange();
+            if (from < start || from >= end) from = start;
+        }
+        _playStart = from;
         _engine.Play(from);
         IsPlaying = true;
         CompositionTarget.Rendering += OnRendering;
@@ -366,7 +390,13 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
     private void OnRendering(object? sender, EventArgs e)
     {
         if (!_engine.IsPlaying) return;
-        SyncPlayhead(_engine.Position);
+        var position = _engine.Position;
+        if (LoopPlayback && LoopRange() is var (start, end) && end > start && position >= end)
+        {
+            RestartLoop(start);
+            return;
+        }
+        SyncPlayhead(position);
     }
 
     private void SyncPlayhead(MediaTime time)
@@ -382,8 +412,21 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
         }
     }
 
+    /// <summary>Volta ao início do trecho em loop sem parar a reprodução.</summary>
+    private void RestartLoop(MediaTime start)
+    {
+        _engine.Pause();
+        _engine.Play(start);
+        SyncPlayhead(start);
+    }
+
     private void OnPlaybackEnded(object? sender, EventArgs e) => _dispatcher.BeginInvoke(() =>
     {
+        if (LoopPlayback && IsPlaying && LoopRange() is var (start, end) && end > start)
+        {
+            RestartLoop(start);
+            return;
+        }
         CompositionTarget.Rendering -= OnRendering;
         IsPlaying = false;
         SyncPlayhead(Timeline.Duration);

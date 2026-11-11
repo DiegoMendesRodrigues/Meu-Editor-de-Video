@@ -202,7 +202,7 @@ if (-not (Test-Path -LiteralPath $apacheDestino -PathType Leaf)) {
 
 function Get-TextoPadrao([string]$spdx) {
     if ($spdx -in 'GPL-3.0', 'GPL-3.0-or-later') {
-        return Read-Texto (Join-Path $repo 'LICENSE')
+        return Read-Texto (Join-Path $repo 'LICENSE.md')
     }
     $arq = Join-Path $licDir "$spdx.txt"
     if (Test-Path -LiteralPath $arq -PathType Leaf) { return Read-Texto $arq }
@@ -230,7 +230,7 @@ if (Test-Path -LiteralPath $ffmpegDir) {
 if ($ffmpegLic -and $ffmpegLic.Count -gt 0) { $textoFfmpeg = Read-Texto $ffmpegLic[0].FullName }
 else {
     Write-Aviso 'Arquivo de licença do FFmpeg não encontrado em deps/ffmpeg; usando o texto da GPL-3.0 do repositório.'
-    $textoFfmpeg = Read-Texto (Join-Path $repo 'LICENSE')
+    $textoFfmpeg = Read-Texto (Join-Path $repo 'LICENSE.md')
 }
 
 # ---------------------------------------------------------------------------
@@ -271,7 +271,7 @@ $titulo = 'MEU EDITOR DE VÍDEO — AVISOS DE TERCEIROS'
 Add-Linha $titulo
 Add-Linha ('=' * $titulo.Length)
 Add-Linha ''
-Add-Linha ('O Meu Editor de Vídeo é licenciado sob GPL-3.0-or-later (arquivo LICENSE); abaixo estão os componentes de terceiros distribuídos com o aplicativo e suas licenças. Gerado por scripts/generate-notices.ps1 — não editar à mão.')
+Add-Linha ('O Meu Editor de Vídeo é licenciado sob GPL-3.0-or-later (arquivo LICENSE.md); abaixo estão os componentes de terceiros distribuídos com o aplicativo e suas licenças. Gerado por scripts/generate-notices.ps1 — não editar à mão.')
 
 # 1. Bibliotecas
 Add-Secao '1. BIBLIOTECAS (.NET / NuGet)'

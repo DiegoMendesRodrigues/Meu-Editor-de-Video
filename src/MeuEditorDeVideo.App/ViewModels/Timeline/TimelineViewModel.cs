@@ -284,6 +284,7 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
     {
         OnPropertyChanged(nameof(PlayheadSeconds));
         UpdateTexts();
+        JoinCutsCommand.NotifyCanExecuteChanged();
         Invalidate();
     }
 
@@ -302,7 +303,7 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
     {
         foreach (var c in new IRelayCommand[]
         {
-            SplitCommand, DeleteCommand, RippleDeleteCommand, CopyCommand, CutCommand, PasteCommand, DuplicateCommand,
+            SplitCommand, JoinCutsCommand, DeleteCommand, RippleDeleteCommand, DeleteAndJoinCommand, CopyCommand, CutCommand, PasteCommand, DuplicateCommand,
             AddMarkerCommand, GroupCommand, UngroupCommand, LinkCommand, UnlinkCommand, SetSpeedCommand,
             AddSelectedMediaCommand, AddTrackCommand, SetClipColorCommand,
         })
@@ -449,6 +450,35 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
 
     [RelayCommand(CanExecute = nameof(CanEditSelection))]
     private void RippleDelete() => Execute(new RemoveClipsCommand(SequenceId, [.. _selection], Ripple: true));
+
+    /// <summary>Excluir e juntar: fecha o espaço em todas as trilhas, mantendo vídeo, áudio e textos sincronizados.</summary>
+    /// <summary>Corte que pode ser juntado sob o cursor (tolerância de alguns pixels, para o clique na régua).</summary>
+    private MediaTime? CutAtPlayhead() =>
+        HasSession && Sequence is { } seq
+            ? JoinClipsCommand.FindCut(seq, Playhead, MediaTime.FromSecondsApprox(Math.Max(FrameRate.FrameDuration.TotalSeconds / 2, 5 / Math.Max(1, PixelsPerSecond))))
+            : null;
+
+    private bool CanJoinCuts() => CutAtPlayhead() is not null;
+
+    /// <summary>Juntar os cortes: desfaz a divisão no ponto do cursor.</summary>
+    [RelayCommand(CanExecute = nameof(CanJoinCuts))]
+    private void JoinCuts()
+    {
+        if (CutAtPlayhead() is not { } cut) return;
+        Execute(new JoinClipsCommand(SequenceId, cut));
+    }
+
+    [RelayCommand(CanExecute = nameof(CanEditSelection))]
+    private void DeleteAndJoin() => Execute(new RemoveClipsCommand(SequenceId, [.. _selection], Ripple: true, AllTracks: true));
+
+    /// <summary>Trecho ocupado pelos clipes selecionados (início do primeiro ao fim do último), ou null sem seleção.</summary>
+    public (MediaTime Start, MediaTime End)? SelectionRange()
+    {
+        if (Sequence is not { } seq || _selection.Count == 0) return null;
+        var clips = seq.Tracks.SelectMany(t => t.Clips).Where(c => _selection.Contains(c.Id)).ToList();
+        if (clips.Count == 0) return null;
+        return (clips.Min(c => c.Start), clips.Max(c => c.End));
+    }
 
     [RelayCommand(CanExecute = nameof(CanEditSelection))]
     private void Copy()

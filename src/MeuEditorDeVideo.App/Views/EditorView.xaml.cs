@@ -36,9 +36,135 @@ public partial class EditorView : UserControl
     /// Maximiza ou restaura o monitor ("Linha do tempo"): maximizado, ele cobre a biblioteca à esquerda e a linha do
     /// tempo embaixo; o painel Propriedades continua visível. Restaurar volta aos tamanhos anteriores.
     /// </summary>
+    // ---------------------------------------------------------------- Visualizar › Modo do layout
+
+    private string _modoLayout = "Padrao";
+    private GridLength _larguraPropriedades = new(400);
+    private GridLength _larguraBibliotecaLayout = new(560);
+
+    private void ModoLayout_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is MenuItem { Tag: string modo }) AplicarLayout(modo);
+    }
+
+    /// <summary>
+    /// Padrão: biblioteca e monitor em cima, linha do tempo embaixo, Propriedades à direita em altura total.
+    /// Linha do tempo: igual, mas a linha do tempo ocupa toda a largura da janela.
+    /// Vídeo: o monitor ocupa a metade direita da janela, em altura total; biblioteca e Propriedades ficam em cima, à
+    /// esquerda, com a linha do tempo embaixo.
+    /// </summary>
+    public void AplicarLayout(string modo)
+    {
+        if (BotaoMaximizarMonitor.IsChecked == true) BotaoMaximizarMonitor.IsChecked = false;
+        foreach (var item in MenuModoLayout.Items.OfType<MenuItem>()) item.IsChecked = (string)item.Tag == modo;
+        if (modo == _modoLayout) return;
+
+        // Volta ao padrão.
+        if (_modoLayout == "Video")
+        {
+            AreaCentral.Children.Remove(PainelPropriedades);
+            GradeEditor.Children.Remove(PainelMonitor);
+            Posicionar(PainelMonitor, 0, 1, 2);
+            AreaCentral.Children.Add(PainelMonitor);
+            Posicionar(PainelPropriedades, 1, 3, 2);
+            GradeEditor.Children.Add(PainelPropriedades);
+            ColunaPrincipal.Width = new GridLength(1, GridUnitType.Star);
+            ColunaPrincipal.MinWidth = 760;
+            ColunaPropriedades.Width = _larguraPropriedades;
+            ColunaPropriedades.MinWidth = 340;
+            ColunaBiblioteca.Width = _larguraBibliotecaLayout;
+        }
+        else if (_modoLayout != "Video")
+        {
+            _larguraPropriedades = ColunaPropriedades.Width;
+        }
+        Grid.SetColumnSpan(AreaInferior, 1);
+        Grid.SetColumnSpan(DivisorCentral, 1);
+        Grid.SetRowSpan(PainelPropriedades, 3);
+        Grid.SetRowSpan(DivisorPropriedades, 3);
+
+        if (modo == "LinhaDoTempo")
+        {
+            Grid.SetColumnSpan(AreaInferior, 3);
+            Grid.SetColumnSpan(DivisorCentral, 3);
+            Grid.SetRowSpan(PainelPropriedades, 1);
+            Grid.SetRowSpan(DivisorPropriedades, 1);
+        }
+        else if (modo == "Video")
+        {
+            // Troca de lugar: Propriedades vai para a área de cima (ao lado da biblioteca) e o monitor para a direita.
+            AreaCentral.Children.Remove(PainelMonitor);
+            GradeEditor.Children.Remove(PainelPropriedades);
+            Posicionar(PainelPropriedades, 0, 1, 2);
+            AreaCentral.Children.Add(PainelPropriedades);
+            Posicionar(PainelMonitor, 1, 3, 2);
+            GradeEditor.Children.Add(PainelMonitor);
+            ColunaPrincipal.MinWidth = 600;
+            ColunaPrincipal.Width = new GridLength(1, GridUnitType.Star);
+            ColunaPropriedades.MinWidth = 400;
+            ColunaPropriedades.Width = new GridLength(1, GridUnitType.Star);
+            // Biblioteca e Propriedades dividem a metade esquerda.
+            _larguraBibliotecaLayout = ColunaBiblioteca.Width;
+            ColunaBiblioteca.Width = new GridLength(1, GridUnitType.Star);
+        }
+        _modoLayout = modo;
+    }
+
+    private static void Posicionar(UIElement e, int linha, int linhas, int coluna)
+    {
+        Grid.SetRow(e, linha);
+        Grid.SetRowSpan(e, linhas);
+        Grid.SetColumn(e, coluna);
+        Grid.SetColumnSpan(e, 1);
+    }
+
+    // ---------------------------------------------------------------- Visualizar › Qualidade, zoom e régua
+
+    private void MenuQualidade_SubmenuOpened(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not EditorViewModel { Preview: { } preview }) return;
+        MenuQualidade.Items.Clear();
+        foreach (var opcao in preview.Qualities)
+        {
+            var item = new MenuItem { Header = opcao.Label, IsCheckable = true, IsChecked = ReferenceEquals(opcao, preview.Quality) };
+            AutomationProperties.SetName(item, "Qualidade " + opcao.Label);
+            item.Click += (_, _) => preview.Quality = opcao;
+            MenuQualidade.Items.Add(item);
+        }
+    }
+
+    private double _zoomVideo;
+
+    private void ZoomVideo_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem { Tag: string tag }) return;
+        _zoomVideo = double.Parse(tag, System.Globalization.CultureInfo.InvariantCulture);
+        foreach (var item in MenuZoomVideo.Items.OfType<MenuItem>()) item.IsChecked = ReferenceEquals(item, sender);
+        AplicarZoomVideo();
+    }
+
+    /// <summary>Ajuste: a imagem cabe no monitor. Percentual: 100% = um pixel do vídeo por pixel da tela, com rolagem.</summary>
+    private void AplicarZoomVideo()
+    {
+        if (_zoomVideo <= 0 || DataContext is not EditorViewModel { Timeline.Project.Settings: { } ajustes })
+        {
+            ConteudoMonitor.Width = ConteudoMonitor.Height = double.NaN;
+            RolagemMonitor.HorizontalScrollBarVisibility = RolagemMonitor.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+            return;
+        }
+        var dpi = VisualTreeHelper.GetDpi(this);
+        ConteudoMonitor.Width = ajustes.Width * _zoomVideo / dpi.DpiScaleX;
+        ConteudoMonitor.Height = ajustes.Height * _zoomVideo / dpi.DpiScaleY;
+        RolagemMonitor.HorizontalScrollBarVisibility = RolagemMonitor.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+    }
+
+    private void Regua_Click(object sender, RoutedEventArgs e) =>
+        ReguaMonitor.Visibility = MenuRegua.IsChecked ? Visibility.Visible : Visibility.Collapsed;
+
     private void MaximizarMonitor_Changed(object sender, RoutedEventArgs e)
     {
         var maximizar = BotaoMaximizarMonitor.IsChecked == true;
+        if (maximizar && _modoLayout != "Padrao") AplicarLayout("Padrao");
         if (maximizar)
         {
             _larguraBiblioteca = ColunaBiblioteca.Width;

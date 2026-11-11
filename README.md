@@ -1,7 +1,7 @@
 # Meu Editor de Vídeo
 
 Editor de vídeo desktop para **Windows 11 (64 bits)**, em **Português do Brasil**, com processamento 100% local
-(inclusive IA). Licenciado sob **GPL-3.0-or-later**.
+(inclusive IA). Licenciado sob **GPL-3.0-or-later** ([`LICENSE.md`](LICENSE.md)).
 
 - Especificação: [`ESPECIFICACAO_TECNICA_E_FUNCIONAL.md`](ESPECIFICACAO_TECNICA_E_FUNCIONAL.md)
 - Plano de implantação: [`documentation/PLANO_DE_IMPLANTACAO.md`](documentation/PLANO_DE_IMPLANTACAO.md)

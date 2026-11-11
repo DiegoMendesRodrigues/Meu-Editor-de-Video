@@ -1,7 +1,7 @@
 ﻿MEU EDITOR DE VÍDEO — AVISOS DE TERCEIROS
 =========================================
 
-O Meu Editor de Vídeo é licenciado sob GPL-3.0-or-later (arquivo LICENSE); abaixo estão os componentes de terceiros distribuídos com o aplicativo e suas licenças. Gerado por scripts/generate-notices.ps1 — não editar à mão.
+O Meu Editor de Vídeo é licenciado sob GPL-3.0-or-later (arquivo LICENSE.md); abaixo estão os componentes de terceiros distribuídos com o aplicativo e suas licenças. Gerado por scripts/generate-notices.ps1 — não editar à mão.
 
 1. BIBLIOTECAS (.NET / NuGet)
 -----------------------------
