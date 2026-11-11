@@ -3,7 +3,7 @@
 Editor de vídeo desktop para **Windows 11 (64 bits)**, em **Português do Brasil**, com processamento 100% local
 (inclusive IA). Licenciado sob **GPL-3.0-or-later** ([`LICENSE.md`](LICENSE.md)).
 
-- Especificação: [`ESPECIFICACAO_TECNICA_E_FUNCIONAL.md`](ESPECIFICACAO_TECNICA_E_FUNCIONAL.md)
+- Especificação: [`ESPECIFICACAO_TECNICA_E_FUNCIONAL.zip`](ESPECIFICACAO_TECNICA_E_FUNCIONAL.zip)
 - Plano de implantação: [`documentation/PLANO_DE_IMPLANTACAO.md`](documentation/PLANO_DE_IMPLANTACAO.md)
 - Manual do usuário: [`documentation/MANUAL_DO_USUARIO.md`](documentation/MANUAL_DO_USUARIO.md) (também em **Ajuda › Manual do usuário**, F1)
 - Documentação técnica: [`documentation/DOCUMENTACAO_TECNICA.md`](documentation/DOCUMENTACAO_TECNICA.md)
@@ -11,6 +11,19 @@ Editor de vídeo desktop para **Windows 11 (64 bits)**, em **Português do Brasi
 - Publicação na Microsoft Store: [`documentation/MICROSOFT_STORE.md`](documentation/MICROSOFT_STORE.md)
 - Homologação (CA001–CA024): [`documentation/HOMOLOGACAO.md`](documentation/HOMOLOGACAO.md)
 - Dependências e licenças: [`documentation/DEPENDENCIAS.md`](documentation/DEPENDENCIAS.md) e [`THIRD-PARTY-NOTICES.txt`](THIRD-PARTY-NOTICES.txt)
+
+## Recursos
+
+- Edição não linear com várias trilhas de vídeo, áudio, texto e imagem; dividir e **juntar os cortes**, recortar,
+  copiar, colar no cursor, duplicar, excluir, excluir e fechar o espaço e **excluir e juntar** (em todas as trilhas).
+- Editor com barra de título própria, biblioteca em abas, painel Propriedades em altura total e cor por clipe.
+- **Visualizar**: modos de layout (Padrão, Linha do tempo, Vídeo), qualidade de reprodução, zoom no vídeo (Ajuste
+  a 400%), reproduzir/pausar, parar, reprodução em loop e régua em pixels no monitor.
+- Efeitos com miniaturas, predefinições de cor, ajustes HSL por faixa de cor e HDR; transições, máscaras,
+  rastreamento de movimento e estabilização.
+- IA local (ONNX Runtime, DirectML/CPU): remoção de fundo (MODNet), rastreamento de câmera com corte automático,
+  **Retocar** (beleza e maquiagem com o Face Mesh V2) e legendas com Whisper.
+- Exportação com FFmpeg (NVENC/AMF/QSV/software), fila de renderização e modelos de exportação.
 
 ## Requisitos de desenvolvimento
 
@@ -45,7 +58,7 @@ src/        App (WPF/MVVM), Application, Domain, Core, Infrastructure e motores
 tests/      UnitTests, IntegrationTests, MediaTests
 resources/  modelos de exportação, transições, efeitos, LUTs, fontes
 scripts/    dependências, avisos de terceiros, instalador e bateria offline
-installer/  instalador WiX: Msi/ (MSI) e Bundle/ (Setup.exe com o Visual C++)
+installer/  instalador WiX: Msi/ (MSI) e Bundle/ (Setup.exe com o Visual C++); Store/ (MSIX)
 documentation/
 ```
 

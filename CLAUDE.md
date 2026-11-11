@@ -46,6 +46,7 @@ Layered solution, 13 projects in `src/`. The layering is **enforced by NetArchTe
   - Engines must not reference `App` or `Application`.
   - Each engine exposes an `Add…` DI extension method.
 - `App`: WPF. **All DI composition lives in `App.xaml.cs`** (`ConfigureServices`). Implementations are bound to `Core` interfaces only here.
+- `AIEngine` vision services (`Vision/`): `SegmentationService` (MODNet person matte), `CameraTracker` (head/body auto-framing), `FaceLandmarkService` + `FaceMeshDetector` (MediaPipe Face Mesh V2, 478 points) used by `FaceRetouch` (effects `ai.beauty`, `ai.makeup`). Optional models are listed in `resources/ai-models/modelos.json` (pinned URL + SHA-256, license text in `resources/ai-models/licencas/`) and installed by the user from the app; don't copy them into `deps\ai-models`.
 - `ModelDownloads`: the **only** assembly allowed to use the network (HTTP to pinned URLs with SHA-256, only when the user clicks Instalar). `PrivacyTests` fails the build if any other product assembly touches `System.Net.*`. Keep it that way. A new product assembly must be added to `ProductAssemblies` in those tests.
 
 ### `.med` project format (ProjectEngine)
@@ -64,6 +65,11 @@ Layered solution, 13 projects in `src/`. The layering is **enforced by NetArchTe
 - `PreviewEngine`: has a render thread and an audio thread. The WASAPI playback position is the master clock.
 - `RenderEngine`: drives export through the same path with FFmpeg encoding (NVENC/AMF/QSV/software).
 
+### Timeline editing commands (`Domain/Editing/TimelineCommands.cs`)
+
+- `SplitClipsCommand` (Dividir) and `JoinClipsCommand` (Juntar os cortes): a join only merges neighbours that continue the same media (`CanJoin`: contiguous source, identical settings); `FindCut` locates a joinable cut near the playhead.
+- `RemoveClipsCommand`: `Ripple` closes the gap on the clip's track (Excluir e fechar o espaço); `AllTracks` closes it on every unlocked track (Excluir e juntar) and is rejected if another track would overlap.
+
 ### App (WPF) conventions
 
 - **Navigation:** pages are `PageViewModel`s mapped to views in `Views/ViewMappings.xaml`. `INavigationService.NavigateTo<T>()` switches pages; `OnNavigatedTo()` refreshes state.
@@ -72,6 +78,7 @@ Layered solution, 13 projects in `src/`. The layering is **enforced by NetArchTe
   - Simple custom dialogs are code-only `Window`s in `Views/Dialogs/` (e.g. `PromptWindow`, `RecentRemovalWindow`).
 - **Strings:** `Resources/Strings/{Common,Home,Editor}.xaml` (`sys:String` keys like `Home.ProjetosRecentes`). Theme brushes are `DynamicResource` keys `Med.*` (`Med.Text`, `Med.Background`, `Med.Panel`, `Med.Accent`, `Med.Danger`…), defined in `Themes/Palette.{Dark,Light}.xaml` and swapped by `ThemeService`.
 - **Fluent styling pitfall:** a `Style` without `BasedOn="{StaticResource {x:Type X}}"` replaces the Fluent template with the classic Aero one. On dark windows this produces white-on-white dropdowns and lists. Never apply generic styles (e.g. `TargetType="FrameworkElement"` just for margins) to controls; set `Margin` directly. `ItemContainerStyle`s must be `BasedOn` the theme style.
+- **Editor window** (`Views/EditorView.xaml` + code-behind): menus Arquivo/Editar/Visualizar/Projeto/Ferramentas/Ajuda bind to `Timeline.*` and `Preview.*` commands; menu shortcuts are shown via `ctl:ShortcutText.Action` (ids from `ShortcutService`). Visualizar › Modo do layout (`AplicarLayout`: Padrão, Linha do tempo, Vídeo) re-parents `PainelMonitor`/`PainelPropriedades` and changes grid spans in code; it must restore the default layout before applying another or maximizing the monitor. Monitor zoom, playback quality, loop (`PreviewViewModel.LoopPlayback`) and the pixel ruler (`Controls/MonitorRuler.cs`) live there too. Ajuda › Verificar atualizações / Notas de lançamento are disabled placeholders; an update check would need network, so it must live in `ModelDownloads` (or a new assembly allowed by `PrivacyTests`).
 - Controls need `AutomationProperties.Name` (accessibility; also used by UI Automation testing).
 - The user manual `documentation/MANUAL_DO_USUARIO.md` ships with the app (Ajuda › Manual, F1). Update it when user-visible behavior changes.
 
@@ -80,4 +87,6 @@ Layered solution, 13 projects in `src/`. The layering is **enforced by NetArchTe
 - Testing the real app touches the user's data: `%APPDATA%\MeuEditorDeVideo\settings.json` (recent projects) and `%LOCALAPPDATA%\MeuEditorDeVideo\` (autosave, cache, installed AI models, render queue).
   - Back up `settings.json` before driving the app and restore it afterwards.
   - Remove only test-created autosave and project files.
+- While the app is running, its `bin\` DLLs are locked and `dotnet build`/`dotnet test` fail with MSB3027. Ask before closing a user's instance; to only check compilation, build into a scratch folder with `-o` (but run the full test suite only with the normal output, since `ExportTemplateStoreTests` fail when outputs are mixed).
+- Drive the app through UI Automation (`AutomationProperties.Name`) or Win32 `SendMessage`; don't use `SendKeys` (keys may go to another window).
 - When capturing screenshots of the app, capture only its window (e.g. `PrintWindow`), never the full screen.
