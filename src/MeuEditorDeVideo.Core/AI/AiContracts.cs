@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Domain.Editing;
+﻿using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 using MeuEditorDeVideo.Core.Media;
@@ -25,6 +25,9 @@ public enum ModelCapability
 
     /// <summary>Melhoria de imagem / super-resolução (RF164).</summary>
     ImageEnhancement,
+
+    /// <summary>Pontos do rosto (malha de 478 pontos): retoque de beleza e maquiagem.</summary>
+    FaceLandmarks,
 }
 
 /// <summary>Dispositivo de execução escolhido pelo usuário (RF167). GPU usa DirectML e cai para CPU em caso de falha.</summary>
@@ -189,6 +192,21 @@ public interface ISceneDetectionService
 public sealed record Matte(int Width, int Height, byte[] Alpha);
 
 /// <summary>Segmentação de pessoas com cache de máscaras em memória e disco (RF156, RF162, RF163).</summary>
+/// <summary>Pontos do rosto (malha MediaPipe de 478 pontos) em pixels do quadro.</summary>
+public sealed record FaceLandmarks(float[] X, float[] Y)
+{
+    public int Count => X.Length;
+}
+
+/// <summary>Localiza o rosto principal do quadro e devolve os pontos da malha (retoque de beleza e maquiagem).</summary>
+public interface IFaceLandmarkService
+{
+    bool IsAvailable { get; }
+
+    /// <summary>Pontos do rosto no quadro, ou null sem modelo ou sem rosto visível.</summary>
+    FaceLandmarks? Detect(MediaAsset asset, string? path, MediaTime sourceTime, BgraImage frame);
+}
+
 public interface ISegmentationService
 {
     bool IsAvailable { get; }

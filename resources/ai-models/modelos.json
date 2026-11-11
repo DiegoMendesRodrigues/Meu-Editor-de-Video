@@ -124,5 +124,30 @@
     "url": "https://huggingface.co/Xenova/swin2SR-lightweight-x2-64/resolve/92a21aca5713f20faf9a87590cdfbdce2e34112c/onnx/model.onnx",
     "sha256": "c2abbfe0cc8e685b5e11964970f8ebe3d24072e904fd5545a30ac31ec1e110db",
     "sizeBytes": 8078888
+  },
+  {
+    "file": "face_landmarks.onnx",
+    "id": "facemesh-v2",
+    "name": "Face Mesh V2 (pontos do rosto)",
+    "version": "2.0",
+    "source": "Google MediaPipe Face Mesh V2 (exportação ONNX fernandotonon/QtMeshEditor-facemesh-onnx)",
+    "capability": "FaceLandmarks",
+    "purpose": "Localiza 478 pontos do rosto (olhos, sobrancelhas, nariz, boca, contorno e íris) para o retoque de beleza e a maquiagem virtual.",
+    "features": [
+      "Retocar › Beleza: pele, linhas de expressão, bolsas, rosto, olhos, nariz, boca e sobrancelhas",
+      "Retocar › Maquiagem: looks, cílios, sombra, delineador, sobrancelhas, batom, blush, contorno, realces, cor dos olhos e sardas"
+    ],
+    "license": "Apache-2.0",
+    "licenseFile": "facemesh.txt",
+    "memoryMb": 150,
+    "gpu": false,
+    "parameters": {
+      "input": "256×256 RGB",
+      "points": "478 (com íris)"
+    },
+    "dependsOn": [],
+    "url": "https://huggingface.co/fernandotonon/QtMeshEditor-facemesh-onnx/resolve/32714088ed9830a98df6ee653ad406a3b83ef014/face_landmarks.onnx",
+    "sha256": "d16e5a55e6a480284d468ee32469692464049518c311662ab3956681de31e3e9",
+    "sizeBytes": 4920979
   }
 ]

@@ -27,6 +27,7 @@ Todos os recursos de inteligência artificial rodam **somente no computador do u
 | Remover trechos sem fala | RF165 | `VoiceActivity` | Silero VAD 5 |
 | Detectar cenas → marcadores (e dividir o clipe) | RF161 | `SceneDetection` | TransNetV2; sem modelo, comparação de histogramas |
 | Melhorar imagem (ampliar fotos 2×) | RF164 | `ImageEnhancement` | Swin2SR leve 2× |
+| Retocar: beleza e maquiagem (aba Vídeo) | — | `FaceLandmarks` | Face Mesh V2 (MediaPipe, 478 pontos) |
 
 Sem o modelo correspondente (exceto o MODNet, que é incluído), o recurso aparece como **"Indisponível — instale o modelo em Ferramentas › Modelos de IA"**
 e o botão fica desativado (§8.3). A detecção de cenas é a exceção: funciona sem modelo, com precisão menor.
@@ -135,6 +136,7 @@ O teste `Catalogo_do_repositorio_e_valido_e_tem_licencas` valida o catálogo.
 | Silero VAD 5 | 2,2 MB | — |
 | TransNetV2 | 29,8 MB | — |
 | Swin2SR leve 2× | 7,7 MB | — |
+| Face Mesh V2 | 4,7 MB | — |
 
 ## Gerar os pacotes (alternativa pelo terminal)
 
@@ -151,6 +153,7 @@ O teste `Catalogo_do_repositorio_e_valido_e_tem_licencas` valida o catálogo.
 | `silero_vad.onnx` | github.com/snakers4/silero-vad | MIT |
 | `transnetv2.onnx` | github.com/elya5/transnetv2 (TransNetV2 de Tomáš Souček) | MIT |
 | `swin2sr-x2.onnx` | huggingface.co/Xenova/swin2SR-lightweight-x2-64 | Apache-2.0 |
+| `face_landmarks.onnx` | huggingface.co/fernandotonon/QtMeshEditor-facemesh-onnx (MediaPipe Face Mesh V2 do Google) | Apache-2.0 |
 
 ## Detalhes de execução
 
@@ -182,6 +185,10 @@ O teste `Catalogo_do_repositorio_e_valido_e_tem_licencas` valida o catálogo.
   pela sensibilidade) viram marcadores "Cena N", com distância mínima de 0,5 s.
 - **Melhorar imagem:** o Swin2SR processa a imagem em blocos de 192 px com 16 px de sobreposição e mistura linear; o
   alfa é ampliado por interpolação. O clipe passa a usar a nova imagem PNG, e desfazer volta à original.
+- **Retocar:** a cabeça é localizada pela máscara do MODNet (faixa de cima da silhueta) ou pelo rosto do quadro anterior;
+  o Face Mesh V2 recebe o recorte quadrado em 256×256 RGB (0…1, NHWC) e devolve 478 pontos. Um segundo recorte, justo
+  em torno dos pontos, refina o resultado e confirma a presença do rosto. Beleza e maquiagem são máscaras desenhadas
+  sobre os pontos (OpenCV), filtro bilateral para a pele e um remapeamento único para as deformações.
 
 ## Limitações conhecidas
 

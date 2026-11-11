@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Globalization;
 using MeuEditorDeVideo.Domain.Model;
 
@@ -56,6 +56,24 @@ public static class EffectCatalog
     public const string Curves = "color.curves";
     public const string Wheels = "color.wheels";
     public const string Lut = "color.lut";
+    public const string Hsl = "color.hsl";
+    public const string Hdr = "color.hdr";
+    public const string CameraTrack = "ai.cameratrack";
+
+    /// <summary>Faixas de cor do ajuste HSL: chave, nome e matiz central (graus).</summary>
+    public static IReadOnlyList<(string Key, string Name, double Hue)> HslBands { get; } =
+    [
+        ("red", "Vermelho", 0), ("orange", "Laranja", 30), ("yellow", "Amarelo", 60), ("green", "Verde", 120),
+        ("cyan", "Ciano", 180), ("blue", "Azul", 240), ("purple", "Roxo", 275), ("magenta", "Magenta", 310),
+    ];
+
+    private static IReadOnlyList<EffectParameter> HslParameters() =>
+        HslBands.SelectMany(b => new EffectParameter[]
+        {
+            new(b.Key + ".h", b.Name + " · matiz", ParameterKind.Slider, -30, 30, 0, "°"),
+            new(b.Key + ".s", b.Name + " · saturação", ParameterKind.Slider, -100, 100),
+            new(b.Key + ".l", b.Name + " · luminância", ParameterKind.Slider, -100, 100),
+        }).ToList();
     public const string Blur = "fx.blur";
     public const string Sharpen = "fx.sharpen";
     public const string Vignette = "fx.vignette";
@@ -69,6 +87,11 @@ public static class EffectCatalog
     public const string ChromaKey = "key.chroma";
     public const string EdgeRefine = "edgeRefine";
     public const string AiBackground = "ai.background";
+    public const string Beauty = "ai.beauty";
+    public const string Makeup = "ai.makeup";
+
+    /// <summary>Looks prontos da maquiagem (índice = valor do parâmetro "look").</summary>
+    public static IReadOnlyList<string> MakeupLooks { get; } = ["Nenhum", "Natural", "Glamour", "Noite", "Rosado"];
     public const string Equalizer = "audio.eq";
     public const string Compressor = "audio.compressor";
     public const string Denoise = "audio.denoise";
@@ -116,6 +139,16 @@ public static class EffectCatalog
             new("intensity", "Intensidade", ParameterKind.Slider, 0, 100, 100, "%"),
         ], UsesResource: true),
 
+        new(Hsl, "HSL", "Matiz, saturação e luminância por faixa de cor (ex.: só o azul do céu ou o verde das folhas).", EffectCategory.Color,
+            HslParameters()),
+        new(Hdr, "HDR", "Aspecto HDR: recupera sombras e realces e reforça os detalhes locais.", EffectCategory.Color,
+        [
+            new("strength", "Intensidade", ParameterKind.Slider, 0, 100, 60, "%"),
+            new("shadows", "Sombras", ParameterKind.Slider, 0, 100, 50, "%"),
+            new("highlights", "Realces", ParameterKind.Slider, 0, 100, 50, "%"),
+            new("detail", "Detalhes", ParameterKind.Slider, 0, 100, 40, "%"),
+            new("vibrance", "Vivacidade", ParameterKind.Slider, -100, 100, 15),
+        ]),
         new(Blur, "Desfoque", "Desfoque gaussiano.", EffectCategory.Stylize, [new("radius", "Raio", ParameterKind.Slider, 0, 100, 8, " px")]),
         new(Sharpen, "Nitidez", "Realça detalhes (máscara de nitidez).", EffectCategory.Stylize, [new("amount", "Intensidade", ParameterKind.Slider, 0, 200, 60, "%")]),
         new(Vignette, "Vinheta", "Escurece as bordas do quadro.", EffectCategory.Stylize,
@@ -159,6 +192,46 @@ public static class EffectCatalog
             new("threshold", "Limiar da máscara", ParameterKind.Slider, 0, 100, 0, "%"),
             new("temporal", "Suavização entre quadros", ParameterKind.Slider, 0, 100, 50, "%"),
         ], AffectsAlpha: true),
+        new(Beauty, "Beleza", "Retoque do rosto com a malha de pontos do rosto (modelo local): pele suave e mais clara, menos linhas de expressão e bolsas sob os olhos, e ajustes de rosto, olhos, nariz, boca e sobrancelhas.", EffectCategory.Ai,
+        [
+            new("smooth", "Pele · suavizar", ParameterKind.Slider, 0, 100, 50, "%"),
+            new("white", "Pele · clarear", ParameterKind.Slider, 0, 100, 20, "%"),
+            new("lines", "Linhas de expressão", ParameterKind.Slider, 0, 100, 30, "%"),
+            new("bags", "Bolsas abaixo dos olhos", ParameterKind.Slider, 0, 100, 30, "%"),
+            new("face", "Rosto · afinar", ParameterKind.Slider, -100, 100, 0),
+            new("eyes", "Olhos · aumentar", ParameterKind.Slider, -100, 100, 0),
+            new("nose", "Nariz · afinar", ParameterKind.Slider, -100, 100, 0),
+            new("mouth", "Boca · tamanho", ParameterKind.Slider, -100, 100, 0),
+            new("brows", "Sobrancelhas · erguer", ParameterKind.Slider, -100, 100, 0),
+        ]),
+        new(Makeup, "Maquiagem", "Maquiagem virtual aplicada sobre a malha de pontos do rosto (modelo local): looks prontos ou cada item com cor e intensidade.", EffectCategory.Ai,
+        [
+            new("look", "Look", ParameterKind.Choice, 0, 4, 1, Options: MakeupLooks),
+            new("lashes", "Cílios", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("shadow", "Sombra de olhos", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("shadowColor", "Cor da sombra", ParameterKind.Color, DefaultColor: (0.55, 0.36, 0.32)),
+            new("liner", "Delineador", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("browfill", "Sobrancelhas", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("browColor", "Cor das sobrancelhas", ParameterKind.Color, DefaultColor: (0.26, 0.17, 0.12)),
+            new("lipstick", "Batom", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("lipColor", "Cor do batom", ParameterKind.Color, DefaultColor: (0.75, 0.12, 0.2)),
+            new("blush", "Blush", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("blushColor", "Cor do blush", ParameterKind.Color, DefaultColor: (0.92, 0.45, 0.45)),
+            new("contour", "Contorno", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("highlight", "Realces", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("eyecolor", "Cor dos olhos", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("irisColor", "Cor da íris", ParameterKind.Color, DefaultColor: (0.25, 0.5, 0.75)),
+            new("freckles", "Sardas", ParameterKind.Slider, 0, 100, 0, "%"),
+        ]),
+        new(CameraTrack, "Rastreamento de câmera", "Uma câmera virtual acompanha a cabeça ou o corpo da pessoa (modelo de segmentação local): corte automático, agitar e fundo desfocado.", EffectCategory.Ai,
+        [
+            new("target", "Acompanhar", ParameterKind.Choice, 0, 1, 0, Options: ["Cabeça", "Corpo"]),
+            new("autocrop", "Corte automático (zoom)", ParameterKind.Slider, 0, 100, 40, "%"),
+            new("follow", "Seguir o movimento", ParameterKind.Slider, 0, 100, 100, "%"),
+            new("shake", "Agitar", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("bgblur", "Fundo desfocado", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("temporal", "Suavização entre quadros", ParameterKind.Slider, 0, 100, 70, "%"),
+        ]),
         new(EdgeRefine, "Refinar bordas", "Contrai ou expande, suaviza e limpa as bordas da transparência (use depois do chroma key ou de máscaras).", EffectCategory.Key,
         [
             new("choke", "Contrair/expandir", ParameterKind.Slider, -20, 20, 0, " px"),
@@ -303,6 +376,11 @@ public static class EffectCatalog
             Curves => CurveChannels.All(c => CurvePoints(e, c) is var pts && pts.All(p => Math.Abs(p.X - p.Y) < 1e-9)),
             Wheels => new[] { "lift", "gamma", "gain" }.All(k => WheelValue(e, k) == (0, 0, 0)),
             Lut => string.IsNullOrEmpty(e.Resource) || Value(e, "intensity") <= 0,
+            Hsl => Find(e.Type)!.Parameters.All(p => Math.Abs(Value(e, p.Key)) < 1e-9),
+            Hdr => Value(e, "strength") <= 0,
+            Beauty => Find(e.Type)!.Parameters.All(p => Math.Abs(Value(e, p.Key)) < 0.5),
+            Makeup => Value(e, "look") < 0.5 && Find(e.Type)!.Parameters.Where(p => p.Kind == ParameterKind.Slider).All(p => Value(e, p.Key) < 0.5),
+            CameraTrack => Value(e, "autocrop") <= 0 && Value(e, "shake") <= 0 && Value(e, "bgblur") <= 0,
             Blur => Value(e, "radius") <= 0,
             EdgeRefine => Math.Abs(Value(e, "choke")) < 0.5 && Value(e, "feather") < 0.5 && Value(e, "decontaminate") <= 0,
             Equalizer => new[] { "lowGain", "midGain", "highGain", "lowcut" }.All(k => Math.Abs(Value(e, k)) < 1e-9),

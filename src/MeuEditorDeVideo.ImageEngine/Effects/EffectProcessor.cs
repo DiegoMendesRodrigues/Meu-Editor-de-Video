@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;
@@ -33,6 +33,8 @@ public static class EffectProcessor
                 case Curves: CurvesFx(px, e); break;
                 case Wheels: WheelsFx(px, e); break;
                 case Lut: LutFx(px, e); break;
+                case Hsl: HslFx(px, e); break;
+                case Hdr: HdrFx(px, w, h, e); break;
                 case Blur: BlurFx(px, w, h, Value(e, "radius") * ctx.PixelScale); break;
                 case Sharpen: SharpenFx(px, w, h, Value(e, "amount") / 100, ctx.PixelScale); break;
                 case Vignette: VignetteFx(px, w, h, Value(e, "amount") / 100, Value(e, "size") / 100); break;
@@ -159,6 +161,128 @@ public static class EffectProcessor
             {
                 var y = 0.2126f * r + 0.7152f * g + 0.0722f * b;
                 r = y + (r - y) * sat; g = y + (g - y) * sat; b = y + (b - y) * sat;
+            }
+            px[i] = ToByte(b); px[i + 1] = ToByte(g); px[i + 2] = ToByte(r);
+        });
+    }
+
+    /// <summary>
+    /// HSL por faixa de cor: cada pixel recebe a soma ponderada dos ajustes das faixas vizinhas da sua matiz (transição
+    /// suave entre faixas). Cores pouco saturadas (cinzas) quase não mudam.
+    /// </summary>
+    private static void HslFx(byte[] px, EffectInstance e)
+    {
+        var bands = HslBands;
+        var n = bands.Count;
+        var center = new float[n];
+        var dh = new float[n];
+        var ds = new float[n];
+        var dl = new float[n];
+        for (var k = 0; k < n; k++)
+        {
+            center[k] = (float)bands[k].Hue;
+            dh[k] = (float)Value(e, bands[k].Key + ".h");
+            ds[k] = (float)(Value(e, bands[k].Key + ".s") / 100);
+            dl[k] = (float)(Value(e, bands[k].Key + ".l") / 100);
+        }
+        Rows(px, i =>
+        {
+            float b = px[i] / 255f, g = px[i + 1] / 255f, r = px[i + 2] / 255f;
+            var (hue, sat, lum) = ToHsl(r, g, b);
+            if (sat < 1e-4f) return;
+            // As duas faixas cuja matiz central cerca a do pixel, com peso linear entre elas.
+            int lo = n - 1, hi = 0;
+            for (var k = 0; k < n; k++)
+            {
+                if (center[k] <= hue) lo = k;
+            }
+            hi = (lo + 1) % n;
+            var span = (center[hi] - center[lo] + 360) % 360;
+            if (span == 0) span = 360;
+            var t = ((hue - center[lo] + 360) % 360) / span;
+            float W(int k) => k == lo ? 1 - t : t;
+            float sh = W(lo) * dh[lo] + W(hi) * dh[hi];
+            float ss = W(lo) * ds[lo] + W(hi) * ds[hi];
+            float sl = W(lo) * dl[lo] + W(hi) * dl[hi];
+            var weight = Math.Min(1, sat * 2); // cinzas e quase cinzas ficam como estão
+            hue = (hue + sh * weight + 360) % 360;
+            sat = Math.Clamp(sat * (1 + ss * weight), 0, 1);
+            lum = Math.Clamp(lum + sl * weight * (sl > 0 ? 1 - lum : lum) * 0.8f, 0, 1);
+            var (nr, ng, nb) = FromHsl(hue, sat, lum);
+            px[i] = ToByte(nb); px[i + 1] = ToByte(ng); px[i + 2] = ToByte(nr);
+        });
+    }
+
+    private static (float H, float S, float L) ToHsl(float r, float g, float b)
+    {
+        float max = Math.Max(r, Math.Max(g, b)), min = Math.Min(r, Math.Min(g, b));
+        var l = (max + min) / 2;
+        var d = max - min;
+        if (d < 1e-6f) return (0, 0, l);
+        var s = l > 0.5f ? d / (2 - max - min) : d / (max + min);
+        float h;
+        if (max == r) h = (g - b) / d + (g < b ? 6 : 0);
+        else if (max == g) h = (b - r) / d + 2;
+        else h = (r - g) / d + 4;
+        return (h * 60, s, l);
+    }
+
+    private static (float R, float G, float B) FromHsl(float h, float s, float l)
+    {
+        if (s <= 0) return (l, l, l);
+        var q = l < 0.5f ? l * (1 + s) : l + s - l * s;
+        var p = 2 * l - q;
+        var hk = h / 360;
+        return (Channel(p, q, hk + 1f / 3), Channel(p, q, hk), Channel(p, q, hk - 1f / 3));
+
+        static float Channel(float p, float q, float t)
+        {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1f / 6) return p + (q - p) * 6 * t;
+            if (t < 0.5f) return q;
+            if (t < 2f / 3) return p + (q - p) * (2f / 3 - t) * 6;
+            return p;
+        }
+    }
+
+    /// <summary>
+    /// HDR (mapeamento de tons local): separa a luminância em base (desfocada) e detalhe; a base tem as sombras
+    /// levantadas e os realces recuperados, e o detalhe é reforçado. A cor acompanha a razão de luminância.
+    /// </summary>
+    private static void HdrFx(byte[] px, int w, int h, EffectInstance e)
+    {
+        var strength = (float)(Value(e, "strength") / 100);
+        var shadows = (float)(Value(e, "shadows") / 100) * strength;
+        var highlights = (float)(Value(e, "highlights") / 100) * strength;
+        var detail = (float)(Value(e, "detail") / 100) * strength;
+        var vibrance = (float)(Value(e, "vibrance") / 100) * strength;
+
+        // Base: luminância desfocada (raio proporcional ao quadro, independente da resolução).
+        var lum = new byte[px.Length];
+        Rows(px, i =>
+        {
+            var y = ToByte((0.2126f * px[i + 2] + 0.7152f * px[i + 1] + 0.0722f * px[i]) / 255f);
+            lum[i] = lum[i + 1] = lum[i + 2] = y;
+            lum[i + 3] = 255;
+        });
+        BlurFx(lum, w, h, Math.Max(2, Math.Min(w, h) * 0.03));
+
+        Rows(px, i =>
+        {
+            float b = px[i] / 255f, g = px[i + 1] / 255f, r = px[i + 2] / 255f;
+            var l = 0.2126f * r + 0.7152f * g + 0.0722f * b;
+            var bl = lum[i] / 255f;
+            var bt = bl + shadows * 0.5f * (1 - bl) * (1 - bl) * MathF.Sqrt(bl) - highlights * 0.45f * bl * bl * bl;
+            var nl = Math.Clamp(bt + (l - bl) * (1 + 2.5f * detail), 0, 1);
+            var ratio = nl / Math.Max(l, 1e-3f);
+            r *= ratio; g *= ratio; b *= ratio;
+            if (vibrance != 0)
+            {
+                var y = 0.2126f * r + 0.7152f * g + 0.0722f * b;
+                var s = Math.Max(r, Math.Max(g, b)) - Math.Min(r, Math.Min(g, b));
+                var k = 1 + vibrance * (1 - Math.Min(1, s));
+                r = y + (r - y) * k; g = y + (g - y) * k; b = y + (b - y) * k;
             }
             px[i] = ToByte(b); px[i + 1] = ToByte(g); px[i + 2] = ToByte(r);
         });

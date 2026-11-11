@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -242,6 +242,7 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
             _clipId = null;
             ColorEffects.Clear();
             OtherEffects.Clear();
+            AppliedKeys = EmptyKeys;
             return;
         }
 
@@ -291,6 +292,112 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         _clipId = clip.Id;
         Sync(ColorEffects, color, sameClip);
         Sync(OtherEffects, other, sameClip);
+        AppliedKeys = ComputeAppliedKeys(clip);
+        CameraTracking = OtherEffects.FirstOrDefault(e => e.Effect.Type == EffectCatalog.CameraTrack);
+        Beauty = OtherEffects.FirstOrDefault(e => e.Effect.Type == EffectCatalog.Beauty);
+        Makeup = OtherEffects.FirstOrDefault(e => e.Effect.Type == EffectCatalog.Makeup);
+    }
+
+    /// <summary>Efeito de rastreamento de câmera do clipe (aba Vídeo), ou null.</summary>
+    [ObservableProperty]
+    public partial EffectItemViewModel? CameraTracking { get; set; }
+
+    /// <summary>Retoque de beleza do clipe (aba Vídeo › Retocar), ou null.</summary>
+    [ObservableProperty]
+    public partial EffectItemViewModel? Beauty { get; set; }
+
+    /// <summary>Maquiagem do clipe (aba Vídeo › Retocar), ou null.</summary>
+    [ObservableProperty]
+    public partial EffectItemViewModel? Makeup { get; set; }
+
+    /// <summary>Adiciona a beleza ("beauty") ou a maquiagem ("makeup") ao clipe, se ainda não houver.</summary>
+    [RelayCommand]
+    public void StartRetouch(string kind)
+    {
+        if (!EnsureClip() || Current() is not { } cur) return;
+        var (type, label) = kind == "makeup" ? (EffectCatalog.Makeup, "Maquiagem") : (EffectCatalog.Beauty, "Beleza");
+        if (cur.Clip.Effects.Any(e => e.Type == type)) return;
+        UpdateClip(c => c with { Effects = c.Effects.Add(EffectCatalog.Create(type)) }, $"Retocar: {label}");
+    }
+
+    /// <summary>
+    /// Ativa o rastreamento de câmera acompanhando a cabeça ("0") ou o corpo ("1"). Se já estiver ativo, só troca o alvo.
+    /// </summary>
+    [RelayCommand]
+    public void StartCameraTracking(string target)
+    {
+        if (!EnsureClip() || Current() is not { } cur) return;
+        var value = target == "1" ? 1 : 0;
+        var label = value == 1 ? "corpo" : "cabeça";
+        if (cur.Clip.Effects.FirstOrDefault(e => e.Type == EffectCatalog.CameraTrack) is { } existing)
+        {
+            UpdateEffect(existing.Id, e => EffectCatalog.WithValue(e, "target", value), $"Rastrear {label}", null);
+            return;
+        }
+        var effect = EffectCatalog.WithValue(EffectCatalog.Create(EffectCatalog.CameraTrack), "target", value);
+        UpdateClip(c => c with { Effects = c.Effects.Add(effect) }, $"Rastreamento de câmera: {label}");
+    }
+
+    private static readonly IReadOnlySet<string> EmptyKeys = new HashSet<string>();
+
+    /// <summary>
+    /// Opções do catálogo já aplicadas ao clipe: tipos de efeito presentes e predefinições de cor cujos efeitos estão
+    /// na pilha com os valores originais. Os cartões aplicados ficam destacados; duplo clique neles desaplica.
+    /// </summary>
+    [ObservableProperty]
+    public partial IReadOnlySet<string> AppliedKeys { get; set; } = EmptyKeys;
+
+    private static HashSet<string> ComputeAppliedKeys(Clip clip)
+    {
+        var keys = clip.Effects.Select(e => e.Type).ToHashSet(StringComparer.Ordinal);
+        foreach (var preset in ColorPresets.All)
+            if (FindPreset(clip, preset) is not null) keys.Add(preset.PreviewKey);
+        return keys;
+    }
+
+    /// <summary>Ids dos efeitos de uma ocorrência da predefinição na pilha, ou null se ela não está aplicada.</summary>
+    private static List<Guid>? FindPreset(Clip clip, ColorPreset preset)
+    {
+        var used = new List<Guid>();
+        foreach (var wanted in preset.Build())
+        {
+            var match = clip.Effects.FirstOrDefault(e => !used.Contains(e.Id) && SameValues(e, wanted));
+            if (match is null) return null;
+            used.Add(match.Id);
+        }
+        return used;
+    }
+
+    private static bool SameValues(EffectInstance a, EffectInstance b) =>
+        a.Type == b.Type && a.Parameters.Count == b.Parameters.Count
+        && a.Parameters.All(p => b.Parameters.TryGetValue(p.Key, out var v) && Math.Abs(v - p.Value) < 1e-9);
+
+    /// <summary>
+    /// Desaplica uma opção do catálogo (duplo clique num cartão aplicado): remove todos os efeitos desse tipo ou todas
+    /// as ocorrências da predefinição de cor. Uma edição só no histórico.
+    /// </summary>
+    public void RemoveApplied(string key)
+    {
+        if (Current() is not { } cur) return;
+        var preset = ColorPresets.All.FirstOrDefault(p => p.PreviewKey == key);
+        string name;
+        Func<Clip, Clip> change;
+        if (preset is not null)
+        {
+            name = preset.Name;
+            change = c =>
+            {
+                while (FindPreset(c, preset) is { } ids) c = c with { Effects = c.Effects.RemoveAll(e => ids.Contains(e.Id)) };
+                return c;
+            };
+        }
+        else
+        {
+            if (EffectCatalog.Find(key) is not { } definition) return;
+            name = definition.Name;
+            change = c => c with { Effects = c.Effects.RemoveAll(e => e.Type == key) };
+        }
+        if (!cur.Clip.Effects.SequenceEqual(change(cur.Clip).Effects)) UpdateClip(change, $"Remover {name}");
     }
 
     private void Sync(ObservableCollection<EffectItemViewModel> target, List<EffectInstance> effects, bool sameClip)
@@ -355,6 +462,22 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         }
         var effect = EffectCatalog.Create(type, resource);
         UpdateClip(c => c with { Effects = c.Effects.Add(effect) }, $"Adicionar {definition.Name}");
+    }
+
+    /// <summary>Predefinições de cor (aba Cor).</summary>
+    public IReadOnlyList<ColorPreset> LibraryColorPresets => ColorPresets.All;
+
+    /// <summary>
+    /// Aplica uma predefinição de cor: acrescenta os efeitos dela à pilha (ficam editáveis). Uma edição só no histórico.
+    /// </summary>
+    [RelayCommand]
+    public void ApplyColorPreset(string id)
+    {
+        if (!EnsureClip()) return;
+        var preset = ColorPresets.All.FirstOrDefault(p => p.Id == id);
+        if (preset is null) return;
+        var effects = preset.Build();
+        UpdateClip(c => c with { Effects = c.Effects.AddRange(effects) }, $"Predefinição de cor: {preset.Name}");
     }
 
     public void ChooseLut(EffectItemViewModel item)

@@ -171,6 +171,23 @@ public sealed class PreviewEngine : IDisposable
 
     private volatile bool _compareMode;
 
+    /// <summary>Posição da linha da comparação, de 0 (esquerda) a 1 (direita); à esquerda dela, sem efeitos.</summary>
+    public double CompareSplit
+    {
+        get => Volatile.Read(ref _compareSplit);
+        set
+        {
+            value = Math.Clamp(value, 0, 1);
+            if (Volatile.Read(ref _compareSplit) == value) return;
+            Volatile.Write(ref _compareSplit, value);
+            if (!_compareMode) return;
+            lock (_gate) _forceRender = true;
+            _renderSignal.Set();
+        }
+    }
+
+    private double _compareSplit = 0.5;
+
     public void SetHardwareDecoding(bool enabled)
     {
         lock (_gate)
@@ -379,26 +396,26 @@ public sealed class PreviewEngine : IDisposable
     {
         // Capturas (useCache = false) sempre usam o original em resolução total, nunca o proxy.
         var paths = useCache ? snapshot.VideoPaths : snapshot.Paths;
-        var key = new CacheKey(snapshot.Sequence, snapshot.Project.Media, paths, snapshot.FrameRate.TimeToFrame(t), w, h, CompareMode);
+        var key = new CacheKey(snapshot.Sequence, snapshot.Project.Media, paths, snapshot.FrameRate.TimeToFrame(t), w, h, CompareMode, CompareMode ? CompareSplit : 0);
         if (useCache && TryCache(key) is { } cached) return cached;
 
         var watch = Stopwatch.StartNew();
         var image = CompareMode
-            ? _frames.RenderCompare(video, snapshot.Project, snapshot.Sequence, paths, t, w, h)
+            ? _frames.RenderCompare(video, snapshot.Project, snapshot.Sequence, paths, t, w, h, key.Split)
             : _frames.Render(video, snapshot.Project, snapshot.Sequence, paths, t, w, h);
         var result = new PreviewFrame(image, t, watch.Elapsed);
         if (useCache) AddCache(key, result);
         return result;
     }
 
-    private readonly record struct CacheKey(Sequence Sequence, object Media, object Paths, long Frame, int W, int H, bool Compare);
+    private readonly record struct CacheKey(Sequence Sequence, object Media, object Paths, long Frame, int W, int H, bool Compare, double Split);
 
     private PreviewFrame? TryCache(CacheKey key)
     {
         for (var n = _cache.First; n is not null; n = n.Next)
         {
             var k = n.Value.Key;
-            if (ReferenceEquals(k.Sequence, key.Sequence) && ReferenceEquals(k.Media, key.Media) && ReferenceEquals(k.Paths, key.Paths) && k.Frame == key.Frame && k.W == key.W && k.H == key.H && k.Compare == key.Compare)
+            if (ReferenceEquals(k.Sequence, key.Sequence) && ReferenceEquals(k.Media, key.Media) && ReferenceEquals(k.Paths, key.Paths) && k.Frame == key.Frame && k.W == key.W && k.H == key.H && k.Compare == key.Compare && k.Split == key.Split)
             {
                 _cache.Remove(n);
                 _cache.AddFirst(n);

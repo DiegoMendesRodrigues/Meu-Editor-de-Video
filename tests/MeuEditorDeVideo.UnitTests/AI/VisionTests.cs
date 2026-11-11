@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using MeuEditorDeVideo.AIEngine;
 using MeuEditorDeVideo.AIEngine.Models;
 using MeuEditorDeVideo.AIEngine.Runtime;
@@ -140,11 +140,17 @@ public sealed class VisionTests : IDisposable
     public void Processador_sem_modelo_devolve_a_imagem_original()
     {
         var img = Solid(8, 8, 1, 2, 3);
-        var processor = new AiFrameProcessor(new NoSegmentation());
+        var processor = new AiFrameProcessor(new NoSegmentation(), new NoFaces());
         var asset = new MediaAsset { Id = Guid.NewGuid(), Kind = MediaKind.Image, Name = "a.png", OriginalPath = "a.png" };
         var (result, alpha) = processor.Apply(Effect(0), img, asset, null, MediaTime.Zero, (_, _) => null, 1);
         Assert.Same(img, result);
         Assert.False(alpha);
+    }
+
+    private sealed class NoFaces : IFaceLandmarkService
+    {
+        public bool IsAvailable => false;
+        public FaceLandmarks? Detect(MediaAsset asset, string? path, MediaTime sourceTime, BgraImage frame) => null;
     }
 
     private sealed class NoSegmentation : ISegmentationService

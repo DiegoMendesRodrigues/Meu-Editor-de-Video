@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Windows;
 using MeuEditorDeVideo.App.ViewModels.Inspector;
 
@@ -33,8 +33,8 @@ public partial class ClipEffectsPanel
     private void Apply()
     {
         var color = Mode == EffectsPanelMode.Color;
-        Comparar.Visibility = color ? Visibility.Visible : Visibility.Collapsed;
-        TituloAdicionar.Text = color ? "Adicionar correção de cor" : "Adicionar efeito";
+        Predefinicoes.Visibility = color ? Visibility.Visible : Visibility.Collapsed;
+        TituloAdicionar.Text = color ? "Ferramentas de cor" : "Adicionar efeito";
         TituloPilha.Text = color ? "Correções aplicadas (em ordem)" : "Efeitos aplicados (em ordem)";
         PilhaVazia.Text = color
             ? "Nenhuma correção de cor. Comece por \"Ajustes de cor\"; use \"Comparar antes/depois\" para avaliar."
@@ -47,6 +47,28 @@ public partial class ClipEffectsPanel
         _watched = DataContext is ClipInspectorViewModel vm ? (color ? vm.ColorEffects : vm.OtherEffects) : null;
         if (_watched is not null) _watched.CollectionChanged += OnStackChanged;
         UpdateEmpty();
+    }
+
+    private bool _cartaoJaAplicado;
+
+    /// <summary>
+    /// Duplo clique num cartão que já estava aplicado desaplica a opção. O primeiro clique ainda aplica (como sempre);
+    /// o estado é lido antes dele, para saber se a opção já estava no clipe.
+    /// </summary>
+    private void Cartao_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (sender is not FrameworkElement { Tag: string key } || DataContext is not ClipInspectorViewModel vm) return;
+        if (e.ClickCount == 1)
+        {
+            _cartaoJaAplicado = vm.AppliedKeys.Contains(key);
+            return;
+        }
+        if (e.ClickCount == 2 && _cartaoJaAplicado)
+        {
+            vm.RemoveApplied(key);
+            _cartaoJaAplicado = false;
+        }
+        e.Handled = true;
     }
 
     private static readonly DependencyProperty ItemsControlItemsSource = System.Windows.Controls.ItemsControl.ItemsSourceProperty;

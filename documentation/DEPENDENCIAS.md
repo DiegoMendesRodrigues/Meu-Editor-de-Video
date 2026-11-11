@@ -57,6 +57,7 @@ licença em `resources\ai-models\licencas\`. Detalhes e uso em [MODELOS_IA.md](M
 | Silero VAD 5 | snakers4/silero-vad | MIT | Detecção de fala / remoção de silêncios |
 | TransNetV2 | Tomáš Souček (ONNX: elya5/transnetv2) | MIT | Detecção de cenas |
 | Swin2SR leve 2× | mv-lab/swin2sr (ONNX: Xenova/swin2SR-lightweight-x2-64) | Apache-2.0 | Melhoria de imagem |
+| Face Mesh V2 | Google MediaPipe (ONNX: fernandotonon/QtMeshEditor-facemesh-onnx) | Apache-2.0 | Retocar: beleza e maquiagem |
 
 ## Ferramentas de compilação do instalador (não fazem parte do aplicativo)
 

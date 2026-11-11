@@ -140,6 +140,7 @@ public sealed partial class ModelManagerViewModel : ObservableObject, IDisposabl
         ModelCapability.VoiceActivity => "Detecção de fala (remover silêncios)",
         ModelCapability.SceneDetection => "Detecção de cenas",
         ModelCapability.ImageEnhancement => "Melhoria de imagem",
+        ModelCapability.FaceLandmarks => "Pontos do rosto (retoque de beleza e maquiagem)",
         _ => c.ToString(),
     };
 

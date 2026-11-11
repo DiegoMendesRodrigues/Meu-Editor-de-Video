@@ -64,7 +64,7 @@ Depois de criar ou abrir um projeto, a tela de edição aparece. Ela é dividida
 
 - **Barra superior** (no topo da janela): à esquerda, os menus **Arquivo**, **Editar**, **Visualizar**, **Projeto**, **Ferramentas** e **Ajuda** e os botões **Salvar**, **Desfazer** e **Refazer**; no centro, o nome do projeto; à direita, **Tema**, **Fila de renderização**, **Exportar** e os botões de minimizar, maximizar e fechar a janela. Arraste a barra para mover a janela e dê um duplo clique nela para maximizar ou restaurar.
 - **Biblioteca de mídias** (à esquerda): no alto ficam as abas Biblioteca de Mídias, Vídeos, Imagens, Áudios, Elementos Gráficos, Textos, Transições, Efeitos, Cor e IA. Passe o mouse sobre uma aba para ver o nome completo. As mídias importadas aparecem em grade, com miniatura e duração.
-- **Pré-visualização** (no centro, em cima): mostra o resultado do vídeo. Em cima ficam a resolução da pré-visualização e o botão Proxy; embaixo, a barra de posição (arraste para ir a qualquer ponto), os botões de reproduzir, pausar e avançar quadro a quadro, o volume, a captura de quadro e a tela cheia.
+- **Pré-visualização** (no centro, em cima): mostra o resultado do vídeo. Em cima ficam a resolução da pré-visualização, o botão Proxy e o botão **Maximizar o monitor**, que faz a pré-visualização cobrir a biblioteca e a linha do tempo (o painel Propriedades continua visível; clique de novo para restaurar); embaixo, a barra de posição (arraste para ir a qualquer ponto), os botões de reproduzir, pausar e avançar quadro a quadro, o volume, a captura de quadro e a tela cheia.
 - **Propriedades** (à direita): mostra as informações e as configurações do item selecionado. Está dividida em abas: **Projeto** (resolução, taxa de quadros, duração, quantidade de mídias e clipes, arquivo), **Mídia**, **Vídeo**, **Texto**, **Composição**, **IA**, **Áudio**, **Efeitos**, **Cor** e **Histórico**.
 - **Linha do tempo** (embaixo): onde você monta o vídeo. Cada linha horizontal é uma trilha. Há uma barra de ferramentas logo acima dela.
 
@@ -239,11 +239,24 @@ Esta aba reúne as configurações de movimento e tempo do clipe:
 - **Congelar quadro**, **Repetir trecho**, **Preencher quadro**, **Girar 90°** e **Espelhar** na horizontal e na vertical.
 - **Transição de entrada**: aplica uma transição entre este clipe e o clipe que vem antes dele na mesma trilha. Para usar, os dois clipes precisam estar encostados. Você escolhe a transição e a **Duração da transição**.
 
+- **Rastreamento de câmera**: escolha **Cabeça** ou **Corpo**, e uma câmera virtual acompanha essa parte da pessoa. Ajuste:
+  - **Corte automático (zoom)**: aproxima a imagem do alvo.
+  - **Seguir o movimento**: quanto a câmera segue o alvo (em 0%, ela fica no centro).
+  - **Agitar**: tremor de câmera em torno do alvo.
+  - **Fundo desfocado**: desfoca tudo o que não é a pessoa.
+
+  O rastreamento usa o mesmo modelo de recorte de pessoa da aba **IA** (instale-o em **Modelos de IA**, se ainda não tiver). Sem o modelo ou sem pessoa no quadro, a câmera fica no centro e o fundo não é desfocado. O efeito também aparece na lista de efeitos aplicados da aba **Efeitos**.
+- **Retocar**: retoque do rosto da pessoa, quadro a quadro. Clique em **Beleza** ou **Maquiagem** para adicionar o retoque ao clipe; os ajustes aparecem logo abaixo.
+  - **Beleza**: **Pele · suavizar** e **Pele · clarear**, **Linhas de expressão** e **Bolsas abaixo dos olhos** (suavizam essas áreas), e ajustes de forma: **Rosto · afinar**, **Olhos · aumentar**, **Nariz · afinar**, **Boca · tamanho** e **Sobrancelhas · erguer** (valores negativos fazem o contrário).
+  - **Maquiagem**: escolha um **Look** pronto (Natural, Glamour, Noite ou Rosado) ou **Nenhum**, e ajuste cada item: **Cílios**, **Sombra de olhos**, **Delineador**, **Sobrancelhas**, **Batom**, **Blush**, **Contorno**, **Realces**, **Cor dos olhos** e **Sardas**. Sombra, sobrancelhas, batom, blush e íris têm cor própria. Um item com valor acima de 0% usa o seu valor e a sua cor; com 0%, vale o que o look define.
+
+  O retoque usa o modelo **Face Mesh V2**, que localiza 478 pontos do rosto. Instale-o em **Ferramentas › Modelos de IA › Baixar modelos…** (cerca de 5 MB). Se o modelo de recorte de pessoa estiver instalado, ele ajuda a encontrar a cabeça no quadro. Sem o modelo Face Mesh ou sem rosto visível, o quadro fica como está. O retoque funciona melhor com o rosto de frente e ocupando uma boa parte da imagem.
+
 As transições disponíveis são: Corte seco, Dissolver, Escurecer e clarear (fade), Zoom, Deslizar (para a esquerda, a direita, cima e baixo), Empurrar (para a esquerda e para a direita), Cortina (para a esquerda, a direita, cima e baixo), Círculo, Losango, Relógio e Persianas.
 
 ### Efeitos
 
-A aba **Efeitos** tem duas partes. Em cima, os botões com o nome de cada efeito: clique num deles para adicionar o efeito ao clipe. Embaixo, a lista **Efeitos aplicados**, na ordem em que os efeitos são processados. Cada efeito da lista tem controles deslizantes para os ajustes, e os botões **Mover para cima**, **Mover para baixo** e **Remover efeito**. Dê um duplo clique num controle deslizante para voltar ao valor padrão.
+A aba **Efeitos** tem duas partes. Em cima, uma grade com uma miniatura de cada efeito, que mostra o resultado numa paisagem de exemplo: clique numa delas para adicionar o efeito ao clipe. Embaixo, a lista **Efeitos aplicados**, na ordem em que os efeitos são processados. Cada efeito da lista tem controles deslizantes para os ajustes, e os botões **Mover para cima**, **Mover para baixo** e **Remover efeito**. A seta à esquerda do nome mostra ou oculta os ajustes. Dê um duplo clique num controle deslizante para voltar ao valor padrão. Nos ajustes de cor, uma faixa colorida sob o controle mostra o efeito do valor (por exemplo, azul a laranja na temperatura).
 
 Efeitos visuais disponíveis:
 
@@ -251,17 +264,23 @@ Efeitos visuais disponíveis:
 - **Chroma key**: remove um fundo verde, azul ou de outra cor escolhida. Tem tolerância, suavidade da transição, suavização das bordas, remoção do reflexo da cor e a opção de deixar o fundo transparente ou com cor sólida.
 - **Refinar bordas**: contrai ou expande a borda da transparência, suaviza e limpa a cor das bordas. Use depois do chroma key ou de uma máscara.
 
-A opção **Comparar antes/depois no monitor** mostra, numa metade do monitor, o vídeo sem efeitos e sem correção de cor, para você comparar.
+Nas abas **Efeitos** e **Cor**, a opção **Comparar antes/depois no monitor** mostra, à esquerda de uma linha no monitor, o vídeo sem efeitos e sem correção de cor, para você comparar. Arraste a alça da linha para a direita ou para a esquerda para mudar a divisão.
+
+Os cartões das opções já aplicadas ao clipe ficam com a borda em destaque. Um duplo clique num cartão aplicado desaplica a opção: remove o efeito ou, numa predefinição de cor, os ajustes que ela criou (desde que você não os tenha alterado).
 
 ### Cor
 
-A aba **Cor** e a seção **Cor** da biblioteca têm as ferramentas de correção de cor:
+A aba **Cor** começa pelas **Predefinições**: Preto e branco, Noir, Cinema, Vívido, Quente, Frio, Desbotado, Retrô e Claro e arejado. Clique numa miniatura para aplicar o estilo ao clipe. A predefinição entra na lista de correções aplicadas como ajustes comuns, que você pode alterar ou remover; **Desfazer** (Ctrl+Z) volta tudo de uma vez.
+
+Abaixo, em **Ferramentas de cor** (e na seção **Cor** da biblioteca), ficam as ferramentas de correção de cor:
 
 - **Ajustes de cor**: exposição, brilho, contraste, saturação, temperatura, tonalidade (verde ou magenta), matiz, sombras e realces.
 - **Balanço de branco**: indique a cor que deveria ser cinza neutro, e o programa corrige a dominante.
 - **Curvas**: curvas de tons do vídeo inteiro e por canal (vermelho, verde e azul).
 - **Rodas de cor**: ajuste separado das sombras, dos tons médios e dos realces.
 - **LUT 3D (.cube)**: aplica uma tabela de cores no formato .cube, muito usada para dar um estilo ao vídeo. Escolha a intensidade com o controle deslizante.
+- **HSL**: ajusta matiz, saturação e luminância de cada faixa de cor (vermelho, laranja, amarelo, verde, ciano, azul, roxo e magenta) sem mexer nas outras, por exemplo só o azul do céu. Cinzas, preto e branco não mudam.
+- **HDR**: aspecto HDR, que recupera sombras e realces e reforça os detalhes. Tem intensidade, sombras, realces, detalhes e vivacidade.
 
 ### Máscaras, rastreamento e estabilização
 
@@ -369,6 +388,7 @@ Cada recurso usa um modelo de IA. O modelo do **Remover fundo** já vem com o pr
 | Remover trechos sem fala | Silero VAD 5 | Sim, cerca de 2,3 MB | Somente CPU |
 | Detectar cenas | TransNetV2 | Sim, cerca de 31 MB | CPU ou GPU |
 | Melhorar imagem | Swin2SR leve 2× | Sim, cerca de 8 MB | CPU ou GPU |
+| Retocar (beleza e maquiagem) | Face Mesh V2 | Sim, cerca de 5 MB | Somente CPU |
 
 A detecção de cenas funciona mesmo sem o modelo TransNetV2, comparando as imagens do vídeo. Nesse caso, a precisão é menor.
 

@@ -1,4 +1,4 @@
-<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipEffectsPanel"
+﻿<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipEffectsPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--
@@ -30,19 +30,55 @@
                 <CheckBox x:Name="Comparar" Content="Comparar antes/depois no monitor" IsChecked="{Binding Preview.CompareMode}" Margin="0,10,0,0"
                           AutomationProperties.Name="Comparar antes e depois" ToolTip="Metade esquerda do monitor sem efeitos e sem correção de cor" />
 
+                <!-- Predefinições de cor (só na aba Cor) -->
+                <StackPanel x:Name="Predefinicoes">
+                    <TextBlock Text="Predefinições" Style="{StaticResource Ins.Section}" />
+                    <ItemsControl ItemsSource="{Binding LibraryColorPresets}" AutomationProperties.Name="Predefinições de cor">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="4" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource Ins.CardButton}" ToolTip="{Binding Description}" Tag="{Binding PreviewKey}"
+                                        PreviewMouseLeftButtonDown="Cartao_PreviewMouseLeftButtonDown"
+                                        AutomationProperties.Name="{Binding Name, StringFormat='Aplicar predefinição {0}'}"
+                                        Command="{Binding DataContext.ApplyColorPresetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding Id}">
+                                    <StackPanel>
+                                        <Border Style="{StaticResource Ins.Thumb}">
+                                            <Image Source="{Binding PreviewKey, Converter={StaticResource Ins.Preview}}" Stretch="UniformToFill" Height="46" />
+                                        </Border>
+                                        <TextBlock Text="{Binding Name}" Style="{StaticResource Ins.CardText}" />
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
                 <TextBlock x:Name="TituloAdicionar" Style="{StaticResource Ins.Section}" />
                 <ItemsControl x:Name="Catalogo">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel />
+                            <UniformGrid Columns="4" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Content="{Binding Name}" Style="{StaticResource Ins.SmallButton}" ToolTip="{Binding Description}"
+                            <Button Style="{StaticResource Ins.CardButton}" ToolTip="{Binding Description}" Tag="{Binding Key}"
+                                    PreviewMouseLeftButtonDown="Cartao_PreviewMouseLeftButtonDown"
                                     AutomationProperties.Name="{Binding Name, StringFormat='Adicionar {0}'}"
                                     Command="{Binding DataContext.AddEffectCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                    CommandParameter="{Binding Key}" />
+                                    CommandParameter="{Binding Key}">
+                                <StackPanel>
+                                    <Border Style="{StaticResource Ins.Thumb}">
+                                        <Image Source="{Binding Key, Converter={StaticResource Ins.Preview}}" Stretch="UniformToFill" Height="46" />
+                                    </Border>
+                                    <TextBlock Text="{Binding Name}" Style="{StaticResource Ins.CardText}" />
+                                </StackPanel>
+                            </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

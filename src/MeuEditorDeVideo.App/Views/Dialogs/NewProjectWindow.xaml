@@ -7,7 +7,7 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        Background="{DynamicResource Med.Background}"
+        Background="{DynamicResource Med.WindowBackground}"
         Foreground="{DynamicResource Med.Text}">
     <Window.Resources>
         <!-- Modelos de projeto agrupados: geral, internet e redes sociais, personalizado. -->

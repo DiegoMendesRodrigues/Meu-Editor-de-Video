@@ -214,14 +214,14 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition x:Name="LinhaCentral" Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="300" MinHeight="200" />
+            <RowDefinition x:Name="LinhaInferior" Height="300" MinHeight="200" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="760" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="320" MinWidth="260" />
+            <ColumnDefinition Width="400" MinWidth="340" />
         </Grid.ColumnDefinitions>
 
         <!-- 1. Barra de título: logotipo, menu, ações rápidas, projeto e Exportar.
@@ -354,15 +354,15 @@
         </Border>
 
         <!-- 3. Área central: Biblioteca | Monitor | Propriedades -->
-        <Grid Grid.Row="1">
+        <Grid x:Name="AreaCentral" Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="560" MinWidth="360" />
+                <ColumnDefinition x:Name="ColunaBiblioteca" Width="560" MinWidth="360" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" MinWidth="400" />
             </Grid.ColumnDefinitions>
 
             <!-- Painel A: Biblioteca -->
-            <Border Grid.Column="0" Style="{StaticResource Editor.Painel}" Margin="1">
+            <Border x:Name="PainelBiblioteca" Grid.Column="0" Style="{StaticResource Editor.Painel}" Margin="1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -837,7 +837,7 @@
                 </Grid>
             </Border>
 
-            <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+            <GridSplitter x:Name="DivisorBiblioteca" Grid.Column="1" Width="3" MinWidth="0" HorizontalAlignment="Center" VerticalAlignment="Stretch"
                           ResizeBehavior="PreviousAndNext" Background="{DynamicResource Med.Background}" />
 
             <!-- Painel B: Monitor -->
@@ -866,16 +866,40 @@
                                           ToolTip="{StaticResource Editor.Monitor.UsarProxies}">
                                 <TextBlock Text="Proxy" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" />
                             </ToggleButton>
+                            <!-- Maximizar: o monitor cobre a biblioteca e a linha do tempo; Propriedades continua visível -->
+                            <ToggleButton x:Name="BotaoMaximizarMonitor" Style="{StaticResource Editor.Alternar}" Margin="4,0,0,0"
+                                          Checked="MaximizarMonitor_Changed" Unchecked="MaximizarMonitor_Changed"
+                                          AutomationProperties.Name="{StaticResource Editor.Monitor.Maximizar}"
+                                          ToolTip="{StaticResource Editor.Monitor.Maximizar}">
+                                <TextBlock x:Name="IconeMaximizarMonitor" Style="{StaticResource Editor.Icone}" Text="&#xE740;" />
+                            </ToggleButton>
                         </StackPanel>
                     </Grid>
 
                     <Border x:Name="Monitor" Grid.Row="1" Background="{DynamicResource Med.MonitorBackground}" CornerRadius="4" ClipToBounds="True"
                             MouseLeftButtonDown="Monitor_MouseLeftButtonDown">
                         <Grid>
-                            <Image Source="{Binding Preview.Image}" Stretch="Uniform" RenderOptions.BitmapScalingMode="Linear"
-                                   AutomationProperties.Name="{StaticResource Editor.Monitor.Imagem}" />
+                            <Image x:Name="ImagemMonitor" Source="{Binding Preview.Image}" Stretch="Uniform" RenderOptions.BitmapScalingMode="Linear"
+                                   AutomationProperties.Name="{StaticResource Editor.Monitor.Imagem}" SizeChanged="ImagemMonitor_SizeChanged" />
                             <!-- Edição de máscaras e regiões de rastreamento sobre a imagem (F9) -->
                             <ctl:CompositionOverlay Editor="{Binding CompositionInspector}" />
+                            <!-- Comparar antes/depois: alça arrastável sobre a linha divisória (desenhada pelo renderizador) -->
+                            <Canvas x:Name="CamadaComparacao" IsVisibleChanged="CamadaComparacao_IsVisibleChanged" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Width="{Binding ActualWidth, ElementName=ImagemMonitor}" Height="{Binding ActualHeight, ElementName=ImagemMonitor}"
+                                    Visibility="{Binding Preview.CompareMode, Converter={StaticResource Editor.BoolToVis}}">
+                                <Border x:Name="AlcaComparacao" Width="24" Background="Transparent" Cursor="SizeWE"
+                                        Height="{Binding ActualHeight, ElementName=CamadaComparacao}"
+                                        MouseLeftButtonDown="AlcaComparacao_MouseLeftButtonDown" MouseMove="AlcaComparacao_MouseMove"
+                                        MouseLeftButtonUp="AlcaComparacao_MouseLeftButtonUp"
+                                        AutomationProperties.Name="{StaticResource Editor.Monitor.LinhaComparacao}"
+                                        ToolTip="{StaticResource Editor.Monitor.LinhaComparacao}">
+                                    <Border Width="28" Height="28" CornerRadius="14" Background="White" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                            Margin="-2,0">
+                                        <TextBlock Text="&#xE76B;&#xE76C;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="9" Foreground="Black"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                </Border>
+                            </Canvas>
                             <TextBlock Text="{StaticResource Editor.Monitor.PreVisualizacao}" FontSize="18"
                                        HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <TextBlock.Style>
@@ -970,12 +994,12 @@
         </Grid>
 
         <!-- 4. Divisor horizontal entre a área central e a parte inferior -->
-        <GridSplitter Grid.Row="2" Height="6" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+        <GridSplitter x:Name="DivisorCentral" Grid.Row="2" Height="3" MinHeight="0" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                       ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"
                       Background="{DynamicResource Med.Background}" />
 
         <!-- 5 e 6. Ferramentas (E) e Linha do tempo (D) -->
-        <Grid Grid.Row="3">
+        <Grid x:Name="AreaInferior" Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" MinHeight="160" />
@@ -1219,7 +1243,7 @@
             </Border>
         </Grid>
 
-            <GridSplitter Grid.Row="1" Grid.RowSpan="3" Grid.Column="1" Width="6" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+            <GridSplitter Grid.Row="1" Grid.RowSpan="3" Grid.Column="1" Width="3" MinWidth="0" HorizontalAlignment="Center" VerticalAlignment="Stretch"
                           ResizeBehavior="PreviousAndNext" Background="{DynamicResource Med.Background}" />
 
             <!-- Painel C: Propriedades (altura total, do topo até a linha do tempo) -->
@@ -1230,18 +1254,52 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Text="{StaticResource Editor.Propriedades.Titulo}"
-                               Style="{StaticResource Med.SectionTitle}" Margin="12,10,12,8" />
-
-                    <TabControl Grid.Row="1" Margin="8,0,8,8"
+                    <TabControl Grid.Row="1" Margin="6,6,6,6"
                                 Background="{DynamicResource Med.Panel}"
                                 BorderBrush="{DynamicResource Med.Border}">
-                        <TabItem Header="{StaticResource Editor.Propriedades.Projeto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.InfoProjeto}" IsSelected="True">
+                        <!-- Abas: ícone + texto em verde; a ativa fica preenchida e com um ponto vermelho -->
+                        <TabControl.ItemContainerStyle>
+                            <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+                                <Setter Property="Padding" Value="2" />
+                                <Setter Property="Margin" Value="0,0,2,2" />
+                                <Setter Property="HeaderTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Border x:Name="Fundo" CornerRadius="4" Padding="8,5" Background="Transparent">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock x:Name="Icone" Style="{StaticResource Med.Icon}" FontSize="14"
+                                                                   Foreground="{DynamicResource Med.Accent}"
+                                                                   Text="{Binding Tag, RelativeSource={RelativeSource AncestorType=TabItem}}" />
+                                                        <TextBlock x:Name="Rotulo" Text="{Binding}" Margin="6,0,0,0" VerticalAlignment="Center"
+                                                                   Foreground="{DynamicResource Med.Accent}" />
+                                                    </StackPanel>
+                                                </Border>
+                                                <Ellipse x:Name="Ponto" Width="9" Height="9" Fill="{DynamicResource Med.Danger}"
+                                                         Stroke="{DynamicResource Med.Panel}" StrokeThickness="1.5"
+                                                         HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-3,-3,0"
+                                                         Visibility="Collapsed" IsHitTestVisible="False" />
+                                            </Grid>
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
+                                                    <Setter TargetName="Fundo" Property="Background" Value="{DynamicResource Med.Accent}" />
+                                                    <Setter TargetName="Icone" Property="Foreground" Value="{DynamicResource Med.OnAccent}" />
+                                                    <Setter TargetName="Rotulo" Property="Foreground" Value="{DynamicResource Med.OnAccent}" />
+                                                    <Setter TargetName="Rotulo" Property="FontWeight" Value="SemiBold" />
+                                                    <Setter TargetName="Ponto" Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TabControl.ItemContainerStyle>
+                        <TabItem Tag="&#xE7C3;" Header="{StaticResource Editor.Propriedades.Projeto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.InfoProjeto}" IsSelected="True">
                             <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="12">
                                 <ItemsControl ItemsSource="{Binding ProjectInfoLines}" ItemTemplate="{StaticResource Editor.LinhaInfo}" />
                             </ScrollViewer>
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Midia}" AutomationProperties.Name="{StaticResource Editor.Propriedades.InfoMidia}">
+                        <TabItem Tag="&#xE8B9;" Header="{StaticResource Editor.Propriedades.Midia}" AutomationProperties.Name="{StaticResource Editor.Propriedades.InfoMidia}">
                             <Grid>
                                 <TextBlock Text="{StaticResource Editor.Propriedades.SelecioneMidia}"
                                            TextWrapping="Wrap" Margin="12">
@@ -1275,28 +1333,28 @@
                                 </ScrollViewer>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Video}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Video}">
+                        <TabItem Tag="&#xE714;" Header="{StaticResource Editor.Propriedades.Video}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Video}">
                             <panels:ClipVideoPanel DataContext="{Binding Inspector}" />
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Texto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Texto}">
+                        <TabItem Tag="&#xE8D2;" Header="{StaticResource Editor.Propriedades.Texto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Texto}">
                             <panels:ClipTextPanel DataContext="{Binding TextInspector}" />
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Composicao}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Composicao}">
+                        <TabItem Tag="&#xE81E;" Header="{StaticResource Editor.Propriedades.Composicao}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Composicao}">
                             <panels:ClipCompositionPanel DataContext="{Binding CompositionInspector}" />
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.IA}" AutomationProperties.Name="Inteligência artificial">
+                        <TabItem Tag="&#xE99A;" Header="{StaticResource Editor.Propriedades.IA}" AutomationProperties.Name="Inteligência artificial">
                             <panels:ClipAiPanel DataContext="{Binding AiInspector}" />
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Audio}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Audio}">
+                        <TabItem Tag="&#xE8D6;" Header="{StaticResource Editor.Propriedades.Audio}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Audio}">
                             <panels:ClipAudioPanel DataContext="{Binding AudioInspector}" />
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Efeitos}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Efeitos}">
+                        <TabItem Tag="&#xE706;" Header="{StaticResource Editor.Propriedades.Efeitos}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Efeitos}">
                             <panels:ClipEffectsPanel Mode="Effects" DataContext="{Binding Inspector}" />
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Cor}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Cor}">
+                        <TabItem Tag="&#xE790;" Header="{StaticResource Editor.Propriedades.Cor}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Cor}">
                             <panels:ClipEffectsPanel Mode="Color" DataContext="{Binding Inspector}" />
                         </TabItem>
-                        <TabItem Header="{StaticResource Editor.Propriedades.Historico}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}">
+                        <TabItem Tag="&#xE81C;" Header="{StaticResource Editor.Propriedades.Historico}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}">
                             <ListBox ItemsSource="{Binding HistoryItems}" Background="Transparent" BorderThickness="0"
                                      AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}"
                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">

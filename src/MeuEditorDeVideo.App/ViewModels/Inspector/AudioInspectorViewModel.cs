@@ -52,7 +52,20 @@ public sealed partial class AudioInspectorViewModel : ObservableObject, IClipEdi
     public ObservableCollection<EffectItemViewModel> Effects { get; } = [];
 
     public IReadOnlyList<LibraryEffectItem> LibraryAudio { get; } =
-        EffectCatalog.All.Where(d => d.Category == EffectCategory.Audio).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "")).ToList();
+        EffectCatalog.All.Where(d => d.Category == EffectCategory.Audio).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, AudioGlyph(d.Type))).ToList();
+
+    /// <summary>Ícone (Segoe Fluent Icons) que representa cada efeito de áudio no catálogo.</summary>
+    private static string AudioGlyph(string type) => type switch
+    {
+        EffectCatalog.Equalizer => "",
+        EffectCatalog.Compressor => "",
+        EffectCatalog.Denoise => "",
+        EffectCatalog.Echo => "",
+        EffectCatalog.Reverb => "",
+        EffectCatalog.Telephone => "",
+        EffectCatalog.Distortion => "",
+        _ => "",
+    };
 
     /// <summary>Alvos de loudness (RF126).</summary>
     public IReadOnlyList<Option<double>> Targets { get; } =

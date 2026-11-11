@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
 
@@ -17,7 +17,7 @@ public sealed class PromptWindow : Window
         ResizeMode = ResizeMode.NoResize;
         ShowInTaskbar = false;
         WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        SetResourceReference(BackgroundProperty, "Med.Background");
+        SetResourceReference(BackgroundProperty, "Med.WindowBackground");
 
         var text = new TextBlock { Text = label, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 0, 0, 8) };
         text.SetResourceReference(TextBlock.ForegroundProperty, "Med.Text");

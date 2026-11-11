@@ -1,4 +1,4 @@
-<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.SubtitleEditorWindow"
+﻿<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.SubtitleEditorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Editor de legendas"
@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         AutomationProperties.Name="Editor de legendas"
-        Background="{DynamicResource Med.Background}"
+        Background="{DynamicResource Med.WindowBackground}"
         Foreground="{DynamicResource Med.Text}">
     <!-- Editor de legendas (RF143): tempos e textos editáveis, sincronizados com a linha do tempo e desfazíveis. -->
     <Window.Resources>

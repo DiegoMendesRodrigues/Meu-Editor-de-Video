@@ -1,4 +1,4 @@
-<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.ModelCatalogWindow"
+﻿<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.ModelCatalogWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Baixar modelos de IA"
@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         AutomationProperties.Name="Baixar modelos de IA"
-        Background="{DynamicResource Med.Background}"
+        Background="{DynamicResource Med.WindowBackground}"
         Foreground="{DynamicResource Med.Text}">
     <!-- Catálogo oficial: recursos de cada modelo; Instalar = baixar, conferir SHA-256, gerar .medmodel e instalar com as dependências. -->
     <Window.Resources>

@@ -1,4 +1,4 @@
-<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipVideoPanel"
+﻿<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipVideoPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- Aba "Vídeo" do painel C: transformação, keyframes, recorte, mistura, velocidade, congelar/repetir, transição (F6). -->
@@ -143,6 +143,63 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
+
+                <!-- Rastreamento de câmera: câmera virtual que acompanha a cabeça ou o corpo (efeito de IA) -->
+                <TextBlock Text="Rastreamento de câmera" Style="{StaticResource Ins.Section}" />
+                <TextBlock Style="{StaticResource Ins.Label}" TextWrapping="Wrap" Margin="0,0,0,6"
+                           Text="Escolha o que a câmera acompanha. Depois ajuste o corte automático, o agitar e o fundo desfocado. Usa o modelo de recorte de pessoa (aba IA)." />
+                <UniformGrid Columns="2" Margin="0,0,0,6">
+                    <Button Style="{StaticResource Ins.CardButton}" Command="{Binding StartCameraTrackingCommand}" CommandParameter="0"
+                            AutomationProperties.Name="Rastrear a cabeça" ToolTip="A câmera acompanha a cabeça da pessoa">
+                        <StackPanel>
+                            <Border Style="{StaticResource Ins.Thumb}" Height="46">
+                                <TextBlock Text="&#xE77B;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="22"
+                                           Foreground="{DynamicResource Med.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="Cabeça" Style="{StaticResource Ins.CardText}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource Ins.CardButton}" Command="{Binding StartCameraTrackingCommand}" CommandParameter="1"
+                            AutomationProperties.Name="Rastrear o corpo" ToolTip="A câmera acompanha o corpo inteiro da pessoa">
+                        <StackPanel>
+                            <Border Style="{StaticResource Ins.Thumb}" Height="46">
+                                <TextBlock Text="&#xE716;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="22"
+                                           Foreground="{DynamicResource Med.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="Corpo" Style="{StaticResource Ins.CardText}" />
+                        </StackPanel>
+                    </Button>
+                </UniformGrid>
+                <ContentControl Content="{Binding CameraTracking}" Focusable="False" />
+
+                <!-- Retocar: beleza e maquiagem sobre os pontos do rosto (efeitos de IA, modelo Face Mesh) -->
+                <TextBlock Text="Retocar" Style="{StaticResource Ins.Section}" />
+                <TextBlock Style="{StaticResource Ins.Label}" TextWrapping="Wrap" Margin="0,0,0,6"
+                           Text="Beleza (pele, rosto, olhos, nariz, boca e sobrancelhas) e maquiagem virtual. Usa o modelo de pontos do rosto (aba IA › Modelos › Face Mesh V2)." />
+                <UniformGrid Columns="2" Margin="0,0,0,6">
+                    <Button Style="{StaticResource Ins.CardButton}" Command="{Binding StartRetouchCommand}" CommandParameter="beauty"
+                            AutomationProperties.Name="Retocar: beleza" ToolTip="Pele suave, menos linhas e bolsas; ajustes de rosto, olhos, nariz, boca e sobrancelhas">
+                        <StackPanel>
+                            <Border Style="{StaticResource Ins.Thumb}" Height="46">
+                                <TextBlock Text="&#xE76E;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="22"
+                                           Foreground="{DynamicResource Med.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="Beleza" Style="{StaticResource Ins.CardText}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource Ins.CardButton}" Command="{Binding StartRetouchCommand}" CommandParameter="makeup"
+                            AutomationProperties.Name="Retocar: maquiagem" ToolTip="Looks prontos, cílios, sombra, delineador, sobrancelhas, batom, blush, contorno, realces, cor dos olhos e sardas">
+                        <StackPanel>
+                            <Border Style="{StaticResource Ins.Thumb}" Height="46">
+                                <TextBlock Text="&#xE771;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="22"
+                                           Foreground="{DynamicResource Med.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="Maquiagem" Style="{StaticResource Ins.CardText}" />
+                        </StackPanel>
+                    </Button>
+                </UniformGrid>
+                <ContentControl Content="{Binding Beauty}" Focusable="False" />
+                <ContentControl Content="{Binding Makeup}" Focusable="False" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -1,4 +1,4 @@
-<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.RenderQueueWindow"
+﻿<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.RenderQueueWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Fila de renderização"
@@ -8,7 +8,7 @@
         MinHeight="300"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        Background="{DynamicResource Med.Background}"
+        Background="{DynamicResource Med.WindowBackground}"
         Foreground="{DynamicResource Med.Text}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />

@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.AIEngine.Models;
+﻿using MeuEditorDeVideo.AIEngine.Models;
 using MeuEditorDeVideo.AIEngine.Runtime;
 using MeuEditorDeVideo.AIEngine.Speech;
 using MeuEditorDeVideo.AIEngine.Vision;
@@ -25,6 +25,7 @@ public static class AiEngineServiceCollectionExtensions
         services.AddSingleton(sp => new OnnxSessionFactory(sp.GetService<ISettingsService>(), sp.GetService<ILogger<OnnxSessionFactory>>()));
         services.AddSingleton(sp => new MatteCache(Path.Combine(sp.GetRequiredService<IAppPaths>().Cache, "mattes")));
         services.AddSingleton<ISegmentationService, SegmentationService>();
+        services.AddSingleton<IFaceLandmarkService, FaceLandmarkService>();
         services.AddSingleton<IAiFrameProcessor, AiFrameProcessor>();
         services.AddSingleton<ISceneDetectionService, SceneDetectionService>();
         services.AddSingleton<IImageEnhancementService, ImageEnhancementService>();

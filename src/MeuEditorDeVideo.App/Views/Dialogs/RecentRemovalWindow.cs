@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
 using MeuEditorDeVideo.App.Services;
@@ -18,7 +18,7 @@ public sealed class RecentRemovalWindow : Window
         ResizeMode = ResizeMode.NoResize;
         ShowInTaskbar = false;
         WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        SetResourceReference(BackgroundProperty, "Med.Background");
+        SetResourceReference(BackgroundProperty, "Med.WindowBackground");
 
         var root = new StackPanel { Margin = new Thickness(16) };
         root.Children.Add(Text($"O que deseja fazer com o projeto \"{projectName}\"?", "Med.Text", bold: true));

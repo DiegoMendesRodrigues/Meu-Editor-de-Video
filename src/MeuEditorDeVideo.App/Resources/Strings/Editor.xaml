@@ -120,6 +120,9 @@
     <sys:String x:Key="Editor.Ferramenta.AfastarZoom">Afastar (Ctrl+−)</sys:String>
     <sys:String x:Key="Editor.Ferramenta.AproximarZoom">Aproximar (Ctrl+=)</sys:String>
     <sys:String x:Key="Editor.Ferramenta.AjustarZoom">Ajustar à janela (Shift+Z)</sys:String>
+    <sys:String x:Key="Editor.Monitor.Maximizar">Maximizar o monitor</sys:String>
+    <sys:String x:Key="Editor.Monitor.Restaurar">Restaurar o monitor</sys:String>
+    <sys:String x:Key="Editor.Monitor.LinhaComparacao">Arraste para comparar: à esquerda, sem efeitos; à direita, com efeitos</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Zoom">Zoom da linha do tempo</sys:String>
 
     <!-- Painel D: Linha do tempo -->

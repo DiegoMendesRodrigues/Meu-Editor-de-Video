@@ -88,15 +88,23 @@
                 <ItemsControl ItemsSource="{Binding LibraryAudio}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel />
+                            <UniformGrid Columns="4" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Content="{Binding Name}" Style="{StaticResource Ins.SmallButton}" ToolTip="{Binding Description}"
+                            <Button Style="{StaticResource Ins.CardButton}" ToolTip="{Binding Description}"
                                     AutomationProperties.Name="{Binding Name, StringFormat='Adicionar {0}'}"
                                     Command="{Binding DataContext.AddEffectCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                    CommandParameter="{Binding Key}" />
+                                    CommandParameter="{Binding Key}">
+                                <StackPanel>
+                                    <Border Style="{StaticResource Ins.Thumb}" Height="52">
+                                        <TextBlock Text="{Binding Glyph}" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="24"
+                                                   Foreground="{DynamicResource Med.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <TextBlock Text="{Binding Name}" Style="{StaticResource Ins.CardText}" />
+                                </StackPanel>
+                            </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         AutomationProperties.Name="Modelos de IA"
-        Background="{DynamicResource Med.Background}"
+        Background="{DynamicResource Med.WindowBackground}"
         Foreground="{DynamicResource Med.Text}">
     <!-- Gerenciador de modelos (RF166–RF170, §8.3): instalação por pacotes locais, todos os campos do manifesto, CPU/GPU. -->
     <Window.Resources>

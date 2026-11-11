@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -27,6 +28,40 @@ public partial class EditorView : UserControl
     }
 
     private Window? _host;
+
+    private GridLength _larguraBiblioteca = new(560);
+    private GridLength _alturaLinhaDoTempo = new(300);
+
+    /// <summary>
+    /// Maximiza ou restaura o monitor ("Linha do tempo"): maximizado, ele cobre a biblioteca à esquerda e a linha do
+    /// tempo embaixo; o painel Propriedades continua visível. Restaurar volta aos tamanhos anteriores.
+    /// </summary>
+    private void MaximizarMonitor_Changed(object sender, RoutedEventArgs e)
+    {
+        var maximizar = BotaoMaximizarMonitor.IsChecked == true;
+        if (maximizar)
+        {
+            _larguraBiblioteca = ColunaBiblioteca.Width;
+            _alturaLinhaDoTempo = LinhaInferior.Height;
+            ColunaBiblioteca.MinWidth = 0;
+            ColunaBiblioteca.Width = new GridLength(0);
+            LinhaInferior.MinHeight = 0;
+            LinhaInferior.Height = new GridLength(0);
+        }
+        else
+        {
+            ColunaBiblioteca.Width = _larguraBiblioteca;
+            ColunaBiblioteca.MinWidth = 360;
+            LinhaInferior.Height = _alturaLinhaDoTempo;
+            LinhaInferior.MinHeight = 200;
+        }
+        var visivel = maximizar ? Visibility.Collapsed : Visibility.Visible;
+        PainelBiblioteca.Visibility = DivisorBiblioteca.Visibility = DivisorCentral.Visibility = AreaInferior.Visibility = visivel;
+        IconeMaximizarMonitor.Text = maximizar ? "" : "";
+        var texto = (string)FindResource(maximizar ? "Editor.Monitor.Restaurar" : "Editor.Monitor.Maximizar");
+        BotaoMaximizarMonitor.ToolTip = texto;
+        AutomationProperties.SetName(BotaoMaximizarMonitor, texto);
+    }
 
     private void Unhook()
     {
@@ -213,6 +248,34 @@ public partial class EditorView : UserControl
     {
         if (e.ClickCount == 2) AbrirTelaCheia();
     }
+
+    // ---- Comparar antes/depois: arrastar a linha divisória
+
+    private void ImagemMonitor_SizeChanged(object sender, SizeChangedEventArgs e) => PosicionarAlcaComparacao();
+
+    private void CamadaComparacao_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) => PosicionarAlcaComparacao();
+
+    private void PosicionarAlcaComparacao()
+    {
+        var split = DataContext is EditorViewModel { Preview: { } p } ? p.CompareSplit : 0.5;
+        Canvas.SetLeft(AlcaComparacao, split * ImagemMonitor.ActualWidth - AlcaComparacao.Width / 2);
+    }
+
+    private void AlcaComparacao_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        AlcaComparacao.CaptureMouse();
+        e.Handled = true; // não abre a tela cheia nem edita máscaras
+    }
+
+    private void AlcaComparacao_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (!AlcaComparacao.IsMouseCaptured || ImagemMonitor.ActualWidth <= 0) return;
+        if (DataContext is not EditorViewModel { Preview: { } preview }) return;
+        preview.CompareSplit = Math.Clamp(e.GetPosition(CamadaComparacao).X / ImagemMonitor.ActualWidth, 0, 1);
+        PosicionarAlcaComparacao();
+    }
+
+    private void AlcaComparacao_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) => AlcaComparacao.ReleaseMouseCapture();
 
     private void ElementosGraficos_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {

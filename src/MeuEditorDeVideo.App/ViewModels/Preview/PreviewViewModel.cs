@@ -246,6 +246,12 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
 
     partial void OnCompareModeChanged(bool value) => _engine.CompareMode = value;
 
+    /// <summary>Posição da linha da comparação (0 a 1); o usuário arrasta a linha no monitor.</summary>
+    [ObservableProperty]
+    public partial double CompareSplit { get; set; } = 0.5;
+
+    partial void OnCompareSplitChanged(double value) => _engine.CompareSplit = value;
+
     // ---------------------------------------------------------------- sessão
 
     private void OnSessionChanged(object? sender, EventArgs e) => _dispatcher.Invoke(Attach);

@@ -1,4 +1,4 @@
-<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.MixerWindow"
+﻿<Window x:Class="MeuEditorDeVideo.App.Views.Dialogs.MixerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ctl="clr-namespace:MeuEditorDeVideo.App.Controls"
@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         AutomationProperties.Name="Mixer de áudio"
-        Background="{DynamicResource Med.Background}"
+        Background="{DynamicResource Med.WindowBackground}"
         Foreground="{DynamicResource Med.Text}">
     <!-- Mixer (RF130): um canal por trilha de áudio — medidor, fader, panorâmica, mudo e solo — e o total (master). -->
     <Window.Resources>

@@ -565,8 +565,9 @@ Projeto: `src/MeuEditorDeVideo.AIEngine`. Detalhes de uso para o usuário estão
 | `VoiceActivity` | `VoiceActivityService` | Silero VAD |
 | `SceneDetection` | `SceneDetectionService` | TransNetV2 (ou diferença de histogramas, sem modelo) |
 | `ImageEnhancement` | `ImageEnhancementService` | Swin2SR leve 2× |
+| `FaceLandmarks` | `FaceLandmarkService` (`FaceMeshDetector`) | Face Mesh V2 (MediaPipe) |
 
-Há um efeito de IA no catálogo de efeitos: `ai.background` (`EffectCatalog.AiBackground`, categoria `Ai`). Ele é executado pelo `AiFrameProcessor`, dentro do `FrameRenderer`.
+Efeitos de IA do catálogo (categoria `Ai`): `ai.background` (remover fundo), `ai.cameratrack` (rastreamento de câmera), `ai.beauty` e `ai.makeup` (Retocar). Eles são executados pelo `AiFrameProcessor`, dentro do `FrameRenderer`.
 
 ### Registro de modelos
 
@@ -642,6 +643,7 @@ Whisper (`WhisperTranscriber`) não usa ONNX: roda whisper.cpp pelo Whisper.net,
 - **Isolamento de voz**: GTCRN quadro a quadro (STFT 512/256).
 - **Cenas**: TransNetV2 com janelas de 100 quadros 48×27. Se o modelo não estiver instalado, `SceneDetectors` usa diferença de histogramas.
 - **Melhoria de imagem**: Swin2SR em blocos de 192 px com sobreposição de 16 px.
+- **Retocar** (`ai.beauty`, `ai.makeup`): `FaceLandmarkService` localiza a cabeça pela máscara do MODNet, roda o Face Mesh V2 em dois recortes (enquadrar e refinar) e guarda os pontos por quadro; `FaceRetouch` desenha as máscaras sobre os pontos e aplica pele, deformações e maquiagem só no retângulo do rosto.
 
 ### Segurança dos modelos
 

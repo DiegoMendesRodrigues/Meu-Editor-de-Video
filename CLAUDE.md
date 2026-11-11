@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Meu Editor de Vídeo** — non-linear video editor for Windows 11 x64. C#/.NET 10, WPF with the Fluent theme (`ThemeMode`), MVVM via CommunityToolkit.Mvvm, DI via Microsoft.Extensions.Hosting. FFmpeg (via FFmpeg.AutoGen), ONNX Runtime (DirectML/CPU), Whisper.net, NAudio (WASAPI), OpenCvSharp. License GPL-3.0-or-later.
 
 - UI text, docs (`documentation/`), code comments, and commit messages are in **Portuguese (pt-BR)**.
-- Spec: `ESPECIFICACAO_TECNICA_E_FUNCIONAL.md` (RF/RNF/CA ids referenced in code and comments).
+- Spec: `ESPECIFICACAO_TECNICA_E_FUNCIONAL.zip` (RF/RNF/CA ids referenced in code and comments).
 - Architecture reference: `documentation/DOCUMENTACAO_TECNICA.md`. It includes "Como estender" recipes for new effects, transitions, export templates, AI models, shortcuts, and `.med` migrations. Follow them.
 
 ## Commands

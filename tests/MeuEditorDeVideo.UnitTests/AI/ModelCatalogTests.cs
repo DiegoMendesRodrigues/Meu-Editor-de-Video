@@ -50,7 +50,7 @@ public sealed class ModelCatalogTests : IDisposable
     public void Catalogo_do_repositorio_e_valido_e_tem_licencas()
     {
         var catalog = ModelCatalog.Load(RepoCatalog());
-        Assert.Equal(["whisper-large-v3-turbo", "gtcrn-voz", "silero-vad", "transnetv2", "swin2sr-x2"], catalog.Entries.Select(e => e.Id));
+        Assert.Equal(["whisper-large-v3-turbo", "gtcrn-voz", "silero-vad", "transnetv2", "swin2sr-x2", "facemesh-v2"], catalog.Entries.Select(e => e.Id));
         Assert.All(catalog.Entries, e =>
         {
             Assert.True(File.Exists(catalog.LicensePath(e)), e.LicenseFile);

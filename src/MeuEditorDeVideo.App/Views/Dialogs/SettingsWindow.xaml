@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         AutomationProperties.Name="Configurações"
-        Background="{DynamicResource Med.Background}"
+        Background="{DynamicResource Med.WindowBackground}"
         Foreground="{DynamicResource Med.Text}">
     <!-- Configurações (§3.15, RF208–RF214, §12.3). Nada é gravado até "Salvar". -->
     <Window.Resources>
