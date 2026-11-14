@@ -1,4 +1,4 @@
-# Manual do usuário — Meu Editor de Vídeo
+﻿# Manual do usuário — Meu Editor de Vídeo
 
 Este manual explica como instalar, usar e configurar o Meu Editor de Vídeo. Ele foi escrito para quem nunca editou vídeo antes. Os nomes de menus e botões são os mesmos que aparecem na tela.
 
@@ -72,7 +72,7 @@ Depois de criar ou abrir um projeto, a tela de edição aparece. Ela é dividida
 
 ### Menus
 
-- **Arquivo**: novo projeto, abrir, importar mídia, importar sequência de imagens, salvar, salvar como, criar cópia de segurança, exportar, fila de renderização, exportar quadro atual (PNG ou JPEG) e voltar ao início.
+- **Arquivo**: novo projeto, **novo a partir de modelo**, abrir, importar mídia, importar sequência de imagens, salvar, salvar como, criar cópia de segurança, exportar, fila de renderização, exportar quadro atual (PNG ou JPEG) e voltar ao início.
 - **Editar**: desfazer e refazer; selecionar tudo; dividir; **juntar os cortes** (desfaz uma divisão: clique na régua sobre o ponto do corte; só fica disponível quando os dois lados são a continuação da mesma mídia, sem ajustes diferentes); recortar, copiar, colar no cursor e duplicar; excluir, excluir e fechar o espaço (só na trilha do clipe) e **excluir e juntar** (fecha o espaço em todas as trilhas, mantendo a sincronia; trilhas bloqueadas não se movem e a operação é recusada se um clipe de outra trilha ocupar parte do trecho removido).
 - **Visualizar**:
   - **Modo do layout**: **Padrão**; **Linha do tempo** (a linha do tempo ocupa toda a largura); **Vídeo** (o monitor ocupa a metade direita, na altura toda).
@@ -80,9 +80,12 @@ Depois de criar ou abrir um projeto, a tela de edição aparece. Ela é dividida
   - **Nível de zoom no vídeo**: Ajuste (cabe no monitor) ou 10% a 400%; acima do tamanho do monitor aparecem barras de rolagem.
   - **Reproduzir/Pausar**, **Parar** (volta ao ponto onde a reprodução começou) e **Intervalo de reprodução em loop** (repete a seleção da linha do tempo ou, sem seleção, o projeto inteiro).
   - **Régua**: réguas em pixels do vídeo no alto e à esquerda da imagem.
-- **Projeto**: empacotar mídias no projeto, **reenquadrar automaticamente** e localizar mídias ausentes.
+- **Projeto**: empacotar mídias no projeto, **reenquadrar automaticamente**, **salvar como modelo**, **camada de ajuste**, **clipe composto**, **tela dividida**, **multicâmera** e localizar mídias ausentes (veja [Camadas de ajuste, clipes compostos, tela dividida e multicâmera](#camadas-de-ajuste-clipes-compostos-tela-dividida-e-multicâmera)).
+  - **Salvar como modelo…** guarda uma cópia do projeto salvo nos seus modelos. **Arquivo › Novo a partir de modelo…** escolhe um modelo (seu ou de um pacote), pergunta onde salvar o projeto novo e abre a cópia; o modelo continua intacto.
   - **Reenquadrar automaticamente…** muda o formato do projeto (9:16 para Reels, TikTok e Shorts; 1:1; 4:5; 16:9) e reposiciona cada clipe de vídeo e imagem para cobrir o novo quadro. Em **Acompanhar**, escolha **Rosto**, **Corpo inteiro** ou **Centro do quadro**. Para acompanhar a pessoa, o programa usa o modelo de remoção de fundo e cria keyframes de posição, que você pode ajustar depois na aba Vídeo. Os textos ficam como estão. O andamento aparece na aba **IA**, e tudo se desfaz com um único Ctrl+Z.
-- **Ferramentas**: mixer de áudio, editor de legendas, importar e exportar legendas, **texto para fala**, **analisar mídia**, modelos de IA e configurações.
+- **Ferramentas**: mixer de áudio, editor de legendas, importar e exportar legendas, **texto para fala**, **analisar mídia**, **gravar tela, webcam e microfone**, **pacotes de conteúdo**, modelos de IA e configurações.
+  - **Gravar tela, webcam e microfone…** grava a área de trabalho, uma webcam num canto da tela e o som de um microfone, tudo ao mesmo tempo, num arquivo MP4. Com mais de um monitor, escolha em **Tela a gravar** qual tela gravar (ou todas). A webcam ocupa um décimo da largura da tela gravada. Ao clicar em **Gravar**, o programa é minimizado e uma contagem 5, 4, 3, 2, 1 aparece no centro da tela antes de a gravação começar. Para parar, pressione **F10** (funciona com qualquer programa em primeiro plano); o programa volta a aparecer. A gravação vai para a pasta **Gravações** (ao lado do projeto ou em Vídeos › Meu Editor de Vídeo), entra na biblioteca (categoria Gravações) e, se a opção estiver marcada, na linha do tempo no cursor. Sem a tela, grava só a webcam.
+  - **Pacotes de conteúdo…** instala, exporta e remove pacotes de figurinhas, títulos e modelos de projeto (arquivos .medpack). Um pacote é um ZIP com as pastas `figurinhas` (PNG, GIF, WebP, JPEG ou SVG), `titulos` (.medtitle) e `modelos` (.med) e, opcionalmente, um `pacote.json` com o nome (por exemplo `{"nome": "Festa Junina"}`). Os itens que você mesmo salva ficam no pacote **Meus itens**; use **Exportar…** para compartilhá-lo.
   - **Texto para fala…** transforma um texto em narração com as vozes instaladas no Windows, sem internet. Digite o texto, escolha a **Voz** e a **Velocidade** e clique em **Gerar e inserir**: o áudio vai para a biblioteca (categoria Narração) e entra na posição do cursor, na primeira trilha de áudio livre ou numa trilha nova chamada Narração. Para ter mais vozes, como as em português, instale-as em **Configurações do Windows › Hora e idioma › Fala**.
   - **Analisar mídia** dá etiquetas a todas as mídias da biblioteca: tipo, orientação (horizontal, vertical, quadrado), resolução (HD, Full HD, 4K), duração (curto, longo) e som. Com os modelos instalados, também **fala** ou **sem fala**, o número de **cenas** e **pessoa** ou **sem pessoas**. As etiquetas aparecem ao passar o mouse sobre a mídia e a caixa **Pesquisar…** da biblioteca também procura nelas.
 - **Ajuda**: **Manual do usuário** (F1), **Atalhos de teclado…**, **Informações do sistema…**, **Abrir pasta de logs**, **Licenças de terceiros**, **Sobre o Meu Editor de Vídeo…**, **Verificar atualizações** e **Notas de lançamento** (estes dois ainda não estão disponíveis e aparecem desativados).
@@ -194,6 +197,17 @@ Clique com o botão direito no nome da trilha para **Renomear trilha…** ou **R
 
 Clique com o botão direito no clipe e escolha **Velocidade…** para deixá-lo mais rápido ou mais lento. Na aba **Vídeo** das propriedades, a lista de velocidades vai de 0,25× (câmera lenta) a 8× (acelerado).
 
+### Ativar e desativar clipes
+
+Clique com o botão direito no clipe e escolha **Ativar/desativar clipe**. Um clipe desativado continua na linha do tempo (esmaecido e com o símbolo ⊘), mas não aparece nem soa na reprodução e na exportação.
+
+### Camadas de ajuste, clipes compostos, tela dividida e multicâmera
+
+- **Camada de ajuste** (**Projeto › Adicionar camada de ajuste**): cria, no cursor, um clipe de 5 segundos numa trilha de efeitos. Os efeitos e a correção de cor colocados nele valem para **todas as trilhas abaixo**, durante o tempo do clipe. Selecione a camada e adicione efeitos nas abas **Efeitos** e **Cor**. A opacidade da camada dosa o efeito e as máscaras limitam a área. Estique ou mova a camada como qualquer clipe.
+- **Clipe composto** (**Projeto › Criar clipe composto…** ou menu de contexto): junta os clipes selecionados (com os áudios vinculados) num único clipe, que se move, corta e recebe efeitos como um só. As trilhas e as posições originais ficam guardadas dentro dele. **Desfazer clipe composto** devolve os clipes à linha do tempo, em trilhas novas, só com o trecho que o clipe composto mostrava. O som do clipe composto só toca em velocidade normal.
+- **Tela dividida** (**Projeto › Tela dividida**): selecione de 2 a 4 clipes de vídeo ou imagem, cada um numa trilha diferente, e escolha um modelo: **2 lado a lado**, **2 empilhados**, **3 colunas**, **3 faixas**, **1 grande e 2 pequenos** ou **4 em grade**. Cada clipe (na ordem das trilhas, de cima para baixo) é ampliado para cobrir a sua parte do quadro e recortado no excesso. Ajuste depois a posição e o recorte na aba Vídeo.
+- **Multicâmera** (**Projeto › Multicâmera**): coloque cada câmera numa trilha de vídeo, sincronizadas (por exemplo, com **Sincronizar pelo áudio**). Durante a reprodução ou parado, escolha **Câmera 1** a **Câmera 4** (Alt+1 a Alt+4, com o foco na linha do tempo) para mostrar aquela câmera **a partir do cursor**: o programa corta todas as câmeras no cursor e desativa as outras. A câmera 1 é a trilha de vídeo mais alta com clipe no cursor. O áudio não muda.
+
 ### Cor do clipe
 
 Para identificar clipes de um jeito visual, selecione um ou mais clipes, clique com o botão direito e escolha **Cor do clipe**. A cor fica salva no projeto e pode ser desfeita com Ctrl+Z. Escolha **Automática (pelo tipo)** para voltar à cor padrão (vídeo, imagem, áudio ou texto).
@@ -240,7 +254,7 @@ Esta aba reúne as configurações de movimento e tempo do clipe:
 - **Keyframes**: um keyframe guarda um valor num instante específico. Quando há keyframes, o programa muda o valor gradualmente entre eles. Use **Keyframe anterior** e **Próximo keyframe** para navegar entre eles, e **Interpolação** para escolher a curva: Suave (entrada e saída), Linear, Acelerando, Desacelerando ou Manter (salto).
 - **3D (perspectiva)**: giro X, giro Y e profundidade, para dar sensação de profundidade ao clipe. O botão **Virar cartão 3D** faz o clipe girar como um cartão. Não é um modelo 3D completo.
 - **Animações prontas**: efeitos de movimento prontos para aplicar, como entrar pela esquerda, aparecer com zoom, Ken Burns (zoom lento), pulsar, girar, balançar, quicar e surgir e sumir.
-- **Recorte**: corta as bordas do vídeo pela esquerda, pelo topo, pela direita e pela base.
+- **Recorte**: corta as bordas do vídeo pela esquerda, pelo topo, pela direita e pela base. Os controles só escondem as bordas; o tamanho do projeto continua o mesmo. Para o vídeo realmente ficar com o tamanho recortado, clique em **Aplicar recorte ao vídeo**: o projeto passa a ter o tamanho da área recortada, em pixels do vídeo original (uma gravação 1920×1080 sem 25% da esquerda fica com 1440×1080), a área recortada preenche o quadro e a exportação sai com essas dimensões. Textos e outros clipes acompanham. O clipe não pode estar girado nem ter keyframes de posição ou escala. Ctrl+Z desfaz.
 - **Mistura**: modo de mistura com outras camadas, como Multiplicar, Tela, Sobrepor, Luz suave, Adicionar, Escurecer, Clarear e Diferença.
 - **Fades**: **Entrada gradual** e **Saída gradual**, de 0 a 10 segundos, para o clipe surgir e desaparecer suavemente.
 - **Velocidade**: velocidades predefinidas ou outra velocidade. Abaixo de 1×, a opção **Câmera lenta suavizada** mistura quadros vizinhos para reduzir os saltos. **Reproduzir ao contrário** mostra o clipe do fim para o começo, com o áudio vinculado também invertido (também no menu de contexto do clipe; o clipe ganha o símbolo ◀ na linha do tempo). Não vale para quadros congelados. Em vídeos longos, use proxies para a reprodução ao contrário ficar fluida.
@@ -275,6 +289,7 @@ Efeitos visuais disponíveis:
 - **Desfoque**, **Nitidez**, **Vinheta**, **Preto e branco**, **Sépia**, **Negativo**, **Pixelizar**, **Granulado**, **Posterizar** e **Brilho suave**.
 - **Chroma key**: remove um fundo verde, azul ou de outra cor escolhida. Tem tolerância, suavidade da transição, suavização das bordas, remoção do reflexo da cor e a opção de deixar o fundo transparente ou com cor sólida.
 - **Refinar bordas**: contrai ou expande a borda da transparência, suaviza e limpa a cor das bordas. Use depois do chroma key ou de uma máscara.
+- **Reenquadrar 360°**: transforma um vídeo 360° (equirretangular, com largura igual ao dobro da altura) numa vista comum. Ajuste a **Direção**, a **Inclinação**, o **Giro** e o **Campo de visão** e escolha a **Proporção da vista** (16:9, 9:16, 1:1, 4:3 ou 4:5). Crie keyframes nesses valores para a câmera virtual se mover pelo vídeo.
 - **Correção de lente**: corrige a curvatura das linhas retas causada por lentes grande-angulares e câmeras de ação (valores negativos) ou por teleobjetivas (positivos). **Zoom para esconder as bordas** amplia a imagem para tirar os cantos vazios.
 - **Redução de ruído de vídeo**: suaviza o granulado de gravações com pouca luz. **Preservar detalhes** mantém mais textura.
 - **Visualizador de áudio**: barras (normais ou espelhadas) ou uma onda que dançam com o som de uma música. Ao adicionar, escolha a música da biblioteca; ela precisa estar na linha do tempo. Ajuste o número de barras, a altura, a cor e a opacidade. Use num clipe de vídeo ou imagem (por exemplo, um fundo).
@@ -314,6 +329,8 @@ Na seção **Elementos Gráficos** da biblioteca, clique duas vezes numa forma p
 
 Também é possível importar um gráfico vetorial pelo botão **Importar SVG…**.
 
+Em **Figurinhas** aparecem as figurinhas dos pacotes instalados. O programa já vem com o pacote **Básico**, com 40 figurinhas de uso comum (setas, círculo de destaque, certo e errado, balões de fala, coração, estrela, emojis, botões Inscreva-se e Curtir, selos como Novo e Oferta, entre outras). Ele não pode ser removido, mas pode ser exportado. Clique numa delas para inseri-la no cursor por 3 segundos, com 40% do tamanho (ajuste na aba Vídeo), numa trilha de imagem livre (ou numa trilha nova chamada Figurinhas). A imagem entra também na biblioteca, na categoria Figurinhas.
+
 ### Textos e legendas
 
 ### Inserir textos
@@ -336,6 +353,8 @@ Selecione o texto na linha do tempo para editar. A aba **Texto** das propriedade
 - **Animação de entrada** e **Animação de saída**: por exemplo, esmaecer, deslizar ou zoom.
 
 A posição, a escala, a rotação e a opacidade do texto ficam na aba **Vídeo**.
+
+Para reaproveitar um texto pronto (estilo, animações e duração), selecione-o e use **Salvar texto selecionado como título…** na seção Textos (ou no menu de contexto do clipe). Ele aparece em **Títulos salvos**; escolha-o e clique em **Inserir título salvo** para colocá-lo no cursor. Títulos de pacotes instalados aparecem na mesma lista.
 
 ### Legendas
 
@@ -634,6 +653,7 @@ Estes são os atalhos padrão. Você pode mudar qualquer um deles em **Ferrament
 | Aproximar a linha do tempo | Ctrl++ (tecla de mais) |
 | Afastar a linha do tempo | Ctrl+- (tecla de menos) |
 | Ajustar à janela | Shift+Z |
+| Multicâmera: câmera 1 a 4 | Alt+1 a Alt+4 |
 
 ## Privacidade
 

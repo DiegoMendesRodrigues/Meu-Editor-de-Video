@@ -61,6 +61,12 @@ public static class EffectCatalog
     public const string CameraTrack = "ai.cameratrack";
     public const string ColorMatch = "color.match";
     public const string Lens = "fx.lens";
+
+    /// <summary>Reenquadrar vídeo 360° (equirretangular) numa vista plana com direção, inclinação e campo de visão.</summary>
+    public const string Reframe360 = "fx.reframe360";
+
+    /// <summary>Proporções da vista do "Reenquadrar 360°" (largura/altura), na ordem das opções.</summary>
+    public static readonly double[] Reframe360Aspects = [16 / 9.0, 9 / 16.0, 1, 4 / 3.0, 4 / 5.0];
     public const string VideoDenoise = "fx.denoise";
     public const string AudioVisualizer = "fx.audioviz";
     public const string FaceBlur = "ai.faceblur";
@@ -258,6 +264,14 @@ public static class EffectCatalog
         [
             new("distortion", "Distorção (barril → almofada)", ParameterKind.Slider, -100, 100, 0),
             new("zoom", "Zoom para esconder as bordas", ParameterKind.Slider, 0, 50, 0, "%"),
+        ]),
+        new(Reframe360, "Reenquadrar 360°", "Transforma um vídeo 360° (equirretangular) numa vista comum: escolha para onde a câmera olha e o campo de visão. Anime com keyframes para mover a câmera.", EffectCategory.Stylize,
+        [
+            new("yaw", "Direção (esquerda ↔ direita)", ParameterKind.Slider, -180, 180, 0, "°"),
+            new("pitch", "Inclinação (baixo ↔ cima)", ParameterKind.Slider, -90, 90, 0, "°"),
+            new("roll", "Giro", ParameterKind.Slider, -180, 180, 0, "°"),
+            new("fov", "Campo de visão", ParameterKind.Slider, 30, 150, 90, "°"),
+            new("aspect", "Proporção da vista", ParameterKind.Choice, 0, 4, 0, Options: ["16:9", "9:16", "1:1", "4:3", "4:5"]),
         ]),
         new(VideoDenoise, "Redução de ruído de vídeo", "Suaviza o granulado de gravações com pouca luz, preservando as bordas.", EffectCategory.Stylize,
         [

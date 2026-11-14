@@ -1,4 +1,4 @@
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using MeuEditorDeVideo.Core.Abstractions;
 
 namespace MeuEditorDeVideo.App.Services;
@@ -96,7 +96,8 @@ public static class ShortcutCatalog
         GoToStart = "reproducao.inicio", GoToEnd = "reproducao.fim", PreviousEdit = "reproducao.cortaAnterior", NextEdit = "reproducao.proximoCorte",
         Split = "linha.dividir", Delete = "linha.excluir", RippleDelete = "linha.excluirFechando", Copy = "linha.copiar", Cut = "linha.recortar",
         Paste = "linha.colar", Duplicate = "linha.duplicar", SelectAll = "linha.selecionarTudo", Group = "linha.agrupar", Ungroup = "linha.desagrupar",
-        Marker = "linha.marcador", Snap = "linha.ima", ZoomIn = "linha.aproximar", ZoomOut = "linha.afastar", ZoomFit = "linha.ajustar";
+        Marker = "linha.marcador", Snap = "linha.ima", ZoomIn = "linha.aproximar", ZoomOut = "linha.afastar", ZoomFit = "linha.ajustar",
+        Camera1 = "multicam.1", Camera2 = "multicam.2", Camera3 = "multicam.3", Camera4 = "multicam.4";
 
     public static IReadOnlyList<ShortcutAction> All { get; } =
     [
@@ -137,6 +138,11 @@ public static class ShortcutCatalog
         new(ZoomIn, "Aproximar", "Linha do tempo", "Ctrl+OemPlus", "Ctrl+Add"),
         new(ZoomOut, "Afastar", "Linha do tempo", "Ctrl+OemMinus", "Ctrl+Subtract"),
         new(ZoomFit, "Ajustar à janela", "Linha do tempo", "Shift+Z"),
+
+        new(Camera1, "Multicâmera: câmera 1", "Linha do tempo", "Alt+D1"),
+        new(Camera2, "Multicâmera: câmera 2", "Linha do tempo", "Alt+D2"),
+        new(Camera3, "Multicâmera: câmera 3", "Linha do tempo", "Alt+D3"),
+        new(Camera4, "Multicâmera: câmera 4", "Linha do tempo", "Alt+D4"),
     ];
 
     public static ShortcutAction? Find(string id) => All.FirstOrDefault(a => a.Id == id);

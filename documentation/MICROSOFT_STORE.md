@@ -55,7 +55,7 @@ pwsh scripts/build-msix.ps1
 O script publica o aplicativo (self-contained, x64), gera os ícones em todas as escalas a partir de `Imagens/Ícone`,
 preenche o manifesto e cria `artifacts/store/MeuEditorDeVideo_<versão>_x64.msix`.
 
-- A versão vem de `Directory.Build.props` e vira `1.0.0.0`. A Store exige que a quarta parte seja `0`.
+- A versão vem de `Directory.Build.props` e vira `1.1.0.0`. A Store exige que a quarta parte seja `0`.
 - **A cada nova submissão, aumente `<Version>`** em `Directory.Build.props`: a Store recusa pacote com versão igual ou
   menor que a já publicada.
 - Sem a identidade preenchida, o script para com uma mensagem (exceto com `-TestSign`).
@@ -73,7 +73,7 @@ Depois, num PowerShell **como administrador**, rode os dois comandos que o scrip
 
 ```powershell
 Import-Certificate -FilePath 'artifacts\store\certificado-de-teste.cer' -CertStoreLocation Cert:\LocalMachine\TrustedPeople
-Add-AppxPackage -Path 'artifacts\store\MeuEditorDeVideo_1.0.0.0_x64.msix'
+Add-AppxPackage -Path 'artifacts\store\MeuEditorDeVideo_1.1.0.0_x64.msix'
 ```
 
 Confira:

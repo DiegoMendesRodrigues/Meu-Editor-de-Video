@@ -25,7 +25,30 @@ public partial class EditorView : UserControl
             window.KeyDown += EditorView_KeyDown;
         };
         Unloaded += (_, _) => Unhook();
+        DataContextChanged += (_, e) =>
+        {
+            if (e.OldValue is EditorViewModel old) old.PropertyChanged -= Editor_PropertyChanged;
+            if (e.NewValue is EditorViewModel vm) vm.PropertyChanged += Editor_PropertyChanged;
+            ObservarLinhaDoTempo();
+        };
     }
+
+    private ViewModels.Timeline.TimelineViewModel? _linhaDoTempo;
+
+    private void Editor_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(EditorViewModel.Timeline)) ObservarLinhaDoTempo();
+    }
+
+    private void ObservarLinhaDoTempo()
+    {
+        if (_linhaDoTempo is not null) _linhaDoTempo.RevealTopRequested -= RevelarTopo;
+        _linhaDoTempo = (DataContext as EditorViewModel)?.Timeline;
+        if (_linhaDoTempo is not null) _linhaDoTempo.RevealTopRequested += RevelarTopo;
+    }
+
+    private void RevelarTopo(object? sender, EventArgs e) =>
+        Dispatcher.BeginInvoke(() => RolagemTrilhas.ScrollToTop(), System.Windows.Threading.DispatcherPriority.Loaded);
 
     private Window? _host;
 

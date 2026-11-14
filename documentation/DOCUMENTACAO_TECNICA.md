@@ -1,4 +1,4 @@
-# Documentação técnica — Meu Editor de Vídeo
+﻿# Documentação técnica — Meu Editor de Vídeo
 
 Documento para quem vai manter o projeto (entregáveis ENT016, RNF018 e CA023). Descreve o que o **código** faz hoje. Quando o plano ou a especificação previam outra tecnologia, a diferença está na seção [Diferenças em relação ao plano](#diferenças-em-relação-ao-plano).
 
@@ -32,7 +32,7 @@ Características fundamentais:
 | Plataforma alvo | Windows 11 x64 (`RuntimeIdentifier win-x64` no App) |
 | Processamento | 100% local. O único código com rede é o downloader de modelos (ver [Privacidade e segurança](#privacidade-e-segurança)) |
 
-Versão atual: `1.0.0` (`<Version>` em `Directory.Build.props`).
+Versão atual: `1.1.0` (`<Version>` em `Directory.Build.props`).
 
 ---
 
@@ -165,9 +165,9 @@ Ao fechar a janela, `MainWindow.OnClosing` pergunta sobre alterações não salv
 |---|---|
 | `UseMeuEditorInfrastructure` (Infrastructure) | `IAppPaths`, `ISettingsService` → `JsonSettingsService`, `IExportTemplateStore` → `JsonExportTemplateStore`, Serilog |
 | `AddProjectEngine` (ProjectEngine) | `IProjectStore` → `MedProjectStore`, `IMediaLocator` → `MediaLocator`, `IAutosaveStore` → `AutosaveStore`, `IDomainJson` → `Format.DomainJson` |
-| `AddMediaEngine` (MediaEngine) | `MediaCache`, `IMediaProbe`, `IThumbnailProvider`, `IWaveformProvider`, `IProxyService` → `ProxyService`, `IVideoFrameSourceFactory`, `IAudioSampleSourceFactory` |
+| `AddMediaEngine` (MediaEngine) | `MediaCache`, `IMediaProbe`, `IThumbnailProvider`, `IWaveformProvider`, `IProxyService` → `ProxyService`, `IVideoFrameSourceFactory`, `IAudioSampleSourceFactory`, `IScreenRecorder` → `Recording.ScreenRecorder` (processo `ffmpeg.exe` com gdigrab e DirectShow; `Screens()` lista os monitores em pixels físicos e `ScreenRecordingOptions.Area` recorta um deles com `-offset_x/-offset_y/-video_size`; a janela `ScreenRecordWindow` registra F10 com `RegisterHotKey` só durante a gravação; o exe é copiado para `ffmpeg\` pelo `.csproj` do App) |
 | `AddPreviewEngine` (RenderingEngine) | `AddAudioEngine` (`IAudioAnalysisService`), `ICompositor` → `CpuCompositor`, `IAudioOutputFactory`, `PreviewEngine` (transient), `IRenderEngine` → `RenderEngine` |
-| `AddMeuEditorApplication` (Application) | `IProjectService` → `ProjectService`, `AutosaveScheduler`, `IMediaImportService`, `IRenderQueueService` → `RenderQueueService` |
+| `AddMeuEditorApplication` (Application) | `IProjectService` → `ProjectService`, `AutosaveScheduler`, `IMediaImportService`, `IRenderQueueService` → `RenderQueueService`, `IContentPackStore` → `Packs.ContentPackStore` (pacotes .medpack em `%LOCALAPPDATA%\MeuEditorDeVideo\Pacotes`; extrai só `figurinhas/`, `titulos/*.medtitle` e `modelos/*.med`, sem caminhos e com limite de tamanho). Pacotes incluídos no programa ficam em `pacotes\<id>` ao lado do exe (copiados de `resources/stickers` pelo `.csproj` do App; `ContentPackStore.BuiltInRoot`), são só leitura (`IsBuiltIn`, não podem ser removidos) e um pacote instalado com o mesmo id tem precedência. As 40 figurinhas do pacote Básico são arte original gerada por `scripts/generate-stickers.py` (Pillow) |
 | `AddAiEngine` (AIEngine) | `IModelRegistry` → `ModelRegistry`, `OnnxSessionFactory`, `MatteCache`, `ISegmentationService`, `IAiFrameProcessor` (inclui `Interpolate`, fluxo óptico Farneback em `FrameInterpolator`), `ISceneDetectionService`, `IReframeService` → `ReframeService`, `IMediaAnalysisService` → `MediaAnalysisService` (etiquetas da biblioteca e "Combinar cor"), `IImageEnhancementService`, `IVoiceActivityService`, `IVoiceEnhancementService`, `ISpeechRecognitionService` → `WhisperTranscriber` |
 | `AddModelDownloads` (ModelDownloads) | `IModelDownloader` → `HttpModelDownloader`, recebendo `ModelCatalog.AllowedHosts` |
 | `App.ConfigureServices` | `CatalogModelInstaller`, `IThemeService`, `INavigationService`, `IDialogService`, `IProjectWorkflow`, view models, `MainWindow`, `ShortcutService`, `ICacheMaintenance`, `IHardwareInfoService` |
@@ -287,7 +287,7 @@ Erros de formato viram `MED-1002` (não é projeto ou está danificado). Erros d
 ### Versionamento e migrações
 
 - Versão atual gravada: `MedMigrator.Current = 1.4` (`Format/MedMigrations.cs`).
-- Migrações são `IMedMigration` (`From`, `To`, `Migrate(JsonObject)`), registradas em `MedMigrator.Default`. As existentes são `Migration1_0To1_1`, `Migration1_1To1_2` e `Migration1_2To1_3` (cor de identificação do clipe, `Clip.LabelColor`) e `Migration1_3To1_4` (reproduzir ao contrário `Clip.Reverse`, curva de velocidade `Clip.SpeedRamp`, `Clip.MotionBlur`, `Clip.OpticalFlow`, máscara de cor `Mask.EffectsOnly` e etiquetas `MediaAsset.Tags`; todos com padrão neutro). Hoje nenhuma altera estrutura: campos novos têm valor neutro (volume 1, panorâmica 0, cor nula = automática etc.).
+- Migrações são `IMedMigration` (`From`, `To`, `Migrate(JsonObject)`), registradas em `MedMigrator.Default`. As existentes são `Migration1_0To1_1`, `Migration1_1To1_2` e `Migration1_2To1_3` (cor de identificação do clipe, `Clip.LabelColor`) e `Migration1_3To1_4` (reproduzir ao contrário `Clip.Reverse`, curva de velocidade `Clip.SpeedRamp`, `Clip.MotionBlur`, `Clip.OpticalFlow`, máscara de cor `Mask.EffectsOnly`, etiquetas `MediaAsset.Tags`, clipe desativado `Clip.Enabled` (padrão `true`), camada de ajuste `Clip.IsAdjustment` e clipe composto `Clip.NestedSequenceId`, que aponta para outra `Sequence` de `Project.Sequences`; todos com padrão neutro). Hoje nenhuma altera estrutura: campos novos têm valor neutro (volume 1, panorâmica 0, cor nula = automática etc.).
 - Regras de compatibilidade:
   - **Major maior que o suportado**: recusado (`MED-1003`).
   - **Minor maior que o suportado**: aberto, com aviso de que campos desconhecidos podem se perder ao salvar.
@@ -396,6 +396,10 @@ Arquivos: `src/MeuEditorDeVideo.ProjectEngine/`.
 Arquivos: `src/MeuEditorDeVideo.TimelineEngine/`.
 
 - `TimelineEvaluator.cs`: dado um instante, devolve as camadas visíveis de uma sequência, com a transformação já interpolada pelos keyframes, o instante da mídia de origem (considerando velocidade, curva de velocidade (`SpeedRamps.Progress`, normalizada para consumir o mesmo trecho de origem) e reprodução ao contrário, calculado por `Clip.SourceTimeAt`, a única fórmula de tempo de origem do projeto) e os efeitos ativos. Também devolve as máscaras de transição (`TransitionMask`) e o texto a desenhar (com progresso de créditos e máquina de escrever). É a única fonte de verdade sobre "o que aparece agora", usada pela pré-visualização e pela exportação.
+  - Clipes com `Enabled = false` não geram camada nem áudio.
+  - Camada de ajuste: `VisualLayer.IsAdjustment` (sem mídia). Clipe composto: `VisualLayer.NestedSequenceId`, com `SourceTime` no tempo da sequência aninhada.
+  - `AudioIn` inclui o som dos clipes compostos (só em velocidade 1, sem inversão nem congelamento): os trechos da sequência aninhada voltam com `TimelineStart`/`TimelineEnd` e `Clip.Start` deslocados e o volume do composto multiplicado.
+  - `AssetsInUse(project, sequence)` percorre também as sequências aninhadas (para o `Trim` dos decodificadores e a checagem de mídias da exportação).
 - `SnapEngine.cs`: encaixe de clipes e marcadores.
 
 Não tem DI próprio: os motores o instanciam diretamente.
@@ -443,6 +447,8 @@ Arquivos: `src/MeuEditorDeVideo.AudioEngine/`.
 Arquivos: `src/MeuEditorDeVideo.RenderingEngine/`. Fluxo completo em [Pré-visualização e renderização](#pré-visualização-e-renderização).
 
 - `FrameRenderer.cs`: monta um quadro. Compartilhado por pré-visualização e exportação, para que o exportado seja o que aparece na tela.
+  - Camada de ajuste: compõe as camadas já montadas, aplica os efeitos (máscaras limitam a área, a opacidade mistura com o original) e troca a lista por esse quadro.
+  - Clipe composto: renderiza a sequência aninhada recursivamente (fundo transparente, no máximo 4 níveis) e trata o resultado como uma camada de imagem com alfa.
 - `CpuCompositor.cs` (`ICompositor`), `TransitionMasks.cs` (máscaras de transição).
 - `PreviewEngine.cs`: pré-visualização em tempo real (threads próprias, cache de quadros, reprodução).
 - `RenderEngine.cs` (`IRenderEngine`): exportação em trechos, retomável.
@@ -843,7 +849,7 @@ O CI não baixa modelos de IA, então os testes de IA que dependem de modelo sã
 
 ### Versionamento
 
-- Versão única em `Directory.Build.props` (`<Version>1.0.0</Version>`). Ela vira `AssemblyInformationalVersion` (`AppInfo.Version`, tela Sobre, cabeçalho do `.med` em `appVersion`) e a versão do MSI (`build-installer.ps1` lê o valor e passa para o WiX).
+- Versão única em `Directory.Build.props` (`<Version>1.1.0</Version>`). Ela vira `AssemblyInformationalVersion` (`AppInfo.Version`, tela Sobre, cabeçalho do `.med` em `appVersion`) e a versão do MSI (`build-installer.ps1` lê o valor e passa para o WiX).
 - Versões de pacotes NuGet ficam centralizadas em `Directory.Packages.props` (`ManagePackageVersionsCentrally`). Mudanças de versão devem ser registradas em [DEPENDENCIAS.md](DEPENDENCIAS.md).
 - Versão do formato `.med`: `MedMigrator.Current` (independente da versão do aplicativo).
 - O `User-Agent` do downloader de modelos é fixo (`MeuEditorDeVideo/1.0`) e não acompanha a versão do aplicativo.

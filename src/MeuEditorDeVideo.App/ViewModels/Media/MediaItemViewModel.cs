@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -10,7 +10,11 @@ using MeuEditorDeVideo.Domain.Time;
 namespace MeuEditorDeVideo.App.ViewModels.Media;
 
 /// <summary>Linha "rótulo: valor" do painel de informações da mídia (RF035).</summary>
-public sealed record MediaInfoLine(string Label, string Value);
+public sealed record MediaInfoLine(string Label, string Value)
+{
+    /// <summary>Texto lido por leitores de tela (itens de lista usam o texto do objeto).</summary>
+    public override string ToString() => $"{Label}: {Value}";
+}
 
 /// <summary>Item da biblioteca de mídias (painel A).</summary>
 public sealed partial class MediaItemViewModel : ObservableObject

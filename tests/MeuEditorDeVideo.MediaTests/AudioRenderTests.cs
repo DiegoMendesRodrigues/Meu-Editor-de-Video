@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using MeuEditorDeVideo.AudioEngine;
 using MeuEditorDeVideo.AudioEngine.Dsp;
 using MeuEditorDeVideo.Core.Export;
@@ -59,6 +59,25 @@ public sealed class AudioRenderTests(SampleMedia media) : IDisposable
 
     private static Clip AudioClip(Project p, int track = 0, int index = 0) =>
         p.MainSequence.Tracks.Where(t => t.Kind == TrackKind.Audio).ElementAt(track).Clips[index];
+
+    /// <summary>
+    /// Regressão: pedir áudio em blocos pequenos além do fim da faixa (gravação com o microfone mais curto que o vídeo)
+    /// fazia o leitor descartar além do buffer e quebrava a exportação com ArgumentOutOfRangeException.
+    /// </summary>
+    [Fact]
+    public async Task Leitura_em_blocos_pequenos_alem_do_fim_da_faixa_devolve_silencio()
+    {
+        var path = Generate("curto.m4a", "sine=frequency=440:duration=1"); // AAC: a busca cai antes do fim e decodifica até ele
+        var asset = await AssetAsync(path, "curto");
+        // Blocos pequenos e grandes: com o buffer cheio, o pedido depois do fim começa além do tamanho do array.
+        foreach (var size in new[] { 500, 900, 4096, 24000, 47900, 48000, 60000 })
+        {
+            using var source = _sources.Create();
+            var block = new float[size * AudioFormat.Channels];
+            for (long frame = 0; frame < 120000; frame += Math.Min(size, 900))
+                source.Read(asset, path, AudioFormat.FromFrames(frame), block);
+        }
+    }
 
     [Fact]
     public async Task Normalizacao_leva_o_loudness_ao_alvo()

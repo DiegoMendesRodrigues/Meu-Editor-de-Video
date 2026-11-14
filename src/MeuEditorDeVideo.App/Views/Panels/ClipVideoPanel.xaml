@@ -78,6 +78,9 @@
 
                 <TextBlock Text="Recorte" Style="{StaticResource Ins.Section}" />
                 <ItemsControl ItemsSource="{Binding Crop}" />
+                <Button Content="Aplicar recorte ao vídeo" Style="{StaticResource Ins.SmallButton}" Command="{Binding ApplyCropCommand}" HorizontalAlignment="Left"
+                        Margin="0,2,0,6" AutomationProperties.Name="Aplicar recorte ao vídeo"
+                        ToolTip="Muda o tamanho do projeto para o da área recortada (em pixels da mídia original). A exportação sai com essas dimensões." />
 
                 <TextBlock Text="Composição" Style="{StaticResource Ins.Section}" />
                 <Grid Margin="0,0,0,6">

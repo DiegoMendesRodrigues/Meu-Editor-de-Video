@@ -47,6 +47,12 @@ public sealed record VisualLayer(
 
     /// <summary>O quadro intermediário da câmera lenta é interpolado por fluxo óptico (não só misturado).</summary>
     public bool OpticalFlow { get; init; }
+
+    /// <summary>Camada de ajuste: os efeitos valem para o quadro composto até aqui (as camadas abaixo).</summary>
+    public bool IsAdjustment { get; init; }
+
+    /// <summary>Clipe composto: sequência renderizada no instante <see cref="VisualLayer.SourceTime"/>.</summary>
+    public Guid? NestedSequenceId { get; init; }
 }
 
 /// <summary>
@@ -214,6 +220,8 @@ public static class TimelineEvaluator
 
     private static VisualLayer? BaseLayer(Project project, Track track, Clip clip, MediaTime t)
     {
+        if (!clip.Enabled) return null;
+        if (clip.IsAdjustment || clip.IsCompound) return GeneratedLayerOf(project, track, clip, t);
         if (clip.IsText) return TextLayerOf(project, track, clip, t);
         if (clip.IsShape) return ShapeLayerOf(project, track, clip, t);
         if (clip.MediaAssetId is not { } id || project.FindMedia(id) is not { HasVideo: true } asset) return null;
@@ -284,6 +292,28 @@ public static class TimelineEvaluator
             if (tr != current) trail.Add(tr);
         }
         return trail;
+    }
+
+    /// <summary>Camada de ajuste ou de clipe composto (sem mídia própria).</summary>
+    private static VisualLayer? GeneratedLayerOf(Project project, Track track, Clip clip, MediaTime t)
+    {
+        var offset = MediaTime.Max(MediaTime.Zero, MediaTime.Min(clip.Duration, t - clip.Start));
+        var opacity = ClipAnimation.OpacityAt(clip, offset);
+        if (opacity <= 0) return null;
+        if (clip.IsAdjustment)
+            return new VisualLayer(clip.Id, track.Id, null, offset, Transform.Identity, opacity, EffectCatalog.ActiveEffects(clip))
+            {
+                IsAdjustment = true,
+            };
+        if (project.Sequences.Find(s => s.Id == clip.NestedSequenceId) is not { } nested) return null;
+        var source = clip.FreezeAt ?? SourceTimeAt(clip, t);
+        return new VisualLayer(clip.Id, track.Id, null, MediaTime.Max(MediaTime.Zero, source), ClipAnimation.TransformAt(clip, offset), opacity,
+            EffectCatalog.ActiveEffects(clip))
+        {
+            BlendMode = clip.BlendMode,
+            NestedSequenceId = nested.Id,
+            MotionTrail = Trail(project, clip, offset),
+        };
     }
 
     /// <summary>Camada de um elemento gráfico gerado (forma vetorial).</summary>
@@ -366,6 +396,7 @@ public static class TimelineEvaluator
         var result = new List<AudioSegment>();
         if (to <= from) return result;
         var anySolo = sequence.Tracks.Exists(t => t.Kind == TrackKind.Audio && t.IsSolo);
+        AddNestedAudio(project, sequence, from, to, anySolo, result, depth: 0);
         foreach (var track in sequence.Tracks)
         {
             if (track.Kind != TrackKind.Audio || track.IsMuted || track.Volume <= 0) continue;
@@ -374,6 +405,7 @@ public static class TimelineEvaluator
             {
                 if (clip.End <= from) continue;
                 if (clip.Start >= to) break;
+                if (!clip.Enabled) continue;
                 if (clip.MediaAssetId is not { } id || project.FindMedia(id) is not { HasAudio: true } asset) continue;
                 if (clip.Volume <= 0 && !ClipAnimation.IsAnimated(clip, AnimatedProperty.Volume)) continue;
                 // Com curva de velocidade o áudio fica mudo (como nos editores populares): o ritmo variável distorceria o som.
@@ -390,7 +422,60 @@ public static class TimelineEvaluator
         return result;
     }
 
+    /// <summary>
+    /// Som dos clipes compostos (nas trilhas visuais): os trechos da sequência aninhada são trazidos para o tempo da linha do
+    /// tempo, com o clipe interno deslocado (keyframes e fades continuam valendo) e o volume do clipe composto aplicado. Só com
+    /// velocidade normal, sem ir ao contrário nem congelar; trilhas em solo silenciam o composto.
+    /// </summary>
+    private static void AddNestedAudio(Project project, Sequence sequence, MediaTime from, MediaTime to, bool anySolo, List<AudioSegment> result, int depth)
+    {
+        if (anySolo || depth > 4) return;
+        foreach (var track in sequence.Tracks)
+        {
+            if (!track.IsVisual || track.IsMuted) continue;
+            foreach (var clip in track.Clips)
+            {
+                if (clip.End <= from) continue;
+                if (clip.Start >= to) break;
+                if (!clip.IsCompound || !clip.Enabled || clip.Volume <= 0 || clip.Reverse || clip.FreezeAt is not null
+                    || clip.Speed != Rational.One || clip.SpeedRamp.Count >= 2) continue;
+                if (project.Sequences.Find(s => s.Id == clip.NestedSequenceId) is not { } nested || nested.Id == sequence.Id) continue;
+                var delta = clip.Start - clip.SourceIn;
+                var start = MediaTime.Max(from, clip.Start);
+                var end = MediaTime.Min(to, clip.End);
+                foreach (var seg in AudioIn(project, nested, start - delta, end - delta))
+                {
+                    result.Add(seg with
+                    {
+                        TimelineStart = seg.TimelineStart + delta,
+                        TimelineEnd = seg.TimelineEnd + delta,
+                        Volume = seg.Volume * clip.Volume,
+                        Clip = seg.Clip with { Start = seg.Clip.Start + delta, Volume = seg.Clip.Volume * clip.Volume },
+                    });
+                }
+            }
+        }
+    }
+
     /// <summary>Mídias usadas por algum clipe (para liberar decodificadores ociosos).</summary>
     public static IReadOnlySet<Guid> AssetsInUse(Sequence sequence) =>
         sequence.Tracks.SelectMany(t => t.Clips).Select(c => c.MediaAssetId).OfType<Guid>().ToHashSet();
+
+    /// <summary>Mídias usadas pela sequência e pelas sequências dos clipes compostos dela.</summary>
+    public static IReadOnlySet<Guid> AssetsInUse(Project project, Sequence sequence)
+    {
+        var result = new HashSet<Guid>();
+        var seen = new HashSet<Guid>();
+        var pending = new Stack<Sequence>([sequence]);
+        while (pending.TryPop(out var s))
+        {
+            if (!seen.Add(s.Id)) continue;
+            foreach (var c in s.Tracks.SelectMany(t => t.Clips))
+            {
+                if (c.MediaAssetId is { } id) result.Add(id);
+                if (c.NestedSequenceId is { } n && project.Sequences.Find(x => x.Id == n) is { } nested) pending.Push(nested);
+            }
+        }
+        return result;
+    }
 }

@@ -14,6 +14,8 @@ Editor de vídeo desktop para **Windows 11 (64 bits)**, em **Português do Brasi
 
 ## Recursos
 
+Versão **1.1.0**.
+
 - Edição não linear com várias trilhas de vídeo, áudio, texto e imagem; dividir e **juntar os cortes**, recortar,
   copiar, colar no cursor, duplicar, excluir, excluir e fechar o espaço e **excluir e juntar** (em todas as trilhas).
 - Editor com barra de título própria, biblioteca em abas, painel Propriedades em altura total e cor por clipe.
@@ -21,9 +23,36 @@ Editor de vídeo desktop para **Windows 11 (64 bits)**, em **Português do Brasi
   a 400%), reproduzir/pausar, parar, reprodução em loop e régua em pixels no monitor.
 - Efeitos com miniaturas, predefinições de cor, ajustes HSL por faixa de cor e HDR; transições, máscaras,
   rastreamento de movimento e estabilização.
+- Velocidade constante e em curva, **reproduzir ao contrário**, quadro congelado e **exportar o quadro atual** (PNG ou JPEG).
+- **Recorte** com **Aplicar recorte ao vídeo**: o projeto (e a exportação) passa a ter o tamanho da área recortada.
+- **Reenquadrar automaticamente** para 9:16, 1:1, 4:5 ou 16:9, acompanhando o rosto, o corpo ou o centro do quadro.
+- **Camadas de ajuste**, **clipes compostos**, **tela dividida** com modelos, **multicâmera** (Alt+1 a Alt+4),
+  clipes desativados e **reenquadrar vídeo 360°**.
+- **Gravar tela, webcam e microfone** ao mesmo tempo (FFmpeg): escolha do monitor, webcam num canto da tela,
+  contagem regressiva com o programa minimizado e **F10** para parar.
+- **Pacotes locais** (.medpack) de figurinhas, títulos e modelos de projeto, com o pacote **Básico** de 40 figurinhas
+  incluído no programa.
+- Áudio: mixer, efeitos, normalização de loudness, detecção de silêncio e **atenuação automática** da música sob a fala.
 - IA local (ONNX Runtime, DirectML/CPU): remoção de fundo (MODNet), rastreamento de câmera com corte automático,
-  **Retocar** (beleza e maquiagem com o Face Mesh V2) e legendas com Whisper.
-- Exportação com FFmpeg (NVENC/AMF/QSV/software), fila de renderização e modelos de exportação.
+  **Retocar** (beleza e maquiagem com o Face Mesh V2), detecção de fala e legendas com Whisper.
+- Exportação com FFmpeg (NVENC/AMF/QSV/software), fila de renderização e modelos de exportação (Instagram, YouTube,
+  TikTok e outros).
+- Acessibilidade: nomes para leitores de tela (UI Automation) em controles, listas e grades.
+
+## Tecnologias
+
+| Área | Tecnologia |
+|---|---|
+| Plataforma | C# e .NET 10 (`net10.0-windows`, x64) |
+| Interface | WPF com o tema Fluent (`ThemeMode`), MVVM com CommunityToolkit.Mvvm |
+| Composição e serviços | Microsoft.Extensions.Hosting (injeção de dependências), Serilog (logs em arquivo) |
+| Vídeo e áudio | FFmpeg (FFmpeg.AutoGen para decodificar e codificar; `ffmpeg.exe` com gdigrab e DirectShow para gravar a tela) |
+| Reprodução de áudio | NAudio (WASAPI) |
+| Imagem e visão | OpenCvSharp, Svg.Skia (SkiaSharp) |
+| IA | ONNX Runtime com DirectML (GPU) ou CPU: MODNet, MediaPipe Face Mesh V2, Silero VAD; Whisper.net (legendas) |
+| Interoperabilidade | Win32 (`LibraryImport`): monitores, atalho global F10 |
+| Testes | xUnit, NetArchTest (camadas e privacidade), coverlet |
+| Instaladores | WiX Toolset 6 (MSI e Setup.exe), MSIX para a Microsoft Store |
 
 ## Requisitos de desenvolvimento
 

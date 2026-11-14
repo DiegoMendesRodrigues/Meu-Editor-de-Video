@@ -91,10 +91,12 @@ public abstract class TimelineSurface : FrameworkElement
             ShortcutCatalog.ZoomIn => vm.ZoomInCommand,
             ShortcutCatalog.ZoomOut => vm.ZoomOutCommand,
             ShortcutCatalog.ZoomFit => vm.ZoomToFitCommand,
+            ShortcutCatalog.Camera1 or ShortcutCatalog.Camera2 or ShortcutCatalog.Camera3 or ShortcutCatalog.Camera4 => vm.SwitchCameraCommand,
             _ => null,
         };
         if (command is null) return;
-        if (command.CanExecute(null)) command.Execute(null);
+        object? parameter = command == vm.SwitchCameraCommand ? action![^1..] : null;
+        if (command.CanExecute(parameter)) command.Execute(parameter);
         e.Handled = true;
     }
 
@@ -415,7 +417,7 @@ public sealed class TimelineControl : TimelineSurface
             _ => Res("Med.ClipVideo", Brushes.RoyalBlue),
         };
 
-        dc.PushOpacity(ghost * (track.IsHidden || (track.IsMuted && track.Kind == TrackKind.Audio) ? 0.45 : 1));
+        dc.PushOpacity(ghost * (track.IsHidden || !clip.Enabled || (track.IsMuted && track.Kind == TrackKind.Audio) ? 0.45 : 1));
         var shape = new RectangleGeometry(rect, 4, 4);
         dc.DrawGeometry(fill, null, shape);
         dc.PushClip(shape);
@@ -437,7 +439,11 @@ public sealed class TimelineControl : TimelineSurface
         // Faixa do título.
         dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(110, 0, 0, 0)), null, new Rect(rect.Left, rect.Top, rect.Width, 16));
         var label = asset?.Name ?? (clip.IsText ? ViewModels.Inspector.ClipInspectorViewModel.TextTitle(clip.Text!)
-            : clip.Shape is { } shapeStyle ? "◆ " + Domain.Editing.ShapePresets.Name(shapeStyle.Kind) : "Clipe");
+            : clip.Shape is { } shapeStyle ? "◆ " + Domain.Editing.ShapePresets.Name(shapeStyle.Kind)
+            : clip.IsAdjustment ? "☰ Camada de ajuste"
+            : clip.IsCompound ? "⧉ " + (vm.Project?.Sequences.Find(s => s.Id == clip.NestedSequenceId)?.Name ?? "Clipe composto")
+            : "Clipe");
+        if (!clip.Enabled) label = "⊘ " + label;
         if (clip.Masks.Count > 0) label = "◐ " + label;
         if (clip.Stabilization is { Enabled: true }) label = "⌖ " + label;
         if (clip.MotionLink is not null) label = "⛓ " + label;

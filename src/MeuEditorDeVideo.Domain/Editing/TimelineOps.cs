@@ -189,6 +189,7 @@ public static class TimelineOps
     /// <summary>Duração máxima de origem disponível para o clipe (null = ilimitada: imagens, textos).</summary>
     public static MediaTime? SourceLimit(Project project, Clip clip)
     {
+        if (clip.IsCompound) return project.Sequences.Find(s => s.Id == clip.NestedSequenceId)?.Duration;
         if (clip.MediaAssetId is not { } id || project.FindMedia(id) is not { } asset) return null;
         return asset.Kind is MediaKind.Image ? null : asset.Duration;
     }

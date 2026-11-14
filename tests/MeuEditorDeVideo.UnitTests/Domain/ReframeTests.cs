@@ -38,6 +38,20 @@ public sealed class ReframeTests
     }
 
     [Fact]
+    public void Back_to_16x9_restores_the_original_framing()
+    {
+        // 9:16 e depois 16:9 (centro do quadro): o projeto volta a 1920×1080 e o vídeo 16:9 a escala 1, centralizado.
+        var vertical = new ProjectSettings { Width = 1080, Height = 1920 };
+        Assert.Equal((1920, 1080), Reframe.Size(vertical, 16, 9));
+        var clip = Reframe.Apply(Reframe.Apply(Video(), 1920, 1080, 1080, 1920), 1920, 1080, 1920, 1080);
+        Assert.Equal(1, clip.Transform.ScaleX, 6);
+        Assert.Equal(0, clip.Transform.X);
+        Assert.Equal(0, clip.Transform.Y);
+        // Já em 16:9: aplicar de novo não muda nada (o diálogo avisa em vez de criar uma etapa vazia).
+        Assert.Equal(clip.Transform, Reframe.Apply(clip, 1920, 1080, 1920, 1080).Transform);
+    }
+
+    [Fact]
     public void Follows_the_focus_and_never_shows_the_edges()
     {
         // Imagem exibida com 3413 px de largura num quadro de 1080: deslocamento máximo ±1166 px.

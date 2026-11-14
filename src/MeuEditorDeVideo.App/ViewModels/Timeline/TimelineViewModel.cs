@@ -15,6 +15,9 @@ namespace MeuEditorDeVideo.App.ViewModels.Timeline;
 /// <summary>Cabeçalho de trilha (nome, ocultar, silenciar, bloquear) — RF038–RF043.</summary>
 public sealed partial class TrackHeaderViewModel(TimelineViewModel owner, Track track, double height) : ObservableObject
 {
+    /// <summary>Texto lido por leitores de tela (itens de lista usam o texto do objeto).</summary>
+    public override string ToString() => Name;
+
     public Track Track { get; } = track;
     public Guid Id => Track.Id;
     public string Name => Track.Name;
@@ -305,7 +308,8 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
         {
             SplitCommand, JoinCutsCommand, DeleteCommand, RippleDeleteCommand, DeleteAndJoinCommand, CopyCommand, CutCommand, PasteCommand, DuplicateCommand,
             AddMarkerCommand, GroupCommand, UngroupCommand, LinkCommand, UnlinkCommand, SetSpeedCommand, ToggleReverseCommand,
-            AddSelectedMediaCommand, AddTrackCommand, SetClipColorCommand,
+            AddSelectedMediaCommand, AddTrackCommand, SetClipColorCommand, AddAdjustmentLayerCommand, CreateCompoundCommand, UnpackCompoundCommand,
+            ToggleEnabledCommand, SplitScreenCommand, SwitchCameraCommand,
         })
         {
             c.NotifyCanExecuteChanged();

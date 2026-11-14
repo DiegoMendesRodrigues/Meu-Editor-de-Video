@@ -194,7 +194,7 @@ public sealed partial class CompositionInspectorViewModel : ObservableObject, IC
         {
             if (!t.IsVisual) continue;
             foreach (var c in t.Clips)
-                if (Timeline.Selection.Contains(c.Id) && (c.MediaAssetId is not null || c.IsText || c.IsShape)) return (t, c);
+                if (Timeline.Selection.Contains(c.Id) && (c.MediaAssetId is not null || c.IsText || c.IsShape || c.IsAdjustment || c.IsCompound)) return (t, c);
         }
         return null;
     }

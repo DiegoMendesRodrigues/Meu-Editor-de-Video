@@ -326,7 +326,7 @@ public sealed class PreviewEngine : IDisposable
                 video ??= _videoFactory.Create(_hardware);
                 if (!ReferenceEquals(snapshot, lastSnapshot))
                 {
-                    video.Trim(TimelineEvaluator.AssetsInUse(snapshot.Sequence));
+                    video.Trim(TimelineEvaluator.AssetsInUse(snapshot.Project, snapshot.Sequence));
                     lastSnapshot = snapshot;
                 }
 
@@ -489,7 +489,7 @@ public sealed class PreviewEngine : IDisposable
                 if (snapshot is null) break;
                 if (!ReferenceEquals(snapshot, last))
                 {
-                    source.Trim(TimelineEvaluator.AssetsInUse(snapshot.Sequence));
+                    source.Trim(TimelineEvaluator.AssetsInUse(snapshot.Project, snapshot.Sequence));
                     last = snapshot;
                 }
                 mixer.Mix(snapshot.Project, snapshot.Sequence, snapshot.Paths, next, chunk);

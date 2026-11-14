@@ -256,7 +256,12 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
 
     private void OnSessionChanged(object? sender, EventArgs e) => _dispatcher.Invoke(Attach);
 
-    private void OnHistoryChanged(object? sender, EventArgs e) => PushSnapshot();
+    private void OnHistoryChanged(object? sender, EventArgs e)
+    {
+        // O tamanho do projeto pode ter mudado (Aplicar recorte, Reenquadrar, desfazer): o monitor acompanha.
+        ApplyPreviewSize();
+        PushSnapshot();
+    }
 
     private void Attach()
     {

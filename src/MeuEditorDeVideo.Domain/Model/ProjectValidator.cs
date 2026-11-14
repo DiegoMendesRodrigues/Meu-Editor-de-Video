@@ -1,4 +1,4 @@
-namespace MeuEditorDeVideo.Domain.Model;
+﻿namespace MeuEditorDeVideo.Domain.Model;
 
 /// <summary>Regras de integridade do projeto, aplicadas ao abrir e antes de salvar (RNF015).</summary>
 public static class ProjectValidator
@@ -53,6 +53,8 @@ public static class ProjectValidator
                     if (clip.Opacity is < 0 or > 1) errors.Add($"Opacidade inválida em clipe da trilha '{track.Name}'.");
                     if (clip.MediaAssetId is { } mid && !mediaIds.Contains(mid))
                         errors.Add($"Clipe da trilha '{track.Name}' referencia uma mídia inexistente.");
+                    if (clip.NestedSequenceId is { } nid && (nid == sequence.Id || !project.Sequences.Exists(s => s.Id == nid)))
+                        errors.Add($"Clipe composto da trilha '{track.Name}' referencia uma sequência inválida.");
                     if (previous is not null && clip.Start < previous.End)
                         errors.Add($"Clipes sobrepostos na trilha '{track.Name}'.");
                     previous = clip;

@@ -9,6 +9,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>false</SelfContained>
+    <!-- LibraryImport (atalho global F10 da gravação de tela). -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" />
@@ -23,6 +25,8 @@
   </PropertyGroup>
   <ItemGroup Condition="Exists('$(FFmpegBinDir)')">
     <None Include="$(FFmpegBinDir)*.dll" Link="ffmpeg\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <!-- ffmpeg.exe: gravação de tela, webcam e microfone (Ferramentas › Gravar tela). -->
+    <None Include="$(FFmpegBinDir)ffmpeg.exe" Link="ffmpeg\ffmpeg.exe" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
   <!-- Modelos de IA incluídos no aplicativo (MODNet): manifesto, licença e documentação do repositório + arquivo do modelo
        baixado por scripts\fetch-deps.ps1 (SHA-256 no lock), copiados para a pasta ai-models\ do aplicativo. -->
@@ -40,6 +44,7 @@
     <None Include="..\..\resources\ai-models\licencas\*.txt" Link="catalogo-ia\licencas\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\resources\stickers\**\*" Link="pacotes\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
     <None Include="..\..\resources\templates\export\*.json" Link="templates\export\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <!-- Avisos de terceiros (gerados por scripts\generate-notices.ps1) e licença do aplicativo. -->

@@ -233,7 +233,7 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         {
             if (!t.IsVisual) continue;
             foreach (var c in t.Clips)
-                if (Timeline.Selection.Contains(c.Id) && (c.MediaAssetId is not null || c.IsText || c.IsShape)) return (t, c);
+                if (Timeline.Selection.Contains(c.Id) && (c.MediaAssetId is not null || c.IsText || c.IsShape || c.IsAdjustment || c.IsCompound)) return (t, c);
         }
         return null;
     }
@@ -271,7 +271,8 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         try
         {
             var asset = clip.MediaAssetId is { } id ? Timeline.Project?.FindMedia(id) : null;
-            ClipTitle = asset?.Name ?? (clip.IsText ? TextTitle(clip.Text!) : clip.Shape is { } shape ? "◆  " + ShapePresets.Name(shape.Kind) : "Clipe");
+            ClipTitle = asset?.Name ?? (clip.IsText ? TextTitle(clip.Text!) : clip.Shape is { } shape ? "◆  " + ShapePresets.Name(shape.Kind)
+                : clip.IsAdjustment ? "☰  Camada de ajuste" : clip.IsCompound ? "⧉  Clipe composto" : "Clipe");
             foreach (var a in Animated) a.Refresh(clip, offset);
             foreach (var a in Animated3D) a.Refresh(clip, offset);
             foreach (var c in Crop) c.Refresh(clip);
@@ -620,6 +621,14 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         if (_updating || value is null || value.Value == -2 || Current() is not { } cur) return;
         var points = value.Value >= 0 ? SpeedRamps.Presets[value.Value].Points : [];
         Timeline.Execute(new SetSpeedRampCommand(Timeline.SequenceId, cur.Clip.Id, points, value.Value >= 0 ? value.Label : null));
+    }
+
+    /// <summary>Recorte › Aplicar recorte ao vídeo: o projeto (e a exportação) passa a ter o tamanho da área recortada.</summary>
+    [RelayCommand]
+    private void ApplyCrop()
+    {
+        if (Current() is not { } cur) return;
+        Timeline.Execute(new ApplyCropCommand(Timeline.SequenceId, cur.Clip.Id));
     }
 
     partial void OnReverseClipChanged(bool value)

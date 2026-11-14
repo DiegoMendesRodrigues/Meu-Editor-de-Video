@@ -33,6 +33,9 @@ public interface IClipEditor
 /// <summary>Valor numérico exibido num controle deslizante; evita reenvio ao atualizar a partir do modelo.</summary>
 public abstract partial class ValueItemViewModel : ObservableObject
 {
+    /// <summary>Texto lido por leitores de tela (itens de lista usam o texto do objeto).</summary>
+    public override string ToString() => Label;
+
     private bool _updating;
 
     protected ValueItemViewModel(string label, double min, double max, string unit, double step)
@@ -137,6 +140,9 @@ public sealed partial class ClipValueViewModel(IClipEditor owner, string key, st
 /// <summary>Efeito na pilha do clipe (RF086–RF089).</summary>
 public sealed partial class EffectItemViewModel : ObservableObject
 {
+    /// <summary>Texto lido por leitores de tela (itens de lista usam o texto do objeto).</summary>
+    public override string ToString() => Name;
+
     private readonly IClipEditor _owner;
     private bool _updating;
 
@@ -213,6 +219,9 @@ public sealed partial class EffectItemViewModel : ObservableObject
 
 public abstract partial class EffectParameterViewModel(EffectItemViewModel owner, EffectParameter parameter) : ObservableObject
 {
+    /// <summary>Texto lido por leitores de tela (itens de lista usam o texto do objeto).</summary>
+    public override string ToString() => Label;
+
     protected bool Updating;
 
     public EffectItemViewModel Owner { get; } = owner;
@@ -390,4 +399,8 @@ public sealed partial class WheelParameterViewModel(EffectItemViewModel owner, E
 }
 
 /// <summary>Item da biblioteca de efeitos/cor/transições (painel A).</summary>
-public sealed record LibraryEffectItem(string Key, string Name, string Description, string Glyph);
+public sealed record LibraryEffectItem(string Key, string Name, string Description, string Glyph)
+{
+    /// <summary>Nome lido por leitores de tela (o item da lista usa o texto do objeto).</summary>
+    public override string ToString() => Name;
+}

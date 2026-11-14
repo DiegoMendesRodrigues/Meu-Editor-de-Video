@@ -22,7 +22,14 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
 
     /// <param name="bypassEffects">Ignora efeitos e correção de cor (lado "antes" da comparação, RF101).</param>
     public BgraImage Render(IVideoFrameSource video, Project project, Sequence sequence, IReadOnlyDictionary<Guid, string> paths,
-        MediaTime t, int width, int height, bool transparentBackground = false, bool bypassEffects = false, bool includeSubtitles = true)
+        MediaTime t, int width, int height, bool transparentBackground = false, bool bypassEffects = false, bool includeSubtitles = true) =>
+        RenderCore(video, project, sequence, paths, t, width, height, transparentBackground, bypassEffects, includeSubtitles, depth: 0);
+
+    /// <summary>Profundidade máxima de clipes compostos dentro de clipes compostos.</summary>
+    private const int MaxNesting = 4;
+
+    private BgraImage RenderCore(IVideoFrameSource video, Project project, Sequence sequence, IReadOnlyDictionary<Guid, string> paths,
+        MediaTime t, int width, int height, bool transparentBackground, bool bypassEffects, bool includeSubtitles, int depth)
     {
         var graph = TimelineEvaluator.Evaluate(project, sequence, t, includeSubtitles);
         var layers = new List<LayerImage>(graph.Layers.Count);
@@ -49,15 +56,34 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
                 AddWithTrail(layers, new LayerImage(layer, img, HasAlpha: true, NativeSize: true));
                 continue;
             }
-            if (layer.Asset is null || !paths.TryGetValue(layer.Asset.Id, out var path)) continue;
-            var image = video.GetFrame(layer.Asset, path, layer.SourceTime, width, height);
-            if (image is null) continue;
+            if (layer.IsAdjustment)
+            {
+                if (!bypassEffects && layer.Effects.Count > 0)
+                    ApplyAdjustment(layers, layer, ctx, video, project, sequence, paths, t, width, height, graph.Width, transparentBackground);
+                continue;
+            }
 
-            if (layer.BlendSourceTime is { } next && video.GetFrame(layer.Asset, path, next, width, height) is { } second)
-                image = (layer.OpticalFlow ? ai?.Interpolate(image, second, layer.BlendWeight) : null)
-                        ?? EffectProcessor.Mix(image, second, layer.BlendWeight);
+            BgraImage? image;
+            bool hasAlpha;
+            if (layer.NestedSequenceId is { } nestedId)
+            {
+                // Clipe composto: a sequência aninhada é renderizada inteira (fundo transparente) e vira uma camada.
+                if (depth >= MaxNesting || nestedId == sequence.Id || project.Sequences.Find(s => s.Id == nestedId) is not { } nested) continue;
+                image = RenderCore(video, project, nested, paths, layer.SourceTime, width, height, true, bypassEffects, includeSubtitles, depth + 1);
+                hasAlpha = true;
+            }
+            else
+            {
+                if (layer.Asset is null || !paths.TryGetValue(layer.Asset.Id, out var path)) continue;
+                image = video.GetFrame(layer.Asset, path, layer.SourceTime, width, height);
+                if (image is null) continue;
 
-            var hasAlpha = layer.Asset.Info?.HasAlpha == true || layer.Asset.Kind == MediaKind.Image;
+                if (layer.BlendSourceTime is { } next && video.GetFrame(layer.Asset, path, next, width, height) is { } second)
+                    image = (layer.OpticalFlow ? ai?.Interpolate(image, second, layer.BlendWeight) : null)
+                            ?? EffectProcessor.Mix(image, second, layer.BlendWeight);
+
+                hasAlpha = layer.Asset.Info?.HasAlpha == true || layer.Asset.Kind == MediaKind.Image;
+            }
             var cut = layer.Masks.Where(m => !m.EffectsOnly).ToList();
             var colorMasks = layer.Masks.Where(m => m.EffectsOnly).ToList();
             if (cut.Count > 0)
@@ -82,6 +108,24 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
             AddWithTrail(layers, new LayerImage(layer, image, hasAlpha));
         }
         return compositor.Compose(width, height, graph.Width, layers, transparentBackground);
+    }
+
+    /// <summary>
+    /// Camada de ajuste: compõe o que está abaixo, aplica os efeitos ao quadro (limitados às máscaras, se houver, e misturados
+    /// pela opacidade) e troca as camadas anteriores por esse quadro já pronto.
+    /// </summary>
+    private void ApplyAdjustment(List<LayerImage> layers, VisualLayer layer, EffectContext ctx, IVideoFrameSource video, Project project,
+        Sequence sequence, IReadOnlyDictionary<Guid, string> paths, MediaTime t, int width, int height, int projectWidth, bool transparentBackground)
+    {
+        var below = compositor.Compose(width, height, projectWidth, layers, transparentBackground);
+        var image = ApplyEffects(below, layer, ctx, video, project, sequence, paths, t).Image;
+        if (image.Width != width || image.Height != height) return;
+        if (layer.Masks.Count > 0 && MaskRenderer.Coverage(width, height, layer.Masks) is { } cov)
+            image = MaskedMix(below, image, cov);
+        if (layer.Opacity < 1) image = EffectProcessor.Mix(below, image, layer.Opacity);
+        layers.Clear();
+        layers.Add(new LayerImage(layer with { Opacity = 1, Transform = Transform.Identity, MotionTrail = [], Mask = null }, image,
+            HasAlpha: transparentBackground, NativeSize: true));
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Domain.Effects;
+﻿using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;
 
 namespace MeuEditorDeVideo.App.ViewModels.Inspector;
@@ -6,6 +6,9 @@ namespace MeuEditorDeVideo.App.ViewModels.Inspector;
 /// <summary>Predefinição de cor (aba Cor): um ou mais efeitos de cor do catálogo com valores prontos.</summary>
 public sealed record ColorPreset(string Id, string Name, string Description, Func<IReadOnlyList<EffectInstance>> Build)
 {
+    /// <summary>Texto lido por leitores de tela (itens de lista usam o texto do objeto).</summary>
+    public override string ToString() => Name;
+
     /// <summary>Chave da miniatura em <see cref="Services.EffectPreviews"/>.</summary>
     public string PreviewKey => "preset:" + Id;
 }

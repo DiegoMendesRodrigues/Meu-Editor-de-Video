@@ -130,10 +130,12 @@ internal sealed unsafe class PlaybackAudioReader : StreamDecoder
     {
         var available = Math.Max(0, _bufferFrames - offsetFrames);
         var n = Math.Min(available, wanted);
-        _buffer.AsSpan(offsetFrames * Ch, n * Ch).CopyTo(destination);
+        // Pedido depois do fim do buffer (fim da faixa): nada a copiar; o início pode até passar do tamanho do array.
+        if (n > 0) _buffer.AsSpan(offsetFrames * Ch, n * Ch).CopyTo(destination);
 
         // Descarta o que já foi entregue, mantendo 100 ms para pequenas voltas.
-        var consumed = offsetFrames + n - AudioFormat.SampleRate / 10;
+        // O pedido pode começar depois do fim do buffer (fim da faixa, dentro da tolerância): nunca descarta além dele.
+        var consumed = Math.Min(_bufferFrames, offsetFrames + n) - AudioFormat.SampleRate / 10;
         if (consumed > 0)
         {
             Array.Copy(_buffer, consumed * Ch, _buffer, 0, (_bufferFrames - consumed) * Ch);

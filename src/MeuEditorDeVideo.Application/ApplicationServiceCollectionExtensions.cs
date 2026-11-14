@@ -13,6 +13,7 @@ public static class ApplicationServiceCollectionExtensions
         services.AddSingleton<AutosaveScheduler>();
         services.AddSingleton<IMediaImportService, MediaImportService>();
         services.AddSingleton<IRenderQueueService, RenderQueueService>();
+        services.AddSingleton<Core.Projects.IContentPackStore, Packs.ContentPackStore>();
         return services;
     }
 }

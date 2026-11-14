@@ -32,7 +32,11 @@ public enum LibrarySection
 }
 
 /// <summary>Item do painel de histórico (RF014). Index = quantidade de ações aplicadas após clicar.</summary>
-public sealed record HistoryItem(int Index, string Description, string Time, bool IsCurrent, bool IsUndone);
+public sealed record HistoryItem(int Index, string Description, string Time, bool IsCurrent, bool IsUndone)
+{
+    /// <summary>Texto lido por leitores de tela (itens de lista usam o texto do objeto).</summary>
+    public override string ToString() => Description;
+}
 
 /// <summary>Tela principal de edição (§5.3).</summary>
 public sealed partial class EditorViewModel(
@@ -82,6 +86,10 @@ public sealed partial class EditorViewModel(
     /// <summary>Seção Elementos gráficos da biblioteca: formas vetoriais e SVG (F9).</summary>
     [ObservableProperty]
     public partial GraphicsLibraryViewModel? GraphicsLibrary { get; set; }
+
+    /// <summary>Gravação de tela e pacotes de conteúdo (figurinhas, títulos salvos, modelos de projeto).</summary>
+    [ObservableProperty]
+    public partial CreativeToolsViewModel? CreativeTools { get; set; }
 
     /// <summary>Seção Textos da biblioteca: modelos e legendas (F8).</summary>
     [ObservableProperty]
@@ -179,6 +187,8 @@ public sealed partial class EditorViewModel(
         CompositionInspector = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<CompositionInspectorViewModel>(services, Timeline);
         AiInspector = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<AiInspectorViewModel>(services, Timeline);
         GraphicsLibrary = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<GraphicsLibraryViewModel>(services, Timeline, Library);
+        CreativeTools = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<CreativeToolsViewModel>(services, Timeline);
+        CreativeTools.Refresh();
         projects.SessionChanged += OnSessionChanged;
         projects.Saved += OnSaved;
         AttachSession();
@@ -203,6 +213,7 @@ public sealed partial class EditorViewModel(
         AiInspector?.Dispose();
         AiInspector = null;
         GraphicsLibrary = null;
+        CreativeTools = null;
         Preview?.Dispose();
         Preview = null;
         Timeline?.Dispose();

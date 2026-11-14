@@ -48,6 +48,10 @@ public static class EffectProcessor
                 case ChromaKey: alpha |= ChromaKeyFx(px, w, h, e, ctx.PixelScale); break;
                 case ColorMatch: ColorMatchFx(px, e); break;
                 case Lens: px = LensFx(px, w, h, Value(e, "distortion") / 100, Value(e, "zoom") / 100); break;
+                case Reframe360:
+                    (px, w) = Reframe360Fx(px, w, h, Value(e, "yaw"), Value(e, "pitch"), Value(e, "roll"), Value(e, "fov"),
+                        Reframe360Aspects[Math.Clamp((int)Math.Round(Value(e, "aspect")), 0, Reframe360Aspects.Length - 1)]);
+                    break;
                 case VideoDenoise: DenoiseFx(px, w, h, Value(e, "strength") / 100, Value(e, "detail") / 100, ctx.PixelScale); break;
                 case EdgeRefine:
                     px = EdgeRefiner.Apply(new BgraImage(w, h, px), Value(e, "choke") * ctx.PixelScale, Value(e, "feather") * ctx.PixelScale,
@@ -575,6 +579,41 @@ public static class EffectProcessor
             }
         });
         return dst;
+    }
+
+    /// <summary>
+    /// Vista plana (perspectiva) de uma imagem equirretangular: altura igual à da origem e largura pela proporção. Para cada
+    /// pixel, o raio da câmera virtual é girado (giro, inclinação, direção) e convertido em longitude/latitude na origem.
+    /// </summary>
+    public static (byte[] Pixels, int Width) Reframe360Fx(byte[] px, int w, int h, double yawDeg, double pitchDeg, double rollDeg, double fovDeg, double aspect)
+    {
+        var ow = Math.Max(2, (int)Math.Round(h * aspect / 2) * 2);
+        var oh = h;
+        var dst = new byte[ow * oh * 4];
+        var focal = ow / 2.0 / Math.Tan(Math.Clamp(fovDeg, 1, 179) * Math.PI / 360);
+        double yaw = yawDeg * Math.PI / 180, pitch = pitchDeg * Math.PI / 180, roll = rollDeg * Math.PI / 180;
+        double cy = Math.Cos(yaw), sy = Math.Sin(yaw), cp = Math.Cos(pitch), sp = Math.Sin(pitch), cr = Math.Cos(roll), sr = Math.Sin(roll);
+        Parallel.For(0, oh, y =>
+        {
+            for (var x = 0; x < ow; x++)
+            {
+                // Raio na câmera: x à direita, y para cima, z para a frente.
+                var dx = x - (ow - 1) / 2.0;
+                var dy = (oh - 1) / 2.0 - y;
+                double rx = dx * cr - dy * sr, ry = dx * sr + dy * cr, rz = focal;
+                // Inclinação (em torno de x) e direção (em torno de y).
+                double py = ry * cp + rz * sp, pz = -ry * sp + rz * cp;
+                double qx = rx * cy + pz * sy, qz = -rx * sy + pz * cy;
+                var lon = Math.Atan2(qx, qz);
+                var lat = Math.Atan2(py, Math.Sqrt(qx * qx + qz * qz));
+                var sx = (lon / (2 * Math.PI) + 0.5) * w - 0.5;
+                var syy = (0.5 - lat / Math.PI) * h - 0.5;
+                sx = ((sx % w) + w) % w;
+                syy = Math.Clamp(syy, 0, h - 1);
+                Bilinear(px, w, h, Math.Min(sx, w - 1), syy, dst, (y * ow + x) * 4);
+            }
+        });
+        return (dst, ow);
     }
 
     private static void Bilinear(byte[] src, int w, int h, double x, double y, byte[] dst, int o)

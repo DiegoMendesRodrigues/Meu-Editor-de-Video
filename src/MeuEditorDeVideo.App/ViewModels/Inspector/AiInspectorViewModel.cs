@@ -633,6 +633,21 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
             .Where(c => c.MediaAssetId is { } id && project.FindMedia(id) is { HasVideo: true, Width: > 0, Height: > 0 })
             .ToList();
 
+        // Mesmo formato, sem acompanhar e com os clipes já cobrindo o quadro centralizados: nada mudaria. Avisa em vez
+        // de parecer que o comando não funcionou (e de criar uma etapa vazia no desfazer).
+        if (width == settings.Width && height == settings.Height && follow is null && targets.All(c =>
+            {
+                var asset = project.FindMedia(c.MediaAssetId!.Value)!;
+                var r = Reframe.Apply(c, asset.Width, asset.Height, width, height);
+                return r.Transform == c.Transform && r.Keyframes.Count == c.Keyframes.Count;
+            }))
+        {
+            _dialogs.ShowInfo("Reenquadrar automaticamente",
+                $"O projeto já está no formato {aw}:{ah} ({width}×{height}) e os vídeos já cobrem o quadro, centralizados. Não há nada para mudar.\n\n" +
+                "Para cortar as bordas do vídeo, use Recorte na aba Vídeo. Para outro formato, escolha 9:16, 1:1 ou 4:5.");
+            return;
+        }
+
         await RunAsync("Reenquadrando…", async (progress, ct) =>
         {
             var commands = new List<IEditCommand> { new ChangeProjectSettingsCommand(settings with { Width = width, Height = height }) };

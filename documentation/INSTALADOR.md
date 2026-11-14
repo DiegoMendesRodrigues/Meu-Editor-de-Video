@@ -54,17 +54,17 @@ tudo, apague também as duas pastas acima.
 
 ```powershell
 # Para todos os usuários (administrador), sem interface:
-MeuEditorDeVideo-1.0.0-Setup.exe /quiet /norestart
-msiexec /i MeuEditorDeVideo-1.0.0-x64.msi /qn ALLUSERS=1
+MeuEditorDeVideo-1.1.0-Setup.exe /quiet /norestart
+msiexec /i MeuEditorDeVideo-1.1.0-x64.msi /qn ALLUSERS=1
 
 # Somente para o usuário atual, sem administrador:
-msiexec /i MeuEditorDeVideo-1.0.0-x64.msi /qn ALLUSERS=2 MSIINSTALLPERUSER=1
+msiexec /i MeuEditorDeVideo-1.1.0-x64.msi /qn ALLUSERS=2 MSIINSTALLPERUSER=1
 
 # Sem o atalho da área de trabalho:
-msiexec /i MeuEditorDeVideo-1.0.0-x64.msi /qn ALLUSERS=1 ADDLOCAL=Aplicativo
+msiexec /i MeuEditorDeVideo-1.1.0-x64.msi /qn ALLUSERS=1 ADDLOCAL=Aplicativo
 
 # Log detalhado:
-msiexec /i MeuEditorDeVideo-1.0.0-x64.msi /l*v instalacao.log
+msiexec /i MeuEditorDeVideo-1.1.0-x64.msi /l*v instalacao.log
 ```
 
 ## Assinatura de código

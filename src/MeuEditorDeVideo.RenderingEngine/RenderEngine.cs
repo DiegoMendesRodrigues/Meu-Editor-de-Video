@@ -86,7 +86,7 @@ public sealed class RenderEngine(
         if (rangeEnd <= rangeStart) throw new MedException(MedErrors.NothingToRender());
 
         // Mídias usadas precisam existir.
-        var inUse = TimelineEvaluator.AssetsInUse(sequence);
+        var inUse = TimelineEvaluator.AssetsInUse(project, sequence);
         var missing = project.Media.Where(a => inUse.Contains(a.Id) &&
                 (!req.MediaPaths.TryGetValue(a.Id, out var p) || !MediaExists(p, a)))
             .Select(a => a.Name).ToList();

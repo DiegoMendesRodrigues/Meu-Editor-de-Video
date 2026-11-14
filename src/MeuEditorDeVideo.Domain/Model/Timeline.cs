@@ -140,6 +140,17 @@ public sealed record Clip
     /// <summary>Câmera lenta por interpolação de quadros (fluxo óptico) em vez da mistura simples.</summary>
     public bool OpticalFlow { get; init; }
 
+    /// <summary>Clipe ativo. Desativado, não aparece nem soa (multicâmera, "Desativar clipe").</summary>
+    public bool Enabled { get; init; } = true;
+
+    /// <summary>Camada de ajuste: sem mídia; os efeitos dela valem para tudo o que está abaixo na composição.</summary>
+    public bool IsAdjustment { get; init; }
+
+    /// <summary>Clipe composto: mostra (e toca) outra sequência do projeto, a partir de <see cref="SourceIn"/>.</summary>
+    public Guid? NestedSequenceId { get; init; }
+
+    public bool IsCompound => NestedSequenceId is not null && MediaAssetId is null;
+
     public MediaTime End => Start + Duration;
 
     /// <summary>Ponto final dentro da mídia de origem.</summary>

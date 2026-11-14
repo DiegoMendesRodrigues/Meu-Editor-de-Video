@@ -78,6 +78,17 @@
     <sys:String x:Key="Editor.Mascara.SoCor">Máscara de cor (só efeitos)</sys:String>
     <sys:String x:Key="Editor.Mascara.SoCor.Dica">Em vez de recortar a camada, a máscara limita a correção de cor e os efeitos à área dela</sys:String>
     <sys:String x:Key="Editor.Clipe.AoContrario">Reproduzir ao contrário</sys:String>
+    <sys:String x:Key="Editor.Clipe.AtivarDesativar">Ativar/desativar clipe</sys:String>
+    <sys:String x:Key="Editor.Clipe.SalvarTitulo">Salvar texto como título…</sys:String>
+    <sys:String x:Key="Editor.Menu.NovoDeModelo">Novo a partir de _modelo…</sys:String>
+    <sys:String x:Key="Editor.Menu.SalvarModelo">Salvar como _modelo…</sys:String>
+    <sys:String x:Key="Editor.Menu.CamadaAjuste">Adicionar camada de _ajuste</sys:String>
+    <sys:String x:Key="Editor.Menu.CriarComposto">Criar clipe _composto…</sys:String>
+    <sys:String x:Key="Editor.Menu.DesfazerComposto">Desfazer clipe composto</sys:String>
+    <sys:String x:Key="Editor.Menu.TelaDividida">_Tela dividida</sys:String>
+    <sys:String x:Key="Editor.Menu.Multicamera">M_ulticâmera</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.GravarTela">_Gravar tela, webcam e microfone…</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Pacotes">_Pacotes de conteúdo…</sys:String>
     <sys:String x:Key="Editor.Clipe.AoContrario.Dica">Mostra o clipe (e o áudio vinculado) do fim para o começo</sys:String>
     <sys:String x:Key="Editor.Acao.AlternarTema">Alternar tema claro/escuro</sys:String>
     <sys:String x:Key="Editor.Acao.ImportarSequencia">Importar sequência de imagens</sys:String>
