@@ -19,7 +19,8 @@
            Compressed="yes">
     <SummaryInformation Description="Meu Editor de Vídeo $(var.Version) — editor de vídeo com IA local" Manufacturer="Diego Mendes Rodrigues" />
 
-    <MajorUpgrade DowngradeErrorMessage="Uma versão mais nova do Meu Editor de Vídeo já está instalada." />
+    <!-- Sempre remove a versão instalada antes, inclusive outra compilação da mesma versão. -->
+    <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="Uma versão mais nova do Meu Editor de Vídeo já está instalada." />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
 
     <Icon Id="AppIcon.ico" SourceFile="$(var.RepoRoot)src\MeuEditorDeVideo.App\Assets\icone.ico" />
@@ -31,7 +32,12 @@
     <Property Id="ApplicationFolderName" Value="Meu Editor de Vídeo" />
     <Property Id="WixAppFolder" Value="WixPerUserFolder" />
     <WixVariable Id="WixUILicenseRtf" Value="$(var.LicenseRtf)" />
+    <!-- Logotipo nas telas do instalador (gerados por build-installer.ps1 a partir de Assets\logo-256.png). -->
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.BannerBmp)" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.DialogBmp)" />
     <ui:WixUI Id="WixUI_Advanced" />
+    <!-- O WixUI_Advanced usa [ProgramFilesFolder] (x86) para "todos os usuários"; o aplicativo é x64. -->
+    <SetProperty Id="WixPerMachineFolder" Value="[ProgramFiles64Folder][ApplicationFolderName]" After="WixSetDefaultPerMachineFolder" Sequence="both" />
 
     <StandardDirectory Id="ProgramFiles6432Folder">
       <Directory Id="APPLICATIONFOLDER" Name="Meu Editor de Vídeo" />
@@ -73,6 +79,12 @@
         <Shortcut Id="AtalhoMenuIniciar" Name="Meu Editor de Vídeo" Description="Editor de vídeo com IA local"
                   Target="[APPLICATIONFOLDER]MeuEditorDeVideo.exe" WorkingDirectory="APPLICATIONFOLDER" />
         <RegistryValue Root="HKMU" Key="Software\Meu Editor de Vídeo" Name="AtalhoMenuIniciar" Type="integer" Value="1" KeyPath="yes" />
+        <!-- A instalação começa sempre com as preferências vazias: o programa mostra a janela de boas-vindas ao abrir. -->
+        <RemoveRegistryValue Root="HKCU" Key="Software\Meu Editor de Vídeo" Name="Name" />
+        <RemoveRegistryValue Root="HKCU" Key="Software\Meu Editor de Vídeo" Name="Language" />
+        <RemoveRegistryValue Root="HKCU" Key="Software\Meu Editor de Vídeo" Name="ThemeColor" />
+        <RemoveRegistryValue Root="HKCU" Key="Software\Meu Editor de Vídeo" Name="CheckForNewVersions" />
+        <RemoveRegistryValue Root="HKCU" Key="Software\Meu Editor de Vídeo" Name="LastCheck" />
       </Component>
     </StandardDirectory>
 

@@ -40,7 +40,6 @@ public sealed record HistoryItem(int Index, string Description, string Time, boo
 
 /// <summary>Tela principal de edição (§5.3).</summary>
 public sealed partial class EditorViewModel(
-    INavigationService navigation,
     IThemeService themes,
     ISettingsService settings,
     IProjectService projects,
@@ -263,7 +262,7 @@ public sealed partial class EditorViewModel(
             new("Clipes", clips.ToString(br)),
             new("Criado em", project.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm", br)),
             new("Modificado em", project.ModifiedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm", br)),
-            new("Arquivo", s.FilePath ?? "Ainda não salvo"),
+            new("Arquivo", s.FilePath ?? MeuEditorDeVideo.App.Localization.Translator.T("Ainda não salvo")),
         ];
     }
 
@@ -318,12 +317,13 @@ public sealed partial class EditorViewModel(
 
     private bool HasSession => _session is not null;
 
+    /// <summary>Até 5 projetos recentes que ainda existem, para o menu Arquivo (o mais recente primeiro).</summary>
+    public IReadOnlyList<string> RecentProjectsForMenu() =>
+        [.. settings.Current.RecentProjects.Where(System.IO.File.Exists).Take(5)];
+
+    /// <summary>Arquivo › projeto recente: abre o projeto (pergunta antes se houver alterações não salvas).</summary>
     [RelayCommand]
-    private async Task GoHome()
-    {
-        if (!await workflow.CloseProjectAsync()) return;
-        navigation.NavigateTo<HomeViewModel>();
-    }
+    private Task OpenRecent(string? path) => path is null ? Task.CompletedTask : workflow.OpenAsync(path);
 
     [RelayCommand]
     private void SelectSection(LibrarySection section) => SelectedSection = section;

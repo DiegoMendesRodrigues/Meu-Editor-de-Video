@@ -34,6 +34,38 @@ public partial class EditorView : UserControl
     }
 
     private ViewModels.Timeline.TimelineViewModel? _linhaDoTempo;
+    private const string RecentTag = "recente";
+
+    /// <summary>
+    /// Arquivo: depois do separador abaixo de "Abrir…", os 5 projetos recentes (_1 a _5, caminho na dica) e mais um
+    /// separador. Sem projetos recentes, só o separador original.
+    /// </summary>
+    private void MenuArquivo_SubmenuOpened(object sender, RoutedEventArgs e)
+    {
+        if (!ReferenceEquals(e.OriginalSource, MenuArquivo) || DataContext is not EditorViewModel vm) return;
+        foreach (var old in MenuArquivo.Items.OfType<FrameworkElement>().Where(i => Equals(i.Tag, RecentTag)).ToList())
+            MenuArquivo.Items.Remove(old);
+
+        var recent = vm.RecentProjectsForMenu();
+        if (recent.Count == 0) return;
+        var index = MenuArquivo.Items.IndexOf(SeparadorRecentes) + 1;
+        for (var i = 0; i < recent.Count; i++)
+        {
+            var path = recent[i];
+            var name = System.IO.Path.GetFileNameWithoutExtension(path);
+            var item = new MenuItem
+            {
+                Header = $"_{i + 1}  {name.Replace("_", "__", StringComparison.Ordinal)}",
+                ToolTip = path,
+                Tag = RecentTag,
+                Command = vm.OpenRecentCommand,
+                CommandParameter = path,
+            };
+            AutomationProperties.SetName(item, name);
+            MenuArquivo.Items.Insert(index++, item);
+        }
+        MenuArquivo.Items.Insert(index, new Separator { Tag = RecentTag });
+    }
 
     private void Editor_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
@@ -290,6 +322,10 @@ public partial class EditorView : UserControl
     /// <summary>Informações do aplicativo (RF215).</summary>
     private void Sobre_Click(object sender, RoutedEventArgs e) => Dialogs.AboutWindow.ShowFor(Window.GetWindow(this));
 
+    /// <summary>Ajuda › Verificar atualizações (consulta o serviço de versões).</summary>
+    private async void VerificarAtualizacoes_Click(object sender, RoutedEventArgs e) =>
+        await ((Services.UpdateCheckService)App.Services.GetService(typeof(Services.UpdateCheckService))!).CheckAsync(manual: true);
+
     /// <summary>Manual do usuário offline (F1).</summary>
     private void Manual_Click(object sender, RoutedEventArgs e) => Dialogs.HelpWindow.ShowFor(Window.GetWindow(this));
 
@@ -321,7 +357,7 @@ public partial class EditorView : UserControl
         }
         catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
         {
-            MessageBox.Show($"Não foi possível abrir \"{path}\".", "Meu Editor de Vídeo", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(Localization.Translator.F("Não foi possível abrir \"{0}\".", path), "Meu Editor de Vídeo", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 

@@ -11,6 +11,9 @@ namespace MeuEditorDeVideo.App.ViewModels;
 
 public sealed record Option<T>(string Label, T Value)
 {
+    /// <summary>Rótulo no idioma da interface.</summary>
+    public string Label { get; init; } = Localization.Translator.T(Label);
+
     public override string ToString() => Label;
 }
 

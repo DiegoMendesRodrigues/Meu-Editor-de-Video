@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.App.ViewModels;
@@ -49,6 +49,9 @@ public partial class MainWindow : Window
 
     private void Fechar_Click(object sender, RoutedEventArgs e) => SystemCommands.CloseWindow(this);
 
+    /// <summary>O usuário cancelou o fechamento na pergunta sobre alterações não salvas.</summary>
+    public event EventHandler? CloseCanceled;
+
     /// <summary>Ao fechar, pergunta sobre alterações não salvas (Sim / Não / Cancelar).</summary>
     protected override async void OnClosing(CancelEventArgs e)
     {
@@ -56,7 +59,11 @@ public partial class MainWindow : Window
         if (_closeConfirmed || e.Cancel) return;
 
         e.Cancel = true;
-        if (!await _workflow.ConfirmDiscardOrSaveAsync()) return;
+        if (!await _workflow.ConfirmDiscardOrSaveAsync())
+        {
+            CloseCanceled?.Invoke(this, EventArgs.Empty);
+            return;
+        }
 
         _closeConfirmed = true;
         await Dispatcher.InvokeAsync(Close);

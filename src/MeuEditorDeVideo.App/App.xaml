@@ -10,7 +10,6 @@
                 <ResourceDictionary Source="Themes/Palette.Dark.xaml" />
                 <ResourceDictionary Source="Themes/Styles.xaml" />
                 <ResourceDictionary Source="Resources/Strings/Common.xaml" />
-                <ResourceDictionary Source="Resources/Strings/Home.xaml" />
                 <ResourceDictionary Source="Resources/Strings/Editor.xaml" />
                 <ResourceDictionary Source="Views/ViewMappings.xaml" />
             </ResourceDictionary.MergedDictionaries>

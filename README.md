@@ -19,6 +19,8 @@ Versão **1.1.0**.
 - Edição não linear com várias trilhas de vídeo, áudio, texto e imagem; dividir e **juntar os cortes**, recortar,
   copiar, colar no cursor, duplicar, excluir, excluir e fechar o espaço e **excluir e juntar** (em todas as trilhas).
 - Editor com barra de título própria, biblioteca em abas, painel Propriedades em altura total e cor por clipe.
+- Interface e manual em **seis idiomas**: alemão, espanhol, francês, inglês, português (Brasil) e português (Portugal).
+  O programa abre direto no editor e o menu Arquivo lista os cinco projetos recentes.
 - **Visualizar**: modos de layout (Padrão, Linha do tempo, Vídeo), qualidade de reprodução, zoom no vídeo (Ajuste
   a 400%), reproduzir/pausar, parar, reprodução em loop e régua em pixels no monitor.
 - Efeitos com miniaturas, predefinições de cor, ajustes HSL por faixa de cor e HDR; transições, máscaras,
@@ -93,7 +95,8 @@ documentation/
 
 ## Privacidade
 
-Todo o processamento (inclusive a IA) é local, sem telemetria. A única exceção de rede é a ferramenta
+Todo o processamento (inclusive a IA) é local, sem telemetria. As exceções de rede são **Verificar atualizações** (Ajuda, e uma vez por mês ao abrir, se ligado em Configurações),
+que consulta só a versão publicada enviando o idioma da interface, e a ferramenta
 **Baixar modelos de IA**: quando o usuário clica em **Instalar**, ela baixa os modelos opcionais das URLs oficiais
 fixadas no catálogo, só por HTTPS e com verificação SHA-256. Esse código fica isolado no assembly
 `MeuEditorDeVideo.ModelDownloads`. Testes automatizados garantem que nenhum outro assembly usa rede

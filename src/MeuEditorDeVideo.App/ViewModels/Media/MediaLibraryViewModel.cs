@@ -125,8 +125,8 @@ public sealed partial class MediaLibraryViewModel : ObservableObject, IDisposabl
 
     /// <summary>Texto para lista vazia: biblioteca vazia ou nada encontrado na pesquisa.</summary>
     public string EmptyMessage => Items.Count == 0
-        ? "Nenhuma mídia importada. Arraste arquivos ou pastas para cá ou use \"Importar Mídia\"."
-        : "Nenhuma mídia corresponde à pesquisa.";
+        ? MeuEditorDeVideo.App.Localization.Translator.T("Nenhuma mídia importada. Arraste arquivos ou pastas para cá ou use \"Importar Mídia\".")
+        : MeuEditorDeVideo.App.Localization.Translator.T("Nenhuma mídia corresponde à pesquisa.");
 
     partial void OnFilterChanged(MediaFilter value) => Refilter();
     partial void OnSearchTextChanged(string value) => Refilter();

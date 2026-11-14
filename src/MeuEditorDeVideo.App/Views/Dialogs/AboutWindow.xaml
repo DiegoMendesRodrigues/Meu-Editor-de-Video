@@ -41,7 +41,18 @@
                     <StackPanel>
                         <TextBlock Text="{Binding Product}" FontSize="22" FontWeight="SemiBold" />
                         <TextBlock Text="{Binding Version}" Foreground="{DynamicResource Med.TextMuted}" Margin="0,2,0,0" />
-                        <TextBlock Text="{Binding DeveloperText}" FontWeight="SemiBold" Margin="0,8,0,0" />
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <TextBlock Text="{Binding DeveloperText}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            <!-- Perfil no LinkedIn: abre no navegador padrão. -->
+                            <Button Command="{Binding OpenLinkedInCommand}" Margin="8,0,0,0" Padding="0" Cursor="Hand"
+                                    Background="Transparent" BorderThickness="0" VerticalAlignment="Center"
+                                    ToolTip="linkedin.com/in/diegomendesrodrigues" AutomationProperties.Name="Perfil de Diego Mendes Rodrigues no LinkedIn">
+                                <Border Width="20" Height="20" CornerRadius="3" Background="#0A66C2">
+                                    <TextBlock Text="in" Foreground="White" FontWeight="Bold" FontSize="13" FontFamily="Segoe UI"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0" />
+                                </Border>
+                            </Button>
+                        </StackPanel>
                         <TextBlock Text="{Binding Copyright}" Foreground="{DynamicResource Med.TextMuted}" Margin="0,2,0,0" TextWrapping="Wrap" />
                     </StackPanel>
                 </DockPanel>

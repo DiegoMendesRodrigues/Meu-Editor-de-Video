@@ -12,6 +12,9 @@ namespace MeuEditorDeVideo.App.ViewModels.Media;
 /// <summary>Linha "rótulo: valor" do painel de informações da mídia (RF035).</summary>
 public sealed record MediaInfoLine(string Label, string Value)
 {
+    /// <summary>Rótulo no idioma da interface.</summary>
+    public string Label { get; init; } = MeuEditorDeVideo.App.Localization.Translator.T(Label);
+
     /// <summary>Texto lido por leitores de tela (itens de lista usam o texto do objeto).</summary>
     public override string ToString() => $"{Label}: {Value}";
 }

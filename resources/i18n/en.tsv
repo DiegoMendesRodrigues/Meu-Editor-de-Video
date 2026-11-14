@@ -1,0 +1,2187 @@
+0013df89	No color correction. Start with "Color adjustments"; use "Compare before/after" to evaluate.
+002816b9	Text content
+002ea675	Isolate voice (voice and ambience separated)
+003602ab	Compound clip name
+00729350	Import "{0}"
+008a9fe4	When installing, the app downloads the model files from the official sources (huggingface.co and github.com), at 
+00a5b712	Point outline: Ctrl+click on the monitor adds a point; right-click removes
+00b6829b	Insert overlay
+00cd80cc	Frames per second
+00d551e6	Profile
+00e05d1d	Use the project resolution
+00e2a93d	Fades in at the start and fades out at the end of the clip.
+00e6066c	Reframing…
+00f93752	Keep
+01007cb9	Text 1
+01108940	Text templates
+01590d5a	Could not find a common segment between the two audio tracks.
+0168ed63	Disable {0}
+0188164c	Image enhancement
+019905bb	Model documentation
+01b2dbc7	Computing the person masks…
+0202c3d4	Multicam
+020cdce1	Effects
+02524e47	Artificial intelligence
+0276f27a	Shadow color
+029b3c90	1280 × 720 · 30 FPS · horizontal, small file
+02ea4889	Toggle snapping
+0308909e	Applied audio effects (in order)
+031bc0e2	Remove segments without speech
+032a18e6	Remove keyframe
+035f634d	Drag to compare: left, without effects; right, with effects
+03900a2b	Text to be spoken
+03ae90f8	Measures loudness (EBU R128) and adjusts volume to the target, without exceeding −1 dBFS peak
+03bb166f	Auto ducking
+03ef44a2	The model file '{0}' declared in the manifest is not in the package.
+041295fb	Unknown animation preset: '{0}'.
+0466381b	Bold
+049d36d6	Anchor point
+04c43e66	Mask threshold
+04f9f0a7	Appearance
+05009c10	Projects
+05104eb4	Transitions
+0542a483	Enter width and height in pixels.
+054fae56	System information
+0550d3b7	Encoder
+05688f74	The clip needs at least two frames for motion analysis.
+05791d4c	Audio
+058fcb4f	Memory for frames:
+0596a7f2	Edit on monitor
+05a9f4b2	Track "{0}" is locked.
+05d6e3fc	Hero
+05dcc06b	Toggle light/dark theme
+05e2db2f	Chipmunk
+06071cd7	Duck under speech
+06212f7a	Stabilization
+064a2689	The file is damaged and could not be decoded.
+065c4b73	Add marker
+0661b8e2	Background media
+06789515	Clean edge color
+0685b0d0	Parametric equalizer: bass, adjustable mids, treble and low cut.
+06caa2d8	The files were generated, but could not be imported: 
+073f2136	Below 1×, creates in-between frames following the motion (smoother than blending; slower to process)
+0758c00e	Default
+076c68a9	Transition
+0783a361	Invalid opacity in a clip on track '{0}'.
+078f7908	Generate editing proxy (540p)
+0794ef86	Open the subtitle editor
+07c62c93	Import media
+07c8faa0	Installed by the user (.medmodel package)
+07cf1cc3	Track {0}
+07e3fd12	Show the mouse cursor
+07f1878b	Delete template "{0}"?
+08085e15	Animation
+0837686d	Difference
+083815b9	Iris color
+0838227e	Package media
+084700c8	{0} subtitles generated. Review the text in Tools › Subtitle editor.
+0848bd4e	Maximum width
+08b9fad3	Apply style to {0} subtitles
+08dc5795	Memory of {0} (recommended minimum: 16 GB): long or 4K projects may be slow, and the preview keeps fewer frames.
+092b9ccf	Maximize
+09456467	There are no subtitles on the timeline.
+094ce26d	Hard black and white, with deep shadows.
+09b0cfc0	Compatible models will use the GPU (DirectML), with automatic fallback to the CPU.
+09b3be7d	System information…
+09c7eebb	Makeup gain
+09de0c0a	Export completed
+0a066496	Text color
+0a23d300	installed on another computer without internet via "Install package…".
+0a8c017b	 (installed alongside)
+0aa12720	Dependencies
+0ab88c87	Keeps the voice natural when speeding up or slowing down the clip
+0abb8248	FLAC (lossless)
+0ad16ce4	Area size
+0ad79817	Do you want to recover it now? If you choose no, the copy stays saved and is offered again next time.
+0b4a9d2c	the 'packageFormat' field must be 1 or greater.
+0ba0cb9d	Add track
+0bcac467	Save project as
+0bdc4e3a	Color tools
+0be8593b	Measuring loudness…
+0c0043fb	Windows has no text-to-speech voices installed.
+0c0bbf4d	R {0}
+0c22d156	Import a song (or a video with sound) into the library before using the visualizer.
+0c29e643	The file is not a valid Meu Editor de Vídeo project or is damaged:\n{0}
+0c7cb81d	No beat falls within the selected clips.
+0ca0a504	Ready-made looks, lashes, eyeshadow, eyeliner, eyebrows, lipstick, blush, contour, highlights, eye color and freckles
+0cbf53af	No limitations found.
+0ccce9d9	The limit cannot be negative.
+0ced23a0	Manage AI models
+0d023eef	Presentations
+0d466a9a	No beat falls within the video clips.
+0d4a67f8	Align text
+0d4c8b58	Beauty
+0d93a0a8	Not enough memory to continue the export. Close other programs or reduce the resolution and try again.
+0d9e3700	Background color
+0da0de24	Unnamed
+0da83999	1080 × 1080 · 30 FPS · square 1:1
+0dbd11e2	Manage models…
+0dd41921	Interval
+0de5a654	This Windows does not have the voice service (SAPI) available.
+0df1ab9f	Blend mode
+0dfff1df	Text to speech
+0e37130c	Zoom in
+0e66ef4d	Separates the person from the background with a local segmentation model and makes the background transparent, colored, blurred or replaced by another image/video (RF102–RF109).
+0e6dd87b	Other…
+0e733e44	Transparent
+0e756f9c	Manual contents
+0e7b405a	Install all
+0e7b59f5	Under-eye bags
+0e873426	Subtitles (AI) · 
+0e96564b	Project (*.med)|*.med
+0ed26265	Frame with a size different from the encoder.
+0ed39f0c	Could not read the image.
+0f2bd88e	Close
+0f4fda81	The file is not a valid .cube LUT.
+0f648cfe	Select two audio clips of the same event (Ctrl+click). The one on the upper track stays put; the other is moved.
+0f66a1e1	This pack has no documentation.
+0f823152	Drop shadow
+0f9df0fd	Hide track
+0fe4dd3c	Volume reduced in {0} {1}
+0ff11311	Rectangle
+101cbd6c	Delete and _close gap
+104056ac	No permission to access:\n{0}
+10825006	head
+109708c5	Color in hexadecimal: #RRGGBB or #AARRGGBB (AA = opacity, 00 transparent to FF opaque)
+1098b2ba	Audio must be mono, stereo or 5.1.
+10c36c9b	Nonexistent job.
+10dcbba1	Reorder audio effects
+10e15be5	Free memory now: {0}.
+111fe10c	Teal
+112917dc	Retouch: beauty
+118cbbe7	Blurred background
+11a76f48	The model catalog is malformed: {0}
+11cdc5f9	Transition smoothness
+11deac2c	Reorder effects
+1212c7f2	Reset {0}
+12172482	Set all options manually
+127bcf16	The file has no subtitles to import.
+129a4490	Finds the beats of the selected music to mark the timeline or cut the videos to the rhythm.
+12b79a73	White balance
+12e36b26	No speech recognized in the clip.
+12e43c54	Background (AI)
+130205e9	The model source responded with error {0}.
+1305406c	Source
+1327273b	No effects. Effects combine in list order; use the arrows to reorder.
+133b5561	Move {0} clips
+139fd95e	Delete proxy
+13affe77	Multicam: camera {0}
+13d33b3b	{0} video, {1} audio, {2} subtitle
+142c1048	No audio
+14382145	None (static mask)
+143d7159	Not detected
+145f6546	Cancel analysis
+14770a87	_Open…
+14827c86	Interpolation: {0}
+1489b76a	Undoes the split at the playhead (click the ruler over a cut)
+14d3347b	Cannot package the project: media "{0}" was not found. Locate it before saving.
+150487bd	⧉  Compound clip
+15101329	Enable/disable clip
+15116ba3	Version
+152bf9ec	Video bitrate (kbps)
+15339509	 · luminance
+1539c27b	no speech
+1577f23f	Multicam: camera 1
+15836e65	Not checked yet.
+15b49896	Track solo
+15c60c96	Browse exports folder
+15f36941	There is already a subtitle at the playhead. Move the playhead to a free space.
+1613c0b6	Background blur
+16202f97	Create _backup
+16257b8e	Downloading… {0} of {1}
+16877631	Esc or F11 to exit · Space plays/pauses
+16a2eed2	Analyzing the sequence…
+16c49152	Custom export
+16deab74	Beat sensitivity
+172b8b49	Your text here
+175f9366	About {0} of free disk space is needed 
+1761779d	Go to subtitle
+176f6526	Camera _2 from playhead
+178a4311	Contents
+178e7d0d	Pixelate
+179e051c	Warm
+18174d62	Enter a whole number between 1 and 100.
+1827b2f4	540p editing proxy (used only in preview)
+183c14a7	Unknown effect: {0}
+185a199f	No encoder available for this codec.
+1875203b	Yellow
+1880b1b3	Time: {0}
+1885c8a7	My items
+189406ff	Redo (Ctrl+Y)
+18b1ed4f	Models run only on this computer. No file, audio or video is sent to the internet; it is only used to download models when you ask, in "Download models…".
+18d61fa3	Show/hide adjustments
+18e0b11a	Media
+192d2b9f	The model manifest is invalid: {0}
+195c60bb	Audio
+196624f8	Height
+19a414f6	Remove media
+1a31c2cb	Gray
+1a339743	Could not write the subtitles to "{0}": {1}
+1a9c2cc2	Scene {0}
+1aa0b2d7	Person
+1ab28fa2	Could not delete and join: on track "{0}", a clip occupies part of the removed segment. Use "Delete and close the gap".
+1aebdf67	Could not save the project to:\n{0}\nThe previous file was preserved.
+1af961a8	 (copy)
+1b3c8d48	Export video
+1b5b305a	Available on this computer: 
+1b6f8069	Motion blur
+1b719fd0	Invalid format version: '{0}'.
+1b907390	Separating the voice from other sounds…
+1bc58133	This clip is a freeze frame.
+1bc887aa	Repeats the segment of the selected clips or, with no selection, the whole sequence
+1bdb4add	Font
+1bee19fb	Small vertical video, split into files of up to 60 seconds.
+1bf9f5bf	R{0}
+1bfac570	The model identifier is invalid ('{0}'): use 2 to 64 lowercase characters, digits, '.', '_' or '-', starting with a letter or digit.
+1c163cbc	Image transitions only apply to visual tracks.
+1c50785c	Old telephone or radio sound (narrow band).
+1c5236be	Treble frequency
+1c89b0ff	{0} media packaged in:\n{1}
+1cbafdcf	Robot
+1cc5806d	3D (perspective)
+1ce084c5	Spin
+1cf38b1a	Corrects the distortion of wide-angle and action-camera lenses (barrel) or telephoto lenses (pincushion).
+1cf81317	The voice enhancement model is not installed.
+1d1b1318	Frame rate
+1d546d89	Could not write the package: 
+1d777006	Video _zoom level
+1d8cd1d1	Camera 1
+1da54087	Incomplete segment: {0}
+1dbd6c98	Tracks
+1dd99ff6	Remove background with AI
+1e584c73	Saves the current parameters to the selected template
+1e5e1bb5	Motion tracking
+1e60492a	Camera tracking: {0}
+1e866939	Enhances detail (unsharp mask).
+1eacd2c6	Select a clip on the timeline to use the artificial intelligence features (processed on this computer).
+1eb3d8b3	Subtitle editor
+1ecb28b9	Stop recording before closing.
+1edad40a	Track the body
+1f2a3e07	The downloaded file does not match the catalog SHA-256 and was discarded.
+1fc7eefa	Rename marker
+1fd93748	Camera _4 from playhead
+1fe483d6	Camera 3
+1fe81875	Fill color
+2000a3e6	1 clip selected
+20069d00	Remove transition
+200f67c8	Save title
+201b0183	The project integrity check failed (internal file "{0}" differs from expected). 
+203b9502	Text color: {0}
+2044b4f3	Enhance image (AI)
+20692ba7	Saturated colors and more contrast.
+2069ecd0	Invalid file name for '{0}'.
+208d6759	Remove from project
+20cd12dd	Type the text to be spoken.
+20defe23	Red · offset
+20f6693f	Subtitle start
+2100e459	About Meu Editor de Vídeo…
+21049745	Restore all
+212b6b7b	Opacity
+2130a3b5	General
+21538449	Reset curve
+21bed0ea	Size
+21c8d0d0	Export progress
+21dd9981	Play normally
+21fcc6cd	Installation
+22046fdc	Intensity
+2237b88f	Color
+223d4815	Remove subtitle
+2252ad0a	{0} — {1} free of {2}
+226ba415	Invalid value on LUT line {0}.
+226bb3a9	_Record screen, webcam and microphone…
+23235a80	A project with this name already exists in this folder.
+232914b0	Enable frame interpolation
+233b170f	Save as new…
+233d94a9	Track not found.
+2350fda6	|Videos|{0}|Audio|{1}|Images and GIFs|{2}|All files|*.*
+235669a8	Add effect
+2371413f	Incompatible file.
+23cfedf4	New name in the library (the original file is not changed):
+23f7cd84	Shrink/expand edge
+241021c5	Alignment
+242f8a3b	Follow
+24461b9c	Select at least two video or image clips.
+244b2e88	Trim clip end
+2483bc5d	Smooths the grain of low-light recordings while preserving edges.
+250084d8	Project template
+25065ec1	Video track
+250e2c1d	LUT line {0} should have 3 values.
+250f78f1	Detected hardware
+2525f3c6	Quality 
+252c4d41	Slide right
+2534315e	Keep pitch
+253acf99	Failed
+2562cdf7	There is nothing to export: the sequence (or the chosen range) is empty.
+25796500	Speech bubble
+258f9890	Enter a number of seconds between 0.1 and 600, for example 2 or 1.5.
+25982bec	Rotate 90 degrees right
+25c2528e	Enable clip
+26238b0f	Bullet
+264262f8	Multicam needs video clips on at least two video tracks at the playhead.
+264350ed	**Version:** 
+267f7232	The title is corrupted or from an incompatible version.
+268bb9fe	Fade in and out
+268c417e	Seconds to shift
+26b772fe	Cannot export: the media below were not found. Locate them and try again.\n• 
+26d01672	There are no video or image clips playing along with this music.
+2704d2c1	Analyze media
+2746b738	Timeline layout
+277d0a64	Bars
+27852896	M_ulticam
+2791248f	Track
+2799ee04	The narration was generated, but could not be imported: 
+284652b8	Slow motion by interpolation (optical flow)
+28684e32	Line alignment; when left-aligned, X position is the block's left edge
+288f2e4c	Destination folder
+289477e3	Remove segments
+28b66102	File not found
+28c12b90	Writing the file
+28c195e3	About Meu Editor de Vídeo
+28c83cdd	Clips cut on the beats ({0} beats).
+28cee05d	The model catalog is malformed: 
+292f20ee	Export
+294088f9	Reframe 360°
+298eb9ed	In transition
+29926e61	In use: {0} of {1}
+29adb39c	Subtitles · 
+29cd5809	The project needs a name.
+2a26d4b1	Noise reduction
+2a2d375c	Remove track
+2a2dd579	install on another computer without internet.
+2a3a147a	Static mask
+2a8f3af4	Import vector graphics
+2a982144	Settings…
+2aacdb1b	Model license not found.
+2ab756a6	to download AI models when you ask, in Tools › AI Models › Download models.
+2abf9dcd	Split the clip at each scene
+2ac18b26	Save as _template…
+2adb3f6d	'{0}' depends on '{1}', which is not in the catalog.
+2b0c5a91	Import image _sequence…
+2b0f40dc	9:16 vertical video for Shorts.
+2b2b4ad0	Orange
+2b3f02df	Render _queue…
+2b49d5a8	Disable smoothed slow motion
+2b6ce560	Select a compound clip.
+2b72b31c	Montage
+2b8a0ae1	Hexagon
+2b8a2ca2	Could not read the file: {0}
+2b8b9582	A project with this name already exists in this folder:\n{0}
+2bb2d843	Privacy
+2bbefc50	Timeline
+2be7b894	3 columns
+2bf3bcd8	{0} model(s) installed in {1:0} s. The corresponding AI features are now available.
+2bfe28fe	Noise-free audio on a new track{0}
+2c0296cc	open file
+2c87774b	\n\n| Action | Shortcut |\n|---|---|\n
+2cb9e9fc	Add at playhead
+2d15da41	Adjust {0}: {1}
+2d222ad0	Overlapping clips on track '{0}'.
+2d3e2cdb	The file already exists:\n{0}\n\nDo you want to replace it?
+2d450a5f	Graphics card
+2d48ee32	Select at least two clips to group.
+2d5cc50b	Color presets
+2d66dba8	Intact (SHA-256 matches)
+2df5e7ae	Codec "{0}" is not supported.
+2df64e60	Project "{0}" was recovered from the autosave of {1}.\n\n
+2e273755	Color mask
+2e32a32c	Preset without builder: '{0}'.
+2e3c4535	Open packs folder
+2e4e5331	Analysis progress
+2e57fd1e	The project name cannot be empty.
+2e7c388d	Film grain.
+2e822378	New background
+2e92d7f2	Duplicate identifier in {0}: {1}.
+2eeaa206	Render in background
+2eecd702	The name cannot contain the characters \\ / : * ? " < > |
+2eed6249	Save the new project as
+2f3d9b7b	_Default
+2f6412b8	Star
+2fbc33c0	The media is already part of the project.
+300aa066	finish file
+3010760c	All screens
+3012f1c0	Default projects folder
+30239564	Flip horizontally
+30752705	Generate subtitles
+3076a998	Stickers
+3095ce94	Add _adjustment layer
+30abc330	Enter the video bitrate in kbps.
+30ae5c5b	1 scene
+30d1d13a	Zoom in appearance
+30df7956	Normalize loudness
+30eed553	Disable clip
+313aad8d	Not generated (recommended for this resolution)
+3143f1d7	Narration - {0}.wav
+3159bb96	Invalid LUT
+31da6402	The license file '{0}' declared in the manifest is not in the package.
+31f18c36	Aged tone.
+31fad865	Basic performance: computer below the minimum configuration; preview uses reduced resolution.
+3257ba09	Turns a 360° (equirectangular) video into a regular view: choose where the camera looks and the field of view. Animate with keyframes to move the camera.
+325dfc37	Start
+327771fc	4:5 video for the Instagram feed.
+328503cc	Encoder {0} failed; {1} was used.
+32a0cf03	Speech language
+32adf98e	\n| Item | Value |\n|---|---|\n
+330a4e5f	Echo
+330b2927	No segment to remove.
+33207c67	Could not start recording.
+332a87ef	Apply transition
+333e7ea3	Import SRT or VTT subtitles
+33c23156	Select a video or image clip on the timeline.
+33efa939	Crop
+3425d10a	Recordings
+348e5d7d	Default layout
+3493d15f	Packs bring stickers (Graphic elements), titles (Texts) and project templates (File › New from template). 
+34b0d211	1080 × 1350 · 30 FPS · social media
+34b9998f	The export settings are invalid:\n• {0}
+34f565db	Missing media
+350724c7	AI models…
+350dbf88	Audio codec
+352e1bb6	Use proxies in preview (large videos become lighter; export always uses the original)
+3533a02b	Compare before and after
+354b7cc2	The model catalog was not found in the app folder.
+35e011ce	Play (Space)
+35f42480	Search in folder
+3602fb73	Set category…
+3632e2c1	Applies a color table in .cube format.
+3681e640	Target size in MB
+369101e1	Show the edit on the monitor
+369cefdf	Wipe up
+36c23353	Preset animation
+36cf41bb	Blur
+36f71ab3	To sync, the clip would have to start before the timeline start. Move the reference away and try again.
+36f8acb2	to download and package the models, but there is {0}.
+37106c1d	Open logs folder
+3791f5fd	There is not enough disk space to complete the export in:\n{0}\n
+379c2854	Recording
+37a0a489	Reset transform
+37b25c10	Audio encoder "{0}" missing.
+37b584ab	Position on the timeline
+37f2fd07	Other speed
+3854d62f	Choose…
+3861a24e	Clip
+3868d284	Type
+387a32d5	Frame interpolation
+387e968c	Constant quality
+38822812	Follow the object's scale
+3883d477	Recording did not start. 
+388cf37f	The previous file was preserved.
+38a184a5	\nTags: {0}
+38d4657e	Add {0} markers
+38e9c65b	No person found in the clip.
+38ee087e	Finds the face in each frame and blurs, pixelates or covers it with a bar (Face Mesh V2 model)
+3926721b	Audio channels
+3933da5c	Speed must be between 0.1× and 16×.
+39406071	Grading by range: shadows (lift), midtones (gamma) and highlights (gain).
+398dbf76	Redo: {0} (Ctrl+Y)
+398f4b60	Project: {0} × {1}, {2:0.###} FPS · duration {3}
+399810b4	Custom
+39aa7e5f	Microphone
+39dcf1cb	Copy
+3a04898a	Apply
+3a0df3c5	Fill the frame
+3a386c75	Motion analysis
+3a9fc0ce	Small horizontal video to send in chats, limited to about 16 MB.
+3ac65040	Not saved yet
+3ad25f2d	Screen to record
+3ae31515	File and editing
+3b46fb29	Threshold
+3b4e5a78	Encoder "{0}" missing.
+3b76efd7	Mask follows {0}
+3b97a221	No hardware video encoder: export uses the processor and is slower.
+3ba121ec	Could not use the chosen folder: {0}
+3bc02403	Masks are available for videos, images and graphic elements.
+3bc8d46b	write audio
+3be475e0	Select a video or image clip to apply the crop.
+3bf6fd57	Track person with AI
+3bfabf36	Follow scale
+3c15d740	Edit mask on monitor
+3c40acb1	|Videos|
+3c4dcce4	Audio mixer
+3c5843cd	Delete clips
+3c64e4a7	Makeup
+3c994d1d	Track motion ({0} frames)
+3cb1e0d2	Invert
+3cbfc485	Packs
+3ccc32a1	Forward 1 second
+3cf0f322	Automatically save a recovery copy
+3d0d217b	Height in pixels
+3d15e61f	Cancelled
+3d1dd24d	Restore the monitor
+3d237e76	Aspect ratio
+3d345c85	Subtitle text
+3d407cd9	Feather edges
+3d6450e5	Rendering
+3d998840	Add freeform mask
+3d9ce1b0	Project recovered
+3deb3228	Non-animatable property: {0}
+3e0eae00	Change voice
+3e3a300d	Follow {0}
+3e403e71	The clip has no audio.
+3e43a712	Equalizer
+3e44a0e4	Select two audio clips of the same event (e.g. camera and recorder). The one on the upper track stays put; the other is moved.
+3e99f0eb	The project must be saved to become a template. Save now?
+3ea09c4a	SVG vector graphic
+3ea11abe	Mark the object on the monitor (drag the region) and click Track. Masks and other elements can follow it.
+3ea47a2f	no people
+3eb96537	Follow motion
+3ec071bd	No dedicated graphics card: effects and AI are slower and the preview uses reduced resolution.
+3ec781fc	Import subtitles (SRT/VTT)…
+3ee84c6e	Effects track
+3f2796ef	App infrastructure
+3f37c218	Import progress
+3f3a9f9e	Graphics
+3f8b3ca7	Add {0} keyframe at this moment
+3fba8694	Keyframe interpolation
+3fc5f90b	Minimize
+3fee37c3	Full HD horizontal video for YouTube. Keeps the project frame rate.
+3fef6833	the 'sizeBytes' field cannot be negative.
+400d96d0	Could not read the first frame.
+40564208	1920 × 1080 · 30 FPS · horizontal video 16:9
+40598e1c	Green
+407a3e87	Select the clips for the compound clip.
+40834843	Recording imported into the library (Recordings category).
+40935722	Zoom out (Ctrl+−)
+40cdbb72	Slides from the right side to the original position.
+4154f567	Lipstick color
+416da133	The packages were already downloaded before; nothing will be downloaded.
+41a07328	The file is damaged or incomplete and could not be read.
+422fed39	Clip volume
+42773e53	Release
+4286721c	This version opens projects up to format {0}. Update Meu Editor de Vídeo.
+4290938e	Custom
+429ef04f	Completed ({0} files)
+42e0bd2b	Layout _mode
+42fccac8	Unlink audio and video
+43148e31	The sequence images could not be read.
+432f6735	Cache usage
+433344e4	Timeline zoom
+438effd7	Processor
+439a14b3	Rotate 90° ↺
+439ba23f	3D LUT (.cube)
+43d72881	Enable or disable clip
+43fccb1b	Matches this clip's color to another's (mean and contrast per channel). Use "Match color with…" in the Color tab.
+4465a37d	Grainy
+4479a267	Track the head
+44b631ff	Subtitle file next to the video
+44d0ccfb	1:1 (square)
+45152ae6	Video bitrate must be between 100 kbps and 500 Mbps.
+451fd00a	Remove speed curve
+453b0ca2	Image sequence
+455fbf86	Reframe
+45843491	Checking and installing the package…
+45f182aa	Preview
+460f299c	This model comes with the app and cannot be removed.
+4619e6f0	Next keyframe
+4641ce70	Check that the camera and microphone are not in use by another program.
+464f1484	Add to timeline
+465c8cc9	{0} clips selected
+46757bac	Temperature
+46a5f1fa	Indigo
+46d1e868	Play in reverse
+46e58e97	Pinkish
+46fabbb3	Import SVG vector graphic
+47076b85	Edit text
+4762edfd	format {0}
+476362c1	The package contains an invalid file path ('{0}'). Installation was cancelled.
+47d0ed00	Apply to selected clip
+4838bdb7	Add graphic element
+4916a7fb	Gaussian blur.
+494a569b	Speech recognition (automatic subtitles)
+496a53a0	None
+496b2da1	Distortion
+4990e6de	Could not read the documentation.
+49a11f80	Time ruler
+49b2426b	Smoothed slow motion
+49e49399	Decoder not available for "{0}".
+4a091d4d	Could not import: 
+4a41756b	Subtitle editor…
+4a7bc882	Add credits
+4aa32342	Backup created:\n{0}
+4ac612f8	unavailable
+4aca7f2a	(none)
+4b01bca3	Rename…
+4b26f857	The F10 key is in use by another program; close it and try again.
+4b277df4	Remove mask
+4b845e0a	Title name
+4ba40cf2	Reduce noise (AI)
+4ba77551	Reducing noise…
+4bad4af2	Choose the destination folder.
+4bd5688d	Enter the audio bitrate in kbps.
+4c08a5d5	Title
+4c124771	Remove italic
+4c17b0b8	Voice and ambience on separate tracks{0}
+4c2d09e3	Could not create the markers.
+4c65fff4	Voice (AI)
+4c7877d7	Project
+4c7d57aa	Subtitles
+4ca2decc	Previous cut
+4cbd0254	not detected
+4cc178d3	Ruler
+4cd84002	Installation is in progress. Cancel and close?
+4cd930f2	Continue without the media
+4cf809fc	Incompatible sequence.
+4d695638	The file is not a valid package (.medpack or .zip).
+4d7672c3	Subtitle file
+4d88d3e0	File generated:\n{0}
+4d8d51de	Rate control
+4da3e4a0	Corrupted or missing — reinstall the pack
+4da4d95e	Location
+4dc131b3	File name
+4dd2a527	Applied audio effects
+4e478494	Analyzing camera motion…
+4e7b2c21	|Images and GIFs|{0}|All files|*.*
+4e7db727	Content packs
+4eb0e167	Keep pitch at speed
+4ec416b1	ONNX Runtime with DirectML
+4ee930b2	1:1 — square
+4f10a1b7	Cool
+4f30b1f8	Shortcuts
+4f323156	The person segmentation model is not installed.
+4f3d2b8c	Not generated
+4f3fc79f	The image sequence "{0}" cannot be packaged into the project yet. Keep media linked.
+4f45a05b	Negative
+4f4ef64d	_Locate missing media…
+4f753a42	Default exports folder
+4f89c7f2	No beat found. Increase the sensitivity.
+4f8f39dd	Last check: {0:g}
+4fa1f152	Save as
+4ffae93b	Speed…
+5024d904	Width and height must be even numbers (required by video encoders).
+503b71a5	Version {0}
+5061f61d	Layout mode
+507f50c1	Could not export
+50869006	Name
+508943cb	Track pan
+5093fe1d	No segment to multiplex.
+509f67e8	Checking SHA-256…
+50daaf94	Pitch follows speed
+50fc99c9	Save _as…
+51180d5d	Return the compound clip to normal speed before undoing it.
+5118fb2b	Instead of cropping the layer, the mask limits color correction and effects to its area
+518ce4d1	Bars that dance to the sound of a library song (choose the media under Source).
+518e4791	Folder
+51948b7a	Remove underline
+51af8632	Duplicate template
+51f5a88c	AI models: none installed
+52157c00	Content pack (*.medpack)|*.medpack
+5224efb1	Move mask up
+5261d1d0	Darkens the frame edges.
+5281dcd3	The package does not contain manifest.json at the root.
+52db6cdf	Next frame
+52f0ddaf	Yellowish, with low contrast.
+52f5eb2e	Medium performance: computer at the minimum configuration.
+52f6d189	Frame rate must be between 1 and 240 FPS.
+5346e9c6	Tracks
+53a6ae34	Remove silences
+53d5198d	Blinds
+540143aa	There is no other video or image clip to use as a reference.
+541d9e89	This information stays on this computer only. Copy it if you need to ask for help.
+54276aa0	Category
+546462a5	First Last\nRole or description
+54699d00	No long silence between speech.
+54b991fe	Color preset: {0}
+54bd8b93	Insert processed audio
+54d5ecd2	{0} conflicting combination(s): fix before saving.
+54d95a50	Add audio effect
+54d9d017	Clear cache
+54f63e8c	 and clip split
+54f7a61f	Mask editing on monitor
+55a407f1	Text (Enter breaks the line)
+55c3143d	Capture frame (PNG)
+5627b3ae	Media unavailable
+56564f14	Queued
+566ebd31	Type the text. The narration is generated with the voices installed in Windows (no internet) and is placed at the playhead, on a free audio track.
+56ec9cd7	Number of bars
+56f78534	Search…
+57224ac7	Generating .medmodel package…
+5741bd41	Color conversion not supported for this video.
+5761280e	{0}|*{1}|All files|*.*
+576a2e8c	Importing {0} of {1}
+57a73ede	Purple
+57d63eae	PNG image (*.png)|*.png|JPEG image (*.jpg)|*.jpg
+57e96679	Rise from bottom
+57ff5ff1	PCM (uncompressed)
+58114811	100% = original volume. ◇ creates a volume keyframe at the playhead (e.g. lower the music during speech).
+581b58f9	Models will use only the CPU.
+581c5f1d	3 strips
+5821979a	Seconds; negative brings subtitles earlier
+58397e06	Transparency of the removed background
+585cd8ea	Vibrance
+587f165b	Model package (*.medmodel)|*.medmodel
+58b46f11	● Recording  {0:hh\\:mm\\:ss}   (press F10 or click Stop to finish)
+58eda3a6	Bluish shadows and orange highlights (teal & orange).
+59040892	Enter a name for the media.
+590fb42f	Copied to clipboard.
+592f4cc0	Do you want to save the changes to "{0}"?
+59347891	Ready (540p, used in preview)
+5987374c	Pulse
+59a37909	Text-to-speech failed: {0}
+59d5e221	Invalid speed
+59edc3f0	Remove from queue
+59f670ec	Clip with negative in point on track '{0}'.
+5a086003	Delete and join
+5a21f8f7	Sample rate
+5aac92de	_New project…
+5ad64b57	GPU compatible
+5aecb57a	Use the format HH:MM:SS:FF (hours, minutes, seconds and frame).
+5af9aaf9	Recording failed. 
+5b078c47	Rename track
+5b24e3ed	Monitor volume
+5b2beec5	Webcam position
+5b35d758	The files were generated, but could not be imported: {0}
+5b46cdc4	_Package media into the project…
+5b54f4d2	Unmute track "{0}"
+5b8c54fd	Music that moves the bars (it must be on the timeline):
+5ba6351b	◇ Shape key
+5c08e459	Auto reframe
+5c59554f	Audio bitrate must be between 32 and 640 kbps.
+5c65e5d0	yes (DirectML), with fallback to CPU
+5c66b8e9	Measured: {0}
+5c8c4760	New track
+5cc33dc3	Vertical video
+5d537a71	There are no subtitles in the sequence; the subtitle file was not created.
+5d56e7ff	Disable shadow
+5d6a22d7	Width
+5d8883aa	Generating narration…
+5d96bdfe	Enter from the right
+5da2091e	Mute track
+5db649fb	The recovery copy does not replace the project file; it is offered when opening the app after an unexpected shutdown.
+5de9e781	Mask blending
+5dfeb2fb	Unknown features will be ignored and may be lost when saving.
+5e1b8a06	The end must be after the start.
+5e295043	Select an audio clip (or a video with linked audio) on the timeline to adjust volume, effects and loudness.
+5e2fa470	There is not enough disk space to save the project. Free up space and try again. 
+5e82d5ac	Invalid speed.
+5e954ab7	The project has no sequence.
+5eae0cf4	Images|{0}
+5eb230ec	No clip under the playhead to split.
+5edf5e79	Color conversion not supported by the encoder.
+5ee1a93f	Configuration problems
+5eeb522d	The file for '{0}' does not match the catalog (different size or SHA-256).
+5eed6dcf	Inserts the playhead frame held for a few seconds
+5efcf38a	Clip too short
+5f1f5525	There is no compatible track for "{0}".
+5f411070	Slow down
+5f4e661e	The clip cannot be longer than the media.
+5fc11996	Content
+5fee64c3	Save changes to template
+6005731b	Disk cache
+6005ab40	Compute masks in the background
+6011bf83	Virtual makeup applied over the face landmark mesh (local model): ready-made looks or each item with color and intensity.
+60165ffd	User manual — Meu Editor de Vídeo
+602f8c0e	Narration
+60329be2	Add text at playhead
+60470949	Insert title
+60610864	Export subtitles (SRT/VTT)…
+60893c2c	The manifest identifier does not match the project's.
+608b33b7	Available models
+60cf6b61	Unavailable
+60fbc8a7	Rises from the bottom to the original position.
+61154f2a	Subtitle
+612a3040	☰  Adjustment layer
+613006e0	Local artificial intelligence
+6134d3a8	Third-party components
+616d51ec	Camera _1 from playhead
+61889fa9	Sunset tones.
+61af0557	Default quality:
+61cd11be	Freeze frame
+61fc7586	Top right corner
+620bf6a8	Installed models
+623e74ba	No hardware video decoding: use proxies for high-resolution videos.
+623f2504	Select an audio clip (or a video with linked audio) on the timeline.
+62609ef1	Tracking to follow
+626f3120	Subtitles (*.srt;*.vtt)|*.srt;*.vtt|SubRip (*.srt)|*.srt|WebVTT (*.vtt)|*.vtt
+6295da7b	Invalid LUT size on line {0}.
+62a2eccd	Quality automatically reduced to {0}: the computer could not keep up with playback.
+62b10e70	GPU acceleration
+62c95076	Details
+62d6cb2e	Export subtitles
+62ec5467	Unhandled exception in the interface.
+6304c501	Resume
+63257e4f	Computing SHA-256 hash…
+633366cb	The clip is not a text.
+635c4024	Use GPU
+638d754c	Frame {0:N0} of {1:N0}
+63b910bf	The project contains inconsistent data:\n• {0}
+63dc024a	Remove pack
+63e2bbaf	Continue
+6432ba75	Scale
+64678705	Preset animations
+6483cc8f	Hue
+64d1d6b0	Minimum duration
+64dee0dc	A freeze frame has no speed curve.
+64e1842b	Settings sections
+651a7b19	Unavailable — install in "Download models…"
+652b779e	Internet and social media
+654fc003	No templates installed. Save a project with Project › Save as template or install a pack in Tools › Content packs.
+65599055	Pixel format
+659a054f	Remove category
+659f28ca	Anchor text
+65a38c35	The following will be installed, in this order:\n{0}\n\n{1}\nNone of your data is sent. Continue?
+65bf658b	Export transparency (alpha channel)
+65c185f6	The image was generated, but could not be imported.
+65c492ea	Models run only on this computer; nothing is sent to the internet. Manage them in Tools › AI Models.
+65d66874	Mix
+65e573ea	☰ Adjustment layer
+65ea563c	Full body
+65f7a370	Subtitle end
+663c4a55	Insert the recording into the timeline, at the playhead
+66846785	Installed
+66ca46a8	_Text to speech…
+66f394a3	Yes (DirectML)
+67075420	GPU encoding
+6711c37f	Changes the project size to that of the cropped area (in original media pixels). The export comes out with these dimensions.
+672ff2e8	End
+674159e7	Draw subtitles onto the video (burned-in subtitles)
+6741b8b5	Red
+676c833d	Highlight bar
+67a83907	SVG vector graphics
+67b47953	Track
+67c013aa	Package not found.
+67cc3632	Link audio and video
+680417c6	Lifted blacks and soft colors, old film look.
+68059633	Beauty (skin, face, eyes, nose, mouth and eyebrows) and virtual makeup. Uses the face landmark model (AI tab › Models › Face Mesh V2).
+680ebc8f	Subtitles · {0}
+68247c27	Marker not found.
+68686e27	The speech detection model is not installed.
+68707ab4	Downloaded from
+68714cde	Tracking, stabilization and masks
+68b34599	Limit each file size to (MB):
+68dbd634	The compound clip's sequence does not exist.
+68fa9b14	Bottom right corner
+6913e0b0	Open exported file
+695e820e	Fit to window
+6969fe0b	Could not use "{0}": {1}
+697131ea	Identifier
+698a73c2	Italic
+69bd325e	Narration inserted ({0}
+69d920c6	Video codec
+69e07560	Cache folder
+69e0d3f0	Next cut
+69f500b7	Curves: {0}
+6a616597	Hide track "{0}"
+6a692da5	(no shortcut)
+6b00f1e9	Install packs in Tools › Content packs. Click a sticker to insert it at the playhead.
+6b104bc1	Underline
+6b1d8e2e	Voice isolation and noise reduction
+6b2787bd	Clip with negative start on track '{0}'.
+6b65694a	Cache limit
+6b90a5ae	All files|*.*
+6ba9d30c	1 media file was located.
+6beafca2	Exports folder
+6cecb49a	Duration
+6d2b0d64	|Images and GIFs|
+6d2b1ab0	The file was not found.
+6d5c031d	Add {0}
+6d895b11	8× (fast)
+6d96c2bd	Screen {0}{1}
+6dc56b9d	Select all
+6dd2c42d	To apply the crop, the clip cannot be rotated. Reset Rotation (and 3D rotation) and try again.
+6dd717af	Camera _3 from playhead
+6df3d666	Text
+6e099a28	Media "{0}" is in use on the timeline. Remove the clips first.
+6e0ac37f	Lens correction
+6e236e55	Restore template default
+6e2cb165	Check integrity
+6e903ce8	duration {0:0.000} s, expected {1:0.000} s
+6ea914ef	Reduction
+6ec59632	CPU only
+6ed8deff	Select a video, image, text or graphic element clip on the timeline to use masks, tracking and stabilization.
+6ef27c6b	Audio bitrate in kbps
+6efe6be3	Import {0} media
+6f62c475	Select at least two clips to link.
+6f812075	Invert mask
+6f940f29	Speed curve: speeds up and slows down within the clip without changing its duration. The clip's audio is muted; trimming or splitting returns to constant speed.
+6fac26ea	Install all models
+70041705	1D LUTs are not supported; use a 3D LUT (.cube).
+7019763a	Show region on the monitor
+70671217	Clip with no duration on track '{0}'.
+70bbc100	4:5 — portrait (feed)
+70dfbb51	License
+70fcce83	No file chosen
+71079f9c	The file is not a valid model package (.medmodel).
+714e03f7	; the original was muted.
+7150b8ac	Don't follow scale
+71735e7a	Generating ({0:0}%)
+71a2cb59	Select _all
+71d6e741	Green · offset
+7213da80	Lighten
+725538d9	Compound clip on track '{0}' references an invalid sequence.
+72587b60	Volume reduction during speech
+7272a053	Smooth outline
+72cac06a	Enter the maximum duration per file in seconds.
+72fddc2b	Low
+73125c38	Preset speed
+7322bd2f	Slide down
+734601b1	Completed
+735c9686	Shape
+736429b4	Cannot export: the media below were not found. Locate them and try again.\n• {0}
+73669c6a	Failed: {0}
+7368658c	Save changes
+73687237	Delete clip
+73996866	Media storage
+73a72cc8	Media
+73e1804e	Format
+742773f3	Resolution
+74449404	There is no cut to join at this point.
+74676510	Integrity
+74701190	Sample rate must be 44.1 kHz, 48 kHz or 96 kHz.
+74950218	Blush color
+74b4aba2	File format
+74c6975a	Right
+74db3158	Full Name
+74f8a58e	Reduces hiss and constant background noise (fan, air conditioning).
+75137ba5	Model file not found.
+751aa842	Noise-free (AI)
+753c5dc6	Enable {0}
+754b3f75	4 in a grid
+7565d946	Interpolation
+7577403d	Open project
+75887a79	Render in background (keep editing while exporting)
+758dcd0f	Full-screen preview
+75b6dc2a	Clock
+75bb54dc	Could not write the package: {0}
+75cd5d41	Looking for cameras and microphones…
+75e2df5e	Match color
+762ab498	Color wheels: {0}
+7677bcb8	Solo: hear only soloed tracks
+76791ad9	Reduce noise
+7688a23b	Template name:
+769f6a0a	No model: uses color comparison (less accurate)
+76b0fb6a	Settings
+76c39a8e	Lipstick
+76ed2629	Video zoom level
+772bee3a	Track motion
+7738a0c6	Multicam: camera 2
+77521d99	Range start
+7780d60c	Speed
+77918f1b	Animated GIF
+7792337a	Remove color spill
+779aaedb	The target size must be greater than zero.
+77b5da99	Dynamic compression: evens out loud and quiet passages.
+77ba5003	No subtitle tracks. Import an SRT/VTT file or create a track.
+77cc60ba	Repeat segment
+77f2eef4	Backup
+77f7e80e	Select a clip on the timeline to edit its properties.
+77fbdf0b	Select a media item in the library to see its information.
+781f27a7	Hardware encoding
+786b4822	Undo
+78f1677d	Empty frame rate.
+791b5a92	Tolerance
+7923816a	File not found.
+79327250	Delete and _join
+79398ebe	Speed {0}
+794fd4bd	Start export
+79629b91	The project already has the size of this crop.
+7962c89c	_Content packs…
+797088f1	Speed (slow ← → fast)
+7a4e934f	Record screen
+7a6e273d	Could not read the file: 
+7a8f424d	Remove {0} keyframe at this moment
+7abe7a0c	Animation: {0}
+7ae9d418	Language
+7b1ac665	Apply the limit now
+7b659c9c	Redo
+7b8168f3	New subtitle
+7b8807a6	4:5 (portrait)
+7b9afa8b	Source
+7ba120ce	no (CPU only)
+7bacbc5a	You may use, study, modify and redistribute the program under the terms of this license; the program is distributed without warranty.
+7be26e28	Link external media
+7bf29c9b	Fit to window (Shift+Z)
+7bf604ba	Keyboard shortcuts…
+7c675143	Export template
+7c8b936e	Release from tracking
+7c911b78	Invalid duration
+7cb9296c	Not checked
+7cdb7ed8	Freckles
+7ce6ecfa	Too many redirects while downloading the model.
+7d0bb3f3	The clip has no image.
+7d1929c8	Choose where to save the project (Save as).
+7d4015d0	Unsolo track
+7d82850f	Fonts (*.ttf;*.otf;*.ttc)|*.ttf;*.otf;*.ttc
+7da0a509	Beats
+7dd3ac25	New from template
+7dde99b5	Telephone / radio
+7e0113a6	Color mask (effects only)
+7e27ac9a	 — dependency
+7e32a2d4	Mask {0}
+7e3bf162	Recording {0}.mp4
+7e3e9d65	Could not move the clip.
+7e42d8e8	The file will be larger. Do you want to continue?
+7e782e89	"{0}" was located.
+7e94ec89	Constant quality must be between 0 and 51.
+7ed4feb8	Container
+7ed5bb1c	Audio {0} cannot be used in format {1}.
+7eeaa42e	Resolution must be between {0} and {1} pixels in each dimension.
+7f0ef377	To refine the cutout, apply the Refine edges effect (Effects tab).
+7f22c681	Multicam: camera 4
+7f6e6649	Track volume
+7f716596	Out animation
+7f93841d	Subtitle style
+7f93c4ec	Encoder: {0}
+7fb47d4c	Recording failed. {0}
+7fe9e5a9	Drag the points; click to create; right-click removes
+803b8572	Press Ctrl+F to search the manual.
+803d8783	No new markers to add.
+811994bb	Speed (0.1 to 16; 1 = normal)
+81290fc5	Add marker (M)
+81411148	Free
+81682906	Minimum pause
+816f8dda	create output file
+818512fa	missing media
+8185e1c3	Outline
+81979bb4	Playback _quality
+81d7338f	Adjust {0}
+81f3bf42	Pitch
+81f5e133	Click the shortcut field and press the new key combination.
+81ff0504	Processor with {0} logical cores: export, transcription and analysis will be slower.
+820467cd	Locate "{0}"
+82048c39	 · saturation
+820e8fc1	Could not insert the processed audio.
+820eaa6a	Use
+82490d77	Looking for media
+824f6bec	Track person (AI)
+8253f604	Resume export
+826b1832	Smooth skin, fewer lines and bags; face, eye, nose, mouth and eyebrow adjustments
+8295bfb6	Save the project to keep the recovered changes.
+82b6cf63	Custom height in pixels
+82f28f3c	Applied corrections (in order)
+831374b6	Join cuts
+8317d524	Remove shape key
+831e1b98	The model file is corrupted: the size does not match the manifest.
+83229f4f	Paste
+835dc419	Texts
+837e69ec	Minimum silence duration
+8380d244	Browse destination folder
+83b2b3ad	More light, soft shadows and light colors.
+841e268c	Save selected text as title
+84644aef	Import Media
+84d0a40a	_Video
+84fb8a36	Installation progress
+8536a03a	Zoom in (Ctrl+=)
+853ecd69	Failed to decode media "{0}" during export. The file may be damaged.
+859e48c3	Forward
+85a84081	Insufficient space
+85e4ef24	no sound
+85e60104	There is already an export queued for this file.
+86156f83	The clips are already in sync.
+865599f5	How many repetitions after the clip?
+865f5b7a	Adjust tracking region
+8666ae09	Simulates the ambience of a room.
+86abe398	No media imported. Drag files or folders here or use "Import Media".
+86ae2870	Delayed repetitions of the sound.
+86f5314c	Local data
+87088714	Undo compound clip
+871aa6c3	1:1 square video for the Facebook feed.
+87628281	Sync
+876ffbf9	Thumbnails, waveforms, proxies and AI masks are kept so they are not recalculated. When the limit is exceeded, the least recently used items are deleted. Projects are never deleted.
+878a7adc	Lowers this clip's volume (for example, the music) while there is speech on the other tracks.
+87eae1d4	Follow
+881c6e33	Download models…
+8829c93e	Export transparency
+8857e42a	SAPI unavailable.
+88ae9947	Unmute track
+88b862ab	1080 × 1080 · 30 FPS · social media
+88df6d33	The speech recognition model is not installed.
+88e95c0a	{0} of {1}: {2} — {3}
+88f77287	Duplicate
+893056f0	Enter the target size in MB.
+89423cbc	Install AI model
+8970ea4a	The clipboard is in use. Try again.
+89929850	_Loop playback range
+8998ed98	Full screen (F11)
+89a4eae3	Split at playhead (S)
+89c80e34	Maximum duration per file in seconds
+89dd5401	The font was already available or the file is not a valid font.
+89ee5557	Repeat segment {0}×
+8a0ab8d5	Browse projects folder
+8a40875e	Noise-free audio on a new track
+8a6fd558	Text-to-speech failed: 
+8a86d43f	Subtitle on the subtitle track, with a dark box at the bottom of the frame.
+8a8b5ccd	Installed packs
+8ab186bd	Vertical anchor point
+8ae77c8d	Mask
+8b19518f	Delete
+8b5f9c27	Finds the face in each frame (local face landmark model) and blurs, pixelates or covers it with a bar.
+8b680f94	Snapping magnet (N)
+8b765514	Name and role in the bottom left corner, with box and highlight bar.
+8b9685fd	Nothing to insert.
+8ba35013	The number of repetitions must be between 1 and 100.
+8ba4bfdb	Download address not allowed: {0}
+8bb7142c	Hue, saturation and luminance per color range (e.g. only the blue of the sky or the green of leaves).
+8bca47f7	Mid frequency
+8bcf12dd	Locate the files so they appear correctly. You can continue without them; the parts will be marked as missing.
+8bd535e8	Reframe to {0}:{1}
+8bf6d35e	Change LUT
+8cdd8b73	An unexpected error occurred. Technical details were recorded in the log.
+8ceb5546	 · {0:0.#} frames/s
+8cf2f985	Mids
+8cf68614	Shift all subtitles
+8d25baae	Clear completed
+8d3ab4fe	fixed addresses, and checks each one's SHA-256 signature. None of your data is sent: videos, audio and projects 
+8d451aba	_Export…
+8d498979	Background box
+8db954de	Restore all default templates
+8de3ef77	Analyze and stabilize
+8e0afda7	Freeze frame duration (seconds)
+8e55a42b	To crop the video edges, use Crop in the Video tab. For another format, choose 9:16, 1:1 or 4:5.
+8e6c50c3	_Import media…
+8e7290e4	Destination
+8e8a1dd4	Install
+8ec34711	L {0}
+8f15aa6f	Nose · slim
+8f74af45	No speech detected in the clip; nothing was removed.
+8f9711cf	Default preview quality
+8f978747	Video bitrate in kbps
+8fc6b8b6	Image
+8fe35595	Remove "{0}" from the project?\n\nThe original file will not be deleted.
+90053151	The package is too large (limit of 1 GB, 200 MB per file).
+902992cd	The timeline is empty.
+90373aee	Split
+904d8590	Transition duration
+90a83863	The mask follows the tracked object in this clip
+910a780e	Library image or video used as background
+910b85d5	Rename media
+911cdb53	Audio bitrate (kbps)
+91243d08	Manage AI models…
+9127d899	The adjustment layer needs a duration.
+913d78bc	Move mask down
+9170dd96	Project information
+91993891	Tint (green/magenta)
+91a4e4d1	Marker name
+91c1307d	Applied effects
+91f4c48a	Sync by audio
+9215f215	Uninvert mask
+921a92a5	Shrinks or expands, softens and cleans the transparency edges (use after chroma key or masks).
+924d7ac0	Import subtitles
+92705f24	Left total level
+9274f120	Could not download {0} from {1}: {2} 
+92776122	AI models:
+92bea0f0	3D card flip
+92c5fc4a	Push right
+92d5ff67	Export pack
+92e5d43d	Removes the green, blue or other color background (RF112–RF118).
+9313455e	Yes
+9330387d	Track name
+93430dd7	Minimum pause without speech
+93496ca9	New subtitle track
+9353deae	Timeline horizontal scroll
+939c8811	Autosave interval
+93d2a681	**Original file:** 
+93f020e7	Purpose
+9408883f	Composition
+9417c083	Rotate 90° ↻
+941b287a	Scene
+94460ea5	Monitor volume (does not affect export)
+94532fca	Detecting beats…
+9469c655	Untitled
+947a2e03	Template "{0}" saved. Use File › New from template to start a project with it.
+94944ce3	To apply the crop, the clip cannot have position or scale keyframes. Remove them and try again.
+94ad0fd2	Video noise reduction
+94f6b18b	Pop
+9507d266	Export templates
+955c0ab4	write video
+9588387c	Multicam: camera 3
+959b655e	Magnification (0 = automatic)
+95d59946	Solid color
+95f551a3	Ambient (AI)
+95f91ae8	Meu Editor de Vídeo project (*.med)|*.med
+96171edc	Text font (system or added to the app)
+961d7e4e	Subtitles (AI) · {0}
+967bcf34	Add
+967dc3a7	High constant quality for watching on a computer.
+968025f2	{0} file(s) were already in the project and were skipped.
+9681eb86	Add a font file (.ttf, .otf) to the app
+9686fe50	the 'sha256' field must contain 64 hexadecimal characters.
+96983038	Diamond
+96ac0bc8	Create project
+96c0ff21	 · file {0} of {1}
+96de2ae3	Speed curve
+96f7d901	The credits roll from bottom to top during the whole clip: lengthen the clip to scroll more slowly.
+97031e0c	Runs on
+97099a8f	Invalid frame rate: "{0}".
+971b6d49	Move up
+9735f192	Silences
+97615d97	Face · slim
+976d01c0	Free up space and resume the export; the parts already done will be reused.
+977ee6ea	Measures camera motion across the whole clip and compensates the shake
+9793a5a3	Highlights
+97a0fa09	About
+97b6e3dd	 (color comparison).
+97c7861a	Save as template
+97ccf959	Drag the handles or the shape on the monitor
+97d1f7a4	4K project on this computer: the preview uses reduced resolution and proxies are recommended.
+982ab01b	Installed by the user
+9835016e	Webcam position on the screen
+98374ac0	Subtitle track
+9845c805	The media has no image.
+988590bb	Project reframed to {0}×{1} ({2} {3}
+9889fca2	Features: remove or replace the background, automatic subtitles, isolate voice, reduce noise, detect scenes, remove silences, track the person and enhance the image. Only "Remove background" comes installed; the other models are installed through the manager.
+98b5d173	The export settings are invalid:\n• 
+98cf9ae3	Unavailable — install the model in Tools › AI Models.
+9909c673	{0} media imported.
+993f8ca5	Export current _frame…
+993fb9a7	The maximum duration per file must be at least 1 second.
+99698ee6	Malformed JSON, unknown capability or missing required field.
+99970c27	Go to
+99978bfe	Download AI models
+99b554f5	Show track
+99c2a78a	Tracking motion…
+99df1621	Zoom: fit
+9a02a010	● not saved
+9a3f0084	Duplicate clip
+9a6e2b5f	 (limited by peak)
+9a7d2d6d	Save as new template
+9a87121f	There is not enough disk space to save the project. Free up space and try again. The previous file was preserved.
+9ab0d1ea	Color wheel
+9ab3d578	|Audio|{0}|Images and GIFs|{1}|All files|*.*
+9ac09183	Faded
+9ad24dec	Person tracked over {0} frames. Link elements in the Composition tab.
+9ad60b9d	Keyboard shortcuts
+9b19dee8	Blend mode: {0}
+9b29bed0	New format
+9b531f54	Slide up
+9b65b00b	 · {0} left
+9b7db2e8	Select a clip on the timeline and double-click an item (or use Apply).
+9b9131e8	Warning: requires {0}, but only {1} free right now.
+9b94de36	Restore default templates
+9b99805f	Available
+9ba2e998	Media not found
+9bc947e5	No
+9c0f9b45	Color wheels
+9c1e3034	Fill
+9c24e660	Background and people
+9c2ace19	Software (most compatible)
+9c34b3cd	Local technical log
+9c6cd9bb	In animation
+9c942e59	Choose LUT file
+9c9faeaf	Trim clip start
+9cc1e882	Below this level sound is considered silence
+9cd2818e	Clipping mask
+9d88a6f0	FFV1 (lossless)
+9d99fd1a	Interface structure
+9d9ef9d6	Right total level
+9db4fa74	|All files|*.*
+9dbee951	Video memory of {0} on {1} (recommended minimum: 4 GB): AI models may run on the CPU.
+9ddd13ca	The project name contains characters not allowed in file names.
+9df19278	{0} · {1} free of {2}
+9e08fe1b	{0} · {1} items
+9e27b666	open output file
+9e4809a4	The person (foreground)
+9e4f5f8a	Wipe right
+9e753333	All categories
+9e7970b6	Drops from above and bounces three times, with decreasing heights, within 1.2 s.
+9ea4187c	Text stays as it is. Everything can be undone with Ctrl+Z.
+9eb75f87	Select a text, title, credit, lower third or subtitle on the timeline. To create one, use the Texts section of the library.
+9ed52789	Save selected text as title…
+9ef688e1	Subtitle track
+9f27aa14	Shift all
+9f50ebd5	Search in folder…
+9f54018c	Text track
+9f82554b	Record
+9f8f7a58	Version 
+9f9fef77	Search for missing media in this folder (includes subfolders)
+9fbdfc69	Double-click a shape to insert it at the playhead. Adjust shape, colors and masks in the Composition tab.
+9fc16cbd	Finalizing the file…
+9ffb6e4e	Subtitles burned into the video
+a01a5fce	Open
+a01b0354	Videos
+a02d9202	Mute track "{0}"
+a053b0c0	Check your internet connection and try again; what was already downloaded is reused.
+a07187e6	Could not read the clip's frames.
+a07f22c4	Add lower third
+a0fddddc	Unknown sample rate.
+a17a83d9	Package generated by Meu Editor de Vídeo (Tools › AI Models › Download models). It can be copied and
+a1d3b0f3	Media Library
+a1dbcab3	Acceleration
+a1f0ebf7	Posterize
+a1fdc355	List of credits that scrolls up the screen during the clip.
+a22df4a4	Follows the region through the whole clip, from the frame where it was marked
+a25d0867	rectangle
+a25f7142	Unsupported file format.
+a27c1569	Lock track "{0}"
+a2917771	Element shape
+a2db4029	Top left corner
+a3037dc7	Remove
+a33c279d	The crop leaves no part of the video visible.
+a35b27c8	Save text as title…
+a38d2879	Click and press the new combination
+a3d8a6fc	Available on this computer: {0}
+a3ec6a2d	Graphic elements
+a4197e5a	Speech detection (remove silences)
+a42d035a	the document is empty.
+a42ec6eb	The clip has no crop. Adjust Left, Top, Right or Bottom in the Crop section and try again.
+a432f80d	Main sequence
+a4366291	9:16 vertical video for TikTok.
+a4484ae1	The segments cover the whole clip; nothing would remain.
+a44a7bf7	WhatsApp sharing
+a495ed65	Play / pause
+a4cfbdb9	This pack comes with the program and cannot be removed.
+a4d93982	Plays the clip (and linked audio) from end to start
+a50c4359	FFT size must be a power of 2.
+a552ddd9	Shake
+a5596e75	Choose a subtitle track.
+a559e5d2	Saved titles
+a59fbd11	◇ creates a keyframe at the playhead; with keyframes, changing the value records a new keyframe.
+a5ab3212	Template
+a5ba8caf	Processes all frames and stores the masks in the cache: playback and export become faster.
+a5d5bde3	Clip color
+a68795a7	Corners
+a689d5fe	Remove ducking
+a6d2c75c	Pan (left/right)
+a6d59bff	Enough memory ({0} free).
+a6e38409	the required field '{0}' is empty.
+a79164d7	Range end
+a80de96d	History
+a81a45dd	Curve from the keyframe at the playhead (or the previous one) to the next
+a833a2ff	Fill frame
+a83f2382	A virtual camera follows the person's head or body (local segmentation model): auto cut, shake and blurred background.
+a855e974	Playback quality
+a88536f3	Speed up
+a8986614	Install pack…
+a8bf82e2	Face (head)
+a8d89df1	SVG vector graphics (*.svg)|*.svg
+a8f519e6	Compare before/after on the monitor
+a93f5408	Model '{0}' does not exist in the catalog.
+a944c0bd	Could not import: {0}
+a9687773	Field of view
+a97a2f58	Retouch: {0}
+a9cb52c8	Vivid
+aa37929d	Open the last project on startup
+aa38493c	The background (removes the person)
+aa3a6b36	Select a text on the timeline.
+aa3ccd04	Export SRT or VTT subtitles
+aa524ea7	Videos, audio, images and projects are processed only on this computer. The internet is only used to download AI models when you ask, in Tools › AI Models › Download models.
+aa58d0db	Unlock track
+aa69e649	Color as #RRGGBB
+aa846485	Save settings
+aa919d0d	Not installed
+aaa36d27	Blend
+aaa71991	noise-free
+aaaa1558	All media will be copied into the project file (.med), which can then be taken to another computer.\n\nThe file will be larger. Do you want to continue?
+aabd2374	Locate {0} media
+aacb531f	"{0}" has no audio.
+ab3b4b5f	Inverts the colors.
+ab48d386	Scale pulse of up to +8% every half second, one cycle per second.
+ab57bf31	none (uses the processor)
+ab6ca17a	Preview resolution
+ab87641e	1080 × 1350 · 30 FPS · portrait 4:5
+ab8ecea6	Oscillates the rotation by ±5° every 0.25 s and ends at the original position.
+abd7c83a	Remove tracking
+abece812	Isolate voice (AI)
+abf8b470	1/4 resolution
+abfb4b30	Project name
+ac2cbab5	Masks
+ac483d96	Could not determine the file duration.
+ac950bd2	Change visualizer music
+acdbbcfc	Group
+ad10b62e	Quality {0}
+ad136596	Frame without dimensions.
+ad2a0c06	Invalid fraction: '{0}'.
+ad80e2c3	Heart
+ad874ae7	Pause (Space)
+ad8df3a5	Could not insert the narration into the timeline.
+adb7270d	Could not list the devices.
+ae0506ab	Rotation
+ae17790f	Curve editor
+ae212840	Auto _reframe…
+ae270ee9	unreadable file
+ae770c3a	Rotate 90 degrees left
+ae9f4b28	Restore default
+aebeadc5	Split into files of up to (seconds):
+aeccaa09	Follow the motion
+aee6ac44	Remove effect
+aef7cd5b	Save
+aef8d6e3	Select a clip
+aeff7dfe	Preview frame
+af0af913	Enter a valid project name (without the characters \\ / : * ? " < > |).
+af1b8596	Use the graphics card to decode and encode video
+af29197a	Looking for speech on the other tracks…
+af546587	The model file is corrupted: the SHA-256 hash does not match the manifest.
+afa5a4d1	Below 1×, blends neighboring frames to reduce stutter
+afb4371a	Audio track
+afe2cac2	No silence found with these settings.
+b01248cd	Scene detection
+b063a2b4	Move down
+b0bdf35c	No project open.
+b0bf526b	Blue
+b0d199f4	The file does not contain a title.
+b0db97bd	1 large and 2 small
+b0eb1a78	Install pack
+b11740b5	video
+b11e7ca5	Width (px)
+b11ed988	Bottom left corner
+b145bb85	Creates a track with the person's position in each frame (use in the Composition tab to link elements).
+b16877fc	Image track
+b18667ee	Automatic subtitles
+b1ac18dd	Clip not found.
+b1cd5de2	Encoder "{0}" failed during export.\n\nDetail: {1}
+b1ec1e0a	Rewind
+b219ec26	Smoothed slow motion (frame blending)
+b242b184	Cancel export
+b27ca00f	Bitrate
+b2984529	Remove background (AI)
+b2b13af1	Invalid SHA-256 for '{0}'.
+b2b3f797	Unknown split-screen template.
+b2b73bb5	Speech recognition for subtitles
+b2b9b581	Rename project
+b2d639ee	A pack is a .medpack (ZIP) file with the folders figurinhas, titulos and modelos. Everything stays on this computer.
+b2dca5fa	Create compound clip
+b2de3267	Invalid range: use hh:mm:ss:ff, with start before end.
+b2ef043b	Transparent (shows the tracks below)
+b2f40db4	Shift subtitles {0}
+b387f469	Video layout
+b3dc418d	Transform
+b40b2944	In
+b426f76d	Texts only go on text or subtitle tracks.
+b428cf3d	The project was converted from format {0} to {1}. A backup of the original was created when saving.
+b45e0461	Place another clip right before the selected one, on the same track, to apply a transition.
+b4689945	Tracking followed by the mask
+b47459a4	{0} will be downloaded from the official sources (huggingface.co and github.com).
+b47523e5	Pick the color that should be neutral gray; the effect compensates the cast.
+b4899b01	Export…
+b4de2f0a	Checking the result
+b4ea7511	Shape key at this moment: the mask is animated.
+b4fc57a4	Restore all defaults
+b523facc	With automatic quality, resolution is also reduced during playback when the computer cannot keep up with the frame rate.
+b55b893b	fixed addresses, and checks each one's SHA-256 signature. None of your data is sent: videos, audio and projects stay only on this computer. The generated .medmodel packages are kept and can be copied to install on another computer without internet.
+b59eb5ff	Recover project
+b5b3551f	Audio visualizer
+b6105c3d	Could not read the model catalog: {0}
+b628fbcc	Add keyframe
+b62c9d74	Move to "{0}"
+b62c9eb7	Add title
+b63068f3	Shadows
+b631ad1e	There is no media available in the library to analyze.
+b63a3ccf	Enable smoothed slow motion
+b643bd60	Default
+b659da7f	Crop
+b6802094	Circle
+b686b59f	Choose the project folder
+b6937e77	Select a video clip to freeze the frame.
+b6c3a204	Could not copy the font: {0}
+b727d242	Curve
+b72a9846	My template
+b72e5a13	Blue · gain
+b72e9d46	Analyzing media…
+b7e6dc27	Insert saved title
+b7f76078	Add elliptical mask
+b8132eef	Ducking transition duration
+b8364050	Typewriter
+b838cbac	Cancel AI processing
+b874aa98	Motion measured over {0} frames. Magnification used: {1}
+b9338cb5	Push left
+b95e7e70	Add shape key
+b9a919b8	Add subtitle
+b9c0bcfe	The server sent more data than expected for the model.
+b9e41f3e	unknown error
+b9f1ad20	Cut on beats
+ba08d63c	Mouth · size
+ba20b1c3	The SVG file could not be read.
+ba309e78	Free software licensed under GPL-3.0-or-later (GNU General Public License, version 3 or later). You may use, study, modify and redistribute the program under the terms of this license; the program is distributed without warranty.
+ba30f96d	Rename track…
+ba8a452f	File
+ba9f942a	Required memory
+bb036ae9	Import image sequence
+bb454060	Treble
+bb4ffa92	Loudness target
+bb6066d2	Insert narration
+bb8b9160	CPU compatible
+bb9dbb40	Cancel
+bc10c86c	Video
+bc27f047	{0} scenes
+bc2db144	Background removed. Adjust edges, color and frame-to-frame smoothing in the "Remove background (AI)" effect on the Effects tab.
+bc3097cd	Detecting speech…
+bc314f33	Bounce
+bc4300e4	Delete and close gap
+bc918795	Split clip at playhead
+bcefb06d	Retouch: makeup
+bd44d5e0	Fade out
+bd45d76a	The file contains no video, image or audio.
+bd62479c	{0} camera(s) and {1} microphone(s) found. Video is recorded in MP4.
+bd86e359	Person (AI) {0}
+bdf1d163	Black and white
+be434a66	Check for updates
+be5ba8e9	Shape: {0}
+be798572	 (included)
+bea5dcaa	Mid width (Q)
+bed3691d	Desktops and laptops
+bef25b45	Calculating…
+bef5ae1a	Changes the voice pitch (low, high, chipmunk, monster) or gives it a robot tone, without changing speed.
+bf1976de	Remove model
+bf27b980	Ellipse
+bf58245f	Card-flip entrance (Y rotation keyframes)
+bf92b13c	Slow, continuous zoom-in over the whole clip, with a slight shift.
+bfbbed74	Locate…
+bfcb20ec	resolution {0}×{1} differs from expected
+bfea1e6b	Enhancing the image…
+c0092693	Left half of the monitor without effects and without color correction
+c01fb16d	{0} frames
+c023c053	Matching color…
+c02993f6	Follow tracking
+c0791fa7	Locate missing media
+c0b1203e	Some project media were not found
+c0c555d2	Check monthly:
+c0ee73d7	1000 × 1500 · 30 FPS · portrait 2:3
+c10e2d3d	Invalid size for '{0}'.
+c10eef07	Graphic Elements
+c11b9c88	Maximize the monitor
+c121cb08	{0} subtitle(s) · from {1} to {2}
+c17a983d	Applies to the cut before the selected clip.
+c1b2f978	 · hue
+c23c0fb4	New version available
+c2440898	Template name
+c2544121	When you click Record, the program is minimized and recording starts after a 5-second countdown. To stop recording, press F10.
+c2553487	Enable stabilization
+c260f7a0	New project
+c29337f0	A freeze frame cannot be played in reverse.
+c2c8833a	Match color with previous clip
+c307b025	Try again with the software encoder ("Encoder: software" option).
+c33d5482	{0} is also used in "{1}"
+c3410a7b	Auto cut (zoom)
+c354d10e	Reframe clip
+c3760820	Wipe down
+c39fe73b	Instagram Feed square
+c3ca70d6	Run models on:
+c3e811b3	Masks ready: playback and export use the cache.
+c3ed83c8	Cuts the clip's silences (and the linked video's) and closes the gaps
+c3ef05c4	HDR look: recovers shadows and highlights and boosts local detail.
+c4146628	Jump
+c420cee5	No media matches the search.
+c42d7a7e	Remove bold
+c43ee61f	Automatically generate proxies for videos above 1080p
+c45641ba	High performance: computer at the recommended configuration.
+c463002e	The image enhancement model is not installed.
+c46d4cbb	The file is in use by another program:\n{0}
+c4930de6	Apply this style to all subtitles on the track
+c4a917af	GPU (DirectML) or CPU
+c4af3181	{0}\nFile not found: {1}
+c4d27f4e	No frame could be decoded: the file appears to be damaged.
+c4de21c5	Eye color
+c51615db	{0} · {1} logical cores
+c5303bde	… and {0} more.
+c54fabd9	Reset
+c55fd7cd	A fractional frame rate must be written as a fraction (e.g. "30000/1001").
+c56a6f8f	Import media
+c5b052a0	Could not write the output file (no permission or in use by another program):\n{0}
+c5e8f6d9	Installation cancelled. What was already downloaded is reused next time.
+c61dc132	Could not open "{0}".
+c628bd83	UpdateTrackCommand can only change track properties.
+c62f017a	Transcribing speech…
+c62ff1b1	Local execution of AI models (CPU/GPU)
+c651f92c	Split clip
+c6985a35	{0:0.#}% · {1}{2}{3} · elapsed {4}{5}
+c6b8e501	Unknown processor
+c6d3c6e0	Line
+c6d42e7a	Could not complete
+c6d506f6	Previous keyframe
+c6d545bf	Content packs (*.medpack;*.zip)|*.medpack;*.zip
+c6fab07f	Eyebrows
+c7052a9a	Disable frame interpolation
+c714b525	The file may be damaged. Try opening a backup.
+c73611a9	See available models and install without using the terminal
+c74ea951	{0} media were located.
+c755de94	Editor features
+c76fa9d1	Sensitivity
+c777cba8	Position
+c77828a1	Reorder masks
+c80528f0	_Analyze media
+c81d0d1c	Camera 4
+c84d88c5	No scene change found.
+c85c9bc6	The manifest field '{0}' must be the name of a file at the package root.
+c86bc40d	Person segmentation (remove background, track person)
+c8c4334a	Check monthly
+c8ca981d	Slow zoom (Ken Burns)
+c8d122f9	The cache is already within the limit.
+c923d90e	{0} · included with the app
+c954e4de	Cyan
+c9566ca4	Voice
+c95d98b6	Default folders
+c98b709b	Presets
+c9b70322	Remove {0} animation
+c9e84ea7	with sound
+c9fd8063	_Split screen
+ca20957b	System language
+ca37f5e4	Eyebrow color
+ca4a03a9	Could not list the devices: {0}
+ca93daeb	Render the export queue in the background
+caa82c0e	Noise reduction strength
+cac8788d	Render queue
+cad1d646	ffmpeg.exe was not found in the app folder.
+caf0af32	1080 × 1920 · 30 FPS · short videos for phones
+cb181a77	Place each clip on a different track so they appear together.
+cb3a8443	No sequence found: at least 2 images numbered in order are needed (e.g. frame_0001.png, frame_0002.png).
+cbee450f	Documentation
+cbf8103b	Back 1 second
+cc172b83	The clip's media was not found.
+cc751dd6	To follow the person, install the background removal model in Tools › AI Models.
+cc7b20f3	The exported file did not pass the final check:\n{0}\n\nDetail: {1}
+cc837ecf	Custom range
+cc8e766b	Curves
+cc9d944e	Custom width in pixels
+ccaa7e34	{0} file(s) could not be imported:
+ccad7dc6	Uncategorized
+ccbf50f2	Install content pack
+ccd4dc1f	Grows from 30% size, emerging from transparency.
+cce6f32e	Color profile
+ccf20974	Place another clip right before this one, on the same track, to use a transition.
+ccf5462e	Available (D3D11VA)
+cd16bc71	The file does not contain valid subtitles.
+cd2b0e42	Project "{0}" was not closed properly. There is an autosave from {1:g}.\n\n
+cd2b4486	The graphics card video encoder ("{0}") failed. 
+cd409788	Replace background (AI)
+cd57d86d	Autosave
+cd883163	Project resolution and frame rate; adjust all parameters freely.
+cd9ab984	There are no audio tracks. Add an audio track on the timeline.
+cda0614c	The source redirected the download to an address without HTTPS; download cancelled.
+cdb3bf8d	Lower third
+cdbc24ea	Video 2
+cdd35dea	Full screen
+cdd64d8d	Cancel download
+ce16f759	Remove segments without speech with AI
+ce274629	Performance
+ce2fdefa	The source track of the copied clips no longer exists.
+ce7b87d4	Recommended for Full HD projects: preview {0}, {1} MB for ready frames
+ce893ef1	Mixer channels
+ce8f5d96	Replace file
+ce985e6c	Go to end
+cebcf0ea	Portrait post
+cede5ece	Invalid FPS.
+cede683f	Only text clips can become titles.
+cf1ef0f5	Removes color.
+cf22fcad	Stabilize video
+cf44c902	Eyes · enlarge
+cf47486d	16:9 — landscape
+cf65fb76	Monster
+cf7d46de	Status
+cfc84c18	Limitations
+d002e703	Head
+d0438263	AI masks
+d06fea30	Arrow
+d08cb210	9:16 vertical video for Reels.
+d093eaf9	Could not write the file: {0}
+d0a15b1b	No encoder available for {0} on this computer. Choose another codec or format.
+d0aa40d1	Deletes and closes the gap on all tracks, keeping video, audio and text in sync
+d0ecc7bb	"{0}" installed (hash verified).
+d1065a79	media
+d10e481f	Retro
+d12eda2a	File generated:\n
+d154ea2e	Camera 2
+d15917b6	stereo
+d18d4ec5	Which part of the block sits at the Y position (Video tab). At the bottom, new lines grow upward.
+d19efdb7	Image enlarged to {0}×{1}.
+d1a14ef8	There is no migration registered from format {0}.
+d1e6feab	Finding the person in each frame…
+d1e84cd3	Silence threshold
+d1ed6f3f	Unlock track "{0}"
+d265dad7	Depth
+d2745176	Choose to record the screen, the webcam or both.
+d2b92596	Preparing…
+d3078cc6	Use CPU only
+d307a5d3	Slide left
+d33d6a18	Rolling credits
+d35c8a94	Reduces the number of tones.
+d35d462f	Block mosaic.
+d36c5e50	Stop
+d3aff719	Body
+d3d62cc2	Track has no subtitles. Use Add.
+d3d9733d	The media has no video stream.
+d4127098	Box color
+d43a5efa	The catalog repeats the model '{0}'.
+d449c235	{0} channels
+d4573421	Edit mask shape
+d457deea	Package media into the project
+d45c5191	Import image sequence — choose any image of the sequence
+d466a526	Disable stabilization
+d4a3d974	Track person
+d4ceee12	Vignette
+d4d595d5	Architecture
+d547c308	_Ruler
+d5515f4f	Frame-to-frame smoothing
+d56bab13	Clip on track '{0}' references a nonexistent media.
+d5861a1a	ffmpeg.exe was not found in the app folder. Reinstall the program.
+d5b35acf	Select a clip on the timeline and open the AI tab in the properties. Everything is processed on this computer.
+d5df3708	Theme
+d6399374	Rename marker…
+d70702a9	Sequence not found in the project.
+d74ec111	Memory for preview frames
+d74ecb33	Enter breaks the line
+d76b2abd	Free software licensed under GPL-3.0-or-later (GNU General Public License, version 3 or later). 
+d78d2f52	Loop playback range
+d799f13c	Project photo missing.
+d7acb076	Select a video or image clip on the timeline to apply effects and correct color.
+d7b97f67	None of the missing media was found in this folder.
+d7ba6b22	Rename media to "{0}"
+d81dfbac	Ready · {0} {1}
+d823a450	sequence
+d83f16db	Recording did not start. {0}
+d868b4b5	Luminous halo in bright areas.
+d8a45bbe	Sequence not found.
+d8b94490	Paste at playhead
+d9096f23	M mutes the track; S (solo) makes only soloed tracks play. Double-click the fader or pan to reset. Meters move during playback.
+d97ce7ae	Reduce noise with AI
+d97f2e39	The media of the copied clips is no longer part of the project.
+d9939134	Install model package
+d9da0b53	Delete and close the gap
+d9eb530f	Mute the original audio
+d9f02f0f	720 × 1280 · 30 FPS · vertical 9:16, small file
+da1525a1	Tracking {0}
+da2f8d8f	When installing, the app downloads the model files from the official sources (huggingface.co and github.com), at fixed addresses, and checks each one's SHA-256 signature. None of your data is sent: videos, audio and projects stay only on this computer. The generated .medmodel packages are kept and can be copied to install on another computer without internet.
+da3b0c44	There is no other clip with audio playing along with this one. Put the narration or speech on another track and try again.
+da56fad3	{0} beats marked on the timeline.
+da7709b6	; the original audio was muted.
+da88ad51	Eyebrows · raise
+daa319da	The clips are too short for a transition.
+dac230c4	Feather edge
+dacf0de7	Channels
+dadc7501	"{0}" removed.
+dadf3082	No voices found. Install voices in Windows Settings › Time & language › Speech.
+dae519a0	Width in pixels
+dafb5961	Refresh
+daffd2d7	Comparing audio…
+db1bcfbe	Modified on
+db1bd3e9	Could not list the devices: 
+db472496	Media information
+db4db0b3	Splits the video and image clips that play along with the music at each beat
+db4f2ca2	Wipe left
+db6ba745	This computer
+dba9d8ed	The camera follows the person's head
+dbbd5fd0	Delete selection (Delete)
+dbd4cc7d	Enable shadow
+dbf57416	Could not read the model catalog: 
+dbffcdb9	Paste at pla_yhead
+dc1b48bb	Thumbnails, waveforms and proxies
+dc55af2c	Reset values
+dc7ababc	Catalog
+dca191f2	Track "{0}" has {1} clip(s). Remove anyway?
+dcc81347	Select a video or image clip on the timeline to edit transform, keyframes, speed and transitions.
+dd01bd46	Unobserved exception in asynchronous task.
+dd052db6	Synced: shifted {0}
+dd21499b	Enhance image with AI
+dd39c51b	Editing proxy
+dd561c36	Straight outline
+dd917327	Every {0:0} min
+ddb12094	Circular dependency in the catalog involving '{0}'.
+ddb5468b	Move clip
+ddb5a44a	Out
+ddbb6686	Title "{0}" saved in My items.
+ddd9ed7e	9:16 vertical video for Facebook Reels.
+ddf40d55	⚠ Media removed
+de085fc7	The documentation file '{0}' declared in the manifest is not in the package.
+de26c2fc	Sharpness
+de518962	Scenes
+de71e378	Video 1
+de73d011	Height (px)
+de7fe5d8	Media '{0}' has no source path.
+de98cdf6	Motion trail when position, scale or rotation are animated by keyframes
+ded554c8	Included with the app
+df16032c	The media engine (FFmpeg) could not be loaded. Reinstall the app.\n\nDetail: {0}
+df3425a3	Project folder
+df4bc13a	Codec {0} cannot be used in format {1}.
+df4ca6e8	Trackings
+dfb167ac	Compound clip
+dfbd5d14	Makes this clip follow a tracked object in another clip, from the current position (at the playhead).
+dfbea4cf	Lock track
+dfca0b15	Images
+dfdb85c3	Reverb
+dfebfa5f	Automatic (by type)
+e013582b	Looking for scene changes…
+e01a85b1	AI device
+e039cb27	Clips
+e046bcea	Transparency
+e0836c56	User manual
+e09ddd11	Copy to clipboard
+e0ac5283	Eyeliner
+e1394269	Full
+e13f2454	Clean bluish tones.
+e1563935	Animation: 3D card flip
+e1603818	Preparing
+e18cbc44	Saturation
+e1914583	Remove marker
+e1b7eed8	The pack has no stickers, titles or templates (folders figurinhas, titulos and modelos).
+e1e6e158	Delete and close gap (Shift+Delete)
+e2083844	Browse…
+e2226fad	One full turn (360°) over the whole clip.
+e2c82f4a	Isolate voice with AI
+e2d9aa0e	Could not remove the silences.
+e3015b6b	The LUT should have {0} colors, but has {1}.
+e30250af	Delete template
+e3156f4a	Choose LUT
+e3272a97	Category name (e.g. Interviews, Soundtracks, Logos):
+e368a5cc	None
+e377ade6	The camera follows the person's whole body
+e37e9336	stay only on this computer. The generated .medmodel packages are kept and can be copied to 
+e3b7bbc0	Exports
+e3d88e40	In duration
+e407e789	Keep pitch when changing speed
+e416dedb	Creates a marker on each beat of the music
+e41ba7b0	Cut videos on beats
+e4345363	Add rectangular mask
+e447260d	not tracked
+e45cb1f6	Zoom out
+e4612538	3840 × 2160 · 30 FPS · horizontal video 16:9
+e48f88e7	Double-click a template to insert it at the playhead. Edit content and style in the Text tab.
+e4925bc0	MPEG-2 only accepts 23.976, 24, 25, 29.97, 30, 50, 59.94 or 60 FPS.
+e4abebf7	**License:** 
+e4b7653b	Start at playhead
+e4c2c394	Graphic element
+e4ed4d77	Marker {0}
+e4ef5ec6	Add font
+e4f95dd5	Mark beats
+e50beb48	Resolution must be between {0} and {1} pixels.
+e510a658	Marker '{0}' is at a negative time.
+e5110962	Packs bring stickers (Graphic elements), titles (Texts) and project templates (File › New from template). A pack is a .medpack (ZIP) file with the folders figurinhas, titulos and modelos. Everything stays on this computer.
+e521737c	Images are already still; adjust the clip duration.
+e5432657	Videos, audio, images and projects are processed only on this computer. The internet is only used 
+e56d0d19	Record the screen
+e58dce23	Projects folder
+e5b989e0	Show track "{0}"
+e5d2c46e	Supported media|{0}|Videos|{1}|Audio|{2}|Images and GIFs|{3}|All files|*.*
+e5f47aec	2 stacked
+e612ee70	Select a video or image clip.
+e62f7e59	The narration was generated, but could not be imported: {0}
+e631f0fb	{0} ({1} free)
+e649cc8d	Enter a valid file name.
+e6948c7a	AI progress
+e699c971	Outline color
+e6af9664	Apply crop to video
+e6b9dd39	Incomplete download: {0} of {1} bytes. Try again.
+e6cd0bd5	Split screen
+e6efbd7c	Recording is about to start.\nPress F10 to stop.
+e6ff10b9	The package contains duplicate entries ('{0}').
+e70460ad	Refine edges
+e710b660	_Timeline
+e718e93f	Could not save the image
+e7480ffb	Sound saturation.
+e772276e	Track volume (dB)
+e7a30200	Unknown error.
+e7a739c9	Detect scenes
+e7c1098a	Scene sensitivity
+e7f0e6d9	Import
+e85928e2	Luminance
+e864d54f	stay only on this computer. The generated .medmodel packages are kept and can be copied to install on another computer without internet.
+e8845dce	Night
+e8908ee8	Undo (Ctrl+Z)
+e8c6a28c	Generate subtitles with AI
+e9109798	Import SVG…
+e9181b97	Ungroup
+e92a40db	Blue · offset
+e942cbbb	Apply preset animation
+e98708b0	Select a video clip.
+e98fbfc2	Codec profile
+e9e0cbd8	Reinstall
+e9e86c21	Invalid render segment.
+ea267171	Audio analysis
+ea44d3e6	Rendering
+ea46be2a	Enhance image (upscale 2×)
+ea73b2b1	Darken
+ea74fffe	Tracking
+ea75073f	Generated media not found.
+ea7a85a6	Limit size
+eab631d5	Locate media
+eac04eb7	Installation stopped: {0}
+eace0ac0	Move marker
+eadd8245	Import SRT/VTT…
+eb0db893	Remove the pack "{0}" from this computer? Projects that already use its stickers keep the imported copies.
+eb805d69	No speech found while this clip plays.
+eba2822f	Change font
+eba5a22e	Add track "{0}"
+ebb751ab	Beat
+ebc1fe65	Flip vertically
+ebc78ef6	Choose what the camera follows. Then adjust the auto cut, shake and blurred background. Uses the person cutout model (AI tab).
+ebe55185	Maximum compatibility for PowerPoint, projectors and TVs.
+ebf8e83d	Normalize audio ({0}
+ebff964d	Remove stabilization
+ecaf3589	Properties
+ecd8cf20	Lower third
+ecdef51f	Cache cleared: {0} freed.
+ece5d28b	Toggles a shape key at the playhead (animated mask)
+ecfce37f	Mask: {0}
+ed20f426	Stabilization on
+ed437c03	Diego Mendes Rodrigues' LinkedIn profile
+ed4f6762	Invalid WebVTT file: missing WEBVTT header.
+ed5431fc	Capture frame
+ed79bce8	This model requires a newer version of Meu Editor de Vídeo.
+eda02893	Restore
+edca4a4b	The project file was not found:\n{0}
+ee313bb5	Delete thumbnails, waveforms, proxies and AI masks? They will be recreated when needed (proxies and masks take some time).
+ee7728ba	|Audio|
+ee9361d0	Hardware decoding
+ee9dd0a6	Speed curve{0}
+eeaea3b8	Overlay
+eee0df8e	Voice and ambience on separate tracks
+ef49e594	Go to start
+ef615877	Media not found.
+ef62334f	Initial state
+ef6ae57d	{0} freed (least recently used items).
+ef91a6e4	The file is empty.
+ef9d3884	Soft glow
+efebe6ab	Out duration
+eff4000b	Installing…
+eff50710	Add text
+effbe5e6	Show in folder
+f065fdb7	Create _compound clip…
+f06da6b5	New tracking
+f070c3ff	Use proxies in preview when available
+f0cda431	AI features
+f0db2438	"{0}": {1} sticker(s), {2} title(s) and {3} template(s).
+f0e8a4bf	Drop to import
+f0ed3a84	Background
+f0fd80f0	The clip cannot start before the start of the timeline.
+f1068e39	Logo
+f117b512	Select at least one clip.
+f1297822	Applied effects (in order)
+f19506e2	Creates markers at scene changes (and splits the clip, if checked).
+f1bfb891	Project audio must be mono, stereo or 5.1.
+f1c041e7	GPU decoding
+f2282c39	Graphic elements go on image tracks.
+f25c2a9f	Removes the clip's volume animation
+f25c5c68	Double-click to reset
+f27d711b	Overall and per-channel tone curves (red, green, blue).
+f2816ecd	 (enhanced 2x).png
+f29d8f09	Retouch
+f2a39118	Discard the changes made to the templates that come with the app? Your own templates are kept.
+f2a404ee	All media will be copied into the project file (.med), which can then be taken to another computer.\n\n
+f2aa03f9	Width and height must be even numbers.
+f2aaed18	No exports queued.
+f2b7aa54	Preview audio output
+f3024191	Install AI models
+f30c229d	Installation stopped: 
+f36d6efc	Sepia
+f3a0b56a	Proxy queued
+f3a2c68a	.cube file without LUT_3D_SIZE before the data.
+f3a9a5a4	Frame center (no tracking)
+f43c3023	No model: uses color comparison between frames (less accurate). Install the scene model for a better result.
+f45c2722	Package installed
+f45e2e4b	Invalid number
+f4895a29	Swing
+f490af28	Speech rate
+f4c10d83	Color in hexadecimal, e.g. #00B140
+f4ef89c4	available (D3D11VA)
+f51273b7	Enter a number between 0.1 and 16, for example 0.5 or 2.
+f5142cc2	Adjustment {0}
+f5350d7d	Full Name:
+f53807aa	Space
+f53bbaa0	User
+f55e100d	CREDITS\n\nDirected by\nFirst Last\n\nEdited by\nFirst Last\n\nSoundtrack\nFirst Last\n\nThanks for watching!
+f595a550	Remove {0} {1}
+f5d41570	Exporting…
+f6424ba8	Audio sample rate must be 44.1 kHz, 48 kHz or 96 kHz.
+f64537aa	Change project settings
+f664370c	The clip cannot be placed on track "{0}".
+f67a21a5	Face landmarks (beauty retouch and makeup)
+f68c9c48	Undo: {0} (Ctrl+Z)
+f6995716	Could not complete: {0}
+f69a95e3	Browse folder
+f6bfbe13	Looking for silences…
+f6c8473d	Quality: {0:0} (lower = better; 18–23 recommended)
+f6d7d1b5	Created on
+f709edbe	Mask shape key at playhead
+f7206e7f	Square video
+f72685ad	Track "{0}" does not accept "{1}".
+f742d3de	 (detection by sound level; install the speech detection model for more accuracy).
+f7514da1	Camera tracking
+f779c799	Clip speed
+f7ca4a2d	Remove "{0}"? Features that depend on it will become unavailable.
+f7d38b21	The clip is not a compound clip.
+f7f4837b	This clip's file was not found. Reconnect the media and try again.
+f8208e09	Edit subtitle
+f84dbc77	Preview audio
+f8515210	Previous frame
+f85e8e02	The transition needs two adjacent clips on the same track.
+f87a8166	Recording countdown
+f8838989	High
+f9154968	AI models
+f9250d2c	Position, scale, rotation, opacity and keyframes are in the Video tab.
+f943d8ef	Address not allowed for '{0}': {1}. Use HTTPS at {2}
+f959e9b0	Color matched with the previous clip. Adjust the intensity in Video › Color › Match color.
+f95c7cec	Whole sequence
+f9801bb3	Face retouch with the face landmark mesh (local model): smooth, lighter skin, fewer expression lines and under-eye bags, and face, eye, nose, mouth and eyebrow adjustments.
+f9ae06ca	Proxy failed
+f9eb55d0	Could not remove: {0}
+f9f5483c	audio
+f9f64ce9	Save as title
+fa473bff	Creates volume keyframes that lower this clip during speech
+fa504e56	Supported media|
+fa7c93d6	Available · {0} {1}
+fad0236a	Meu Editor de Vídeo — system information
+fadb4dd9	Duplicate clips
+fb1adad4	Rotate
+fb245260	No media imported.
+fb8c80e2	Playback
+fb8cb31d	Audio 1
+fbb8559b	The chosen format does not support transparency (alpha channel).
+fbc1ac35	Generated media (AI)
+fbf00a3b	Developer: {0}
+fc5d92ee	Media removed
+fc5de4d7	View aspect ratio
+fc7d6f6b	Add adjustment layer
+fc8bdc7c	Change subtitle timing
+fc8d81f9	From the project
+fc99ef24	Split into files
+fcbe3fd7	Add graphic element at playhead
+fcd6b084	Included with the app (cannot be removed)
+fcd95b14	Memory
+fce04ab7	Could not analyze the video: {0}
+fcf5e5a1	The project contains inconsistent data:\n• 
+fd2c5555	Interrupted — can be resumed
+fd2e8b1b	Ripple editing
+fd366f93	Exports:
+fd58de69	Release
+fd609e59	Model features
+fd732a2b	Check for updates
+fdd6c021	The range overlaps another clip on the track.
+fe183a44	Remove {0}
+fe50cd52	Export current frame
+fe94b10c	Invalid model identifier.
+feaae1f1	Bright and airy
+feb6cfe3	Normalize
+fed34f04	Center
+fed4a5b0	New from _template…
+fedb6cd1	Custom color
+ff0ad18e	Blur faces
+ff0e4c7e	Export SRT/VTT…
+ff18f971	Generate and insert
+ff34aa43	Repeats the clip right after it
+ff4f0c35	Third-party licenses
+ffabf7a5	The clip is silent; nothing to normalize.
+ffe53031	Shadow
+ffe885ad	Matches this clip's color and contrast to the previous clip on the track (Match color effect, adjustable in the Color tab).
+2eba946b	Edit
+1acb4b8f	View
+b96a67bf	Tools
+fe0addd7	Help
+02862497	Auto
+e51e19df	Automatic
+a75d067f	AI
+d0f790ac	When you save, the program restarts in the new language and reopens the saved project.
+042c3ccf	0.25× (slow motion)
+08ba14a4	0.5× (slow motion)
+3adae3c6	0.75×
+32836911	1.5×
+ef026517	1/2 resolution
+39d9147d	16:9 (landscape)
+191786be	1920 × 1080 · 30 FPS · video platforms
+87773a4c	2 side by side
+4c222ddc	2× (fast)
+781e9daf	4× (fast)
+b40f023d	Damping
+38445407	Speeding up
+b715250f	FFmpeg access from .NET
+c33bc894	Color adjustments
+ec090a77	Attack
+8dfa0c19	Delay
+1b4493cb	Automatic (by hardware and project)
+34631cc0	Automatic (graphics card when available)
+faf634e0	Mirrored bars
+820b28ff	Block bottom
+ff070ada	Brightness
+29d5180b	Block center
+2f3e8dcc	Light
+4c1740bf	Constant (no curve)
+7cfb945a	Contrast
+d0cd77e4	Reference color (should be neutral)
+69597ec9	Key color
+5f3d541f	Low cut
+f5bfe163	Hard cut (none)
+293c7774	Eyelashes
+ef465860	Slowing down
+9f9edf69	Slides in from the left to its original position.
+5c974c0c	Detecting…
+6c1f9ebc	Detect automatically
+8e20dede	Direction (left ↔ right)
+cf97a237	Dissolve
+957f2513	Distortion (barrel → pincushion)
+f0c3253f	Pack media into the project (standalone .med)
+df142d59	Fade in
+99f07dbb	Enter from the left
+85f53d5f	Fade to black and back
+fde8bb83	Dark
+04f4be29	Fade
+e08efb6d	Spanish
+ed928968	Left
+ebf8ff72	Style
+b8f41fc2	Stereo
+5e8780b2	Exposure
+23e05257	Exposure, brightness, contrast, saturation, temperature, tint, shadows and highlights.
+b72611cf	Bass frequency
+59031266	GPU (DirectML), falling back to the CPU
+0cb1e3b6	Rotate X
+0f845589	Rotate Y
+4ea5eb8d	Bass
+1251dfbe	Same as Windows
+49b825e0	Image or video from the library
+20abe171	Tilt (down ↔ up)
+85a560bc	English
+18409a9f	Intersection
+243c07d7	Video and audio reading and export
+0c81a1c8	Expression lines
+6cbd77be	Soft light
+df38600a	Hold (jump)
+6efe5e3c	Mode
+2a21b0bc	Multiply
+07770c0f	Could not detect: 
+f8e5eec2	Could not detect: {0}
+7eb24a73	Levels
+33f565ca	Wave
+36608fb2	Skin · brighten
+0dbae901	Skin · smooth
+27d3c9f6	Graphics card (includes Media Foundation)
+d4ada8ec	Portuguese
+1298e512	Position X
+b394f92c	Position Y
+ef42bcf4	Preserve details
+d0db601b	Radius
+ac3e35fc	Ratio
+c15ffc8e	Rec. 709 (video standard)
+a2d635f9	Removes the color, with a little more contrast.
+d9633a68	Removes the position, scale, rotation and opacity animations.
+49ddd1cb	Repetitions
+22d5f75c	Rounded rectangle
+1f2d5796	No animation
+8c661457	Overlay
+dc0761c7	Add
+a9e12e61	Eyeshadow
+b2d4d83b	Smooth (ease in and out)
+97d2111d	Softness
+5e3ddc33	Smooth
+306dd9dc	Subtract
+9e6b6789	Room size
+7e2b0832	Block size
+d2ce481a	Black bar
+5a56637c	Constant bitrate (CBR)
+f3a14d10	Variable bitrate (VBR)
+2d31efc9	Screen
+0d089536	Bold text with a soft shadow; fades in and out.
+dba3d15a	Plain text
+e757c88e	Midtones
+a8621da1	Top
+4bc31cf0	Block top
+4810863b	Large centered title that zooms in.
+4034d241	Green · gain
+8eb167bc	Red · gain
+b15d9e4c	Link media (files stay where they are)
+d9ca0b40	Landscape 4K video
+a1f6f67b	Landscape Full HD video
+6c1a02a4	Zoom to hide the edges
+852d7316	−14 LUFS — internet (YouTube, social media)
+0eba1991	−23 LUFS — television (EBU R128)
+2643d451	Close this window
+5e01d38c	You have the latest version!
+9c73bac4	New version available
+a4ef774a	Version {0} of {1} is now available so you can update the one you are using.
+75385f91	Available languages: {0}.
+6975441d	Supported operating systems: {0}.
+9a0a0b54	Author: {0}.
+e19b4ed8	Download link on the Microsoft Store:
+1df3dbbe	Download link on the AplicativosIA.Online website:
+d769c40b	Welcome to Meu Editor de Vídeos
+1e1ee72e	To make the most of the program, please help me by filling in your preferences below.
+a25648cb	Check monthly for new updates
+836775bf	Save preferences
+e6c95e78	German
+04e0a642	French
+25c0623b	Portuguese (Brazil)
+a442dc64	Portuguese (Portugal)
+4eb7d40e	Follow the operating system

@@ -5,9 +5,10 @@
     <OutputName>MeuEditorDeVideo-$(Version)-Setup</OutputName>
     <InstallerPlatform>x64</InstallerPlatform>
     <LicenseRtf Condition="'$(LicenseRtf)' == ''">$(MSBuildThisFileDirectory)..\..\artifacts\License.rtf</LicenseRtf>
-    <DefineConstants>Version=$(Version);MsiPath=$(MsiPath);LicenseRtf=$(LicenseRtf);RepoRoot=$(MSBuildThisFileDirectory)..\..\</DefineConstants>
+    <BundleRevision Condition="'$(BundleRevision)' == ''">0</BundleRevision>
+    <DefineConstants>Version=$(Version);BundleVersion=$(Version).$(BundleRevision);MsiPath=$(MsiPath);LicenseRtf=$(LicenseRtf);RepoRoot=$(MSBuildThisFileDirectory)..\..\</DefineConstants>
     <!-- WIX1133: o MSI é "perUserOrMachine" (para instalar sem administrador quando usado sozinho). Pelo Setup.exe ele
-         roda elevado, sem interface e sem MSIINSTALLPERUSER, ou seja, sempre para todos os usuários, como o bundle assume. -->
+         roda elevado, sem interface, com MSIINSTALLPERUSER vazio (ALLUSERS=2 + máquina), ou seja, sempre para todos os usuários, como o bundle assume. -->
     <SuppressSpecificWarnings>1133</SuppressSpecificWarnings>
   </PropertyGroup>
   <ItemGroup>

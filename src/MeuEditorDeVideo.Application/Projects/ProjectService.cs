@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Core.Abstractions;
+﻿using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.Errors;
 using MeuEditorDeVideo.Core.Projects;
 using MeuEditorDeVideo.Domain.Editing;
@@ -25,6 +25,10 @@ public interface IProjectService
     IReadOnlyList<string> LastOpenWarnings { get; }
 
     Task CreateAsync(NewProjectRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>Projeto novo vazio, ainda sem arquivo (configurações padrão); "Salvar" pede o nome e a pasta.</summary>
+    void CreateUntitled(string name);
+
     Task OpenAsync(string path, CancellationToken cancellationToken = default);
     Task OpenRecoveredAsync(RecoverableProject recoverable, CancellationToken cancellationToken = default);
     Task SaveAsync(IProgress<double>? progress = null, CancellationToken cancellationToken = default);
@@ -72,6 +76,13 @@ public sealed class ProjectService(
     public event EventHandler? Saved;
 
     public string FileExtension => Extension;
+
+    public void CreateUntitled(string name)
+    {
+        var project = Project.CreateNew(name, new ProjectSettings(), StorageMode.Linked, _time.GetLocalNow());
+        ReplaceSession(new ProjectSession(project, null, MediaResolution.Empty, recovered: false, migrated: false));
+        logger.LogInformation("Novo projeto sem título criado.");
+    }
 
     public async Task CreateAsync(NewProjectRequest request, CancellationToken cancellationToken = default)
     {

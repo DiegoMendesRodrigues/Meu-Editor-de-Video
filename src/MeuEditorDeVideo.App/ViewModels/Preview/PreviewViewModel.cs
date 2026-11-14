@@ -28,7 +28,14 @@ public enum PreviewQuality
 }
 
 /// <summary>Opção do seletor de qualidade; <paramref name="IsAuto"/> = escolhida pelo hardware e ajustada durante a reprodução (§12.3).</summary>
-public sealed record PreviewQualityOption(PreviewQuality Value, string Label, bool IsAuto = false);
+public sealed record PreviewQualityOption(PreviewQuality Value, string Label, bool IsAuto = false)
+{
+    /// <summary>Rótulo no idioma da interface.</summary>
+    public string Label { get; init; } = MeuEditorDeVideo.App.Localization.Translator.T(Label);
+
+    /// <summary>Texto lido por leitores de tela.</summary>
+    public override string ToString() => Label;
+}
 
 /// <summary>
 /// Monitor (painel B): mostra o quadro da posição do cursor, reproduz com áudio sincronizado,
@@ -330,7 +337,7 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
         if (Image is null || Image.PixelWidth != img.Width || Image.PixelHeight != img.Height)
             Image = new WriteableBitmap(img.Width, img.Height, 96, 96, PixelFormats.Bgra32, null);
         Image.WritePixels(new Int32Rect(0, 0, img.Width, img.Height), img.Pixels, img.Stride, 0);
-        var label = Quality is { IsAuto: true } ? $"Auto {DivisorLabel(EffectiveDivisor)}" : Quality?.Label;
+        var label = Quality is { IsAuto: true } ? $"{MeuEditorDeVideo.App.Localization.Translator.T("Auto")} {MeuEditorDeVideo.App.Localization.Translator.T(DivisorLabel(EffectiveDivisor))}" : Quality?.Label;
         Status = string.Create(CultureInfo.GetCultureInfo("pt-BR"),
             $"{label} · {img.Width} × {img.Height} · {frame.RenderTime.TotalMilliseconds:0} ms");
         TrackRenderTime(frame);

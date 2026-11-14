@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using L = MeuEditorDeVideo.App.Localization.Translator;
+using System.Windows;
 using MeuEditorDeVideo.Core.Errors;
 using Microsoft.Win32;
 
@@ -39,8 +40,6 @@ public interface IDialogService
     /// <summary>Pede um texto ao usuário. Retorna null se cancelado.</summary>
     string? Prompt(string title, string label, string initialValue);
 
-    /// <summary>Remover projeto recente: só da lista, também o arquivo, ou cancelar.</summary>
-    RecentRemovalChoice AskRemoveRecent(string projectName, string path, bool fileExists);
 
     /// <summary>Abre a janela de configurações. Retorna true se o usuário salvou.</summary>
     bool ShowSettings();
@@ -56,17 +55,17 @@ public sealed class DialogService : IDialogService
     private static Window? Owner => System.Windows.Application.Current?.MainWindow;
 
     public void ShowError(MedError error) =>
-        MessageBox.Show(Owner!, $"{error.Message}\n\nCódigo: {error.Code}", AppInfo.ProductName,
+        MessageBox.Show(Owner!, $"{L.T(error.Message)}\n\n{L.T("Código:")} {error.Code}", AppInfo.ProductName,
             MessageBoxButton.OK, MessageBoxImage.Error);
 
     public void ShowInfo(string title, string message) =>
-        MessageBox.Show(Owner!, message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show(Owner!, L.T(message), L.T(title), MessageBoxButton.OK, MessageBoxImage.Information);
 
     public bool Confirm(string title, string message) =>
-        MessageBox.Show(Owner!, message, title, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes;
+        MessageBox.Show(Owner!, L.T(message), L.T(title), MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes;
 
     public UnsavedChoice AskSaveChanges(string projectName) =>
-        MessageBox.Show(Owner!, $"Deseja salvar as alterações em \"{projectName}\"?", AppInfo.ProductName,
+        MessageBox.Show(Owner!, L.F("Deseja salvar as alterações em \"{0}\"?", projectName), AppInfo.ProductName,
             MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) switch
         {
             MessageBoxResult.Yes => UnsavedChoice.Save,
@@ -131,12 +130,6 @@ public sealed class DialogService : IDialogService
     {
         var dialog = new Views.Dialogs.PromptWindow(title, label, initialValue);
         return ShowModal(dialog) == true ? dialog.Value : null;
-    }
-
-    public RecentRemovalChoice AskRemoveRecent(string projectName, string path, bool fileExists)
-    {
-        var dialog = new Views.Dialogs.RecentRemovalWindow(projectName, path, fileExists);
-        return ShowModal(dialog) == true ? dialog.Choice : RecentRemovalChoice.Cancel;
     }
 
     public bool ShowSettings() => Views.Dialogs.SettingsWindow.ShowFor(Owner);

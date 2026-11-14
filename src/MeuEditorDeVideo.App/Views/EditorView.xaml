@@ -242,11 +242,12 @@
                    VerticalAlignment="Center" IsHitTestVisible="False" AutomationProperties.Name="Logotipo" />
         <Menu Grid.Column="1" VerticalAlignment="Center" Background="Transparent"
               WindowChrome.IsHitTestVisibleInChrome="True">
-            <MenuItem Header="{StaticResource Editor.Menu.Arquivo}">
+            <MenuItem x:Name="MenuArquivo" Header="{StaticResource Editor.Menu.Arquivo}" SubmenuOpened="MenuArquivo_SubmenuOpened">
                 <MenuItem Header="{StaticResource Editor.Menu.NovoProjeto}" Command="{Binding NewProjectCommand}" ctl:ShortcutText.Action="projeto.novo" />
                 <MenuItem Header="{StaticResource Editor.Menu.NovoDeModelo}" Command="{Binding CreativeTools.NewFromTemplateCommand}" AutomationProperties.Name="Novo a partir de modelo" />
                 <MenuItem Header="{StaticResource Editor.Menu.Abrir}" Command="{Binding OpenCommand}" ctl:ShortcutText.Action="projeto.abrir" />
-                <Separator />
+                <Separator x:Name="SeparadorRecentes" />
+                <!-- Os 5 projetos recentes entram aqui (EditorView.xaml.cs), seguidos de um separador. -->
                 <MenuItem Header="{StaticResource Editor.Menu.ImportarMidia}" Command="{Binding ImportMediaCommand}" ctl:ShortcutText.Action="midia.importar" />
                 <MenuItem Header="{StaticResource Editor.Menu.ImportarSequencia}" Command="{Binding ImportSequenceCommand}" />
                 <Separator />
@@ -257,8 +258,6 @@
                 <MenuItem Header="{StaticResource Editor.Menu.Exportar}" Command="{Binding ExportCommand}" ctl:ShortcutText.Action="projeto.exportar" />
                 <MenuItem Header="{StaticResource Editor.Menu.FilaRenderizacao}" Command="{Binding ShowRenderQueueCommand}" />
                 <MenuItem Header="{StaticResource Editor.Menu.ExportarQuadro}" Command="{Binding Preview.CaptureFrameCommand}" AutomationProperties.Name="Exportar quadro atual" />
-                <Separator />
-                <MenuItem Header="{StaticResource Editor.Menu.Inicio}" Command="{Binding GoHomeCommand}" />
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Editar}">
                 <MenuItem Header="{StaticResource Editor.Menu.Desfazer}" Command="{Binding UndoCommand}" ctl:ShortcutText.Action="editar.desfazer" ToolTip="{Binding UndoToolTip}" />
@@ -357,8 +356,7 @@
                 <MenuItem Header="Licenças de terceiros" Click="Licencas_Click" AutomationProperties.Name="Licenças de terceiros" />
                 <Separator />
                 <MenuItem Header="Sobre o Meu Editor de Vídeo…" Click="Sobre_Click" AutomationProperties.Name="Sobre" />
-                <MenuItem Header="{StaticResource Editor.Menu.VerificarAtualizacoes}" IsEnabled="False" AutomationProperties.Name="Verificar atualizações" />
-                <MenuItem Header="{StaticResource Editor.Menu.NotasLancamento}" IsEnabled="False" AutomationProperties.Name="Notas de lançamento" />
+                <MenuItem Header="{StaticResource Editor.Menu.VerificarAtualizacoes}" Click="VerificarAtualizacoes_Click" AutomationProperties.Name="Verificar atualizações" />
             </MenuItem>
             </Menu>
 
@@ -567,6 +565,7 @@
                                           ToolTip="{StaticResource Editor.Biblioteca.Categoria}"
                                           ItemsSource="{Binding Library.Categories}"
                                           SelectedItem="{Binding Library.SelectedCategory}"
+                                          ItemTemplate="{StaticResource Med.TranslatedText}"
                                           Background="{DynamicResource Med.PanelAlt}"
                                           Foreground="{DynamicResource Med.Text}"
                                           BorderBrush="{DynamicResource Med.Border}"

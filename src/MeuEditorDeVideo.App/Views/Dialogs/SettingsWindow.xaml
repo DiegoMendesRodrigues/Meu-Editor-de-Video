@@ -56,6 +56,19 @@
             <TabItem Header="Geral">
                 <ScrollViewer>
                     <StackPanel>
+                        <TextBlock Text="Usuário" Style="{StaticResource St.Section}" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Nome Completo:" Style="{StaticResource St.Label}" />
+                            <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" Width="320" MaxLength="200" AutomationProperties.Name="Nome Completo" />
+                        </StackPanel>
+
+                        <TextBlock Text="Idioma do sistema" Style="{StaticResource St.Section}" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Idioma:" Style="{StaticResource St.Label}" />
+                            <ComboBox ItemsSource="{Binding Languages}" SelectedItem="{Binding Language}" DisplayMemberPath="Label" Width="200" AutomationProperties.Name="Idioma" />
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource St.Hint}" Text="Ao salvar, o programa reinicia no novo idioma e reabre o projeto salvo." />
+
                         <TextBlock Text="Aparência" Style="{StaticResource St.Section}" />
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Tema:" Style="{StaticResource St.Label}" />
@@ -92,6 +105,13 @@
                             <TextBlock Text="{Binding AutosaveText}" Margin="12,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                         <TextBlock Style="{StaticResource St.Hint}" Text="A cópia de recuperação não substitui o arquivo do projeto; ela é oferecida ao abrir o aplicativo depois de um fechamento inesperado." />
+
+                        <TextBlock Text="Verificar por atualizações" Style="{StaticResource St.Section}" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Verificar mensalmente:" Style="{StaticResource St.Label}" />
+                            <ComboBox ItemsSource="{Binding YesNo}" SelectedItem="{Binding CheckForNewVersions}" DisplayMemberPath="Label" Width="120" AutomationProperties.Name="Verificar mensalmente" />
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource St.Hint}" Text="{Binding LastCheckText}" />
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>

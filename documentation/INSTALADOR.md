@@ -31,7 +31,26 @@ verificados por SHA-256). O WiX vem do NuGet; nada precisa ser instalado. A vers
 - Atalho no menu Iniciar e, opcionalmente (recurso marcado por padrão), na área de trabalho.
 - Associação dos arquivos `.med` (ProgId `MeuEditorDeVideo.Projeto`, ícone do aplicativo): um duplo clique abre o projeto.
 - Entrada em **Configurações › Aplicativos** com ícone, versão e editor; atualização por *major upgrade* (instalar uma
-  versão nova remove a anterior; instalar uma versão mais antiga por cima é bloqueado com mensagem em pt-BR).
+  versão nova, ou outra compilação da mesma versão, remove a anterior; instalar uma versão mais antiga por cima é
+  bloqueado com mensagem em pt-BR). `AllowSameVersionUpgrades` exige suprimir a ICE61.
+- **Preferências vazias:** a instalação apaga do registro do usuário (`HKCU\Software\Meu Editor de Vídeo`) os valores
+  `Name`, `Language`, `ThemeColor`, `CheckForNewVersions` e `LastCheck` (`RemoveRegistryValue` no componente do atalho
+  do menu Iniciar). Na primeira abertura, o programa mostra a janela de boas-vindas.
+- Logotipo nas telas do assistente: `build-installer.ps1` gera `artifacts\Banner.bmp` (493×58) e `artifacts\Dialog.bmp`
+  (493×312) a partir de `Assets\logo-256.png` (`WixUIBannerBmp`/`WixUIDialogBmp`). As telas do MSI ficam em pt-BR.
+
+## Telas do Setup.exe (instalação e desinstalação)
+
+- Tema `rtfLicense` do WixStdBA com o logotipo (`Assets\logo-64.png`). Pelo Setup.exe, a desinstalação em
+  **Configurações › Aplicativos** abre a mesma janela (o MSI fica oculto da lista).
+- Botões e textos no idioma da interface do Windows: `installer\Bundle\Localizacao	hm.<idioma>.xml` (pt-BR, pt-PT,
+  es, fr, de e en) entram como payloads `<LCID>	hm.wxl` (LCID completo e neutro). Outros idiomas usam o inglês. Os
+  arquivos têm extensão `.xml` para o SDK do WiX não os compilar como localização do próprio bundle.
+- Pelo Setup.exe o MSI é sempre instalado para todos os usuários (`MSIINSTALLPERUSER` vazio). Sem isso, o
+  "perUserOrMachine" instalava em `%LOCALAPPDATA%\Apps` e o Burn, que procura o pacote na máquina, não o achava para
+  desinstalar. `WixPerMachineFolder` aponta para `ProgramFiles64Folder` (o padrão do WixUI_Advanced é a pasta x86).
+- Versão do bundle: `<versão>.<horas desde 2026-01-01>`, para que um Setup.exe novo sempre substitua o anterior. A tela
+  mostra só a versão do programa (`VersaoDoPrograma`).
 
 Pastas de instalação:
 

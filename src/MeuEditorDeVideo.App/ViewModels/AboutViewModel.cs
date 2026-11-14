@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using MeuEditorDeVideo.Core.AI;
 
 namespace MeuEditorDeVideo.App.ViewModels;
@@ -10,6 +10,12 @@ public sealed record AboutComponent(string Name, string License, string Use);
 public sealed class AboutViewModel(IModelRegistry? models = null)
 {
     public const string Developer = "Diego Mendes Rodrigues";
+
+    /// <summary>Perfil do desenvolvedor no LinkedIn (aberto no navegador padrão; o programa não acessa a rede).</summary>
+    public const string DeveloperLinkedIn = "https://www.linkedin.com/in/diegomendesrodrigues/";
+
+    public System.Windows.Input.ICommand OpenLinkedInCommand { get; } = new CommunityToolkit.Mvvm.Input.RelayCommand(() =>
+        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(DeveloperLinkedIn) { UseShellExecute = true }));
 
     public string Product => "Meu Editor de Vídeo";
 

@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MeuEditorDeVideo.App.ViewModels;
@@ -40,7 +40,12 @@ public partial class SettingsWindow
         var vm = ActivatorUtilities.CreateInstance<SettingsViewModel>(App.Services);
         var window = new SettingsWindow(vm) { Owner = owner };
         if (owner is null) window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        return window.ShowDialog() == true;
+        var before = Localization.Translator.Language;
+        var saved = window.ShowDialog() == true;
+        // O idioma escolhido vale na hora: o programa reinicia nele (com o mesmo projeto, se estiver salvo).
+        if (saved && !string.Equals(vm.Language.Value, before, StringComparison.OrdinalIgnoreCase))
+            ((App)System.Windows.Application.Current).RestartForLanguage();
+        return saved;
     }
 
     /// <summary>Captura a combinação pressionada no campo do atalho.</summary>

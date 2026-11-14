@@ -1,0 +1,2188 @@
+0013df89	Aucune correction colorimétrique. Commencez par « Réglages de couleur » ; utilisez « Comparer avant/après » pour évaluer.
+002816b9	Contenu du texte
+002ea675	Isoler la voix (voix et ambiance séparées)
+003602ab	Nom du clip composé
+00729350	Importer « {0} »
+008a9fe4	Lors de l'installation, l'application télécharge les fichiers des modèles depuis les sources officielles (huggingface.co et github.com), à 
+00a5b712	Contour par points : Ctrl+clic sur le moniteur ajoute un point ; le clic droit supprime
+00b6829b	Insérer une superposition
+00cd80cc	Images par seconde
+00d551e6	Profil
+00e05d1d	Utiliser la résolution du projet
+00e2a93d	Apparaît en fondu au début et disparaît à la fin du clip.
+00e6066c	Recadrage…
+00f93752	Conserver
+01007cb9	Texte 1
+01108940	Modèles de texte
+01590d5a	Impossible de trouver un segment commun entre les deux audios.
+0168ed63	Désactiver {0}
+0188164c	Amélioration d'image
+019905bb	Documentation du modèle
+01b2dbc7	Calcul des masques de la personne…
+0202c3d4	Multicam
+020cdce1	Effets
+02524e47	Intelligence artificielle
+0276f27a	Couleur de l'ombre
+029b3c90	1280 × 720 · 30 FPS · horizontal, fichier léger
+02ea4889	Activer/désactiver le magnétisme
+0308909e	Effets audio appliqués (dans l'ordre)
+031bc0e2	Supprimer les segments sans parole
+032a18e6	Supprimer l'image clé
+035f634d	Faites glisser pour comparer : à gauche, sans effets ; à droite, avec effets
+03900a2b	Texte à prononcer
+03ae90f8	Mesure le loudness (EBU R128) et ajuste le volume à la cible, sans dépasser −1 dBFS en crête
+03bb166f	Atténuation automatique
+03ef44a2	Le fichier du modèle « {0} » déclaré dans le manifeste n'est pas dans le pack.
+041295fb	Préréglage d'animation inconnu : « {0} ».
+0466381b	Gras
+049d36d6	Point d'ancrage
+04c43e66	Seuil du masque
+04f9f0a7	Apparence
+05009c10	Projets
+05104eb4	Transitions
+0542a483	Indiquez la largeur et la hauteur en pixels.
+054fae56	Informations système
+0550d3b7	Encodeur
+05688f74	Le clip doit avoir au moins deux images pour l'analyse du mouvement.
+05791d4c	Audios
+058fcb4f	Mémoire pour les images :
+0596a7f2	Modifier sur le moniteur
+05a9f4b2	La piste « {0} » est verrouillée.
+05d6e3fc	Héros
+05dcc06b	Basculer thème clair/sombre
+05e2db2f	Écureuil
+06071cd7	Atténuer sous la parole
+06212f7a	Stabilisation
+064a2689	Le fichier est endommagé et n'a pas pu être décodé.
+065c4b73	Ajouter un marqueur
+0661b8e2	Média d'arrière-plan
+06789515	Nettoyer la couleur des bords
+0685b0d0	Égaliseur paramétrique : graves, médiums réglables, aigus et coupe-bas.
+06caa2d8	Les fichiers ont été générés, mais n'ont pas pu être importés : 
+073f2136	En dessous de 1×, crée des images intermédiaires suivant le mouvement (plus fluide que le mélange ; plus lent à traiter)
+0758c00e	Par défaut
+076c68a9	Transition
+0783a361	Opacité invalide dans un clip de la piste « {0} ».
+078f7908	Générer un proxy de montage (540p)
+0794ef86	Ouvrir l'éditeur de sous-titres
+07c62c93	Importer un média
+07c8faa0	Installé par l'utilisateur (pack .medmodel)
+07cf1cc3	Suivre {0}
+07e3fd12	Afficher le curseur de la souris
+07f1878b	Supprimer le modèle « {0} » ?
+08085e15	Animation
+0837686d	Différence
+083815b9	Couleur de l'iris
+0838227e	Intégrer les médias
+084700c8	{0} sous-titres générés. Révisez le texte dans Outils › Éditeur de sous-titres.
+0848bd4e	Largeur maximale
+08b9fad3	Appliquer le style à {0} sous-titres
+08dc5795	Mémoire de {0} (minimum recommandé : 16 Go) : les projets longs ou 4K peuvent être lents, et l'aperçu conserve moins d'images.
+092b9ccf	Agrandir
+09456467	Il n'y a pas de sous-titres dans la timeline.
+094ce26d	Noir et blanc dur, avec des ombres profondes.
+09b0cfc0	Les modèles compatibles utiliseront le GPU (DirectML), avec repli automatique sur le processeur.
+09b3be7d	Informations système…
+09c7eebb	Gain de compensation
+09de0c0a	Exportation terminée
+0a066496	Couleur du texte
+0a23d300	installé sur un autre ordinateur sans internet via « Installer un pack… ».
+0a8c017b	 (installé avec)
+0aa12720	Dépendances
+0ab88c87	Garde la voix naturelle en accélérant ou ralentissant le clip
+0abb8248	FLAC (sans perte)
+0ad16ce4	Taille de la zone
+0ad79817	Voulez-vous le récupérer maintenant ? Si vous choisissez non, la copie reste conservée et sera proposée à nouveau la prochaine fois.
+0b4a9d2c	le champ « packageFormat » doit être 1 ou plus.
+0ba0cb9d	Ajouter une piste
+0bcac467	Enregistrer le projet sous
+0bdc4e3a	Outils couleur
+0be8593b	Mesure du loudness…
+0c0043fb	Windows n'a aucune voix de synthèse vocale installée.
+0c22d156	Importez une musique (ou une vidéo avec son) dans la bibliothèque avant d'utiliser le visualiseur.
+0c29e643	Le fichier n'est pas un projet Meu Editor de Vídeo valide ou est endommagé :\n{0}
+0c7cb81d	Aucun battement ne tombe dans les clips sélectionnés.
+0ca0a504	Looks prêts, cils, fard à paupières, eye-liner, sourcils, rouge à lèvres, blush, contouring, enlumineur, couleur des yeux et taches de rousseur
+0cbf53af	Aucune limitation trouvée.
+0ccce9d9	La limite ne peut pas être négative.
+0ced23a0	Gérer les modèles d'IA
+0d023eef	Présentations
+0d466a9a	Aucun battement ne tombe dans les clips vidéo.
+0d4a67f8	Aligner le texte
+0d4c8b58	Beauté
+0d93a0a8	Mémoire insuffisante pour poursuivre l'exportation. Fermez d'autres programmes ou réduisez la résolution et réessayez.
+0d9e3700	Couleur d'arrière-plan
+0da0de24	Sans nom
+0da83999	1080 × 1080 · 30 FPS · carré 1:1
+0dbd11e2	Gérer les modèles…
+0dd41921	Intervalle
+0de5a654	Ce Windows ne dispose pas du service de voix (SAPI).
+0df1ab9f	Mode de fusion
+0dfff1df	Synthèse vocale
+0e37130c	Zoom avant
+0e66ef4d	Sépare la personne de l'arrière-plan avec un modèle de segmentation local et rend l'arrière-plan transparent, coloré, flou ou remplacé par une autre image/vidéo (RF102–RF109).
+0e6dd87b	Autre…
+0e733e44	Transparent
+0e756f9c	Contenu du manuel
+0e7b405a	Tout installer
+0e7b59f5	Poches sous les yeux
+0e873426	Sous-titres (IA) · 
+0e96564b	Projet (*.med)|*.med
+0ed26265	Image de taille différente de celle de l'encodeur.
+0ed39f0c	Impossible de lire l'image.
+0f2bd88e	Fermer
+0f4fda81	Le fichier n'est pas une LUT .cube valide.
+0f648cfe	Sélectionnez deux clips audio du même événement (Ctrl+clic). Celui de la piste supérieure reste fixe ; l'autre est déplacé.
+0f66a1e1	Ce pack ne contient pas de documentation.
+0f823152	Ombre portée
+0f9df0fd	Masquer la piste
+0fe4dd3c	Volume réduit sur {0} {1}
+0ff11311	Rectangle
+101cbd6c	Supprimer et _refermer l'espace
+104056ac	Pas d'autorisation d'accès à :\n{0}
+10825006	tête
+109708c5	Couleur en hexadécimal : #RRGGBB ou #AARRGGBB (AA = opacité, 00 transparent à FF opaque)
+1098b2ba	L'audio doit être mono, stéréo ou 5.1.
+10c36c9b	Tâche inexistante.
+10dcbba1	Réorganiser les effets audio
+10e15be5	Mémoire libre actuellement : {0}.
+111fe10c	Bleu-vert
+112917dc	Retoucher : beauté
+118cbbe7	Arrière-plan flou
+11a76f48	Le catalogue des modèles est mal formé : {0}
+11cdc5f9	Douceur de la transition
+11deac2c	Réorganiser les effets
+1212c7f2	Réinitialiser {0}
+12172482	Définissez toutes les options manuellement
+127bcf16	Le fichier n'a pas de sous-titres à importer.
+129a4490	Trouve les battements de la musique sélectionnée pour marquer la timeline ou couper les vidéos en rythme.
+12b79a73	Balance des blancs
+12e36b26	Aucune parole reconnue dans le clip.
+12e43c54	Arrière-plan (IA)
+130205e9	La source du modèle a répondu avec l'erreur {0}.
+1305406c	Source
+1327273b	Aucun effet. Les effets se combinent dans l'ordre de la liste ; utilisez les flèches pour réorganiser.
+133b5561	Déplacer {0} clips
+139fd95e	Supprimer le proxy
+13affe77	Multicam : caméra {0}
+13d33b3b	{0} vidéo, {1} audio, {2} sous-titre
+142c1048	Sans audio
+14382145	Aucun (masque fixe)
+143d7159	Non détectée
+145f6546	Annuler l'analyse
+14770a87	_Ouvrir…
+14827c86	Interpolation : {0}
+1489b76a	Annule la scission à la tête de lecture (cliquez sur la règle au-dessus d'une coupe)
+14d3347b	Impossible d'intégrer le projet : le média « {0} » est introuvable. Localisez-le avant d'enregistrer.
+150487bd	⧉  Clip composé
+15101329	Activer/désactiver le clip
+15116ba3	Version
+152bf9ec	Débit vidéo (kbps)
+15339509	 · luminance
+1539c27b	sans parole
+1577f23f	Multicam : caméra 1
+15836e65	Pas encore vérifié.
+15b49896	Solo de la piste
+15c60c96	Parcourir le dossier des exportations
+15f36941	Il y a déjà un sous-titre à la tête de lecture. Déplacez-la vers un espace libre.
+1613c0b6	Flou d'arrière-plan
+16202f97	Créer une _sauvegarde
+16257b8e	Téléchargement… {0} sur {1}
+16877631	Échap ou F11 pour quitter · Espace lit/met en pause
+16a2eed2	Analyse de la séquence…
+16c49152	Exportation personnalisée
+16deab74	Sensibilité des battements
+172b8b49	Votre texte ici
+175f9366	Environ {0} d'espace libre sur le disque sont nécessaires 
+1761779d	Aller au sous-titre
+176f6526	Caméra _2 depuis la tête de lecture
+178a4311	Sommaire
+178e7d0d	Pixelliser
+179e051c	Chaud
+18174d62	Indiquez un nombre entier entre 1 et 100.
+1827b2f4	Proxy de montage 540p (utilisé uniquement dans l'aperçu)
+183c14a7	Effet inconnu : {0}
+185a199f	Aucun encodeur disponible pour ce codec.
+1875203b	Jaune
+1880b1b3	Temps : {0}
+1885c8a7	Mes éléments
+189406ff	Rétablir (Ctrl+Y)
+18b1ed4f	Les modèles s'exécutent uniquement sur cet ordinateur. Aucun fichier, audio ou vidéo n'est envoyé sur internet ; il ne sert qu'à télécharger des modèles à votre demande, dans « Télécharger des modèles… ».
+18d61fa3	Afficher/masquer les réglages
+18e0b11a	Médias
+192d2b9f	Le manifeste du modèle est invalide : {0}
+195c60bb	Audio
+196624f8	Hauteur
+19a414f6	Supprimer le média
+1a31c2cb	Gris
+1a339743	Impossible d'écrire les sous-titres dans « {0} » : {1}
+1a9c2cc2	Scène {0}
+1aa0b2d7	Personne
+1ab28fa2	Impossible de supprimer et joindre : sur la piste « {0} », un clip occupe une partie du segment supprimé. Utilisez « Supprimer et refermer l'espace ».
+1aebdf67	Impossible d'enregistrer le projet dans :\n{0}\nLe fichier précédent a été conservé.
+1af961a8	 (copie)
+1b3c8d48	Exporter la vidéo
+1b5b305a	Disponibles sur cet ordinateur : 
+1b6f8069	Flou de mouvement
+1b719fd0	Version de format invalide : « {0} ».
+1b907390	Séparation de la voix des autres sons…
+1bc58133	Ce clip est une image figée.
+1bc887aa	Répète le segment des clips sélectionnés ou, sans sélection, toute la séquence
+1bdb4add	Police
+1bee19fb	Vidéo verticale légère, divisée en fichiers de 60 secondes maximum.
+1bfac570	L'identifiant du modèle est invalide (« {0} ») : utilisez 2 à 64 caractères minuscules, chiffres, « . », « _ » ou « - », commençant par une lettre ou un chiffre.
+1c163cbc	Les transitions d'image ne s'appliquent qu'aux pistes visuelles.
+1c50785c	Son de téléphone ou de vieille radio (bande étroite).
+1c5236be	Fréquence des aigus
+1c89b0ff	{0} média(s) intégré(s) dans :\n{1}
+1cbafdcf	Robot
+1cc5806d	3D (perspective)
+1ce084c5	Rotation
+1cf38b1a	Corrige la distorsion des objectifs grand-angle et des caméras d'action (barillet) ou des téléobjectifs (coussinet).
+1cf81317	Le modèle d'amélioration de la voix n'est pas installé.
+1d1b1318	Fréquence d'images
+1d546d89	Impossible d'écrire le pack : 
+1d777006	Niveau de _zoom de la vidéo
+1d8cd1d1	Caméra 1
+1da54087	Segment incomplet : {0}
+1dbd6c98	Pistes
+1dd99ff6	Supprimer l'arrière-plan avec l'IA
+1e584c73	Enregistre les paramètres actuels dans le modèle sélectionné
+1e5e1bb5	Suivi de mouvement
+1e60492a	Suivi de caméra : {0}
+1e866939	Accentue les détails (masque de netteté).
+1eacd2c6	Sélectionnez un clip dans la timeline pour utiliser les fonctions d'intelligence artificielle (traitées sur cet ordinateur).
+1eb3d8b3	Éditeur de sous-titres
+1ecb28b9	Arrêtez l'enregistrement avant de fermer.
+1edad40a	Suivre le corps
+1f2a3e07	Le fichier téléchargé ne correspond pas au SHA-256 du catalogue et a été supprimé.
+1fc7eefa	Renommer le marqueur
+1fd93748	Caméra _4 depuis la tête de lecture
+1fe483d6	Caméra 3
+1fe81875	Couleur de remplissage
+2000a3e6	1 clip sélectionné
+20069d00	Supprimer la transition
+200f67c8	Enregistrer le titre
+201b0183	La vérification d'intégrité du projet a échoué (fichier interne « {0} » différent de l'attendu). 
+203b9502	Couleur du texte : {0}
+2044b4f3	Améliorer l'image (IA)
+20692ba7	Couleurs saturées et plus de contraste.
+2069ecd0	Nom de fichier invalide pour « {0} ».
+208d6759	Retirer du projet
+20cd12dd	Saisissez le texte à prononcer.
+20defe23	Rouge · décalage
+20f6693f	Début du sous-titre
+2100e459	À propos de Meu Editor de Vídeo…
+21049745	Tout restaurer
+212b6b7b	Opacité
+2130a3b5	Général
+21538449	Réinitialiser la courbe
+21bed0ea	Taille
+21c8d0d0	Progression de l'exportation
+21dd9981	Lire normalement
+21fcc6cd	Installation
+22046fdc	Intensité
+2237b88f	Couleur
+223d4815	Supprimer le sous-titre
+2252ad0a	{0} — {1} libres sur {2}
+226ba415	Valeur invalide à la ligne {0} de la LUT.
+226bb3a9	_Enregistrer l'écran, la webcam et le micro…
+23235a80	Un projet portant ce nom existe déjà dans ce dossier.
+232914b0	Activer l'interpolation d'images
+233b170f	Enregistrer comme nouveau…
+233d94a9	Piste introuvable.
+2350fda6	|Vidéos|{0}|Audios|{1}|Images et GIF|{2}|Tous les fichiers|*.*
+235669a8	Ajouter un effet
+2371413f	Fichier incompatible.
+23cfedf4	Nouveau nom dans la bibliothèque (le fichier d'origine n'est pas modifié) :
+23f7cd84	Rétrécir/étendre le bord
+241021c5	Alignement
+242f8a3b	Suivre
+24461b9c	Sélectionnez au moins deux clips vidéo ou image.
+244b2e88	Rogner la fin du clip
+2483bc5d	Atténue le grain des enregistrements en basse lumière en préservant les contours.
+250084d8	Modèle de projet
+25065ec1	Piste vidéo
+250e2c1d	La ligne {0} de la LUT devrait avoir 3 valeurs.
+250f78f1	Matériel détecté
+2525f3c6	Qualité 
+252c4d41	Glisser vers la droite
+2534315e	Conserver la hauteur
+253acf99	Échec
+2562cdf7	Rien à exporter : la séquence (ou l'intervalle choisi) est vide.
+25796500	Bulle
+258f9890	Indiquez un nombre de secondes entre 0,1 et 600, par exemple 2 ou 1,5.
+25982bec	Pivoter de 90 degrés à droite
+25c2528e	Activer le clip
+26238b0f	Balle
+264262f8	Le multicam nécessite des clips vidéo sur au moins deux pistes vidéo à la tête de lecture.
+264350ed	**Version :** 
+267f7232	Le titre est corrompu ou provient d'une version incompatible.
+268bb9fe	Apparaître et disparaître
+268c417e	Secondes de décalage
+26b772fe	Exportation impossible : les médias ci-dessous sont introuvables. Localisez-les et réessayez.\n• 
+26d01672	Aucun clip vidéo ou image n'est joué avec cette musique.
+2704d2c1	Analyser le média
+2746b738	Disposition timeline
+277d0a64	Barres
+27852896	M_ulticam
+2791248f	Piste
+2799ee04	La narration a été générée, mais n'a pas pu être importée : 
+284652b8	Ralenti par interpolation (flux optique)
+28684e32	Alignement des lignes ; à gauche, la position X est le bord gauche du bloc
+288f2e4c	Dossier de destination
+289477e3	Supprimer les segments
+28b66102	Fichier introuvable
+28c12b90	Écriture du fichier
+28c195e3	À propos de Meu Editor de Vídeo
+28c83cdd	Clips coupés sur les battements ({0} battements).
+28cee05d	Le catalogue des modèles est mal formé : 
+292f20ee	Exporter
+294088f9	Recadrer 360°
+298eb9ed	Transition d'entrée
+29926e61	Utilisé : {0} sur {1}
+29adb39c	Sous-titres · 
+29cd5809	Le projet doit avoir un nom.
+2a26d4b1	Réduction du bruit
+2a2d375c	Supprimer la piste
+2a2dd579	une installation sur un autre ordinateur sans internet.
+2a3a147a	Masque fixe
+2a8f3af4	Importer des graphiques vectoriels
+2a982144	Paramètres…
+2aacdb1b	Licence du modèle introuvable.
+2ab756a6	pour télécharger des modèles d'IA à votre demande, dans Outils › Modèles d'IA › Télécharger des modèles.
+2abf9dcd	Scinder le clip à chaque scène
+2ac18b26	Enregistrer comme _modèle…
+2adb3f6d	« {0} » dépend de « {1} », absent du catalogue.
+2b0c5a91	Importer une _séquence d'images…
+2b0f40dc	Vidéo verticale 9:16 pour les Shorts.
+2b2b4ad0	Orange
+2b3f02df	_File de rendu…
+2b49d5a8	Désactiver le ralenti lissé
+2b6ce560	Sélectionnez un clip composé.
+2b72b31c	Montage
+2b8a0ae1	Hexagone
+2b8a2ca2	Impossible de lire le fichier : {0}
+2b8b9582	Un projet portant ce nom existe déjà dans ce dossier :\n{0}
+2bb2d843	Confidentialité
+2bbefc50	Timeline
+2be7b894	3 colonnes
+2bf3bcd8	{0} modèle(s) installé(s) en {1:0} s. Les fonctions d'IA correspondantes sont disponibles.
+2bfe28fe	Audio sans bruit sur une nouvelle piste{0}
+2c0296cc	ouvrir le fichier
+2c87774b	\n\n| Action | Raccourci |\n|---|---|\n
+2cb9e9fc	Ajouter à la tête de lecture
+2d15da41	Ajuster {0} : {1}
+2d222ad0	Clips qui se chevauchent sur la piste « {0} ».
+2d3e2cdb	Le fichier existe déjà :\n{0}\n\nVoulez-vous le remplacer ?
+2d450a5f	Carte graphique
+2d48ee32	Sélectionnez au moins deux clips à grouper.
+2d5cc50b	Préréglages de couleur
+2d66dba8	Intact (SHA-256 correspond)
+2df5e7ae	Le codec « {0} » n'est pas pris en charge.
+2df64e60	Le projet « {0} » a été récupéré depuis l'enregistrement automatique du {1}.\n\n
+2e273755	Masque de couleur
+2e32a32c	Préréglage sans constructeur : « {0} ».
+2e3c4535	Ouvrir le dossier des packs
+2e4e5331	Progression de l'analyse
+2e57fd1e	Le nom du projet ne peut pas être vide.
+2e7c388d	Grain de film.
+2e822378	Nouvel arrière-plan
+2e92d7f2	Identifiant en double dans {0} : {1}.
+2eeaa206	Rendu en arrière-plan
+2eecd702	Le nom ne peut pas contenir les caractères \\ / : * ? " < > |
+2eed6249	Enregistrer le nouveau projet sous
+2f3d9b7b	_Par défaut
+2f6412b8	Étoile
+2fbc33c0	Le média fait déjà partie du projet.
+300aa066	finaliser le fichier
+3010760c	Tous les écrans
+3012f1c0	Dossier par défaut des projets
+30239564	Retourner horizontalement
+30752705	Générer des sous-titres
+3076a998	Autocollants
+3095ce94	Ajouter un calque de _réglage
+30abc330	Indiquez le débit vidéo en kbps.
+30ae5c5b	1 scène
+30d1d13a	Apparition avec zoom
+30df7956	Normaliser le loudness
+30eed553	Désactiver le clip
+313aad8d	Non généré (recommandé pour cette résolution)
+3143f1d7	Narration - {0}.wav
+3159bb96	LUT invalide
+31da6402	Le fichier de licence « {0} » déclaré dans le manifeste n'est pas dans le pack.
+31f18c36	Ton vieilli.
+31fad865	Performances de base : ordinateur sous la configuration minimale ; l'aperçu utilise une résolution réduite.
+3257ba09	Transforme une vidéo 360° (équirectangulaire) en vue normale : choisissez où regarde la caméra et le champ de vision. Animez avec des images clés pour déplacer la caméra.
+325dfc37	Début
+327771fc	Vidéo 4:5 pour le fil Instagram.
+328503cc	L'encodeur {0} a échoué ; {1} a été utilisé.
+32a0cf03	Langue parlée
+32adf98e	\n| Élément | Valeur |\n|---|---|\n
+330a4e5f	Écho
+330b2927	Aucun segment à supprimer.
+33207c67	Impossible de démarrer l'enregistrement.
+332a87ef	Appliquer la transition
+333e7ea3	Importer des sous-titres SRT ou VTT
+33c23156	Sélectionnez un clip vidéo ou image dans la timeline.
+33efa939	Recadrage
+3425d10a	Enregistrements
+348e5d7d	Disposition par défaut
+3493d15f	Les packs apportent des autocollants (Éléments graphiques), des titres (Textes) et des modèles de projet (Fichier › Nouveau à partir d'un modèle). 
+34b0d211	1080 × 1350 · 30 FPS · réseaux sociaux
+34b9998f	Les paramètres d'exportation sont invalides :\n• {0}
+34f565db	Médias manquants
+34faa6ec	Incrustation chroma
+350724c7	Modèles d'IA…
+350dbf88	Codec audio
+352e1bb6	Utiliser les proxies dans l'aperçu (les grosses vidéos sont plus légères ; l'exportation utilise toujours l'original)
+3533a02b	Comparer avant et après
+354b7cc2	Le catalogue des modèles est introuvable dans le dossier de l'application.
+35e011ce	Lire (Espace)
+35f42480	Rechercher dans un dossier
+3602fb73	Définir la catégorie…
+3632e2c1	Applique une table de couleurs au format .cube.
+3681e640	Taille cible en Mo
+369101e1	Afficher la modification sur le moniteur
+369cefdf	Volet vers le haut
+36c23353	Animation prédéfinie
+36cf41bb	Flou
+36f71ab3	Pour synchroniser, le clip devrait commencer avant le début de la timeline. Éloignez la référence et réessayez.
+36f8acb2	pour télécharger et empaqueter les modèles, mais il y a {0}.
+37106c1d	Ouvrir le dossier des journaux
+3791f5fd	Espace disque insuffisant pour terminer l'exportation dans :\n{0}\n
+379c2854	Enregistrement
+37a0a489	Réinitialiser la transformation
+37b25c10	Encodeur audio « {0} » absent.
+37b584ab	Position dans la timeline
+37f2fd07	Autre vitesse
+3854d62f	Choisir…
+3861a24e	Clip
+3868d284	Type
+387a32d5	Interpolation d'images
+387e968c	Qualité constante
+38822812	Suivre l'échelle de l'objet
+3883d477	L'enregistrement n'a pas démarré. 
+388cf37f	Le fichier précédent a été conservé.
+38a184a5	\nÉtiquettes : {0}
+38d4657e	Ajouter {0} marqueurs
+38e9c65b	Aucune personne trouvée dans le clip.
+38ee087e	Trouve le visage dans chaque image et le floute, le pixellise ou le masque d'un bandeau (modèle Face Mesh V2)
+3926721b	Canaux audio
+3933da5c	La vitesse doit être comprise entre 0,1× et 16×.
+39406071	Étalonnage par plages : ombres (lift), tons moyens (gamma) et hautes lumières (gain).
+398dbf76	Rétablir : {0} (Ctrl+Y)
+398f4b60	Projet : {0} × {1}, {2:0.###} FPS · durée {3}
+399810b4	Personnalisée
+39aa7e5f	Microphone
+39dcf1cb	Copier
+3a04898a	Appliquer
+3a0df3c5	Remplir l'image
+3a386c75	Analyse du mouvement
+3a9fc0ce	Vidéo horizontale légère à envoyer dans les discussions, limitée à environ 16 Mo.
+3ac65040	Pas encore enregistré
+3ad25f2d	Écran à enregistrer
+3ae31515	Fichier et édition
+3b46fb29	Seuil
+3b4e5a78	Encodeur « {0} » absent.
+3b76efd7	Masque suit {0}
+3b97a221	Aucun encodeur vidéo matériel : l'exportation utilise le processeur et est plus lente.
+3ba121ec	Impossible d'utiliser le dossier choisi : {0}
+3bc02403	Les masques sont disponibles pour les vidéos, images et éléments graphiques.
+3bc8d46b	écrire l'audio
+3be475e0	Sélectionnez un clip vidéo ou image pour appliquer le recadrage.
+3bf6fd57	Suivre la personne avec l'IA
+3bfabf36	Suivre l'échelle
+3c15d740	Modifier le masque sur le moniteur
+3c40acb1	|Vidéos|
+3c4dcce4	Mixeur audio
+3c5843cd	Supprimer les clips
+3c64e4a7	Maquillage
+3c994d1d	Suivre le mouvement ({0} images)
+3cb1e0d2	Inverser
+3cbfc485	Packs
+3ccc32a1	Avancer d'1 seconde
+3cf0f322	Enregistrer automatiquement une copie de récupération
+3d0d217b	Hauteur en pixels
+3d15e61f	Annulée
+3d1dd24d	Restaurer le moniteur
+3d237e76	Rapport d'aspect
+3d345c85	Texte du sous-titre
+3d407cd9	Adoucir les bords
+3d6450e5	Rendu en cours
+3d998840	Ajouter un masque libre
+3d9ce1b0	Projet récupéré
+3deb3228	Propriété non animable : {0}
+3e0eae00	Changer la voix
+3e3a300d	Suivre {0}
+3e403e71	Le clip n'a pas d'audio.
+3e43a712	Égaliseur
+3e44a0e4	Sélectionnez deux clips audio du même événement (ex. : caméra et enregistreur). Celui de la piste supérieure reste fixe ; l'autre est déplacé.
+3e99f0eb	Le projet doit être enregistré pour devenir un modèle. Enregistrer maintenant ?
+3ea09c4a	Graphique vectoriel SVG
+3ea11abe	Délimitez l'objet sur le moniteur (faites glisser la zone) et cliquez sur Suivre. Les masques et autres éléments peuvent le suivre.
+3ea47a2f	sans personnes
+3eb96537	Suivre le mouvement
+3ec071bd	Pas de carte graphique dédiée : les effets et l'IA sont plus lents et l'aperçu utilise une résolution réduite.
+3ec781fc	Importer des sous-titres (SRT/VTT)…
+3ee84c6e	Piste d'effets
+3f2796ef	Infrastructure de l'application
+3f37c218	Progression de l'importation
+3f3a9f9e	Graphiques
+3f8b3ca7	Ajouter une image clé de {0} à cet instant
+3fba8694	Interpolation de l'image clé
+3fc5f90b	Réduire
+3fee37c3	Vidéo horizontale Full HD pour YouTube. Conserve la fréquence d'images du projet.
+3fef6833	le champ « sizeBytes » ne peut pas être négatif.
+400d96d0	Impossible de lire la première image.
+40564208	1920 × 1080 · 30 FPS · vidéo horizontale 16:9
+40598e1c	Vert
+407a3e87	Sélectionnez les clips pour le clip composé.
+40834843	Enregistrement importé dans la bibliothèque (catégorie Enregistrements).
+40935722	Zoom arrière (Ctrl+−)
+40cdbb72	Glisse depuis la droite jusqu'à la position d'origine.
+4154f567	Couleur du rouge à lèvres
+416da133	Les packs ont déjà été téléchargés ; rien ne sera téléchargé.
+41a07328	Le fichier est endommagé ou incomplet et n'a pas pu être lu.
+422fed39	Volume du clip
+42773e53	Relâchement
+4286721c	Cette version ouvre les projets jusqu'au format {0}. Mettez à jour Meu Editor de Vídeo.
+4290938e	Personnalisé
+429ef04f	Terminée ({0} fichiers)
+42e0bd2b	_Mode de disposition
+42fccac8	Dissocier l'audio et la vidéo
+43148e31	Les images de la séquence n'ont pas pu être lues.
+432f6735	Utilisation du cache
+433344e4	Zoom de la timeline
+438effd7	Processeur
+439a14b3	Pivoter 90° ↺
+43d72881	Activer ou désactiver le clip
+43fccb1b	Fait correspondre la couleur de ce clip à celle d'un autre (moyenne et contraste par canal). Utilisez « Faire correspondre la couleur avec… » dans l'onglet Couleur.
+4465a37d	Granuleux
+4479a267	Suivre la tête
+44b631ff	Fichier de sous-titres à côté de la vidéo
+44d0ccfb	1:1 (carré)
+45152ae6	Le débit vidéo doit être compris entre 100 kbps et 500 Mbps.
+451fd00a	Supprimer la courbe de vitesse
+453b0ca2	Séquence d'images
+455fbf86	Recadrer
+45843491	Vérification et installation du pack…
+45f182aa	Aperçu
+460f299c	Ce modèle est fourni avec l'application et ne peut pas être supprimé.
+4619e6f0	Image clé suivante
+4641ce70	Vérifiez que la caméra et le microphone ne sont pas utilisés par un autre programme.
+464f1484	Ajouter à la timeline
+465c8cc9	{0} clips sélectionnés
+46757bac	Température
+46a5f1fa	Indigo
+46d1e868	Lire à l'envers
+46e58e97	Rosé
+46fabbb3	Importer un graphique vectoriel SVG
+47076b85	Modifier le texte
+4762edfd	format {0}
+476362c1	Le pack contient un chemin de fichier invalide (« {0} »). L'installation a été annulée.
+47d0ed00	Appliquer au clip sélectionné
+4838bdb7	Ajouter un élément graphique
+4916a7fb	Flou gaussien.
+494a569b	Reconnaissance vocale (sous-titres automatiques)
+496a53a0	Aucun
+496b2da1	Distorsion
+4990e6de	Impossible de lire la documentation.
+49a11f80	Règle temporelle
+49b2426b	Ralenti lissé
+49e49399	Décodeur non disponible pour « {0} ».
+4a091d4d	Impossible d'importer : 
+4a41756b	Éditeur de sous-titres…
+4a7bc882	Ajouter un générique
+4aa32342	Sauvegarde créée :\n{0}
+4ac612f8	indisponible
+4aca7f2a	(aucun)
+4b01bca3	Renommer…
+4b26f857	La touche F10 est utilisée par un autre programme ; fermez-le et réessayez.
+4b277df4	Supprimer le masque
+4b845e0a	Nom du titre
+4ba40cf2	Réduire le bruit (IA)
+4ba77551	Réduction du bruit…
+4bad4af2	Choisissez le dossier de destination.
+4bd5688d	Indiquez le débit audio en kbps.
+4c08a5d5	Titre
+4c124771	Retirer l'italique
+4c17b0b8	Voix et ambiance sur des pistes séparées{0}
+4c2d09e3	Impossible de créer les marqueurs.
+4c65fff4	Voix (IA)
+4c7877d7	Projet
+4c7d57aa	Sous-titres
+4ca2decc	Coupe précédente
+4cbd0254	non détectée
+4cc178d3	Règle
+4cd84002	L'installation est en cours. Annuler et fermer ?
+4cd930f2	Continuer sans les médias
+4cf809fc	Séquence incompatible.
+4d695638	Le fichier n'est pas un pack valide (.medpack ou .zip).
+4d7672c3	Fichier de sous-titres
+4d88d3e0	Fichier généré :\n{0}
+4d8d51de	Contrôle du débit
+4da3e4a0	Corrompu ou absent — réinstallez le pack
+4da4d95e	Emplacement
+4dc131b3	Nom du fichier
+4dd2a527	Effets audio appliqués
+4e478494	Analyse du mouvement de la caméra…
+4e7b2c21	|Images et GIF|{0}|Tous les fichiers|*.*
+4e7db727	Packs de contenu
+4eb0e167	Conserver la hauteur avec la vitesse
+4ec416b1	ONNX Runtime avec DirectML
+4ee930b2	1:1 — carré
+4f10a1b7	Froid
+4f30b1f8	Raccourcis
+4f323156	Le modèle de segmentation de personnes n'est pas installé.
+4f3d2b8c	Non généré
+4f3fc79f	La séquence d'images « {0} » ne peut pas encore être intégrée au projet. Gardez les médias liés.
+4f45a05b	Négatif
+4f4ef64d	_Localiser les médias manquants…
+4f753a42	Dossier par défaut des exportations
+4f89c7f2	Aucun battement trouvé. Augmentez la sensibilité.
+4f8f39dd	Dernière vérification : {0:g}
+4fa1f152	Enregistrer sous
+4ffae93b	Vitesse…
+5024d904	La largeur et la hauteur doivent être paires (exigence des encodeurs vidéo).
+503b71a5	Version {0}
+5061f61d	Mode de disposition
+507f50c1	Impossible d'exporter
+50869006	Nom
+508943cb	Panoramique de la piste
+5093fe1d	Aucun segment à multiplexer.
+509f67e8	Vérification SHA-256…
+50daaf94	La hauteur suit la vitesse
+50fc99c9	Enregistrer _sous…
+51180d5d	Remettez le clip composé à vitesse normale avant de le défaire.
+5118fb2b	Au lieu de découper le calque, le masque limite la correction colorimétrique et les effets à sa zone
+518ce4d1	Barres qui dansent au son d'une musique de la bibliothèque (choisissez le média dans Source).
+518e4791	Dossier
+51948b7a	Retirer le soulignement
+51af8632	Dupliquer le modèle
+51f5a88c	Modèles d'IA : aucun installé
+52157c00	Pack de contenu (*.medpack)|*.medpack
+5224efb1	Monter le masque
+5261d1d0	Assombrit les bords de l'image.
+5281dcd3	Le pack ne contient pas le fichier manifest.json à la racine.
+52db6cdf	Image suivante
+52f0ddaf	Jaunâtre, peu contrasté.
+52f5eb2e	Performances intermédiaires : ordinateur à la configuration minimale.
+52f6d189	La fréquence d'images doit être comprise entre 1 et 240 FPS.
+5346e9c6	Pistes
+53a6ae34	Supprimer les silences
+53d5198d	Stores
+540143aa	Aucun autre clip vidéo ou image à utiliser comme référence.
+541d9e89	Ces informations restent uniquement sur cet ordinateur. Copiez-les si vous avez besoin d'aide.
+54276aa0	Catégorie
+546462a5	Prénom Nom\nFonction ou description
+54699d00	Aucun long silence entre les paroles.
+54b991fe	Préréglage de couleur : {0}
+54bd8b93	Insérer l'audio traité
+54d5ecd2	{0} combinaison(s) en conflit : corrigez avant d'enregistrer.
+54d95a50	Ajouter un effet audio
+54d9d017	Vider le cache
+54f63e8c	 et clip scindé
+54f7a61f	Édition du masque sur le moniteur
+55a407f1	Texte (Entrée insère un saut de ligne)
+55c3143d	Capturer l'image (PNG)
+5627b3ae	Média indisponible
+56564f14	En file
+566ebd31	Saisissez le texte. La narration est générée avec les voix installées dans Windows (sans internet) et placée à la tête de lecture, sur une piste audio libre.
+56ec9cd7	Nombre de barres
+56f78534	Rechercher…
+57224ac7	Génération du pack .medmodel…
+5741bd41	Conversion des couleurs non prise en charge pour cette vidéo.
+5761280e	{0}|*{1}|Tous les fichiers|*.*
+576a2e8c	Importation {0} sur {1}
+57a73ede	Violet
+57d63eae	Image PNG (*.png)|*.png|Image JPEG (*.jpg)|*.jpg
+57e96679	Monter depuis le bas
+57ff5ff1	PCM (non compressé)
+58114811	100 % = volume d'origine. ◇ crée une image clé de volume à la tête de lecture (ex. : baisser la musique pendant une voix).
+581b58f9	Les modèles n'utiliseront que le processeur.
+581c5f1d	3 bandes
+5821979a	Secondes ; une valeur négative avance les sous-titres
+58397e06	Transparence de l'arrière-plan supprimé
+585cd8ea	Vibrance
+587f165b	Pack de modèle (*.medmodel)|*.medmodel
+58b46f11	● Enregistrement  {0:hh\\:mm\\:ss}   (appuyez sur F10 ou cliquez sur Arrêter pour terminer)
+58eda3a6	Ombres bleutées et hautes lumières orangées (teal & orange).
+59040892	Indiquez un nom pour le média.
+590fb42f	Copié dans le presse-papiers.
+592f4cc0	Voulez-vous enregistrer les modifications de « {0} » ?
+59347891	Prêt (540p, utilisé dans l'aperçu)
+5987374c	Pulsation
+59a37909	Échec de la synthèse vocale : {0}
+59d5e221	Vitesse invalide
+59edc3f0	Retirer de la file
+59f670ec	Clip avec un point d'entrée négatif sur la piste « {0} ».
+5a086003	Supprimer et joindre
+5a21f8f7	Fréquence d'échantillonnage
+5aac92de	_Nouveau projet…
+5ad64b57	Compatible GPU
+5aecb57a	Utilisez le format HH:MM:SS:II (heures, minutes, secondes et image).
+5af9aaf9	L'enregistrement a échoué. 
+5b078c47	Renommer la piste
+5b24e3ed	Volume du moniteur
+5b2beec5	Position de la webcam
+5b35d758	Les fichiers ont été générés, mais n'ont pas pu être importés : {0}
+5b46cdc4	_Intégrer les médias au projet…
+5b54f4d2	Réactiver le son de la piste « {0} »
+5b8c54fd	Musique qui fait bouger les barres (elle doit être dans la timeline) :
+5ba6351b	◇ Forme clé
+5c08e459	Recadrage automatique
+5c59554f	Le débit audio doit être compris entre 32 et 640 kbps.
+5c65e5d0	oui (DirectML), avec repli sur le processeur
+5c66b8e9	Mesuré : {0}
+5c8c4760	Nouvelle piste
+5cc33dc3	Vidéo verticale
+5d537a71	Il n'y a pas de sous-titres dans la séquence ; le fichier de sous-titres n'a pas été créé.
+5d56e7ff	Désactiver l'ombre
+5d6a22d7	Largeur
+5d8883aa	Génération de la narration…
+5d96bdfe	Entrer par la droite
+5da2091e	Couper la piste
+5db649fb	La copie de récupération ne remplace pas le fichier du projet ; elle est proposée à l'ouverture de l'application après une fermeture inattendue.
+5de9e781	Fusion du masque
+5dfeb2fb	Les fonctions inconnues seront ignorées et pourront être perdues à l'enregistrement.
+5e1b8a06	La fin doit être après le début.
+5e295043	Sélectionnez un clip audio (ou une vidéo avec audio lié) dans la timeline pour régler volume, effets et loudness.
+5e2fa470	Espace disque insuffisant pour enregistrer le projet. Libérez de l'espace et réessayez. 
+5e82d5ac	Vitesse invalide.
+5e954ab7	Le projet n'a aucune séquence.
+5eae0cf4	Images|{0}
+5eb230ec	Aucun clip sous la tête de lecture à scinder.
+5edf5e79	Conversion des couleurs non prise en charge par l'encodeur.
+5ee1a93f	Problèmes de configuration
+5eeb522d	Le fichier de « {0} » ne correspond pas au catalogue (taille ou SHA-256 différent).
+5eed6dcf	Insère l'image de la tête de lecture figée pendant quelques secondes
+5efcf38a	Clip trop court
+5f1f5525	Aucune piste compatible pour « {0} ».
+5f411070	Ralentir
+5f4e661e	Le clip ne peut pas être plus long que le média.
+5fc11996	Contenu
+5fee64c3	Enregistrer les modifications du modèle
+6005731b	Cache disque
+6005ab40	Calculer les masques en arrière-plan
+6011bf83	Maquillage virtuel appliqué sur le maillage de points du visage (modèle local) : looks prêts ou chaque élément avec couleur et intensité.
+60165ffd	Manuel d'utilisation — Meu Editor de Vídeo
+602f8c0e	Narration
+60329be2	Ajouter du texte à la tête de lecture
+60470949	Insérer un titre
+60610864	Exporter les sous-titres (SRT/VTT)…
+60893c2c	L'identifiant du manifeste ne correspond pas à celui du projet.
+608b33b7	Modèles disponibles
+60cf6b61	Indisponible
+60fbc8a7	Monte du bas jusqu'à la position d'origine.
+61154f2a	Sous-titre
+612a3040	☰  Calque de réglage
+613006e0	Intelligence artificielle locale
+6134d3a8	Composants tiers
+616d51ec	Caméra _1 depuis la tête de lecture
+61889fa9	Tons de coucher de soleil.
+61af0557	Qualité par défaut :
+61cd11be	Figer l'image
+61fc7586	Coin supérieur droit
+620bf6a8	Modèles installés
+623e74ba	Pas de décodage vidéo matériel : utilisez des proxies pour les vidéos haute résolution.
+623f2504	Sélectionnez un clip audio (ou une vidéo avec audio lié) dans la timeline.
+62609ef1	Suivi à suivre
+626f3120	Sous-titres (*.srt;*.vtt)|*.srt;*.vtt|SubRip (*.srt)|*.srt|WebVTT (*.vtt)|*.vtt
+6295da7b	Taille de LUT invalide à la ligne {0}.
+62a2eccd	Qualité réduite automatiquement à {0} : l'ordinateur n'a pas suivi la lecture.
+62b10e70	Accélération GPU
+62c95076	Détails
+62d6cb2e	Exporter les sous-titres
+62ec5467	Exception non gérée dans l'interface.
+6304c501	Reprendre
+63257e4f	Calcul de l'empreinte SHA-256…
+633366cb	Le clip n'est pas un texte.
+635c4024	Utiliser le GPU
+638d754c	Image {0:N0} sur {1:N0}
+63b910bf	Le projet contient des données incohérentes :\n• {0}
+63dc024a	Supprimer le pack
+63e2bbaf	Continuer
+6432ba75	Échelle
+64678705	Animations prédéfinies
+6483cc8f	Teinte
+64d1d6b0	Durée minimale
+64dee0dc	Une image figée n'a pas de courbe de vitesse.
+64e1842b	Sections des paramètres
+651a7b19	Indisponible — installez-le dans « Télécharger des modèles… »
+652b779e	Internet et réseaux sociaux
+654fc003	Aucun modèle installé. Enregistrez un projet avec Projet › Enregistrer comme modèle ou installez un pack dans Outils › Packs de contenu.
+65599055	Format de pixel
+659a054f	Supprimer la catégorie
+659f28ca	Ancrer le texte
+65a38c35	Seront installés, dans cet ordre :\n{0}\n\n{1}\nAucune de vos données n'est envoyée. Continuer ?
+65bf658b	Exporter la transparence (canal alpha)
+65c185f6	L'image a été générée, mais n'a pas pu être importée.
+65c492ea	Les modèles s'exécutent uniquement sur cet ordinateur ; rien n'est envoyé sur internet. Gérez-les dans Outils › Modèles d'IA.
+65d66874	Mélange
+65e573ea	☰ Calque de réglage
+65ea563c	Corps entier
+65f7a370	Fin du sous-titre
+663c4a55	Insérer l'enregistrement dans la timeline, à la tête de lecture
+66846785	Installé
+66ca46a8	_Synthèse vocale…
+66f394a3	Oui (DirectML)
+67075420	Encodage GPU
+6711c37f	Change la taille du projet pour celle de la zone recadrée (en pixels du média d'origine). L'exportation sort avec ces dimensions.
+672ff2e8	Fin
+674159e7	Incruster les sous-titres dans la vidéo
+6741b8b5	Rouge
+676c833d	Barre de mise en évidence
+67a83907	Graphiques vectoriels SVG
+67b47953	Suivre
+67c013aa	Pack introuvable.
+67cc3632	Lier l'audio et la vidéo
+680417c6	Noirs relevés et couleurs douces, aspect de vieux film.
+68059633	Beauté (peau, visage, yeux, nez, bouche et sourcils) et maquillage virtuel. Utilise le modèle de points du visage (onglet IA › Modèles › Face Mesh V2).
+680ebc8f	Sous-titres · {0}
+68247c27	Marqueur introuvable.
+68686e27	Le modèle de détection de la parole n'est pas installé.
+68707ab4	Téléchargé depuis
+68714cde	Suivi, stabilisation et masques
+68b34599	Limiter la taille de chaque fichier à (Mo) :
+68dbd634	La séquence du clip composé n'existe pas.
+68fa9b14	Coin inférieur droit
+6913e0b0	Ouvrir le fichier exporté
+695e820e	Ajuster à la fenêtre
+6969fe0b	Impossible d'utiliser « {0} » : {1}
+697131ea	Identifiant
+698a73c2	Italique
+69bd325e	Narration insérée ({0}
+69d920c6	Codec vidéo
+69e07560	Dossier du cache
+69e0d3f0	Coupe suivante
+69f500b7	Courbes : {0}
+6a616597	Masquer la piste « {0} »
+6a692da5	(aucun raccourci)
+6b00f1e9	Installez des packs dans Outils › Packs de contenu. Cliquez sur un autocollant pour l'insérer à la tête de lecture.
+6b104bc1	Souligné
+6b1d8e2e	Isolation de la voix et réduction du bruit
+6b2787bd	Clip avec un début négatif sur la piste « {0} ».
+6b65694a	Limite du cache
+6b90a5ae	Tous les fichiers|*.*
+6ba9d30c	1 média a été localisé.
+6beafca2	Dossier des exportations
+6cecb49a	Durée
+6d2b0d64	|Images et GIF|
+6d2b1ab0	Le fichier est introuvable.
+6d5c031d	Ajouter {0}
+6d895b11	8× (accéléré)
+6d96c2bd	Écran {0}{1}
+6dc56b9d	Tout sélectionner
+6dd2c42d	Pour appliquer le recadrage, le clip ne doit pas être pivoté. Remettez la rotation (et la rotation 3D) à zéro et réessayez.
+6dd717af	Caméra _3 depuis la tête de lecture
+6df3d666	Texte
+6e099a28	Le média « {0} » est utilisé dans la timeline. Supprimez d'abord les clips.
+6e0ac37f	Correction d'objectif
+6e236e55	Restaurer les valeurs par défaut du modèle
+6e2cb165	Vérifier l'intégrité
+6e903ce8	durée {0:0.000} s, attendue {1:0.000} s
+6ea914ef	Réduction
+6ec59632	Processeur uniquement
+6ed8deff	Sélectionnez un clip vidéo, image, texte ou élément graphique dans la timeline pour utiliser masques, suivi et stabilisation.
+6ef27c6b	Débit audio en kbps
+6efe6be3	Importer {0} médias
+6f62c475	Sélectionnez au moins deux clips à lier.
+6f812075	Inverser le masque
+6f940f29	Courbe de vitesse : accélère et ralentit dans le clip sans changer sa durée. L'audio du clip est coupé ; rogner ou scinder revient à une vitesse constante.
+6fac26ea	Installer tous les modèles
+70041705	Les LUT 1D ne sont pas prises en charge ; utilisez une LUT 3D (.cube).
+7019763a	Afficher la zone sur le moniteur
+70671217	Clip sans durée sur la piste « {0} ».
+70bbc100	4:5 — portrait (fil)
+70dfbb51	Licence
+70fcce83	Aucun fichier choisi
+71079f9c	Le fichier n'est pas un pack de modèle valide (.medmodel).
+714e03f7	 ; l'original a été coupé.
+7150b8ac	Ne pas suivre l'échelle
+71735e7a	Génération ({0:0} %)
+71a2cb59	_Tout sélectionner
+71d6e741	Vert · décalage
+7213da80	Éclaircir
+725538d9	Le clip composé de la piste « {0} » référence une séquence invalide.
+72587b60	Réduction du volume pendant la parole
+7272a053	Contour lisse
+72cac06a	Indiquez la durée maximale par fichier en secondes.
+73125c38	Vitesse prédéfinie
+7322bd2f	Glisser vers le bas
+734601b1	Terminée
+735c9686	Forme
+736429b4	Exportation impossible : les médias ci-dessous sont introuvables. Localisez-les et réessayez.\n• {0}
+73669c6a	Échec : {0}
+7368658c	Enregistrer les modifications
+73687237	Supprimer le clip
+73996866	Stockage des médias
+73a72cc8	Média
+73e1804e	Format
+742773f3	Résolution
+74449404	Il n'y a pas de coupe à joindre à cet endroit.
+74676510	Intégrité
+74701190	La fréquence d'échantillonnage doit être de 44,1 kHz, 48 kHz ou 96 kHz.
+74950218	Couleur du blush
+74b4aba2	Format du fichier
+74c6975a	Droite
+74db3158	Nom complet
+74f8a58e	Réduit le souffle et le bruit de fond constant (ventilateur, climatisation).
+75137ba5	Fichier du modèle introuvable.
+751aa842	Sans bruit (IA)
+753c5dc6	Activer {0}
+754b3f75	4 en grille
+7565d946	Interpolation
+7577403d	Ouvrir le projet
+75887a79	Rendu en arrière-plan (continuer le montage pendant l'exportation)
+758dcd0f	Aperçu plein écran
+75b6dc2a	Horloge
+75bb54dc	Impossible d'écrire le pack : {0}
+75cd5d41	Recherche de caméras et de microphones…
+75e2df5e	Faire correspondre la couleur
+75e948e4	Compresseur
+762ab498	Roues chromatiques : {0}
+7677bcb8	Solo : n'écouter que les pistes en solo
+76791ad9	Réduire le bruit
+7688a23b	Nom du modèle :
+76900f1b	Retour
+769f6a0a	Sans modèle : utilise la comparaison des couleurs (moins précise)
+76b0fb6a	Paramètres
+76c39a8e	Rouge à lèvres
+76ed2629	Niveau de zoom de la vidéo
+772bee3a	Suivre le mouvement
+7738a0c6	Multicam : caméra 2
+77521d99	Début de l'intervalle
+7780d60c	Vitesse
+77918f1b	GIF animé
+7792337a	Supprimer le débordement de couleur
+779aaedb	La taille cible doit être supérieure à zéro.
+77b5da99	Compression dynamique : rapproche passages forts et faibles.
+77ba5003	Aucune piste de sous-titres. Importez un fichier SRT/VTT ou créez une piste.
+77cc60ba	Répéter le segment
+77f2eef4	Sauvegarde
+77f7e80e	Sélectionnez un clip dans la timeline pour modifier ses propriétés.
+77fbdf0b	Sélectionnez un média dans la bibliothèque pour voir ses informations.
+781f27a7	Encodage matériel
+786b4822	Annuler
+78f1677d	Fréquence d'images vide.
+791b5a92	Tolérance
+7923816a	Fichier introuvable.
+79327250	Supprimer et _joindre
+79398ebe	Vitesse {0}
+794fd4bd	Démarrer l'exportation
+79629b91	Le projet a déjà la taille de ce recadrage.
+7962c89c	_Packs de contenu…
+797088f1	Vitesse (lente ← → rapide)
+7a4e934f	Enregistrer l'écran
+7a6e273d	Impossible de lire le fichier : 
+7a8f424d	Supprimer l'image clé de {0} à cet instant
+7abe7a0c	Animation : {0}
+7ae9d418	Langue
+7b1ac665	Appliquer la limite maintenant
+7b659c9c	Rétablir
+7b8168f3	Nouveau sous-titre
+7b8807a6	4:5 (portrait)
+7b9afa8b	Source
+7ba120ce	non (processeur uniquement)
+7bacbc5a	Vous pouvez utiliser, étudier, modifier et redistribuer le programme selon les termes de cette licence ; le programme est distribué sans garantie.
+7be26e28	Lier des médias externes
+7bf29c9b	Ajuster à la fenêtre (Maj+Z)
+7bf604ba	Raccourcis clavier…
+7c675143	Modèle d'exportation
+7c8b936e	Libérer du suivi
+7c911b78	Durée invalide
+7cb9296c	Non vérifié
+7cdb7ed8	Taches de rousseur
+7ce6ecfa	Trop de redirections lors du téléchargement du modèle.
+7d0bb3f3	Le clip n'a pas d'image.
+7d1929c8	Choisissez où enregistrer le projet (Enregistrer sous).
+7d4015d0	Désactiver le solo de la piste
+7d82850f	Polices (*.ttf;*.otf;*.ttc)|*.ttf;*.otf;*.ttc
+7da0a509	Battements
+7dd3ac25	Nouveau à partir d'un modèle
+7dde99b5	Téléphone / radio
+7e0113a6	Masque de couleur (effets uniquement)
+7e27ac9a	 — dépendance
+7e32a2d4	Masque {0}
+7e3bf162	Enregistrement {0}.mp4
+7e3e9d65	Impossible de déplacer le clip.
+7e42d8e8	Le fichier sera plus volumineux. Voulez-vous continuer ?
+7e782e89	« {0} » a été localisé.
+7e94ec89	La qualité constante doit être comprise entre 0 et 51.
+7ed4feb8	Conteneur
+7ed5bb1c	L'audio {0} ne peut pas être utilisé dans le format {1}.
+7eeaa42e	La résolution doit être comprise entre {0} et {1} pixels dans chaque dimension.
+7f0ef377	Pour affiner le détourage, appliquez l'effet Affiner les bords (onglet Effets).
+7f22c681	Multicam : caméra 4
+7f6e6649	Volume de la piste
+7f716596	Animation de sortie
+7f93841d	Style du sous-titre
+7f93c4ec	Encodeur : {0}
+7fb47d4c	L'enregistrement a échoué. {0}
+7fe9e5a9	Faites glisser les points ; cliquez pour créer ; le clic droit supprime
+803b8572	Appuyez sur Ctrl+F pour rechercher dans le manuel.
+803d8783	Aucun nouveau marqueur à ajouter.
+811994bb	Vitesse (0,1 à 16 ; 1 = normale)
+81290fc5	Ajouter un marqueur (M)
+81411148	Libre
+81682906	Pause minimale
+816f8dda	créer le fichier de sortie
+818512fa	média(s) manquant(s)
+8185e1c3	Contour
+81979bb4	_Qualité de lecture
+81d7338f	Ajuster {0}
+81f3bf42	Hauteur
+81f5e133	Cliquez dans le champ du raccourci et appuyez sur la nouvelle combinaison de touches.
+81ff0504	Processeur avec {0} cœurs logiques : l'exportation, la transcription et les analyses seront plus lentes.
+820467cd	Localiser « {0} »
+82048c39	 · saturation
+820e8fc1	Impossible d'insérer l'audio traité.
+820eaa6a	Utiliser
+82490d77	Recherche de médias
+824f6bec	Suivre la personne (IA)
+8253f604	Reprendre l'exportation
+826b1832	Peau lisse, moins de rides et de poches ; réglages du visage, des yeux, du nez, de la bouche et des sourcils
+8295bfb6	Enregistrez le projet pour conserver les modifications récupérées.
+82b6cf63	Hauteur personnalisée en pixels
+82c7c0d1	Nom alternatif
+82f28f3c	Corrections appliquées (dans l'ordre)
+831374b6	Joindre les coupes
+8317d524	Supprimer la forme clé
+831e1b98	Le fichier du modèle est corrompu : la taille ne correspond pas au manifeste.
+83229f4f	Coller
+835dc419	Textes
+837e69ec	Durée minimale du silence
+8380d244	Parcourir le dossier de destination
+83b2b3ad	Plus de lumière, ombres douces et couleurs légères.
+841e268c	Enregistrer le texte sélectionné comme titre
+84644aef	Importer des médias
+84d0a40a	_Vidéo
+84fb8a36	Progression de l'installation
+8536a03a	Zoom avant (Ctrl+=)
+853ecd69	Échec du décodage du média « {0} » pendant l'exportation. Le fichier est peut-être endommagé.
+859e48c3	Avancer
+85a39ab3	Oui
+85a84081	Espace insuffisant
+85e4ef24	sans son
+85e60104	Une exportation est déjà en file pour ce fichier.
+86156f83	Les clips sont déjà synchronisés.
+865599f5	Combien de répétitions après le clip ?
+865f5b7a	Ajuster la zone de suivi
+8666ae09	Simule l'ambiance d'une pièce.
+86abe398	Aucun média importé. Faites glisser des fichiers ou dossiers ici ou utilisez « Importer des médias ».
+86ae2870	Répétitions retardées du son.
+86f5314c	Données locales
+87088714	Défaire le clip composé
+871aa6c3	Vidéo carrée 1:1 pour le fil Facebook.
+87628281	Synchroniser
+876ffbf9	Les miniatures, formes d'onde, proxies et masques IA sont conservés pour ne pas être recalculés. Quand la limite est dépassée, les éléments les moins récemment utilisés sont supprimés. Les projets ne sont jamais supprimés.
+878a7adc	Baisse le volume de ce clip (par exemple la musique) pendant qu'il y a de la parole sur les autres pistes.
+87eae1d4	Suivre
+881c6e33	Télécharger des modèles…
+8829c93e	Exporter la transparence
+8857e42a	SAPI indisponible.
+88ae9947	Réactiver le son de la piste
+88b862ab	1080 × 1080 · 30 FPS · réseaux sociaux
+88df6d33	Le modèle de reconnaissance vocale n'est pas installé.
+88e95c0a	{0} sur {1} : {2} — {3}
+88f77287	Dupliquer
+893056f0	Indiquez la taille cible en Mo.
+89423cbc	Installer un modèle d'IA
+8970ea4a	Le presse-papiers est utilisé. Réessayez.
+89929850	_Intervalle de lecture en boucle
+8998ed98	Plein écran (F11)
+89a4eae3	Scinder à la tête de lecture (S)
+89c80e34	Durée maximale par fichier en secondes
+89dd5401	La police était déjà disponible ou le fichier n'est pas une police valide.
+89ec0bb8	Cinéma
+89ee5557	Répéter le segment {0}×
+8a0ab8d5	Parcourir le dossier des projets
+8a40875e	Audio sans bruit sur une nouvelle piste
+8a6fd558	Échec de la synthèse vocale : 
+8a86d43f	Sous-titre sur la piste de sous-titres, avec une boîte sombre en bas de l'image.
+8a8b5ccd	Packs installés
+8ab186bd	Point d'ancrage vertical
+8ae77c8d	Masque
+8b19518f	Supprimer
+8b5f9c27	Trouve le visage dans chaque image (modèle local de points du visage) et le floute, le pixellise ou le masque d'un bandeau.
+8b680f94	Aimant d'alignement (N)
+8b765514	Nom et fonction dans le coin inférieur gauche, avec boîte et barre de mise en évidence.
+8b9685fd	Rien à insérer.
+8ba35013	Le nombre de répétitions doit être compris entre 1 et 100.
+8ba4bfdb	Adresse de téléchargement non autorisée : {0}
+8bb7142c	Teinte, saturation et luminance par plage de couleur (ex. : seulement le bleu du ciel ou le vert des feuilles).
+8bca47f7	Fréquence des médiums
+8bcf12dd	Localisez les fichiers pour qu'ils s'affichent correctement. Vous pouvez continuer sans eux ; les parties seront marquées comme manquantes.
+8bd535e8	Recadrer en {0}:{1}
+8bf6d35e	Changer de LUT
+8cdd8b73	Une erreur inattendue s'est produite. Les détails techniques ont été consignés dans le journal.
+8ceb5546	 · {0:0.#} images/s
+8cf2f985	Médiums
+8cf68614	Décaler tous les sous-titres
+8d25baae	Effacer les terminées
+8d3ab4fe	des adresses fixes, et vérifie la signature SHA-256 de chacun. Aucune de vos données n'est envoyée : vidéos, audios et projets 
+8d451aba	_Exporter…
+8d498979	Boîte d'arrière-plan
+8db954de	Restaurer tous les modèles par défaut
+8de3ef77	Analyser et stabiliser
+8e0afda7	Durée de l'image figée (secondes)
+8e55a42b	Pour rogner les bords de la vidéo, utilisez Recadrage dans l'onglet Vidéo. Pour un autre format, choisissez 9:16, 1:1 ou 4:5.
+8e6c50c3	_Importer des médias…
+8e7290e4	Destination
+8e8a1dd4	Installer
+8ec34711	G {0}
+8f15aa6f	Nez · affiner
+8f74af45	Aucune parole détectée dans le clip ; rien n'a été supprimé.
+8f9711cf	Qualité par défaut de l'aperçu
+8f978747	Débit vidéo en kbps
+8fc6b8b6	Image
+8fe35595	Retirer « {0} » du projet ?\n\nLe fichier d'origine ne sera pas supprimé.
+90053151	Le pack est trop volumineux (limite de 1 Go, 200 Mo par fichier).
+902992cd	La timeline est vide.
+90373aee	Scinder
+904d8590	Durée de la transition
+90a83863	Le masque suit l'objet suivi dans ce clip
+910a780e	Image ou vidéo de la bibliothèque utilisée comme arrière-plan
+910b85d5	Renommer le média
+911cdb53	Débit audio (kbps)
+91243d08	Gérer les modèles d'IA…
+9127d899	Le calque de réglage doit avoir une durée.
+913d78bc	Descendre le masque
+9170dd96	Informations sur le projet
+91993891	Teinte (vert/magenta)
+91a4e4d1	Nom du marqueur
+91c1307d	Effets appliqués
+91f4c48a	Synchroniser par l'audio
+9215f215	Désinverser le masque
+921a92a5	Rétrécit ou étend, adoucit et nettoie les bords de la transparence (à utiliser après le chroma key ou les masques).
+924d7ac0	Importer des sous-titres
+92705f24	Niveau total gauche
+9274f120	Impossible de télécharger {0} depuis {1} : {2} 
+92776122	Modèles d'IA :
+92bea0f0	Retournement de carte 3D
+92c5fc4a	Pousser vers la droite
+92d5ff67	Exporter le pack
+92e5d43d	Supprime l'arrière-plan vert, bleu ou d'une autre couleur (RF112–RF118).
+9313455e	Oui
+9330387d	Nom de la piste
+93430dd7	Pause minimale sans parole
+93496ca9	Nouvelle piste de sous-titres
+9353deae	Défilement horizontal de la timeline
+939c8811	Intervalle de l'enregistrement automatique
+93d2a681	**Fichier d'origine :** 
+93f020e7	Objectif
+9408883f	Composition
+9417c083	Pivoter 90° ↻
+941b287a	Scène
+94460ea5	Volume du moniteur (n'affecte pas l'exportation)
+94532fca	Détection des battements…
+9469c655	Sans titre
+947a2e03	Modèle « {0} » enregistré. Utilisez Fichier › Nouveau à partir d'un modèle pour démarrer un projet avec.
+94944ce3	Pour appliquer le recadrage, le clip ne doit pas avoir d'images clés de position ou d'échelle. Supprimez-les et réessayez.
+94ad0fd2	Réduction du bruit vidéo
+94f6b18b	Sauter (pop)
+9507d266	Modèles d'exportation
+955c0ab4	écrire la vidéo
+9588387c	Multicam : caméra 3
+959b655e	Agrandissement (0 = automatique)
+95d59946	Couleur unie
+95f551a3	Ambiance (IA)
+95f91ae8	Projet Meu Editor de Vídeo (*.med)|*.med
+96171edc	Police du texte (du système ou ajoutée à l'application)
+961d7e4e	Sous-titres (IA) · {0}
+967bcf34	Ajouter
+967dc3a7	Haute qualité constante pour regarder sur ordinateur.
+968025f2	{0} fichier(s) étai(en)t déjà dans le projet et a/ont été ignoré(s).
+9681eb86	Ajouter un fichier de police (.ttf, .otf) à l'application
+9686fe50	le champ « sha256 » doit contenir 64 caractères hexadécimaux.
+96983038	Losange
+96ac0bc8	Créer le projet
+96c0ff21	 · fichier {0} sur {1}
+96de2ae3	Courbe de vitesse
+96f7d901	Le générique défile de bas en haut pendant tout le clip : allongez le clip pour un défilement plus lent.
+97031e0c	S'exécute sur
+97099a8f	Fréquence d'images invalide : « {0} ».
+971b6d49	Monter
+9735f192	Silences
+97615d97	Visage · affiner
+976d01c0	Libérez de l'espace et reprenez l'exportation ; les parties déjà prêtes seront réutilisées.
+977ee6ea	Mesure le mouvement de la caméra sur tout le clip et compense les tremblements
+9793a5a3	Hautes lumières
+97a0fa09	À propos
+97b6e3dd	 (comparaison des couleurs).
+97c7861a	Enregistrer comme modèle
+97ccf959	Faites glisser les poignées ou la forme sur le moniteur
+97d1f7a4	Projet 4K sur cet ordinateur : l'aperçu utilise une résolution réduite et les proxies sont recommandés.
+982ab01b	Installé par l'utilisateur
+9835016e	Position de la webcam sur l'écran
+98374ac0	Piste de sous-titres
+9845c805	Le média n'a pas d'image.
+988590bb	Projet recadré en {0}×{1} ({2} {3}
+9889fca2	Fonctions : supprimer ou remplacer l'arrière-plan, sous-titres automatiques, isoler la voix, réduire le bruit, détecter les scènes, supprimer les silences, suivre la personne et améliorer l'image. Seul « Supprimer l'arrière-plan » est installé d'origine ; les autres modèles s'installent depuis le gestionnaire.
+98b5d173	Les paramètres d'exportation sont invalides :\n• 
+98cf9ae3	Indisponible — installez le modèle dans Outils › Modèles d'IA.
+9909c673	{0} média(s) importé(s).
+993f8ca5	Exporter l'_image actuelle…
+993fb9a7	La durée maximale par fichier doit être d'au moins 1 seconde.
+99698ee6	JSON mal formé, capacité inconnue ou champ obligatoire manquant.
+99970c27	Aller à
+99978bfe	Télécharger des modèles d'IA
+99b554f5	Afficher la piste
+99c2a78a	Suivi du mouvement…
+99df1621	Zoom : ajuster
+9a02a010	● non enregistré
+9a3f0084	Dupliquer le clip
+9a6e2b5f	 (limité par la crête)
+9a7d2d6d	Enregistrer comme nouveau modèle
+9a87121f	Espace disque insuffisant pour enregistrer le projet. Libérez de l'espace et réessayez. Le fichier précédent a été conservé.
+9ab0d1ea	Roue chromatique
+9ab3d578	|Audios|{0}|Images et GIF|{1}|Tous les fichiers|*.*
+9ac09183	Délavé
+9ad24dec	Personne suivie sur {0} images. Liez des éléments dans l'onglet Composition.
+9ad60b9d	Raccourcis clavier
+9b19dee8	Mode de fusion : {0}
+9b29bed0	Nouveau format
+9b531f54	Glisser vers le haut
+9b65b00b	 · reste {0}
+9b7db2e8	Sélectionnez un clip dans la timeline et double-cliquez sur un élément (ou utilisez Appliquer).
+9b9131e8	Attention : nécessite {0}, mais seulement {1} libres actuellement.
+9b94de36	Restaurer les modèles par défaut
+9b99805f	Disponible
+9ba2e998	Médias introuvables
+9bc947e5	Non
+9c0f9b45	Roues chromatiques
+9c1e3034	Remplissage
+9c24e660	Arrière-plan et personnes
+9c2ace19	Logiciel (plus compatible)
+9c34b3cd	Journal technique local
+9c6cd9bb	Animation d'entrée
+9c942e59	Choisir le fichier LUT
+9c9faeaf	Rogner le début du clip
+9cb207d9	21:9 (ultra-large)
+9cc1e882	En dessous de ce niveau, le son est considéré comme du silence
+9cd2818e	Masque de découpe
+9d88a6f0	FFV1 (sans perte)
+9d99fd1a	Structure de l'interface
+9d9ef9d6	Niveau total droit
+9db4fa74	|Tous les fichiers|*.*
+9dbee951	Mémoire vidéo de {0} sur {1} (minimum recommandé : 4 Go) : les modèles d'IA peuvent s'exécuter sur le processeur.
+9ddd13ca	Le nom du projet contient des caractères non autorisés dans les noms de fichier.
+9df19278	{0} · {1} libres sur {2}
+9e08fe1b	{0} · {1} éléments
+9e27b666	ouvrir le fichier de sortie
+9e4809a4	La personne (premier plan)
+9e4f5f8a	Volet vers la droite
+9e753333	Toutes les catégories
+9e7970b6	Tombe d'en haut et rebondit trois fois, de moins en moins haut, en 1,2 s maximum.
+9ea4187c	Les textes restent tels quels. Tout peut être annulé avec Ctrl+Z.
+9eb75f87	Sélectionnez un texte, titre, générique, bandeau ou sous-titre dans la timeline. Pour en créer un, utilisez la section Textes de la bibliothèque.
+9ed52789	Enregistrer le texte sélectionné comme titre…
+9ef688e1	Piste de sous-titre
+9f27aa14	Tout décaler
+9f50ebd5	Rechercher dans un dossier…
+9f54018c	Piste de texte
+9f82554b	Enregistrer
+9f8f7a58	Version 
+9f9fef77	Rechercher les médias manquants dans ce dossier (sous-dossiers inclus)
+9fbdfc69	Double-cliquez sur une forme pour l'insérer à la tête de lecture. Ajustez forme, couleurs et masques dans l'onglet Composition.
+9fc16cbd	Finalisation du fichier…
+9ffb6e4e	Sous-titres incrustés dans la vidéo
+a01a5fce	Ouvrir
+a01b0354	Vidéos
+a02d9202	Couper la piste « {0} »
+a053b0c0	Vérifiez la connexion internet et réessayez ; ce qui a déjà été téléchargé est réutilisé.
+a07187e6	Impossible de lire les images du clip.
+a07f22c4	Ajouter un bandeau
+a0fddddc	Fréquence d'échantillonnage inconnue.
+a17a83d9	Pack généré par Meu Editor de Vídeo (Outils › Modèles d'IA › Télécharger des modèles). Il peut être copié et
+a1d3b0f3	Bibliothèque de médias
+a1dbcab3	Accélération
+a1f0ebf7	Postériser
+a1fdc355	Liste du générique qui défile vers le haut pendant le clip.
+a22df4a4	Suit la zone sur tout le clip, à partir de l'image où elle a été marquée
+a25d0867	rectangle
+a25f7142	Format de fichier non pris en charge.
+a27c1569	Verrouiller la piste « {0} »
+a2917771	Forme de l'élément
+a2db4029	Coin supérieur gauche
+a3037dc7	Supprimer
+a33c279d	Le recadrage ne laisse aucune partie de la vidéo visible.
+a35b27c8	Enregistrer le texte comme titre…
+a38d2879	Cliquez et appuyez sur la nouvelle combinaison
+a3d8a6fc	Disponibles sur cet ordinateur : {0}
+a3ec6a2d	Éléments graphiques
+a4197e5a	Détection de la parole (supprimer les silences)
+a42d035a	le document est vide.
+a42ec6eb	Le clip n'a pas de recadrage. Réglez Gauche, Haut, Droite ou Bas dans la section Recadrage et réessayez.
+a432f80d	Séquence principale
+a4366291	Vidéo verticale 9:16 pour TikTok.
+a4484ae1	Les segments couvrent tout le clip ; il ne resterait rien.
+a44a7bf7	Partage WhatsApp
+a495ed65	Lecture / pause
+a4cfbdb9	Ce pack est fourni avec le programme et ne peut pas être supprimé.
+a4d93982	Lit le clip (et l'audio lié) de la fin au début
+a50c4359	La taille de la FFT doit être une puissance de 2.
+a552ddd9	Secouer
+a5596e75	Choisissez une piste de sous-titres.
+a559e5d2	Titres enregistrés
+a59fbd11	◇ crée une image clé à la tête de lecture ; avec des images clés, modifier la valeur en enregistre une nouvelle.
+a5ab3212	Modèle
+a5ba8caf	Traite toutes les images et stocke les masques dans le cache : la lecture et l'exportation sont plus rapides.
+a5d5bde3	Couleur du clip
+a68795a7	Coins
+a689d5fe	Supprimer l'atténuation
+a6d2c75c	Panoramique (gauche/droite)
+a6d59bff	Mémoire suffisante ({0} libres).
+a6e38409	le champ obligatoire « {0} » est vide.
+a79164d7	Fin de l'intervalle
+a80de96d	Historique
+a81a45dd	Courbe de l'image clé à la tête de lecture (ou de la précédente) jusqu'à la suivante
+a833a2ff	Remplir l'image
+a83f2382	Une caméra virtuelle suit la tête ou le corps de la personne (modèle de segmentation local) : coupe automatique, tremblement et arrière-plan flou.
+a855e974	Qualité de lecture
+a88536f3	Accélérer
+a8986614	Installer un pack…
+a8bf82e2	Visage (tête)
+a8d89df1	Graphiques vectoriels SVG (*.svg)|*.svg
+a8f519e6	Comparer avant/après sur le moniteur
+a93f5408	Le modèle « {0} » n'existe pas dans le catalogue.
+a944c0bd	Impossible d'importer : {0}
+a9687773	Champ de vision
+a97a2f58	Retoucher : {0}
+a9cb52c8	Vif
+aa37929d	Ouvrir le dernier projet au démarrage
+aa38493c	L'arrière-plan (supprime la personne)
+aa3a6b36	Sélectionnez un texte dans la timeline.
+aa3ccd04	Exporter les sous-titres SRT ou VTT
+aa524ea7	Vidéos, audios, images et projets sont traités uniquement sur cet ordinateur. Internet n'est utilisé que pour télécharger des modèles d'IA à votre demande, dans Outils › Modèles d'IA › Télécharger des modèles.
+aa58d0db	Déverrouiller la piste
+aa69e649	Couleur en #RRGGBB
+aa846485	Enregistrer les paramètres
+aa919d0d	Non installé
+aaa36d27	Fusion
+aaa71991	sans bruit
+aaaa1558	Tous les médias seront copiés dans le fichier du projet (.med), qui pourra être emporté sur un autre ordinateur.\n\nLe fichier sera plus volumineux. Voulez-vous continuer ?
+aabd2374	Localiser {0} médias
+aacb531f	« {0} » n'a pas d'audio.
+ab3b4b5f	Inverse les couleurs.
+ab48d386	Pulsation d'échelle jusqu'à +8 % toutes les demi-secondes, un cycle par seconde.
+ab57bf31	aucune (utilise le processeur)
+ab6ca17a	Résolution de l'aperçu
+ab87641e	1080 × 1350 · 30 FPS · portrait 4:5
+ab8ecea6	Fait osciller la rotation de ±5° toutes les 0,25 s et finit à la position d'origine.
+abd7c83a	Supprimer le suivi
+abece812	Isoler la voix (IA)
+abf8b470	1/4 de la résolution
+abfb4b30	Nom du projet
+ac2cbab5	Masques
+ac483d96	Impossible de déterminer la durée du fichier.
+ac6d9b76	Attaché
+ac950bd2	Changer la musique du visualiseur
+acdbbcfc	Grouper
+ad10b62e	Qualité {0}
+ad136596	Image sans dimensions.
+ad2a0c06	Fraction invalide : « {0} ».
+ad80e2c3	Cœur
+ad874ae7	Pause (Espace)
+ad8df3a5	Impossible d'insérer la narration dans la timeline.
+adb7270d	Impossible de lister les périphériques.
+ae0506ab	Rotation
+ae17790f	Éditeur de courbe
+ae212840	_Recadrage automatique…
+ae270ee9	fichier illisible
+ae770c3a	Pivoter de 90 degrés à gauche
+ae9f4b28	Restaurer par défaut
+aebeadc5	Diviser en fichiers de (secondes) :
+aeccaa09	Suivre le mouvement
+aee6ac44	Supprimer l'effet
+aef7cd5b	Enregistrer
+aef8d6e3	Sélectionnez un clip
+aeff7dfe	Image de l'aperçu
+af0af913	Indiquez un nom de projet valide (sans les caractères \\ / : * ? " < > |).
+af1b8596	Utiliser la carte graphique pour décoder et encoder la vidéo
+af29197a	Recherche de parole sur les autres pistes…
+af546587	Le fichier du modèle est corrompu : l'empreinte SHA-256 ne correspond pas au manifeste.
+afa5a4d1	En dessous de 1×, mélange les images voisines pour réduire les saccades
+afb4371a	Piste audio
+afe2cac2	Aucun silence trouvé avec ces réglages.
+b01248cd	Détection de scènes
+b063a2b4	Descendre
+b0bdf35c	Aucun projet ouvert.
+b0bf526b	Bleu
+b0d199f4	Le fichier ne contient pas de titre.
+b0db97bd	1 grand et 2 petits
+b0eb1a78	Installer le pack
+b11740b5	vidéo
+b11e7ca5	Largeur (px)
+b11ed988	Coin inférieur gauche
+b145bb85	Crée un suivi avec la position de la personne dans chaque image (à utiliser dans l'onglet Composition pour lier des éléments).
+b16877fc	Piste d'image
+b18667ee	Sous-titres automatiques
+b1ac18dd	Clip introuvable.
+b1cd5de2	L'encodeur « {0} » a échoué pendant l'exportation.\n\nDétail : {1}
+b1ec1e0a	Reculer
+b219ec26	Ralenti lissé (mélange d'images)
+b242b184	Annuler l'exportation
+b27ca00f	Débit
+b2984529	Supprimer l'arrière-plan (IA)
+b2b13af1	SHA-256 invalide pour « {0} ».
+b2b3f797	Modèle d'écran partagé inconnu.
+b2b73bb5	Reconnaissance vocale pour sous-titres
+b2b9b581	Renommer le projet
+b2d639ee	Un pack est un fichier .medpack (ZIP) avec les dossiers figurinhas, titulos et modelos. Tout reste sur cet ordinateur.
+b2dca5fa	Créer un clip composé
+b2de3267	Intervalle invalide : utilisez hh:mm:ss:ii, le début avant la fin.
+b2ef043b	Transparent (montre les pistes inférieures)
+b2f40db4	Décaler les sous-titres {0}
+b387f469	Disposition vidéo
+b3dc418d	Transformation
+b40b2944	Entrée
+b426f76d	Les textes ne vont que sur des pistes de texte ou de sous-titres.
+b428cf3d	Le projet a été converti du format {0} au format {1}. Une sauvegarde de l'original a été créée lors de l'enregistrement.
+b45e0461	Placez un autre clip juste avant celui sélectionné, sur la même piste, pour appliquer une transition.
+b4689945	Suivi utilisé par le masque
+b47459a4	{0} seront téléchargés depuis les sources officielles (huggingface.co et github.com).
+b47523e5	Indiquez la couleur qui devrait être gris neutre ; l'effet compense la dominante.
+b4899b01	Exporter…
+b4de2f0a	Vérification du résultat
+b4ea7511	Forme clé à cet instant : le masque est animé.
+b4fc57a4	Restaurer toutes les valeurs par défaut
+b523facc	En qualité automatique, la résolution est aussi réduite pendant la lecture lorsque l'ordinateur ne suit pas la fréquence d'images.
+b55b893b	des adresses fixes, et vérifie la signature SHA-256 de chacun. Aucune de vos données n'est envoyée : vidéos, audios et projets restent uniquement sur cet ordinateur. Les packs .medmodel générés sont conservés et peuvent être copiés pour une installation sur un autre ordinateur sans internet.
+b59eb5ff	Récupérer le projet
+b5b3551f	Visualiseur audio
+b6105c3d	Impossible de lire le catalogue des modèles : {0}
+b628fbcc	Ajouter une image clé
+b62c9d74	Déplacer vers « {0} »
+b62c9eb7	Ajouter un titre
+b63068f3	Ombres
+b631ad1e	Aucun média disponible dans la bibliothèque à analyser.
+b63a3ccf	Activer le ralenti lissé
+b643bd60	Par défaut
+b659da7f	Recadrer
+b6802094	Cercle
+b686b59f	Choisissez le dossier du projet
+b6937e77	Sélectionnez un clip vidéo pour figer l'image.
+b6c3a204	Impossible de copier la police : {0}
+b727d242	Courbe
+b72a9846	Mon modèle
+b72e5a13	Bleu · gain
+b72e9d46	Analyse des médias…
+b7e6dc27	Insérer un titre enregistré
+b7f76078	Ajouter un masque elliptique
+b8132eef	Durée de la transition de l'atténuation
+b8364050	Machine à écrire
+b838cbac	Annuler le traitement IA
+b874aa98	Mouvement mesuré sur {0} images. Agrandissement utilisé : {1}
+b9338cb5	Pousser vers la gauche
+b95e7e70	Ajouter une forme clé
+b9a919b8	Ajouter un sous-titre
+b9c0bcfe	Le serveur a envoyé plus de données que prévu pour le modèle.
+b9e41f3e	erreur inconnue
+b9f1ad20	Couper sur les battements
+ba08d63c	Bouche · taille
+ba20b1c3	Le fichier SVG n'a pas pu être lu.
+ba309e78	Logiciel libre sous licence GPL-3.0-or-later (GNU General Public License, version 3 ou ultérieure). Vous pouvez utiliser, étudier, modifier et redistribuer le programme selon les termes de cette licence ; le programme est distribué sans garantie.
+ba30f96d	Renommer la piste…
+ba8a452f	Fichier
+ba9f942a	Mémoire nécessaire
+bb036ae9	Importer une séquence d'images
+bb454060	Aigus
+bb4ffa92	Cible de loudness
+bb6066d2	Insérer une narration
+bb8b9160	Compatible CPU
+bb9dbb40	Annuler
+bc10c86c	Vidéo
+bc27f047	{0} scènes
+bc2db144	Arrière-plan supprimé. Réglez les bords, la couleur et le lissage entre images dans l'effet « Supprimer l'arrière-plan (IA) » de l'onglet Effets.
+bc3097cd	Détection de la parole…
+bc314f33	Rebondir
+bc4300e4	Supprimer et refermer l'espace
+bc918795	Scinder le clip à la tête de lecture
+bcefb06d	Retoucher : maquillage
+bd44d5e0	Fondu de sortie
+bd45d76a	Le fichier ne contient ni vidéo, ni image, ni audio.
+bd62479c	{0} caméra(s) et {1} microphone(s) trouvé(s). La vidéo est enregistrée en MP4.
+bd86e359	Personne (IA) {0}
+bdf1d163	Noir et blanc
+be434a66	Rechercher des mises à jour
+be5ba8e9	Forme : {0}
+be798572	 (inclus)
+bea5dcaa	Largeur des médiums (Q)
+bed3691d	Ordinateurs et portables
+bef25b45	Calcul…
+bef5ae1a	Change la hauteur de la voix (grave, aigu, écureuil, monstre) ou lui donne un timbre de robot, sans changer la vitesse.
+bf1976de	Supprimer le modèle
+bf27b980	Ellipse
+bf58245f	Entrée en retournant comme une carte (images clés de rotation Y)
+bf92b13c	Zoom avant lent et continu sur tout le clip, avec un léger décalage.
+bfbbed74	Localiser…
+bfcb20ec	résolution {0}×{1} différente de celle attendue
+bfea1e6b	Amélioration de l'image…
+c0092693	Moitié gauche du moniteur sans effets ni correction colorimétrique
+c01fb16d	{0} images
+c023c053	Correspondance des couleurs…
+c02993f6	Suivre le suivi
+c0791fa7	Localiser le média manquant
+c0b1203e	Certains médias du projet sont introuvables
+c0c555d2	Vérifier tous les mois :
+c0ee73d7	1000 × 1500 · 30 FPS · portrait 2:3
+c10e2d3d	Taille invalide pour « {0} ».
+c10eef07	Éléments graphiques
+c11b9c88	Agrandir le moniteur
+c121cb08	{0} sous-titre(s) · de {1} à {2}
+c17a983d	S'applique à la coupe avant le clip sélectionné.
+c1b2f978	 · teinte
+c23c0fb4	Nouvelle version disponible
+c2440898	Nom du modèle
+c2544121	Lorsque vous cliquez sur Enregistrer, le programme est réduit et l'enregistrement démarre après un compte à rebours de 5 secondes. Pour arrêter, appuyez sur F10.
+c2553487	Activer la stabilisation
+c260f7a0	Nouveau projet
+c29337f0	Une image figée ne peut pas être lue à l'envers.
+c2c8833a	Faire correspondre la couleur au clip précédent
+c307b025	Réessayez avec l'encodeur logiciel (option « Encodeur : logiciel »).
+c33d5482	{0} est aussi utilisé dans « {1} »
+c3410a7b	Coupe automatique (zoom)
+c354d10e	Recadrer le clip
+c3760820	Volet vers le bas
+c39fe73b	Instagram Feed carré
+c3ca70d6	Exécuter les modèles sur :
+c3e811b3	Masques prêts : la lecture et l'exportation utilisent le cache.
+c3ed83c8	Coupe les silences du clip (et de la vidéo liée) et referme les espaces
+c3ef05c4	Aspect HDR : récupère ombres et hautes lumières et renforce les détails locaux.
+c4146628	Saut
+c420cee5	Aucun média ne correspond à la recherche.
+c42d7a7e	Retirer le gras
+c43ee61f	Générer automatiquement des proxies pour les vidéos au-delà de 1080p
+c45641ba	Performances élevées : ordinateur à la configuration recommandée.
+c463002e	Le modèle d'amélioration d'image n'est pas installé.
+c46d4cbb	Le fichier est utilisé par un autre programme :\n{0}
+c4930de6	Appliquer ce style à tous les sous-titres de la piste
+c4af3181	{0}\nFichier introuvable : {1}
+c4d27f4e	Aucune image n'a pu être décodée : le fichier semble endommagé.
+c4de21c5	Couleur des yeux
+c51615db	{0} · {1} cœurs logiques
+c5303bde	… et {0} de plus.
+c54fabd9	Réinitialiser
+c55fd7cd	Une fréquence d'images fractionnaire doit s'écrire sous forme de fraction (ex. : « 30000/1001 »).
+c56a6f8f	Importer des médias
+c5b052a0	Impossible d'écrire le fichier de sortie (pas d'autorisation ou utilisé par un autre programme) :\n{0}
+c5c152f7	Fard à joues
+c5e8f6d9	Installation annulée. Ce qui a déjà été téléchargé sera réutilisé la prochaine fois.
+c61dc132	Impossible d'ouvrir « {0} ».
+c628bd83	UpdateTrackCommand ne peut modifier que les propriétés de la piste.
+c62f017a	Transcription de la parole…
+c62ff1b1	Exécution locale des modèles d'IA (CPU/GPU)
+c651f92c	Scinder le clip
+c6985a35	{0:0.#} % · {1}{2}{3} · écoulé {4}{5}
+c6b8e501	Processeur inconnu
+c6d3c6e0	Ligne
+c6d42e7a	Impossible de terminer
+c6d506f6	Image clé précédente
+c6d545bf	Packs de contenu (*.medpack;*.zip)|*.medpack;*.zip
+c6fab07f	Sourcils
+c7052a9a	Désactiver l'interpolation d'images
+c714b525	Le fichier est peut-être endommagé. Essayez d'ouvrir une sauvegarde.
+c73611a9	Voir les modèles disponibles et installer sans utiliser le terminal
+c74ea951	{0} médias ont été localisés.
+c755de94	Fonctions de l'éditeur
+c76fa9d1	Sensibilité
+c777cba8	Position
+c77828a1	Réorganiser les masques
+c80528f0	_Analyser le média
+c81d0d1c	Caméra 4
+c84d88c5	Aucun changement de scène trouvé.
+c85c9bc6	Le champ « {0} » du manifeste doit être le nom d'un fichier à la racine du pack.
+c86bc40d	Segmentation de personnes (supprimer l'arrière-plan, suivre la personne)
+c8c4334a	Vérifier tous les mois
+c8ca981d	Zoom lent (Ken Burns)
+c8d122f9	Le cache est déjà dans la limite.
+c923d90e	{0} · inclus dans l'application
+c954e4de	Cyan
+c9566ca4	Voix
+c95d98b6	Dossiers par défaut
+c98b709b	Préréglages
+c9b70322	Supprimer l'animation de {0}
+c9e84ea7	avec son
+c9fd8063	Écran _partagé
+ca20957b	Langue du système
+ca37f5e4	Couleur des sourcils
+ca4a03a9	Impossible de lister les périphériques : {0}
+ca93daeb	Effectuer le rendu de la file d'exportation en arrière-plan
+caa82c0e	Intensité de la réduction du bruit
+cac8788d	File de rendu
+cad1d646	ffmpeg.exe est introuvable dans le dossier de l'application.
+caf0af32	1080 × 1920 · 30 FPS · vidéos courtes pour mobile
+cb181a77	Placez chaque clip sur une piste différente pour qu'ils apparaissent ensemble.
+cb3a8443	Aucune séquence trouvée : il faut au moins 2 images numérotées dans l'ordre (ex. : image_0001.png, image_0002.png).
+cbee450f	Documentation
+cbf8103b	Reculer d'1 seconde
+cc172b83	Le média du clip est introuvable.
+cc751dd6	Pour suivre la personne, installez le modèle de suppression d'arrière-plan dans Outils › Modèles d'IA.
+cc7b20f3	Le fichier exporté n'a pas passé la vérification finale :\n{0}\n\nDétail : {1}
+cc837ecf	Intervalle personnalisé
+cc8e766b	Courbes
+cc9d944e	Largeur personnalisée en pixels
+ccaa7e34	{0} fichier(s) n'ont pas pu être importé(s) :
+ccad7dc6	Sans catégorie
+ccbf50f2	Installer un pack de contenu
+ccd4dc1f	Grandit à partir de 30 % de la taille, en émergeant de la transparence.
+cce6f32e	Profil colorimétrique
+ccf20974	Placez un autre clip juste avant celui-ci, sur la même piste, pour utiliser une transition.
+ccf5462e	Disponible (D3D11VA)
+cd16bc71	Le fichier ne contient pas de sous-titres valides.
+cd2b0e42	Le projet « {0} » n'a pas été fermé correctement. Il existe un enregistrement automatique du {1:g}.\n\n
+cd2b4486	L'encodeur vidéo de la carte graphique (« {0} ») a échoué. 
+cd409788	Remplacer l'arrière-plan (IA)
+cd57d86d	Enregistrement automatique
+cd883163	Résolution et fréquence d'images du projet ; réglez librement tous les paramètres.
+cd9ab984	Il n'y a pas de pistes audio. Ajoutez une piste audio dans la timeline.
+cda0614c	La source a redirigé le téléchargement vers une adresse sans HTTPS ; téléchargement annulé.
+cdb3bf8d	Bandeau
+cdbc24ea	Vidéo 2
+cdd35dea	Plein écran
+cdd64d8d	Annuler le téléchargement
+ce16f759	Supprimer les segments sans parole avec l'IA
+ce274629	Performances
+ce2fdefa	La piste source des clips copiés n'existe plus.
+ce7b87d4	Recommandé pour les projets Full HD : aperçu {0}, {1} Mo pour les images prêtes
+ce893ef1	Canaux du mixeur
+ce8f5d96	Remplacer le fichier
+ce985e6c	Aller à la fin
+cebcf0ea	Publication portrait
+cede5ece	FPS invalide.
+cede683f	Seuls les clips de texte peuvent devenir des titres.
+cf1ef0f5	Supprime la couleur.
+cf22fcad	Stabiliser la vidéo
+cf44c902	Yeux · agrandir
+cf47486d	16:9 — paysage
+cf65fb76	Monstre
+cf7d46de	État
+cfc84c18	Limitations
+d002e703	Tête
+d0438263	Masques IA
+d06fea30	Flèche
+d08cb210	Vidéo verticale 9:16 pour les Reels.
+d093eaf9	Impossible d'écrire le fichier : {0}
+d0a15b1b	Aucun encodeur disponible pour {0} sur cet ordinateur. Choisissez un autre codec ou format.
+d0aa40d1	Supprime et referme l'espace sur toutes les pistes, en gardant vidéo, audio et textes synchronisés
+d0ecc7bb	« {0} » installé (empreinte vérifiée).
+d1065a79	média
+d10e481f	Rétro
+d12eda2a	Fichier généré :\n
+d154ea2e	Caméra 2
+d15917b6	stéréo
+d18d4ec5	Quelle partie du bloc se trouve à la position Y (onglet Vidéo). En bas, les nouvelles lignes s'ajoutent vers le haut.
+d19efdb7	Image agrandie à {0}×{1}.
+d1a14ef8	Aucune migration enregistrée depuis le format {0}.
+d1e6feab	Localisation de la personne dans chaque image…
+d1e84cd3	Seuil de silence
+d1ed6f3f	Déverrouiller la piste « {0} »
+d265dad7	Profondeur
+d2745176	Choisissez d'enregistrer l'écran, la webcam ou les deux.
+d2b92596	Préparation…
+d3078cc6	Utiliser uniquement le processeur
+d307a5d3	Glisser vers la gauche
+d33d6a18	Générique défilant
+d35c8a94	Réduit le nombre de tons.
+d35d462f	Mosaïque de blocs.
+d36c5e50	Arrêter
+d3aff719	Corps
+d3d62cc2	Piste sans sous-titres. Utilisez Ajouter.
+d3d9733d	Le média n'a pas de flux vidéo.
+d4127098	Couleur de la boîte
+d43a5efa	Le catalogue répète le modèle « {0} ».
+d449c235	{0} canaux
+d4573421	Modifier la forme du masque
+d457deea	Intégrer les médias au projet
+d45c5191	Importer une séquence d'images — choisissez n'importe quelle image de la séquence
+d466a526	Désactiver la stabilisation
+d4a3d974	Suivre la personne
+d4ceee12	Vignette
+d4d595d5	Architecture
+d547c308	_Règle
+d5515f4f	Lissage entre images
+d56bab13	Le clip de la piste « {0} » référence un média inexistant.
+d5861a1a	ffmpeg.exe est introuvable dans le dossier de l'application. Réinstallez le programme.
+d5b35acf	Sélectionnez un clip dans la timeline et ouvrez l'onglet IA dans les propriétés. Tout est traité sur cet ordinateur.
+d5df3708	Thème
+d6399374	Renommer le marqueur…
+d6eafe82	Télécharger
+d70702a9	Séquence introuvable dans le projet.
+d74ec111	Mémoire pour les images de l'aperçu
+d74ecb33	Entrée insère un saut de ligne
+d76b2abd	Logiciel libre sous licence GPL-3.0-or-later (GNU General Public License, version 3 ou ultérieure). 
+d78d2f52	Intervalle de lecture en boucle
+d799f13c	Photo du projet manquante.
+d7acb076	Sélectionnez un clip vidéo ou image dans la timeline pour appliquer des effets et corriger la couleur.
+d7b97f67	Aucun des médias manquants n'a été trouvé dans ce dossier.
+d7ba6b22	Renommer le média en « {0} »
+d81dfbac	Prêt · {0} {1}
+d823a450	séquence
+d83f16db	L'enregistrement n'a pas démarré. {0}
+d868b4b5	Halo lumineux dans les zones claires.
+d8a45bbe	Séquence introuvable.
+d8b94490	Coller à la tête de lecture
+d9096f23	M coupe la piste ; S (solo) ne fait jouer que les pistes en solo. Double-cliquez sur le fader ou le panoramique pour réinitialiser. Les vumètres bougent pendant la lecture.
+d97ce7ae	Réduire le bruit avec l'IA
+d97f2e39	Le média des clips copiés ne fait plus partie du projet.
+d9939134	Installer un pack de modèle
+d9da0b53	Supprimer et refermer l'espace
+d9eb530f	Couper l'audio d'origine
+d9f02f0f	720 × 1280 · 30 FPS · vertical 9:16, fichier léger
+da1525a1	Suivi {0}
+da2f8d8f	Lors de l'installation, l'application télécharge les fichiers des modèles depuis les sources officielles (huggingface.co et github.com), à des adresses fixes, et vérifie la signature SHA-256 de chacun. Aucune de vos données n'est envoyée : vidéos, audios et projets restent uniquement sur cet ordinateur. Les packs .medmodel générés sont conservés et peuvent être copiés pour une installation sur un autre ordinateur sans internet.
+da3b0c44	Aucun autre clip avec audio n'est joué avec celui-ci. Placez la narration ou la parole sur une autre piste et réessayez.
+da56fad3	{0} battements marqués dans la timeline.
+da7709b6	 ; l'audio d'origine a été coupé.
+da88ad51	Sourcils · relever
+daa319da	Les clips sont trop courts pour une transition.
+dac230c4	Adoucir le bord
+dacf0de7	Canaux
+dadc7501	« {0} » supprimé.
+dadf3082	Aucune voix trouvée. Installez des voix dans Paramètres Windows › Heure et langue › Voix.
+dae519a0	Largeur en pixels
+dafb5961	Actualiser
+daffd2d7	Comparaison des audios…
+db1bcfbe	Modifié le
+db1bd3e9	Impossible de lister les périphériques : 
+db472496	Informations sur le média
+db4db0b3	Scinde les clips vidéo et image joués avec la musique à chaque battement
+db4f2ca2	Volet vers la gauche
+db6ba745	Cet ordinateur
+dba9d8ed	La caméra suit la tête de la personne
+dbbd5fd0	Supprimer la sélection (Suppr)
+dbd4cc7d	Activer l'ombre
+dbf57416	Impossible de lire le catalogue des modèles : 
+dbffcdb9	Co_ller à la tête de lecture
+dc1b48bb	Miniatures, formes d'onde et proxies
+dc55af2c	Réinitialiser les valeurs
+dc7ababc	Catalogue
+dca191f2	La piste « {0} » contient {1} clip(s). Supprimer quand même ?
+dcc81347	Sélectionnez un clip vidéo ou image dans la timeline pour modifier la transformation, les images clés, la vitesse et les transitions.
+dd01bd46	Exception non observée dans une tâche asynchrone.
+dd052db6	Synchronisé : décalé de {0}
+dd21499b	Améliorer l'image avec l'IA
+dd39c51b	Proxy de montage
+dd561c36	Contour droit
+dd917327	Toutes les {0:0} min
+ddb12094	Dépendance circulaire dans le catalogue impliquant « {0} ».
+ddb5468b	Déplacer le clip
+ddb5a44a	Sortie
+ddbb6686	Titre « {0} » enregistré dans Mes éléments.
+ddd9ed7e	Vidéo verticale 9:16 pour les Reels Facebook.
+ddf40d55	⚠ Média supprimé
+de085fc7	Le fichier de documentation « {0} » déclaré dans le manifeste n'est pas dans le pack.
+de26c2fc	Netteté
+de518962	Scènes
+de71e378	Vidéo 1
+de73d011	Hauteur (px)
+de7fe5d8	Le média « {0} » n'a pas de chemin source.
+de98cdf6	Traînée de mouvement quand la position, l'échelle ou la rotation sont animées par images clés
+ded554c8	Inclus dans l'application
+df16032c	Le moteur multimédia (FFmpeg) n'a pas pu être chargé. Réinstallez l'application.\n\nDétail : {0}
+df3425a3	Dossier du projet
+df4bc13a	Le codec {0} ne peut pas être utilisé dans le format {1}.
+df4ca6e8	Suivis
+dfb167ac	Clip composé
+dfbd5d14	Fait suivre à ce clip un objet suivi dans un autre clip, à partir de la position actuelle (tête de lecture).
+dfbea4cf	Verrouiller la piste
+dfca0b15	Images
+dfdb85c3	Réverbération
+dfebfa5f	Automatique (par type)
+e013582b	Recherche de changements de scène…
+e01a85b1	Périphérique IA
+e039cb27	Clips
+e046bcea	Transparence
+e0836c56	Manuel d'utilisation
+e09ddd11	Copier dans le presse-papiers
+e0ac5283	Eye-liner
+e1394269	Complète
+e13f2454	Tons bleutés et nets.
+e1563935	Animation : retournement de carte 3D
+e1603818	Préparation
+e18cbc44	Saturation
+e1914583	Supprimer le marqueur
+e1b7eed8	Le pack n'a ni autocollants, ni titres, ni modèles (dossiers figurinhas, titulos et modelos).
+e1e6e158	Supprimer et refermer l'espace (Maj+Suppr)
+e2083844	Parcourir…
+e2226fad	Un tour complet (360°) sur tout le clip.
+e2c82f4a	Isoler la voix avec l'IA
+e2d9aa0e	Impossible de supprimer les silences.
+e3015b6b	La LUT devrait avoir {0} couleurs, mais en a {1}.
+e30250af	Supprimer le modèle
+e3156f4a	Choisir une LUT
+e3272a97	Nom de la catégorie (ex. : Interviews, Musiques, Logos) :
+e368a5cc	Aucune
+e377ade6	La caméra suit le corps entier de la personne
+e37e9336	restent uniquement sur cet ordinateur. Les packs .medmodel générés sont conservés et peuvent être copiés pour 
+e3b7bbc0	Exportations
+e3d88e40	Durée d'entrée
+e407e789	Conserver la hauteur en changeant la vitesse
+e416dedb	Crée un marqueur sur chaque battement de la musique
+e41ba7b0	Couper les vidéos sur les battements
+e4345363	Ajouter un masque rectangulaire
+e447260d	non suivi
+e45cb1f6	Zoom arrière
+e4612538	3840 × 2160 · 30 FPS · vidéo horizontale 16:9
+e48f88e7	Double-cliquez sur un modèle pour l'insérer à la tête de lecture. Modifiez le contenu et le style dans l'onglet Texte.
+e4925bc0	MPEG-2 n'accepte que 23,976, 24, 25, 29,97, 30, 50, 59,94 ou 60 FPS.
+e4abebf7	**Licence :** 
+e4b7653b	Début à la tête de lecture
+e4c2c394	Élément graphique
+e4ed4d77	Marqueur {0}
+e4ef5ec6	Ajouter une police
+e4f95dd5	Marquer les battements
+e50beb48	La résolution doit être comprise entre {0} et {1} pixels.
+e510a658	Le marqueur « {0} » est à un temps négatif.
+e5110962	Les packs apportent des autocollants (Éléments graphiques), des titres (Textes) et des modèles de projet (Fichier › Nouveau à partir d'un modèle). Un pack est un fichier .medpack (ZIP) avec les dossiers figurinhas, titulos et modelos. Tout reste sur cet ordinateur.
+e521737c	Les images sont déjà fixes ; ajustez la durée du clip.
+e5432657	Vidéos, audios, images et projets sont traités uniquement sur cet ordinateur. Internet n'est utilisé que 
+e56d0d19	Enregistrer l'écran
+e58dce23	Dossier des projets
+e5b989e0	Afficher la piste « {0} »
+e5d2c46e	Médias pris en charge|{0}|Vidéos|{1}|Audios|{2}|Images et GIF|{3}|Tous les fichiers|*.*
+e5f47aec	2 empilés
+e612ee70	Sélectionnez un clip vidéo ou image.
+e62f7e59	La narration a été générée, mais n'a pas pu être importée : {0}
+e631f0fb	{0} ({1} libres)
+e649cc8d	Indiquez un nom de fichier valide.
+e6948c7a	Progression de l'IA
+e699c971	Couleur du contour
+e6af9664	Appliquer le recadrage à la vidéo
+e6b9dd39	Téléchargement incomplet : {0} sur {1} octets. Réessayez.
+e6cd0bd5	Écran partagé
+e6efbd7c	L'enregistrement va commencer.\nAppuyez sur F10 pour arrêter.
+e6ff10b9	Le pack contient des entrées en double (« {0} »).
+e70460ad	Affiner les bords
+e710b660	_Timeline
+e718e93f	Impossible d'enregistrer l'image
+e7480ffb	Saturation du son.
+e772276e	Volume de la piste (dB)
+e7a30200	Erreur inconnue.
+e7a739c9	Détecter les scènes
+e7c1098a	Sensibilité des scènes
+e7f0e6d9	Importer
+e85928e2	Luminance
+e864d54f	restent uniquement sur cet ordinateur. Les packs .medmodel générés sont conservés et peuvent être copiés pour une installation sur un autre ordinateur sans internet.
+e8845dce	Nuit
+e8908ee8	Annuler (Ctrl+Z)
+e8c6a28c	Générer des sous-titres avec l'IA
+e9109798	Importer SVG…
+e9181b97	Dégrouper
+e92a40db	Bleu · décalage
+e942cbbb	Appliquer une animation prédéfinie
+e98708b0	Sélectionnez un clip vidéo.
+e98fbfc2	Profil du codec
+e9e0cbd8	Réinstaller
+e9e86c21	Segment de rendu invalide.
+ea267171	Analyse audio
+ea44d3e6	Rendu
+ea46be2a	Améliorer l'image (agrandir 2×)
+ea73b2b1	Assombrir
+ea74fffe	Suivi
+ea75073f	Média généré introuvable.
+ea7a85a6	Limiter la taille
+eab631d5	Localiser le média
+eac04eb7	L'installation s'est arrêtée : {0}
+eace0ac0	Déplacer le marqueur
+eadd8245	Importer SRT/VTT…
+eb0db893	Supprimer le pack « {0} » de cet ordinateur ? Les projets qui utilisent déjà ses autocollants gardent les copies importées.
+eb805d69	Aucune parole trouvée pendant la lecture de ce clip.
+eba2822f	Changer de police
+eba5a22e	Ajouter la piste « {0} »
+ebb751ab	Battement
+ebc1fe65	Retourner verticalement
+ebc78ef6	Choisissez ce que suit la caméra. Réglez ensuite la coupe automatique, le tremblement et l'arrière-plan flou. Utilise le modèle de détourage de personne (onglet IA).
+ebe55185	Compatibilité maximale pour PowerPoint, projecteurs et téléviseurs.
+ebf8e83d	Normaliser l'audio ({0}
+ebff964d	Supprimer la stabilisation
+ecaf3589	Propriétés
+ecd8cf20	Bandeau (lower third)
+ecdef51f	Cache vidé : {0} libérés.
+ece5d28b	Active/désactive une forme clé à la tête de lecture (masque animé)
+ecfce37f	Masque : {0}
+ed20f426	Stabilisation active
+ed437c03	Profil LinkedIn de Diego Mendes Rodrigues
+ed4f6762	Fichier WebVTT invalide : en-tête WEBVTT manquant.
+ed5431fc	Capturer l'image
+ed79bce8	Ce modèle nécessite une version plus récente de Meu Editor de Vídeo.
+eda02893	Restaurer
+edca4a4b	Le fichier du projet est introuvable :\n{0}
+ee313bb5	Supprimer les miniatures, formes d'onde, proxies et masques IA ? Ils seront recréés si nécessaire (les proxies et masques prennent un peu de temps).
+ee7728ba	|Audios|
+ee9361d0	Décodage matériel
+ee9dd0a6	Courbe de vitesse{0}
+eeaea3b8	Incrustation
+eee0df8e	Voix et ambiance sur des pistes séparées
+ef49e594	Aller au début
+ef615877	Média introuvable.
+ef62334f	État initial
+ef6ae57d	{0} libérés (éléments les moins récemment utilisés).
+ef91a6e4	Le fichier est vide.
+ef9d3884	Lueur douce
+efebe6ab	Durée de sortie
+eff4000b	Installation…
+eff50710	Ajouter du texte
+effbe5e6	Afficher dans le dossier
+f065fdb7	Créer un clip _composé…
+f06da6b5	Nouveau suivi
+f070c3ff	Utiliser les proxies dans l'aperçu s'ils existent
+f0cda431	Fonctions d'IA
+f0db2438	« {0} » : {1} autocollant(s), {2} titre(s) et {3} modèle(s).
+f0e8a4bf	Déposez pour importer
+f0ed3a84	Arrière-plan
+f0fd80f0	Le clip ne peut pas commencer avant le début de la timeline.
+f1068e39	Logo
+f117b512	Sélectionnez au moins un clip.
+f1297822	Effets appliqués (dans l'ordre)
+f19506e2	Crée des marqueurs aux changements de scène (et scinde le clip, si coché).
+f1bfb891	L'audio du projet doit être mono, stéréo ou 5.1.
+f1c041e7	Décodage GPU
+f2282c39	Les éléments graphiques vont sur des pistes d'image.
+f25c2a9f	Supprime l'animation de volume du clip
+f25c5c68	Double-cliquez pour réinitialiser
+f27d711b	Courbes de tons globales et par canal (rouge, vert, bleu).
+f2816ecd	 (améliorée 2x).png
+f29d8f09	Retoucher
+f2a39118	Annuler les modifications des modèles fournis avec l'application ? Vos propres modèles sont conservés.
+f2a404ee	Tous les médias seront copiés dans le fichier du projet (.med), qui pourra être emporté sur un autre ordinateur.\n\n
+f2aa03f9	La largeur et la hauteur doivent être paires.
+f2aaed18	Aucune exportation en file.
+f2b7aa54	Sortie audio de l'aperçu
+f3024191	Installer des modèles d'IA
+f30c229d	L'installation s'est arrêtée : 
+f3a0b56a	Proxy en file
+f3a2c68a	Fichier .cube sans LUT_3D_SIZE avant les données.
+f3a9a5a4	Centre de l'image (sans suivi)
+f43c3023	Sans modèle : utilise la comparaison des couleurs entre images (moins précise). Installez le modèle de scènes pour un meilleur résultat.
+f45c2722	Pack installé
+f45e2e4b	Nombre invalide
+f4895a29	Balancer
+f490af28	Débit de parole
+f4c10d83	Couleur en hexadécimal, ex. : #00B140
+f4ef89c4	disponible (D3D11VA)
+f51273b7	Indiquez un nombre entre 0,1 et 16, par exemple 0,5 ou 2.
+f5142cc2	Réglage {0}
+f5350d7d	Nom complet :
+f53807aa	Espace
+f53bbaa0	Utilisateur
+f55e100d	GÉNÉRIQUE\n\nRéalisation\nPrénom Nom\n\nMontage\nPrénom Nom\n\nBande originale\nPrénom Nom\n\nMerci d'avoir regardé !
+f595a550	Supprimer {0} {1}
+f5d41570	Exportation…
+f6424ba8	La fréquence d'échantillonnage audio doit être de 44,1 kHz, 48 kHz ou 96 kHz.
+f64537aa	Modifier les paramètres du projet
+f664370c	Le clip ne peut pas être placé sur la piste « {0} ».
+f67a21a5	Points du visage (retouche beauté et maquillage)
+f68c9c48	Annuler : {0} (Ctrl+Z)
+f6995716	Impossible de terminer : {0}
+f69a95e3	Parcourir le dossier
+f6bfbe13	Recherche de silences…
+f6c8473d	Qualité : {0:0} (plus bas = meilleur ; 18–23 recommandé)
+f6d7d1b5	Créé le
+f709edbe	Forme clé du masque à la tête de lecture
+f7206e7f	Vidéo carrée
+f72685ad	La piste « {0} » n'accepte pas « {1} ».
+f742d3de	 (détection par niveau sonore ; installez le modèle de détection de la parole pour plus de précision).
+f7514da1	Suivi de caméra
+f779c799	Vitesse du clip
+f7ca4a2d	Supprimer « {0} » ? Les fonctions qui en dépendent deviendront indisponibles.
+f7d38b21	Le clip n'est pas un clip composé.
+f7f4837b	Le fichier de ce clip est introuvable. Reconnectez le média et réessayez.
+f8208e09	Modifier le sous-titre
+f84dbc77	Audio de l'aperçu
+f8515210	Image précédente
+f85e8e02	La transition nécessite deux clips adjacents sur la même piste.
+f87a8166	Compte à rebours de l'enregistrement
+f8838989	Aigu
+f9154968	Modèles d'IA
+f9250d2c	Position, échelle, rotation, opacité et images clés se trouvent dans l'onglet Vidéo.
+f943d8ef	Adresse non autorisée pour « {0} » : {1}. Utilisez HTTPS sur {2}
+f959e9b0	Couleur ajustée sur le clip précédent. Réglez l'intensité dans Vidéo › Couleur › Faire correspondre la couleur.
+f95c7cec	Séquence entière
+f9801bb3	Retouche du visage avec le maillage de points du visage (modèle local) : peau lisse et plus claire, moins de rides d'expression et de poches sous les yeux, et réglages du visage, des yeux, du nez, de la bouche et des sourcils.
+f9ae06ca	Échec du proxy
+f9eb55d0	Impossible de supprimer : {0}
+f9f5483c	audio
+f9f64ce9	Enregistrer comme titre
+fa473bff	Crée des images clés de volume qui baissent ce clip pendant la parole
+fa504e56	Médias pris en charge|
+fa7c93d6	Disponible · {0} {1}
+fad0236a	Meu Editor de Vídeo — informations système
+fadb4dd9	Dupliquer les clips
+fb1adad4	Pivoter
+fb245260	Aucun média importé.
+fb8c80e2	Lecture
+fb8cb31d	Audio 1
+fbb8559b	Le format choisi ne prend pas en charge la transparence (canal alpha).
+fbc1ac35	Médias générés (IA)
+fbf00a3b	Développeur : {0}
+fc5d92ee	Média supprimé
+fc5de4d7	Rapport d'aspect de l'affichage
+fc7d6f6b	Ajouter un calque de réglage
+fc8bdc7c	Modifier le minutage du sous-titre
+fc8d81f9	Du projet
+fc99ef24	Diviser en fichiers
+fcbe3fd7	Ajouter un élément graphique à la tête de lecture
+fcd6b084	Inclus dans l'application (ne peut pas être supprimé)
+fcd95b14	Mémoire
+fce04ab7	Impossible d'analyser la vidéo : {0}
+fcf5e5a1	Le projet contient des données incohérentes :\n• 
+fd2c5555	Interrompue — peut être reprise
+fd2e8b1b	Édition en cascade (ripple)
+fd366f93	Exportations :
+fd58de69	Libérer
+fd609e59	Fonctions du modèle
+fd732a2b	Rechercher des mises à jour
+fdd6c021	L'intervalle chevauche un autre clip de la piste.
+fe183a44	Supprimer {0}
+fe50cd52	Exporter l'image actuelle
+fe94b10c	Identifiant de modèle invalide.
+feaae1f1	Clair et aérien
+feb6cfe3	Normaliser
+fed34f04	Centre
+fed4a5b0	Nouveau à partir d'un _modèle…
+fedb6cd1	Couleur personnalisée
+ff0ad18e	Flouter les visages
+ff0e4c7e	Exporter SRT/VTT…
+ff18f971	Générer et insérer
+ff34aa43	Répète le clip juste après lui
+ff4f0c35	Licences tierces
+ffabf7a5	Le clip est silencieux ; rien à normaliser.
+ffe53031	Ombre
+ffe885ad	Fait correspondre la couleur et le contraste de ce clip au clip précédent de la piste (effet Faire correspondre la couleur, réglable dans l'onglet Couleur).
+2eba946b	Modifier
+1acb4b8f	Affichage
+b96a67bf	Outils
+fe0addd7	Aide
+02862497	Auto
+e51e19df	Automatique
+a75d067f	IA
+d0f790ac	À l'enregistrement, le programme redémarre dans la nouvelle langue et rouvre le projet enregistré.
+042c3ccf	0,25× (ralenti)
+08ba14a4	0,5× (ralenti)
+ef026517	1/2 de la résolution
+39d9147d	16:9 (paysage)
+191786be	1920 × 1080 · 30 FPS · plateformes vidéo
+e197fed0	1× (normale)
+87773a4c	2 côte à côte
+4c222ddc	2× (accéléré)
+781e9daf	4× (accéléré)
+b40f023d	Amortissement
+38445407	Accélération
+b715250f	Accès à FFmpeg depuis .NET
+c33bc894	Réglages de couleur
+ec090a77	Attaque
+8dfa0c19	Retard
+1b4493cb	Automatique (selon le matériel et le projet)
+34631cc0	Automatique (carte graphique si disponible)
+faf634e0	Barres en miroir
+820b28ff	Bas du bloc
+ff070ada	Luminosité
+29d5180b	Centre du bloc
+2f3e8dcc	Clair
+4c1740bf	Constante (sans courbe)
+d0cd77e4	Couleur de référence (devrait être neutre)
+69597ec9	Couleur à supprimer
+5f3d541f	Coupe-bas
+f5bfe163	Coupe franche (aucune)
+293c7774	Cils
+ef465860	Ralentissement
+9f9edf69	Glisse depuis la gauche jusqu'à sa position d'origine.
+5c974c0c	Détection…
+6c1f9ebc	Détecter automatiquement
+8e20dede	Direction (gauche ↔ droite)
+cf97a237	Fondu enchaîné
+957f2513	Distorsion (barillet → coussinet)
+f0c3253f	Intégrer les médias au projet (.med autonome)
+df142d59	Apparition progressive
+99f07dbb	Entrer par la gauche
+85f53d5f	Fondu au noir
+fde8bb83	Sombre
+04f4be29	Fondu
+e08efb6d	Espagnol
+ed928968	Gauche
+ebf8ff72	Style
+b8f41fc2	Stéréo
+5e8780b2	Exposition
+23e05257	Exposition, luminosité, contraste, saturation, température, teinte, ombres et hautes lumières.
+b72611cf	Fréquence des graves
+59031266	GPU (DirectML), avec repli sur le processeur
+0cb1e3b6	Rotation X
+0f845589	Rotation Y
+1251dfbe	Comme Windows
+49b825e0	Image ou vidéo de la bibliothèque
+20abe171	Inclinaison (bas ↔ haut)
+85a560bc	Anglais
+18409a9f	Intersection
+243c07d7	Lecture et exportation vidéo et audio
+0c81a1c8	Rides d'expression
+6cbd77be	Lumière douce
+df38600a	Maintenir (saut)
+6efe5e3c	Mode
+2a21b0bc	Produit
+07770c0f	Détection impossible : 
+f8e5eec2	Détection impossible : {0}
+7eb24a73	Niveaux
+33f565ca	Onde
+36608fb2	Peau · éclaircir
+0dbae901	Peau · lisser
+27d3c9f6	Carte graphique (inclut Media Foundation)
+d4ada8ec	Portugais
+1298e512	Position X
+b394f92c	Position Y
+ef42bcf4	Préserver les détails
+d0db601b	Rayon
+ac3e35fc	Ratio
+c15ffc8e	Rec. 709 (standard vidéo)
+a2d635f9	Supprime la couleur, avec un peu plus de contraste.
+d9633a68	Supprime les animations de position, d'échelle, de rotation et d'opacité.
+49ddd1cb	Répétitions
+22d5f75c	Rectangle arrondi
+1f2d5796	Sans animation
+8c661457	Incrustation
+dc0761c7	Addition
+a9e12e61	Fard à paupières
+b2d4d83b	Doux (entrée et sortie)
+97d2111d	Douceur
+5e3ddc33	Lisser
+306dd9dc	Soustraction
+9e6b6789	Taille de la pièce
+7e2b0832	Taille du bloc
+d2ce481a	Bande noire
+5a56637c	Débit constant (CBR)
+f3a14d10	Débit variable (VBR)
+2d31efc9	Superposition
+0d089536	Texte en gras avec une ombre douce ; apparaît et disparaît en fondu.
+dba3d15a	Texte simple
+e757c88e	Tons moyens
+a8621da1	Haut
+4bc31cf0	Haut du bloc
+4810863b	Grand titre centré, avec une entrée en zoom.
+4034d241	Vert · gain
+8eb167bc	Rouge · gain
+b15d9e4c	Lier les médias (les fichiers restent à leur place)
+d9ca0b40	Vidéo paysage 4K
+a1f6f67b	Vidéo paysage Full HD
+6c1a02a4	Zoom pour masquer les bords
+852d7316	−14 LUFS — internet (YouTube, réseaux sociaux)
+0eba1991	−23 LUFS — télévision (EBU R128)
+2643d451	Fermer cette fenêtre
+5e01d38c	Vous avez la version la plus récente !
+9c73bac4	Nouvelle version disponible
+a4ef774a	La nouvelle version {0} de {1} est disponible pour mettre à jour celle que vous utilisez.
+75385f91	Langues disponibles : {0}.
+6975441d	Systèmes d'exploitation pris en charge : {0}.
+9a0a0b54	Auteur : {0}.
+e19b4ed8	Lien de téléchargement sur le Microsoft Store :
+1df3dbbe	Lien de téléchargement sur le site AplicativosIA.Online :
+d769c40b	Bienvenue dans Meu Editor de Vídeos
+1e1ee72e	Pour mieux utiliser la solution, aidez-moi en indiquant vos préférences dans les champs ci-dessous.
+a25648cb	Rechercher les mises à jour chaque mois
+836775bf	Enregistrer les préférences
+e6c95e78	Allemand
+04e0a642	Français
+25c0623b	Portugais (Brésil)
+a442dc64	Portugais (Portugal)
+4eb7d40e	Suivre le système d'exploitation

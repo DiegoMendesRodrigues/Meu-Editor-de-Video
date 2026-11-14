@@ -28,15 +28,21 @@ public partial class App : System.Windows.Application
 
     public static IServiceProvider Services => ((App)Current)._host!.Services;
 
+    /// <summary>Argumento da nova instância ao reiniciar pelo idioma: espera o processo anterior terminar.</summary>
+    private const string WaitArgument = "--aguardar-processo=";
+
     protected override async void OnStartup(StartupEventArgs e)
     {
-        ApplyPortugueseCulture();
-
+        WaitForPreviousInstance(e.Args);
         var paths = new AppPaths();
         ImageEngine.Text.FontCatalog.UserFontsFolder = paths.Fonts;
+        // Preferências do registro lidas antes do host: o JsonSettingsService completa os valores que faltam, e a janela de
+        // boas-vindas precisa saber o que o usuário ainda não preencheu.
+        var preferenceStore = new Infrastructure.Settings.RegistryPreferencesStore();
+        var preferences = preferenceStore.Read();
         // Os argumentos não vão para o host: o único argumento esperado é o caminho de um .med (associação de arquivos).
         _host = Host.CreateDefaultBuilder()
-            .UseMeuEditorInfrastructure(paths)
+            .UseMeuEditorInfrastructure(paths, preferenceStore)
             .ConfigureServices(ConfigureServices)
             .Build();
 
@@ -47,11 +53,26 @@ public partial class App : System.Windows.Application
         var logger = Services.GetRequiredService<ILogger<App>>();
         logger.LogInformation("Meu Editor de Vídeo {Version} iniciado.", AppInfo.Version);
 
+        // Idioma (Configurações › Geral, registro "Language"): cultura e traduções antes de criar as janelas.
+        var language = Services.GetRequiredService<ISettingsService>().Current.Language;
+        if (!SupportedLanguages.IsSupported(language)) language = SupportedLanguages.FromCulture(CultureInfo.CurrentUICulture.Name);
+        ApplyCulture(language);
+        Localization.Translator.Load(language, System.IO.Path.Combine(AppContext.BaseDirectory, "i18n"));
+        Localization.LocalizationHook.TranslateResources(Resources);
+        Localization.LocalizationHook.Install();
+
         Services.GetRequiredService<IThemeService>().Apply(Services.GetRequiredService<ISettingsService>().Current.Theme);
+
+        // Boas-vindas: preferências ausentes ou vazias no registro. Se o idioma escolhido for outro, reinicia nele.
+        if (!preferences.IsComplete && !await AskPreferencesAsync(preferences, preferenceStore, language))
+            return;
 
         var window = Services.GetRequiredService<MainWindow>();
         MainWindow = window;
-        Services.GetRequiredService<INavigationService>().NavigateTo<HomeViewModel>();
+        // Sem tela inicial: o editor abre com um projeto novo vazio; depois, se for o caso, o projeto pedido, a recuperação
+        // de um fechamento inesperado ou o último projeto.
+        Services.GetRequiredService<IProjectService>().CreateUntitled(Localization.Translator.T("Sem título"));
+        Services.GetRequiredService<INavigationService>().NavigateTo<EditorViewModel>();
         window.Show();
 
         Services.GetRequiredService<AutosaveScheduler>().Start();
@@ -59,14 +80,103 @@ public partial class App : System.Windows.Application
         StartBackgroundMaintenance(logger);
         if (StartupArguments.ProjectPath(e.Args) is { } project)
             await OpenProjectAsync(project, logger);
-        else
+        else if (!await OfferRecoveryAsync())
             await OpenLastProjectAsync(logger);
+        // Verificação mensal de atualizações (registro CheckForNewVersions e LastCheck).
+        await Services.GetRequiredService<UpdateCheckService>().CheckOnStartupAsync();
 
         base.OnStartup(e);
     }
 
+    private bool _restartRequested;
+
+    /// <summary>
+    /// Reinicia o programa para aplicar o idioma salvo em Configurações › Geral. Fecha a janela pelo caminho normal
+    /// (pergunta sobre alterações não salvas; se o usuário cancelar, nada muda) e abre de novo o projeto salvo.
+    /// </summary>
+    public void RestartForLanguage()
+    {
+        if (MainWindow is not Views.MainWindow window) return;
+        _restartRequested = true;
+        void Canceled(object? sender, EventArgs e)
+        {
+            _restartRequested = false;
+            window.CloseCanceled -= Canceled;
+        }
+        window.CloseCanceled += Canceled;
+        window.Close();
+    }
+
+    /// <summary>
+    /// Mostra a janela de boas-vindas, grava as cinco preferências no registro (Name, Language, ThemeColor,
+    /// CheckForNewVersions e LastCheck) e aplica o tema. Devolve false quando o programa vai reiniciar no idioma escolhido.
+    /// </summary>
+    private async Task<bool> AskPreferencesAsync(UserPreferences current, IUserPreferencesStore store, string language)
+    {
+        // Sem janela principal ainda: a de boas-vindas não pode virar a principal e encerrar o programa ao fechar.
+        ShutdownMode = ShutdownMode.OnExplicitShutdown;
+        var welcome = new Views.Dialogs.WelcomeWindow(current);
+        welcome.ShowDialog();
+        ShutdownMode = ShutdownMode.OnMainWindowClose;
+        var chosen = welcome.Result;
+
+        store.WriteName(chosen.Name!);
+        store.WriteLanguage(chosen.Language!);
+        store.WriteThemeColor(chosen.ThemeColor!);
+        store.WriteCheckForNewVersions(chosen.CheckForNewVersions!.Value);
+        store.WriteLastCheck(chosen.LastCheck!.Value);
+
+        var settings = Services.GetRequiredService<ISettingsService>();
+        var theme = Enum.Parse<AppTheme>(chosen.ThemeColor!);
+        await settings.SaveAsync(settings.Current with
+        {
+            UserName = chosen.Name!,
+            Language = chosen.Language!,
+            Theme = theme,
+            CheckForNewVersions = chosen.CheckForNewVersions.Value,
+            LastUpdateCheck = chosen.LastCheck,
+        });
+
+        if (!string.Equals(chosen.Language, language, StringComparison.OrdinalIgnoreCase) && Environment.ProcessPath is { } exe)
+        {
+            var start = new System.Diagnostics.ProcessStartInfo(exe) { UseShellExecute = false };
+            start.ArgumentList.Add(WaitArgument + Environment.ProcessId);
+            System.Diagnostics.Process.Start(start);
+            Shutdown();
+            return false;
+        }
+        Services.GetRequiredService<IThemeService>().Apply(theme);
+        return true;
+    }
+
+    /// <summary>Ao reiniciar, a instância anterior ainda pode estar fechando o projeto e o autosave: espera até 15 s.</summary>
+    private static void WaitForPreviousInstance(string[] args)
+    {
+        var arg = args.FirstOrDefault(a => a.StartsWith(WaitArgument, StringComparison.Ordinal));
+        if (arg is null || !int.TryParse(arg[WaitArgument.Length..], out var pid)) return;
+        try
+        {
+            using var previous = System.Diagnostics.Process.GetProcessById(pid);
+            previous.WaitForExit(15_000);
+        }
+        catch (ArgumentException)
+        {
+            // Já terminou.
+        }
+    }
+
     protected override async void OnExit(ExitEventArgs e)
     {
+        // Antes de qualquer await: OnExit é async void e o processo termina no primeiro await.
+        if (_restartRequested && Environment.ProcessPath is { } exe)
+        {
+            var reopen = Services.GetRequiredService<IProjectService>().Current?.FilePath;
+            var start = new System.Diagnostics.ProcessStartInfo(exe) { UseShellExecute = false };
+            start.ArgumentList.Add(WaitArgument + Environment.ProcessId);
+            if (reopen is not null && System.IO.File.Exists(reopen)) start.ArgumentList.Add(reopen);
+            System.Diagnostics.Process.Start(start);
+        }
+
         if (_host is not null)
         {
             await Services.GetRequiredService<AutosaveScheduler>().DisposeAsync();
@@ -100,6 +210,21 @@ public partial class App : System.Windows.Application
                 logger.LogWarning(ex, "Falha na manutenção em segundo plano.");
             }
         });
+    }
+
+    /// <summary>
+    /// Fechamento inesperado (RF011): oferece recuperar o salvamento automático mais recente ou descartá-lo.
+    /// Retorna true se recuperou.
+    /// </summary>
+    private static async Task<bool> OfferRecoveryAsync()
+    {
+        var projects = Services.GetRequiredService<IProjectService>();
+        if (projects.FindRecoverable().FirstOrDefault() is not { } r) return false;
+        if (!Services.GetRequiredService<IDialogService>().Confirm("Recuperar projeto",
+                $"O projeto \"{r.Name}\" não foi fechado corretamente. Há um salvamento automático de {r.SavedAt.LocalDateTime:g}.\n\n" +
+                "Deseja recuperá-lo agora? Se escolher não, a cópia continua guardada e é oferecida de novo na próxima vez."))
+            return false;
+        return await Services.GetRequiredService<IProjectWorkflow>().RecoverAsync(r);
     }
 
     /// <summary>"Abrir o último projeto ao iniciar" (configurações › Geral).</summary>
@@ -140,15 +265,13 @@ public partial class App : System.Windows.Application
         services.AddSingleton<IThemeService, ThemeService>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDialogService, DialogService>();
+        services.AddSingleton<UpdateCheckService>();
         services.AddSingleton<IProjectWorkflow, ProjectWorkflow>();
-        services.AddSingleton<IFileRecycler, RecycleBinFileRecycler>();
-        services.AddTransient<RecentProjectRemoval>();
         services.AddTransient<NewProjectViewModel>();
         services.AddTransient<MissingMediaViewModel>();
         services.AddTransient<ViewModels.Media.MediaLibraryViewModel>();
 
         services.AddSingleton<ShellViewModel>();
-        services.AddTransient<HomeViewModel>();
         services.AddTransient<EditorViewModel>();
 
         services.AddSingleton<MainWindow>();
@@ -171,9 +294,9 @@ public partial class App : System.Windows.Application
         });
     }
 
-    private static void ApplyPortugueseCulture()
+    private static void ApplyCulture(string language)
     {
-        var culture = CultureInfo.GetCultureInfo("pt-BR");
+        var culture = CultureInfo.GetCultureInfo(language);
         CultureInfo.DefaultThreadCurrentCulture = culture;
         CultureInfo.DefaultThreadCurrentUICulture = culture;
         Thread.CurrentThread.CurrentCulture = culture;

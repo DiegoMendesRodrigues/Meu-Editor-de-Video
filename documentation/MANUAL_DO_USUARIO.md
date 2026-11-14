@@ -24,23 +24,17 @@ Estes são os requisitos previstos na especificação do produto:
 
 Uma placa de vídeo dedicada não é obrigatória para o programa funcionar, mas deixa a pré-visualização, a exportação e os recursos de inteligência artificial bem mais rápidos.
 
-### A tela inicial
+### Ao abrir o programa
 
-Ao abrir o programa, aparece a tela inicial. Ela tem estes elementos:
+Na primeira vez (ou se alguma preferência estiver faltando ou vazia no registro do Windows), aparece a janela **Bem-vindo ao Meu Editor de Vídeos**. Preencha **Nome Completo**, **Idioma do sistema**, **Tema** (Claro, Escuro ou Acompanhar o sistema operacional) e **Verificar mensalmente pelas novas atualizações** (Sim ou Não) e clique em **Salvar as preferências**. Todos os campos são obrigatórios e a janela só fecha depois de salvar. Se você escolher outro idioma, o programa reinicia nele. Depois, as preferências podem ser mudadas em **Ferramentas › Configurações… › Geral**.
 
-- **Novo Projeto**: cria um projeto de vídeo novo.
-- **Abrir Projeto**: abre um projeto salvo anteriormente (arquivo com a extensão .med).
-- **Configurações**: abre as configurações do programa.
-- **Projetos recentes**: lista os últimos projetos abertos. Clique num deles para abrir. Se o arquivo tiver sido movido ou apagado, aparece a mensagem "Arquivo não encontrado".
-  - Para tirar um projeto da lista, clique no ícone de **lixeira** ao lado dele. O programa pergunta o que fazer:
-    - **Remover da lista**: o projeto some de "Projetos recentes", mas o arquivo continua no disco e pode ser aberto de novo por **Abrir Projeto**.
-    - **Excluir também o arquivo**: além de tirar da lista, o arquivo do projeto (`.med`) vai para a **Lixeira do Windows**, de onde pode ser restaurado. As mídias originais (vídeos, fotos, músicas) usadas no projeto **não** são apagadas. Esta opção fica indisponível quando o arquivo não é encontrado.
-    - **Cancelar**: nada muda.
-- **Recuperação**: aparece uma faixa com o botão **Recuperar** e o botão **Descartar** quando existe uma cópia de um projeto que não foi salvo corretamente. Veja a seção Salvar, salvamento automático e recuperação.
+O programa abre direto na tela de edição, com um projeto novo e vazio chamado "Sem título". Se existir uma cópia de um projeto que não foi fechado corretamente, o programa pergunta se você quer recuperá-la (veja a seção Salvar, salvamento automático e recuperação).
+
+Os últimos cinco projetos abertos aparecem no menu **Arquivo**, entre separadores. Clique num deles para abrir. Se o arquivo tiver sido movido ou apagado, o programa avisa e o tira da lista.
 
 ### Criar um projeto
 
-1. Na tela inicial, clique em **Novo Projeto**.
+1. Escolha **Arquivo › Novo projeto…**.
 2. Escreva um nome em "Nome do projeto".
 3. Escolha a pasta onde o projeto será guardado em "Pasta do projeto" (use **Procurar…** se quiser).
 4. Escolha um "Modelo de projeto". Os modelos já trazem a resolução, a proporção e a taxa de quadros indicadas. Há modelos para vídeo horizontal (Full HD, 4K e cinema), vertical e quadrado, e modelos para plataformas como YouTube, Instagram, TikTok, WhatsApp e Facebook.
@@ -54,8 +48,8 @@ Ao abrir o programa, aparece a tela inicial. Ela tem estes elementos:
 
 Há três maneiras:
 
-- Na tela inicial, clique em **Abrir Projeto** e escolha o arquivo .med.
-- Clique num projeto da lista **Projetos recentes**.
+- Escolha **Arquivo › Abrir…** e selecione o arquivo .med.
+- Clique num dos projetos recentes no menu **Arquivo**.
 - Dê um duplo clique no arquivo .med no Explorador de Arquivos. O programa abre o projeto automaticamente.
 
 ## A tela de edição
@@ -72,7 +66,7 @@ Depois de criar ou abrir um projeto, a tela de edição aparece. Ela é dividida
 
 ### Menus
 
-- **Arquivo**: novo projeto, **novo a partir de modelo**, abrir, importar mídia, importar sequência de imagens, salvar, salvar como, criar cópia de segurança, exportar, fila de renderização, exportar quadro atual (PNG ou JPEG) e voltar ao início.
+- **Arquivo**: novo projeto, **novo a partir de modelo**, abrir, importar mídia, importar sequência de imagens, salvar, salvar como, criar cópia de segurança, exportar, fila de renderização, exportar quadro atual (PNG ou JPEG) e os cinco projetos recentes.
 - **Editar**: desfazer e refazer; selecionar tudo; dividir; **juntar os cortes** (desfaz uma divisão: clique na régua sobre o ponto do corte; só fica disponível quando os dois lados são a continuação da mesma mídia, sem ajustes diferentes); recortar, copiar, colar no cursor e duplicar; excluir, excluir e fechar o espaço (só na trilha do clipe) e **excluir e juntar** (fecha o espaço em todas as trilhas, mantendo a sincronia; trilhas bloqueadas não se movem e a operação é recusada se um clipe de outra trilha ocupar parte do trecho removido).
 - **Visualizar**:
   - **Modo do layout**: **Padrão**; **Linha do tempo** (a linha do tempo ocupa toda a largura); **Vídeo** (o monitor ocupa a metade direita, na altura toda).
@@ -88,7 +82,7 @@ Depois de criar ou abrir um projeto, a tela de edição aparece. Ela é dividida
   - **Pacotes de conteúdo…** instala, exporta e remove pacotes de figurinhas, títulos e modelos de projeto (arquivos .medpack). Um pacote é um ZIP com as pastas `figurinhas` (PNG, GIF, WebP, JPEG ou SVG), `titulos` (.medtitle) e `modelos` (.med) e, opcionalmente, um `pacote.json` com o nome (por exemplo `{"nome": "Festa Junina"}`). Os itens que você mesmo salva ficam no pacote **Meus itens**; use **Exportar…** para compartilhá-lo.
   - **Texto para fala…** transforma um texto em narração com as vozes instaladas no Windows, sem internet. Digite o texto, escolha a **Voz** e a **Velocidade** e clique em **Gerar e inserir**: o áudio vai para a biblioteca (categoria Narração) e entra na posição do cursor, na primeira trilha de áudio livre ou numa trilha nova chamada Narração. Para ter mais vozes, como as em português, instale-as em **Configurações do Windows › Hora e idioma › Fala**.
   - **Analisar mídia** dá etiquetas a todas as mídias da biblioteca: tipo, orientação (horizontal, vertical, quadrado), resolução (HD, Full HD, 4K), duração (curto, longo) e som. Com os modelos instalados, também **fala** ou **sem fala**, o número de **cenas** e **pessoa** ou **sem pessoas**. As etiquetas aparecem ao passar o mouse sobre a mídia e a caixa **Pesquisar…** da biblioteca também procura nelas.
-- **Ajuda**: **Manual do usuário** (F1), **Atalhos de teclado…**, **Informações do sistema…**, **Abrir pasta de logs**, **Licenças de terceiros**, **Sobre o Meu Editor de Vídeo…**, **Verificar atualizações** e **Notas de lançamento** (estes dois ainda não estão disponíveis e aparecem desativados).
+- **Ajuda**: **Manual do usuário** (F1), **Atalhos de teclado…**, **Informações do sistema…**, **Abrir pasta de logs**, **Licenças de terceiros**, **Sobre o Meu Editor de Vídeo…**, **Verificar atualizações** (consulta pela internet se há uma versão nova: mostra "Você está com a versão mais recente!" ou a janela **Nova versão disponível**, com a versão, os idiomas, os sistemas suportados, o autor e os links para baixar na Microsoft Store e no site AplicativosIA.Online; ao clicar em **Fechar essa janela**, a data da verificação é guardada). Em **Sobre o Meu Editor de Vídeo…**, o ícone do LinkedIn abre o perfil do autor no navegador.
 
 O **Manual do usuário** abre este manual dentro do programa, sem internet. A lista à esquerda leva a cada assunto e Ctrl+F procura uma palavra. A janela pode ficar aberta enquanto você edita.
 
@@ -570,23 +564,28 @@ A cópia de recuperação não substitui o arquivo do projeto. Ela só é oferec
 
 ### Recuperar um projeto
 
-Se o programa foi fechado sem salvar, a tela inicial mostra a faixa "Há um projeto que pode ser recuperado", com dois botões:
+Se o programa foi fechado sem salvar, ao abri-lo de novo aparece a pergunta "Recuperar projeto":
 
-- **Recuperar**: abre o projeto com as últimas alterações.
-- **Descartar**: apaga as alterações recuperáveis. Essa ação não pode ser desfeita.
+- **Sim**: abre o projeto com as últimas alterações.
+- **Não**: abre um projeto vazio; a cópia continua guardada e é oferecida de novo na próxima vez.
 
 > Recomenda-se salvar manualmente com Ctrl+S com frequência, mesmo com o salvamento automático ligado.
 
 ## Configurações e desempenho
 
-Abra as configurações em **Ferramentas › Configurações…** (atalho Ctrl+,) ou no botão **Configurações** da tela inicial. As configurações são divididas em quatro abas. Nada é gravado até você clicar em **Salvar**.
+Abra as configurações em **Ferramentas › Configurações…** (atalho Ctrl+,). As configurações são divididas em quatro abas. Nada é gravado até você clicar em **Salvar**.
 
 ### Aba Geral
 
+- **Usuário › Nome completo**: o seu nome.
+- **Idioma do sistema › Idioma**: Alemão, Espanhol, Francês, Inglês, Português (Brasil) ou Português (Portugal). Na primeira execução, o programa usa o idioma do Windows, se for um desses, ou o inglês. Ao salvar, o programa reinicia no novo idioma: antes pergunta sobre alterações não salvas e depois reabre o projeto, se ele estiver salvo. O manual também abre no idioma escolhido.
 - **Tema**: **Escuro**, **Claro** ou **Igual ao Windows**. Você também pode alternar pelo botão **Tema** na barra superior.
+- **Verificar por atualizações › Verificar mensalmente**: **Sim** (padrão) ou **Não**. A data da última verificação aparece ao lado. Com **Sim**, ao abrir o programa ele verifica sozinho se há versão nova quando já passaram mais de 30 dias da última verificação. A consulta envia só o idioma da interface; sem internet, nada aparece.
 - **Abrir o último projeto ao iniciar**.
 - **Pastas padrão**: a pasta dos projetos e a pasta das exportações.
 - **Salvamento automático**: ligar ou desligar a cópia de recuperação e definir o intervalo.
+
+O nome, o idioma, o tema e a preferência de atualizações ficam no Registro do Windows, em `HKEY_CURRENT_USER\Software\Meu Editor de Vídeo`.
 
 ### Aba Desempenho
 
@@ -704,7 +703,7 @@ O programa não lê esse formato. Converta o arquivo para um formato comum, como
 
 ### Perdi alterações depois de um travamento
 
-Ao abrir o programa, verifique a faixa de recuperação na tela inicial e clique em **Recuperar**. Se ela não aparecer, procure a cópia de segurança do projeto, que fica na pasta de cópias de segurança do aplicativo, dentro de `%LOCALAPPDATA%\MeuEditorDeVideo\backups`.
+Ao abrir o programa, responda **Sim** à pergunta "Recuperar projeto". Se ela não aparecer, procure a cópia de segurança do projeto, que fica na pasta de cópias de segurança do aplicativo, dentro de `%LOCALAPPDATA%\MeuEditorDeVideo\backups`.
 
 ### O programa não abre ou apresenta erros
 

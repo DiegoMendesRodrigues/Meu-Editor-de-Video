@@ -1,0 +1,738 @@
+008a9fe4	Ao instalar, a aplicação transfere os ficheiros dos modelos das origens oficiais (huggingface.co e github.com), em
+00cd80cc	Fotogramas por segundo
+00e6066c	A reenquadrar…
+01b2dbc7	A calcular as máscaras da pessoa…
+0202c3d4	Multicâmara
+029b3c90	1280 × 720 · 30 FPS · horizontal, ficheiro leve
+03ef44a2	O ficheiro do modelo '{0}' declarado no manifesto não está no pacote.
+0542a483	Indique largura e altura em píxeis.
+05688f74	O clipe precisa de ter pelo menos dois fotogramas para a análise de movimento.
+058fcb4f	Memória para fotogramas:
+05a9f4b2	A faixa "{0}" está bloqueada.
+064a2689	O ficheiro está danificado e não pôde ser descodificado.
+0661b8e2	Ficheiro de fundo
+06789515	Limpar cor das margens
+06caa2d8	Os ficheiros foram gerados, mas não puderam ser importados:
+073f2136	Abaixo de 1×, cria fotogramas intermédios acompanhando o movimento (mais fluido que a mistura; mais lento a processar)
+0758c00e	Predefinido
+0783a361	Opacidade inválida em clipe da faixa '{0}'.
+07c62c93	Importar multimédia
+07c8faa0	Instalado pelo utilizador (pacote .medmodel)
+07cf1cc3	Seguir {0}
+07e3fd12	Mostrar o cursor do rato
+07f1878b	Eliminar o modelo "{0}"?
+0838227e	Incluir ficheiros multimédia
+08dc5795	Memória de {0} (mínimo recomendado: 16 GB): projetos longos ou 4K podem ficar lentos, e a pré-visualização guarda menos fotogramas.
+09456467	Não há legendas na linha temporal.
+0ad79817	Deseja recuperá-lo agora? Se escolher não, a cópia continua guardada e é oferecida de novo da próxima vez.
+0ba0cb9d	Adicionar faixa
+0bcac467	Guardar projeto como
+0be8593b	A medir o loudness…
+0c29e643	O ficheiro não é um projeto válido do Meu Editor de Vídeo ou está danificado:\n{0}
+0ca0a504	Looks prontos, pestanas, sombra, eyeliner, sobrancelhas, batom, blush, contorno, iluminador, cor dos olhos e sardas
+0e7b59f5	Papos debaixo dos olhos
+0ed26265	Fotograma com tamanho diferente do codificador.
+0f4fda81	O ficheiro não é uma LUT .cube válida.
+0f648cfe	Selecione dois clipes de áudio do mesmo acontecimento (Ctrl+clique). O da faixa mais acima fica parado; o outro é movido.
+0f9df0fd	Ocultar faixa
+101cbd6c	Eliminar e _fechar o espaço
+1212c7f2	Repor {0}
+127bcf16	O ficheiro não tem legendas para importar.
+129a4490	Encontra as batidas da música selecionada para marcar a linha temporal ou cortar os vídeos no ritmo.
+12b79a73	Equilíbrio de brancos
+1327273b	Nenhum efeito. Os efeitos combinam-se na ordem da lista; use as setas para reordenar.
+139fd95e	Eliminar proxy
+13affe77	Multicâmara: câmara {0}
+143d7159	Não detetada
+14d3347b	Não é possível incluir o projeto: o ficheiro "{0}" não foi encontrado. Localize-o antes de guardar.
+1577f23f	Multicâmara: câmara 1
+15b49896	Solo da faixa
+16257b8e	A transferir… {0} de {1}
+16a2eed2	A analisar a sequência…
+172b8b49	O seu texto aqui
+175f9366	São necessários cerca de {0} livres no disco
+176f6526	Câmara _2 a partir do cursor
+178a4311	Índice
+18174d62	Indique um número inteiro entre 1 e 100.
+18b1ed4f	Os modelos correm apenas neste computador. Nenhum ficheiro, áudio ou vídeo é enviado para a internet; esta só é usada para transferir modelos quando pede, em "Transferir modelos…".
+18e0b11a	Multimédia
+19a414f6	Remover ficheiro
+1ab28fa2	Não foi possível eliminar e juntar: na faixa "{0}", um clipe ocupa parte do trecho removido. Use "Eliminar e fechar o espaço".
+1aebdf67	Não foi possível guardar o projeto em:\n{0}\nO ficheiro anterior foi preservado.
+1b907390	A separar a voz dos restantes sons…
+1bc58133	Este clipe é um fotograma congelado.
+1bdb4add	Tipo de letra
+1bee19fb	Vídeo vertical leve, dividido em ficheiros de até 60 segundos.
+1c163cbc	Transições de imagem só se aplicam a faixas visuais.
+1c89b0ff	{0} ficheiro(s) incluído(s) em:\n{1}
+1cf38b1a	Corrige a distorção de lentes grande-angulares e de câmaras de ação (barril) ou de teleobjetivas (almofada).
+1d1b1318	Taxa de fotogramas
+1d8cd1d1	Câmara 1
+1e584c73	Guarda os parâmetros atuais no modelo selecionado
+1e5e1bb5	Seguimento de movimento
+1e60492a	Seguimento de câmara: {0}
+1eacd2c6	Selecione um clipe na linha temporal para usar os recursos de inteligência artificial (processados neste computador).
+1edad40a	Seguir o corpo
+1f2a3e07	O ficheiro transferido não confere com o SHA-256 do catálogo e foi descartado.
+1fc7eefa	Mudar o nome do marcador
+1fd93748	Câmara _4 a partir do cursor
+1fe483d6	Câmara 3
+200f67c8	Guardar título
+201b0183	A verificação de integridade do projeto falhou (ficheiro interno "{0}" diferente do esperado).
+2069ecd0	Nome de ficheiro inválido para '{0}'.
+20cd12dd	Escreva o texto a ser falado.
+2100e459	Acerca do Meu Editor de Vídeo…
+21538449	Repor curva
+226bb3a9	_Gravar ecrã, webcam e microfone…
+232914b0	Ativar interpolação de fotogramas
+233b170f	Guardar como novo…
+233d94a9	Faixa não encontrada.
+2350fda6	|Vídeos|{0}|Áudios|{1}|Imagens e GIFs|{2}|Todos os ficheiros|*.*
+2371413f	Ficheiro incompatível.
+23cfedf4	Novo nome na biblioteca (o ficheiro original não é alterado):
+2483bc5d	Suaviza o grão de gravações com pouca luz, preservando as margens.
+25065ec1	Faixa de vídeo
+258f9890	Indique um número de segundos entre 0,1 e 600, por exemplo 2 ou 1,5.
+25982bec	Rodar 90 graus para a direita
+264262f8	A multicâmara precisa de clipes de vídeo em pelo menos duas faixas de vídeo no cursor.
+26b772fe	Não é possível exportar: os ficheiros abaixo não foram encontrados. Localize-os e tente novamente.\n•
+2746b738	Layout linha temporal
+27852896	M_ulticâmara
+2791248f	Faixa
+284652b8	Câmara lenta por interpolação (fluxo ótico)
+28b66102	Ficheiro não encontrado
+28c12b90	A gravar o ficheiro
+28c195e3	Acerca do Meu Editor de Vídeo
+2a2d375c	Remover faixa
+2a2dd579	instalar noutro computador sem internet.
+2a982144	Definições…
+2ab756a6	para transferir modelos de IA quando pede, em Ferramentas › Modelos de IA › Transferir modelos.
+2ac18b26	Guardar como _modelo…
+2b49d5a8	Desativar câmara lenta suavizada
+2b8a2ca2	Não foi possível ler o ficheiro: {0}
+2bbefc50	Linha temporal
+2bfe28fe	Áudio sem ruído numa faixa nova{0}
+2c0296cc	abrir ficheiro
+2d222ad0	Clipes sobrepostos na faixa '{0}'.
+2d3e2cdb	O ficheiro já existe:\n{0}\n\nDeseja substituí-lo?
+2d48ee32	Selecione pelo menos dois clipes para agrupar.
+2df64e60	O projeto "{0}" foi recuperado da gravação automática de {1}.\n\n
+2eed6249	Guardar o novo projeto como
+2f3d9b7b	_Predefinido
+2fbc33c0	O multimédia já faz parte do projeto.
+300aa066	finalizar ficheiro
+3010760c	Todos os ecrãs
+3012f1c0	Pasta predefinida dos projetos
+3076a998	Autocolantes
+30abc330	Indique a taxa de bits do vídeo em kbps.
+31da6402	O ficheiro de licença '{0}' declarado no manifesto não está no pacote.
+3257ba09	Transforma um vídeo 360° (equirretangular) numa vista comum: escolha para onde a câmara olha e o campo de visão. Anime com keyframes para mover a câmara.
+33c23156	Selecione um clipe de vídeo ou imagem na linha temporal.
+348e5d7d	Layout predefinido
+3493d15f	Os pacotes trazem autocolantes (Elementos gráficos), títulos (Textos) e modelos de projeto (Ficheiro › Novo a partir de modelo).
+34b9998f	As definições de exportação são inválidas:\n• {0}
+34f565db	Ficheiros em falta
+354b7cc2	O catálogo de modelos não foi encontrado na pasta da aplicação.
+36c23353	Animação predefinida
+36f71ab3	Para sincronizar, o clipe teria de começar antes do início da linha temporal. Afaste a referência e tente de novo.
+36f8acb2	para transferir e empacotar os modelos, mas há {0}.
+37a0a489	Repor transformação
+37b584ab	Posição na linha temporal
+387a32d5	Interpolação de fotogramas
+388cf37f	O ficheiro anterior foi preservado.
+38ee087e	Encontra o rosto em cada fotograma e desfoca-o, pixeliza-o ou cobre-o com tarja (modelo Face Mesh V2)
+3a0df3c5	Preencher o fotograma
+3ac65040	Ainda não guardado
+3ad25f2d	Ecrã a gravar
+3ae31515	Ficheiro e edição
+3bf6fd57	Seguir pessoa com IA
+3c4dcce4	Mesa de mistura de áudio
+3c5843cd	Eliminar clipes
+3c994d1d	Seguir movimento ({0} fotogramas)
+3cf0f322	Guardar automaticamente uma cópia de recuperação
+3d0d217b	Altura em píxeis
+3d407cd9	Suavizar margens
+3d6450e5	A renderizar
+3e44a0e4	Selecione dois clipes de áudio do mesmo acontecimento (ex.: câmara e gravador). O da faixa mais acima fica parado; o outro é movido.
+3e99f0eb	O projeto tem de estar guardado para se tornar modelo. Guardar agora?
+3ea11abe	Marque o objeto no monitor (arraste a região) e clique em Seguir. Máscaras e outros elementos podem segui-lo.
+3ee84c6e	Faixa de efeitos
+3f2796ef	Infraestrutura da aplicação
+3fee37c3	Vídeo horizontal Full HD para o YouTube. Mantém a taxa de fotogramas do projeto.
+400d96d0	Não foi possível ler o primeiro fotograma.
+416da133	Os pacotes já foram transferidos antes; nada será transferido.
+41a07328	O ficheiro está danificado ou incompleto e não pôde ser lido.
+42773e53	Libertação
+429ef04f	Concluída ({0} ficheiros)
+42fccac8	Desligar áudio e vídeo
+433344e4	Zoom da linha temporal
+439a14b3	Rodar 90° ↺
+43fccb1b	Iguala a cor deste clipe à de outro (média e contraste por canal). Use "Combinar cor com…" no separador Cor.
+4479a267	Seguir a cabeça
+44b631ff	Ficheiro de legendas ao lado do vídeo
+45843491	A verificar e instalar o pacote…
+460f299c	Este modelo vem com a aplicação e não pode ser removido.
+4641ce70	Verifique se a câmara e o microfone não estão a ser usados por outro programa.
+464f1484	Adicionar à linha temporal
+476362c1	O pacote contém um caminho de ficheiro inválido ('{0}'). A instalação foi cancelada.
+49b2426b	Câmara lenta suavizada
+49e49399	Descodificador não disponível para "{0}".
+4b01bca3	Mudar o nome…
+4b26f857	A tecla F10 está a ser usada por outro programa; feche-o e tente de novo.
+4ba77551	A reduzir o ruído…
+4bd5688d	Indique a taxa de bits do áudio em kbps.
+4c17b0b8	Voz e ambiente em faixas separadas{0}
+4cbd0254	não detetada
+4cd930f2	Continuar sem os ficheiros multimédia
+4d695638	O ficheiro não é um pacote válido (.medpack ou .zip).
+4d7672c3	Ficheiro de legendas
+4d88d3e0	Ficheiro gerado:\n{0}
+4d8d51de	Controlo de taxa
+4dc131b3	Nome do ficheiro
+4e478494	A analisar o movimento da câmara…
+4e7b2c21	|Imagens e GIFs|{0}|Todos os ficheiros|*.*
+4f3fc79f	A sequência de imagens "{0}" ainda não pode ser incluída no projeto. Mantenha os ficheiros multimédia ligados.
+4f4ef64d	_Localizar ficheiros em falta…
+4f753a42	Pasta predefinida das exportações
+4fa1f152	Guardar como
+508943cb	Panorâmica da faixa
+509f67e8	A conferir SHA-256…
+50fc99c9	Guardar _como…
+518ce4d1	Barras que dançam com o som de uma música da biblioteca (escolha o ficheiro em Recurso).
+5261d1d0	Escurece as margens do fotograma.
+5281dcd3	O pacote não contém o ficheiro manifest.json na raiz.
+52db6cdf	Próximo fotograma
+52f5eb2e	Desempenho intermédio: computador na configuração mínima.
+52f6d189	A taxa de fotogramas deve estar entre 1 e 240 FPS.
+5346e9c6	Faixas
+546462a5	Nome Apelido\nCargo ou descrição
+54d5ecd2	{0} combinação(ões) em conflito: corrija antes de guardar.
+55a407f1	Texto (Enter muda de linha)
+55c3143d	Capturar fotograma (PNG)
+5627b3ae	Ficheiro indisponível
+566ebd31	Escreva o texto. A narração é gerada com as vozes instaladas no Windows (sem internet) e entra na posição do cursor, numa faixa de áudio livre.
+57224ac7	A gerar pacote .medmodel…
+5761280e	{0}|*{1}|Todos os ficheiros|*.*
+576a2e8c	A importar {0} de {1}
+58114811	100% = volume original. ◇ cria um keyframe de volume no instante do cursor (ex.: baixar a música durante uma fala).
+58b46f11	● A gravar  {0:hh\\:mm\\:ss}   (prima F10 ou clique em Parar para terminar)
+59040892	Indique um nome para o ficheiro multimédia.
+592f4cc0	Deseja guardar as alterações em "{0}"?
+59f670ec	Clipe com ponto de entrada negativo na faixa '{0}'.
+5a086003	Eliminar e juntar
+5aecb57a	Use o formato HH:MM:SS:FF (horas, minutos, segundos e fotograma).
+5af9aaf9	A gravação falhou.
+5b078c47	Mudar o nome da faixa
+5b35d758	Os ficheiros foram gerados, mas não puderam ser importados: {0}
+5b46cdc4	_Incluir ficheiros no projeto…
+5b54f4d2	Ativar som da faixa "{0}"
+5b8c54fd	Música que move as barras (tem de estar na linha temporal):
+5c8c4760	Nova faixa
+5d537a71	Não há legendas na sequência; o ficheiro de legendas não foi criado.
+5d8883aa	A gerar a narração…
+5da2091e	Silenciar faixa
+5db649fb	A cópia de recuperação não substitui o ficheiro do projeto; é oferecida ao abrir a aplicação depois de um encerramento inesperado.
+5dfeb2fb	Recursos desconhecidos serão ignorados e podem perder-se ao guardar.
+5e1b8a06	O fim tem de ser depois do início.
+5e295043	Selecione um clipe de áudio (ou um vídeo com áudio ligado) na linha temporal para ajustar volume, efeitos e loudness.
+5e2fa470	Não há espaço suficiente em disco para guardar o projeto. Liberte espaço e tente novamente.
+5e954ab7	O projeto não tem nenhuma sequência.
+5eeb522d	O ficheiro de '{0}' não confere com o catálogo (tamanho ou SHA-256 diferente).
+5eed6dcf	Insere o fotograma do cursor parado durante alguns segundos
+5f1f5525	Não há faixa compatível para "{0}".
+5f4e661e	O clipe não pode ser maior que o ficheiro.
+5fee64c3	Guardar alterações no modelo
+6011bf83	Maquilhagem virtual aplicada sobre a malha de pontos do rosto (modelo local): looks prontos ou cada item com cor e intensidade.
+60165ffd	Manual do utilizador — Meu Editor de Vídeo
+616d51ec	Câmara _1 a partir do cursor
+61af0557	Qualidade predefinida:
+61cd11be	Congelar fotograma
+623e74ba	Sem descodificação de vídeo por hardware: use proxies para vídeos de alta resolução.
+623f2504	Selecione um clipe de áudio (ou um vídeo com áudio ligado) na linha temporal.
+62609ef1	Seguimento a seguir
+63257e4f	A calcular o hash SHA-256…
+638d754c	Fotograma {0:N0} de {1:N0}
+64678705	Animações predefinidas
+64cff131	Ação
+64dee0dc	Um fotograma congelado não tem curva de velocidade.
+64e1842b	Secções das definições
+651a7b19	Indisponível — instale em "Transferir modelos…"
+654fc003	Nenhum modelo instalado. Guarde um projeto com Projeto › Guardar como modelo ou instale um pacote em Ferramentas › Pacotes de conteúdo.
+65599055	Formato de píxel
+65c492ea	Os modelos correm apenas neste computador; nada é enviado para a internet. Gira-os em Ferramentas › Modelos de IA.
+663c4a55	Inserir a gravação na linha temporal, no cursor
+6711c37f	Muda o tamanho do projeto para o da área recortada (em píxeis do ficheiro original). A exportação sai com essas dimensões.
+67b47953	Seguir
+67cc3632	Ligar áudio e vídeo
+68059633	Beleza (pele, rosto, olhos, nariz, boca e sobrancelhas) e maquilhagem virtual. Usa o modelo de pontos do rosto (separador IA › Modelos › Face Mesh V2).
+68686e27	O modelo de deteção de fala não está instalado.
+68707ab4	Transferido de
+68714cde	Seguimento, estabilização e máscaras
+68b34599	Limitar o tamanho de cada ficheiro a (MB):
+6913e0b0	Abrir ficheiro exportado
+6a616597	Ocultar faixa "{0}"
+6b00f1e9	Instale pacotes em Ferramentas › Pacotes de conteúdo. Clique num autocolante para o inserir no cursor.
+6b2787bd	Clipe com início negativo na faixa '{0}'.
+6b90a5ae	Todos os ficheiros|*.*
+6ba9d30c	1 multimédia foi localizado.
+6d2b1ab0	O ficheiro não foi encontrado.
+6d96c2bd	Ecrã {0}{1}
+6dd2c42d	Para aplicar o recorte, o clipe não pode estar rodado. Coloque a Rotação (e a rotação 3D) a zero e tente de novo.
+6dd717af	Câmara _3 a partir do cursor
+6e099a28	O multimédia "{0}" está em uso na linha temporal. Remova os clipes antes.
+6e236e55	Restaurar predefinição do modelo
+6ec59632	Apenas CPU
+6ed8deff	Selecione um clipe de vídeo, imagem, texto ou elemento gráfico na linha temporal para usar máscaras, seguimento e estabilização.
+6efe6be3	Importar {0} ficheiros multimédia
+6f62c475	Selecione pelo menos dois clipes para ligar.
+70671217	Clipe sem duração na faixa '{0}'.
+70fcce83	Nenhum ficheiro escolhido
+71079f9c	O ficheiro não é um pacote de modelo válido (.medmodel).
+71735e7a	A gerar ({0:0}%)
+725538d9	Clipe composto da faixa '{0}' referencia uma sequência inválida.
+72cac06a	Indique a duração máxima por ficheiro em segundos.
+736429b4	Não é possível exportar: os ficheiros abaixo não foram encontrados. Localize-os e tente novamente.\n• {0}
+7368658c	Guardar alterações
+73687237	Eliminar clipe
+73996866	Armazenamento dos ficheiros multimédia
+73a72cc8	Multimédia
+74b4aba2	Formato do ficheiro
+74f8a58e	Reduz chiado e ruído de fundo constante (ventoinha, ar condicionado).
+75137ba5	Ficheiro do modelo não encontrado.
+754b3f75	4 em grelha
+75887a79	Renderizar em segundo plano (continuar a editar enquanto exporta)
+758dcd0f	Pré-visualização em ecrã inteiro
+75cd5d41	A procurar câmaras e microfones…
+7677bcb8	Solo: ouvir só as faixas em solo
+76900f1b	Voltar
+76b0fb6a	Definições
+772bee3a	Seguir movimento
+7738a0c6	Multicâmara: câmara 2
+77ba5003	Nenhuma faixa de legendas. Importe um ficheiro SRT/VTT ou crie uma faixa.
+77f7e80e	Selecione um clipe na linha temporal para editar as suas propriedades.
+77fbdf0b	Selecione um ficheiro na biblioteca para ver as informações.
+786b4822	Anular
+78f1677d	Taxa de fotogramas vazia.
+7923816a	Ficheiro não encontrado.
+79327250	Eliminar e _juntar
+7a4e934f	Gravar ecrã
+7a6e273d	Não foi possível ler o ficheiro:
+7ba120ce	não (apenas CPU)
+7bacbc5a	Pode usar, estudar, modificar e redistribuir o programa nos termos dessa licença; o programa é distribuído sem garantia.
+7be26e28	Ligar ficheiros externos
+7c8b936e	Soltar do seguimento
+7ce6ecfa	Demasiados redirecionamentos ao transferir o modelo.
+7d1929c8	Escolha onde guardar o projeto (Guardar como).
+7d4015d0	Desativar solo da faixa
+7d82850f	Tipos de letra (*.ttf;*.otf;*.ttc)|*.ttf;*.otf;*.ttc
+7e42d8e8	O ficheiro ficará maior. Deseja continuar?
+7ed4feb8	Contentor
+7eeaa42e	A resolução deve estar entre {0} e {1} píxeis em cada dimensão.
+7f0ef377	Para refinar o recorte, aplique o efeito Refinar margens (separador Efeitos).
+7f22c681	Multicâmara: câmara 4
+7f6e6649	Volume da faixa
+803b8572	Prima Ctrl+F para procurar no manual.
+816f8dda	criar ficheiro de saída
+818512fa	ficheiro(s) em falta
+81f5e133	Clique no campo do atalho e prima a nova combinação de teclas.
+82490d77	A procurar ficheiros
+824f6bec	Seguir pessoa (IA)
+826b1832	Pele suave, menos linhas e papos; ajustes de rosto, olhos, nariz, boca e sobrancelhas
+8295bfb6	Guarde o projeto para manter as alterações recuperadas.
+82b6cf63	Altura personalizada em píxeis
+82c7c0d1	Nome alternativo
+831e1b98	O ficheiro do modelo está corrompido: o tamanho não confere com o manifesto.
+841e268c	Guardar texto selecionado como título
+84644aef	Importar multimédia
+853ecd69	Falha ao descodificar o ficheiro "{0}" durante a exportação. O ficheiro pode estar danificado.
+85a39ab3	Sim
+85e60104	Já existe uma exportação na fila para este ficheiro.
+865f5b7a	Ajustar região do seguimento
+86abe398	Nenhum ficheiro importado. Arraste ficheiros ou pastas para aqui ou use "Importar multimédia".
+878a7adc	Baixa o volume deste clipe (por exemplo, a música) enquanto há fala nas outras faixas.
+881c6e33	Transferir modelos…
+88ae9947	Ativar som da faixa
+893056f0	Indique o tamanho alvo em MB.
+8970ea4a	A área de transferência está a ser usada. Tente novamente.
+8998ed98	Ecrã inteiro (F11)
+89c80e34	Duração máxima por ficheiro em segundos
+89dd5401	O tipo de letra já estava disponível ou o ficheiro não é um tipo de letra válido.
+8a40875e	Áudio sem ruído numa faixa nova
+8a86d43f	Legenda na faixa de legendas, com caixa escura na base do fotograma.
+8b19518f	Eliminar
+8b5f9c27	Encontra o rosto em cada fotograma (modelo local de pontos do rosto) e desfoca-o, pixeliza-o ou cobre-o com tarja.
+8ba4bfdb	Endereço de transferência não permitido: {0}
+8bcf12dd	Localize os ficheiros para que apareçam corretamente. Pode continuar sem eles; os trechos ficarão marcados como em falta.
+8ceb5546	 · {0:0.#} fotogramas/s
+8db954de	Restaurar todos os modelos predefinidos
+8e0afda7	Duração do fotograma congelado (segundos)
+8e55a42b	Para cortar as margens do vídeo, use Recorte no separador Vídeo. Para outro formato, escolha 9:16, 1:1 ou 4:5.
+8e6c50c3	_Importar multimédia…
+8f74af45	Nenhuma fala detetada no clipe; nada foi removido.
+8f9711cf	Qualidade predefinida da pré-visualização
+8fe35595	Remover "{0}" do projeto?\n\nO ficheiro original não será apagado.
+90053151	O pacote é demasiado grande (limite de 1 GB, 200 MB por ficheiro).
+902992cd	A linha temporal está vazia.
+910b85d5	Mudar o nome do ficheiro
+9274f120	Não foi possível transferir {0} de {1}: {2}
+9330387d	Nome da faixa
+93496ca9	Nova faixa de legendas
+9353deae	Deslocamento horizontal da linha temporal
+939c8811	Intervalo da gravação automática
+93d2a681	**Ficheiro original:**
+9417c083	Rodar 90° ↻
+94532fca	A detetar as batidas…
+947a2e03	Modelo "{0}" guardado. Use Ficheiro › Novo a partir de modelo para começar um projeto com ele.
+9588387c	Multicâmara: câmara 3
+96171edc	Tipo de letra do texto (do sistema ou adicionado à aplicação)
+968025f2	{0} ficheiro(s) já estava(m) no projeto e foi(ram) ignorado(s).
+9681eb86	Adicionar um ficheiro de tipo de letra (.ttf, .otf) à aplicação
+96c0ff21	 · ficheiro {0} de {1}
+97099a8f	Taxa de fotogramas inválida: "{0}".
+976d01c0	Liberte espaço e retome a exportação; os trechos já prontos serão aproveitados.
+977ee6ea	Mede o movimento da câmara em todo o clipe e compensa os tremores
+97a0fa09	Acerca de
+97c7861a	Guardar como modelo
+982ab01b	Instalado pelo utilizador
+9835016e	Posição da webcam sobre o ecrã
+98374ac0	Faixa de legendas
+9845c805	O multimédia não tem imagem.
+9889fca2	Recursos: remover ou substituir o fundo, legendas automáticas, isolar a voz, reduzir ruído, detetar cenas, remover silêncios, seguir a pessoa e melhorar a imagem. Só "Remover fundo" vem instalado; os restantes modelos são instalados pelo gestor.
+98b5d173	As definições de exportação são inválidas:\n•
+9909c673	{0} ficheiro(s) importado(s).
+993f8ca5	Exportar _fotograma atual…
+993fb9a7	A duração máxima por ficheiro deve ser de pelo menos 1 segundo.
+99978bfe	Transferir modelos de IA
+99b554f5	Mostrar faixa
+99c2a78a	A seguir o movimento…
+9a02a010	● não guardado
+9a7d2d6d	Guardar como novo modelo
+9a87121f	Não há espaço suficiente em disco para guardar o projeto. Liberte espaço e tente novamente. O ficheiro anterior foi preservado.
+9ab3d578	|Áudios|{0}|Imagens e GIFs|{1}|Todos os ficheiros|*.*
+9ad24dec	Pessoa seguida em {0} fotogramas. Ligue elementos no separador Composição.
+9b7db2e8	Selecione um clipe na linha temporal e faça duplo clique num item (ou use Aplicar).
+9b94de36	Restaurar modelos predefinidos
+9ba2e998	Ficheiros não encontrados
+9c942e59	Escolher ficheiro da LUT
+9db4fa74	|Todos os ficheiros|*.*
+9ddd13ca	O nome do projeto contém caracteres não permitidos em nomes de ficheiro.
+9e27b666	abrir ficheiro de saída
+9ea4187c	Os textos ficam como estão. Tudo pode ser anulado com Ctrl+Z.
+9eb75f87	Selecione um texto, título, crédito, tarja ou legenda na linha temporal. Para criar um, use a secção Textos da biblioteca.
+9ed52789	Guardar texto selecionado como título…
+9ef688e1	Faixa de legenda
+9f54018c	Faixa de texto
+9f9fef77	Procurar ficheiros em falta nesta pasta (inclui subpastas)
+9fbdfc69	Faça duplo clique numa forma para a inserir no cursor. Ajuste forma, cores e máscaras no separador Composição.
+9fc16cbd	A finalizar o ficheiro…
+a02d9202	Silenciar faixa "{0}"
+a053b0c0	Verifique a ligação à internet e tente de novo; o que já foi transferido é aproveitado.
+a07187e6	Não foi possível ler os fotogramas do clipe.
+a17a83d9	Pacote gerado pelo Meu Editor de Vídeo (Ferramentas › Modelos de IA › Transferir modelos). Pode ser copiado e
+a1d3b0f3	Biblioteca multimédia
+a1fdc355	Lista de créditos que sobe pelo ecrã durante o clipe.
+a22df4a4	Segue a região em todo o clipe, a partir do fotograma onde foi marcada
+a25f7142	Formato de ficheiro não suportado.
+a27c1569	Bloquear faixa "{0}"
+a35b27c8	Guardar texto como título…
+a38d2879	Clique e prima a nova combinação
+a4197e5a	Deteção de fala (remover silêncios)
+a44a7bf7	WhatsApp partilha
+a4d93982	Mostra o clipe (e o áudio ligado) do fim para o início
+a5596e75	Escolha uma faixa de legendas.
+a559e5d2	Títulos guardados
+a5ba8caf	Processa todos os fotogramas e guarda as máscaras na cache: reprodução e exportação ficam mais rápidas.
+a833a2ff	Preencher fotograma
+a83f2382	Uma câmara virtual acompanha a cabeça ou o corpo da pessoa (modelo de segmentação local): corte automático, agitar e fundo desfocado.
+aa3a6b36	Selecione um texto na linha temporal.
+aa524ea7	Vídeos, áudios, imagens e projetos são processados apenas neste computador. A internet só é usada para transferir modelos de IA quando pede, em Ferramentas › Modelos de IA › Transferir modelos.
+aa58d0db	Desbloquear faixa
+aa846485	Guardar definições
+aaaa1558	Todos os ficheiros serão copiados para dentro do ficheiro do projeto (.med), que poderá ser levado para outro computador.\n\nO ficheiro ficará maior. Deseja continuar?
+aabd2374	Localizar {0} ficheiros multimédia
+abd7c83a	Remover seguimento
+ac483d96	Não foi possível identificar a duração do ficheiro.
+ac6d9b76	Anexado
+ad136596	Fotograma sem dimensões.
+ad874ae7	Pausa (Espaço)
+ad8df3a5	Não foi possível inserir a narração na linha temporal.
+ae270ee9	ficheiro ilegível
+ae770c3a	Rodar 90 graus para a esquerda
+ae9f4b28	Restaurar predefinição
+aebeadc5	Dividir em ficheiros de até (segundos):
+aef7cd5b	Guardar
+aeff7dfe	Fotograma da pré-visualização
+af0af913	Indique um nome de projeto válido (sem os caracteres \\ / : * ? " < > |).
+af1b8596	Usar a placa gráfica para descodificar e codificar vídeo
+af29197a	A procurar fala nas outras faixas…
+af546587	O ficheiro do modelo está corrompido: o hash SHA-256 não confere com o manifesto.
+afa5a4d1	Abaixo de 1×, mistura fotogramas vizinhos para reduzir os saltos
+afb4371a	Faixa de áudio
+b01248cd	Deteção de cenas
+b0d199f4	O ficheiro não contém um título.
+b145bb85	Cria um seguimento com a posição da pessoa em cada fotograma (use no separador Composição para ligar elementos).
+b16877fc	Faixa de imagem
+b219ec26	Câmara lenta suavizada (mistura de fotogramas)
+b2b3f797	Modelo de ecrã dividido desconhecido.
+b2b9b581	Mudar o nome do projeto
+b2d639ee	Um pacote é um ficheiro .medpack (ZIP) com as pastas figurinhas, titulos e modelos. Tudo fica neste computador.
+b2ef043b	Transparente (mostra as faixas abaixo)
+b426f76d	Textos só entram em faixas de texto ou de legendas.
+b428cf3d	O projeto foi convertido do formato {0} para {1}. Foi criada uma cópia de segurança do original ao guardar.
+b45e0461	Encoste outro clipe antes do selecionado, na mesma faixa, para aplicar uma transição.
+b4689945	Seguimento seguido pela máscara
+b47459a4	Serão transferidos {0} das origens oficiais (huggingface.co e github.com).
+b4de2f0a	A verificar o resultado
+b4fc57a4	Restaurar todas as predefinições
+b523facc	Na qualidade automática, a resolução também é reduzida durante a reprodução quando o computador não acompanha a taxa de fotogramas.
+b55b893b	endereços fixos, e confere a assinatura SHA-256 de cada um. Nenhum dado seu é enviado: vídeos, áudios e projetos continuam apenas neste computador. Os pacotes .medmodel gerados ficam guardados e podem ser copiados para instalar noutro computador sem internet.
+b631ad1e	Não há ficheiros disponíveis na biblioteca para analisar.
+b643bd60	Predefinido
+b6937e77	Selecione um clipe de vídeo para congelar o fotograma.
+b6c3a204	Não foi possível copiar o tipo de letra: {0}
+b72e9d46	A analisar os ficheiros multimédia…
+b7e6dc27	Inserir título guardado
+b874aa98	Movimento medido em {0} fotogramas. Ampliação usada: {1}
+ba20b1c3	O ficheiro SVG não pôde ser lido.
+ba309e78	Software livre licenciado sob a GPL-3.0-or-later (GNU General Public License, versão 3 ou posterior). Pode usar, estudar, modificar e redistribuir o programa nos termos dessa licença; o programa é distribuído sem garantia.
+ba30f96d	Mudar o nome da faixa…
+ba8a452f	Ficheiro
+bc2db144	Fundo removido. Ajuste margens, cor e suavização entre fotogramas no efeito "Remover fundo (IA)" do separador Efeitos.
+bc3097cd	A detetar a fala…
+bc314f33	Saltar
+bc4300e4	Eliminar e fechar espaço
+bcefb06d	Retocar: maquilhagem
+bd45d76a	O ficheiro não contém vídeo, imagem nem áudio.
+bd62479c	{0} câmara(s) e {1} microfone(s) encontrados. O vídeo é gravado em MP4.
+bed3691d	Computadores e portáteis
+bef25b45	A calcular…
+bfea1e6b	A melhorar a imagem…
+c01fb16d	{0} fotogramas
+c023c053	A combinar a cor…
+c02993f6	Seguir seguimento
+c0791fa7	Localizar ficheiro em falta
+c0b1203e	Alguns ficheiros multimédia do projeto não foram encontrados
+c2544121	Ao clicar em Gravar, o programa é minimizado e a gravação começa após uma contagem de 5 segundos. Para parar a gravação, prima F10.
+c29337f0	Um fotograma congelado não pode ser reproduzido ao contrário.
+c3ed83c8	Corta os silêncios do clipe (e do vídeo ligado) e fecha os espaços
+c420cee5	Nenhum ficheiro corresponde à pesquisa.
+c46d4cbb	O ficheiro está a ser usado por outro programa:\n{0}
+c4930de6	Aplicar este estilo a todas as legendas da faixa
+c4af3181	{0}\nFicheiro não encontrado: {1}
+c4d27f4e	Nenhum fotograma pôde ser descodificado: o ficheiro parece danificado.
+c54fabd9	Repor
+c55fd7cd	Uma taxa de fotogramas fracionária deve ser escrita como fração (ex.: "30000/1001").
+c56a6f8f	Importar ficheiros multimédia
+c5b052a0	Não foi possível gravar o ficheiro de saída (sem permissão ou em uso por outro programa):\n{0}
+c5e8f6d9	Instalação cancelada. O que já foi transferido é aproveitado da próxima vez.
+c628bd83	UpdateTrackCommand só pode alterar propriedades da faixa.
+c62f017a	A transcrever a fala…
+c7052a9a	Desativar interpolação de fotogramas
+c714b525	O ficheiro pode estar danificado. Tente abrir uma cópia de segurança.
+c74ea951	{0} ficheiros foram localizados.
+c80528f0	_Analisar ficheiro
+c81d0d1c	Câmara 4
+c85c9bc6	O campo '{0}' do manifesto deve ser o nome de um ficheiro na raiz do pacote.
+c86bc40d	Segmentação de pessoas (remover fundo, seguir pessoa)
+c923d90e	{0} · incluído na aplicação
+c95d98b6	Pastas predefinidas
+c9fd8063	_Ecrã dividido
+cad1d646	O ffmpeg.exe não foi encontrado na pasta da aplicação.
+caf0af32	1080 × 1920 · 30 FPS · vídeos curtos para telemóvel
+cb181a77	Coloque cada clipe numa faixa diferente para que apareçam juntos.
+cb3a8443	Não foi encontrada uma sequência: são necessárias pelo menos 2 imagens numeradas em ordem (ex.: fotograma_0001.png, fotograma_0002.png).
+cbf8103b	Recuar 1 segundo
+cc172b83	O multimédia do clipe não foi encontrado.
+cc7b20f3	O ficheiro exportado não passou na verificação final:\n{0}\n\nDetalhe: {1}
+cc9d944e	Largura personalizada em píxeis
+ccaa7e34	{0} ficheiro(s) não puderam ser importados:
+ccf20974	Encoste outro clipe antes deste, na mesma faixa, para usar uma transição.
+cd16bc71	O ficheiro não contém legendas válidas.
+cd2b0e42	O projeto "{0}" não foi fechado corretamente. Há uma gravação automática de {1:g}.\n\n
+cd57d86d	Gravação automática
+cd883163	Resolução e taxa de fotogramas do projeto; ajuste todos os parâmetros livremente.
+cd9ab984	Não há faixas de áudio. Adicione uma faixa de áudio na linha temporal.
+cda0614c	A origem redirecionou a transferência para um endereço sem HTTPS; transferência cancelada.
+cdd35dea	Ecrã inteiro
+cdd64d8d	Cancelar transferência
+ce2fdefa	A faixa de origem dos clipes copiados já não existe.
+ce7b87d4	Recomendado para projetos Full HD: pré-visualização {0}, {1} MB para fotogramas prontos
+ce893ef1	Canais da mesa de mistura
+ce8f5d96	Substituir ficheiro
+d093eaf9	Não foi possível gravar o ficheiro: {0}
+d0aa40d1	Elimina e fecha o espaço em todas as faixas, mantendo vídeo, áudio e textos sincronizados
+d1065a79	ficheiro
+d12eda2a	Ficheiro gerado:\n
+d154ea2e	Câmara 2
+d18d4ec5	Que parte do bloco fica na posição Y (separador Vídeo). Na base, as linhas novas crescem para cima.
+d1e6feab	A localizar a pessoa em cada fotograma…
+d1ed6f3f	Desbloquear faixa "{0}"
+d2745176	Escolha gravar o ecrã, a webcam ou os dois.
+d2b92596	A preparar…
+d3078cc6	Usar apenas CPU
+d33d6a18	Créditos em rolagem
+d3d62cc2	Faixa sem legendas. Use Adicionar.
+d3d9733d	O multimédia não tem faixa de vídeo.
+d457deea	Incluir ficheiros multimédia no projeto
+d4a3d974	Seguir pessoa
+d5515f4f	Suavização entre fotogramas
+d56bab13	Clipe da faixa '{0}' referencia um ficheiro multimédia inexistente.
+d5861a1a	O ffmpeg.exe não foi encontrado na pasta da aplicação. Reinstale o programa.
+d5b35acf	Selecione um clipe na linha temporal e abra o separador IA nas propriedades. Tudo é processado neste computador.
+d6399374	Mudar o nome do marcador…
+d6eafe82	Transferir
+d74ec111	Memória para fotogramas da pré-visualização
+d74ecb33	Enter muda de linha
+d7acb076	Selecione um clipe de vídeo ou imagem na linha temporal para aplicar efeitos e corrigir a cor.
+d7b97f67	Nenhum dos ficheiros em falta foi encontrado nessa pasta.
+d7ba6b22	Mudar o nome do ficheiro para "{0}"
+d9096f23	M silencia a faixa; S (solo) faz só as faixas em solo soarem. Duplo clique no fader ou na panorâmica repõe o padrão. Os medidores movem-se durante a reprodução.
+d97f2e39	O multimédia dos clipes copiados já não faz parte do projeto.
+d9da0b53	Eliminar e fechar o espaço
+d9f02f0f	720 × 1280 · 30 FPS · vertical 9:16, ficheiro leve
+da1525a1	Seguimento {0}
+da2f8d8f	Ao instalar, a aplicação transfere os ficheiros dos modelos das origens oficiais (huggingface.co e github.com), em endereços fixos, e confere a assinatura SHA-256 de cada um. Nenhum dado seu é enviado: vídeos, áudios e projetos continuam apenas neste computador. Os pacotes .medmodel gerados ficam guardados e podem ser copiados para instalar noutro computador sem internet.
+da3b0c44	Não há outro clipe com áudio a tocar com este. Coloque a narração ou a fala noutra faixa e tente de novo.
+da56fad3	{0} batidas marcadas na linha temporal.
+daa319da	Os clipes são demasiado curtos para uma transição.
+dac230c4	Suavizar margem
+dadf3082	Nenhuma voz encontrada. Instale vozes em Definições do Windows › Hora e idioma › Voz.
+dae519a0	Largura em píxeis
+daffd2d7	A comparar os áudios…
+db472496	Informações do ficheiro
+dbbd5fd0	Eliminar seleção (Delete)
+dc55af2c	Repor valores
+dca191f2	A faixa "{0}" tem {1} clipe(s). Remover mesmo assim?
+dcc81347	Selecione um clipe de vídeo ou imagem na linha temporal para editar transformação, keyframes, velocidade e transições.
+ddbb6686	Título "{0}" guardado em Meus itens.
+ddf40d55	⚠ Ficheiro removido
+de085fc7	O ficheiro de documentação '{0}' declarado no manifesto não está no pacote.
+de7fe5d8	O multimédia '{0}' não tem caminho de origem.
+ded554c8	Incluído na aplicação
+df16032c	O motor multimédia (FFmpeg) não pôde ser carregado. Reinstale a aplicação.\n\nDetalhe: {0}
+df4ca6e8	Seguimentos
+dfbd5d14	Faz este clipe acompanhar um objeto seguido noutro clipe, a partir da posição atual (no cursor).
+dfbea4cf	Bloquear faixa
+e013582b	A procurar mudanças de cena…
+e0836c56	Manual do utilizador
+e0ac5283	Eyeliner
+e1603818	A preparar
+e1b7eed8	O pacote não tem autocolantes, títulos nem modelos (pastas figurinhas, titulos e modelos).
+e1e6e158	Eliminar e fechar espaço (Shift+Delete)
+e30250af	Eliminar modelo
+e3272a97	Nome da categoria (ex.: Entrevistas, Bandas sonoras, Logótipos):
+e37e9336	continuam apenas neste computador. Os pacotes .medmodel gerados ficam guardados e podem ser copiados para
+e447260d	não seguido
+e48f88e7	Faça duplo clique num modelo para o inserir no cursor. Edite o conteúdo e o estilo no separador Texto.
+e4ef5ec6	Adicionar tipo de letra
+e50beb48	A resolução deve estar entre {0} e {1} píxeis.
+e5110962	Os pacotes trazem autocolantes (Elementos gráficos), títulos (Textos) e modelos de projeto (Ficheiro › Novo a partir de modelo). Um pacote é um ficheiro .medpack (ZIP) com as pastas figurinhas, titulos e modelos. Tudo fica neste computador.
+e5432657	Vídeos, áudios, imagens e projetos são processados apenas neste computador. A internet só é usada
+e56d0d19	Gravar o ecrã
+e5b989e0	Mostrar faixa "{0}"
+e5d2c46e	Ficheiros suportados|{0}|Vídeos|{1}|Áudios|{2}|Imagens e GIFs|{3}|Todos os ficheiros|*.*
+e649cc8d	Indique um nome de ficheiro válido.
+e6b9dd39	Transferência incompleta: {0} de {1} bytes. Tente de novo.
+e6cd0bd5	Ecrã dividido
+e6efbd7c	A gravação vai começar.\nPrima F10 para parar.
+e70460ad	Refinar margens
+e710b660	_Linha temporal
+e718e93f	Não foi possível guardar a imagem
+e772276e	Volume da faixa (dB)
+e7a739c9	Detetar cenas
+e864d54f	continuam apenas neste computador. Os pacotes .medmodel gerados ficam guardados e podem ser copiados para instalar noutro computador sem internet.
+e8908ee8	Anular (Ctrl+Z)
+e942cbbb	Aplicar animação predefinida
+ea74fffe	Seguimento
+ea75073f	Ficheiro gerado não encontrado.
+eab631d5	Localizar ficheiro multimédia
+eb0db893	Remover o pacote "{0}" deste computador? Projetos que já usam os autocolantes dele continuam com as cópias importadas.
+eba2822f	Alterar tipo de letra
+eba5a22e	Adicionar faixa "{0}"
+ebc78ef6	Escolha o que a câmara acompanha. Depois ajuste o corte automático, o agitar e o fundo desfocado. Usa o modelo de recorte de pessoa (separador IA).
+ed4f6762	Ficheiro WebVTT inválido: falta o cabeçalho WEBVTT.
+ed5431fc	Capturar fotograma
+edca4a4b	O ficheiro de projeto não foi encontrado:\n{0}
+ee313bb5	Apagar miniaturas, formas de onda, proxies e máscaras de IA? Serão recriados quando necessário (proxies e máscaras levam algum tempo).
+ee9361d0	Descodificação por hardware
+eee0df8e	Voz e ambiente em faixas separadas
+ef615877	Ficheiro não encontrado.
+ef91a6e4	O ficheiro está vazio.
+eff4000b	A instalar…
+f06da6b5	Novo seguimento
+f0db2438	"{0}": {1} autocolante(s), {2} título(s) e {3} modelo(s).
+f0e8a4bf	Largue para importar
+f0fd80f0	O clipe não pode começar antes do início da linha temporal.
+f117b512	Selecione pelo menos um clipe.
+f1c041e7	Descodificação por GPU
+f2282c39	Elementos gráficos entram em faixas de imagem.
+f25c5c68	Duplo clique para repor
+f2a39118	Descartar as alterações feitas nos modelos que acompanham a aplicação? Os seus modelos próprios são mantidos.
+f2a404ee	Todos os ficheiros serão copiados para dentro do ficheiro do projeto (.med), que poderá ser levado para outro computador.\n\n
+f3a2c68a	Ficheiro .cube sem LUT_3D_SIZE antes dos dados.
+f43c3023	Sem modelo: usa comparação de cores entre fotogramas (menos precisa). Instale o modelo de cenas para melhor resultado.
+f51273b7	Indique um número entre 0,1 e 16, por exemplo 0,5 ou 2.
+f53bbaa0	Utilizador
+f55e100d	CRÉDITOS\n\nRealização\nNome Apelido\n\nEdição\nNome Apelido\n\nBanda sonora\nNome Apelido\n\nObrigado por assistir!
+f5d41570	A exportar…
+f64537aa	Alterar definições do projeto
+f664370c	O clipe não pode ser colocado na faixa "{0}".
+f67a21a5	Pontos do rosto (retoque de beleza e maquilhagem)
+f68c9c48	Anular: {0} (Ctrl+Z)
+f6bfbe13	A procurar silêncios…
+f72685ad	A faixa "{0}" não aceita "{1}".
+f742d3de	 (deteção pelo nível do som; instale o modelo de deteção de fala para mais precisão).
+f7514da1	Seguimento de câmara
+f7f4837b	O ficheiro deste clipe não foi encontrado. Volte a ligar o ficheiro e tente de novo.
+f8515210	Fotograma anterior
+f85e8e02	A transição precisa de dois clipes encostados na mesma faixa.
+f9250d2c	Posição, escala, rotação, opacidade e keyframes ficam no separador Vídeo.
+f9801bb3	Retoque do rosto com a malha de pontos do rosto (modelo local): pele suave e mais clara, menos linhas de expressão e papos sob os olhos, e ajustes de rosto, olhos, nariz, boca e sobrancelhas.
+f9f64ce9	Guardar como título
+fa473bff	Cria keyframes de volume que baixam este clipe nos trechos com fala
+fa504e56	Ficheiros suportados|
+fb1adad4	Rodar
+fb245260	Nenhum ficheiro importado.
+fbc1ac35	Ficheiros gerados (IA)
+fbf00a3b	Programador: {0}
+fc5d92ee	Ficheiro removido
+fc99ef24	Dividir em ficheiros
+fcd6b084	Incluído na aplicação (não pode ser removido)
+fdd6c021	O intervalo sobrepõe-se a outro clipe da faixa.
+fe50cd52	Exportar fotograma atual
+ffe885ad	Iguala a cor e o contraste deste clipe aos do clipe anterior da faixa (efeito Combinar cor, ajustável no separador Cor).
+2eba946b	Editar
+1acb4b8f	Ver
+b96a67bf	Ferramentas
+fe0addd7	Ajuda
+02862497	Auto
+e51e19df	Automática
+a75d067f	IA
+d0f790ac	Ao guardar, o programa reinicia no novo idioma e reabre o projeto guardado.
+2d31efc9	Ecrã
+5c974c0c	A detetar…
+6c1f9ebc	Detetar automaticamente
+07770c0f	Não foi possível detetar: 
+f8e5eec2	Não foi possível detetar: {0}
+27d3c9f6	Placa gráfica (inclui Media Foundation)
+34631cc0	Automático (placa gráfica quando disponível)
+b15d9e4c	Ligar multimédia (os ficheiros ficam onde estão)
+f0c3253f	Empacotar multimédia no projeto (.med independente)
+04f4be29	Desvanecer
+293c7774	Pestanas
+d2ce481a	Faixa preta
+0d089536	Texto em negrito com sombra suave; entra e sai a desvanecer.
+38445407	A acelerar
+ef465860	A desacelerar
+042c3ccf	0,25× (câmara lenta)
+08ba14a4	0,5× (câmara lenta)
+2643d451	Fechar esta janela
+5e01d38c	Tem a versão mais recente!
+a4ef774a	A nova versão {0} do {1} está disponível para poder atualizar a que está a utilizar.
+6975441d	Sistemas operativos suportados: {0}.
+e19b4ed8	Ligação para transferência na Microsoft Store:
+1df3dbbe	Ligação para transferência no site AplicativosIA.Online:
+1e1ee72e	Para que possa utilizar melhor a solução, será necessário que me ajude, preenchendo as suas preferências nos espaços abaixo.
+a25648cb	Verificar mensalmente se há novas atualizações
+836775bf	Guardar as preferências
+4eb7d40e	Acompanhar o sistema operativo

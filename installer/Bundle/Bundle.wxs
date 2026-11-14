@@ -9,14 +9,32 @@
      xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
   <Bundle Name="Meu Editor de Vídeo"
           Manufacturer="Diego Mendes Rodrigues"
-          Version="$(var.Version)"
+          Version="$(var.BundleVersion)"
           UpgradeCode="9D2E4F60-3B1A-4C7D-8E5F-1A2B3C4D5E6F"
           IconSourceFile="$(var.RepoRoot)src\MeuEditorDeVideo.App\Assets\icone.ico">
+    <!-- Botões e textos no idioma do Windows: o WixStdBA procura "<LCID>\thm.wxl" (idioma completo e depois o neutro);
+         sem correspondência, usa o inglês embutido. -->
     <BootstrapperApplication>
-      <bal:WixStandardBootstrapperApplication Theme="rtfLicense" LicenseFile="$(var.LicenseRtf)" ShowVersion="yes" SuppressOptionsUI="yes" />
+      <Payload Id="Loc1033" Name="1033\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.en.xml" />
+      <Payload Id="Loc9" Name="9\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.en.xml" />
+      <Payload Id="Loc1046" Name="1046\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.pt-BR.xml" />
+      <Payload Id="Loc22" Name="22\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.pt-BR.xml" />
+      <Payload Id="Loc2070" Name="2070\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.pt-PT.xml" />
+      <Payload Id="Loc3082" Name="3082\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.es.xml" />
+      <Payload Id="Loc1034" Name="1034\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.es.xml" />
+      <Payload Id="Loc10" Name="10\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.es.xml" />
+      <Payload Id="Loc1036" Name="1036\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.fr.xml" />
+      <Payload Id="Loc12" Name="12\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.fr.xml" />
+      <Payload Id="Loc1031" Name="1031\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.de.xml" />
+      <Payload Id="Loc7" Name="7\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.de.xml" />
+      <bal:WixStandardBootstrapperApplication Theme="rtfLicense" LicenseFile="$(var.LicenseRtf)" LogoFile="$(var.RepoRoot)src\MeuEditorDeVideo.App\Assets\logo-64.png" ShowVersion="yes" SuppressOptionsUI="yes" />
     </BootstrapperApplication>
 
     <!-- Visual C++ 14.x x64 já instalado? (chave documentada pela Microsoft; Major = 14, Minor >= 40 cobre as DLLs exigidas pelo ONNX Runtime/Whisper) -->
+    <!-- A versão do pacote ganha uma revisão por compilação (para que um novo Setup.exe sempre substitua o anterior);
+         a tela mostra só a versão do programa. -->
+    <Variable Name="VersaoDoPrograma" Value="$(var.Version)" />
+
     <util:RegistrySearch Id="VcRedistInstalado" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64"
                          Value="Installed" Variable="VcRedistInstalado" Bitness="always64" />
     <util:RegistrySearch Id="VcRedistMinor" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64"
@@ -32,7 +50,11 @@
         <ExitCode Value="3010" Behavior="scheduleReboot" />
       </ExePackage>
       <!-- Pelo Setup.exe (que já pede elevação para o Visual C++), o MSI "perUserOrMachine" é instalado para todos os usuários. -->
-      <MsiPackage Id="Aplicativo" SourceFile="$(var.MsiPath)" Vital="yes" Compressed="yes" />
+      <!-- Sempre para todos os usuários: sem isto, o "perUserOrMachine" do MSI define MSIINSTALLPERUSER=1,
+           o MSI vai para %LOCALAPPDATA%\Apps e o Burn, que o procura na máquina, não o encontra para desinstalar. -->
+      <MsiPackage Id="Aplicativo" SourceFile="$(var.MsiPath)" Vital="yes" Compressed="yes">
+        <MsiProperty Name="MSIINSTALLPERUSER" Value="" />
+      </MsiPackage>
     </Chain>
   </Bundle>
 </Wix>

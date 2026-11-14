@@ -79,6 +79,25 @@ foreach ($ch in $license.Replace("`r`n", "`n").ToCharArray()) {
 $licenseRtf = Join-Path $artifacts 'License.rtf'
 [IO.File]::WriteAllText($licenseRtf, $sb.ToString(), [Text.Encoding]::ASCII)
 
+# Logotipo nas telas do MSI (WixUI): faixa superior 493×58 (logo à direita) e tela de boas-vindas/conclusão 493×312
+# (logo na coluna esquerda de 164 px; o texto do WixUI ocupa o lado direito).
+Add-Type -AssemblyName System.Drawing
+$logo = [System.Drawing.Image]::FromFile((Join-Path $root 'src\MeuEditorDeVideo.App\Assets\logo-256.png'))
+function Save-Bmp([string]$file, [int]$width, [int]$height, [int]$x, [int]$y, [int]$size, [System.Drawing.Color]$panel, [int]$panelWidth) {
+    $bmp = New-Object System.Drawing.Bitmap $width, $height, ([System.Drawing.Imaging.PixelFormat]::Format24bppRgb)
+    $g = [System.Drawing.Graphics]::FromImage($bmp)
+    $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+    $g.Clear([System.Drawing.Color]::White)
+    if ($panelWidth -gt 0) { $g.FillRectangle((New-Object System.Drawing.SolidBrush $panel), 0, 0, $panelWidth, $height) }
+    $g.DrawImage($logo, $x, $y, $size, $size)
+    $g.Dispose(); $bmp.Save($file, [System.Drawing.Imaging.ImageFormat]::Bmp); $bmp.Dispose()
+}
+$bannerBmp = Join-Path $artifacts 'Banner.bmp'
+$dialogBmp = Join-Path $artifacts 'Dialog.bmp'
+Save-Bmp $bannerBmp 493 58 (493 - 52 - 6) 3 52 ([System.Drawing.Color]::White) 0
+Save-Bmp $dialogBmp 493 312 22 96 120 ([System.Drawing.Color]::FromArgb(240, 242, 247)) 164
+$logo.Dispose()
+
 # Assinatura opcional (antes de empacotar, para que o executável dentro do MSI também saia assinado).
 $sign = $CertificateThumbprint -or $CertificatePath
 function Invoke-Sign([string[]]$files) {
@@ -97,16 +116,20 @@ function Invoke-Sign([string[]]$files) {
 Invoke-Sign @((Join-Path $publish 'MeuEditorDeVideo.exe'))
 
 # 3. MSI.
-$common = @('-c', $Configuration, '-nologo', '-v', 'q', "-p:Version=$version", "-p:LicenseRtf=$licenseRtf")
+$common = @('-c', $Configuration, '-nologo', '-v', 'q', "-p:Version=$version", "-p:LicenseRtf=$licenseRtf", "-p:BannerBmp=$bannerBmp", "-p:DialogBmp=$dialogBmp")
 Invoke-Checked dotnet (@('build', (Join-Path $root 'installer\Msi\MeuEditorDeVideo.Installer.wixproj'),
     "-p:AppPublishDir=$publish\", '-o', $out) + $common)
 $msi = Join-Path $out "MeuEditorDeVideo-$version-x64.msi"
 if (-not (Test-Path $msi)) { throw "MSI não gerado: $msi" }
 Invoke-Sign @($msi)
 
+# Revisão do Setup.exe: horas desde 2026-01-01 (cresce a cada compilação em outra hora; o Burn trata a nova como
+# atualização da anterior; limite de 65535 por parte da versão, cerca de 7 anos).
+$bundleRevision = [int](([DateTime]::UtcNow - [DateTime]'2026-01-01').TotalHours)
+
 # 4. Setup.exe (Burn). Com certificado, o motor do bundle é desanexado, assinado e reanexado (wix burn detach/reattach).
 Invoke-Checked dotnet (@('build', (Join-Path $root 'installer\Bundle\MeuEditorDeVideo.Setup.wixproj'),
-    "-p:MsiPath=$msi", '-o', $out) + $common)
+    "-p:MsiPath=$msi", "-p:BundleRevision=$bundleRevision", '-o', $out) + $common)
 $setup = Join-Path $out "MeuEditorDeVideo-$version-Setup.exe"
 if (-not (Test-Path $setup)) { throw "Setup.exe não gerado: $setup" }
 if ($sign) {

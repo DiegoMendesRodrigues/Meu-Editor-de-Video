@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -10,7 +10,15 @@ namespace MeuEditorDeVideo.App.Views.Dialogs;
 public partial class HelpWindow
 {
     /// <summary>Local do manual instalado junto com o aplicativo.</summary>
-    public static string ManualPath => Path.Combine(AppContext.BaseDirectory, "ajuda", "MANUAL_DO_USUARIO.md");
+    /// <summary>Manual no idioma escolhido (MANUAL_DO_USUARIO.{idioma}.md); o português do Brasil é o original.</summary>
+    public static string ManualPath => ManualPathFor(Localization.Translator.Language);
+
+    public static string ManualPathFor(string? language)
+    {
+        var folder = Path.Combine(AppContext.BaseDirectory, "ajuda");
+        var localized = Path.Combine(folder, $"MANUAL_DO_USUARIO.{language}.md");
+        return !string.IsNullOrEmpty(language) && File.Exists(localized) ? localized : Path.Combine(folder, "MANUAL_DO_USUARIO.md");
+    }
 
     private static HelpWindow? _open;
 

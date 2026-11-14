@@ -14,6 +14,9 @@ namespace MeuEditorDeVideo.App.ViewModels;
 /// <summary>Opção de uma lista de escolha (rótulo + valor).</summary>
 public sealed record Choice<T>(string Label, T Value)
 {
+    /// <summary>Rótulo no idioma da interface.</summary>
+    public string Label { get; init; } = Localization.Translator.T(Label);
+
     public override string ToString() => Label;
 }
 
@@ -98,6 +101,10 @@ public sealed partial class SettingsViewModel : ObservableObject
 
         var s = settings.Current;
         Theme = Themes.First(t => t.Value == s.Theme);
+        UserName = s.UserName;
+        Language = Languages.FirstOrDefault(l => l.Value == s.Language) ?? Languages.First(l => l.Value == "en");
+        CheckForNewVersions = YesNo.First(c => c.Value == s.CheckForNewVersions);
+        LastCheckText = s.LastUpdateCheck is { } at ? $"Última verificação: {at.LocalDateTime:g}" : "Ainda não verificado.";
         OpenLastProject = s.OpenLastProjectOnStartup;
         ProjectsDirectory = s.DefaultProjectsDirectory ?? DefaultProjectsDirectory;
         ExportDirectory = s.DefaultExportDirectory ?? DefaultExportDirectory;
@@ -130,6 +137,25 @@ public sealed partial class SettingsViewModel : ObservableObject
     public event EventHandler<bool>? CloseRequested;
 
     // ---------------------------------------------------------------- Geral
+
+    /// <summary>Nome completo do usuário (registro: Name).</summary>
+    [ObservableProperty]
+    public partial string UserName { get; set; } = "";
+
+    /// <summary>Idiomas, cada um pelo nome no próprio idioma (registro: Language).</summary>
+    public IReadOnlyList<Choice<string>> Languages { get; } =
+        [.. SupportedLanguages.All.Select(l => new Choice<string>(l.NativeName, l.Code) with { Label = l.NativeName })]; // nome no próprio idioma, sem tradução
+
+    [ObservableProperty]
+    public partial Choice<string> Language { get; set; }
+
+    public IReadOnlyList<Choice<bool>> YesNo { get; } = [new("Sim", true), new("Não", false)];
+
+    /// <summary>Verificar mensalmente se há novas versões (registro: CheckForNewVersions).</summary>
+    [ObservableProperty]
+    public partial Choice<bool> CheckForNewVersions { get; set; }
+
+    public string LastCheckText { get; }
 
     public IReadOnlyList<Choice<AppTheme>> Themes { get; } =
     [
@@ -402,6 +428,9 @@ public sealed partial class SettingsViewModel : ObservableObject
         var updated = current with
         {
             Theme = Theme.Value,
+            UserName = UserName.Trim(),
+            Language = Language.Value,
+            CheckForNewVersions = CheckForNewVersions.Value,
             OpenLastProjectOnStartup = OpenLastProject,
             DefaultProjectsDirectory = string.Equals(ProjectsDirectory, DefaultProjectsDirectory, StringComparison.OrdinalIgnoreCase) ? null : ProjectsDirectory,
             DefaultExportDirectory = string.Equals(ExportDirectory, DefaultExportDirectory, StringComparison.OrdinalIgnoreCase) ? null : ExportDirectory,

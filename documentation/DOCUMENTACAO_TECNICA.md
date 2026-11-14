@@ -30,7 +30,7 @@ Características fundamentais:
 | Logs | Serilog (arquivo rotativo local) |
 | Licença | GPL-3.0-or-later (`LICENSE.md`; `Directory.Build.props`, `Copyright`) |
 | Plataforma alvo | Windows 11 x64 (`RuntimeIdentifier win-x64` no App) |
-| Processamento | 100% local. O único código com rede é o downloader de modelos (ver [Privacidade e segurança](#privacidade-e-segurança)) |
+| Processamento | 100% local. O único código com rede é o downloader de modelos e o verificador de atualizações (ver [Privacidade e segurança](#privacidade-e-segurança)) |
 
 Versão atual: `1.1.0` (`<Version>` em `Directory.Build.props`).
 
@@ -55,7 +55,7 @@ A solução (`MeuEditorDeVideo.sln`) tem 13 projetos em `src/`, 3 projetos de te
 | Motores | `AudioEngine` | Mixagem, DSP, análise de loudness e saída WASAPI. |
 | Motores | `AIEngine` | Registro de modelos, pacotes `.medmodel`, sessões ONNX, segmentação, fala, cenas e melhoria de imagem. |
 | Motores | `RenderingEngine` | Compositor, pré-visualização e exportação (motor de renderização). |
-| Rede (isolado) | `ModelDownloads` | Único assembly com HTTP. Usado só pela ferramenta "Baixar modelos de IA". |
+| Rede (isolado) | `ModelDownloads` | Único assembly com HTTP. Usado pela ferramenta "Baixar modelos de IA" e por Verificar atualizações. |
 | Apresentação | `App` | WPF: janelas, view models, controles, atalhos, composição (DI) e tratamento global de exceções. |
 
 ### Grafo de dependências (referências de projeto)
@@ -130,8 +130,7 @@ A composição fica em `src/MeuEditorDeVideo.App/App.xaml.cs`. Não há contêin
 
 ### Sequência de inicialização (`OnStartup`)
 
-1. **Cultura pt-BR** (`ApplyPortugueseCulture`): define `CultureInfo` padrão das threads, `Thread.CurrentThread` e `FrameworkElement.LanguageProperty`.
-2. **Caminhos** (`new AppPaths()`) e pasta de fontes do usuário em `ImageEngine.Text.FontCatalog.UserFontsFolder`.
+1. **Caminhos** (`new AppPaths()`) e pasta de fontes do usuário em `ImageEngine.Text.FontCatalog.UserFontsFolder`.
 3. **Host** (`Host.CreateDefaultBuilder`):
    - `UseMeuEditorInfrastructure(paths)` cria as pastas (`AppPaths.EnsureCreated`), configura o Serilog e registra `IAppPaths`, `ISettingsService` (`JsonSettingsService`) e `IExportTemplateStore`.
    - `ConfigureServices` registra os demais serviços (lista na próxima subseção).
@@ -139,11 +138,12 @@ A composição fica em `src/MeuEditorDeVideo.App/App.xaml.cs`. Não há contêin
 4. **Tratamento global de exceções** (`RegisterGlobalExceptionHandlers`, RNF010): ver a subseção própria.
 5. `_host.StartAsync()`.
 6. Log de início com `AppInfo.Version`.
-7. `IThemeService.Apply(settings.Theme)`.
-8. Cria e mostra `MainWindow`, navega para `HomeViewModel`.
-9. `AutosaveScheduler.Start()`.
-10. `IRenderQueueService.InitializeAsync()`: lê `render-queue\queue.json`. Trabalhos que estavam `Running` viram `Interrupted`, e a fila é salva de novo.
-11. `StartBackgroundMaintenance`, em `Task.Run` (não bloqueia a UI):
+7. **Idioma** (`ApplyCulture` + `Localization.Translator.Load`): o idioma vem do registro (`JsonSettingsService` + `RegistryPreferencesStore`); sem valor, o do Windows (`SupportedLanguages.FromCulture`). Define a cultura das threads e de `FrameworkElement.LanguageProperty`, carrega `i18n\<idioma>.tsv`, traduz os `sys:String` de `App.Resources` e instala `LocalizationHook`. Ver [Idiomas e tradução](#idiomas-e-tradução).
+8. `IThemeService.Apply(settings.Theme)`.
+9. Cria e mostra `MainWindow` direto no editor, com um projeto novo "Sem título" (`IProjectService.CreateUntitled`); antes, oferece recuperar um autosave (`OfferRecoveryAsync`) e, se configurado, abre o último projeto.
+10. `AutosaveScheduler.Start()`.
+11. `IRenderQueueService.InitializeAsync()`: lê `render-queue\queue.json`. Trabalhos que estavam `Running` viram `Interrupted`, e a fila é salva de novo.
+12. `StartBackgroundMaintenance`, em `Task.Run` (não bloqueia a UI):
     - `IHardwareInfoService.Get()` detecta CPU, memória, GPUs, discos e codificadores (`EncoderCatalog.HardwareSummary` testa cada codificador; pode levar alguns segundos).
     - `ICacheMaintenance.Trim(limite)` reduz o cache ao limite de `PreviewCacheGigabytes` (mínimo 1 GB).
 12. Projeto inicial:
@@ -169,7 +169,7 @@ Ao fechar a janela, `MainWindow.OnClosing` pergunta sobre alterações não salv
 | `AddPreviewEngine` (RenderingEngine) | `AddAudioEngine` (`IAudioAnalysisService`), `ICompositor` → `CpuCompositor`, `IAudioOutputFactory`, `PreviewEngine` (transient), `IRenderEngine` → `RenderEngine` |
 | `AddMeuEditorApplication` (Application) | `IProjectService` → `ProjectService`, `AutosaveScheduler`, `IMediaImportService`, `IRenderQueueService` → `RenderQueueService`, `IContentPackStore` → `Packs.ContentPackStore` (pacotes .medpack em `%LOCALAPPDATA%\MeuEditorDeVideo\Pacotes`; extrai só `figurinhas/`, `titulos/*.medtitle` e `modelos/*.med`, sem caminhos e com limite de tamanho). Pacotes incluídos no programa ficam em `pacotes\<id>` ao lado do exe (copiados de `resources/stickers` pelo `.csproj` do App; `ContentPackStore.BuiltInRoot`), são só leitura (`IsBuiltIn`, não podem ser removidos) e um pacote instalado com o mesmo id tem precedência. As 40 figurinhas do pacote Básico são arte original gerada por `scripts/generate-stickers.py` (Pillow) |
 | `AddAiEngine` (AIEngine) | `IModelRegistry` → `ModelRegistry`, `OnnxSessionFactory`, `MatteCache`, `ISegmentationService`, `IAiFrameProcessor` (inclui `Interpolate`, fluxo óptico Farneback em `FrameInterpolator`), `ISceneDetectionService`, `IReframeService` → `ReframeService`, `IMediaAnalysisService` → `MediaAnalysisService` (etiquetas da biblioteca e "Combinar cor"), `IImageEnhancementService`, `IVoiceActivityService`, `IVoiceEnhancementService`, `ISpeechRecognitionService` → `WhisperTranscriber` |
-| `AddModelDownloads` (ModelDownloads) | `IModelDownloader` → `HttpModelDownloader`, recebendo `ModelCatalog.AllowedHosts` |
+| `AddModelDownloads` (ModelDownloads) | `IModelDownloader` → `HttpModelDownloader`, recebendo `ModelCatalog.AllowedHosts`; `IUpdateChecker` → `HttpUpdateChecker` |
 | `App.ConfigureServices` | `CatalogModelInstaller`, `IThemeService`, `INavigationService`, `IDialogService`, `IProjectWorkflow`, view models, `MainWindow`, `ShortcutService`, `ICacheMaintenance`, `IHardwareInfoService` |
 
 `ImageEngine` e `TimelineEngine` não têm método `Add...`. Os motores que os usam recebem as classes diretamente.
@@ -326,7 +326,7 @@ Implementação: `ProjectEngine/AutosaveStore.cs` e `Application/Projects/Autosa
 - `AutosaveEnabled` desliga o loop (padrão: ligado).
 - Ao **salvar** o projeto, a sessão de autosave é reiniciada (a pasta antiga é apagada).
 - Ao **fechar normalmente** (`CloseAsync` / `EndSession`), a pasta é apagada.
-- **Recuperação**: `FindRecoverable` procura pastas cujo processo dono não existe mais. A checagem compara PID e horário de início (tolerância de 2 s), para evitar falsos positivos por reuso de PID. A tela inicial mostra o projeto recuperável e `OpenRecoveredAsync` carrega o `autosave.med`, resolvendo as mídias pelo caminho original do projeto.
+- **Recuperação**: `FindRecoverable` procura pastas cujo processo dono não existe mais. A checagem compara PID e horário de início (tolerância de 2 s), para evitar falsos positivos por reuso de PID. Na inicialização, `App.OfferRecoveryAsync` pergunta se o projeto deve ser recuperado e `OpenRecoveredAsync` carrega o `autosave.med`, resolvendo as mídias pelo caminho original do projeto.
 - Sessões sem autosave válido são removidas.
 
 ### Linked e packaged
@@ -467,6 +467,7 @@ Arquivos: `src/MeuEditorDeVideo.AIEngine/`. Detalhes em [Inteligência artificia
 Arquivos: `src/MeuEditorDeVideo.ModelDownloads/`. É o **único** assembly do produto com rede. Ver [Privacidade e segurança](#privacidade-e-segurança).
 
 - `HttpModelDownloader.cs` (`IModelDownloader`): download com HTTPS, retomada de `.part` com `Range`, verificação de tamanho e SHA-256 antes de entregar o arquivo, e `User-Agent` genérico (`MeuEditorDeVideo/1.0`).
+- `HttpUpdateChecker.cs` (`IUpdateChecker`, Core/Updates): GET em `https://meueditordevideos.aplicativoia.online/version?language=<código>` (`UpdateEndpoints.UrlFor`: de, es, fr-FR, en, pt-BR, pt), só HTTPS, sem redirecionamentos nem cookies, resposta até 64 KB. Lê `version`, `languages`, `operatingSystem`, `author`, `microsoftStoreLink` e `installLink`; falhas viram `IOException`. No App, `Services/UpdateCheckService` compara `version` com `AppInfo.Version` (diferente = versão nova), mostra `Views/Dialogs/UpdateWindow` e, ao fechar, grava `LastUpdateCheck` (registro `LastCheck`). Roda por Ajuda › Verificar atualizações e, ao abrir, quando `CheckForNewVersions` está ligado e passaram mais de 30 dias de `LastCheck` (`UpdateEndpoints.IsDue`). Links só viram clicáveis se forem http/https.
 - `ModelDownloadsServiceCollectionExtensions.cs`: registro. A assinatura não expõe tipos de rede, para que `App` não passe a depender de `System.Net.Http`.
 
 ### App
@@ -475,9 +476,9 @@ Arquivos: `src/MeuEditorDeVideo.App/`.
 
 - `App.xaml.cs`: composição, ciclo de vida, exceções globais.
 - `Services/`: `ProjectWorkflow.cs` (fluxos de abrir, salvar, fechar, empacotar, cópia de segurança), `ShortcutService.cs` (`ShortcutCatalog` e `ShortcutService`), `StartupArguments.cs`, `ThemeService.cs` (tema escuro, claro ou do sistema), `DialogService.cs`, `NavigationService.cs`, `Help/` (manual, sobre e relatório do sistema).
-- `ViewModels/`: `ShellViewModel`, `HomeViewModel`, `EditorViewModel`, `Preview/PreviewViewModel.cs` (exibe os quadros em `WriteableBitmap`), `Timeline/`, `Inspector/`, `Media/`, `Export/`, `SettingsViewModel`, `ModelCatalogViewModel`, `ModelManagerViewModel`.
+- `ViewModels/`: `ShellViewModel`, `EditorViewModel`, `Preview/PreviewViewModel.cs` (exibe os quadros em `WriteableBitmap`), `Timeline/`, `Inspector/`, `Media/`, `Export/`, `SettingsViewModel`, `ModelCatalogViewModel`, `ModelManagerViewModel`.
 - `Controls/`: `TimelineControl.cs` (trilhas e régua), `CompositionOverlay.cs`, `CurveEditor.cs`, `ColorWheel.cs`, `LevelMeter.cs`.
-- `Views/`: `MainWindow`, `EditorView`, `HomeView`, `Panels/`, `Dialogs/`.
+- `Views/`: `MainWindow`, `EditorView`, `Panels/`, `Dialogs/`.
 
 ---
 
@@ -672,7 +673,7 @@ Logs (`%LOCALAPPDATA%\MeuEditorDeVideo\logs\`) ficam **somente no computador** e
 
 ### Rede: só o downloader de modelos
 
-O aplicativo não faz requisições de rede em nenhum fluxo normal de edição. A única exceção é `MeuEditorDeVideo.ModelDownloads`, usado **somente** quando o usuário clica em **Instalar** (ou **Instalar todos**) na ferramenta "Baixar modelos de IA". O download:
+O aplicativo não faz requisições de rede em nenhum fluxo normal de edição. A rede fica só em `MeuEditorDeVideo.ModelDownloads`, usado em dois casos: **Verificar atualizações** (Ajuda, ou ao abrir quando passaram mais de 30 dias da última verificação e a opção está ligada), que faz um GET no serviço de versões enviando só o idioma da interface; e quando o usuário clica em **Instalar** (ou **Instalar todos**) na ferramenta "Baixar modelos de IA". O download:
 
 - usa HTTPS;
 - aceita só os hosts de `ModelCatalog.AllowedHosts` (`huggingface.co`, `github.com`) **na URL inicial**, validada também ao carregar o catálogo;
@@ -754,7 +755,10 @@ Definidas em `src/MeuEditorDeVideo.Core/Abstractions/ISettingsService.cs`. Cada 
 
 | Campo | Padrão | Uso |
 |---|---|---|
-| `Language` | `pt-BR` | Idioma (somente pt-BR no momento). |
+| `UserName` | `""` | Nome completo (Configurações › Geral › Usuário). Guardado no registro (`Name`). |
+| `Language` | idioma do Windows ou `en` | `de`, `es`, `fr`, `en`, `pt-BR` ou `pt-PT` (`SupportedLanguages`). Guardado no registro (`Language`). Ao salvar um idioma diferente, `SettingsWindow.ShowFor` chama `App.RestartForLanguage`: fecha a janela pelo caminho normal (pergunta sobre alterações não salvas) e, no início de `OnExit` (antes de qualquer `await`), abre de novo o executável com `--aguardar-processo=<pid>` e o projeto salvo; a nova instância espera a anterior terminar. |
+| `CheckForNewVersions` | `true` | Verificar mensalmente: ao abrir, consulta o serviço de versões quando passaram mais de 30 dias de `LastCheck`. Registro: `CheckForNewVersions`. |
+| `LastUpdateCheck` | data da primeira gravação | Registro: `LastCheck`. |
 | `Theme` | `Dark` | `Dark`, `Light` ou `System`. |
 | `OpenLastProjectOnStartup` | `false` | Abre o projeto mais recente ao iniciar. |
 | `UseGpuAcceleration` | `true` | Decodificação D3D11VA na pré-visualização e codificação por GPU na exportação. |
@@ -865,7 +869,7 @@ O CI não baixa modelos de IA, então os testes de IA que dependem de modelo sã
 1. `dotnet publish` do `App` (Release, `win-x64`, self-contained) em `artifacts\publish`.
 2. Converte `LICENSE.md` para RTF (`artifacts\License.rtf`).
 3. Compila o MSI (`installer\Msi\MeuEditorDeVideo.Installer.wixproj`, WiX 6) em `artifacts\installer\MeuEditorDeVideo-{versão}-x64.msi`.
-4. Compila o `Setup.exe` (`installer\Bundle\MeuEditorDeVideo.Setup.wixproj`, Burn), que encadeia o Visual C++ Redistributable.
+4. Compila o `Setup.exe` (`installer\Bundle\MeuEditorDeVideo.Setup.wixproj`, Burn), que encadeia o Visual C++ Redistributable. Telas com logotipo e no idioma do Windows; a instalação remove a versão anterior e apaga as preferências do registro (ver [INSTALADOR.md](INSTALADOR.md)).
 5. Assinatura opcional (`-CertificateThumbprint` ou `-CertificatePath`), aplicada ao executável, ao MSI e ao bundle (com `wix burn detach/reattach`).
 6. Gera `SHA256SUMS.txt`.
 
@@ -874,6 +878,24 @@ Pré-requisitos: .NET SDK 10 e `fetch-deps.ps1` executado. O SDK do WiX vem do N
 A orientação de assinatura está em [INSTALADOR.md](INSTALADOR.md).
 
 ---
+
+### Preferências no registro
+
+`IUserPreferencesStore` (Core) é implementado por `Infrastructure/Settings/RegistryPreferencesStore.cs` em `HKCU\Software\Meu Editor de Vídeo`: `Name`, `Language`, `ThemeColor` (`Dark`/`Light`/`System`), `CheckForNewVersions` (DWORD 0/1) e `LastCheck` (data ISO 8601). `JsonSettingsService` lê o registro ao iniciar (prevalece sobre o `settings.json`), completa o que faltar na primeira execução (idioma do Windows, tema atual, `CheckForNewVersions = 1` e `LastCheck` = agora) e, em `SaveAsync`, grava só as preferências que mudaram. Os testes usam um repositório falso (`JsonSettingsServiceTests`).
+
+### Janela de boas-vindas
+
+`App.OnStartup` lê o registro (`RegistryPreferencesStore.Read`) **antes** de montar o host, porque o `JsonSettingsService` completa os valores que faltam. Se `UserPreferences.IsComplete` for falso (algum de `Name`, `Language`, `ThemeColor`, `CheckForNewVersions` ou `LastCheck` ausente ou vazio), `AskPreferencesAsync` mostra `Views/Dialogs/WelcomeWindow` antes da janela principal (com `ShutdownMode` explícito enquanto ela está aberta). A janela só fecha por **Salvar as preferências**, com todos os campos preenchidos; grava os cinco valores no registro (`LastCheck` = agora) e atualiza o `ISettingsService`. Se o idioma escolhido for diferente do carregado, o programa reinicia (`--aguardar-processo=<pid>`).
+
+### Idiomas e tradução
+
+- O texto de origem da interface é o português do Brasil escrito no código e no XAML. Não há chaves de recurso por idioma: o texto em pt-BR é a chave.
+- `scripts/extract-strings.py` extrai os textos visíveis (XAML, `sys:String`, literais C# e catálogos) para `resources/i18n/origem.json`.
+- Cada idioma tem `resources/i18n/<código>.tsv` com linhas `id⇥tradução`; o id são os 8 primeiros hexadecimais do SHA-256 do texto de origem em UTF-8 (`Translator.IdOf`). `\n`, `\t` e `\\` são escapados. Texto sem linha fica em pt-BR. O csproj do App copia a pasta para `i18n\` na saída.
+- `App/Localization/Translator.cs`: `T(texto)` procura a tradução exata, depois sem espaços nas pontas, depois em modelos com `{0}` (os valores capturados também são traduzidos, por exemplo "clipes"), depois linha a linha e no formato "Rótulo: valor". `F(formato, args)` traduz o formato antes de formatar.
+- `App/Localization/LocalizationHook.cs`: manipuladores de classe para `Loaded` traduzem `TextBlock.Text`, `Content`, `Header`, `ToolTip`, `Window.Title` e `AutomationProperties.Name/HelpText` com `SetCurrentValue`, inclusive valores que mudam depois por binding. As mensagens de `IDialogService` e `MessageBox` passam por `Translator.T`/`F`.
+- **Ao criar ou mudar um texto visível**: rode `python scripts/extract-strings.py` e acrescente a tradução nos cinco `.tsv`. `TranslatorTests.Arquivos_de_traducao_correspondem_a_origem` confere que cada id existe na origem e que os marcadores `{n}` são os mesmos.
+- O manual tem um arquivo por idioma (`documentation/MANUAL_DO_USUARIO.<código>.md`); `HelpWindow.ManualPathFor` escolhe o do idioma atual e recai no pt-BR.
 
 ## Como estender
 

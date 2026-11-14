@@ -19,7 +19,6 @@
     <sys:String x:Key="Editor.MidiasAusentes">Mídias ausentes</sys:String>
     <sys:String x:Key="Editor.MidiasAusentesSufixo">mídia(s) ausente(s)</sys:String>
     <sys:String x:Key="Editor.Propriedades.Historico">Histórico</sys:String>
-    <sys:String x:Key="Editor.Menu.Inicio">_Início</sys:String>
     <sys:String x:Key="Editor.Menu.Abrir">_Abrir…</sys:String>
     <sys:String x:Key="Editor.Menu.Salvar">_Salvar</sys:String>
     <sys:String x:Key="Editor.Menu.Exportar">_Exportar…</sys:String>
@@ -28,7 +27,6 @@
     <sys:String x:Key="Editor.Menu.SelecionarTudo">Selecionar _tudo</sys:String>
     <sys:String x:Key="Editor.Menu.Dividir">_Dividir</sys:String>
     <sys:String x:Key="Editor.Menu.VerificarAtualizacoes">Verificar atualizações</sys:String>
-    <sys:String x:Key="Editor.Menu.NotasLancamento">Notas de lançamento</sys:String>
     <sys:String x:Key="Editor.Menu.JuntarCortes">Juntar os cortes</sys:String>
     <sys:String x:Key="Editor.Menu.JuntarCortes.Dica">Desfaz a divisão no ponto do cursor (clique na régua sobre um corte)</sys:String>
     <sys:String x:Key="Editor.Menu.Recortar">Re_cortar</sys:String>

@@ -16,7 +16,7 @@ public static class InfrastructureServiceCollectionExtensions
     /// Registra caminhos, configurações e logs técnicos (RNF011). Logs são rotativos, locais,
     /// e não devem registrar conteúdo audiovisual — apenas eventos técnicos.
     /// </summary>
-    public static IHostBuilder UseMeuEditorInfrastructure(this IHostBuilder builder, AppPaths paths)
+    public static IHostBuilder UseMeuEditorInfrastructure(this IHostBuilder builder, AppPaths paths, IUserPreferencesStore? preferences = null)
     {
         paths.EnsureCreated();
 
@@ -35,7 +35,9 @@ public static class InfrastructureServiceCollectionExtensions
         builder.ConfigureServices(services =>
         {
             services.AddSingleton<IAppPaths>(paths);
-            services.AddSingleton<ISettingsService, JsonSettingsService>();
+            if (preferences is not null) services.AddSingleton(preferences);
+            services.AddSingleton<ISettingsService>(sp => new JsonSettingsService(
+                sp.GetRequiredService<IAppPaths>(), sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<JsonSettingsService>>(), preferences));
             services.AddSingleton<IExportTemplateStore, JsonExportTemplateStore>();
         });
 

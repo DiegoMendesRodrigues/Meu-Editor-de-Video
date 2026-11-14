@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.App.ViewModels;
@@ -45,7 +45,6 @@ public sealed class SettingsViewModelTests
         public string? Prompt(string title, string label, string initialValue) => null;
         public bool? ShowModal(Window dialog) => null;
         public bool ShowSettings() => false;
-        public RecentRemovalChoice AskRemoveRecent(string projectName, string path, bool fileExists) => RecentRemovalChoice.Cancel;
     }
 
     private sealed class FakeTheme : IThemeService
