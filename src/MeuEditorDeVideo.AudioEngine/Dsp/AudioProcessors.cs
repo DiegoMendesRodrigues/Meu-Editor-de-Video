@@ -39,6 +39,7 @@ public static class AudioProcessorFactory
             EffectCatalog.Reverb => new ReverbProcessor(),
             EffectCatalog.Telephone => new TelephoneProcessor(),
             EffectCatalog.Distortion => new DistortionProcessor(),
+            EffectCatalog.VoiceChanger => new VoiceChangerProcessor(),
             _ => null,
         };
         p?.Configure(effect);
@@ -549,5 +550,92 @@ public sealed class AudioEffectChain
     public void Reset()
     {
         foreach (var item in _items) item.Processor.Reset();
+    }
+}
+
+/// <summary>
+/// Mudar a voz: deslocamento de tom sem mudar a duração (duas leituras de uma linha de atraso que deslizam e se cruzam
+/// com janela triangular) e timbre de robô (modulação em anel + pente metálico curto).
+/// </summary>
+public sealed class VoiceChangerProcessor : IAudioProcessor
+{
+    private const int Window = AudioProcessorFactory.Rate / 25; // 40 ms
+    private readonly float[] _buffer = new float[(Window * 2 + 8) * 2];
+    private readonly float[] _comb = new float[512 * 2];
+    private int _write, _combPos;
+    private double _phase, _ring;
+    private double _ratio = 1;
+    private float _robot, _mix;
+
+    public int LatencyFrames => 0;
+    public int PreRollFrames => Window * 2;
+
+    public void Configure(EffectInstance e)
+    {
+        var (pitch, robot) = EffectCatalog.VoiceSettings(e);
+        _ratio = Math.Pow(2, Math.Clamp(pitch, -12, 12) / 12);
+        _robot = (float)Math.Clamp(robot, 0, 1);
+        _mix = (float)Math.Clamp(EffectCatalog.Value(e, "mix") / 100, 0, 1);
+    }
+
+    public void Process(Span<float> s)
+    {
+        var size = _buffer.Length / 2;
+        var combSize = _comb.Length / 2;
+        var combDelay = AudioProcessorFactory.Rate / 160; // ~6 ms
+        for (var i = 0; i + 1 < s.Length; i += 2)
+        {
+            _buffer[_write * 2] = s[i];
+            _buffer[_write * 2 + 1] = s[i + 1];
+            float l = s[i], r = s[i + 1];
+
+            if (Math.Abs(_ratio - 1) > 1e-6)
+            {
+                // A fase percorre a janela; o atraso diminui (tom mais agudo) ou aumenta (mais grave).
+                _phase = (_phase + (1 - _ratio) + Window) % Window;
+                var d1 = _phase;
+                var d2 = (_phase + Window / 2.0) % Window;
+                var g1 = 1 - Math.Abs(d1 / Window * 2 - 1);
+                var g2 = 1 - g1;
+                l = (float)(Tap(d1 + 2, 0, size) * g1 + Tap(d2 + 2, 0, size) * g2);
+                r = (float)(Tap(d1 + 2, 1, size) * g1 + Tap(d2 + 2, 1, size) * g2);
+            }
+            if (_robot > 0)
+            {
+                _ring += 2 * Math.PI * 55 / AudioProcessorFactory.Rate;
+                if (_ring > 2 * Math.PI) _ring -= 2 * Math.PI;
+                var m = (float)Math.Sin(_ring);
+                var read = (_combPos - combDelay + combSize) % combSize;
+                var cl = l * (1 - _robot) + l * m * _robot + _comb[read * 2] * 0.55f * _robot;
+                var cr = r * (1 - _robot) + r * m * _robot + _comb[read * 2 + 1] * 0.55f * _robot;
+                _comb[_combPos * 2] = cl;
+                _comb[_combPos * 2 + 1] = cr;
+                _combPos = (_combPos + 1) % combSize;
+                l = cl;
+                r = cr;
+            }
+            s[i] = s[i] * (1 - _mix) + l * _mix;
+            s[i + 1] = s[i + 1] * (1 - _mix) + r * _mix;
+            _write = (_write + 1) % size;
+        }
+    }
+
+    /// <summary>Amostra com atraso fracionário <paramref name="delay"/> (interpolação linear).</summary>
+    private double Tap(double delay, int channel, int size)
+    {
+        var pos = _write - delay;
+        while (pos < 0) pos += size;
+        var i0 = (int)pos;
+        var f = pos - i0;
+        var i1 = (i0 + 1) % size;
+        return _buffer[i0 * 2 + channel] * (1 - f) + _buffer[i1 * 2 + channel] * f;
+    }
+
+    public void Reset()
+    {
+        Array.Clear(_buffer);
+        Array.Clear(_comb);
+        _write = _combPos = 0;
+        _phase = _ring = 0;
     }
 }

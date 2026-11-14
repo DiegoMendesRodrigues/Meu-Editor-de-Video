@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.AudioEngine;
+﻿using MeuEditorDeVideo.AudioEngine;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
@@ -32,6 +32,47 @@ public sealed class AudioMixerTests
     }
 
     private static MediaTime T(double seconds) => MediaTime.FromSecondsApprox(seconds);
+
+    /// <summary>Fonte em rampa: cada amostra vale o índice absoluto do quadro na origem.</summary>
+    private sealed class RampAudioSource : IAudioSampleSource
+    {
+        public int Read(MediaAsset asset, string path, MediaTime sourceTime, Span<float> destination)
+        {
+            var first = sourceTime.ToSamples(AudioFormat.SampleRate);
+            var frames = destination.Length / Ch;
+            for (var f = 0; f < frames; f++)
+                for (var c = 0; c < Ch; c++) destination[f * Ch + c] = first + f;
+            return frames;
+        }
+
+        public void Trim(IReadOnlySet<Guid> inUse) { }
+
+        public void Dispose() { }
+    }
+
+    [Fact]
+    public void Reversed_clip_reads_the_source_from_the_end_backwards()
+    {
+        var asset = MediaWithAudio();
+        var clip = MakeClip(asset, 0, 1, sourceIn: 2) with { Reverse = true };
+        var stream = new ClipStream(new RampAudioSource()) { ApplyGainEnvelope = false };
+        var buffer = new float[256 * Ch];
+        stream.Render(clip, asset, asset.OriginalPath, 0, buffer);
+
+        var end = AudioFormat.ToFrames(T(3));
+        Assert.Equal(end - 1, buffer[0], 0.5);
+        Assert.Equal(end - 1, buffer[1], 0.5);
+        Assert.Equal(end - 256, buffer[255 * Ch], 0.5);
+    }
+
+    [Fact]
+    public void Reverse_frames_keeps_the_channels_of_each_frame_together()
+    {
+        float[] block = [1, 10, 2, 20, 3, 30];
+        ClipStream.ReverseFrames(block);
+        Assert.Equal([3f, 30, 2, 20, 1, 10], block);
+    }
+
 
     private static MediaAsset MediaWithAudio(string name = "v.mp4") => new()
     {

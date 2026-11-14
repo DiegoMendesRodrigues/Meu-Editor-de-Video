@@ -178,8 +178,27 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     [ObservableProperty]
     public partial bool FrameBlending { get; set; }
 
+    /// <summary>Câmera lenta por interpolação de quadros (fluxo óptico).</summary>
+    [ObservableProperty]
+    public partial bool OpticalFlow { get; set; }
+
+    /// <summary>Desfoque de movimento dos keyframes (0–100 %).</summary>
+    [ObservableProperty]
+    public partial double MotionBlur { get; set; }
+
+    /// <summary>Curvas de velocidade: "Nenhuma" e as prontas (índice − 1 em <see cref="SpeedRamps.Presets"/>).</summary>
+    public IReadOnlyList<Option<int>> SpeedRampOptions { get; } =
+        [new(-1, "Constante (sem curva)"), .. SpeedRamps.Presets.Select((p, i) => new Option<int>(i, p.Name)), new(-2, "Personalizada")];
+
+    [ObservableProperty]
+    public partial Option<int>? SelectedSpeedRamp { get; set; }
+
     [ObservableProperty]
     public partial bool IsFrozen { get; set; }
+
+    /// <summary>Reproduzir ao contrário (o clipe e o áudio vinculado).</summary>
+    [ObservableProperty]
+    public partial bool ReverseClip { get; set; }
 
     [ObservableProperty]
     public partial bool IsAnyAnimated { get; set; }
@@ -263,7 +282,12 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
             SelectedSpeed = SpeedPresets.FirstOrDefault(s => Math.Abs(s.Value - clip.Speed.Value) < 1e-6);
             SpeedText = clip.Speed.Value.ToString("0.##", Pt) + "×";
             FrameBlending = clip.FrameBlending;
+            OpticalFlow = clip.OpticalFlow;
+            MotionBlur = Math.Round(clip.MotionBlur * 100);
+            SelectedSpeedRamp = clip.SpeedRamp.Count < 2 ? SpeedRampOptions[0]
+                : SpeedRampOptions.FirstOrDefault(o => o.Value >= 0 && SpeedRamps.Presets[o.Value].Points.SequenceEqual(clip.SpeedRamp)) ?? SpeedRampOptions[^1];
             IsFrozen = clip.FreezeAt is not null;
+            ReverseClip = clip.Reverse;
             IsAnyAnimated = !clip.Keyframes.IsEmpty;
             SelectedEasing ??= Easings[0];
 
@@ -296,11 +320,16 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         CameraTracking = OtherEffects.FirstOrDefault(e => e.Effect.Type == EffectCatalog.CameraTrack);
         Beauty = OtherEffects.FirstOrDefault(e => e.Effect.Type == EffectCatalog.Beauty);
         Makeup = OtherEffects.FirstOrDefault(e => e.Effect.Type == EffectCatalog.Makeup);
+        FaceBlurEffect = OtherEffects.FirstOrDefault(e => e.Effect.Type == EffectCatalog.FaceBlur);
     }
 
     /// <summary>Efeito de rastreamento de câmera do clipe (aba Vídeo), ou null.</summary>
     [ObservableProperty]
     public partial EffectItemViewModel? CameraTracking { get; set; }
+
+    /// <summary>Desfocar rostos do clipe (aba Vídeo › Retocar), ou null.</summary>
+    [ObservableProperty]
+    public partial EffectItemViewModel? FaceBlurEffect { get; set; }
 
     /// <summary>Retoque de beleza do clipe (aba Vídeo › Retocar), ou null.</summary>
     [ObservableProperty]
@@ -315,7 +344,12 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     public void StartRetouch(string kind)
     {
         if (!EnsureClip() || Current() is not { } cur) return;
-        var (type, label) = kind == "makeup" ? (EffectCatalog.Makeup, "Maquiagem") : (EffectCatalog.Beauty, "Beleza");
+        var (type, label) = kind switch
+        {
+            "makeup" => (EffectCatalog.Makeup, "Maquiagem"),
+            "faceblur" => (EffectCatalog.FaceBlur, "Desfocar rostos"),
+            _ => (EffectCatalog.Beauty, "Beleza"),
+        };
         if (cur.Clip.Effects.Any(e => e.Type == type)) return;
         UpdateClip(c => c with { Effects = c.Effects.Add(EffectCatalog.Create(type)) }, $"Retocar: {label}");
     }
@@ -455,7 +489,12 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         var definition = EffectCatalog.Find(type);
         if (definition is null) return;
         string? resource = null;
-        if (definition.UsesResource)
+        if (type == EffectCatalog.AudioVisualizer)
+        {
+            resource = PickVisualizerAudio(null);
+            if (resource is null) return;
+        }
+        else if (definition.UsesResource)
         {
             resource = _dialogs.PickFile("Escolher LUT", "LUT 3D (*.cube)|*.cube", null);
             if (resource is null || !ValidateLut(resource)) return;
@@ -480,8 +519,33 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         UpdateClip(c => c with { Effects = c.Effects.AddRange(effects) }, $"Predefinição de cor: {preset.Name}");
     }
 
+    /// <summary>Música do visualizador de áudio: escolhida entre as mídias com áudio da biblioteca.</summary>
+    private string? PickVisualizerAudio(string? current)
+    {
+        if (Timeline.Project is not { } project) return null;
+        var audio = project.Media.Where(m => m.HasAudio).OrderBy(m => m.Kind == MediaKind.Audio ? 0 : 1).ThenBy(m => m.Name).ToList();
+        if (audio.Count == 0)
+        {
+            _dialogs.ShowInfo("Visualizador de áudio", "Importe uma música (ou um vídeo com som) para a biblioteca antes de usar o visualizador.");
+            return null;
+        }
+        var selected = Math.Max(0, audio.FindIndex(m => m.Id.ToString() == current));
+        var window = new Views.Dialogs.ChoiceWindow("Visualizador de áudio", "Música que move as barras (ela precisa estar na linha do tempo):",
+            audio.Select(m => m.Name).ToList(), selected, "Usar");
+        return _dialogs.ShowModal(window) == true ? audio[window.SelectedIndex].Id.ToString() : null;
+    }
+
+    /// <summary>Nome da mídia escolhida como recurso (visualizador de áudio).</summary>
+    public string? MediaName(string? id) =>
+        Guid.TryParse(id, out var g) && Timeline.Project?.FindMedia(g) is { } m ? m.Name : null;
+
     public void ChooseLut(EffectItemViewModel item)
     {
+        if (item.Effect.Type == EffectCatalog.AudioVisualizer)
+        {
+            if (PickVisualizerAudio(item.Effect.Resource) is { } id) item.Update(e => e with { Resource = id }, "Trocar música do visualizador", null);
+            return;
+        }
         var path = _dialogs.PickFile("Escolher LUT", "LUT 3D (*.cube)|*.cube", null);
         if (path is null || !ValidateLut(path)) return;
         item.Update(e => e with { Resource = path }, "Trocar LUT", null);
@@ -539,6 +603,29 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     partial void OnFrameBlendingChanged(bool value)
     {
         if (!_updating) UpdateClip(c => c with { FrameBlending = value }, value ? "Ativar câmera lenta suavizada" : "Desativar câmera lenta suavizada");
+    }
+
+    partial void OnOpticalFlowChanged(bool value)
+    {
+        if (!_updating) UpdateClip(c => c with { OpticalFlow = value }, value ? "Ativar interpolação de quadros" : "Desativar interpolação de quadros");
+    }
+
+    partial void OnMotionBlurChanged(double value)
+    {
+        if (!_updating) UpdateClip(c => c with { MotionBlur = Math.Clamp(value / 100, 0, 1) }, "Desfoque de movimento", "motionblur");
+    }
+
+    partial void OnSelectedSpeedRampChanged(Option<int>? value)
+    {
+        if (_updating || value is null || value.Value == -2 || Current() is not { } cur) return;
+        var points = value.Value >= 0 ? SpeedRamps.Presets[value.Value].Points : [];
+        Timeline.Execute(new SetSpeedRampCommand(Timeline.SequenceId, cur.Clip.Id, points, value.Value >= 0 ? value.Label : null));
+    }
+
+    partial void OnReverseClipChanged(bool value)
+    {
+        if (_updating || Current() is not { } cur || cur.Clip.Reverse == value) return;
+        Timeline.Execute(new SetClipReverseCommand(Timeline.SequenceId, cur.Clip.Id, value));
     }
 
     partial void OnSelectedSpeedChanged(Option<double>? value)

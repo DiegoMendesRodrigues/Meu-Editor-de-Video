@@ -1,4 +1,4 @@
-<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipCompositionPanel"
+﻿<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipCompositionPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- Aba "Composição" do painel C (F9): elemento gráfico, máscaras, rastreamento, vínculo ao movimento e estabilização. -->
@@ -123,6 +123,8 @@
                         </Grid>
                         <WrapPanel>
                             <CheckBox Content="Inverter" IsChecked="{Binding MaskInvert}" Margin="0,0,12,4" AutomationProperties.Name="Inverter máscara" />
+                            <CheckBox Content="{StaticResource Editor.Mascara.SoCor}" IsChecked="{Binding MaskEffectsOnly}" Margin="0,0,12,4"
+                                      AutomationProperties.Name="Máscara de cor" ToolTip="{StaticResource Editor.Mascara.SoCor.Dica}" />
                             <CheckBox Content="Contorno suave" IsChecked="{Binding MaskSmooth}" Margin="0,0,0,4" AutomationProperties.Name="Contorno suave"
                                       Visibility="{Binding MaskIsPath, Converter={StaticResource Ins.BoolToVis}}" />
                         </WrapPanel>

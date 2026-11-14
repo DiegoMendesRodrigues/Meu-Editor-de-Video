@@ -434,7 +434,7 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
 
     // ---------------------------------------------------------------- captura
 
-    /// <summary>Salva o quadro do cursor em PNG na resolução total do projeto.</summary>
+    /// <summary>Salva o quadro do cursor em PNG ou JPEG na resolução total do projeto.</summary>
     [RelayCommand(CanExecute = nameof(CanPlay))]
     private async Task CaptureFrame()
     {
@@ -443,7 +443,7 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
         var time = Timeline.Playhead;
         var name = $"{s.Project.Name} {Timecode.Format(time, s.Project.Settings.FrameRate).Replace(':', '-')}.png";
         var dir = s_lastCaptureDirectory ?? (s.FilePath is { } fp ? Path.GetDirectoryName(fp) : null);
-        var path = _dialogs.PickSaveFile("Capturar quadro", "Imagem PNG (*.png)|*.png", name, dir);
+        var path = _dialogs.PickSaveFile("Capturar quadro", "Imagem PNG (*.png)|*.png|Imagem JPEG (*.jpg)|*.jpg", name, dir);
         if (path is null) return;
         s_lastCaptureDirectory = Path.GetDirectoryName(path);
 
@@ -451,8 +451,15 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
         {
             var image = await _engine.CaptureAsync(time, s.Project.Settings.Width, s.Project.Settings.Height);
             if (image is null) return;
-            var bitmap = BitmapSource.Create(image.Width, image.Height, 96, 96, PixelFormats.Bgra32, null, image.Pixels, image.Stride);
-            var encoder = new PngBitmapEncoder();
+            BitmapSource bitmap = BitmapSource.Create(image.Width, image.Height, 96, 96, PixelFormats.Bgra32, null, image.Pixels, image.Stride);
+            BitmapEncoder encoder;
+            if (IsJpeg(path))
+            {
+                // JPEG não tem transparência: achata sobre preto (fundo do monitor).
+                bitmap = new FormatConvertedBitmap(bitmap, PixelFormats.Bgr24, null, 0);
+                encoder = new JpegBitmapEncoder { QualityLevel = 95 };
+            }
+            else encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(bitmap));
             await using var file = File.Create(path);
             encoder.Save(file);
@@ -463,6 +470,9 @@ public sealed partial class PreviewViewModel : ObservableObject, IDisposable
             _dialogs.ShowInfo("Não foi possível salvar a imagem", ex.Message);
         }
     }
+
+    private static bool IsJpeg(string path) =>
+        Path.GetExtension(path).ToLowerInvariant() is ".jpg" or ".jpeg";
 
     public void Dispose()
     {

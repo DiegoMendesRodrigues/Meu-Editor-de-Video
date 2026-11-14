@@ -64,6 +64,21 @@
     <sys:String x:Key="Editor.Acao.Exportar">Exportar</sys:String>
     <sys:String x:Key="Editor.Acao.FilaRenderizacao">Fila de renderização</sys:String>
     <sys:String x:Key="Editor.Menu.FilaRenderizacao">_Fila de renderização…</sys:String>
+    <sys:String x:Key="Editor.Menu.ExportarQuadro">Exportar _quadro atual…</sys:String>
+    <sys:String x:Key="Editor.Menu.Reenquadrar">_Reenquadrar automaticamente…</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.TextoParaFala">_Texto para fala…</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.AnalisarMidia">_Analisar mídia</sys:String>
+    <sys:String x:Key="Editor.Clipe.Interpolacao">Câmera lenta por interpolação (fluxo óptico)</sys:String>
+    <sys:String x:Key="Editor.Clipe.Interpolacao.Dica">Abaixo de 1×, cria quadros intermediários acompanhando o movimento (mais fluido que a mistura; mais lento para processar)</sys:String>
+    <sys:String x:Key="Editor.Clipe.CurvaVelocidade">Curva</sys:String>
+    <sys:String x:Key="Editor.Clipe.CurvaVelocidade.Dica">Curva de velocidade: acelera e desacelera dentro do clipe sem mudar a duração. O áudio do clipe fica mudo; aparar ou dividir volta à velocidade constante.</sys:String>
+    <sys:String x:Key="Editor.Clipe.DesfoqueMovimento">Desfoque de movimento</sys:String>
+    <sys:String x:Key="Editor.Clipe.DesfoqueMovimento.Dica">Rastro de movimento quando a posição, a escala ou a rotação estão animadas por keyframes</sys:String>
+    <sys:String x:Key="Editor.Clipe.DesfocarRostos.Dica">Encontra o rosto em cada quadro e o desfoca, pixeliza ou cobre com tarja (modelo Face Mesh V2)</sys:String>
+    <sys:String x:Key="Editor.Mascara.SoCor">Máscara de cor (só efeitos)</sys:String>
+    <sys:String x:Key="Editor.Mascara.SoCor.Dica">Em vez de recortar a camada, a máscara limita a correção de cor e os efeitos à área dela</sys:String>
+    <sys:String x:Key="Editor.Clipe.AoContrario">Reproduzir ao contrário</sys:String>
+    <sys:String x:Key="Editor.Clipe.AoContrario.Dica">Mostra o clipe (e o áudio vinculado) do fim para o começo</sys:String>
     <sys:String x:Key="Editor.Acao.AlternarTema">Alternar tema claro/escuro</sys:String>
     <sys:String x:Key="Editor.Acao.ImportarSequencia">Importar sequência de imagens</sys:String>
 

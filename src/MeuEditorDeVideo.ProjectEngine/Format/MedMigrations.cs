@@ -39,9 +39,9 @@ public readonly record struct MedVersion(int Major, int Minor) : IComparable<Med
 public sealed class MedMigrator(IEnumerable<IMedMigration> migrations)
 {
     /// <summary>Versão gravada por este aplicativo.</summary>
-    public static readonly MedVersion Current = new(1, 3);
+    public static readonly MedVersion Current = new(1, 4);
 
-    public static MedMigrator Default { get; } = new([new Migration1_0To1_1(), new Migration1_1To1_2(), new Migration1_2To1_3()]);
+    public static MedMigrator Default { get; } = new([new Migration1_0To1_1(), new Migration1_1To1_2(), new Migration1_2To1_3(), new Migration1_3To1_4()]);
 
     private readonly IReadOnlyList<IMedMigration> _migrations = migrations.OrderBy(m => m.From).ToList();
 
@@ -115,6 +115,22 @@ public sealed class Migration1_2To1_3 : IMedMigration
 {
     public MedVersion From => new(1, 2);
     public MedVersion To => new(1, 3);
+
+    public void Migrate(JsonObject project)
+    {
+        // Sem alterações estruturais.
+    }
+}
+
+/// <summary>
+/// 1.3 → 1.4: clipes ganham "reproduzir ao contrário" (<c>reverse</c>), curva de velocidade (<c>speedRamp</c>), desfoque de
+/// movimento (<c>motionBlur</c>) e interpolação de quadros (<c>opticalFlow</c>); máscaras ganham <c>effectsOnly</c> (máscara de
+/// cor) e mídias ganham etiquetas (<c>tags</c>). Ausentes = valores neutros; nada a converter.
+/// </summary>
+public sealed class Migration1_3To1_4 : IMedMigration
+{
+    public MedVersion From => new(1, 3);
+    public MedVersion To => new(1, 4);
 
     public void Migrate(JsonObject project)
     {

@@ -125,10 +125,40 @@ public sealed record Clip
     /// <summary>Com velocidade diferente de 1×, mantém o tom original da voz/música (esticamento de tempo).</summary>
     public bool PreservePitch { get; init; } = true;
 
+    /// <summary>Reproduzir ao contrário: o clipe mostra o trecho [SourceIn, SourceOut) do fim para o começo.</summary>
+    public bool Reverse { get; init; }
+
+    /// <summary>
+    /// Curva de velocidade (speed ramping): pontos em fração da duração do clipe com o multiplicador relativo. Vazia = velocidade
+    /// constante. A curva é normalizada: o trecho de origem consumido continua igual, só muda o ritmo dentro do clipe.
+    /// </summary>
+    public ImmutableList<SpeedPoint> SpeedRamp { get; init; } = [];
+
+    /// <summary>Desfoque de movimento (0…1) aplicado quando a posição, escala ou rotação estão animadas por keyframes.</summary>
+    public double MotionBlur { get; init; }
+
+    /// <summary>Câmera lenta por interpolação de quadros (fluxo óptico) em vez da mistura simples.</summary>
+    public bool OpticalFlow { get; init; }
+
     public MediaTime End => Start + Duration;
 
     /// <summary>Ponto final dentro da mídia de origem.</summary>
     public MediaTime SourceOut => SourceIn + Speed.SourceDurationOf(Duration);
+
+    /// <summary>
+    /// Instante da mídia de origem mostrado no tempo <paramref name="timelineTime"/> da linha do tempo (sem considerar o
+    /// congelamento). Ao contrário, o início do clipe mostra o fim do trecho (um tick antes do <see cref="SourceOut"/>).
+    /// </summary>
+    public MediaTime SourceTimeAt(MediaTime timelineTime)
+    {
+        var played = SpeedRamp.Count < 2 || Duration.Ticks <= 0
+            ? Speed.SourceDurationOf(timelineTime - Start)
+            : new MediaTime((long)Math.Round(Speed.SourceDurationOf(Duration).Ticks
+                * SpeedRamps.Progress(SpeedRamp, (double)(timelineTime - Start).Ticks / Duration.Ticks)));
+        if (!Reverse) return SourceIn + played;
+        var t = SourceOut - played - new MediaTime(1);
+        return t < SourceIn ? SourceIn : t;
+    }
 }
 
 public sealed record Track

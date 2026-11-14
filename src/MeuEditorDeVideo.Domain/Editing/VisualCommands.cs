@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Domain.Model;
+﻿using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 using static MeuEditorDeVideo.Domain.Editing.TimelineOps;
 
@@ -57,7 +57,7 @@ internal static class RippleOps
     }
 
     public static MediaTime SourceTimeAt(Clip c, MediaTime timelineTime) =>
-        c.FreezeAt ?? c.SourceIn + c.Speed.SourceDurationOf(MediaTime.Max(MediaTime.Zero, timelineTime - c.Start));
+        c.FreezeAt ?? c.SourceTimeAt(MediaTime.Max(c.Start, timelineTime));
 }
 
 /// <summary>

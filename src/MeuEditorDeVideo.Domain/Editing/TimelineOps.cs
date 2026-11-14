@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 
@@ -102,13 +102,30 @@ public static class TimelineOps
     }
 
     /// <summary>Encurta o clipe para terminar em <paramref name="end"/> (início e origem inalterados).</summary>
-    public static Clip TrimEndTo(Clip c, MediaTime end) => c with { Duration = end - c.Start };
+    /// <remarks>Ao contrário, o fim do clipe mostra o começo do trecho: encurtar o fim avança o ponto de origem.</remarks>
+    public static Clip TrimEndTo(Clip c, MediaTime end)
+    {
+        // A curva de velocidade vale para o clipe inteiro: aparar ou dividir volta à velocidade constante.
+        if (c.SpeedRamp.Count > 0) c = c with { SpeedRamp = [] };
+        if (!c.Reverse) return c with { Duration = end - c.Start };
+        var delta = c.End - end;
+        var sourceDelta = c.Speed.SourceDurationOf(delta.Ticks >= 0 ? delta : -delta);
+        return c with
+        {
+            Duration = end - c.Start,
+            SourceIn = delta.Ticks >= 0 ? c.SourceIn + sourceDelta : MediaTime.Max(MediaTime.Zero, c.SourceIn - sourceDelta),
+        };
+    }
 
     /// <summary>Move o início do clipe para <paramref name="start"/> mantendo o fim; avança/recua o ponto de origem.</summary>
     public static Clip TrimStartTo(Clip c, MediaTime start)
     {
+        if (c.SpeedRamp.Count > 0) c = c with { SpeedRamp = [] };
         var delta = start - c.Start;
         var sourceDelta = c.Speed.SourceDurationOf(delta.Ticks >= 0 ? delta : -delta);
+        // Ao contrário, o início mostra o fim do trecho: o ponto de origem não muda, só o SourceOut (pela duração).
+        if (c.Reverse)
+            return c with { Start = start, Duration = c.End - start, Keyframes = ShiftKeyframes(c, delta) };
         return c with
         {
             Start = start,

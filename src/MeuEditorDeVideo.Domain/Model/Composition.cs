@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using MeuEditorDeVideo.Domain.Time;
 
 namespace MeuEditorDeVideo.Domain.Model;
@@ -53,6 +53,10 @@ public sealed record Mask
     public double Expansion { get; init; }
 
     public bool Invert { get; init; }
+
+    /// <summary>Máscara de cor: em vez de recortar a camada, limita os efeitos e a correção de cor à área da máscara.</summary>
+    public bool EffectsOnly { get; init; }
+
     public MaskMode Mode { get; init; } = MaskMode.Add;
     public double Opacity { get; init; } = 1;
     public bool Enabled { get; init; } = true;

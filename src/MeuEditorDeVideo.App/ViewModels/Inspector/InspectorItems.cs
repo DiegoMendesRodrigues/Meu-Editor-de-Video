@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Windows.Media;
@@ -25,6 +25,9 @@ public interface IClipEditor
     void RemoveEffect(Guid effectId);
     void MoveEffect(Guid effectId, int direction);
     void ChooseLut(EffectItemViewModel item);
+
+    /// <summary>Nome da mídia de um recurso (Id), quando o efeito usa uma mídia da biblioteca.</summary>
+    string? MediaName(string? id) => null;
 }
 
 /// <summary>Valor numérico exibido num controle deslizante; evita reenvio ao atualizar a partir do modelo.</summary>
@@ -163,7 +166,9 @@ public sealed partial class EffectItemViewModel : ObservableObject
     public string Name => Definition.Name;
     public string Description => Definition.Description;
     public bool UsesResource => Definition.UsesResource;
-    public string ResourceName => string.IsNullOrEmpty(Effect.Resource) ? "Nenhum arquivo escolhido" : Path.GetFileName(Effect.Resource);
+    public string ResourceName => string.IsNullOrEmpty(Effect.Resource) ? "Nenhum arquivo escolhido"
+        : Effect.Type == EffectCatalog.AudioVisualizer ? (_owner.MediaName(Effect.Resource) ?? "Mídia removida")
+        : Path.GetFileName(Effect.Resource);
     public ObservableCollection<EffectParameterViewModel> Parameters { get; } = [];
 
     /// <summary>Curvas: um único editor com seletor de canal.</summary>

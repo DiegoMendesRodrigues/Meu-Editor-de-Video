@@ -28,6 +28,8 @@ public static class AiEngineServiceCollectionExtensions
         services.AddSingleton<IFaceLandmarkService, FaceLandmarkService>();
         services.AddSingleton<IAiFrameProcessor, AiFrameProcessor>();
         services.AddSingleton<ISceneDetectionService, SceneDetectionService>();
+        services.AddSingleton<IReframeService, ReframeService>();
+        services.AddSingleton<IMediaAnalysisService, MediaAnalysisService>();
         services.AddSingleton<IImageEnhancementService, ImageEnhancementService>();
         services.AddSingleton<IVoiceActivityService, VoiceActivityService>();
         services.AddSingleton<IVoiceEnhancementService, VoiceEnhancementService>();

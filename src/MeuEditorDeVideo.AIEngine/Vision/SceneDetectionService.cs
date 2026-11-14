@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.AIEngine.Runtime;
+﻿using MeuEditorDeVideo.AIEngine.Runtime;
 using MeuEditorDeVideo.Core.AI;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Model;
@@ -47,7 +47,7 @@ public sealed class SceneDetectionService : ISceneDetectionService, IDisposable
         for (var i = 0; i < times.Count; i++)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var sourceTime = clip.SourceIn + clip.Speed.SourceDurationOf(times[i] - clip.Start);
+            var sourceTime = clip.SourceTimeAt(times[i]);
             var frame = source.GetFrame(asset, path, sourceTime, 160, 90);
             if (frame is not null)
             {

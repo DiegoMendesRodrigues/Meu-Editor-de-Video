@@ -304,7 +304,7 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
         foreach (var c in new IRelayCommand[]
         {
             SplitCommand, JoinCutsCommand, DeleteCommand, RippleDeleteCommand, DeleteAndJoinCommand, CopyCommand, CutCommand, PasteCommand, DuplicateCommand,
-            AddMarkerCommand, GroupCommand, UngroupCommand, LinkCommand, UnlinkCommand, SetSpeedCommand,
+            AddMarkerCommand, GroupCommand, UngroupCommand, LinkCommand, UnlinkCommand, SetSpeedCommand, ToggleReverseCommand,
             AddSelectedMediaCommand, AddTrackCommand, SetClipColorCommand,
         })
         {
@@ -554,6 +554,15 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
     /// <summary>Separa áudio e vídeo (RF064): a seleção passa a ser só o clipe clicado.</summary>
     [RelayCommand(CanExecute = nameof(CanEditSelection))]
     private void Unlink() => Execute(new LinkClipsCommand(SequenceId, [.. _selection], Link: false));
+
+    [RelayCommand(CanExecute = nameof(CanEditSelection))]
+    private void ToggleReverse()
+    {
+        if (Sequence is not { } seq) return;
+        var clip = seq.Tracks.SelectMany(t => t.Clips).FirstOrDefault(c => _selection.Contains(c.Id) && c.MediaAssetId is not null);
+        if (clip is null) return;
+        Execute(new SetClipReverseCommand(SequenceId, clip.Id, !clip.Reverse));
+    }
 
     [RelayCommand(CanExecute = nameof(CanEditSelection))]
     private void SetSpeed()

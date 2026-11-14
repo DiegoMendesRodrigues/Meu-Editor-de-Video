@@ -445,6 +445,7 @@ public sealed class TimelineControl : TimelineSurface
             label += " · " + clip.Speed.Value.ToString("0.##", CultureInfo.GetCultureInfo("pt-BR")) + "×";
         if (clip.GroupId is not null) label = "▣ " + label;
         if (clip.FreezeAt is not null) label = "❄ " + label;
+        if (clip.Reverse) label = "◀ " + label;
         if (!clip.Effects.IsEmpty) label = "fx " + label;
         if (asset is null && clip.MediaAssetId is not null) label = "⚠ Mídia removida";
         var ft = Text(label, 11, text, bold: true);

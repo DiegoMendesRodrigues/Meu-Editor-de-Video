@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.Domain.Time;
+﻿using System.Collections.Immutable;
+using MeuEditorDeVideo.Domain.Time;
 
 namespace MeuEditorDeVideo.Domain.Model;
 
@@ -46,6 +47,9 @@ public sealed record MediaAsset
 
     /// <summary>Somente para <see cref="MediaKind.ImageSequence"/>: padrão dos arquivos numerados.</summary>
     public ImageSequenceInfo? Sequence { get; init; }
+
+    /// <summary>Etiquetas da análise de mídia (ex.: "fala", "pessoa", "cenas"), usadas na busca da biblioteca.</summary>
+    public ImmutableList<string> Tags { get; init; } = [];
 
     public bool HasVideo => Kind != MediaKind.Audio;
     public bool HasAudio => Kind == MediaKind.Audio || (Kind == MediaKind.Video && Info?.AudioCodec is not null);

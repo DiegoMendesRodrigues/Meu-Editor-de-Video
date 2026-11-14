@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.AudioEngine.Dsp;
+﻿using MeuEditorDeVideo.AudioEngine.Dsp;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Effects;
@@ -142,7 +142,8 @@ public sealed class ClipStream(IAudioSampleSource source)
     private readonly AudioEffectChain _chain = new();
     private ISpeedProducer? _producer;
     private long _next = long.MinValue;
-    private (Guid Asset, MediaTime Start, MediaTime SourceIn, Rational Speed, bool Pitch) _signature;
+    private (Guid Asset, MediaTime Start, MediaTime SourceIn, Rational Speed, bool Pitch, bool Reverse, MediaTime Duration) _signature;
+    private long _reverseEnd;
     private Clip? _clipRef;
     private MediaAsset _asset = null!;
     private string _path = "";
@@ -155,7 +156,7 @@ public sealed class ClipStream(IAudioSampleSource source)
     public void Render(Clip clip, MediaAsset asset, string path, long timelineFrame, Span<float> destination)
     {
         var restart = timelineFrame != _next || _producer is null;
-        var signature = (asset.Id, clip.Start, clip.SourceIn, clip.Speed, clip.PreservePitch);
+        var signature = (asset.Id, clip.Start, clip.SourceIn, clip.Speed, clip.PreservePitch, clip.Reverse, clip.Reverse ? clip.Duration : MediaTime.Zero);
         if (signature != _signature || path != _path)
         {
             _signature = signature;
@@ -185,11 +186,14 @@ public sealed class ClipStream(IAudioSampleSource source)
         var latency = _chain.LatencyFrames;
         var speed = clip.Speed.Value;
         var startOffset = timelineFrame - preRoll - clipStart; // em quadros da timeline, relativo ao início do clipe
-        var sourceStart = AudioFormat.ToFrames(clip.SourceIn) + startOffset * speed;
+        // Ao contrário, os produtores avançam numa coordenada invertida (0 = fim do trecho) e o leitor converte.
+        _reverseEnd = AudioFormat.ToFrames(clip.SourceOut);
+        var sourceStart = clip.Reverse ? startOffset * speed : AudioFormat.ToFrames(clip.SourceIn) + startOffset * speed;
+        FrameReader reader = clip.Reverse ? ReadSourceReversed : ReadSource;
 
-        if (Math.Abs(speed - 1) < 1e-9) _producer = new DirectProducer(ReadSource, (long)Math.Round(sourceStart));
-        else if (clip.PreservePitch) _producer = new TimeStretchProducer(ReadSource, sourceStart, speed);
-        else _producer = new ResampleProducer(ReadSource, sourceStart, speed);
+        if (Math.Abs(speed - 1) < 1e-9) _producer = new DirectProducer(reader, (long)Math.Round(sourceStart));
+        else if (clip.PreservePitch) _producer = new TimeStretchProducer(reader, sourceStart, speed);
+        else _producer = new ResampleProducer(reader, sourceStart, speed);
 
         // Aquece a cadeia e compensa a latência, descartando a saída.
         var toDiscard = preRoll + latency;
@@ -214,6 +218,26 @@ public sealed class ClipStream(IAudioSampleSource source)
             if (destination.IsEmpty) return;
         }
         source.Read(_asset, _path, AudioFormat.FromFrames(position), destination);
+    }
+
+    /// <summary>
+    /// Leitura ao contrário: a posição <paramref name="position"/> conta do fim do trecho para trás. Lê o bloco
+    /// correspondente da origem e inverte a ordem dos quadros (as amostras de cada quadro ficam juntas).
+    /// </summary>
+    private void ReadSourceReversed(long position, Span<float> destination)
+    {
+        var frames = destination.Length / Ch;
+        ReadSource(_reverseEnd - position - frames, destination);
+        ReverseFrames(destination);
+    }
+
+    /// <summary>Inverte a ordem dos quadros de um bloco intercalado.</summary>
+    public static void ReverseFrames(Span<float> block)
+    {
+        var frames = block.Length / Ch;
+        for (int i = 0, j = frames - 1; i < j; i++, j--)
+            for (var c = 0; c < Ch; c++)
+                (block[i * Ch + c], block[j * Ch + c]) = (block[j * Ch + c], block[i * Ch + c]);
     }
 
     private static void ApplyGain(Clip clip, long offsetFrames, Span<float> s)

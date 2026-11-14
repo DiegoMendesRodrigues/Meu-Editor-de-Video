@@ -46,6 +46,9 @@ public static class EffectProcessor
                 case Posterize: PosterizeFx(px, (int)Math.Round(Value(e, "levels"))); break;
                 case Glow: GlowFx(px, w, h, Value(e, "amount") / 100, Value(e, "radius") * ctx.PixelScale, Value(e, "threshold") / 100); break;
                 case ChromaKey: alpha |= ChromaKeyFx(px, w, h, e, ctx.PixelScale); break;
+                case ColorMatch: ColorMatchFx(px, e); break;
+                case Lens: px = LensFx(px, w, h, Value(e, "distortion") / 100, Value(e, "zoom") / 100); break;
+                case VideoDenoise: DenoiseFx(px, w, h, Value(e, "strength") / 100, Value(e, "detail") / 100, ctx.PixelScale); break;
                 case EdgeRefine:
                     px = EdgeRefiner.Apply(new BgraImage(w, h, px), Value(e, "choke") * ctx.PixelScale, Value(e, "feather") * ctx.PixelScale,
                         Value(e, "decontaminate") / 100).Pixels;
@@ -486,6 +489,182 @@ public static class EffectProcessor
                 px[i + 2] = (byte)Math.Clamp(px[i + 2] + n, 0, 255);
             }
         });
+    }
+
+    /// <summary>Combinar cor: v' = v·ganho + deslocamento por canal, misturado pela intensidade.</summary>
+    private static void ColorMatchFx(byte[] px, EffectInstance e)
+    {
+        var amount = (float)(Value(e, "amount") / 100);
+        float[] Lut(string c)
+        {
+            var gain = Value(e, c + ".gain");
+            var offset = Value(e, c + ".offset");
+            var lut = new float[256];
+            for (var i = 0; i < 256; i++)
+            {
+                var v = i / 255.0;
+                lut[i] = (float)(v + (v * gain + offset - v) * amount);
+            }
+            return lut;
+        }
+        PerChannel(px, Lut("r"), Lut("g"), Lut("b"));
+    }
+
+    /// <summary>
+    /// Estatística de cor (média e desvio por canal, 0…1) usada pelo "Combinar cor" (transferência de Reinhard, no RGB).
+    /// Ignora pixels transparentes.
+    /// </summary>
+    public static (double[] Mean, double[] Std) ColorStats(BgraImage image)
+    {
+        var sum = new double[3];
+        var sq = new double[3];
+        long n = 0;
+        var p = image.Pixels;
+        for (var i = 0; i < p.Length; i += 4)
+        {
+            if (p[i + 3] < 16) continue;
+            for (var c = 0; c < 3; c++)
+            {
+                var v = p[i + 2 - c] / 255.0; // c: 0 = R, 1 = G, 2 = B
+                sum[c] += v;
+                sq[c] += v * v;
+            }
+            n++;
+        }
+        if (n == 0) return ([0.5, 0.5, 0.5], [0.25, 0.25, 0.25]);
+        var mean = sum.Select(s => s / n).ToArray();
+        var std = sq.Select((s, c) => Math.Sqrt(Math.Max(1e-6, s / n - mean[c] * mean[c]))).ToArray();
+        return (mean, std);
+    }
+
+    /// <summary>Ganho e deslocamento por canal (R, G, B) que levam a estatística <paramref name="source"/> à <paramref name="target"/>.</summary>
+    public static (double Gain, double Offset)[] MatchColor((double[] Mean, double[] Std) source, (double[] Mean, double[] Std) target)
+    {
+        var result = new (double, double)[3];
+        for (var c = 0; c < 3; c++)
+        {
+            var gain = Math.Clamp(target.Std[c] / Math.Max(1e-3, source.Std[c]), 0.25, 4);
+            result[c] = (gain, Math.Clamp(target.Mean[c] - source.Mean[c] * gain, -1, 1));
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Correção de lente pelo modelo radial r' = r·(1 + k·r²): k negativo (barril → reto) puxa os cantos para fora. O zoom
+    /// recorta as bordas que ficariam vazias.
+    /// </summary>
+    private static byte[] LensFx(byte[] px, int w, int h, double k, double zoom)
+    {
+        var dst = new byte[px.Length];
+        double cx = (w - 1) / 2.0, cy = (h - 1) / 2.0;
+        var norm = Math.Sqrt(cx * cx + cy * cy);
+        var scale = 1 / (1 + zoom);
+        var kk = -k * 0.5;
+        Parallel.For(0, h, y =>
+        {
+            for (var x = 0; x < w; x++)
+            {
+                var nx = (x - cx) / norm * scale;
+                var ny = (y - cy) / norm * scale;
+                var f = 1 + kk * (nx * nx + ny * ny);
+                var sx = cx + nx * f * norm;
+                var sy = cy + ny * f * norm;
+                var o = (y * w + x) * 4;
+                if (sx < 0 || sy < 0 || sx > w - 1 || sy > h - 1) continue; // fica transparente/preto
+                Bilinear(px, w, h, sx, sy, dst, o);
+            }
+        });
+        return dst;
+    }
+
+    private static void Bilinear(byte[] src, int w, int h, double x, double y, byte[] dst, int o)
+    {
+        var x0 = (int)x;
+        var y0 = (int)y;
+        var x1 = Math.Min(w - 1, x0 + 1);
+        var y1 = Math.Min(h - 1, y0 + 1);
+        var fx = x - x0;
+        var fy = y - y0;
+        for (var c = 0; c < 4; c++)
+        {
+            var a = src[(y0 * w + x0) * 4 + c] * (1 - fx) + src[(y0 * w + x1) * 4 + c] * fx;
+            var b = src[(y1 * w + x0) * 4 + c] * (1 - fx) + src[(y1 * w + x1) * 4 + c] * fx;
+            dst[o + c] = (byte)Math.Clamp((int)Math.Round(a * (1 - fy) + b * fy), 0, 255);
+        }
+    }
+
+    /// <summary>
+    /// Redução de ruído de vídeo: média local que só se aplica onde a diferença para o pixel é pequena (ruído); bordas e
+    /// detalhes com contraste alto ficam como estão.
+    /// </summary>
+    private static void DenoiseFx(byte[] px, int w, int h, double strength, double detail, double scale)
+    {
+        var smooth = GaussianApprox(px, w, h, Math.Max(0.8, (0.8 + 2.2 * strength) * scale));
+        var limit = (float)(8 + 50 * strength * (1 - 0.7 * detail));
+        Parallel.For(0, h, y =>
+        {
+            for (var x = 0; x < w; x++)
+            {
+                var o = (y * w + x) * 4;
+                var diff = Math.Abs(px[o] - smooth[o]) + Math.Abs(px[o + 1] - smooth[o + 1]) + Math.Abs(px[o + 2] - smooth[o + 2]);
+                var weight = Math.Clamp(1 - diff / (3 * limit), 0, 1) * (float)strength;
+                for (var c = 0; c < 3; c++)
+                    px[o + c] = (byte)(px[o + c] + (smooth[o + c] - px[o + c]) * weight + 0.5f);
+            }
+        });
+    }
+
+    /// <summary>
+    /// Visualizador de áudio: desenha <paramref name="levels"/> (0…1, um por barra) na parte de baixo da imagem.
+    /// </summary>
+    public static BgraImage DrawVisualizer(BgraImage image, IReadOnlyList<float> levels, EffectInstance e)
+    {
+        if (levels.Count == 0) return image;
+        var px = (byte[])image.Pixels.Clone();
+        int w = image.Width, h = image.Height;
+        var style = (int)Math.Round(Value(e, "style"));
+        var maxH = h * Value(e, "height") / 100;
+        var (r, g, b) = ColorValue(e, "color");
+        var alpha = Value(e, "opacity") / 100;
+        var n = levels.Count;
+        var slot = (double)w / n;
+        var baseY = style == 1 ? h / 2.0 : h - 1;
+        void Fill(int x0, int x1, int y0, int y1)
+        {
+            x0 = Math.Clamp(x0, 0, w); x1 = Math.Clamp(x1, 0, w);
+            y0 = Math.Clamp(y0, 0, h); y1 = Math.Clamp(y1, 0, h);
+            for (var y = y0; y < y1; y++)
+                for (var x = x0; x < x1; x++)
+                {
+                    var o = (y * w + x) * 4;
+                    px[o] = (byte)(px[o] + (b * 255 - px[o]) * alpha);
+                    px[o + 1] = (byte)(px[o + 1] + (g * 255 - px[o + 1]) * alpha);
+                    px[o + 2] = (byte)(px[o + 2] + (r * 255 - px[o + 2]) * alpha);
+                    px[o + 3] = (byte)Math.Max(px[o + 3], 255 * alpha);
+                }
+        }
+        var thick = Math.Max(2, (int)(h / 180.0));
+        var prev = -1;
+        for (var i = 0; i < n; i++)
+        {
+            var level = Math.Clamp(levels[i], 0, 1);
+            var bh = (int)Math.Round(level * maxH);
+            var x0 = (int)Math.Round(i * slot + slot * 0.15);
+            var x1 = (int)Math.Round((i + 1) * slot - slot * 0.15);
+            switch (style)
+            {
+                case 1: Fill(x0, x1, (int)(baseY - bh / 2.0), (int)(baseY + bh / 2.0) + 1); break;
+                case 2:
+                    var y = (int)(h - maxH / 2 - (level - 0.5) * maxH);
+                    var top = prev < 0 ? y : Math.Min(prev, y);
+                    var bottom = prev < 0 ? y : Math.Max(prev, y);
+                    Fill((int)(i * slot), (int)((i + 1) * slot) + 1, top - thick / 2, bottom + thick / 2 + 1);
+                    prev = y;
+                    break;
+                default: Fill(x0, x1, (int)(baseY - bh), (int)baseY + 1); break;
+            }
+        }
+        return new BgraImage(w, h, px);
     }
 
     private static void BlurFx(byte[] px, int w, int h, double radius)

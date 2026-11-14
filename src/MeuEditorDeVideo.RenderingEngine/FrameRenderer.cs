@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Core.AI;
+﻿using MeuEditorDeVideo.Core.AI;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;
@@ -16,8 +16,10 @@ namespace MeuEditorDeVideo.RenderingEngine;
 /// o resultado exportado seja o mesmo que se vê na tela. Efeitos de IA (<c>ai.*</c>) são executados por
 /// <see cref="IAiFrameProcessor"/> na posição em que estão na pilha de efeitos.
 /// </summary>
-public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai = null)
+public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai = null, IWaveformProvider? waveforms = null)
 {
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, WaveformData?> _waveforms = new();
+
     /// <param name="bypassEffects">Ignora efeitos e correção de cor (lado "antes" da comparação, RF101).</param>
     public BgraImage Render(IVideoFrameSource video, Project project, Sequence sequence, IReadOnlyDictionary<Guid, string> paths,
         MediaTime t, int width, int height, bool transparentBackground = false, bool bypassEffects = false, bool includeSubtitles = true)
@@ -44,7 +46,7 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
                 var img = ShapeRasterizer.Render(shape, graph.Width > 0 ? (double)width / graph.Width : 1);
                 if (layer.Masks.Count > 0) img = MaskRenderer.Apply(img, layer.Masks);
                 if (!bypassEffects && layer.Effects.Count > 0) img = EffectProcessor.Apply(img, layer.Effects, ctx).Image;
-                layers.Add(new LayerImage(layer, img, HasAlpha: true, NativeSize: true));
+                AddWithTrail(layers, new LayerImage(layer, img, HasAlpha: true, NativeSize: true));
                 continue;
             }
             if (layer.Asset is null || !paths.TryGetValue(layer.Asset.Id, out var path)) continue;
@@ -52,24 +54,119 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
             if (image is null) continue;
 
             if (layer.BlendSourceTime is { } next && video.GetFrame(layer.Asset, path, next, width, height) is { } second)
-                image = EffectProcessor.Mix(image, second, layer.BlendWeight);
+                image = (layer.OpticalFlow ? ai?.Interpolate(image, second, layer.BlendWeight) : null)
+                        ?? EffectProcessor.Mix(image, second, layer.BlendWeight);
 
             var hasAlpha = layer.Asset.Info?.HasAlpha == true || layer.Asset.Kind == MediaKind.Image;
-            if (layer.Masks.Count > 0)
+            var cut = layer.Masks.Where(m => !m.EffectsOnly).ToList();
+            var colorMasks = layer.Masks.Where(m => m.EffectsOnly).ToList();
+            if (cut.Count > 0)
             {
                 // Máscaras antes dos efeitos: "Refinar bordas" e desfoques atuam sobre o recorte.
-                image = MaskRenderer.Apply(image, layer.Masks);
+                image = MaskRenderer.Apply(image, cut);
                 hasAlpha = true;
             }
             if (!bypassEffects && layer.Effects.Count > 0)
             {
+                var original = image;
                 var (processed, alphaChanged) = ApplyEffects(image, layer, ctx, video, project, sequence, paths, t);
                 image = processed;
                 hasAlpha |= alphaChanged;
+                foreach (var viz in layer.Effects.Where(e => e.Type == EffectCatalog.AudioVisualizer && !EffectCatalog.IsNeutral(e)))
+                    image = EffectProcessor.DrawVisualizer(image, VisualizerLevels(viz, project, sequence, paths, t), viz);
+                // Máscara de cor: os efeitos só valem dentro da área (com a borda suavizada da máscara).
+                if (colorMasks.Count > 0 && original.Width == image.Width && original.Height == image.Height
+                    && MaskRenderer.Coverage(image.Width, image.Height, colorMasks) is { } cov)
+                    image = MaskedMix(original, image, cov);
             }
-            layers.Add(new LayerImage(layer, image, hasAlpha));
+            AddWithTrail(layers, new LayerImage(layer, image, hasAlpha));
         }
         return compositor.Compose(width, height, graph.Width, layers, transparentBackground);
+    }
+
+    /// <summary>
+    /// Níveis das barras do visualizador: a música (<see cref="EffectInstance.Resource"/> = Id da mídia) é lida no instante
+    /// em que toca na linha do tempo (o clipe dela que cobre <paramref name="t"/>); fora dela, barras zeradas.
+    /// </summary>
+    private IReadOnlyList<float> VisualizerLevels(EffectInstance e, Project project, Sequence sequence, IReadOnlyDictionary<Guid, string> paths, MediaTime t)
+    {
+        var bars = Math.Clamp((int)Math.Round(EffectCatalog.Value(e, "bars")), 8, 128);
+        var levels = new float[bars];
+        if (waveforms is null || !Guid.TryParse(e.Resource, out var id) || project.FindMedia(id) is not { } asset || !paths.TryGetValue(id, out var path))
+            return levels;
+        var clip = sequence.Tracks.SelectMany(tr => tr.Clips).FirstOrDefault(c => c.MediaAssetId == id && c.Start <= t && t < c.End);
+        if (clip is null) return levels;
+        var data = _waveforms.GetOrAdd(id, _ =>
+        {
+            try { return waveforms.GetWaveformAsync(asset, path).GetAwaiter().GetResult(); }
+            catch (Exception) { return null; }
+        });
+        if (data is null || data.Count == 0) return levels;
+        return AudioVisualizerLevels(data, clip.SourceTimeAt(t), bars);
+    }
+
+    /// <summary>
+    /// Níveis (0…1) de cada barra: picos da forma de onda numa janela de ~0,4 s ao redor do instante, com as barras
+    /// espalhadas na janela (passado à esquerda, futuro à direita) e reforço nos sons fracos.
+    /// </summary>
+    public static float[] AudioVisualizerLevels(WaveformData data, MediaTime source, int bars)
+    {
+        var levels = new float[bars];
+        var center = source.TotalSeconds * data.PeaksPerSecond;
+        var window = Math.Max(bars, 0.4 * data.PeaksPerSecond);
+        for (var i = 0; i < bars; i++)
+        {
+            var a = (int)Math.Floor(center - window / 2 + window * i / bars);
+            var b = Math.Max(a + 1, (int)Math.Floor(center - window / 2 + window * (i + 1) / bars));
+            var peak = 0f;
+            for (var j = Math.Max(0, a); j < Math.Min(data.Count, b); j++)
+                peak = Math.Max(peak, Math.Max(Math.Abs(data.Min[j]), Math.Abs(data.Max[j])));
+            levels[i] = (float)Math.Sqrt(Math.Clamp(peak, 0, 1));
+        }
+        return levels;
+    }
+
+    /// <summary>
+    /// Desfoque de movimento: desenha a mesma imagem nas posições anteriores e na atual com opacidade 1/k (k = 1…N), o que dá
+    /// peso igual a cada amostra onde elas se sobrepõem.
+    /// </summary>
+    private static void AddWithTrail(List<LayerImage> layers, LayerImage item)
+    {
+        var trail = item.Layer.MotionTrail;
+        if (trail.Count == 0)
+        {
+            layers.Add(item);
+            return;
+        }
+        var n = trail.Count + 1;
+        for (var k = 1; k <= n; k++)
+        {
+            var transform = k < n ? trail[k - 1] : item.Layer.Transform;
+            layers.Add(item with { Layer = item.Layer with { Transform = transform, Opacity = item.Layer.Opacity / k }, HasAlpha = true });
+        }
+    }
+
+    /// <summary>Mistura por pixel: <paramref name="processed"/> onde a cobertura é 255 e <paramref name="original"/> onde é 0.</summary>
+    public static BgraImage MaskedMix(BgraImage original, BgraImage processed, byte[] coverage)
+    {
+        var a = original.Pixels;
+        var b = processed.Pixels;
+        var px = new byte[b.Length];
+        Parallel.For(0, processed.Height, y =>
+        {
+            var row = y * processed.Width;
+            for (var x = 0; x < processed.Width; x++)
+            {
+                var i = row + x;
+                var w = coverage[i];
+                for (var c = 0; c < 4; c++)
+                {
+                    var j = i * 4 + c;
+                    px[j] = (byte)((b[j] * w + a[j] * (255 - w) + 127) / 255);
+                }
+            }
+        });
+        return new BgraImage(processed.Width, processed.Height, px);
     }
 
     /// <summary>Efeitos comuns em blocos, intercalados com os efeitos de IA na ordem da pilha.</summary>

@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
@@ -231,7 +231,7 @@ public static class CompositionMath
         (double X, double Y, double W)? At(MediaTime time)
         {
             var clamped = MediaTime.Max(source.Start, MediaTime.Min(source.End, time));
-            var src = source.FreezeAt ?? source.SourceIn + source.Speed.SourceDurationOf(clamped - source.Start);
+            var src = source.FreezeAt ?? source.SourceTimeAt(clamped);
             if (SampleAt(tracker, src) is not { } s) return null;
             var tr = ClipAnimation.TransformAt(source, clamped - source.Start);
             var (x, y) = ToProject(tr, s.X, s.Y, asset.Width, asset.Height, project.Settings.Width, project.Settings.Height);

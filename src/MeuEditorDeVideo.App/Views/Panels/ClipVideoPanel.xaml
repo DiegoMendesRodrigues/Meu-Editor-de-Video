@@ -104,8 +104,32 @@
                     <Button Grid.Column="2" Content="Outra…" Style="{StaticResource Ins.SmallButton}" Margin="6,0,0,0" Command="{Binding CustomSpeedCommand}"
                             AutomationProperties.Name="Outra velocidade" />
                 </Grid>
-                <CheckBox Content="Câmera lenta suavizada (mistura de quadros)" IsChecked="{Binding FrameBlending}" Margin="0,0,0,8"
+                <CheckBox Content="{StaticResource Editor.Clipe.AoContrario}" IsChecked="{Binding ReverseClip}" Margin="0,0,0,6"
+                          AutomationProperties.Name="Reproduzir ao contrário" ToolTip="{StaticResource Editor.Clipe.AoContrario.Dica}" />
+                <CheckBox Content="Câmera lenta suavizada (mistura de quadros)" IsChecked="{Binding FrameBlending}" Margin="0,0,0,6"
                           AutomationProperties.Name="Câmera lenta suavizada" ToolTip="Abaixo de 1×, mistura quadros vizinhos para reduzir os saltos" />
+                <CheckBox Content="{StaticResource Editor.Clipe.Interpolacao}" IsChecked="{Binding OpticalFlow}" Margin="0,0,0,6"
+                          AutomationProperties.Name="Interpolação de quadros" ToolTip="{StaticResource Editor.Clipe.Interpolacao.Dica}" />
+                <Grid Margin="0,0,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="92" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{StaticResource Editor.Clipe.CurvaVelocidade}" Style="{StaticResource Ins.Label}" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding SpeedRampOptions}" SelectedItem="{Binding SelectedSpeedRamp}" DisplayMemberPath="Label"
+                              AutomationProperties.Name="Curva de velocidade" ToolTip="{StaticResource Editor.Clipe.CurvaVelocidade.Dica}" />
+                </Grid>
+                <Grid Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="92" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="40" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{StaticResource Editor.Clipe.DesfoqueMovimento}" Style="{StaticResource Ins.Label}" TextWrapping="Wrap" />
+                    <Slider Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding MotionBlur}" VerticalAlignment="Center"
+                            AutomationProperties.Name="Desfoque de movimento" ToolTip="{StaticResource Editor.Clipe.DesfoqueMovimento.Dica}" />
+                    <TextBlock Grid.Column="2" Text="{Binding MotionBlur, StringFormat='{}{0:0} %'}" Style="{StaticResource Ins.Label}" HorizontalAlignment="Right" />
+                </Grid>
                 <WrapPanel>
                     <Button Content="Congelar quadro" Style="{StaticResource Ins.SmallButton}" Command="{Binding FreezeFrameCommand}"
                             AutomationProperties.Name="Congelar quadro" ToolTip="Insere o quadro do cursor parado por alguns segundos" />
@@ -197,9 +221,20 @@
                             <TextBlock Text="Maquiagem" Style="{StaticResource Ins.CardText}" />
                         </StackPanel>
                     </Button>
+                    <Button Style="{StaticResource Ins.CardButton}" Command="{Binding StartRetouchCommand}" CommandParameter="faceblur"
+                            AutomationProperties.Name="Desfocar rostos" ToolTip="{StaticResource Editor.Clipe.DesfocarRostos.Dica}">
+                        <StackPanel>
+                            <Border Style="{StaticResource Ins.Thumb}" Height="46">
+                                <TextBlock Text="&#xE72E;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="22"
+                                           Foreground="{DynamicResource Med.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="Desfocar rostos" Style="{StaticResource Ins.CardText}" />
+                        </StackPanel>
+                    </Button>
                 </UniformGrid>
                 <ContentControl Content="{Binding Beauty}" Focusable="False" />
                 <ContentControl Content="{Binding Makeup}" Focusable="False" />
+                <ContentControl Content="{Binding FaceBlurEffect}" Focusable="False" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

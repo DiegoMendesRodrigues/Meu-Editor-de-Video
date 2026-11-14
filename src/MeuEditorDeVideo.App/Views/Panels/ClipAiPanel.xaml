@@ -1,4 +1,4 @@
-<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipAiPanel"
+﻿<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipAiPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- Aba "IA" do painel C (F10): recursos de IA local. Sem modelo instalado, cada recurso aparece como indisponível. -->
@@ -111,6 +111,14 @@
                     <Button Content="Detectar cenas" Command="{Binding DetectScenesCommand}" Style="{StaticResource Ai.Button}"
                             AutomationProperties.Name="Detectar cenas"
                             ToolTip="Cria marcadores nas mudanças de cena (e divide o clipe, se marcado)." />
+                </StackPanel>
+
+                <!-- Combinar cor -->
+                <StackPanel Visibility="{Binding IsVisualMedia, Converter={StaticResource Ins.BoolToVis}}">
+                    <TextBlock Text="Cor" Style="{StaticResource Ins.Section}" />
+                    <Button Content="Combinar cor com o clipe anterior" Command="{Binding MatchColorCommand}" Style="{StaticResource Ai.Button}"
+                            AutomationProperties.Name="Combinar cor com o clipe anterior"
+                            ToolTip="Iguala a cor e o contraste deste clipe aos do clipe anterior da trilha (efeito Combinar cor, ajustável na aba Cor)." />
                 </StackPanel>
 
                 <!-- Melhoria de imagem -->

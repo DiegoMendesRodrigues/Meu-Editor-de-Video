@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -164,7 +164,8 @@ public sealed partial class MediaLibraryViewModel : ObservableObject, IDisposabl
         // Pesquisa sem diferenciar maiúsculas nem acentos (RF034).
         var needle = Normalize(SearchText.Trim());
         return Normalize(item.Name).Contains(needle, StringComparison.Ordinal)
-            || (item.Category is { } cat && Normalize(cat).Contains(needle, StringComparison.Ordinal));
+            || (item.Category is { } cat && Normalize(cat).Contains(needle, StringComparison.Ordinal))
+            || item.Asset.Tags.Any(tag => Normalize(tag).Contains(needle, StringComparison.Ordinal));
     }
 
     private static string Normalize(string s)

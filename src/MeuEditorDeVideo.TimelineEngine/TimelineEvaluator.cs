@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Domain.Editing;
+﻿using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
@@ -41,6 +41,12 @@ public sealed record VisualLayer(
 
     /// <summary>Máscaras com a forma já resolvida no instante (animação e rastreamento aplicados).</summary>
     public IReadOnlyList<Mask> Masks { get; init; } = [];
+
+    /// <summary>Desfoque de movimento: transformações em instantes anteriores (mais antiga primeiro), desenhadas sob a camada.</summary>
+    public IReadOnlyList<Transform> MotionTrail { get; init; } = [];
+
+    /// <summary>O quadro intermediário da câmera lenta é interpolado por fluxo óptico (não só misturado).</summary>
+    public bool OpticalFlow { get; init; }
 }
 
 /// <summary>
@@ -77,7 +83,7 @@ public static class TimelineEvaluator
 {
     /// <summary>Instante dentro da mídia de origem correspondente ao tempo <paramref name="t"/> da timeline.</summary>
     public static MediaTime SourceTimeAt(Clip clip, MediaTime t) =>
-        clip.SourceIn + clip.Speed.SourceDurationOf(t - clip.Start);
+        clip.SourceTimeAt(t);
 
     /// <summary>
     /// Ordem de composição das trilhas, de baixo para cima: mídias (vídeo, imagem, efeito), depois textos e por fim
@@ -209,7 +215,7 @@ public static class TimelineEvaluator
     private static VisualLayer? BaseLayer(Project project, Track track, Clip clip, MediaTime t)
     {
         if (clip.IsText) return TextLayerOf(project, track, clip, t);
-        if (clip.IsShape) return ShapeLayerOf(track, clip, t);
+        if (clip.IsShape) return ShapeLayerOf(project, track, clip, t);
         if (clip.MediaAssetId is not { } id || project.FindMedia(id) is not { HasVideo: true } asset) return null;
 
         var offset = MediaTime.Max(MediaTime.Zero, MediaTime.Min(clip.Duration, t - clip.Start));
@@ -222,7 +228,7 @@ public static class TimelineEvaluator
 
         MediaTime? blendSource = null;
         var blendWeight = 0.0;
-        if (clip.FrameBlending && clip.FreezeAt is null && isMoving && clip.Speed.Value < 1 && asset.FrameRate is { } fr && fr.Value > 0)
+        if ((clip.FrameBlending || clip.OpticalFlow) && clip.FreezeAt is null && !clip.Reverse && isMoving && clip.Speed.Value < 1 && asset.FrameRate is { } fr && fr.Value > 0)
         {
             // Mistura o quadro de origem atual com o seguinte, pela fração de tempo entre eles.
             var frame = fr.TimeToFrame(source);
@@ -251,11 +257,37 @@ public static class TimelineEvaluator
             BlendMode = clip.BlendMode,
             BlendSourceTime = blendSource,
             BlendWeight = blendWeight,
+            OpticalFlow = clip.OpticalFlow && blendSource is not null,
+            MotionTrail = Trail(project, clip, offset),
         };
     }
 
+    /// <summary>Amostras do desfoque de movimento por keyframes.</summary>
+    public const int MotionBlurSamples = 6;
+
+    /// <summary>
+    /// Transformações nos instantes anteriores dentro do "obturador" (até um quadro inteiro com <see cref="Clip.MotionBlur"/> = 1).
+    /// Vazia quando o clipe não tem desfoque ou a posição, escala e rotação não estão animadas.
+    /// </summary>
+    public static IReadOnlyList<Transform> Trail(Project project, Clip clip, MediaTime offset)
+    {
+        if (clip.MotionBlur <= 0) return [];
+        if (!new[] { AnimatedProperty.X, AnimatedProperty.Y, AnimatedProperty.Scale, AnimatedProperty.Rotation }.Any(p => ClipAnimation.IsAnimated(clip, p)))
+            return [];
+        var shutter = project.Settings.FrameRate.FrameDuration.Ticks * Math.Clamp(clip.MotionBlur, 0, 1);
+        var current = ClipAnimation.TransformAt(clip, offset);
+        var trail = new List<Transform>(MotionBlurSamples - 1);
+        for (var i = MotionBlurSamples - 1; i >= 1; i--)
+        {
+            var at = new MediaTime(Math.Max(0, offset.Ticks - (long)(shutter * i / (MotionBlurSamples - 1))));
+            var tr = ClipAnimation.TransformAt(clip, at);
+            if (tr != current) trail.Add(tr);
+        }
+        return trail;
+    }
+
     /// <summary>Camada de um elemento gráfico gerado (forma vetorial).</summary>
-    private static VisualLayer? ShapeLayerOf(Track track, Clip clip, MediaTime t)
+    private static VisualLayer? ShapeLayerOf(Project project, Track track, Clip clip, MediaTime t)
     {
         var offset = MediaTime.Max(MediaTime.Zero, MediaTime.Min(clip.Duration, t - clip.Start));
         var opacity = ClipAnimation.OpacityAt(clip, offset);
@@ -264,6 +296,7 @@ public static class TimelineEvaluator
         {
             BlendMode = clip.BlendMode,
             Shape = clip.Shape,
+            MotionTrail = Trail(project, clip, offset),
         };
     }
 
@@ -343,6 +376,8 @@ public static class TimelineEvaluator
                 if (clip.Start >= to) break;
                 if (clip.MediaAssetId is not { } id || project.FindMedia(id) is not { HasAudio: true } asset) continue;
                 if (clip.Volume <= 0 && !ClipAnimation.IsAnimated(clip, AnimatedProperty.Volume)) continue;
+                // Com curva de velocidade o áudio fica mudo (como nos editores populares): o ritmo variável distorceria o som.
+                if (clip.SpeedRamp.Count >= 2) continue;
                 var start = MediaTime.Max(from, clip.Start);
                 var end = MediaTime.Min(to, clip.End);
                 result.Add(new AudioSegment(clip.Id, asset, start, end, SourceTimeAt(clip, start), clip.Speed, clip.Volume)

@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Domain.Model;
+﻿using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 
 namespace MeuEditorDeVideo.Core.Media;
@@ -79,7 +79,23 @@ public interface IAudioAnalysisService
         IReadOnlyDictionary<Guid, string> paths, double thresholdDb, MediaTime minDuration, MediaTime padding,
         CancellationToken cancellationToken = default);
 
+    /// <summary>Batidas da música do clipe, em tempo da timeline. <paramref name="sensitivity"/> 0…1 (maior = mais batidas).</summary>
+    Task<IReadOnlyList<MediaTime>> DetectBeatsAsync(Project project, Clip clip, IReadOnlyDictionary<Guid, string> paths,
+        double sensitivity, CancellationToken cancellationToken = default);
+
     /// <summary>Onde o clipe <paramref name="other"/> deve começar para que seu áudio coincida com o de <paramref name="reference"/>.</summary>
     Task<AudioSyncResult?> FindSyncAsync(Project project, Clip reference, Clip other, IReadOnlyDictionary<Guid, string> paths,
         CancellationToken cancellationToken = default);
+}
+
+/// <summary>Texto para fala com as vozes do Windows (local, sem rede).</summary>
+public interface ISpeechSynthesisService
+{
+    bool IsAvailable { get; }
+
+    /// <summary>Nomes das vozes instaladas.</summary>
+    IReadOnlyList<string> Voices();
+
+    /// <summary>Gera um WAV com o texto falado. <paramref name="rate"/>: −10 (lento) a 10 (rápido).</summary>
+    Task SynthesizeAsync(string text, string? voiceName, int rate, string outputPath, CancellationToken cancellationToken = default);
 }

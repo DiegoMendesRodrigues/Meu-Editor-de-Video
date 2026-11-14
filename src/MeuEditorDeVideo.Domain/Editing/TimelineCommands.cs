@@ -272,7 +272,7 @@ public sealed record JoinClipsCommand(Guid SequenceId, MediaTime At, IReadOnlyLi
             foreach (var (left, right) in pairs)
             {
                 clips.RemoveAll(c => c.Id == right.Id);
-                clips[clips.FindIndex(c => c.Id == left.Id)] = left with { Duration = left.Duration + right.Duration, FadeOut = right.FadeOut };
+                clips[clips.FindIndex(c => c.Id == left.Id)] = left with { Duration = left.Duration + right.Duration, FadeOut = right.FadeOut, SourceIn = left.Reverse ? right.SourceIn : left.SourceIn };
                 count++;
             }
             seq = ReplaceTrack(seq, WithClips(track, clips));
@@ -310,7 +310,7 @@ public sealed record JoinClipsCommand(Guid SequenceId, MediaTime At, IReadOnlyLi
     /// <summary>O segundo clipe é a continuação do primeiro (mesma mídia, origem contínua e mesmos ajustes)?</summary>
     public static bool CanJoin(Clip left, Clip right) =>
         left.End == right.Start
-        && right.SourceIn == left.SourceOut
+        && (left.Reverse ? right.SourceOut == left.SourceIn : right.SourceIn == left.SourceOut)
         && left.FreezeAt is null && right.FreezeAt is null
         && left.FadeOut == MediaTime.Zero && right.FadeIn == MediaTime.Zero
         && (right with
@@ -492,6 +492,68 @@ public sealed record SetClipSpeedCommand(Guid SequenceId, Guid ClipId, Rational 
             seq = ReplaceTrack(seq, WithClips(track, clips));
         }
 
+        return changed ? Commit(project, seq) : project;
+    }
+}
+
+/// <summary>Reproduzir ao contrário: liga ou desliga a inversão do clipe e dos clipes vinculados (o áudio do vídeo).</summary>
+public sealed record SetClipReverseCommand(Guid SequenceId, Guid ClipId, bool Reverse) : IEditCommand
+{
+    public string Description => Reverse ? "Reproduzir ao contrário" : "Reproduzir normalmente";
+
+    public Project Apply(Project project)
+    {
+        var seq = RequireSequence(project, SequenceId);
+        var ids = Expand(seq, [ClipId], linked: true, groups: false);
+        var changed = false;
+        foreach (var track in seq.Tracks)
+        {
+            var hits = track.Clips.Where(c => ids.Contains(c.Id) && c.Reverse != Reverse && c.MediaAssetId is not null).ToList();
+            if (hits.Count == 0) continue;
+            EnsureUnlocked(track);
+            var clips = track.Clips.ToList();
+            foreach (var c in hits)
+            {
+                if (c.FreezeAt is not null)
+                    throw new EditRejectedException("Um quadro congelado não pode ser reproduzido ao contrário.");
+                clips[clips.FindIndex(x => x.Id == c.Id)] = c with { Reverse = Reverse };
+                changed = true;
+            }
+            seq = ReplaceTrack(seq, WithClips(track, clips));
+        }
+        return changed ? Commit(project, seq) : project;
+    }
+}
+
+/// <summary>
+/// Curva de velocidade (speed ramping) no clipe e nos vinculados; lista vazia volta à velocidade constante. O áudio de um
+/// clipe com curva fica mudo.
+/// </summary>
+public sealed record SetSpeedRampCommand(Guid SequenceId, Guid ClipId, IReadOnlyList<SpeedPoint> Points, string? Name = null) : IEditCommand
+{
+    public string Description => Points.Count < 2 ? "Remover curva de velocidade" : $"Curva de velocidade{(Name is null ? "" : ": " + Name)}";
+
+    public Project Apply(Project project)
+    {
+        var seq = RequireSequence(project, SequenceId);
+        var ramp = Points.Count < 2 ? [] : SpeedRamps.Normalize(Points);
+        var ids = Expand(seq, [ClipId], linked: true, groups: false);
+        var changed = false;
+        foreach (var track in seq.Tracks)
+        {
+            var hits = track.Clips.Where(c => ids.Contains(c.Id) && c.MediaAssetId is not null).ToList();
+            if (hits.Count == 0) continue;
+            EnsureUnlocked(track);
+            var clips = track.Clips.ToList();
+            foreach (var c in hits)
+            {
+                if (c.FreezeAt is not null && ramp.Count > 0)
+                    throw new EditRejectedException("Um quadro congelado não tem curva de velocidade.");
+                clips[clips.FindIndex(x => x.Id == c.Id)] = c with { SpeedRamp = ramp };
+                changed = true;
+            }
+            seq = ReplaceTrack(seq, WithClips(track, clips));
+        }
         return changed ? Commit(project, seq) : project;
     }
 }

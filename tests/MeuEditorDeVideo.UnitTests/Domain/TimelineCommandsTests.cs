@@ -501,6 +501,48 @@ public sealed class TimelineCommandsTests
     }
 
     [Fact]
+    public void Reverse_maps_the_clip_start_to_the_end_of_the_source()
+    {
+        var v = Asset("v.mp4", MediaKind.Video, 20);
+        var clip = NewClip(v, S(0), S(4), sourceIn: S(2)) with { Speed = new Rational(2, 1), Reverse = true };
+        Assert.Equal(S(10), clip.SourceOut);
+        Assert.True(clip.SourceTimeAt(S(0)) < S(10) && clip.SourceTimeAt(S(0)) > S(10) - MediaTime.FromSecondsApprox(0.001));
+        Assert.Equal(S(6) - new MediaTime(1), clip.SourceTimeAt(S(2)));
+        Assert.Equal(S(2), clip.SourceTimeAt(S(4)));
+    }
+
+    [Fact]
+    public void Reverse_split_keeps_each_half_on_its_part_of_the_source_and_joins_back()
+    {
+        var v = Asset("v.mp4", MediaKind.Video, 20);
+        var a = NewClip(v, S(0), S(10)) with { Reverse = true };
+        var p = PlaceClips(NewProject(v), Video1, a);
+        var id = p.MainSequence.Id;
+        var split = new SplitClipsCommand(id, S(4)).Apply(p);
+        var clips = TrackOf(split, Video1).Clips;
+        Assert.Equal((S(6), S(10)), (clips[0].SourceIn, clips[0].SourceOut));
+        Assert.Equal((S(0), S(6)), (clips[1].SourceIn, clips[1].SourceOut));
+        Assert.Equal(a.SourceTimeAt(S(5)), clips[1].SourceTimeAt(S(5)));
+
+        var joined = Assert.Single(TrackOf(new JoinClipsCommand(id, S(4)).Apply(split), Video1).Clips);
+        Assert.Equal((S(0), S(10)), (joined.SourceIn, joined.Duration));
+        Assert.True(joined.Reverse);
+    }
+
+    [Fact]
+    public void Set_reverse_also_reverses_the_linked_audio()
+    {
+        var v = Asset("v.mp4", MediaKind.Video, 20, withAudio: true);
+        var link = Guid.NewGuid();
+        var video = NewClip(v, S(0), S(5), link: link);
+        var audio = NewClip(v, S(0), S(5), link: link);
+        var p = PlaceClips(PlaceClips(NewProject(v), Video1, video), Audio1, audio);
+        var result = new SetClipReverseCommand(p.MainSequence.Id, video.Id, true).Apply(p);
+        Assert.True(ClipOf(result, Video1, video.Id).Reverse);
+        Assert.True(ClipOf(result, Audio1, audio.Id).Reverse);
+    }
+
+    [Fact]
     public void Join_cuts_undoes_a_split()
     {
         var v = Asset("v.mp4", MediaKind.Video, 20);

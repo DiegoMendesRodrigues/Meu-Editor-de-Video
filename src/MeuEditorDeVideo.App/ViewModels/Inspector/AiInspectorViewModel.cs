@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -7,6 +7,7 @@ using MeuEditorDeVideo.App.ViewModels.Timeline;
 using MeuEditorDeVideo.Application.Media;
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.AI;
+using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;
@@ -31,6 +32,9 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
     private readonly IVoiceActivityService _vad;
     private readonly IVoiceEnhancementService _voice;
     private readonly ISceneDetectionService _scenes;
+    private readonly IReframeService _reframe;
+    private readonly ISpeechSynthesisService _tts;
+    private readonly IMediaAnalysisService _analysis;
     private readonly IImageEnhancementService _enhancer;
     private readonly IMediaImportService _import;
     private readonly IProjectService _projects;
@@ -42,7 +46,7 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
     public AiInspectorViewModel(TimelineViewModel timeline, IModelRegistry models, ISegmentationService segmentation,
         ISpeechRecognitionService speech, IVoiceActivityService vad, IVoiceEnhancementService voice, ISceneDetectionService scenes,
         IImageEnhancementService enhancer, IMediaImportService import, IProjectService projects, IDialogService dialogs,
-        ILogger<AiInspectorViewModel> logger)
+        ILogger<AiInspectorViewModel> logger, IReframeService reframe, ISpeechSynthesisService tts, IMediaAnalysisService analysis)
     {
         Timeline = timeline;
         _models = models;
@@ -51,6 +55,9 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
         _vad = vad;
         _voice = voice;
         _scenes = scenes;
+        _reframe = reframe;
+        _tts = tts;
+        _analysis = analysis;
         _enhancer = enhancer;
         _import = import;
         _projects = projects;
@@ -101,7 +108,7 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
     public partial string ClipTitle { get; set; } = "";
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(RemoveBackgroundCommand), nameof(PrecomputeMattesCommand), nameof(TrackPersonCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RemoveBackgroundCommand), nameof(PrecomputeMattesCommand), nameof(TrackPersonCommand), nameof(MatchColorCommand))]
     public partial bool IsVisualMedia { get; set; }
 
     [ObservableProperty]
@@ -189,7 +196,8 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RemoveBackgroundCommand), nameof(PrecomputeMattesCommand), nameof(TrackPersonCommand),
         nameof(GenerateSubtitlesCommand), nameof(IsolateVoiceCommand), nameof(DenoiseCommand), nameof(RemoveSilenceCommand),
-        nameof(DetectScenesCommand), nameof(EnhanceImageCommand), nameof(CancelCommand))]
+        nameof(DetectScenesCommand), nameof(EnhanceImageCommand), nameof(CancelCommand), nameof(ReframeProjectCommand),
+        nameof(TextToSpeechCommand), nameof(AnalyzeMediaCommand), nameof(MatchColorCommand))]
     public partial bool IsBusy { get; set; }
 
     [ObservableProperty]
@@ -598,6 +606,162 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
             var candidate = Path.Combine(dir, $"{name} ({i}){ext}");
             if (!File.Exists(candidate)) return candidate;
         }
+    }
+
+    // ---------------------------------------------------------------- reenquadrar
+
+    private bool CanReframe() => !IsBusy && Timeline.Project is not null;
+
+    /// <summary>
+    /// Projeto › Reenquadrar automaticamente: muda o formato do projeto e reposiciona os clipes de vídeo e imagem para
+    /// cobrir o novo quadro, acompanhando a pessoa quando há modelo de segmentação. Uma única etapa de desfazer.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanReframe))]
+    private async Task ReframeProjectAsync()
+    {
+        if (Timeline.Project is not { } project || Timeline.Sequence is not { } seq) return;
+        var settings = project.Settings;
+        var dialog = new Views.Dialogs.ReframeWindow($"{settings.Width}×{settings.Height}", _reframe.IsAvailable);
+        if (_dialogs.ShowModal(dialog) != true) return;
+        var (aw, ah) = dialog.Format;
+        var follow = dialog.FollowHead;
+        var (width, height) = Reframe.Size(settings, aw, ah);
+
+        var targets = seq.Tracks
+            .Where(t => t.Kind is TrackKind.Video or TrackKind.Image)
+            .SelectMany(t => t.Clips)
+            .Where(c => c.MediaAssetId is { } id && project.FindMedia(id) is { HasVideo: true, Width: > 0, Height: > 0 })
+            .ToList();
+
+        await RunAsync("Reenquadrando…", async (progress, ct) =>
+        {
+            var commands = new List<IEditCommand> { new ChangeProjectSettingsCommand(settings with { Width = width, Height = height }) };
+            for (var i = 0; i < targets.Count; i++)
+            {
+                var clip = targets[i];
+                var asset = project.FindMedia(clip.MediaAssetId!.Value)!;
+                IReadOnlyList<FocusSample>? samples = null;
+                if (follow is { } head && _reframe.IsAvailable && asset.Kind is MediaKind.Video or MediaKind.ImageSequence)
+                {
+                    var n = i;
+                    var inner = new Progress<double>(p => ((IProgress<double>)progress).Report((n + p) / targets.Count));
+                    samples = await _reframe.AnalyzeAsync(project, clip, Timeline.MediaPaths, head, inner, ct);
+                }
+                commands.Add(new UpdateClipCommand(Timeline.SequenceId, clip.Id,
+                    c => Reframe.Apply(c, asset.Width, asset.Height, width, height, samples), "Reenquadrar clipe"));
+                ((IProgress<double>)progress).Report((i + 1.0) / targets.Count);
+            }
+            Timeline.Execute(new CompositeCommand($"Reenquadrar para {aw}:{ah}", commands));
+            Status = $"Projeto reenquadrado para {width}×{height} ({targets.Count} {(targets.Count == 1 ? "clipe" : "clipes")}).";
+        });
+    }
+
+    // ---------------------------------------------------------------- texto para fala, análise de mídia, combinar cor
+
+    private bool CanUseProject() => !IsBusy && Timeline.Project is not null;
+
+    /// <summary>Ferramentas › Texto para fala: gera a narração com as vozes do Windows e a insere no cursor.</summary>
+    [RelayCommand(CanExecute = nameof(CanUseProject))]
+    private async Task TextToSpeechAsync()
+    {
+        if (Timeline.Project is null) return;
+        if (!_tts.IsAvailable)
+        {
+            _dialogs.ShowInfo("Texto para fala", "Este Windows não tem o serviço de vozes (SAPI) disponível.");
+            return;
+        }
+        IReadOnlyList<string> voices;
+        try { voices = _tts.Voices(); }
+        catch (InvalidOperationException ex)
+        {
+            _dialogs.ShowInfo("Texto para fala", ex.Message);
+            return;
+        }
+        var dialog = new Views.Dialogs.TextToSpeechWindow(voices);
+        if (_dialogs.ShowModal(dialog) != true) return;
+        var (text, voice, rate, at) = (dialog.Text, dialog.Voice, dialog.Rate, Timeline.Playhead);
+        await RunAsync("Gerando a narração…", async (progress, ct) =>
+        {
+            var folder = GeneratedFolder();
+            var words = string.Join(' ', text.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(5));
+            var safe = string.Concat(words.Select(ch => Path.GetInvalidFileNameChars().Contains(ch) ? '_' : ch));
+            var output = UniquePath(Path.Combine(folder, $"Narração - {safe}.wav"));
+            await _tts.SynthesizeAsync(text, voice, rate, output, ct);
+            ((IProgress<double>)progress).Report(0.7);
+            var imported = await _import.ImportAsync([output], "Narração", null, ct);
+            if (imported.Imported.Count == 0)
+            {
+                Status = "A narração foi gerada, mas não pôde ser importada: " + string.Join("; ", imported.Failed.Select(f => f.Reason));
+                return;
+            }
+            Status = Timeline.Execute(new AddNarrationCommand(Timeline.SequenceId, imported.Imported[0].Id, at))
+                ? $"Narração inserida ({imported.Imported[0].Duration.TotalSeconds.ToString("0.0", CultureInfo.GetCultureInfo("pt-BR"))} s)."
+                : "Não foi possível inserir a narração na linha do tempo.";
+        });
+    }
+
+    /// <summary>Ferramentas › Analisar mídia: etiquetas (formato, fala, cenas, pessoas) em todas as mídias da biblioteca.</summary>
+    [RelayCommand(CanExecute = nameof(CanUseProject))]
+    private async Task AnalyzeMediaAsync()
+    {
+        if (Timeline.Project is not { } project) return;
+        var assets = project.Media.Where(m => Timeline.MediaPaths.ContainsKey(m.Id)).ToList();
+        if (assets.Count == 0)
+        {
+            _dialogs.ShowInfo("Analisar mídia", "Não há mídias disponíveis na biblioteca para analisar.");
+            return;
+        }
+        await RunAsync("Analisando as mídias…", async (progress, ct) =>
+        {
+            var tags = new Dictionary<Guid, System.Collections.Immutable.ImmutableList<string>>();
+            for (var i = 0; i < assets.Count; i++)
+            {
+                var n = i;
+                var inner = new Progress<double>(p => ((IProgress<double>)progress).Report((n + p) / assets.Count));
+                try { tags[assets[i].Id] = await _analysis.AnalyzeAsync(project, assets[i], Timeline.MediaPaths, inner, ct); }
+                catch (Exception ex) when (ex is InvalidOperationException or IOException)
+                {
+                    _logger.LogWarning(ex, "Falha ao analisar {Midia}", assets[i].Name);
+                    tags[assets[i].Id] = [.. MediaTags.Basic(assets[i])];
+                }
+            }
+            Timeline.Execute(new SetMediaTagsCommand(tags));
+            Status = $"{assets.Count} {(assets.Count == 1 ? "mídia analisada" : "mídias analisadas")}. Pesquise na biblioteca por etiquetas como \"fala\", \"pessoa\" ou \"vertical\".";
+        });
+    }
+
+    private bool CanMatchColor() => !IsBusy && IsVisualMedia;
+
+    /// <summary>
+    /// Combinar cor: iguala a cor do clipe selecionado à do clipe anterior da mesma trilha (ou, sem ele, ao primeiro clipe de
+    /// vídeo do projeto). Cria ou atualiza o efeito "Combinar cor", ajustável na aba Cor.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanMatchColor))]
+    private async Task MatchColorAsync()
+    {
+        if (VisualClip() is not { } cur || Timeline.Project is not { } project || Timeline.Sequence is not { } seq) return;
+        var reference = cur.Track.Clips.Where(c => c.End <= cur.Clip.Start && c.MediaAssetId is not null).MaxBy(c => c.End)
+            ?? seq.Tracks.Where(t => t.IsVisual).SelectMany(t => t.Clips)
+                .FirstOrDefault(c => c.Id != cur.Clip.Id && c.MediaAssetId is { } id && project.FindMedia(id) is { HasVideo: true });
+        if (reference is null)
+        {
+            _dialogs.ShowInfo("Combinar cor", "Não há outro clipe de vídeo ou imagem para usar como referência.");
+            return;
+        }
+        await RunAsync("Combinando a cor…", async (progress, ct) =>
+        {
+            var match = await _analysis.MatchColorAsync(project, cur.Clip, reference, Timeline.MediaPaths, ct);
+            Timeline.Execute(new UpdateClipCommand(Timeline.SequenceId, cur.Clip.Id, c =>
+            {
+                var existing = c.Effects.FirstOrDefault(e => e.Type == EffectCatalog.ColorMatch);
+                var effect = existing ?? EffectCatalog.Create(EffectCatalog.ColorMatch);
+                string[] channels = ["r", "g", "b"];
+                for (var i = 0; i < 3; i++)
+                    effect = EffectCatalog.WithValue(EffectCatalog.WithValue(effect, channels[i] + ".gain", match[i].Gain), channels[i] + ".offset", match[i].Offset);
+                return c with { Effects = existing is null ? c.Effects.Insert(0, effect) : c.Effects.Replace(existing, effect) };
+            }, "Combinar cor"));
+            Status = "Cor combinada com o clipe anterior. Ajuste a intensidade em Vídeo › Cor › Combinar cor.";
+        });
     }
 
     // ---------------------------------------------------------------- execução em segundo plano

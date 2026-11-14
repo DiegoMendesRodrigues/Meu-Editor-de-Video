@@ -59,6 +59,18 @@ public static class EffectCatalog
     public const string Hsl = "color.hsl";
     public const string Hdr = "color.hdr";
     public const string CameraTrack = "ai.cameratrack";
+    public const string ColorMatch = "color.match";
+    public const string Lens = "fx.lens";
+    public const string VideoDenoise = "fx.denoise";
+    public const string AudioVisualizer = "fx.audioviz";
+    public const string FaceBlur = "ai.faceblur";
+    public const string VoiceChanger = "audio.voice";
+
+    /// <summary>Vozes prontas do "Mudar a voz": nome, semitons e robô (%).</summary>
+    public static IReadOnlyList<(string Name, double Pitch, double Robot)> VoicePresets { get; } =
+    [
+        ("Personalizado", 0, 0), ("Grave", -5, 0), ("Agudo", 5, 0), ("Esquilo", 10, 0), ("Monstro", -10, 0), ("Robô", 0, 80),
+    ];
 
     /// <summary>Faixas de cor do ajuste HSL: chave, nome e matiz central (graus).</summary>
     public static IReadOnlyList<(string Key, string Name, double Hue)> HslBands { get; } =
@@ -232,6 +244,40 @@ public static class EffectCatalog
             new("bgblur", "Fundo desfocado", ParameterKind.Slider, 0, 100, 0, "%"),
             new("temporal", "Suavização entre quadros", ParameterKind.Slider, 0, 100, 70, "%"),
         ]),
+        new(ColorMatch, "Combinar cor", "Iguala a cor deste clipe à de outro (média e contraste por canal). Use \"Combinar cor com…\" na aba Cor.", EffectCategory.Color,
+        [
+            new("amount", "Intensidade", ParameterKind.Slider, 0, 100, 100, "%"),
+            new("r.gain", "Vermelho · ganho", ParameterKind.Slider, 0.25, 4, 1),
+            new("g.gain", "Verde · ganho", ParameterKind.Slider, 0.25, 4, 1),
+            new("b.gain", "Azul · ganho", ParameterKind.Slider, 0.25, 4, 1),
+            new("r.offset", "Vermelho · deslocamento", ParameterKind.Slider, -1, 1, 0),
+            new("g.offset", "Verde · deslocamento", ParameterKind.Slider, -1, 1, 0),
+            new("b.offset", "Azul · deslocamento", ParameterKind.Slider, -1, 1, 0),
+        ]),
+        new(Lens, "Correção de lente", "Corrige a distorção de lentes grande-angulares e de câmeras de ação (barril) ou de teleobjetivas (almofada).", EffectCategory.Stylize,
+        [
+            new("distortion", "Distorção (barril → almofada)", ParameterKind.Slider, -100, 100, 0),
+            new("zoom", "Zoom para esconder as bordas", ParameterKind.Slider, 0, 50, 0, "%"),
+        ]),
+        new(VideoDenoise, "Redução de ruído de vídeo", "Suaviza o granulado de gravações com pouca luz, preservando as bordas.", EffectCategory.Stylize,
+        [
+            new("strength", "Intensidade", ParameterKind.Slider, 0, 100, 50, "%"),
+            new("detail", "Preservar detalhes", ParameterKind.Slider, 0, 100, 50, "%"),
+        ]),
+        new(AudioVisualizer, "Visualizador de áudio", "Barras que dançam com o som de uma música da biblioteca (escolha a mídia em Recurso).", EffectCategory.Stylize,
+        [
+            new("style", "Estilo", ParameterKind.Choice, 0, 2, 0, Options: ["Barras", "Barras espelhadas", "Onda"]),
+            new("bars", "Número de barras", ParameterKind.Slider, 8, 128, 48),
+            new("height", "Altura", ParameterKind.Slider, 5, 100, 35, "%"),
+            new("color", "Cor", ParameterKind.Color, DefaultColor: (1.0, 1.0, 1.0)),
+            new("opacity", "Opacidade", ParameterKind.Slider, 0, 100, 90, "%"),
+        ], UsesResource: true),
+        new(FaceBlur, "Desfocar rostos", "Encontra o rosto em cada quadro (modelo local de pontos do rosto) e o desfoca, pixeliza ou cobre com tarja.", EffectCategory.Ai,
+        [
+            new("mode", "Modo", ParameterKind.Choice, 0, 2, 0, Options: ["Desfoque", "Pixelizar", "Tarja preta"]),
+            new("amount", "Intensidade", ParameterKind.Slider, 0, 100, 70, "%"),
+            new("size", "Tamanho da área", ParameterKind.Slider, 80, 200, 125, "%"),
+        ]),
         new(EdgeRefine, "Refinar bordas", "Contrai ou expande, suaviza e limpa as bordas da transparência (use depois do chroma key ou de máscaras).", EffectCategory.Key,
         [
             new("choke", "Contrair/expandir", ParameterKind.Slider, -20, 20, 0, " px"),
@@ -278,6 +324,13 @@ public static class EffectCatalog
         new(Telephone, "Telefone / rádio", "Som de telefone ou rádio antigo (banda estreita).", EffectCategory.Audio,
         [
             new("intensity", "Intensidade", ParameterKind.Slider, 0, 100, 100, "%"),
+        ]),
+        new(VoiceChanger, "Mudar a voz", "Altera o tom da voz (grave, agudo, esquilo, monstro) ou dá um timbre de robô, sem mudar a velocidade.", EffectCategory.Audio,
+        [
+            new("preset", "Voz", ParameterKind.Choice, 0, 5, 0, Options: ["Personalizado", "Grave", "Agudo", "Esquilo", "Monstro", "Robô"]),
+            new("pitch", "Tom", ParameterKind.Slider, -12, 12, 0, " semitons"),
+            new("robot", "Robô", ParameterKind.Slider, 0, 100, 0, "%"),
+            new("mix", "Mistura", ParameterKind.Slider, 0, 100, 100, "%"),
         ]),
         new(Distortion, "Distorção", "Saturação do som.", EffectCategory.Audio,
         [
@@ -380,6 +433,12 @@ public static class EffectCatalog
             Hdr => Value(e, "strength") <= 0,
             Beauty => Find(e.Type)!.Parameters.All(p => Math.Abs(Value(e, p.Key)) < 0.5),
             Makeup => Value(e, "look") < 0.5 && Find(e.Type)!.Parameters.Where(p => p.Kind == ParameterKind.Slider).All(p => Value(e, p.Key) < 0.5),
+            ColorMatch => Value(e, "amount") <= 0 || new[] { "r", "g", "b" }.All(c => Math.Abs(Value(e, c + ".gain") - 1) < 1e-9 && Math.Abs(Value(e, c + ".offset")) < 1e-9),
+            Lens => Math.Abs(Value(e, "distortion")) < 1e-9 && Value(e, "zoom") <= 0,
+            VideoDenoise => Value(e, "strength") <= 0,
+            AudioVisualizer => string.IsNullOrEmpty(e.Resource) || Value(e, "opacity") <= 0,
+            FaceBlur => Value(e, "amount") <= 0 && Value(e, "mode") < 2,
+            VoiceChanger => Value(e, "mix") <= 0 || (VoiceSettings(e) is var v && Math.Abs(v.Pitch) < 1e-9 && v.Robot <= 0),
             CameraTrack => Value(e, "autocrop") <= 0 && Value(e, "shake") <= 0 && Value(e, "bgblur") <= 0,
             Blur => Value(e, "radius") <= 0,
             EdgeRefine => Math.Abs(Value(e, "choke")) < 0.5 && Value(e, "feather") < 0.5 && Value(e, "decontaminate") <= 0,
@@ -388,6 +447,14 @@ public static class EffectCatalog
             Echo or Reverb or Distortion => Value(e, "mix") <= 0,
             _ => false,
         };
+    }
+
+    /// <summary>Tom (semitons) e robô (0…1) efetivos do "Mudar a voz": a voz pronta substitui os controles manuais.</summary>
+    public static (double Pitch, double Robot) VoiceSettings(EffectInstance e)
+    {
+        var preset = (int)Math.Round(Value(e, "preset"));
+        if (preset > 0 && preset < VoicePresets.Count) return (VoicePresets[preset].Pitch, VoicePresets[preset].Robot / 100);
+        return (Value(e, "pitch"), Value(e, "robot") / 100);
     }
 
     /// <summary>Efeitos visuais ativos do clipe.</summary>

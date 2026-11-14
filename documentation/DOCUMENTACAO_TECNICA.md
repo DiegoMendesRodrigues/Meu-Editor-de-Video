@@ -168,7 +168,7 @@ Ao fechar a janela, `MainWindow.OnClosing` pergunta sobre alterações não salv
 | `AddMediaEngine` (MediaEngine) | `MediaCache`, `IMediaProbe`, `IThumbnailProvider`, `IWaveformProvider`, `IProxyService` → `ProxyService`, `IVideoFrameSourceFactory`, `IAudioSampleSourceFactory` |
 | `AddPreviewEngine` (RenderingEngine) | `AddAudioEngine` (`IAudioAnalysisService`), `ICompositor` → `CpuCompositor`, `IAudioOutputFactory`, `PreviewEngine` (transient), `IRenderEngine` → `RenderEngine` |
 | `AddMeuEditorApplication` (Application) | `IProjectService` → `ProjectService`, `AutosaveScheduler`, `IMediaImportService`, `IRenderQueueService` → `RenderQueueService` |
-| `AddAiEngine` (AIEngine) | `IModelRegistry` → `ModelRegistry`, `OnnxSessionFactory`, `MatteCache`, `ISegmentationService`, `IAiFrameProcessor`, `ISceneDetectionService`, `IImageEnhancementService`, `IVoiceActivityService`, `IVoiceEnhancementService`, `ISpeechRecognitionService` → `WhisperTranscriber` |
+| `AddAiEngine` (AIEngine) | `IModelRegistry` → `ModelRegistry`, `OnnxSessionFactory`, `MatteCache`, `ISegmentationService`, `IAiFrameProcessor` (inclui `Interpolate`, fluxo óptico Farneback em `FrameInterpolator`), `ISceneDetectionService`, `IReframeService` → `ReframeService`, `IMediaAnalysisService` → `MediaAnalysisService` (etiquetas da biblioteca e "Combinar cor"), `IImageEnhancementService`, `IVoiceActivityService`, `IVoiceEnhancementService`, `ISpeechRecognitionService` → `WhisperTranscriber` |
 | `AddModelDownloads` (ModelDownloads) | `IModelDownloader` → `HttpModelDownloader`, recebendo `ModelCatalog.AllowedHosts` |
 | `App.ConfigureServices` | `CatalogModelInstaller`, `IThemeService`, `INavigationService`, `IDialogService`, `IProjectWorkflow`, view models, `MainWindow`, `ShortcutService`, `ICacheMaintenance`, `IHardwareInfoService` |
 
@@ -253,7 +253,7 @@ Classe `MedManifest` (`src/MeuEditorDeVideo.ProjectEngine/Format/MedManifest.cs`
 | Campo | Conteúdo |
 |---|---|
 | `format` | sempre `"MED"` (outro valor é recusado) |
-| `formatVersion` | versão do formato, ex.: `"1.3"` |
+| `formatVersion` | versão do formato, ex.: `"1.4"` |
 | `projectId`, `name`, `createdAt`, `modifiedAt` | identificação |
 | `storageMode` | `Linked` ou `Packaged` |
 | `appVersion` | versão do aplicativo que gravou |
@@ -286,8 +286,8 @@ Erros de formato viram `MED-1002` (não é projeto ou está danificado). Erros d
 
 ### Versionamento e migrações
 
-- Versão atual gravada: `MedMigrator.Current = 1.3` (`Format/MedMigrations.cs`).
-- Migrações são `IMedMigration` (`From`, `To`, `Migrate(JsonObject)`), registradas em `MedMigrator.Default`. As existentes são `Migration1_0To1_1`, `Migration1_1To1_2` e `Migration1_2To1_3` (cor de identificação do clipe, `Clip.LabelColor`). Hoje nenhuma altera estrutura: campos novos têm valor neutro (volume 1, panorâmica 0, cor nula = automática etc.).
+- Versão atual gravada: `MedMigrator.Current = 1.4` (`Format/MedMigrations.cs`).
+- Migrações são `IMedMigration` (`From`, `To`, `Migrate(JsonObject)`), registradas em `MedMigrator.Default`. As existentes são `Migration1_0To1_1`, `Migration1_1To1_2` e `Migration1_2To1_3` (cor de identificação do clipe, `Clip.LabelColor`) e `Migration1_3To1_4` (reproduzir ao contrário `Clip.Reverse`, curva de velocidade `Clip.SpeedRamp`, `Clip.MotionBlur`, `Clip.OpticalFlow`, máscara de cor `Mask.EffectsOnly` e etiquetas `MediaAsset.Tags`; todos com padrão neutro). Hoje nenhuma altera estrutura: campos novos têm valor neutro (volume 1, panorâmica 0, cor nula = automática etc.).
 - Regras de compatibilidade:
   - **Major maior que o suportado**: recusado (`MED-1003`).
   - **Minor maior que o suportado**: aberto, com aviso de que campos desconhecidos podem se perder ao salvar.
@@ -395,7 +395,7 @@ Arquivos: `src/MeuEditorDeVideo.ProjectEngine/`.
 
 Arquivos: `src/MeuEditorDeVideo.TimelineEngine/`.
 
-- `TimelineEvaluator.cs`: dado um instante, devolve as camadas visíveis de uma sequência, com a transformação já interpolada pelos keyframes, o instante da mídia de origem (considerando velocidade) e os efeitos ativos. Também devolve as máscaras de transição (`TransitionMask`) e o texto a desenhar (com progresso de créditos e máquina de escrever). É a única fonte de verdade sobre "o que aparece agora", usada pela pré-visualização e pela exportação.
+- `TimelineEvaluator.cs`: dado um instante, devolve as camadas visíveis de uma sequência, com a transformação já interpolada pelos keyframes, o instante da mídia de origem (considerando velocidade, curva de velocidade (`SpeedRamps.Progress`, normalizada para consumir o mesmo trecho de origem) e reprodução ao contrário, calculado por `Clip.SourceTimeAt`, a única fórmula de tempo de origem do projeto) e os efeitos ativos. Também devolve as máscaras de transição (`TransitionMask`) e o texto a desenhar (com progresso de créditos e máquina de escrever). É a única fonte de verdade sobre "o que aparece agora", usada pela pré-visualização e pela exportação.
 - `SnapEngine.cs`: encaixe de clipes e marcadores.
 
 Não tem DI próprio: os motores o instanciam diretamente.
@@ -433,7 +433,8 @@ Arquivos: `src/MeuEditorDeVideo.AudioEngine/`.
 - `AudioMixer.cs`: mixagem das trilhas de uma sequência (volume, panorâmica, mudo, solo). Gera também os níveis por trilha para os medidores.
 - `Dsp/AudioProcessors.cs`, `Dsp/Biquad.cs`, `Dsp/Fft.cs`, `Dsp/TimeStretcher.cs`: equalizador, compressor, eco, reverb, telefone, distorção, redução de ruído e preservação de tom na velocidade variável.
 - `Dsp/AudioAnalysis.cs`: medidor de loudness integrado conforme ITU-R BS.1770-4 / EBU R128 (ponderação K, blocos de 400 ms com 75% de sobreposição, comportas de −70 LUFS e −10 LU) e pico em dBFS. É implementação própria.
-- `AudioAnalysisService.cs` (`IAudioAnalysisService`): loudness, silêncios e sincronização entre clipes. `AddAudioEngine` fica neste arquivo.
+- `AudioAnalysisService.cs` (`IAudioAnalysisService`): loudness, silêncios, batidas (`Dsp/BeatDetector`, fluxo espectral) e sincronização entre clipes. `AddAudioEngine` fica neste arquivo e também registra `ISpeechSynthesisService` → `SpeechSynthesisService` (texto para fala com as vozes do Windows via SAPI, COM por ligação tardia numa thread STA; sem rede).
+- `Dsp/AudioProcessors.cs`: inclui `VoiceChangerProcessor` (`audio.voice`: tom por duas leituras cruzadas de linha de atraso e timbre de robô).
 - `AudioOutput.cs`: `WasapiAudioOutput` usa NAudio `WasapiOut` em modo compartilhado, com latência de 60 ms e sincronização por evento. Informa quantas amostras já tocaram, e esse valor é o **relógio mestre** da reprodução. Sem dispositivo de áudio, a saída informa que é simulada (`IAudioOutput.HasDevice`) e o relógio é simulado.
 - `AudioRingBuffer.cs`: buffer circular entre a produção (mixagem) e a saída.
 
@@ -481,8 +482,10 @@ Arquivos: `src/MeuEditorDeVideo.App/`.
 1. `TimelineEvaluator` calcula, para o instante `t`, as camadas visíveis (mídia ou texto), a transformação de cada uma, os efeitos ativos e as transições.
 2. `FrameRenderer` monta cada camada:
    - lê o quadro com `IVideoFrameSource`, usando o **proxy** quando ele existe e `UseProxies` está ligado (`PreviewSnapshot.VideoPaths`), senão o original;
-   - em câmera lenta, mistura dois quadros com `BlendWeight`;
-   - aplica a pilha de efeitos na ordem: efeitos comuns (`EffectProcessor`) intercalados com efeitos de IA (`IAiFrameProcessor`), na posição em que estão na pilha;
+   - em câmera lenta, mistura dois quadros com `BlendWeight` (com `Clip.OpticalFlow`, interpola por fluxo óptico via `IAiFrameProcessor.Interpolate`);
+   - aplica as máscaras de recorte; as máscaras com `EffectsOnly` (máscara de cor) não recortam: depois dos efeitos, `MaskedMix` mantém a imagem original fora delas;
+   - aplica a pilha de efeitos na ordem: efeitos comuns (`EffectProcessor`) intercalados com efeitos de IA (`IAiFrameProcessor`), na posição em que estão na pilha; o visualizador de áudio (`fx.audioviz`) é desenhado em seguida, com os picos de `IWaveformProvider` da música no instante em que ela toca;
+   - desfoque de movimento: `VisualLayer.MotionTrail` (de `TimelineEvaluator.Trail`) repete a camada nas transformações anteriores do obturador, com opacidade 1/k;
    - rasteriza texto com `TextRasterizer` na escala de saída.
 3. `CpuCompositor` ajusta cada camada ao quadro (contain), aplica transformação (escala, posição, rotação, espelhamento e, em 2,5D, perspectiva com distância focal da câmera virtual) e opacidade, e mistura por alfa. Camadas sem transformação são copiadas diretamente.
 4. `PreviewEngine` guarda os quadros prontos num cache LRU limitado por memória (padrão 256 MB; ajustado pelo hardware, ou pelo valor `PreviewMemoryMegabytes` quando diferente de 0). A tela recebe o quadro e o exibe em `WriteableBitmap`.
@@ -567,7 +570,7 @@ Projeto: `src/MeuEditorDeVideo.AIEngine`. Detalhes de uso para o usuário estão
 | `ImageEnhancement` | `ImageEnhancementService` | Swin2SR leve 2× |
 | `FaceLandmarks` | `FaceLandmarkService` (`FaceMeshDetector`) | Face Mesh V2 (MediaPipe) |
 
-Efeitos de IA do catálogo (categoria `Ai`): `ai.background` (remover fundo), `ai.cameratrack` (rastreamento de câmera), `ai.beauty` e `ai.makeup` (Retocar). Eles são executados pelo `AiFrameProcessor`, dentro do `FrameRenderer`.
+Efeitos de IA do catálogo (categoria `Ai`): `ai.background` (remover fundo), `ai.cameratrack` (rastreamento de câmera), `ai.beauty` e `ai.makeup` (Retocar) e `ai.faceblur` (desfocar rostos, `FaceBlur`). Eles são executados pelo `AiFrameProcessor`, dentro do `FrameRenderer`.
 
 ### Registro de modelos
 

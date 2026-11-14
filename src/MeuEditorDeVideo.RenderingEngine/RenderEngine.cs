@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Core.AI;
+﻿using MeuEditorDeVideo.Core.AI;
 using System.Diagnostics;
 using System.Text.Json;
 using MeuEditorDeVideo.AudioEngine;
@@ -28,12 +28,13 @@ public sealed class RenderEngine(
     ICompositor compositor,
     IMediaProbe probe,
     ILogger<RenderEngine> logger,
-    IAiFrameProcessor? ai = null) : IRenderEngine
+    IAiFrameProcessor? ai = null,
+    IWaveformProvider? waveforms = null) : IRenderEngine
 {
     /// <summary>Duração de cada trecho codificado (granularidade da retomada).</summary>
     public static readonly TimeSpan SegmentLength = TimeSpan.FromSeconds(10);
 
-    private readonly FrameRenderer _frames = new(compositor, ai);
+    private readonly FrameRenderer _frames = new(compositor, ai, waveforms);
 
     private const double MuxWeight = 0.04;
     private const string StateFile = "state.json";

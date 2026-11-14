@@ -64,7 +64,7 @@ Depois de criar ou abrir um projeto, a tela de edição aparece. Ela é dividida
 
 - **Barra superior** (no topo da janela): à esquerda, os menus **Arquivo**, **Editar**, **Visualizar**, **Projeto**, **Ferramentas** e **Ajuda** e os botões **Salvar**, **Desfazer** e **Refazer**; no centro, o nome do projeto; à direita, **Tema**, **Fila de renderização**, **Exportar** e os botões de minimizar, maximizar e fechar a janela. Arraste a barra para mover a janela e dê um duplo clique nela para maximizar ou restaurar.
 - **Biblioteca de mídias** (à esquerda): no alto ficam as abas Biblioteca de Mídias, Vídeos, Imagens, Áudios, Elementos Gráficos, Textos, Transições, Efeitos, Cor e IA. Passe o mouse sobre uma aba para ver o nome completo. As mídias importadas aparecem em grade, com miniatura e duração.
-- **Pré-visualização** (no centro, em cima): mostra o resultado do vídeo. Em cima ficam a resolução da pré-visualização, o botão Proxy e o botão **Maximizar o monitor**, que faz a pré-visualização cobrir a biblioteca e a linha do tempo (o painel Propriedades continua visível; clique de novo para restaurar); embaixo, a barra de posição (arraste para ir a qualquer ponto), os botões de reproduzir, pausar e avançar quadro a quadro, o volume, a captura de quadro e a tela cheia.
+- **Pré-visualização** (no centro, em cima): mostra o resultado do vídeo. Em cima ficam a resolução da pré-visualização, o botão Proxy e o botão **Maximizar o monitor**, que faz a pré-visualização cobrir a biblioteca e a linha do tempo (o painel Propriedades continua visível; clique de novo para restaurar); embaixo, a barra de posição (arraste para ir a qualquer ponto), os botões de reproduzir, pausar e avançar quadro a quadro, o volume, a captura de quadro (salva o quadro atual em PNG ou JPEG, na resolução do projeto; também em **Arquivo › Exportar quadro atual…**) e a tela cheia.
 - **Propriedades** (à direita): mostra as informações e as configurações do item selecionado. Está dividida em abas: **Projeto** (resolução, taxa de quadros, duração, quantidade de mídias e clipes, arquivo), **Mídia**, **Vídeo**, **Texto**, **Composição**, **IA**, **Áudio**, **Efeitos**, **Cor** e **Histórico**.
 - **Linha do tempo** (embaixo): onde você monta o vídeo. Cada linha horizontal é uma trilha. Há uma barra de ferramentas logo acima dela.
 
@@ -72,7 +72,7 @@ Depois de criar ou abrir um projeto, a tela de edição aparece. Ela é dividida
 
 ### Menus
 
-- **Arquivo**: novo projeto, abrir, importar mídia, importar sequência de imagens, salvar, salvar como, criar cópia de segurança, exportar, fila de renderização e voltar ao início.
+- **Arquivo**: novo projeto, abrir, importar mídia, importar sequência de imagens, salvar, salvar como, criar cópia de segurança, exportar, fila de renderização, exportar quadro atual (PNG ou JPEG) e voltar ao início.
 - **Editar**: desfazer e refazer; selecionar tudo; dividir; **juntar os cortes** (desfaz uma divisão: clique na régua sobre o ponto do corte; só fica disponível quando os dois lados são a continuação da mesma mídia, sem ajustes diferentes); recortar, copiar, colar no cursor e duplicar; excluir, excluir e fechar o espaço (só na trilha do clipe) e **excluir e juntar** (fecha o espaço em todas as trilhas, mantendo a sincronia; trilhas bloqueadas não se movem e a operação é recusada se um clipe de outra trilha ocupar parte do trecho removido).
 - **Visualizar**:
   - **Modo do layout**: **Padrão**; **Linha do tempo** (a linha do tempo ocupa toda a largura); **Vídeo** (o monitor ocupa a metade direita, na altura toda).
@@ -80,8 +80,11 @@ Depois de criar ou abrir um projeto, a tela de edição aparece. Ela é dividida
   - **Nível de zoom no vídeo**: Ajuste (cabe no monitor) ou 10% a 400%; acima do tamanho do monitor aparecem barras de rolagem.
   - **Reproduzir/Pausar**, **Parar** (volta ao ponto onde a reprodução começou) e **Intervalo de reprodução em loop** (repete a seleção da linha do tempo ou, sem seleção, o projeto inteiro).
   - **Régua**: réguas em pixels do vídeo no alto e à esquerda da imagem.
-- **Projeto**: empacotar mídias no projeto e localizar mídias ausentes.
-- **Ferramentas**: mixer de áudio, editor de legendas, importar e exportar legendas, modelos de IA e configurações.
+- **Projeto**: empacotar mídias no projeto, **reenquadrar automaticamente** e localizar mídias ausentes.
+  - **Reenquadrar automaticamente…** muda o formato do projeto (9:16 para Reels, TikTok e Shorts; 1:1; 4:5; 16:9) e reposiciona cada clipe de vídeo e imagem para cobrir o novo quadro. Em **Acompanhar**, escolha **Rosto**, **Corpo inteiro** ou **Centro do quadro**. Para acompanhar a pessoa, o programa usa o modelo de remoção de fundo e cria keyframes de posição, que você pode ajustar depois na aba Vídeo. Os textos ficam como estão. O andamento aparece na aba **IA**, e tudo se desfaz com um único Ctrl+Z.
+- **Ferramentas**: mixer de áudio, editor de legendas, importar e exportar legendas, **texto para fala**, **analisar mídia**, modelos de IA e configurações.
+  - **Texto para fala…** transforma um texto em narração com as vozes instaladas no Windows, sem internet. Digite o texto, escolha a **Voz** e a **Velocidade** e clique em **Gerar e inserir**: o áudio vai para a biblioteca (categoria Narração) e entra na posição do cursor, na primeira trilha de áudio livre ou numa trilha nova chamada Narração. Para ter mais vozes, como as em português, instale-as em **Configurações do Windows › Hora e idioma › Fala**.
+  - **Analisar mídia** dá etiquetas a todas as mídias da biblioteca: tipo, orientação (horizontal, vertical, quadrado), resolução (HD, Full HD, 4K), duração (curto, longo) e som. Com os modelos instalados, também **fala** ou **sem fala**, o número de **cenas** e **pessoa** ou **sem pessoas**. As etiquetas aparecem ao passar o mouse sobre a mídia e a caixa **Pesquisar…** da biblioteca também procura nelas.
 - **Ajuda**: **Manual do usuário** (F1), **Atalhos de teclado…**, **Informações do sistema…**, **Abrir pasta de logs**, **Licenças de terceiros**, **Sobre o Meu Editor de Vídeo…**, **Verificar atualizações** e **Notas de lançamento** (estes dois ainda não estão disponíveis e aparecem desativados).
 
 O **Manual do usuário** abre este manual dentro do programa, sem internet. A lista à esquerda leva a cada assunto e Ctrl+F procura uma palavra. A janela pode ficar aberta enquanto você edita.
@@ -116,7 +119,7 @@ Cada mídia importada ganha uma miniatura. Ao selecionar uma mídia, a aba **Mí
 
 ### Organizar a biblioteca
 
-- Use a caixa **Pesquisar…** para encontrar uma mídia pelo nome.
+- Use a caixa **Pesquisar…** para encontrar uma mídia pelo nome, pela categoria ou pelas etiquetas criadas em **Ferramentas › Analisar mídia** (por exemplo "fala", "pessoa" ou "vertical").
 - Clique com o botão direito numa mídia para **Renomear…**, **Definir categoria…**, **Remover categoria**, **Adicionar à linha do tempo** ou **Remover do projeto**.
 - Remover uma mídia do projeto não apaga o arquivo do computador.
 
@@ -240,7 +243,10 @@ Esta aba reúne as configurações de movimento e tempo do clipe:
 - **Recorte**: corta as bordas do vídeo pela esquerda, pelo topo, pela direita e pela base.
 - **Mistura**: modo de mistura com outras camadas, como Multiplicar, Tela, Sobrepor, Luz suave, Adicionar, Escurecer, Clarear e Diferença.
 - **Fades**: **Entrada gradual** e **Saída gradual**, de 0 a 10 segundos, para o clipe surgir e desaparecer suavemente.
-- **Velocidade**: velocidades predefinidas ou outra velocidade. Abaixo de 1×, a opção **Câmera lenta suavizada** mistura quadros vizinhos para reduzir os saltos.
+- **Velocidade**: velocidades predefinidas ou outra velocidade. Abaixo de 1×, a opção **Câmera lenta suavizada** mistura quadros vizinhos para reduzir os saltos. **Reproduzir ao contrário** mostra o clipe do fim para o começo, com o áudio vinculado também invertido (também no menu de contexto do clipe; o clipe ganha o símbolo ◀ na linha do tempo). Não vale para quadros congelados. Em vídeos longos, use proxies para a reprodução ao contrário ficar fluida.
+  - **Câmera lenta por interpolação (fluxo óptico)**: abaixo de 1×, cria os quadros intermediários acompanhando o movimento, o que fica mais fluido que a simples mistura. Não precisa de modelo, mas deixa a reprodução e a exportação mais lentas.
+  - **Curva**: curva de velocidade (speed ramping). Escolha **Montagem**, **Herói**, **Bala**, **Pulo**, **Acelerar** ou **Desacelerar** para o clipe acelerar e desacelerar dentro dele, sem mudar a duração nem o trecho usado do vídeo. **Constante (sem curva)** volta ao normal. Com curva, o áudio do clipe fica mudo. Aparar ou dividir o clipe também volta à velocidade constante.
+  - **Desfoque de movimento**: rastro de movimento quando a posição, a escala ou a rotação estão animadas por keyframes. Em 100%, o rastro cobre o intervalo de um quadro inteiro.
 - **Congelar quadro**, **Repetir trecho**, **Preencher quadro**, **Girar 90°** e **Espelhar** na horizontal e na vertical.
 - **Transição de entrada**: aplica uma transição entre este clipe e o clipe que vem antes dele na mesma trilha. Para usar, os dois clipes precisam estar encostados. Você escolhe a transição e a **Duração da transição**.
 
@@ -251,7 +257,8 @@ Esta aba reúne as configurações de movimento e tempo do clipe:
   - **Fundo desfocado**: desfoca tudo o que não é a pessoa.
 
   O rastreamento usa o mesmo modelo de recorte de pessoa da aba **IA** (instale-o em **Modelos de IA**, se ainda não tiver). Sem o modelo ou sem pessoa no quadro, a câmera fica no centro e o fundo não é desfocado. O efeito também aparece na lista de efeitos aplicados da aba **Efeitos**.
-- **Retocar**: retoque do rosto da pessoa, quadro a quadro. Clique em **Beleza** ou **Maquiagem** para adicionar o retoque ao clipe; os ajustes aparecem logo abaixo.
+- **Retocar**: retoque do rosto da pessoa, quadro a quadro. Clique em **Beleza**, **Maquiagem** ou **Desfocar rostos** para adicionar o efeito ao clipe; os ajustes aparecem logo abaixo.
+  - **Desfocar rostos**: encontra o rosto em cada quadro e o esconde com **Desfoque**, **Pixelizar** ou **Tarja preta**. Ajuste a **Intensidade** e o **Tamanho da área**. Funciona com um rosto por quadro.
   - **Beleza**: **Pele · suavizar** e **Pele · clarear**, **Linhas de expressão** e **Bolsas abaixo dos olhos** (suavizam essas áreas), e ajustes de forma: **Rosto · afinar**, **Olhos · aumentar**, **Nariz · afinar**, **Boca · tamanho** e **Sobrancelhas · erguer** (valores negativos fazem o contrário).
   - **Maquiagem**: escolha um **Look** pronto (Natural, Glamour, Noite ou Rosado) ou **Nenhum**, e ajuste cada item: **Cílios**, **Sombra de olhos**, **Delineador**, **Sobrancelhas**, **Batom**, **Blush**, **Contorno**, **Realces**, **Cor dos olhos** e **Sardas**. Sombra, sobrancelhas, batom, blush e íris têm cor própria. Um item com valor acima de 0% usa o seu valor e a sua cor; com 0%, vale o que o look define.
 
@@ -268,6 +275,9 @@ Efeitos visuais disponíveis:
 - **Desfoque**, **Nitidez**, **Vinheta**, **Preto e branco**, **Sépia**, **Negativo**, **Pixelizar**, **Granulado**, **Posterizar** e **Brilho suave**.
 - **Chroma key**: remove um fundo verde, azul ou de outra cor escolhida. Tem tolerância, suavidade da transição, suavização das bordas, remoção do reflexo da cor e a opção de deixar o fundo transparente ou com cor sólida.
 - **Refinar bordas**: contrai ou expande a borda da transparência, suaviza e limpa a cor das bordas. Use depois do chroma key ou de uma máscara.
+- **Correção de lente**: corrige a curvatura das linhas retas causada por lentes grande-angulares e câmeras de ação (valores negativos) ou por teleobjetivas (positivos). **Zoom para esconder as bordas** amplia a imagem para tirar os cantos vazios.
+- **Redução de ruído de vídeo**: suaviza o granulado de gravações com pouca luz. **Preservar detalhes** mantém mais textura.
+- **Visualizador de áudio**: barras (normais ou espelhadas) ou uma onda que dançam com o som de uma música. Ao adicionar, escolha a música da biblioteca; ela precisa estar na linha do tempo. Ajuste o número de barras, a altura, a cor e a opacidade. Use num clipe de vídeo ou imagem (por exemplo, um fundo).
 
 Nas abas **Efeitos** e **Cor**, a opção **Comparar antes/depois no monitor** mostra, à esquerda de uma linha no monitor, o vídeo sem efeitos e sem correção de cor, para você comparar. Arraste a alça da linha para a direita ou para a esquerda para mudar a divisão.
 
@@ -286,12 +296,14 @@ Abaixo, em **Ferramentas de cor** (e na seção **Cor** da biblioteca), ficam as
 - **LUT 3D (.cube)**: aplica uma tabela de cores no formato .cube, muito usada para dar um estilo ao vídeo. Escolha a intensidade com o controle deslizante.
 - **HSL**: ajusta matiz, saturação e luminância de cada faixa de cor (vermelho, laranja, amarelo, verde, ciano, azul, roxo e magenta) sem mexer nas outras, por exemplo só o azul do céu. Cinzas, preto e branco não mudam.
 - **HDR**: aspecto HDR, que recupera sombras e realces e reforça os detalhes. Tem intensidade, sombras, realces, detalhes e vivacidade.
+- **Combinar cor**: iguala a cor e o contraste de um clipe aos de outro. Selecione o clipe e use **Combinar cor com o clipe anterior** na aba **IA**: o programa compara três quadros de cada clipe e cria o efeito, com ganho e deslocamento por canal. Ajuste a **Intensidade** para um meio-termo.
 
 ### Máscaras, rastreamento e estabilização
 
 Esses recursos ficam na aba **Composição**. Eles funcionam para vídeos, imagens, textos e elementos gráficos.
 
 - **Máscaras**: crie uma forma com **+ Retângulo**, **+ Elipse** ou **+ Livre** (pontos, com Ctrl+clique no monitor). A máscara recorta o que aparece do clipe. Você pode somar, subtrair ou fazer a interseção de máscaras, inverter a máscara e suavizar o contorno.
+- **Máscara de cor (só efeitos)**: marcada, a máscara não recorta o clipe; ela limita a correção de cor e os efeitos à área dela (por exemplo, clarear só o rosto ou desfocar só uma placa). A borda suavizada da máscara faz a transição.
 - **Forma-chave**: com o botão **◇ Forma-chave**, a máscara muda de forma ao longo do tempo.
 - **Rastreamento de movimento**: marque um objeto no monitor, clique em **Rastrear** e o programa acompanha esse objeto. Outro clipe pode então **Seguir** o movimento, com a opção **Seguir**. Use **Soltar** para desligar.
 - **Estabilização**: **Analisar e estabilizar** mede o movimento da câmera e compensa os tremores. Ajuste a **Suavidade** e a **Ampliação** da imagem. Use **Remover estabilização** para desfazer.
@@ -355,6 +367,8 @@ Selecione um clipe de áudio, ou um vídeo com som, e use a aba **Áudio**:
 - **Entrada gradual** e **Saída gradual**: fades de 0 a 10 segundos, para o som começar e terminar suavemente.
 - **Normalizar loudness**: ajusta o volume para um alvo de loudness (padrão EBU R128), sem passar de um pico seguro. Escolha o **Alvo de loudness** antes de aplicar.
 - **Remover silêncios**: corta os trechos silenciosos do clipe. Ajuste o **Limiar**, abaixo do qual o som é considerado silêncio, e a **Duração mínima** do silêncio.
+- **Batidas**: com a música selecionada, **Marcar batidas** cria um marcador em cada batida e **Cortar vídeos nas batidas** divide os clipes de vídeo e imagem que tocam junto com ela em cada batida (para montagens no ritmo). Ajuste a **Sensibilidade**: mais alta encontra mais batidas.
+- **Atenuar sob a fala**: com a música selecionada, clique em **Atenuar sob a fala** e o programa abaixa o volume dela nos trechos em que há fala nas outras trilhas (narração, entrevista). Escolha a **Redução** (padrão −12 dB) e a **Transição** (duração da descida e da subida). O resultado são keyframes de volume, que você pode ajustar; **Remover atenuação** apaga essa animação. Com o modelo de detecção de fala instalado, a detecção é mais precisa; sem ele, o programa usa o nível do som.
 - **Sincronizar pelo áudio**: se você gravou o mesmo momento com duas câmeras ou com um gravador de som, selecione os dois clipes e clique em **Sincronizar**. O programa alinha os dois sons. O clipe da trilha mais acima fica parado, e o outro é movido.
 - **Manter o tom na velocidade**: quando o clipe é acelerado ou desacelerado, a voz continua com tom natural.
 
@@ -369,6 +383,7 @@ Na mesma aba, em **Adicionar efeito de áudio**, estão os efeitos:
 - **Reverberação**: simula o som de uma sala.
 - **Telefone / rádio**: som de telefone ou rádio antigo.
 - **Distorção**: saturação do som.
+- **Mudar a voz**: vozes prontas (**Grave**, **Agudo**, **Esquilo**, **Monstro** e **Robô**) ou, em **Personalizado**, o **Tom** em semitons e a intensidade do **Robô**. A velocidade não muda.
 
 Os efeitos são aplicados na ordem em que aparecem na lista **Efeitos de áudio aplicados**.
 
@@ -393,7 +408,7 @@ Cada recurso usa um modelo de IA. O modelo do **Remover fundo** já vem com o pr
 | Remover trechos sem fala | Silero VAD 5 | Sim, cerca de 2,3 MB | Somente CPU |
 | Detectar cenas | TransNetV2 | Sim, cerca de 31 MB | CPU ou GPU |
 | Melhorar imagem | Swin2SR leve 2× | Sim, cerca de 8 MB | CPU ou GPU |
-| Retocar (beleza e maquiagem) | Face Mesh V2 | Sim, cerca de 5 MB | Somente CPU |
+| Retocar (beleza e maquiagem) e desfocar rostos | Face Mesh V2 | Sim, cerca de 5 MB | Somente CPU |
 
 A detecção de cenas funciona mesmo sem o modelo TransNetV2, comparando as imagens do vídeo. Nesse caso, a precisão é menor.
 

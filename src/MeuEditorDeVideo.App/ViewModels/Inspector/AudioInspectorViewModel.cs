@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.App.ViewModels.Timeline;
 using MeuEditorDeVideo.AudioEngine.Dsp;
+using MeuEditorDeVideo.Core.AI;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Effects;
@@ -23,15 +24,17 @@ public sealed partial class AudioInspectorViewModel : ObservableObject, IClipEdi
     private static readonly CultureInfo Pt = CultureInfo.GetCultureInfo("pt-BR");
     private readonly IDialogService _dialogs;
     private readonly IAudioAnalysisService _analysis;
+    private readonly IVoiceActivityService _vad;
     private Guid? _clipId;
     private bool _updating;
     private CancellationTokenSource? _work;
 
-    public AudioInspectorViewModel(TimelineViewModel timeline, IDialogService dialogs, IAudioAnalysisService analysis)
+    public AudioInspectorViewModel(TimelineViewModel timeline, IDialogService dialogs, IAudioAnalysisService analysis, IVoiceActivityService vad)
     {
         Timeline = timeline;
         _dialogs = dialogs;
         _analysis = analysis;
+        _vad = vad;
         Volume = new AnimatedValueViewModel(this, AnimatedProperty.Volume, "Volume do clipe", 0, 400, "%", 100, 1);
         Fades =
         [
@@ -104,11 +107,34 @@ public sealed partial class AudioInspectorViewModel : ObservableObject, IClipEdi
     public string SilenceThresholdDisplay => SilenceThreshold.ToString("0", Pt) + " dB";
     public string SilenceMinDisplay => SilenceMinSeconds.ToString("0.0", Pt) + " s";
 
+    /// <summary>Atenuação automática: redução do volume durante a fala (dB, negativo).</summary>
+    [ObservableProperty]
+    public partial double DuckGainDb { get; set; } = -12;
+
+    /// <summary>Atenuação automática: duração das rampas de descida e subida (s).</summary>
+    [ObservableProperty]
+    public partial double DuckFadeSeconds { get; set; } = 0.3;
+
+    /// <summary>Detecção de batidas: sensibilidade 0–100 (maior = mais batidas).</summary>
+    [ObservableProperty]
+    public partial double BeatSensitivity { get; set; } = 50;
+
+    public string BeatSensitivityDisplay => BeatSensitivity.ToString("0", Pt) + " %";
+
+    partial void OnBeatSensitivityChanged(double value) => OnPropertyChanged(nameof(BeatSensitivityDisplay));
+
+    public string DuckGainDisplay => DuckGainDb.ToString("0", Pt) + " dB";
+    public string DuckFadeDisplay => DuckFadeSeconds.ToString("0.0", Pt) + " s";
+
+    partial void OnDuckGainDbChanged(double value) => OnPropertyChanged(nameof(DuckGainDisplay));
+    partial void OnDuckFadeSecondsChanged(double value) => OnPropertyChanged(nameof(DuckFadeDisplay));
+
     partial void OnSilenceThresholdChanged(double value) => OnPropertyChanged(nameof(SilenceThresholdDisplay));
     partial void OnSilenceMinSecondsChanged(double value) => OnPropertyChanged(nameof(SilenceMinDisplay));
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(NormalizeCommand), nameof(RemoveSilenceCommand), nameof(SyncCommand))]
+    [NotifyCanExecuteChangedFor(nameof(NormalizeCommand), nameof(RemoveSilenceCommand), nameof(SyncCommand), nameof(DuckCommand),
+        nameof(DetectBeatsCommand), nameof(CutAtBeatsCommand))]
     public partial bool IsBusy { get; set; }
 
     /// <summary>Resultado da última análise (ex.: "Medido: −20,1 LUFS · ganho aplicado +6,1 dB").</summary>
@@ -260,6 +286,53 @@ public sealed partial class AudioInspectorViewModel : ObservableObject, IClipEdi
 
     private bool CanAnalyze() => !IsBusy;
 
+    /// <summary>Detecta as batidas da música selecionada e cria marcadores nelas.</summary>
+    [RelayCommand(CanExecute = nameof(CanAnalyze))]
+    private async Task DetectBeatsAsync()
+    {
+        if (!EnsureClip() || Current() is not { } cur || Timeline.Project is not { } project) return;
+        var sensitivity = BeatSensitivity / 100;
+        await RunAsync("Detectando as batidas…", async ct =>
+        {
+            var beats = await _analysis.DetectBeatsAsync(project, cur.Clip, Timeline.MediaPaths, sensitivity, ct);
+            if (beats.Count == 0)
+            {
+                AnalysisStatus = "Nenhuma batida encontrada. Aumente a sensibilidade.";
+                return;
+            }
+            AnalysisStatus = Timeline.Execute(new AddMarkersCommand(Timeline.SequenceId, beats, "Batida"))
+                ? $"{beats.Count} batidas marcadas na linha do tempo."
+                : "Não foi possível criar os marcadores.";
+        });
+    }
+
+    /// <summary>
+    /// Cortar nas batidas: detecta as batidas da música selecionada e divide os clipes de vídeo e imagem das trilhas
+    /// visuais (desbloqueadas) que tocam junto com ela.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanAnalyze))]
+    private async Task CutAtBeatsAsync()
+    {
+        if (!EnsureClip() || Current() is not { } cur || Timeline.Project is not { } project || Timeline.Sequence is not { } seq) return;
+        var music = cur.Clip;
+        var targets = seq.Tracks.Where(t => t.IsVisual && !t.IsLocked).SelectMany(t => t.Clips)
+            .Where(c => c.MediaAssetId is not null && c.Id != music.Id && (music.LinkId is null || c.LinkId != music.LinkId) && c.Start < music.End && c.End > music.Start)
+            .Select(c => c.Id).ToList();
+        if (targets.Count == 0)
+        {
+            _dialogs.ShowInfo("Cortar nas batidas", "Não há clipes de vídeo ou imagem tocando junto com esta música.");
+            return;
+        }
+        var sensitivity = BeatSensitivity / 100;
+        await RunAsync("Detectando as batidas…", async ct =>
+        {
+            var beats = await _analysis.DetectBeatsAsync(project, music, Timeline.MediaPaths, sensitivity, ct);
+            AnalysisStatus = beats.Count > 0 && Timeline.Execute(new SplitAtTimesCommand(Timeline.SequenceId, beats, targets))
+                ? $"Clipes cortados nas batidas ({beats.Count} batidas)."
+                : "Nenhuma batida cai dentro dos clipes de vídeo.";
+        });
+    }
+
     /// <summary>Normaliza o loudness do clipe para o alvo escolhido, limitando o pico em −1 dBFS (RF126).</summary>
     [RelayCommand(CanExecute = nameof(CanAnalyze))]
     private async Task NormalizeAsync()
@@ -347,6 +420,75 @@ public sealed partial class AudioInspectorViewModel : ObservableObject, IClipEdi
                 ? $"Sincronizado: deslocado {delta.TotalSeconds.ToString("+0.000;−0.000", Pt)} s (confiança {result.Confidence.ToString("P0", Pt)})."
                 : "Não foi possível mover o clipe.";
         });
+    }
+
+    /// <summary>
+    /// Atenuação automática: procura fala nos clipes com áudio das outras trilhas (não mudas) que tocam junto com o
+    /// clipe selecionado e abaixa o volume dele nesses trechos, com keyframes de volume.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanAnalyze))]
+    private async Task DuckAsync()
+    {
+        if (!EnsureClip() || Current() is not { } cur || Timeline.Project is not { } project || Timeline.Sequence is not { } seq) return;
+        var target = cur.Clip;
+        // Fala: clipes das trilhas de áudio; um vídeo só conta quando não tem um clipe de áudio vinculado.
+        var linkedAudio = seq.Tracks.Where(t => t.Kind == TrackKind.Audio).SelectMany(t => t.Clips)
+            .Where(c => c.LinkId is not null).Select(c => c.LinkId).ToHashSet();
+        var voices = new List<Clip>();
+        foreach (var track in seq.Tracks)
+        {
+            if (track.Id == cur.Track.Id || track.IsMuted) continue;
+            if (track.Kind is not (TrackKind.Audio or TrackKind.Video)) continue;
+            foreach (var c in track.Clips)
+            {
+                if (c.Id == target.Id || c.Start >= target.End || c.End <= target.Start) continue;
+                if (target.LinkId is not null && c.LinkId == target.LinkId) continue;
+                if (track.Kind == TrackKind.Video && c.LinkId is not null && linkedAudio.Contains(c.LinkId)) continue;
+                if (c.MediaAssetId is { } id && project.FindMedia(id) is { HasAudio: true }) voices.Add(c);
+            }
+        }
+        if (voices.Count == 0)
+        {
+            _dialogs.ShowInfo("Atenuação automática",
+                "Não há outro clipe com áudio tocando junto com este. Coloque a narração ou a fala em outra trilha e tente de novo.");
+            return;
+        }
+
+        await RunAsync("Procurando fala nas outras trilhas…", async ct =>
+        {
+            var speech = new List<TimeRange>();
+            foreach (var v in voices)
+            {
+                if (_vad.IsAvailable)
+                    speech.AddRange(await _vad.DetectSpeechAsync(project, v, Timeline.MediaPaths, cancellationToken: ct));
+                else
+                {
+                    var silences = await _analysis.DetectSilenceAsync(project, v, Timeline.MediaPaths, SilenceThreshold,
+                        MediaTime.FromSecondsApprox(0.3), MediaTime.Zero, ct);
+                    speech.AddRange(Ducking.Complement(silences, v.Start, v.End));
+                }
+            }
+            var fade = MediaTime.FromSecondsApprox(DuckFadeSeconds);
+            var inClip = Ducking.Merge(Ducking.ToClipOffsets(target, speech), Ducking.DefaultMergeGap + fade + fade);
+            if (inClip.Count == 0)
+            {
+                AnalysisStatus = "Nenhuma fala encontrada enquanto este clipe toca.";
+                return;
+            }
+            var gain = DuckGainDb;
+            Timeline.Execute(new UpdateClipCommand(Timeline.SequenceId, target.Id, c => Ducking.Apply(c, speech, gain, fade), "Atenuação automática"));
+            AnalysisStatus = $"Volume reduzido em {inClip.Count} {(inClip.Count == 1 ? "trecho" : "trechos")} com fala" +
+                             (_vad.IsAvailable ? "." : " (detecção pelo nível do som; instale o modelo de detecção de fala para mais precisão).");
+        });
+    }
+
+    /// <summary>Remove a atenuação (a animação de volume) do clipe selecionado.</summary>
+    [RelayCommand]
+    private void RemoveDuck()
+    {
+        if (!EnsureClip()) return;
+        UpdateClip(Ducking.Remove, "Remover atenuação");
+        AnalysisStatus = "";
     }
 
     private async Task RunAsync(string status, Func<CancellationToken, Task> work)

@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.AudioEngine.Dsp;
+﻿using MeuEditorDeVideo.AudioEngine.Dsp;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
@@ -31,6 +31,18 @@ public sealed class AudioAnalysisService(IAudioSampleSourceFactory factory) : IA
         var ranges = detector.Detect(thresholdDb, AudioFormat.ToFrames(minDuration), AudioFormat.ToFrames(padding));
         IReadOnlyList<TimeRange> result = ranges
             .Select(r => new TimeRange(clip.Start + AudioFormat.FromFrames(r.Start), clip.Start + AudioFormat.FromFrames(r.End)))
+            .ToList();
+        return result;
+    }, cancellationToken);
+
+    public Task<IReadOnlyList<MediaTime>> DetectBeatsAsync(Project project, Clip clip, IReadOnlyDictionary<Guid, string> paths,
+        double sensitivity, CancellationToken cancellationToken = default) => Task.Run(() =>
+    {
+        var detector = new BeatDetector();
+        RenderClip(project, clip, paths, applyGain: false, clip.Duration, s => detector.Add(s), cancellationToken);
+        IReadOnlyList<MediaTime> result = detector.Detect(sensitivity)
+            .Select(f => clip.Start + AudioFormat.FromFrames(f))
+            .Where(t => t < clip.End)
             .ToList();
         return result;
     }, cancellationToken);
@@ -89,6 +101,7 @@ public static class AudioEngineServiceCollectionExtensions
     public static IServiceCollection AddAudioEngine(this IServiceCollection services)
     {
         services.AddSingleton<IAudioAnalysisService, AudioAnalysisService>();
+        services.AddSingleton<ISpeechSynthesisService, SpeechSynthesisService>();
         return services;
     }
 }

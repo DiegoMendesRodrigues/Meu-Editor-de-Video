@@ -18,6 +18,11 @@ public sealed class AiFrameProcessor(ISegmentationService segmentation, IFaceLan
             if (face is null) return (image, false);
             return (effect.Type == EffectCatalog.Beauty ? FaceRetouch.Beauty(image, face, effect) : FaceRetouch.Makeup(image, face, effect), false);
         }
+        if (effect.Type == EffectCatalog.FaceBlur)
+        {
+            var face = faces.Detect(asset, path, sourceTime, image);
+            return (face is null ? image : FaceBlur.Apply(image, face, effect), false);
+        }
         if (effect.Type == EffectCatalog.CameraTrack)
         {
             var tracked = segmentation.GetMatte(asset, path, sourceTime, image, EffectCatalog.Value(effect, "temporal") / 100);
@@ -27,4 +32,6 @@ public sealed class AiFrameProcessor(ISegmentationService segmentation, IFaceLan
         var matte = segmentation.GetMatte(asset, path, sourceTime, image, EffectCatalog.Value(effect, "temporal") / 100);
         return matte is null ? (image, false) : BackgroundCompositor.Apply(image, matte, effect, background, pixelScale);
     }
+
+    public BgraImage? Interpolate(BgraImage a, BgraImage b, double weight) => FrameInterpolator.Interpolate(a, b, weight);
 }

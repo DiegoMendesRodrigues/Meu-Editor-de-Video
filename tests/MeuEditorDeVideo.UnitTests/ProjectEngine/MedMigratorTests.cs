@@ -15,8 +15,8 @@ public sealed class MedMigratorTests
         var migrated = MedMigrator.Default.Migrate(project, new MedVersion(1, 2), out var warnings);
 
         Assert.True(migrated);
-        Assert.Equal(new MedVersion(1, 3), MedMigrator.Current);
-        Assert.Contains(warnings, w => w.Contains("1.2") && w.Contains("1.3"));
+        Assert.Equal(new MedVersion(1, 4), MedMigrator.Current);
+        Assert.Contains(warnings, w => w.Contains("1.2") && w.Contains("1.4"));
         Assert.Equal(before, project.ToJsonString());
     }
 

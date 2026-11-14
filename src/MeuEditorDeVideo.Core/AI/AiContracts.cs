@@ -242,6 +242,12 @@ public interface IAiFrameProcessor
     /// </summary>
     (BgraImage Image, bool AlphaChanged) Apply(EffectInstance effect, BgraImage image, MediaAsset asset, string? path, MediaTime sourceTime,
         Func<int, int, BgraImage?> background, double pixelScale);
+
+    /// <summary>
+    /// Quadro intermediário entre <paramref name="a"/> e <paramref name="b"/> por fluxo óptico (câmera lenta por interpolação),
+    /// na fração <paramref name="weight"/> (0 = a, 1 = b). Nulo = não disponível (usa a mistura simples).
+    /// </summary>
+    BgraImage? Interpolate(BgraImage a, BgraImage b, double weight) => null;
 }
 
 /// <summary>Melhoria de imagem por IA (RF164): super-resolução 2× de fotos.</summary>
@@ -250,4 +256,30 @@ public interface IImageEnhancementService
     bool IsAvailable { get; }
 
     Task EnhanceImageAsync(string inputPath, string outputPath, IProgress<double>? progress = null, CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// Reenquadrar automaticamente: onde está a pessoa em cada trecho do clipe, para manter o foco ao mudar o formato do
+/// projeto. Usa a máscara da pessoa (modelo de segmentação).
+/// </summary>
+public interface IReframeService
+{
+    /// <summary>Há modelo de segmentação para acompanhar a pessoa.</summary>
+    bool IsAvailable { get; }
+
+    /// <summary>Pontos de foco (cabeça ou corpo) ao longo do clipe, suavizados. Sem pessoa visível, repete o último ponto (ou o centro).</summary>
+    Task<IReadOnlyList<MeuEditorDeVideo.Domain.Editing.FocusSample>> AnalyzeAsync(Project project, Clip clip,
+        IReadOnlyDictionary<Guid, string> paths, bool head, IProgress<double>? progress = null, CancellationToken cancellationToken = default);
+}
+
+/// <summary>Análise de mídia (etiquetas da biblioteca) e "Combinar cor" entre clipes.</summary>
+public interface IMediaAnalysisService
+{
+    /// <summary>Etiquetas da mídia: formato e duração, e — com os modelos instalados — fala, cenas e pessoas.</summary>
+    Task<System.Collections.Immutable.ImmutableList<string>> AnalyzeAsync(Project project, MediaAsset asset, IReadOnlyDictionary<Guid, string> paths,
+        IProgress<double>? progress = null, CancellationToken cancellationToken = default);
+
+    /// <summary>Ganho e deslocamento por canal (R, G, B) que aproximam a cor de <paramref name="target"/> à de <paramref name="reference"/>.</summary>
+    Task<(double Gain, double Offset)[]> MatchColorAsync(Project project, Clip target, Clip reference, IReadOnlyDictionary<Guid, string> paths,
+        CancellationToken cancellationToken = default);
 }

@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -127,6 +127,9 @@ public sealed partial class CompositionInspectorViewModel : ObservableObject, IC
 
     public bool HasSelectedMask => SelectedMask is not null;
     [ObservableProperty] public partial bool MaskInvert { get; set; }
+
+    /// <summary>Máscara de cor: limita os efeitos e a cor à área, sem recortar a camada.</summary>
+    [ObservableProperty] public partial bool MaskEffectsOnly { get; set; }
     [ObservableProperty] public partial bool MaskSmooth { get; set; }
     [ObservableProperty] public partial bool MaskIsPath { get; set; }
     [ObservableProperty] public partial Option<MaskMode>? SelectedMaskMode { get; set; }
@@ -258,6 +261,7 @@ public sealed partial class CompositionInspectorViewModel : ObservableObject, IC
             if (SelectedMaskOf(clip) is { } mask)
             {
                 MaskInvert = mask.Invert;
+                MaskEffectsOnly = mask.EffectsOnly;
                 MaskSmooth = mask.Smooth;
                 MaskIsPath = mask.Kind == MaskKind.Path;
                 SelectedMaskMode = MaskModes.First(m => m.Value == mask.Mode);
@@ -539,6 +543,12 @@ public sealed partial class CompositionInspectorViewModel : ObservableObject, IC
     partial void OnMaskInvertChanged(bool value)
     {
         if (!_updating) UpdateClip(c => WithMask(c, m => m with { Invert = value }), value ? "Inverter máscara" : "Desinverter máscara");
+    }
+
+    partial void OnMaskEffectsOnlyChanged(bool value)
+    {
+        if (!_updating) UpdateClip(c => WithMask(c, m => m with { EffectsOnly = value }),
+            value ? "Máscara de cor (só efeitos)" : "Máscara de recorte");
     }
 
     partial void OnMaskSmoothChanged(bool value)

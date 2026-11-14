@@ -255,6 +255,7 @@
                 <Separator />
                 <MenuItem Header="{StaticResource Editor.Menu.Exportar}" Command="{Binding ExportCommand}" ctl:ShortcutText.Action="projeto.exportar" />
                 <MenuItem Header="{StaticResource Editor.Menu.FilaRenderizacao}" Command="{Binding ShowRenderQueueCommand}" />
+                <MenuItem Header="{StaticResource Editor.Menu.ExportarQuadro}" Command="{Binding Preview.CaptureFrameCommand}" AutomationProperties.Name="Exportar quadro atual" />
                 <Separator />
                 <MenuItem Header="{StaticResource Editor.Menu.Inicio}" Command="{Binding GoHomeCommand}" />
             </MenuItem>
@@ -305,6 +306,7 @@
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Projeto}">
                 <MenuItem Header="{StaticResource Editor.Menu.EmpacotarMidias}" Command="{Binding PackageMediaCommand}" />
+                <MenuItem Header="{StaticResource Editor.Menu.Reenquadrar}" Command="{Binding AiInspector.ReframeProjectCommand}" AutomationProperties.Name="Reenquadrar automaticamente" />
                 <MenuItem Header="{StaticResource Editor.Menu.MidiasAusentes}" Command="{Binding ShowMissingMediaCommand}" />
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Ferramentas}">
@@ -312,6 +314,9 @@
                 <MenuItem Header="{StaticResource Editor.Ferramenta.EditorLegendas}" Click="EditorLegendas_Click" IsEnabled="{Binding Timeline.HasSession}" />
                 <MenuItem Header="{StaticResource Editor.Ferramenta.ImportarLegendas}" Command="{Binding TextLibrary.ImportSubtitlesCommand}" />
                 <MenuItem Header="{StaticResource Editor.Ferramenta.ExportarLegendas}" Command="{Binding TextLibrary.ExportSubtitlesCommand}" />
+                <Separator />
+                <MenuItem Header="{StaticResource Editor.Ferramenta.TextoParaFala}" Command="{Binding AiInspector.TextToSpeechCommand}" AutomationProperties.Name="Texto para fala" />
+                <MenuItem Header="{StaticResource Editor.Ferramenta.AnalisarMidia}" Command="{Binding AiInspector.AnalyzeMediaCommand}" AutomationProperties.Name="Analisar mídia" />
                 <Separator />
                 <MenuItem Header="{StaticResource Editor.Ferramenta.ModelosIA}" Click="ModelosIA_Click" AutomationProperties.Name="Modelos de IA" />
                 <Separator />
@@ -1239,6 +1244,7 @@
                                         <MenuItem Header="{StaticResource Editor.Timeline.Duplicar}" ctl:ShortcutText.Action="linha.duplicar" Command="{Binding Timeline.DuplicateCommand}" />
                                         <Separator />
                                         <MenuItem Header="{StaticResource Editor.Timeline.Velocidade}" Command="{Binding Timeline.SetSpeedCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Clipe.AoContrario}" Command="{Binding Timeline.ToggleReverseCommand}" AutomationProperties.Name="Reproduzir ao contrário" />
                                         <MenuItem Header="{StaticResource Editor.Timeline.CorClipe}">
                                             <MenuItem Header="{StaticResource Editor.Timeline.CorAutomatica}" Command="{Binding Timeline.SetClipColorCommand}" CommandParameter="" />
                                             <Separator />

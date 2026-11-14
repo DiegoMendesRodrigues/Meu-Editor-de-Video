@@ -100,7 +100,8 @@ public sealed partial class MediaItemViewModel : ObservableObject
         _ => Asset.Width > 0 ? $"{Asset.Width} × {Asset.Height}" + (Asset.FrameRate is { } f ? $" · {f} FPS" : "") : KindLabel,
     };
 
-    public string ToolTip => IsMissing ? $"{Name}\nArquivo não encontrado: {Asset.OriginalPath}" : $"{Name}\n{Asset.OriginalPath}";
+    public string ToolTip => (IsMissing ? $"{Name}\nArquivo não encontrado: {Asset.OriginalPath}" : $"{Name}\n{Asset.OriginalPath}")
+        + (Asset.Tags.Count > 0 ? "\nEtiquetas: " + string.Join(", ", Asset.Tags) : "");
 
     public IReadOnlyList<MediaInfoLine> InfoLines
     {

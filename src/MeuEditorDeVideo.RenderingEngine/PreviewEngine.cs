@@ -75,12 +75,13 @@ public sealed class PreviewEngine : IDisposable
     private MixerLevels _currentLevels = MixerLevels.Empty;
 
     public PreviewEngine(IVideoFrameSourceFactory videoFactory, IAudioSampleSourceFactory audioFactory,
-        IAudioOutputFactory outputFactory, ICompositor compositor, ILogger<PreviewEngine> logger, IAiFrameProcessor? ai = null)
+        IAudioOutputFactory outputFactory, ICompositor compositor, ILogger<PreviewEngine> logger, IAiFrameProcessor? ai = null,
+        IWaveformProvider? waveforms = null)
     {
         _videoFactory = videoFactory;
         _audioFactory = audioFactory;
         _outputFactory = outputFactory;
-        _frames = new FrameRenderer(compositor, ai);
+        _frames = new FrameRenderer(compositor, ai, waveforms);
         _logger = logger;
         _renderThread = new Thread(RenderLoop) { IsBackground = true, Name = "Pré-visualização", Priority = ThreadPriority.AboveNormal };
         _renderThread.Start();
