@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
@@ -9,7 +9,13 @@ using MeuEditorDeVideo.Domain.Model;
 namespace MeuEditorDeVideo.App.ViewModels.Timeline;
 
 /// <summary>Modelo da seção Textos da biblioteca.</summary>
-public sealed record TextPresetItem(TextKind Kind, string Name, string Description, string Sample);
+public sealed record TextPresetItem(TextKind Kind, string Name, string Description, string Sample)
+{
+    // Textos em pt-BR no código, fora da árvore WPF que o LocalizationHook traduz.
+    public string Name { get; init; } = Localization.Translator.T(Name);
+
+    public string Description { get; init; } = Localization.Translator.T(Description);
+}
 
 /// <summary>
 /// Seção "Textos" da biblioteca (F8): insere textos, títulos, créditos, tarjas e legendas na posição do cursor

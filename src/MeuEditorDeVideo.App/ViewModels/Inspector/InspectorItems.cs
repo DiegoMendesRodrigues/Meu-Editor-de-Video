@@ -401,6 +401,11 @@ public sealed partial class WheelParameterViewModel(EffectItemViewModel owner, E
 /// <summary>Item da biblioteca de efeitos/cor/transições (painel A).</summary>
 public sealed record LibraryEffectItem(string Key, string Name, string Description, string Glyph)
 {
+    // Os nomes vêm do catálogo em pt-BR (código), fora da árvore WPF que o LocalizationHook traduz.
+    public string Name { get; init; } = Localization.Translator.T(Name);
+
+    public string Description { get; init; } = Localization.Translator.T(Description);
+
     /// <summary>Nome lido por leitores de tela (o item da lista usa o texto do objeto).</summary>
     public override string ToString() => Name;
 }
