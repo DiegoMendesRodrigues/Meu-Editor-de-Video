@@ -1,7 +1,7 @@
 # Listagem da Microsoft Store — Português (Brasil)
 
 Textos prontos para copiar em **Partner Center › (o aplicativo) › Envio › Listagens da Store › Português (Brasil)**.
-Os limites entre parênteses são os do Partner Center. A listagem em inglês está em `LISTAGEM_EN-US.md`.
+Os limites entre parênteses são os do Partner Center. A listagem em inglês está em `LISTAGEM_EN-US.md` e a em espanhol em `LISTAGEM_ES-ES.md`.
 
 ---
 

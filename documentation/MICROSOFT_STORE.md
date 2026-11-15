@@ -13,8 +13,8 @@ certificado de assinatura de código**. Quem instala pela Store não vê o aviso
 | `scripts/build-msix.ps1` | Gera o pacote `artifacts/store/MeuEditorDeVideo_<versão>_x64.msix`, os ícones e os logotipos da listagem. |
 | `installer/Store/Package.appxmanifest` | Manifesto do pacote: identidade, Windows 11, associação de arquivos `.med`, capacidades e dependência do runtime do Visual C++. |
 | `installer/Store/store.json` | Identidade reservada no Partner Center (preencher no passo 3). |
-| `installer/Store/LISTAGEM_PT-BR.md` e `LISTAGEM_EN-US.md` | Textos da página da loja em português do Brasil e em inglês: descrição, novidades, recursos, palavras-chave, requisitos e legendas das capturas. |
-| `installer/Store/capturas/pt-BR/` e `en-US/` | Capturas de tela (1938 × 1038) para cada listagem, com o programa no idioma dela. |
+| `installer/Store/LISTAGEM_PT-BR.md`, `LISTAGEM_EN-US.md` e `LISTAGEM_ES-ES.md` | Textos da página da loja em português do Brasil, inglês e espanhol: descrição, novidades, recursos, palavras-chave, requisitos e legendas das capturas. |
+| `installer/Store/capturas/pt-BR/`, `en-US/` e `es-ES/` | Capturas de tela (1938 × 1038) para cada listagem, com o programa no idioma dela. |
 | `POLITICA_DE_PRIVACIDADE.md` | Política de privacidade (precisa estar publicada num endereço público). |
 
 ## 1. Conta de desenvolvedor
@@ -143,11 +143,13 @@ Envie `artifacts/store/MeuEditorDeVideo_<versão>_x64.msix`. Família de disposi
 
 ### Listagens da Store
 
-O pacote declara seis idiomas (`<Resources>` do manifesto), mas a página da loja existe em dois:
+O pacote declara seis idiomas (`<Resources>` do manifesto), mas a página da loja existe em três:
 
 1. **Português (Brasil)**: textos de `installer/Store/LISTAGEM_PT-BR.md` e capturas de `installer/Store/capturas/pt-BR/`.
 2. **Inglês (Estados Unidos)**: em **Gerenciar idiomas adicionais**, acrescente o idioma; depois use
    `installer/Store/LISTAGEM_EN-US.md` e `installer/Store/capturas/en-US/`.
+3. **Espanhol (Espanha)**: do mesmo jeito, com `installer/Store/LISTAGEM_ES-ES.md` e `installer/Store/capturas/es-ES/`.
+   O texto é neutro e pode ser repetido em variantes como Espanhol (México).
 
 Os demais idiomas do pacote mostram a listagem em inglês.
 
@@ -169,7 +171,7 @@ Clique em **Enviar para a Store**. A certificação costuma levar de algumas hor
 
 1. Aumente `<Version>` em `Directory.Build.props`.
 2. `pwsh scripts/build-msix.ps1`.
-3. Se a interface mudou, refaça as capturas em `installer/Store/capturas/pt-BR/` e `en-US/`.
+3. Se a interface mudou, refaça as capturas em `installer/Store/capturas/pt-BR/`, `en-US/` e `es-ES/`.
 4. No Partner Center: **Atualizar** a submissão e substitua o pacote.
-5. Em **cada** listagem (Português (Brasil) e Inglês), preencha "O que há de novo nesta versão" com o texto de
-   `LISTAGEM_PT-BR.md` e `LISTAGEM_EN-US.md`, e troque as capturas se elas mudaram.
+5. Em **cada** listagem (Português (Brasil), Inglês e Espanhol), preencha "O que há de novo nesta versão" com o texto de
+   `LISTAGEM_PT-BR.md`, `LISTAGEM_EN-US.md` e `LISTAGEM_ES-ES.md`, e troque as capturas se elas mudaram.
