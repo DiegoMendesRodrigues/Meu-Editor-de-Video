@@ -29,3 +29,6 @@ desktop.ini
 
 # Saídas do instalador (scripts/build-installer.ps1)
 /artifacts/
+
+# Site do produto (contém o arquivo de configuração com a senha do e-mail)
+/website/
