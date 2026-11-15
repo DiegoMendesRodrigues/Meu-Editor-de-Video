@@ -30,7 +30,14 @@
   </Dependencies>
 
   <Resources>
+    <!-- Idiomas da interface (Configurações › Idioma). A Store mostra estes como idiomas compatíveis;
+         a listagem existe em pt-BR e en-US (installer/Store/LISTAGEM_*.md). -->
     <Resource Language="pt-BR" />
+    <Resource Language="en-US" />
+    <Resource Language="pt-PT" />
+    <Resource Language="es-ES" />
+    <Resource Language="fr-FR" />
+    <Resource Language="de-DE" />
   </Resources>
 
   <Applications>

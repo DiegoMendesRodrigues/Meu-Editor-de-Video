@@ -165,7 +165,7 @@ $utf8 = New-Object System.Text.UTF8Encoding $false
 # ---------------------------------------------------------------- 3. resources.pri (só os ícones são indexados)
 $makepri = Find-SdkTool 'makepri.exe'
 $priConfig = Join-Path $out 'priconfig.xml'
-Invoke-Checked $makepri @('createconfig', '/cf', $priConfig, '/dq', 'pt-BR', '/pv', '10.0.0', '/o') -Quiet
+Invoke-Checked $makepri @('createconfig', '/cf', $priConfig, '/dq', 'pt-BR_en-US_pt-PT_es-ES_fr-FR_de-DE', '/pv', '10.0.0', '/o') -Quiet
 # Pacote único (não bundle): todas as escalas ficam no resources.pri, sem pacotes de recursos separados.
 [xml]$cfg = Get-Content -Raw $priConfig
 foreach ($node in @($cfg.SelectNodes('//packaging'))) { [void]$node.ParentNode.RemoveChild($node) }

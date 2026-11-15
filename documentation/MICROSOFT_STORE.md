@@ -13,8 +13,8 @@ certificado de assinatura de código**. Quem instala pela Store não vê o aviso
 | `scripts/build-msix.ps1` | Gera o pacote `artifacts/store/MeuEditorDeVideo_<versão>_x64.msix`, os ícones e os logotipos da listagem. |
 | `installer/Store/Package.appxmanifest` | Manifesto do pacote: identidade, Windows 11, associação de arquivos `.med`, capacidades e dependência do runtime do Visual C++. |
 | `installer/Store/store.json` | Identidade reservada no Partner Center (preencher no passo 3). |
-| `installer/Store/LISTAGEM_PT-BR.md` | Textos da página da loja: descrição, recursos, palavras-chave, requisitos e legendas das capturas. |
-| `installer/Store/capturas/` | Capturas de tela para a página da loja. |
+| `installer/Store/LISTAGEM_PT-BR.md` e `LISTAGEM_EN-US.md` | Textos da página da loja em português do Brasil e em inglês: descrição, novidades, recursos, palavras-chave, requisitos e legendas das capturas. |
+| `installer/Store/capturas/pt-BR/` e `en-US/` | Capturas de tela (1938 × 1038) para cada listagem, com o programa no idioma dela. |
 | `POLITICA_DE_PRIVACIDADE.md` | Política de privacidade (precisa estar publicada num endereço público). |
 
 ## 1. Conta de desenvolvedor
@@ -143,8 +143,13 @@ Envie `artifacts/store/MeuEditorDeVideo_<versão>_x64.msix`. Família de disposi
 
 ### Listagens da Store
 
-Adicione o idioma **Português (Brasil)** e copie os textos de `installer/Store/LISTAGEM_PT-BR.md`. Envie as capturas
-de `installer/Store/capturas/`.
+O pacote declara seis idiomas (`<Resources>` do manifesto), mas a página da loja existe em dois:
+
+1. **Português (Brasil)**: textos de `installer/Store/LISTAGEM_PT-BR.md` e capturas de `installer/Store/capturas/pt-BR/`.
+2. **Inglês (Estados Unidos)**: em **Gerenciar idiomas adicionais**, acrescente o idioma; depois use
+   `installer/Store/LISTAGEM_EN-US.md` e `installer/Store/capturas/en-US/`.
+
+Os demais idiomas do pacote mostram a listagem em inglês.
 
 ### Opções de envio: notas para a certificação
 
@@ -153,9 +158,9 @@ O pacote declara a capacidade restrita `runFullTrust`, e o Partner Center pede u
 ```text
 O Meu Editor de Vídeo é um aplicativo de área de trabalho Win32 (WPF/.NET 10) empacotado em MSIX. A capacidade runFullTrust é necessária para executar o aplicativo de desktop, que usa FFmpeg para decodificar e codificar vídeo, Direct3D/DirectML para aceleração por GPU e WASAPI para áudio.
 
-Não é necessário login nem conta. Para testar: na tela inicial, clique em "Novo Projeto", importe um vídeo (Importar Mídia), adicione-o à linha do tempo e clique em "Exportar".
+Não é necessário login nem conta. Na primeira execução aparece a janela de boas-vindas: preencha o nome, escolha idioma e tema e clique em "Salvar as preferências". Depois o aplicativo abre direto no editor, com um projeto sem título. Para testar: importe um vídeo (Importar Mídia), adicione-o à linha do tempo e clique em "Exportar". A interface pode ser trocada para inglês em Ferramentas › Configurações… › Geral (o programa reinicia no novo idioma).
 
-O aplicativo só usa a internet quando o usuário abre Ferramentas › Baixar modelos de IA e clica em Instalar: ele baixa modelos de IA (arquivos de dados ONNX/GGML, não executáveis) de endereços HTTPS fixos em huggingface.co e github.com, conferindo o SHA-256 de cada arquivo. Nenhum dado do usuário é enviado.
+O aplicativo só usa a internet quando o usuário abre Ferramentas › Baixar modelos de IA e clica em Instalar: ele baixa modelos de IA (arquivos de dados ONNX/GGML, não executáveis) de endereços HTTPS fixos em huggingface.co e github.com, conferindo o SHA-256 de cada arquivo. Ajuda › Verificar atualizações (e uma verificação a cada 30 dias, que o usuário pode desligar) apenas consulta o número da versão mais recente. Nenhum dado do usuário é enviado.
 ```
 
 Clique em **Enviar para a Store**. A certificação costuma levar de algumas horas a três dias úteis.
@@ -164,4 +169,7 @@ Clique em **Enviar para a Store**. A certificação costuma levar de algumas hor
 
 1. Aumente `<Version>` em `Directory.Build.props`.
 2. `pwsh scripts/build-msix.ps1`.
-3. No Partner Center: **Atualizar** a submissão, substitua o pacote e preencha "O que há de novo nesta versão".
+3. Se a interface mudou, refaça as capturas em `installer/Store/capturas/pt-BR/` e `en-US/`.
+4. No Partner Center: **Atualizar** a submissão e substitua o pacote.
+5. Em **cada** listagem (Português (Brasil) e Inglês), preencha "O que há de novo nesta versão" com o texto de
+   `LISTAGEM_PT-BR.md` e `LISTAGEM_EN-US.md`, e troque as capturas se elas mudaram.
