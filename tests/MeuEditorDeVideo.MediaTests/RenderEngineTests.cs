@@ -1,5 +1,4 @@
 using System.IO;
-using MeuEditorDeVideo.AudioEngine;
 using MeuEditorDeVideo.Core.Errors;
 using MeuEditorDeVideo.Core.Export;
 using MeuEditorDeVideo.Domain.Editing;

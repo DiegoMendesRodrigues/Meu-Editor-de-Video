@@ -169,22 +169,25 @@ public sealed partial class RenderQueueViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private void ClearFinished() => _queue.ClearFinished();
 
+    /// <summary>Explorador pelo caminho completo: só "explorer.exe" faria o Windows procurá-lo antes na pasta do programa.</summary>
+    private static readonly string Explorer = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe");
+
     [RelayCommand]
     private void OpenFolder(RenderJobViewModel? job)
     {
         var file = job?.Job.Files.FirstOrDefault() ?? job?.Job.OutputPath;
         if (file is null) return;
         if (File.Exists(file))
-            Process.Start(new ProcessStartInfo("explorer.exe", $"/select,\"{file}\"") { UseShellExecute = false });
+            Process.Start(new ProcessStartInfo(Explorer, $"/select,\"{file}\"") { UseShellExecute = false })?.Dispose();
         else if (Path.GetDirectoryName(file) is { } dir && System.IO.Directory.Exists(dir))
-            Process.Start(new ProcessStartInfo("explorer.exe", $"\"{dir}\"") { UseShellExecute = false });
+            Process.Start(new ProcessStartInfo(Explorer, $"\"{dir}\"") { UseShellExecute = false })?.Dispose();
     }
 
     [RelayCommand]
     private void OpenFile(RenderJobViewModel? job)
     {
         if (job?.Job.Files.FirstOrDefault() is { } file && File.Exists(file))
-            Process.Start(new ProcessStartInfo(file) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo(file) { UseShellExecute = true })?.Dispose();
     }
 
     public void Dispose()

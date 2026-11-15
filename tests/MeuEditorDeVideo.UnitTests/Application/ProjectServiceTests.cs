@@ -3,7 +3,6 @@ using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.Errors;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
-using MeuEditorDeVideo.Domain.Time;
 using MeuEditorDeVideo.Infrastructure.Paths;
 using MeuEditorDeVideo.Infrastructure.Settings;
 using MeuEditorDeVideo.ProjectEngine;

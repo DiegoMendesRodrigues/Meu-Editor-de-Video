@@ -111,7 +111,7 @@ internal sealed unsafe class VideoEncoder : IDisposable
         c->time_base = new AVRational { num = spec.FrameRate.Denominator, den = spec.FrameRate.Numerator };
         c->framerate = new AVRational { num = spec.FrameRate.Numerator, den = spec.FrameRate.Denominator };
         c->sample_aspect_ratio = new AVRational { num = 1, den = 1 };
-        c->pix_fmt = IsGifName(name) ? AVPixelFormat.AV_PIX_FMT_PAL8 : ChoosePixelFormat(c, codec, spec.Alpha, name);
+        c->pix_fmt = IsGifName(name) ? AVPixelFormat.AV_PIX_FMT_PAL8 : ChoosePixelFormat(c, codec, spec.Alpha);
         c->thread_count = 0; // automático
 
         if (!IsRgb(c->pix_fmt) && c->pix_fmt != AVPixelFormat.AV_PIX_FMT_PAL8)
@@ -249,7 +249,7 @@ internal sealed unsafe class VideoEncoder : IDisposable
         AVPixelFormat.AV_PIX_FMT_BGRA, AVPixelFormat.AV_PIX_FMT_RGBA,
     ];
 
-    private static AVPixelFormat ChoosePixelFormat(AVCodecContext* c, AVCodec* codec, bool alpha, string name)
+    private static AVPixelFormat ChoosePixelFormat(AVCodecContext* c, AVCodec* codec, bool alpha)
     {
         var supported = SupportedPixelFormats(c, codec);
         if (supported.Count == 0) return AVPixelFormat.AV_PIX_FMT_YUV420P;

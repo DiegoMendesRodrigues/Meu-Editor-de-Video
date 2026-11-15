@@ -1,5 +1,4 @@
 using MeuEditorDeVideo.Core.Abstractions;
-using Xunit;
 
 namespace MeuEditorDeVideo.UnitTests.Settings;
 

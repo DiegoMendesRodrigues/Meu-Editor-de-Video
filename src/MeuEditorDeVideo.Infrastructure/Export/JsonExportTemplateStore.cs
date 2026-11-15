@@ -128,10 +128,13 @@ public sealed class JsonExportTemplateStore : IExportTemplateStore
     {
         var local = Path.Combine(AppContext.BaseDirectory, "templates", "export");
         if (Directory.Exists(local)) return local;
+        // Só a pasta resources do repositório (a que tem a solução): pastas acima do programa instalado podem ter sido
+        // criadas por outro usuário (ex.: C:\resources).
         for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
         {
+            if (!File.Exists(Path.Combine(dir.FullName, "MeuEditorDeVideo.sln"))) continue;
             var candidate = Path.Combine(dir.FullName, "resources", "templates", "export");
-            if (Directory.Exists(candidate)) return candidate;
+            return Directory.Exists(candidate) ? candidate : null;
         }
         return null;
     }

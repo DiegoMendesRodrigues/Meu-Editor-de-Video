@@ -7,7 +7,6 @@ using MeuEditorDeVideo.App.ViewModels.Timeline;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
-using MeuEditorDeVideo.TimelineEngine;
 
 namespace MeuEditorDeVideo.App.Controls;
 
@@ -102,10 +101,46 @@ public abstract class TimelineSurface : FrameworkElement
 
     protected Brush Res(string key, Brush fallback) => TryFindResource(key) as Brush ?? fallback;
 
+    // O desenho roda a cada quadro da reprodução: fontes, pincéis e cores analisadas são criados uma vez só.
+    private static readonly CultureInfo TextCulture = CultureInfo.GetCultureInfo("pt-BR");
+    private static readonly FontFamily TextFamily = new("Segoe UI");
+    private static readonly Typeface Regular = new(TextFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+    private static readonly Typeface SemiBold = new(TextFamily, FontStyles.Normal, FontWeights.SemiBold, FontStretches.Normal);
+    private static readonly Dictionary<uint, SolidColorBrush> SolidBrushes = [];
+    private static readonly Dictionary<string, Brush?> ParsedBrushes = new(StringComparer.OrdinalIgnoreCase);
+
     protected FormattedText Text(string text, double size, Brush brush, bool bold = false) =>
-        new(text, CultureInfo.GetCultureInfo("pt-BR"), FlowDirection.LeftToRight,
-            new Typeface(new FontFamily("Segoe UI"), FontStyles.Normal, bold ? FontWeights.SemiBold : FontWeights.Normal, FontStretches.Normal),
-            size, brush, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+        new(text, TextCulture, FlowDirection.LeftToRight, bold ? SemiBold : Regular, size, brush, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+
+    /// <summary>Pincel sólido congelado, reaproveitado entre os desenhos (só na thread da interface).</summary>
+    protected static SolidColorBrush Solid(byte a, byte r, byte g, byte b)
+    {
+        var key = (uint)a << 24 | (uint)r << 16 | (uint)g << 8 | b;
+        if (!SolidBrushes.TryGetValue(key, out var brush))
+        {
+            brush = new SolidColorBrush(Color.FromArgb(a, r, g, b));
+            brush.Freeze();
+            SolidBrushes[key] = brush;
+        }
+        return brush;
+    }
+
+    /// <summary>Pincel de uma cor em texto (#RRGGBB, nome), congelado e guardado; nulo quando a cor é inválida.</summary>
+    internal static Brush? ParseBrush(string color)
+    {
+        if (ParsedBrushes.TryGetValue(color, out var cached)) return cached;
+        Brush? brush = null;
+        try
+        {
+            var b = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
+            b.Freeze();
+            brush = b;
+        }
+        catch (FormatException) { }
+        if (ParsedBrushes.Count > 512) ParsedBrushes.Clear();
+        ParsedBrushes[color] = brush;
+        return brush;
+    }
 
     protected static Pen MakePen(Brush brush, double thickness, DashStyle? dash = null)
     {
@@ -182,34 +217,9 @@ public sealed class TimelineRuler : TimelineSurface
     }
 
     /// <summary>Pincel da cor de identificação do clipe; nulo quando automática ou inválida.</summary>
-    internal static Brush? LabelBrush(string? color)
-    {
-        if (string.IsNullOrEmpty(color)) return null;
-        try
-        {
-            var b = new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
-            b.Freeze();
-            return b;
-        }
-        catch (FormatException)
-        {
-            return null;
-        }
-    }
+    internal static Brush? LabelBrush(string? color) => string.IsNullOrEmpty(color) ? null : ParseBrush(color);
 
-    internal static Brush MarkerBrush(Marker m)
-    {
-        try
-        {
-            var b = new SolidColorBrush((Color)ColorConverter.ConvertFromString(m.Color));
-            b.Freeze();
-            return b;
-        }
-        catch (FormatException)
-        {
-            return Brushes.DodgerBlue;
-        }
-    }
+    internal static Brush MarkerBrush(Marker m) => (string.IsNullOrEmpty(m.Color) ? null : ParseBrush(m.Color)) ?? Brushes.DodgerBlue;
 
     private static string Label(double sec, double step, FrameRate fr)
     {
@@ -333,7 +343,7 @@ public sealed class TimelineControl : TimelineSurface
             var track = seq.Tracks.Find(t => t.Id == header.Id) ?? header.Track;
             var th = header.Height;
             if (_dropPreview is { TrackId: { } dt } && dt == track.Id)
-                dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(40, 30, 123, 255)), null, new Rect(0, top, w, th));
+                dc.DrawRectangle(Solid(40, 30, 123, 255), null, new Rect(0, top, w, th));
             dc.DrawLine(border, new Point(0, top + th - 0.5), new Point(w, top + th - 0.5));
 
             foreach (var clip in track.Clips)
@@ -354,19 +364,19 @@ public sealed class TimelineControl : TimelineSurface
                 var cx = vm.TimeToX(to.Start);
                 if (cx + half < 0 || cx - half > w) continue;
                 var band = new Rect(cx - half, top + th / 2 - 7, Math.Max(4, half * 2), 14);
-                dc.DrawRoundedRectangle(new SolidColorBrush(Color.FromArgb(220, 255, 255, 255)), MakePen(Brushes.Black, 1), band, 3, 3);
+                dc.DrawRoundedRectangle(Solid(220, 255, 255, 255), MakePen(Brushes.Black, 1), band, 3, 3);
                 dc.DrawLine(MakePen(Brushes.Black, 1), new Point(band.Left + 2, band.Bottom - 2), new Point(band.Right - 2, band.Top + 2));
             }
 
             if (track.IsLocked)
-                dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(70, 0, 0, 0)), null, new Rect(0, top, w, th - 1));
+                dc.DrawRectangle(Solid(70, 0, 0, 0), null, new Rect(0, top, w, th - 1));
             top += th;
         }
 
         // Clipes sendo movidos, na posição de destino.
         if (_dragStarted && _mode == Mode.Move)
         {
-            foreach (var (clip, targetId) in MovePreview(vm, seq))
+            foreach (var (clip, targetId) in MovePreview(seq))
             {
                 var tt = vm.TrackTop(targetId);
                 var target = seq.Tracks.Find(t => t.Id == targetId);
@@ -437,7 +447,7 @@ public sealed class TimelineControl : TimelineSurface
             DrawWaveform(dc, vm, clip, peaks, rect);
 
         // Faixa do título.
-        dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(110, 0, 0, 0)), null, new Rect(rect.Left, rect.Top, rect.Width, 16));
+        dc.DrawRectangle(Solid(110, 0, 0, 0), null, new Rect(rect.Left, rect.Top, rect.Width, 16));
         var label = asset?.Name ?? (clip.IsText ? ViewModels.Inspector.ClipInspectorViewModel.TextTitle(clip.Text!)
             : clip.Shape is { } shapeStyle ? "◆ " + Domain.Editing.ShapePresets.Name(shapeStyle.Kind)
             : clip.IsAdjustment ? "☰ Camada de ajuste"
@@ -461,7 +471,7 @@ public sealed class TimelineControl : TimelineSurface
         dc.DrawText(ft, new Point(Math.Max(rect.Left, 0) + 4, rect.Top + 1));
 
         // Entrada/saída gradual: rampas no canto superior.
-        var fadePen = MakePen(new SolidColorBrush(Color.FromArgb(200, 255, 255, 255)), 1);
+        var fadePen = MakePen(Solid(200, 255, 255, 255), 1);
         if (clip.FadeIn > MediaTime.Zero)
             dc.DrawLine(fadePen, new Point(rect.Left, rect.Bottom), new Point(rect.Left + clip.FadeIn.TotalSeconds * vm.PixelsPerSecond, rect.Top + 16));
         if (clip.FadeOut > MediaTime.Zero)
@@ -470,7 +480,7 @@ public sealed class TimelineControl : TimelineSurface
         // Keyframes (losangos na base do clipe).
         if (!clip.Keyframes.IsEmpty)
         {
-            var diamond = new SolidColorBrush(Color.FromRgb(0xFF, 0xD2, 0x4A));
+            var diamond = Solid(255, 0xFF, 0xD2, 0x4A);
             foreach (var offset in clip.Keyframes.Values.SelectMany(k => k).Select(k => k.Offset).Distinct())
             {
                 var kx = vm.TimeToX(clip.Start + offset);
@@ -530,7 +540,7 @@ public sealed class TimelineControl : TimelineSurface
             c.PolyLineTo(bottom, false, false);
         }
         g.Freeze();
-        dc.DrawGeometry(new SolidColorBrush(Color.FromArgb(190, 255, 255, 255)), null, g);
+        dc.DrawGeometry(Solid(190, 255, 255, 255), null, g);
     }
 
     // ---------------------------------------------------------------- acertos de posição
@@ -658,7 +668,7 @@ public sealed class TimelineControl : TimelineSurface
         {
             if (dragged && vm.Sequence is { } seq)
             {
-                var moves = MovePreview(vm, seq).Select(m => new ClipMove(m.Clip.Id, m.TrackId, m.Clip.Start)).ToList();
+                var moves = MovePreview(seq).Select(m => new ClipMove(m.Clip.Id, m.TrackId, m.Clip.Start)).ToList();
                 vm.MoveClips(moves);
             }
             else if (!dragged && (Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) == 0)
@@ -728,7 +738,7 @@ public sealed class TimelineControl : TimelineSurface
     }
 
     /// <summary>Posições de destino dos clipes movidos (o deslocamento vertical vale para a família da trilha do clipe principal).</summary>
-    private IEnumerable<(Clip Clip, Guid TrackId)> MovePreview(TimelineViewModel vm, Sequence seq)
+    private IEnumerable<(Clip Clip, Guid TrackId)> MovePreview(Sequence seq)
     {
         var primaryVisual = _primaryTrack?.IsVisual ?? true;
         foreach (var track in seq.Tracks)

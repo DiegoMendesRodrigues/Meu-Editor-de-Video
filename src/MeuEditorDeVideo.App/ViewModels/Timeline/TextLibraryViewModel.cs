@@ -5,7 +5,6 @@ using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.Core.Subtitles;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
-using MeuEditorDeVideo.Domain.Time;
 
 namespace MeuEditorDeVideo.App.ViewModels.Timeline;
 

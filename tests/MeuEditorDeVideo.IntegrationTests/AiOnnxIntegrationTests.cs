@@ -1,4 +1,3 @@
-using MeuEditorDeVideo.AIEngine;
 using MeuEditorDeVideo.AIEngine.Vision;
 using MeuEditorDeVideo.Core.AI;
 using MeuEditorDeVideo.Core.Media;

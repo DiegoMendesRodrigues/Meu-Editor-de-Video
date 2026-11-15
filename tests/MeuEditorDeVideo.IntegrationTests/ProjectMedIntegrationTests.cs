@@ -6,7 +6,6 @@ using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 using MeuEditorDeVideo.IntegrationTests.Support;
-using MeuEditorDeVideo.ProjectEngine;
 
 namespace MeuEditorDeVideo.IntegrationTests;
 

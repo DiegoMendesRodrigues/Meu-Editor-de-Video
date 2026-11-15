@@ -39,7 +39,7 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
             var layer = visual;
             if (layer.Text is { } text)
             {
-                if (TextImage(layer, text, graph, width, height) is { } textLayer)
+                if (TextImage(layer, text, graph, width) is { } textLayer)
                 {
                     var (img, positioned) = textLayer;
                     if (layer.Masks.Count > 0) img = MaskRenderer.Apply(img, layer.Masks);
@@ -291,7 +291,7 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
     /// Rasteriza o texto na escala de saída e converte a posição do clipe (ponto de ancoragem do bloco, conforme
     /// alinhamento e âncora vertical) no centro da imagem; nos créditos, calcula a rolagem de baixo para cima.
     /// </summary>
-    private static (BgraImage Image, VisualLayer Layer)? TextImage(VisualLayer layer, TextLayer text, CompositionGraph graph, int width, int height)
+    private static (BgraImage Image, VisualLayer Layer)? TextImage(VisualLayer layer, TextLayer text, CompositionGraph graph, int width)
     {
         var scale = graph.Width > 0 ? (double)width / graph.Width : 1;
         var raster = TextRasterizer.Render(text.Text, text.VisibleCharacters, text.Format.Style, scale, width);

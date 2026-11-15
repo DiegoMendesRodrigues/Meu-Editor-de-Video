@@ -23,6 +23,9 @@ internal sealed unsafe class MediaFile : IDisposable
         }
 
         AVDictionary* dict = null;
+        // Só arquivos locais: uma lista de reprodução (HLS, concat) disfarçada de vídeo não pode abrir conexões de rede
+        // nem ler outros arquivos por protocolos do FFmpeg; também vale para os arquivos que ela referencia.
+        ffmpeg.av_dict_set(&dict, "protocol_whitelist", "file", 0);
         if (options is not null)
             foreach (var (k, v) in options) ffmpeg.av_dict_set(&dict, k, v, 0);
 

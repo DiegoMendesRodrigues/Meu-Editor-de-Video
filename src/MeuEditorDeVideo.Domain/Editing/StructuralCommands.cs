@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using MeuEditorDeVideo.Domain.Model;
+﻿using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 using static MeuEditorDeVideo.Domain.Editing.TimelineOps;
 

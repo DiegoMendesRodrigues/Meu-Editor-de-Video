@@ -55,12 +55,18 @@ public static unsafe class FFmpegRuntime
         var local = Path.Combine(AppContext.BaseDirectory, "ffmpeg");
         if (Valid(local)) return local;
 
-        for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
-        {
-            var candidate = Path.Combine(dir.FullName, "deps", "ffmpeg", "bin");
-            if (Valid(candidate)) return candidate;
-        }
+        // Desenvolvimento: só a pasta deps do repositório (a que tem a solução). Sem essa exigência, um programa instalado
+        // aceitaria DLLs plantadas em pastas acima dele que qualquer usuário pode criar (ex.: C:\deps\ffmpeg\bin).
+        var repository = RepositoryRoot();
+        var candidate = repository is null ? null : Path.Combine(repository, "deps", "ffmpeg", "bin");
+        return Valid(candidate) ? candidate : null;
+    }
 
+    /// <summary>Raiz do repositório (pasta com MeuEditorDeVideo.sln) acima do executável, ou nulo no programa instalado.</summary>
+    private static string? RepositoryRoot()
+    {
+        for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
+            if (File.Exists(Path.Combine(dir.FullName, "MeuEditorDeVideo.sln"))) return dir.FullName;
         return null;
     }
 }

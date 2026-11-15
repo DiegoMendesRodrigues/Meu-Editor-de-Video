@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Markup;
-using System.Windows.Threading;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.Application;
 using MeuEditorDeVideo.Application.Export;

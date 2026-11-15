@@ -12,7 +12,6 @@ using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.Errors;
 using MeuEditorDeVideo.Core.Media;
-using MeuEditorDeVideo.Core.Projects;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;

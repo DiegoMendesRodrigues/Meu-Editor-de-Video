@@ -1,5 +1,4 @@
-﻿using System.IO;
-using MeuEditorDeVideo.Application;
+﻿using MeuEditorDeVideo.Application;
 using MeuEditorDeVideo.AIEngine;
 using MeuEditorDeVideo.Infrastructure.Hosting;
 using MeuEditorDeVideo.Infrastructure.Paths;

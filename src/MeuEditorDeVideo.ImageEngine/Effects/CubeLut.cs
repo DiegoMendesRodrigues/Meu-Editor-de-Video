@@ -56,7 +56,8 @@ public sealed class CubeLut
                     title = line[5..].Trim().Trim('"');
                     continue;
                 case "LUT_3D_SIZE":
-                    if (parts.Length < 2 || !int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out size) || size is < 2 or > 256)
+                    // Até 129 pontos por lado (as LUTs comuns têm 33 ou 65): 256 exigiria ~200 MB só para ler o arquivo.
+                    if (parts.Length < 2 || !int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out size) || size is < 2 or > 129)
                         throw new InvalidDataException($"Tamanho de LUT inválido na linha {lineNo}.");
                     values = new List<float>(size * size * size * 3);
                     continue;

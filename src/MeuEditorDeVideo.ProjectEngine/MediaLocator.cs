@@ -27,6 +27,7 @@ public sealed class MediaLocator(IAppPaths paths, ILogger<MediaLocator> logger) 
         var projectDir = projectFilePath is null ? null : Path.GetDirectoryName(Path.GetFullPath(projectFilePath));
         var extractDir = ExtractionDirectory(project.Id);
 
+        bool? fromInternet = null;
         Dictionary<string, MedManifestFile>? manifestFiles = null;
         ZipArchive? zip = null;
         FileStream? zipStream = null;
@@ -72,7 +73,7 @@ public sealed class MediaLocator(IAppPaths paths, ILogger<MediaLocator> logger) 
                 if (projectDir is not null && !string.IsNullOrWhiteSpace(asset.RelativePath))
                     candidates.Add(Path.GetFullPath(Path.Combine(projectDir, asset.RelativePath)));
 
-                var found = candidates.FirstOrDefault(File.Exists);
+                var found = candidates.FirstOrDefault(c => IsAllowedPath(c, projectFilePath, ref fromInternet) && File.Exists(c));
                 if (found is null)
                 {
                     locations[asset.Id] = new MediaLocation(asset.Id, MediaStatus.Missing, null);
@@ -93,6 +94,40 @@ public sealed class MediaLocator(IAppPaths paths, ILogger<MediaLocator> logger) 
         var missing = locations.Values.Count(l => l.Status == MediaStatus.Missing);
         if (missing > 0) logger.LogWarning("{Missing} mídia(s) ausente(s) ao abrir o projeto.", missing);
         return new MediaResolution(locations);
+    }
+
+    /// <summary>
+    /// Caminho de mídia que pode ser procurado. Recusa caminhos de dispositivo (<c>\\.\</c>, <c>\\?\</c>) e, num .med baixado
+    /// da internet (marca da Web), caminhos de rede em outro servidor: só consultar um <c>\\servidor\pasta</c> já faz o Windows
+    /// enviar as credenciais do usuário (NTLM) a esse servidor. A mídia fica ausente e pode ser reassociada pelo usuário.
+    /// </summary>
+    public static bool IsAllowedPath(string path, string? projectFilePath, ref bool? fromInternet)
+    {
+        if (path.StartsWith(@"\\.\", StringComparison.Ordinal) || path.StartsWith(@"\\?\", StringComparison.Ordinal)
+            || path.StartsWith("//", StringComparison.Ordinal) || !Path.IsPathFullyQualified(path))
+            return false;
+        if (!path.StartsWith(@"\\", StringComparison.Ordinal) || projectFilePath is null) return true;
+        if (string.Equals(UncHost(path), UncHost(Path.GetFullPath(projectFilePath)), StringComparison.OrdinalIgnoreCase)) return true;
+        fromInternet ??= IsFromInternet(projectFilePath);
+        return !fromInternet.Value;
+    }
+
+    private static string? UncHost(string path) =>
+        path.StartsWith(@"\\", StringComparison.Ordinal) ? path[2..].Split('\\', 2)[0] : null;
+
+    /// <summary>Marca da Web (fluxo Zone.Identifier) com zona Internet (3) ou Sites restritos (4).</summary>
+    public static bool IsFromInternet(string file)
+    {
+        try
+        {
+            var zone = File.ReadLines(file + ":Zone.Identifier")
+                .FirstOrDefault(l => l.StartsWith("ZoneId=", StringComparison.OrdinalIgnoreCase));
+            return zone is not null && int.TryParse(zone.AsSpan(7).Trim(), out var id) && id >= 3;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or NotSupportedException or ArgumentException)
+        {
+            return false;
+        }
     }
 
     private static bool IsExtractionValid(string extracted)

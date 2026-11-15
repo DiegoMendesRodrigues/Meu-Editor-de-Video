@@ -1,17 +1,14 @@
-﻿using System.IO;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
 using MeuEditorDeVideo.Application.Media;
 using MeuEditorDeVideo.AIEngine.Vision;
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.AI;
 using MeuEditorDeVideo.Core.Errors;
 using MeuEditorDeVideo.Core.Export;
-using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 using MeuEditorDeVideo.IntegrationTests.Support;
-using MeuEditorDeVideo.RenderingEngine;
 using OpenCvSharp;
 
 namespace MeuEditorDeVideo.IntegrationTests;

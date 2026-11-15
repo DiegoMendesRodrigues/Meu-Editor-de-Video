@@ -1,7 +1,6 @@
 using System.IO;
 using MeuEditorDeVideo.Core.Projects;
 using MeuEditorDeVideo.Domain.Model;
-using MeuEditorDeVideo.Domain.Time;
 using MeuEditorDeVideo.Infrastructure.Paths;
 using MeuEditorDeVideo.ProjectEngine;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -166,6 +165,31 @@ public sealed class MediaLocatorTests : IDisposable
         Assert.Equal(copy, candidates[0].Path);
         Assert.True(candidates[0].FingerprintMatches);
         Assert.False(candidates[1].FingerprintMatches);
+    }
+
+    [Fact]
+    public void Projeto_baixado_da_internet_nao_consulta_servidores_de_rede()
+    {
+        // Consultar \\servidor\... envia as credenciais do Windows (NTLM) ao servidor: num .med com a marca da Web
+        // (zona Internet), só caminhos locais ou do mesmo servidor do projeto são procurados.
+        Directory.CreateDirectory(_root);
+        var local = Path.Combine(_root, "local.med");
+        var baixado = Path.Combine(_root, "baixado.med");
+        File.WriteAllText(local, "x");
+        File.WriteAllText(baixado, "x");
+        File.WriteAllText(baixado + ":Zone.Identifier", "[ZoneTransfer]\r\nZoneId=3\r\n");
+        const string rede = @"\\servidor\videos\clipe.mp4";
+
+        bool? z1 = null, z2 = null, z3 = null, z4 = null;
+        Assert.True(MediaLocator.IsFromInternet(baixado));
+        Assert.False(MediaLocator.IsFromInternet(local));
+        Assert.True(MediaLocator.IsAllowedPath(rede, local, ref z1));
+        Assert.False(MediaLocator.IsAllowedPath(rede, baixado, ref z2));
+        Assert.True(MediaLocator.IsAllowedPath(rede, @"\\SERVIDOR\projetos\p.med", ref z3));
+        Assert.True(MediaLocator.IsAllowedPath(Path.Combine(_root, "clipe.mp4"), baixado, ref z4));
+        Assert.False(MediaLocator.IsAllowedPath(@"\\.\PhysicalDrive0", null, ref z4));
+        Assert.False(MediaLocator.IsAllowedPath(@"\\?\UNC\servidor\videos\clipe.mp4", null, ref z4));
+        Assert.False(MediaLocator.IsAllowedPath("http://exemplo.com/clipe.mp4", null, ref z4));
     }
 
     public void Dispose()

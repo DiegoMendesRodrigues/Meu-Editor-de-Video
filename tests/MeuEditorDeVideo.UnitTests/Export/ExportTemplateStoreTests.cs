@@ -4,7 +4,6 @@ using MeuEditorDeVideo.Core.Export;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 using MeuEditorDeVideo.Infrastructure.Export;
-using MeuEditorDeVideo.ProjectEngine;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace MeuEditorDeVideo.UnitTests.Export;

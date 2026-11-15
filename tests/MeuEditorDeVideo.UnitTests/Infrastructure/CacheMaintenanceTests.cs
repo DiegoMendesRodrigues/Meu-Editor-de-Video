@@ -1,5 +1,4 @@
 using System.IO;
-using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Infrastructure.Cache;
 using MeuEditorDeVideo.Infrastructure.Paths;
 using Microsoft.Extensions.Logging.Abstractions;

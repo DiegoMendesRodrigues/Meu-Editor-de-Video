@@ -155,12 +155,10 @@ public static class ShortcutCatalog
 /// </summary>
 public sealed class ShortcutService
 {
-    private readonly ISettingsService? _settings;
     private Dictionary<string, IReadOnlyList<KeyChord>> _map = [];
 
     public ShortcutService(ISettingsService? settings = null)
     {
-        _settings = settings;
         Rebuild(settings?.Current.Shortcuts ?? new Dictionary<string, string>());
         if (settings is not null) settings.Changed += (_, s) => Rebuild(s.Shortcuts);
     }

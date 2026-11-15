@@ -698,6 +698,25 @@ O aplicativo não faz requisições de rede em nenhum fluxo normal de edição. 
 
 **Ponto de atenção.** O código confere o **esquema** (HTTPS) de cada redirecionamento, mas **não confere o host** dos redirecionamentos: a lista de hosts vale só para a URL inicial. Isso é intencional no comentário do código (a origem pode usar uma CDN), mas significa que um redirecionamento pode levar o download a outro host HTTPS. A mitigação é o SHA-256 fixado no catálogo: um conteúdo diferente é descartado. Qualquer mudança nesse comportamento deve atualizar esta seção e `documentation/MODELOS_IA.md`.
 
+### Arquivos de terceiros não abrem rede
+
+Bibliotecas nativas e de terceiros também ficam sem rede quando leem arquivos que vêm de fora:
+
+- **FFmpeg** (`MediaFile.Open`): `protocol_whitelist=file`. Uma lista de reprodução (HLS, concat) disfarçada de vídeo não abre conexões nem usa outros protocolos, inclusive nos arquivos que ela referencia.
+- **SVG** (`SvgRenderer`): imagens e elementos externos e DTD desligados (`SvgDocument.ResolveExternal* = None`). Por padrão a biblioteca busca `http` e `\\servidor`; uma figurinha de pacote de terceiros abriria conexões só por ser exibida (`SvgTests.Svg_does_not_fetch_external_images`).
+- **Caminhos de rede em projetos baixados** (`MediaLocator.IsAllowedPath`): só consultar `\\servidor\pasta` faz o Windows enviar as credenciais do usuário (NTLM). Num `.med` com a marca da Web (fluxo `Zone.Identifier`, zona Internet ou Sites restritos), mídias em outro servidor não são procuradas e ficam ausentes; o usuário pode reassociá-las. Caminhos de dispositivo (`\\.\`, `\\?\`) nunca são procurados.
+
+### Carregamento de bibliotecas e programas
+
+- O FFmpeg é procurado em `MED_FFMPEG_DIR`, na pasta `ffmpeg` ao lado do executável e, em desenvolvimento, só em `deps\ffmpeg\bin` da pasta que tem `MeuEditorDeVideo.sln`. Não há busca em pastas acima do programa: qualquer usuário pode criar `C:\deps`, e uma DLL plantada ali seria carregada por outra conta. Os modelos de exportação embutidos seguem a mesma regra.
+- O Explorador é chamado pelo caminho completo (`%WINDIR%\explorer.exe`).
+
+### Limites contra arquivos malformados
+
+- `manifest.json` e `project.json` de um `.med`: até 256 MB descompactados (ZIP-bomba).
+- Pacotes `.medpack`: até 200 MB por arquivo e 1 GB no total, só nas pastas conhecidas e sem subpastas.
+- LUT `.cube`: até 129 pontos por lado.
+
 ### Como a regra é verificada
 
 1. **Testes estáticos** (`tests/MeuEditorDeVideo.UnitTests/Architecture/PrivacyTests.cs`): nenhum assembly do produto usa APIs de rede, exceto `ModelDownloads`, que só pode usar HTTP e só pode referenciar `Core` entre os projetos do produto. Rodam em todo `dotnet test`.

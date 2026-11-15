@@ -217,7 +217,7 @@ public sealed partial class ModelCatalogViewModel : ObservableObject, IDisposabl
     {
         if (string.IsNullOrEmpty(PackagesDirectory)) return;
         Directory.CreateDirectory(PackagesDirectory);
-        Process.Start(new ProcessStartInfo("explorer.exe", $"\"{PackagesDirectory}\"") { UseShellExecute = true });
+        Process.Start(new ProcessStartInfo(PackagesDirectory) { UseShellExecute = true })?.Dispose();
     }
 
     private static long FreeSpace(string directory)

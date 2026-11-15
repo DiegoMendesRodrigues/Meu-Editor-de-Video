@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using MeuEditorDeVideo.Core.Media;
-using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;
 using static MeuEditorDeVideo.Domain.Effects.EffectCatalog;
 

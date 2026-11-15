@@ -124,6 +124,31 @@ public sealed class SvgTests : IDisposable
     }
 
     [Fact]
+    public void Svg_does_not_fetch_external_images()
+    {
+        // Figurinha de pacote de terceiros apontando para um servidor: renderizar não pode abrir conexão.
+        var listener = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Loopback, 0);
+        listener.Start();
+        try
+        {
+            var port = ((System.Net.IPEndPoint)listener.LocalEndpoint).Port;
+            var path = WriteSvg("externa.svg",
+                "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"100\" height=\"100\">" +
+                $"<image width=\"100\" height=\"100\" xlink:href=\"http://127.0.0.1:{port}/rastreio.png\" href=\"http://127.0.0.1:{port}/rastreio.png\"/>" +
+                "<rect width=\"10\" height=\"10\" fill=\"#00FF00\"/></svg>");
+
+            var img = SvgRenderer.Render(path, 100, 100);
+
+            Assert.NotNull(img);
+            Assert.False(listener.Pending(), "O SVG abriu uma conexão de rede.");
+        }
+        finally
+        {
+            listener.Stop();
+        }
+    }
+
+    [Fact]
     public async Task Invalid_svg_fails_probe_with_message()
     {
         var path = WriteSvg("invalido.svg", "not svg");

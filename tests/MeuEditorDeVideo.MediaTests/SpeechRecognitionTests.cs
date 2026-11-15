@@ -1,10 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using MeuEditorDeVideo.AIEngine.Models;
 using MeuEditorDeVideo.AIEngine.Speech;
-using MeuEditorDeVideo.Core.AI;
-using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;

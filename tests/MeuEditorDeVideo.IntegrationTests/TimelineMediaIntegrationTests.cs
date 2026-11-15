@@ -1,6 +1,5 @@
 using MeuEditorDeVideo.Application.Media;
 using MeuEditorDeVideo.Application.Projects;
-using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;

@@ -19,6 +19,16 @@ public static class SvgRenderer
     private static readonly Dictionary<string, Entry> Cache = new(StringComparer.OrdinalIgnoreCase);
     private static long _clock;
 
+    static SvgRenderer()
+    {
+        // Figurinhas de pacotes de terceiros: um SVG não pode buscar imagens ou elementos fora dele (http, \\servidor,
+        // outros arquivos) nem usar DTD. Por padrão a biblioteca resolve referências locais e remotas.
+        Svg.SvgDocument.ResolveExternalImages = Svg.ExternalType.None;
+        Svg.SvgDocument.ResolveExternalElements = Svg.ExternalType.None;
+        Svg.SvgDocument.ResolveExternalXmlEntites = Svg.ExternalType.None;
+        Svg.SvgDocument.DisableDtdProcessing = true;
+    }
+
     public static bool IsSvg(string path) =>
         string.Equals(Path.GetExtension(path), ".svg", StringComparison.OrdinalIgnoreCase);
 

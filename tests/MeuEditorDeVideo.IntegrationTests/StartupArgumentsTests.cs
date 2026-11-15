@@ -1,4 +1,3 @@
-using System.IO;
 using MeuEditorDeVideo.App.Services;
 
 namespace MeuEditorDeVideo.IntegrationTests;

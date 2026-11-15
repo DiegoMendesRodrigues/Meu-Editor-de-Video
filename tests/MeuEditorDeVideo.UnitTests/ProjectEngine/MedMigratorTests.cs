@@ -1,6 +1,5 @@
 using System.Text.Json.Nodes;
 using MeuEditorDeVideo.ProjectEngine.Format;
-using Xunit;
 
 namespace MeuEditorDeVideo.UnitTests.ProjectEngine;
 

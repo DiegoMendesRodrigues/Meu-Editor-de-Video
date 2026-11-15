@@ -15,7 +15,6 @@ public sealed class SileroVad(InferenceSession session)
     /// <summary>Amostras de contexto prefixadas a cada janela.</summary>
     public const int ContextSamples = 64;
 
-    private const int StateSize = 2 * 1 * 128;
     private const int SampleRate = 16000;
 
     /// <summary>Probabilidade de fala de cada janela (a última é preenchida com zeros).</summary>

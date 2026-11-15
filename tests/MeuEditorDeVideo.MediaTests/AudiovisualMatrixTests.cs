@@ -1,7 +1,5 @@
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using MeuEditorDeVideo.AudioEngine;
 using MeuEditorDeVideo.Core.Export;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Editing;

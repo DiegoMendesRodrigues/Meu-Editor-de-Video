@@ -20,6 +20,9 @@ public sealed class MedProjectStore(IAppPaths paths, ILogger<MedProjectStore> lo
 {
     private const int MaxBackupsPerProject = 10;
     private const int CopyBufferSize = 1024 * 1024;
+
+    /// <summary>Limite do manifest.json e do project.json descompactados (projetos reais ficam em poucos MB).</summary>
+    private const long MaxDataEntryBytes = 256L * 1024 * 1024;
     private readonly MedMigrator _migrator = migrator ?? MedMigrator.Default;
 
     private static readonly string? AppVersion =
@@ -46,6 +49,8 @@ public sealed class MedProjectStore(IAppPaths paths, ILogger<MedProjectStore> lo
             await VerifyIntegrityAsync(zip, manifest, cancellationToken).ConfigureAwait(false);
 
             var projectEntry = zip.GetEntry(MedLayout.Project) ?? throw new MedException(MedErrors.NotAProject(path));
+            // Um project.json enorme (ZIP-bomba) esgotaria a memória ao ser lido.
+            if (projectEntry.Length > MaxDataEntryBytes) throw new MedException(MedErrors.NotAProject(path));
             JsonObject json;
             await using (var ps = await projectEntry.OpenAsync(cancellationToken).ConfigureAwait(false))
             {
@@ -87,6 +92,7 @@ public sealed class MedProjectStore(IAppPaths paths, ILogger<MedProjectStore> lo
     internal static async Task<MedManifest> ReadManifestAsync(ZipArchive zip, string path, CancellationToken ct)
     {
         var entry = zip.GetEntry(MedLayout.Manifest) ?? throw new MedException(MedErrors.NotAProject(path));
+        if (entry.Length > MaxDataEntryBytes) throw new MedException(MedErrors.NotAProject(path));
         await using var s = await entry.OpenAsync(ct).ConfigureAwait(false);
         var manifest = await JsonSerializer.DeserializeAsync<MedManifest>(s, MedJson.Options, ct).ConfigureAwait(false);
         if (manifest is null || manifest.Format != MedManifest.FormatName) throw new MedException(MedErrors.NotAProject(path));

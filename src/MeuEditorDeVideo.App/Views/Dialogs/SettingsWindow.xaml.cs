@@ -9,12 +9,9 @@ namespace MeuEditorDeVideo.App.Views.Dialogs;
 /// <summary>Janela modal de configurações (RF208–RF214).</summary>
 public partial class SettingsWindow
 {
-    private readonly SettingsViewModel _viewModel;
-
     public SettingsWindow(SettingsViewModel viewModel)
     {
         InitializeComponent();
-        _viewModel = viewModel;
         DataContext = viewModel;
         viewModel.CloseRequested += (_, saved) =>
         {

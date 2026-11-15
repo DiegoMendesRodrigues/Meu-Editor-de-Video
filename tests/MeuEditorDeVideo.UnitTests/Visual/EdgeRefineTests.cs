@@ -1,6 +1,5 @@
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Effects;
-using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.ImageEngine.Effects;
 
 namespace MeuEditorDeVideo.UnitTests.Visual;
