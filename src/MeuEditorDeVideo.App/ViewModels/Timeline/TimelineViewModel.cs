@@ -173,8 +173,8 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
 
     public static double HeightOf(TrackKind kind) => kind switch
     {
-        TrackKind.Video or TrackKind.Image => 64,
-        TrackKind.Audio => 52,
+        TrackKind.Video or TrackKind.Image => 52,
+        TrackKind.Audio => 44,
         _ => 36,
     };
 

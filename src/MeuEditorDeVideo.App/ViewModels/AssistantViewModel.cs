@@ -186,9 +186,9 @@ public sealed partial class AssistantViewModel : ObservableObject, IDisposable
             {
                 started = true;
                 raw += piece;
-                answer.Text = Plain(raw);
+                answer.Text = HelpAssistantService.PlainText(raw);
             }
-            answer.Text = started ? Plain(raw).Trim() : "";
+            answer.Text = started ? HelpAssistantService.PlainText(raw).Trim() : "";
             if (_cts.IsCancellationRequested) answer.Text += (answer.Text.Length > 0 ? " " : "") + L.T("(interrompido)");
             answer.SetSources(HelpAssistantService.Sources(hits));
             _history.Add(new HelpExchange(question, answer.Text));
@@ -245,10 +245,6 @@ public sealed partial class AssistantViewModel : ObservableObject, IDisposable
 
     private void OnRegistryChanged(object? sender, EventArgs e) =>
         System.Windows.Application.Current?.Dispatcher.BeginInvoke(() => HasLanguageModel = _assistant.HasLanguageModel);
-
-    /// <summary>A resposta aparece como texto simples: tira as marcas de negrito e de título do Markdown que o modelo escreve.</summary>
-    public static string Plain(string markdown) =>
-        System.Text.RegularExpressions.Regex.Replace(markdown.Replace("**", "").Replace("__", ""), @"(?m)^#{1,6}\s+", "");
 
     public void Dispose()
     {

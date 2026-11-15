@@ -132,7 +132,7 @@ public sealed class HelpAssistantServiceTests
     [Fact]
     public void Resposta_aparece_sem_marcas_de_Markdown()
     {
-        Assert.Equal("Resumo\nClique em Dividir (S).", MeuEditorDeVideo.App.ViewModels.AssistantViewModel.Plain("## Resumo\nClique em **Dividir** (S)."));
+        Assert.Equal("Resumo\nClique em Dividir (S).", HelpAssistantService.PlainText("## Resumo\nClique em **Dividir** (S)."));
     }
 
     [Fact]

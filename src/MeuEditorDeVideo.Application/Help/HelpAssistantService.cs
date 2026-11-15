@@ -87,6 +87,10 @@ public sealed class HelpAssistantService(IHelpKnowledgeBase knowledge, IHelpAnsw
         if (pending.Length > 0) yield return pending;
     }
 
+    /// <summary>A resposta aparece como texto simples: tira as marcas de negrito e de título do Markdown que o modelo escreve.</summary>
+    public static string PlainText(string markdown) =>
+        System.Text.RegularExpressions.Regex.Replace(markdown.Replace("**", "").Replace("__", ""), @"(?m)^#{1,6}\s+", "");
+
     /// <summary>Mensagens enviadas ao modelo: instruções no idioma, conversa recente e a pergunta com os trechos do manual.</summary>
     public static IReadOnlyList<HelpChatMessage> BuildMessages(string question, string language, IReadOnlyList<HelpSearchHit> hits,
         IReadOnlyList<HelpExchange> history)

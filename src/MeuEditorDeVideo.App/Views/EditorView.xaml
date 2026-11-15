@@ -1390,6 +1390,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <TabControl Grid.Row="1" Margin="6,6,6,6"
@@ -1538,6 +1539,31 @@
                             </ListBox>
                         </TabItem>
                     </TabControl>
+
+                    <!-- Atalhos de ajuda no canto inferior direito: manual do usuário e assistente virtual -->
+                    <Border x:Name="AtalhosAjuda" Grid.Row="2" Margin="6,0,6,6" Padding="4" CornerRadius="6"
+                            Background="{DynamicResource Med.Background}" BorderBrush="{DynamicResource Med.Border}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Margin="0,0,2,0" Padding="8,6" HorizontalAlignment="Stretch" Click="Manual_Click"
+                                    AutomationProperties.Name="Manual do usuário">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE82D;" FontSize="16" Foreground="{DynamicResource Med.Accent}" />
+                                    <TextBlock Text="Manual do usuário" Margin="8,0,0,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="1" Margin="2,0,0,0" Padding="8,6" HorizontalAlignment="Stretch" Click="AtalhoAssistente_Click"
+                                    AutomationProperties.Name="Assistente virtual">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE99A;" FontSize="16" Foreground="{DynamicResource Med.Accent}" />
+                                    <TextBlock Text="Assistente virtual" Margin="8,0,0,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </Border>
                 </Grid>
             </Border>
 

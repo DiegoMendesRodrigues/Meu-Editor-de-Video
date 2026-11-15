@@ -343,6 +343,13 @@ public partial class EditorView : UserControl
 
     private void Assistente_CloseRequested(object? sender, EventArgs e) => MostrarAssistente(false);
 
+    /// <summary>Atalho no canto inferior direito: abre o assistente (ou só leva o foco à pergunta, se já estiver aberto).</summary>
+    private void AtalhoAssistente_Click(object sender, RoutedEventArgs e)
+    {
+        if (PainelAssistente.Visibility == Visibility.Visible) Assistente.FocusQuestion();
+        else MostrarAssistente(true);
+    }
+
     /// <summary>
     /// Abre ou fecha o assistente virtual numa coluna própria, à direita de Propriedades (vale para todos os modos do
     /// layout). A conversa continua ao reabrir; ao fechar, a resposta em andamento para e o modelo sai da memória.
