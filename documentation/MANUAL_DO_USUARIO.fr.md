@@ -82,7 +82,7 @@ Après la création ou l'ouverture d'un projet, l'écran de montage apparaît. I
   - **Packs de contenu…** installe, exporte et supprime des packs d'autocollants, de titres et de modèles de projet (fichiers .medpack). Un pack est un ZIP avec les dossiers `figurinhas` (PNG, GIF, WebP, JPEG ou SVG), `titulos` (.medtitle) et `modelos` (.med) et, en option, un `pacote.json` avec le nom (par exemple `{"nome": "Fête d'été"}`). Les éléments que vous enregistrez vous-même vont dans le pack **Mes éléments** ; utilisez **Exporter…** pour le partager.
   - **Synthèse vocale…** transforme un texte en narration avec les voix installées dans Windows, sans internet. Saisissez le texte, choisissez la **Voix** et la **Vitesse** et cliquez sur **Générer et insérer** : l'audio va dans la bibliothèque (catégorie Narration) et est placé à la tête de lecture, sur la première piste audio libre ou sur une nouvelle piste appelée Narration. Pour avoir plus de voix, installez-les dans **Paramètres Windows › Heure et langue › Voix**.
   - **Analyser les médias** étiquette tous les médias de la bibliothèque : type, orientation (horizontale, verticale, carrée), résolution (HD, Full HD, 4K), durée (court, long) et son. Avec les modèles installés, aussi **parole** ou **sans parole**, le nombre de **scènes** et **personne** ou **sans personnes**. Les étiquettes apparaissent au survol du média et la zone **Rechercher…** de la bibliothèque cherche aussi dedans.
-- **Aide** : **Manuel de l'utilisateur** (F1), **Raccourcis clavier…**, **Informations système…**, **Ouvrir le dossier des journaux**, **Licences tierces**, **À propos de Meu Editor de Vídeo…**, **Rechercher des mises à jour** (demande par internet s'il existe une nouvelle version : affiche « Vous avez la version la plus récente ! » ou la fenêtre **Nouvelle version disponible**, avec la version, les langues, les systèmes pris en charge, l'auteur et les liens de téléchargement sur le Microsoft Store et sur le site AplicativosIA.Online ; un clic sur **Fermer cette fenêtre** enregistre la date de la vérification). Dans **À propos de Meu Editor de Vídeo…**, l'icône LinkedIn ouvre le profil de l'auteur dans le navigateur.
+- **Aide** : **Manuel de l'utilisateur** (F1), **Assistant virtuel** (Maj+F1), **Raccourcis clavier…**, **Informations système…**, **Ouvrir le dossier des journaux**, **Licences tierces**, **À propos de Meu Editor de Vídeo…**, **Rechercher des mises à jour** (demande par internet s'il existe une nouvelle version : affiche « Vous avez la version la plus récente ! » ou la fenêtre **Nouvelle version disponible**, avec la version, les langues, les systèmes pris en charge, l'auteur et les liens de téléchargement sur le Microsoft Store et sur le site AplicativosIA.Online ; un clic sur **Fermer cette fenêtre** enregistre la date de la vérification). Dans **À propos de Meu Editor de Vídeo…**, l'icône LinkedIn ouvre le profil de l'auteur dans le navigateur.
 
 Le **Manuel de l'utilisateur** ouvre ce manuel dans le programme, sans internet. La liste de gauche mène à chaque sujet et Ctrl+F recherche un mot. La fenêtre peut rester ouverte pendant le montage.
 
@@ -154,6 +154,7 @@ La timeline est l'endroit où la vidéo est montée de gauche à droite. La **t�
 - **Déplacer** : faites glisser le clip à un autre endroit de la piste ou sur une autre piste du même type.
 - **Rogner le début ou la fin** : faites glisser le bord du clip pour raccourcir ou allonger le passage utilisé.
 - **Scinder** : placez la tête de lecture au point voulu et cliquez sur **Scinder** dans la barre d'outils, ou appuyez sur S. Le clip est coupé en deux à cet endroit.
+- **Joindre les coupes** (menu Édition) : réunit les deux parties d'un clip scindé. Placez la tête de lecture sur le point de coupe ; cela ne fonctionne que si les deux parties sont la suite du même média, sans réglages différents.
 - **Supprimer** : sélectionnez le clip et appuyez sur Suppr. Vous pouvez aussi utiliser le bouton **Supprimer la sélection**.
 - **Supprimer et combler l'espace** : supprime le clip et ramène les clips suivants pour combler le vide. Utilisez Maj+Suppr.
 - **Copier, couper, coller et dupliquer** : utilisez Ctrl+C, Ctrl+X, Ctrl+V et Ctrl+D. Au collage, le clip va à la position de la tête de lecture.
@@ -422,6 +423,7 @@ Chaque fonction utilise un modèle d'IA. Le modèle de **Supprimer l'arrière-pl
 | Détecter les scènes | TransNetV2 | Oui, environ 31 Mo | CPU ou GPU |
 | Améliorer l'image | Swin2SR léger 2× | Oui, environ 8 Mo | CPU ou GPU |
 | Retoucher (beauté et maquillage) et flouter les visages | Face Mesh V2 | Oui, environ 5 Mo | CPU seulement |
+| Assistant virtuel (réponses en langage naturel) | Phi-4-mini-instruct | Oui, environ 3,2 Go | CPU ou GPU |
 
 La détection des scènes fonctionne même sans le modèle TransNetV2, en comparant les images de la vidéo. Dans ce cas, la précision est moindre.
 
@@ -477,6 +479,15 @@ Cherche les changements de scène de la vidéo et crée un marqueur sur chacun.
 ### Améliorer l'image
 
 Agrandit une photo 2× en reconstruisant les détails. Sélectionnez l'image, allez dans l'onglet **IA** et cliquez sur **Améliorer l'image par IA**. Le clip utilise désormais la nouvelle image. Pour revenir à l'original, utilisez **Annuler**.
+
+### Assistant virtuel
+
+Répond aux questions sur le logiciel et sur le montage vidéo d'après ce manuel, dans la langue du logiciel et sans internet. Ouvrez-le avec **Aide › Assistant virtuel** (Maj+F1) : le panneau apparaît à droite de l'éditeur. Tapez la question et appuyez sur Entrée (Maj+Entrée passe à la ligne) ; sans conversation, le panneau propose quelques questions.
+
+- Avec le modèle de langage **Phi-4-mini** installé, l'assistant rédige une réponse courte en utilisant uniquement les extraits du manuel trouvés et affiche la **Source dans le manuel** : cliquez dessus pour ouvrir le manuel à cette section. Le bouton d'arrêt interrompt la réponse.
+- Sans le modèle, l'assistant affiche les sections du manuel qui traitent du sujet, avec un extrait de chacune et le bouton **Ouvrir dans le manuel**. L'avis en haut du panneau installe le modèle (environ 3,2 Go, téléchargés une seule fois depuis les sources officielles) sans quitter l'éditeur ; **Pas maintenant** masque l'avis.
+- Le modèle utilise la carte graphique quand le **Périphérique d'IA** est **GPU (DirectML)** (dans **Paramètres › Performances**), sinon le processeur. La première question prend quelques secondes de plus, car le modèle est chargé ; à la fermeture du panneau, il quitte la mémoire.
+- **Nouvelle conversation** efface la conversation. Les réponses peuvent contenir des erreurs : vérifiez dans la section indiquée.
 
 ### Annuler un traitement
 
@@ -627,6 +638,7 @@ Voici les raccourcis par défaut. Vous pouvez modifier chacun d'eux dans **Outil
 | Rétablir | Ctrl+Y ou Ctrl+Maj+Z |
 | Paramètres | Ctrl+, |
 | Manuel de l'utilisateur | F1 |
+| Assistant virtuel | Maj+F1 |
 | Lecture / pause | Espace |
 | Plein écran | F11 (Échap ou F11 pour quitter) |
 | Image précédente | ← |

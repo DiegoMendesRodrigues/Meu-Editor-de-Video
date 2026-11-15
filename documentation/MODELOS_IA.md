@@ -28,6 +28,7 @@ Todos os recursos de inteligência artificial rodam **somente no computador do u
 | Detectar cenas → marcadores (e dividir o clipe) | RF161 | `SceneDetection` | TransNetV2; sem modelo, comparação de histogramas |
 | Melhorar imagem (ampliar fotos 2×) | RF164 | `ImageEnhancement` | Swin2SR leve 2× |
 | Retocar: beleza e maquiagem (aba Vídeo) | — | `FaceLandmarks` | Face Mesh V2 (MediaPipe, 478 pontos) |
+| Assistente virtual: respostas em linguagem natural (Ajuda › Assistente virtual); sem o modelo, mostra as seções do manual | — | `HelpAssistant` | Phi-4-mini-instruct ONNX int4 (DirectML) |
 
 Sem o modelo correspondente (exceto o MODNet, que é incluído), o recurso aparece como **"Indisponível — instale o modelo em Ferramentas › Modelos de IA"**
 e o botão fica desativado (§8.3). A detecção de cenas é a exceção: funciona sem modelo, com precisão menor.
@@ -137,6 +138,7 @@ O teste `Catalogo_do_repositorio_e_valido_e_tem_licencas` valida o catálogo.
 | TransNetV2 | 29,8 MB | — |
 | Swin2SR leve 2× | 7,7 MB | — |
 | Face Mesh V2 | 4,7 MB | — |
+| Phi-4-mini-instruct (10 arquivos: `model.onnx`, `model.onnx.data`, tokenizador e configuração) | 3,2 GB | — |
 
 ## Gerar os pacotes (alternativa pelo terminal)
 
@@ -154,6 +156,9 @@ O teste `Catalogo_do_repositorio_e_valido_e_tem_licencas` valida o catálogo.
 | `transnetv2.onnx` | github.com/elya5/transnetv2 (TransNetV2 de Tomáš Souček) | MIT |
 | `swin2sr-x2.onnx` | huggingface.co/Xenova/swin2SR-lightweight-x2-64 | Apache-2.0 |
 | `face_landmarks.onnx` | huggingface.co/fernandotonon/QtMeshEditor-facemesh-onnx (MediaPipe Face Mesh V2 do Google) | Apache-2.0 |
+
+O Phi-4-mini (vários arquivos, `extraFiles` no catálogo) não é gerado por `Build-ModelPackages.ps1`: instale-o pelo
+aplicativo (Baixar modelos ou o aviso do assistente virtual) e copie o pacote de `modelos-baixados\pacotes\`.
 
 ## Detalhes de execução
 

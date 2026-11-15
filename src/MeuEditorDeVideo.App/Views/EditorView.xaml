@@ -222,12 +222,15 @@
             <ColumnDefinition x:Name="ColunaPrincipal" Width="*" MinWidth="760" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition x:Name="ColunaPropriedades" Width="400" MinWidth="340" />
+            <!-- Assistente virtual (Ajuda › Assistente virtual): largura 0 enquanto fechado -->
+            <ColumnDefinition x:Name="ColunaDivisorAssistente" Width="0" />
+            <ColumnDefinition x:Name="ColunaAssistente" Width="0" />
         </Grid.ColumnDefinitions>
 
         <!-- 1. Barra de título: logotipo, menu, ações rápidas, projeto e Exportar.
              Fica sob a área de legenda da janela (WindowChrome); os botões de
              minimizar/maximizar/fechar são desenhados pela MainWindow à direita. -->
-        <Border Grid.Row="0" Grid.ColumnSpan="3" Background="{DynamicResource Med.Panel}" MinHeight="40"
+        <Border Grid.Row="0" Grid.ColumnSpan="5" Background="{DynamicResource Med.Panel}" MinHeight="40"
                 BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,0,1">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -349,6 +352,8 @@
             </MenuItem>
             <MenuItem Header="{StaticResource Editor.Menu.Ajuda}">
                 <MenuItem Header="Manual do usuário" Click="Manual_Click" AutomationProperties.Name="Manual do usuário" ctl:ShortcutText.Action="app.ajuda" />
+                <MenuItem x:Name="MenuAssistente" Header="Assistente virtual" IsCheckable="True" Click="MenuAssistente_Click"
+                          AutomationProperties.Name="Assistente virtual" ctl:ShortcutText.Action="app.assistente" />
                 <MenuItem Header="Atalhos de teclado…" Click="Atalhos_Click" AutomationProperties.Name="Atalhos de teclado" />
                 <Separator />
                 <MenuItem Header="Informações do sistema…" Click="InformacoesSistema_Click" AutomationProperties.Name="Informações do sistema" />
@@ -1534,6 +1539,13 @@
                         </TabItem>
                     </TabControl>
                 </Grid>
+            </Border>
+
+            <!-- Painel D: assistente virtual (altura total, à direita de Propriedades) -->
+            <GridSplitter x:Name="DivisorAssistente" Grid.Row="1" Grid.RowSpan="3" Grid.Column="3" Width="3" MinWidth="0" HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" Background="{DynamicResource Med.Background}" Visibility="Collapsed" />
+            <Border x:Name="PainelAssistente" Grid.Row="1" Grid.RowSpan="3" Grid.Column="4" Style="{StaticResource Editor.Painel}" Margin="1" Visibility="Collapsed">
+                <panels:AssistantPanel x:Name="Assistente" CloseRequested="Assistente_CloseRequested" />
             </Border>
     </Grid>
 </UserControl>

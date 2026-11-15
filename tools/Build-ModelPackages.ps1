@@ -27,6 +27,11 @@ $catalog = [System.IO.File]::ReadAllText((Join-Path $catalogDir 'modelos.json'),
 New-Item -ItemType Directory -Force -Path $Output | Out-Null
 
 foreach ($m in $catalog) {
+    if ($m.extraFiles) {
+        # Modelos de vários arquivos (ex.: Phi-4-mini): o pacote é gerado pelo aplicativo (Baixar modelos de IA).
+        Write-Warning "Modelo com vários arquivos, pulando: $($m.id). Instale-o pelo aplicativo."
+        continue
+    }
     $model = Join-Path $ModelsDir $m.file
     if (-not (Test-Path -LiteralPath $model)) {
         Write-Warning "Modelo ausente, pulando: $($m.file)"

@@ -14,6 +14,7 @@ public static class ApplicationServiceCollectionExtensions
         services.AddSingleton<IMediaImportService, MediaImportService>();
         services.AddSingleton<IRenderQueueService, RenderQueueService>();
         services.AddSingleton<Core.Projects.IContentPackStore, Packs.ContentPackStore>();
+        services.AddSingleton<Help.HelpAssistantService>();
         return services;
     }
 }

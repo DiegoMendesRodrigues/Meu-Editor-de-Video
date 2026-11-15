@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using MeuEditorDeVideo.Application;
 using MeuEditorDeVideo.AIEngine;
 using MeuEditorDeVideo.Infrastructure.Hosting;
@@ -52,6 +52,8 @@ internal sealed class AppContainer : IDisposable
         services.AddPreviewEngine();
         services.AddMeuEditorApplication();
         services.AddAiEngine();
+        services.AddSingleton<Core.Help.IHelpKnowledgeBase>(_ =>
+            new MeuEditorDeVideo.Application.Help.ManualKnowledgeBase(Path.Combine(AppContext.BaseDirectory, "ajuda")));
     }
 
     public void Dispose()

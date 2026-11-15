@@ -28,6 +28,9 @@ public enum ModelCapability
 
     /// <summary>Pontos do rosto (malha de 478 pontos): retoque de beleza e maquiagem.</summary>
     FaceLandmarks,
+
+    /// <summary>Modelo de linguagem do assistente virtual: responde dúvidas com base no manual (Ajuda › Assistente virtual).</summary>
+    HelpAssistant,
 }
 
 /// <summary>Dispositivo de execução escolhido pelo usuário (RF167). GPU usa DirectML e cai para CPU em caso de falha.</summary>
@@ -88,7 +91,20 @@ public sealed record ModelManifest
 
     /// <summary>Parâmetros específicos do modelo (tamanho de entrada, idioma, taxa de amostragem…).</summary>
     public IReadOnlyDictionary<string, string> Parameters { get; init; } = new Dictionary<string, string>();
+
+    /// <summary>
+    /// Outros arquivos do modelo na raiz do pacote/pasta (pesos externos, tokenizador, configuração), cada um com o seu
+    /// SHA-256. Vazio nos modelos de um arquivo só (manifestos antigos não têm o campo).
+    /// </summary>
+    public IReadOnlyList<ModelFileInfo> ExtraFiles { get; init; } = [];
+
+    /// <summary>Tamanho de todos os arquivos do modelo.</summary>
+    [System.Text.Json.Serialization.JsonIgnore]
+    public long TotalBytes => SizeBytes + ExtraFiles.Sum(f => f.SizeBytes);
 }
+
+/// <summary>Arquivo adicional de um modelo instalado (nome na raiz do pacote, SHA-256 em hex e tamanho).</summary>
+public sealed record ModelFileInfo(string File, string Sha256, long SizeBytes);
 
 /// <summary>Modelo instalado em <c>%LOCALAPPDATA%\MeuEditorDeVideo\ai-models\&lt;id&gt;</c>.</summary>
 /// <param name="BuiltIn">Modelo que vem com o aplicativo (pasta <c>ai-models</c> ao lado do executável): sempre disponível e não pode ser removido.</param>

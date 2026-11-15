@@ -48,7 +48,7 @@ public sealed class CatalogModelInstaller(ModelCatalog catalog, IModelRegistry r
 
     /// <summary>Bytes a baixar no plano (pacotes já gerados e íntegros não são baixados de novo).</summary>
     public long DownloadBytes(IReadOnlyList<ModelCatalogEntry> plan) =>
-        plan.Where(e => !HasPackage(e)).Sum(e => e.SizeBytes);
+        plan.Where(e => !HasPackage(e)).Sum(e => e.TotalBytes);
 
     /// <summary>Instala o plano na ordem. Um erro interrompe a instalação; os modelos já instalados continuam valendo.</summary>
     public async Task InstallAsync(IReadOnlyList<ModelCatalogEntry> plan, IProgress<ModelInstallProgress>? progress = null,
@@ -60,26 +60,51 @@ public sealed class CatalogModelInstaller(ModelCatalog catalog, IModelRegistry r
         {
             var entry = plan[i];
             void Report(ModelInstallStage stage, long bytes) =>
-                progress?.Report(new ModelInstallProgress(entry.Id, entry.Name, i + 1, plan.Count, stage, bytes, entry.SizeBytes));
+                progress?.Report(new ModelInstallProgress(entry.Id, entry.Name, i + 1, plan.Count, stage, bytes, entry.TotalBytes));
 
             var package = PackagePath(entry);
             if (!HasPackage(entry))
             {
-                var file = Path.Combine(DownloadsDirectory, entry.File);
+                // Modelos de vários arquivos ficam numa subpasta própria (nomes como config.json podem se repetir).
+                var folder = entry.ExtraFiles.Count == 0 ? DownloadsDirectory : Path.Combine(DownloadsDirectory, entry.Id);
+                Directory.CreateDirectory(folder);
+                var file = Path.Combine(folder, entry.File);
                 Report(ModelInstallStage.Downloading, 0);
                 logger?.LogInformation("Baixando {Id} de {Url}", entry.Id, entry.Url);
-                await downloader.DownloadAsync(entry.Url, file, entry.SizeBytes, entry.Sha256,
-                    new Progress<long>(b => Report(ModelInstallStage.Downloading, b)), cancellationToken);
-                Report(ModelInstallStage.Packaging, entry.SizeBytes);
+                long done = 0;
+                foreach (var (url, name, size, sha) in Files(entry))
+                {
+                    var before = done;
+                    await downloader.DownloadAsync(url, Path.Combine(folder, name), size, sha,
+                        new Progress<long>(b => Report(ModelInstallStage.Downloading, before + b)), cancellationToken);
+                    done += size;
+                }
+                Report(ModelInstallStage.Packaging, entry.TotalBytes);
                 await ModelPackageBuilder.BuildAsync(entry, file, catalog.LicensePath(entry), package, cancellationToken);
-                File.Delete(file);
+                foreach (var f in Files(entry)) File.Delete(Path.Combine(folder, f.File));
+                if (entry.ExtraFiles.Count > 0) TryDeleteEmpty(folder);
             }
             cancellationToken.ThrowIfCancellationRequested();
-            Report(ModelInstallStage.Installing, entry.SizeBytes);
+            Report(ModelInstallStage.Installing, entry.TotalBytes);
             await registry.InstallAsync(package, cancellationToken);
             logger?.LogInformation("Modelo {Id} {Version} instalado a partir do catálogo", entry.Id, entry.Version);
-            Report(ModelInstallStage.Done, entry.SizeBytes);
+            Report(ModelInstallStage.Done, entry.TotalBytes);
         }
+    }
+
+    private static IEnumerable<(Uri Url, string File, long Size, string Sha256)> Files(ModelCatalogEntry entry)
+    {
+        yield return (entry.Url, entry.File, entry.SizeBytes, entry.Sha256);
+        foreach (var f in entry.ExtraFiles) yield return (f.Url, f.File, f.SizeBytes, f.Sha256);
+    }
+
+    private static void TryDeleteEmpty(string folder)
+    {
+        try
+        {
+            if (Directory.Exists(folder) && !Directory.EnumerateFileSystemEntries(folder).Any()) Directory.Delete(folder);
+        }
+        catch (IOException) { }
     }
 
     public string PackagePath(ModelCatalogEntry entry) => Path.Combine(PackagesDirectory, $"{entry.Id}-{entry.Version}.medmodel");
@@ -96,7 +121,7 @@ public sealed class CatalogModelInstaller(ModelCatalog catalog, IModelRegistry r
             ModelManifest m;
             using (var s = e.Open()) m = ModelManifestJson.Read(s);
             return string.Equals(m.Sha256, entry.Sha256, StringComparison.OrdinalIgnoreCase)
-                && zip.GetEntry(entry.File)?.Length == entry.SizeBytes;
+                && Files(entry).All(f => zip.GetEntry(f.File)?.Length == f.Size);
         }
         catch (Exception ex) when (ex is IOException or InvalidDataException)
         {

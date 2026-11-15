@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
@@ -98,9 +98,20 @@ public sealed class ModelRegistry : IModelRegistry
         lock (_gate) model = _installed.FirstOrDefault(m => string.Equals(m.Manifest.Id, id, StringComparison.Ordinal));
         if (model is null || !File.Exists(model.ModelPath)) return false;
 
-        await using var stream = new FileStream(model.ModelPath, FileMode.Open, FileAccess.Read, FileShare.Read, CopyBufferSize, FileOptions.Asynchronous);
+        if (!await HashMatchesAsync(model.ModelPath, model.Manifest.Sha256, cancellationToken).ConfigureAwait(false)) return false;
+        foreach (var extra in model.Manifest.ExtraFiles)
+        {
+            var path = Path.Combine(model.Directory, extra.File);
+            if (!File.Exists(path) || !await HashMatchesAsync(path, extra.Sha256, cancellationToken).ConfigureAwait(false)) return false;
+        }
+        return true;
+    }
+
+    private static async Task<bool> HashMatchesAsync(string path, string sha256, CancellationToken cancellationToken)
+    {
+        await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, CopyBufferSize, FileOptions.Asynchronous);
         var hash = await SHA256.HashDataAsync(stream, cancellationToken).ConfigureAwait(false);
-        return string.Equals(Convert.ToHexString(hash), model.Manifest.Sha256, StringComparison.OrdinalIgnoreCase);
+        return string.Equals(Convert.ToHexString(hash), sha256, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <inheritdoc />
@@ -193,6 +204,15 @@ public sealed class ModelRegistry : IModelRegistry
 
         EnsureSimpleFileName(manifest.File, "file");
         var modelEntry = RequireEntry(zip, manifest.File, $"O arquivo do modelo '{manifest.File}' declarado no manifesto não está no pacote.");
+        // Arquivos adicionais (pesos externos, tokenizador…): cada um é conferido como o principal.
+        var extras = new Dictionary<ZipArchiveEntry, ModelFileInfo>();
+        foreach (var extra in manifest.ExtraFiles)
+        {
+            EnsureSimpleFileName(extra.File, "extraFiles");
+            var e = RequireEntry(zip, extra.File, $"O arquivo do modelo '{extra.File}' declarado no manifesto não está no pacote.");
+            if (ReferenceEquals(e, modelEntry) || !extras.TryAdd(e, extra))
+                throw new InvalidDataException($"O manifesto repete o arquivo '{extra.File}'.");
+        }
         if (manifest.LicenseFile is { } licenseFile)
         {
             EnsureSimpleFileName(licenseFile, "licenseFile");
@@ -221,9 +241,21 @@ public sealed class ModelRegistry : IModelRegistry
                     continue;
                 }
                 if (ReferenceEquals(entry, modelEntry))
+                {
                     modelSize = ExtractEntry(entry, destination, hash, ct);
+                }
+                else if (extras.TryGetValue(entry, out var extra))
+                {
+                    using var extraHash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+                    var size = ExtractEntry(entry, destination, extraHash, ct);
+                    if (!string.Equals(Convert.ToHexString(extraHash.GetHashAndReset()), extra.Sha256, StringComparison.OrdinalIgnoreCase)
+                        || (extra.SizeBytes > 0 && size != extra.SizeBytes))
+                        throw new InvalidDataException($"O arquivo '{extra.File}' do modelo está corrompido: o hash SHA-256 ou o tamanho não confere com o manifesto.");
+                }
                 else
+                {
                     ExtractEntry(entry, destination, null, ct);
+                }
             }
 
             var actualHash = Convert.ToHexString(hash.GetHashAndReset());

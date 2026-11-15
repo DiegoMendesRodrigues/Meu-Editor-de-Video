@@ -736,3 +736,14 @@ e19b4ed8	Ligação para transferência na Microsoft Store:
 a25648cb	Verificar mensalmente se há novas atualizações
 836775bf	Guardar as preferências
 4eb7d40e	Acompanhar o sistema operativo
+0e23f29d	A pergunta e os excertos do manual ultrapassaram o limite do modelo de linguagem.
+29d81af6	As respostas podem conter erros: confirme no manual pela fonte indicada.
+c7bf3af8	Como divido um clip em duas partes?
+1b943228	Estas secções do manual falam sobre isso:
+8e7b4b1a	Nome de ficheiro inválido ou repetido para '{0}': {1}.
+adac886e	Não encontrei esse assunto no manual. Experimente perguntar com outras palavras, por exemplo com o nome do menu ou da funcionalidade.
+c5d32e65	O ficheiro '{0}' do modelo está corrompido: o hash SHA-256 ou o tamanho não corresponde ao manifesto.
+3cb5f362	O manifesto repete o ficheiro '{0}'.
+a08a4981	Para respostas em linguagem natural, instale o modelo {0} ({1}). Corre neste computador; sem ele, o assistente mostra as secções do manual.
+57b8fe10	A pensar…
+6b288621	Pergunte sobre qualquer funcionalidade do programa ou sobre edição de vídeo. Por exemplo:

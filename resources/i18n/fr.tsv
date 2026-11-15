@@ -2186,3 +2186,40 @@ e6c95e78	Allemand
 25c0623b	Portugais (Brésil)
 a442dc64	Portugais (Portugal)
 4eb7d40e	Suivre le système d'exploitation
+251c014e	(interrompu)
+0e23f29d	La question et les extraits du manuel dépassent la limite du modèle de langage.
+9b29e1bd	Ouvrir dans le manuel
+a73293ea	Pas maintenant
+29d81af6	Les réponses peuvent contenir des erreurs : vérifiez dans le manuel avec la source indiquée.
+e8fba24d	Assistant virtuel
+5a7b395d	Annuler l'installation
+c7bf3af8	Comment couper un clip en deux ?
+6a1670f6	Comment générer des sous-titres automatiques ?
+7151d6aa	Comment supprimer l'arrière-plan d'une vidéo ?
+d7ed6d13	Conversation avec l'assistant
+07c7f6db	Envoyer (Entrée)
+dc4070ab	Envoyer la question
+1b943228	Ces sections du manuel en parlent :
+7f957aad	Fermer l'assistant
+ae7f7ffc	Source dans le manuel :
+03207eaa	Installer le modèle de langage
+32208589	Message
+c8b6078a	Messages
+e00023c4	Modèle de langage (assistant virtuel)
+8e7b4b1a	Nom de fichier invalide ou répété pour '{0}' : {1}.
+2ec797fe	Nouvelle conversation
+adac886e	Je n'ai pas trouvé ce sujet dans le manuel. Essayez avec d'autres mots, par exemple le nom du menu ou de la fonction.
+4bb04799	Impossible de générer la réponse : {0}
+c5d32e65	Le fichier '{0}' du modèle est corrompu : le hachage SHA-256 ou la taille ne correspond pas au manifeste.
+3cb5f362	Le manifeste répète le fichier '{0}'.
+d18eb8af	Le modèle de langage de l'assistant virtuel n'est pas installé.
+a08a4981	Pour des réponses en langage naturel, installez le modèle {0} ({1}). Il s'exécute sur cet ordinateur ; sans lui, l'assistant affiche les sections du manuel.
+a8677adf	Arrêter la réponse
+57b8fe10	Réflexion…
+d6a7cb8d	Question à l'assistant
+07ef34b8	Questions suggérées
+6b288621	Posez une question sur une fonction du logiciel ou sur le montage vidéo. Par exemple :
+31213b1e	Quelle qualité utiliser pour exporter ?
+34db3a15	Répond d'après le manuel, sans internet.
+30f9d184	SHA-256 invalide pour '{0}' ({1}).
+a811c9b4	Taille invalide pour '{0}' ({1}).

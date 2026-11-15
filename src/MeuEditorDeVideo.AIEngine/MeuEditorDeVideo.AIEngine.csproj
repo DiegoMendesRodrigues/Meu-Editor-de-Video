@@ -6,6 +6,8 @@
   <ItemGroup>
     <!-- Execução local de modelos (§8.1): ONNX Runtime com DirectML (GPU) e CPU; Whisper (whisper.cpp) para fala. -->
     <PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" />
+    <!-- Assistente virtual: modelo de linguagem local (Phi-4-mini) pelo ONNX Runtime GenAI, também com DirectML. -->
+    <PackageReference Include="Microsoft.ML.OnnxRuntimeGenAI.DirectML" />
     <PackageReference Include="Whisper.net" />
     <PackageReference Include="Whisper.net.Runtime" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />

@@ -50,7 +50,7 @@ public sealed class ModelCatalogTests : IDisposable
     public void Catalogo_do_repositorio_e_valido_e_tem_licencas()
     {
         var catalog = ModelCatalog.Load(RepoCatalog());
-        Assert.Equal(["whisper-large-v3-turbo", "gtcrn-voz", "silero-vad", "transnetv2", "swin2sr-x2", "facemesh-v2"], catalog.Entries.Select(e => e.Id));
+        Assert.Equal(["whisper-large-v3-turbo", "gtcrn-voz", "silero-vad", "transnetv2", "swin2sr-x2", "facemesh-v2", "phi4-mini"], catalog.Entries.Select(e => e.Id));
         Assert.All(catalog.Entries, e =>
         {
             Assert.True(File.Exists(catalog.LicensePath(e)), e.LicenseFile);
@@ -60,6 +60,88 @@ public sealed class ModelCatalogTests : IDisposable
             Assert.DoesNotContain("/master/", e.Url.AbsolutePath);
         });
         Assert.Equal(["silero-vad"], catalog.Find("whisper-large-v3-turbo")!.DependsOn);
+
+        // Assistente virtual: Phi-4-mini em vários arquivos, todos no mesmo commit da origem oficial.
+        var phi = catalog.Find("phi4-mini")!;
+        Assert.Equal(ModelCapability.HelpAssistant, phi.Capability);
+        Assert.Equal("model.onnx", phi.File);
+        Assert.Contains(phi.ExtraFiles, f => f.File == "model.onnx.data" && f.SizeBytes > 3_000_000_000L);
+        Assert.Contains(phi.ExtraFiles, f => f.File == "genai_config.json");
+        Assert.Contains(phi.ExtraFiles, f => f.File == "tokenizer.json");
+        var commit = phi.Url.Segments[4];
+        Assert.All(phi.ExtraFiles, f => Assert.Equal(commit, f.Url.Segments[4]));
+        Assert.True(phi.TotalBytes > phi.SizeBytes);
+    }
+
+    private static ModelCatalogFile Extra(string id, string name, byte[] content) => new()
+    {
+        File = name, Url = new Uri($"https://huggingface.co/x/{id}/resolve/abc/{name}"),
+        Sha256 = Convert.ToHexStringLower(SHA256.HashData(content)), SizeBytes = content.Length,
+    };
+
+    [Fact]
+    public void Arquivos_adicionais_invalidos_sao_recusados()
+    {
+        var entry = Entry("a", Bytes(3));
+        Assert.Throws<InvalidDataException>(() => Catalog(entry with { ExtraFiles = [Extra("a", "a.onnx", Bytes(5))] })); // repete o principal
+        Assert.Throws<InvalidDataException>(() => Catalog(entry with { ExtraFiles = [Extra("a", "manifest.json", Bytes(5))] }));
+        Assert.Throws<InvalidDataException>(() => Catalog(entry with { ExtraFiles = [Extra("a", "x.data", Bytes(5)) with { Url = new Uri("https://exemplo.com/x.data") }] }));
+        Assert.Throws<InvalidDataException>(() => Catalog(entry with { ExtraFiles = [Extra("a", @"..\x.data", Bytes(5))] }));
+        Assert.Throws<InvalidDataException>(() => Catalog(entry with { ExtraFiles = [Extra("a", "x.data", Bytes(5)), Extra("a", "X.DATA", Bytes(7))] }));
+    }
+
+    [Fact]
+    public async Task Modelo_de_varios_arquivos_e_baixado_empacotado_instalado_e_verificado()
+    {
+        byte[] main = Bytes(3), data = Bytes(5, 9000), config = Bytes(7, 300);
+        var entry = Entry("lm", main) with { ExtraFiles = [Extra("lm", "model.onnx.data", data), Extra("lm", "genai_config.json", config)] };
+        var catalog = Catalog(entry);
+        var downloader = new FakeDownloader(new()
+        {
+            [entry.Url] = main, [entry.ExtraFiles[0].Url] = data, [entry.ExtraFiles[1].Url] = config,
+        });
+        var registry = new ModelRegistry(Path.Combine(_dir, "instalados"));
+        var installer = new CatalogModelInstaller(catalog, registry, downloader, Path.Combine(_dir, "trabalho"));
+        var plan = installer.Plan(["lm"]);
+        Assert.Equal(main.Length + data.Length + config.Length, installer.DownloadBytes(plan));
+        var progress = new List<ModelInstallProgress>();
+
+        await installer.InstallAsync(plan, new SyncProgress(progress.Add));
+
+        Assert.Equal(3, downloader.Calls.Count);
+        Assert.All(progress, p => Assert.Equal(entry.TotalBytes, p.TotalBytes));
+        var installed = Assert.Single(registry.Installed);
+        Assert.Equal(["model.onnx.data", "genai_config.json"], installed.Manifest.ExtraFiles.Select(f => f.File));
+        Assert.Equal(data, await File.ReadAllBytesAsync(Path.Combine(installed.Directory, "model.onnx.data")));
+        Assert.Equal(entry.TotalBytes, installed.Manifest.TotalBytes);
+        Assert.True(await registry.VerifyAsync("lm"));
+        Assert.False(Directory.Exists(Path.Combine(_dir, "trabalho", "downloads", "lm")));
+
+        // Um arquivo adicional alterado depois de instalado é detectado.
+        await File.WriteAllBytesAsync(Path.Combine(installed.Directory, "genai_config.json"), Bytes(11, 300));
+        Assert.False(await registry.VerifyAsync("lm"));
+    }
+
+    [Fact]
+    public async Task Pacote_com_arquivo_adicional_corrompido_e_recusado()
+    {
+        byte[] main = Bytes(3), data = Bytes(5, 9000);
+        var entry = Entry("lm", main) with { ExtraFiles = [Extra("lm", "model.onnx.data", data)] };
+        var catalog = Catalog(entry);
+        await File.WriteAllBytesAsync(Path.Combine(_dir, entry.File), main);
+        await File.WriteAllBytesAsync(Path.Combine(_dir, "model.onnx.data"), data);
+        var package = Path.Combine(_dir, "lm.medmodel");
+        await ModelPackageBuilder.BuildAsync(entry, Path.Combine(_dir, entry.File), catalog.LicensePath(entry), package);
+        using (var zip = ZipFile.Open(package, ZipArchiveMode.Update))
+        {
+            zip.GetEntry("model.onnx.data")!.Delete();
+            using var w = zip.CreateEntry("model.onnx.data").Open();
+            w.Write(Bytes(13, 9000));
+        }
+
+        var registry = new ModelRegistry(Path.Combine(_dir, "instalados"));
+        await Assert.ThrowsAsync<InvalidDataException>(() => registry.InstallAsync(package));
+        Assert.Empty(registry.Installed);
     }
 
     [Fact]

@@ -300,6 +300,12 @@ public partial class EditorView : UserControl
             e.Handled = true;
             return;
         }
+        if (action == ShortcutCatalog.Assistant)
+        {
+            MostrarAssistente(PainelAssistente.Visibility != Visibility.Visible);
+            e.Handled = true;
+            return;
+        }
         System.Windows.Input.ICommand? command = action switch
         {
             ShortcutCatalog.NewProject => vm.NewProjectCommand,
@@ -328,6 +334,67 @@ public partial class EditorView : UserControl
 
     /// <summary>Manual do usuário offline (F1).</summary>
     private void Manual_Click(object sender, RoutedEventArgs e) => Dialogs.HelpWindow.ShowFor(Window.GetWindow(this));
+
+    private ViewModels.AssistantViewModel? _assistente;
+    private GridLength _larguraAssistente = new(380);
+    private GridLength? _larguraBibliotecaSemAssistente;
+
+    private void MenuAssistente_Click(object sender, RoutedEventArgs e) => MostrarAssistente(MenuAssistente.IsChecked);
+
+    private void Assistente_CloseRequested(object? sender, EventArgs e) => MostrarAssistente(false);
+
+    /// <summary>
+    /// Abre ou fecha o assistente virtual numa coluna própria, à direita de Propriedades (vale para todos os modos do
+    /// layout). A conversa continua ao reabrir; ao fechar, a resposta em andamento para e o modelo sai da memória.
+    /// </summary>
+    public void MostrarAssistente(bool mostrar)
+    {
+        MenuAssistente.IsChecked = mostrar;
+        if (mostrar == (PainelAssistente.Visibility == Visibility.Visible)) return;
+        if (mostrar)
+        {
+            if (_assistente is null)
+            {
+                // O catálogo (instalação do modelo pelo aviso do painel) não é serviço: é criado como na janela de modelos.
+                var catalogo = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<ViewModels.ModelCatalogViewModel>(App.Services);
+                _assistente = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<ViewModels.AssistantViewModel>(App.Services, catalogo);
+                _assistente.OpenSectionRequested += (_, section) => Dialogs.HelpWindow.ShowFor(Window.GetWindow(this), section.Title);
+                Assistente.DataContext = _assistente;
+            }
+            ColunaDivisorAssistente.Width = GridLength.Auto;
+            ColunaAssistente.MinWidth = 300;
+            ColunaAssistente.Width = _larguraAssistente;
+            PainelAssistente.Visibility = DivisorAssistente.Visibility = Visibility.Visible;
+            AbrirEspacoParaOMonitor();
+            Assistente.FocusQuestion();
+        }
+        else
+        {
+            _larguraAssistente = ColunaAssistente.Width;
+            ColunaAssistente.MinWidth = 0;
+            ColunaAssistente.Width = ColunaDivisorAssistente.Width = new GridLength(0);
+            PainelAssistente.Visibility = DivisorAssistente.Visibility = Visibility.Collapsed;
+            if (_larguraBibliotecaSemAssistente is { } largura) ColunaBiblioteca.Width = largura;
+            _larguraBibliotecaSemAssistente = null;
+            _assistente?.Suspend();
+        }
+    }
+
+    /// <summary>
+    /// Em janelas estreitas, a coluna do assistente sai da área do monitor, que ficaria abaixo do mínimo e cortada:
+    /// encolhe a biblioteca (até o mínimo dela) o que faltar. A largura anterior volta ao fechar o assistente.
+    /// </summary>
+    private void AbrirEspacoParaOMonitor()
+    {
+        UpdateLayout();
+        if (PainelMonitor.Parent != AreaCentral || Grid.GetColumnSpan(AreaCentral) != 1) return; // outro modo do layout
+        // As colunas da área central respeitam os mínimos e passam da coluna principal; o excesso é a parte cortada do monitor.
+        var falta = AreaCentral.ColumnDefinitions.Sum(c => c.ActualWidth) - ColunaPrincipal.ActualWidth;
+        var sobra = ColunaBiblioteca.ActualWidth - ColunaBiblioteca.MinWidth;
+        if (falta <= 0.5 || sobra <= 0) return;
+        _larguraBibliotecaSemAssistente ??= ColunaBiblioteca.Width;
+        ColunaBiblioteca.Width = new GridLength(ColunaBiblioteca.ActualWidth - Math.Min(falta, sobra));
+    }
 
     private void Atalhos_Click(object sender, RoutedEventArgs e) => Dialogs.InfoDocumentWindow.ShowShortcuts(Window.GetWindow(this));
 

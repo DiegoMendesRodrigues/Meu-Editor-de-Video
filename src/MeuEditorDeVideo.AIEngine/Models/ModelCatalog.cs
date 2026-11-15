@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using MeuEditorDeVideo.Core.AI;
 
 namespace MeuEditorDeVideo.AIEngine.Models;
@@ -82,6 +82,19 @@ public sealed class ModelCatalog
             if (e.SizeBytes <= 0) throw new InvalidDataException($"Tamanho inválido para '{e.Id}'.");
             if (Path.GetFileName(e.File) != e.File || Path.GetFileName(e.LicenseFile) != e.LicenseFile)
                 throw new InvalidDataException($"Nome de arquivo inválido para '{e.Id}'.");
+            var files = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { e.File };
+            foreach (var f in e.ExtraFiles)
+            {
+                if (f.Url.Scheme != Uri.UriSchemeHttps || !AllowedHosts.Contains(f.Url.Host, StringComparer.OrdinalIgnoreCase))
+                    throw new InvalidDataException($"Endereço não permitido para '{e.Id}': {f.Url}. Use HTTPS em {string.Join(" ou ", AllowedHosts)}.");
+                if (f.Sha256.Length != 64 || !f.Sha256.All(Uri.IsHexDigit))
+                    throw new InvalidDataException($"SHA-256 inválido para '{e.Id}' ({f.File}).");
+                if (f.SizeBytes <= 0) throw new InvalidDataException($"Tamanho inválido para '{e.Id}' ({f.File}).");
+                if (string.IsNullOrWhiteSpace(f.File) || Path.GetFileName(f.File) != f.File || !files.Add(f.File)
+                    || f.File.Equals("manifest.json", StringComparison.OrdinalIgnoreCase) || f.File.Equals("LICENSE.txt", StringComparison.OrdinalIgnoreCase)
+                    || f.File.Equals("README.md", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidDataException($"Nome de arquivo inválido ou repetido para '{e.Id}': {f.File}.");
+            }
         }
         foreach (var e in entries)
             foreach (var dep in e.DependsOn)

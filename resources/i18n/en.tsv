@@ -2185,3 +2185,40 @@ e6c95e78	German
 25c0623b	Portuguese (Brazil)
 a442dc64	Portuguese (Portugal)
 4eb7d40e	Follow the operating system
+251c014e	(stopped)
+0e23f29d	The question and the manual excerpts exceeded the language model's limit.
+9b29e1bd	Open in the manual
+a73293ea	Not now
+29d81af6	Answers may contain mistakes: check the manual using the source shown.
+e8fba24d	Virtual assistant
+5a7b395d	Cancel installation
+c7bf3af8	How do I split a clip into two parts?
+6a1670f6	How do I generate automatic subtitles?
+7151d6aa	How do I remove the background from a video?
+d7ed6d13	Conversation with the assistant
+07c7f6db	Send (Enter)
+dc4070ab	Send question
+1b943228	These manual sections cover this:
+7f957aad	Close the assistant
+ae7f7ffc	Source in the manual:
+03207eaa	Install the language model
+32208589	Message
+c8b6078a	Messages
+e00023c4	Language model (virtual assistant)
+8e7b4b1a	Invalid or repeated file name for '{0}': {1}.
+2ec797fe	New conversation
+adac886e	I couldn't find this topic in the manual. Try asking in other words, for example with the name of the menu or feature.
+4bb04799	Could not generate the answer: {0}
+c5d32e65	The model file '{0}' is corrupted: the SHA-256 hash or size does not match the manifest.
+3cb5f362	The manifest repeats the file '{0}'.
+d18eb8af	The virtual assistant's language model is not installed.
+a08a4981	For natural-language answers, install the {0} model ({1}). It runs on this computer; without it, the assistant shows the manual sections.
+a8677adf	Stop the answer
+57b8fe10	Thinking…
+d6a7cb8d	Question for the assistant
+07ef34b8	Suggested questions
+6b288621	Ask about any feature of the program or about video editing. For example:
+31213b1e	What quality should I use to export?
+34db3a15	Answers based on the manual, without internet.
+30f9d184	Invalid SHA-256 for '{0}' ({1}).
+a811c9b4	Invalid size for '{0}' ({1}).

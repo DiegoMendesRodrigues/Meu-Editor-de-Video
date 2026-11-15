@@ -90,7 +90,7 @@ public sealed record ShortcutAction(string Id, string Label, string Category, pa
 public static class ShortcutCatalog
 {
     public const string NewProject = "projeto.novo", OpenProject = "projeto.abrir", Save = "projeto.salvar", SaveAs = "projeto.salvarComo",
-        Import = "midia.importar", Export = "projeto.exportar", Undo = "editar.desfazer", Redo = "editar.refazer", Settings = "app.configuracoes", Help = "app.ajuda",
+        Import = "midia.importar", Export = "projeto.exportar", Undo = "editar.desfazer", Redo = "editar.refazer", Settings = "app.configuracoes", Help = "app.ajuda", Assistant = "app.assistente",
         PlayPause = "reproducao.reproduzir", FullScreen = "reproducao.telaCheia", StepBack = "reproducao.quadroAnterior",
         StepForward = "reproducao.proximoQuadro", StepBackSecond = "reproducao.voltarSegundo", StepForwardSecond = "reproducao.avancarSegundo",
         GoToStart = "reproducao.inicio", GoToEnd = "reproducao.fim", PreviousEdit = "reproducao.cortaAnterior", NextEdit = "reproducao.proximoCorte",
@@ -111,6 +111,7 @@ public static class ShortcutCatalog
         new(Redo, "Refazer", "Arquivo e edição", "Ctrl+Y", "Ctrl+Shift+Z"),
         new(Settings, "Configurações", "Arquivo e edição", "Ctrl+OemComma"),
         new(Help, "Manual do usuário", "Arquivo e edição", "F1"),
+        new(Assistant, "Assistente virtual", "Arquivo e edição", "Shift+F1"),
 
         new(PlayPause, "Reproduzir / pausar", "Reprodução", "Space"),
         new(FullScreen, "Tela cheia", "Reprodução", "F11"),

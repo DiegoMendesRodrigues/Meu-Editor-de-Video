@@ -82,7 +82,7 @@ After you create or open a project, the editing screen appears. It is divided in
   - **Content packs…** installs, exports and removes packs of stickers, titles and project templates (.medpack files). A pack is a ZIP with the folders `figurinhas` (PNG, GIF, WebP, JPEG or SVG), `titulos` (.medtitle) and `modelos` (.med) and, optionally, a `pacote.json` with the name (for example `{"nome": "Summer Party"}`). Items you save yourself go into the **My items** pack; use **Export…** to share it.
   - **Text to speech…** turns text into narration with the voices installed in Windows, without internet. Type the text, choose the **Voice** and the **Speed** and click **Generate and insert**: the audio goes to the library (Narration category) and is placed at the playhead, on the first free audio track or on a new track called Narration. For more voices, install them in **Windows Settings › Time & language › Speech**.
   - **Analyze media** tags all the media in the library: type, orientation (horizontal, vertical, square), resolution (HD, Full HD, 4K), duration (short, long) and sound. With the models installed, also **speech** or **no speech**, the number of **scenes** and **person** or **no people**. Tags appear when you hover over the media, and the library's **Search…** box also searches them.
-- **Help**: **User manual** (F1), **Keyboard shortcuts…**, **System information…**, **Open logs folder**, **Third-party licenses**, **About Meu Editor de Vídeo…**, **Check for updates** (asks over the internet whether there is a new version: it shows "You have the latest version!" or the **New version available** window, with the version, languages, supported systems, author and the download links on the Microsoft Store and the AplicativosIA.Online website; clicking **Close this window** stores the check date). In **About Meu Editor de Vídeo…**, the LinkedIn icon opens the author's profile in the browser.
+- **Help**: **User manual** (F1), **Virtual assistant** (Shift+F1), **Keyboard shortcuts…**, **System information…**, **Open logs folder**, **Third-party licenses**, **About Meu Editor de Vídeo…**, **Check for updates** (asks over the internet whether there is a new version: it shows "You have the latest version!" or the **New version available** window, with the version, languages, supported systems, author and the download links on the Microsoft Store and the AplicativosIA.Online website; clicking **Close this window** stores the check date). In **About Meu Editor de Vídeo…**, the LinkedIn icon opens the author's profile in the browser.
 
 The **User manual** opens this manual inside the program, without internet. The list on the left takes you to each topic and Ctrl+F searches for a word. The window can stay open while you edit.
 
@@ -154,6 +154,7 @@ The timeline is where the video is assembled from left to right. The **playhead*
 - **Move**: drag the clip to another place on the track or to another track of the same type.
 - **Trim the start or end**: drag the edge of the clip to shorten or lengthen the part used.
 - **Split**: place the playhead at the desired point and click **Split** on the toolbar, or press S. The clip is cut in two at that point.
+- **Join cuts** (Edit menu): joins the two parts of a split clip back together. Place the playhead over the cut point; it only works when both parts continue the same media, with no different settings.
 - **Delete**: select the clip and press Delete. You can also use the **Delete selection** button.
 - **Delete and close gap**: deletes the clip and pulls the following clips to fill the gap. Use Shift+Delete.
 - **Copy, cut, paste and duplicate**: use Ctrl+C, Ctrl+X, Ctrl+V and Ctrl+D. When pasting, the clip goes to the playhead position.
@@ -422,6 +423,7 @@ Each feature uses an AI model. The **Remove background** model comes with the pr
 | Detect scenes | TransNetV2 | Yes, about 31 MB | CPU or GPU |
 | Enhance image | Swin2SR lightweight 2× | Yes, about 8 MB | CPU or GPU |
 | Retouch (beauty and makeup) and blur faces | Face Mesh V2 | Yes, about 5 MB | CPU only |
+| Virtual assistant (natural-language answers) | Phi-4-mini-instruct | Yes, about 3.2 GB | CPU or GPU |
 
 Scene detection works even without the TransNetV2 model, by comparing the video's images. In that case, accuracy is lower.
 
@@ -477,6 +479,15 @@ Searches for scene changes in the video and creates a marker on each one.
 ### Enhance image
 
 Enlarges a photo 2× by reconstructing details. Select the image, go to the **AI** tab and click **Enhance image with AI**. The clip starts using the new image. To return to the original, use **Undo**.
+
+### Virtual assistant
+
+Answers questions about the program and about video editing based on this manual, in the program's language and without internet. Open it from **Help › Virtual assistant** (Shift+F1): the panel appears on the right of the editor. Type the question and press Enter (Shift+Enter starts a new line); with no conversation, the panel suggests a few questions.
+
+- With the **Phi-4-mini** language model installed, the assistant writes a short answer using only the manual excerpts it found and shows the **Source in the manual**: click it to open the manual at that section. The stop button interrupts the answer.
+- Without the model, the assistant shows the manual sections about the subject, with an excerpt of each and the **Open in the manual** button. The notice at the top of the panel installs the model (about 3.2 GB, downloaded once from the official sources) without leaving the editor; **Not now** hides the notice.
+- The model uses the graphics card when the **AI device** is **GPU (DirectML)** (in **Settings › Performance**), otherwise the processor. The first question takes a few seconds longer because the model is loaded; closing the panel frees it from memory.
+- **New conversation** clears the conversation. Answers may contain mistakes: check the section shown.
 
 ### Cancelling processing
 
@@ -627,6 +638,7 @@ These are the default shortcuts. You can change any of them in **Tools › Setti
 | Redo | Ctrl+Y or Ctrl+Shift+Z |
 | Settings | Ctrl+, |
 | User manual | F1 |
+| Virtual assistant | Shift+F1 |
 | Play / pause | Space |
 | Full screen | F11 (Esc or F11 to exit) |
 | Previous frame | ← |

@@ -38,19 +38,34 @@ public partial class HelpWindow
         Load();
     }
 
-    /// <summary>Abre o manual (ou traz a janela já aberta para a frente).</summary>
-    public static void ShowFor(Window? owner)
+    /// <summary>Abre o manual (ou traz a janela já aberta para a frente), opcionalmente na seção com o título dado.</summary>
+    public static void ShowFor(Window? owner, string? topicTitle = null)
     {
         if (_open is not null)
         {
             if (_open.WindowState == WindowState.Minimized) _open.WindowState = WindowState.Normal;
             _open.Activate();
-            return;
         }
-        _open = new HelpWindow { Owner = owner };
-        if (owner is null) _open.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        _open.Closed += (_, _) => _open = null;
-        _open.Show();
+        else
+        {
+            _open = new HelpWindow { Owner = owner };
+            if (owner is null) _open.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            _open.Closed += (_, _) => _open = null;
+            _open.Show();
+        }
+        if (!string.IsNullOrEmpty(topicTitle)) _open.GoTo(topicTitle);
+    }
+
+    /// <summary>Seleciona a seção no sumário e rola o texto até ela (usado pelo assistente virtual: "Abrir no manual").</summary>
+    public void GoTo(string topicTitle)
+    {
+        if (Sumario.ItemsSource is not IEnumerable<TopicItem> items) return;
+        var item = items.FirstOrDefault(i => i.Title == topicTitle);
+        if (item is null) return;
+        Sumario.SelectedItem = null; // reseleciona mesmo se já estiver selecionada
+        Sumario.SelectedItem = item;
+        Sumario.ScrollIntoView(item);
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, () => item.Topic.Target.BringIntoView());
     }
 
     private void Load()

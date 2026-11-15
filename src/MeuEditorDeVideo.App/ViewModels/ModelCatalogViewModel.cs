@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -22,7 +22,7 @@ public sealed partial class CatalogItemViewModel(ModelCatalogEntry entry, ModelC
     public string Purpose => Entry.Purpose;
     public IReadOnlyList<string> Features => Entry.Features;
     public string Capability => ModelManagerViewModel.CapabilityName(Entry.Capability);
-    public string Download => ModelItemViewModel.FormatBytes(Entry.SizeBytes);
+    public string Download => ModelItemViewModel.FormatBytes(Entry.TotalBytes);
     public string Memory => $"{Entry.MemoryMb.ToString("N0", Pt)} MB";
     public string Device => Entry.Gpu ? "GPU (DirectML) ou CPU" : "CPU";
     public string License => Entry.License;
@@ -145,7 +145,7 @@ public sealed partial class ModelCatalogViewModel : ObservableObject, IDisposabl
         if (_installer is null || IsBusy || ids.Count == 0) return;
         var plan = _installer.Plan(ids);
         var bytes = _installer.DownloadBytes(plan);
-        var names = string.Join("\n", plan.Select(e => $"• {e.Name} ({ModelItemViewModel.FormatBytes(e.SizeBytes)})"
+        var names = string.Join("\n", plan.Select(e => $"• {e.Name} ({ModelItemViewModel.FormatBytes(e.TotalBytes)})"
             + (ids.Contains(e.Id) ? "" : " — dependência")));
         var free = FreeSpace(_installer.PackagesDirectory);
         if (free >= 0 && free < bytes * 2 + (200L << 20))
@@ -163,13 +163,13 @@ public sealed partial class ModelCatalogViewModel : ObservableObject, IDisposabl
         IsBusy = true;
         _cts = new CancellationTokenSource();
         var started = Stopwatch.StartNew();
-        var totalBytes = Math.Max(1, plan.Sum(e => e.SizeBytes));
+        var totalBytes = Math.Max(1, plan.Sum(e => e.TotalBytes));
         var doneBytes = 0L;
         string? current = null;
         var progress = new Progress<ModelInstallProgress>(p =>
         {
             var item = Items.FirstOrDefault(i => i.Id == p.Id);
-            if (current != p.Id) { if (current is not null) doneBytes += plan.First(e => e.Id == current).SizeBytes; current = p.Id; }
+            if (current != p.Id) { if (current is not null) doneBytes += plan.First(e => e.Id == current).TotalBytes; current = p.Id; }
             var text = p.Stage switch
             {
                 ModelInstallStage.Downloading => $"Baixando… {ModelItemViewModel.FormatBytes(p.Bytes)} de {ModelItemViewModel.FormatBytes(p.TotalBytes)}",

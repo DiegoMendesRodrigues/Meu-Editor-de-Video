@@ -1,4 +1,4 @@
-namespace MeuEditorDeVideo.Core.AI;
+﻿namespace MeuEditorDeVideo.Core.AI;
 
 /// <summary>
 /// Modelo do catálogo oficial (resources/ai-models/modelos.json), que o instalador de modelos pode baixar da origem,
@@ -37,6 +37,24 @@ public sealed record ModelCatalogEntry
     /// <summary>SHA-256 esperado do arquivo baixado (minúsculas).</summary>
     public required string Sha256 { get; init; }
 
+    public required long SizeBytes { get; init; }
+
+    /// <summary>
+    /// Arquivos adicionais baixados para a mesma pasta do modelo (ex.: pesos externos <c>model.onnx.data</c>, tokenizador e
+    /// configuração de um modelo de linguagem). Vazio nos modelos de um arquivo só.
+    /// </summary>
+    public IReadOnlyList<ModelCatalogFile> ExtraFiles { get; init; } = [];
+
+    /// <summary>Bytes de todos os arquivos (o principal e os adicionais).</summary>
+    public long TotalBytes => SizeBytes + ExtraFiles.Sum(f => f.SizeBytes);
+}
+
+/// <summary>Arquivo adicional de um modelo do catálogo, com endereço fixado e SHA-256 próprios.</summary>
+public sealed record ModelCatalogFile
+{
+    public required string File { get; init; }
+    public required Uri Url { get; init; }
+    public required string Sha256 { get; init; }
     public required long SizeBytes { get; init; }
 }
 

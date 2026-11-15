@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
@@ -34,21 +34,24 @@ public static class ModelPackageBuilder
         Documentation = "README.md",
         PackageFormat = IModelRegistry.SupportedPackageFormat,
         Parameters = entry.Parameters,
+        ExtraFiles = entry.ExtraFiles.Select(f => new ModelFileInfo(f.File, f.Sha256.ToLowerInvariant(), f.SizeBytes)).ToList(),
     };
 
-    /// <summary>Cria (ou substitui) o pacote em <paramref name="output"/> e devolve o manifesto gravado.</summary>
-    /// <exception cref="InvalidDataException">O arquivo do modelo não confere com o catálogo.</exception>
+    /// <summary>
+    /// Cria (ou substitui) o pacote em <paramref name="output"/> e devolve o manifesto gravado. Os arquivos adicionais da
+    /// entrada (<see cref="ModelCatalogEntry.ExtraFiles"/>) são lidos da mesma pasta de <paramref name="modelFile"/>.
+    /// </summary>
+    /// <exception cref="InvalidDataException">Algum arquivo do modelo não confere com o catálogo.</exception>
     public static async Task<ModelManifest> BuildAsync(ModelCatalogEntry entry, string modelFile, string licenseFile, string output,
         CancellationToken cancellationToken = default)
     {
         var info = new FileInfo(modelFile);
         if (!info.Exists) throw new FileNotFoundException("Arquivo do modelo não encontrado.", modelFile);
         if (!File.Exists(licenseFile)) throw new FileNotFoundException("Licença do modelo não encontrada.", licenseFile);
-        string sha;
-        await using (var stream = File.OpenRead(modelFile))
-            sha = Convert.ToHexStringLower(await SHA256.HashDataAsync(stream, cancellationToken));
-        if (info.Length != entry.SizeBytes || !string.Equals(sha, entry.Sha256, StringComparison.OrdinalIgnoreCase))
-            throw new InvalidDataException($"O arquivo de '{entry.Name}' não confere com o catálogo (tamanho ou SHA-256 diferente).");
+        var sha = await CheckAsync(entry, modelFile, entry.SizeBytes, entry.Sha256, cancellationToken);
+        var folder = Path.GetDirectoryName(Path.GetFullPath(modelFile))!;
+        foreach (var extra in entry.ExtraFiles)
+            await CheckAsync(entry, Path.Combine(folder, extra.File), extra.SizeBytes, extra.Sha256, cancellationToken);
 
         var manifest = Manifest(entry, info.Length, sha);
         Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(output))!);
@@ -59,11 +62,28 @@ public static class ModelPackageBuilder
             WriteText(zip, "manifest.json", ModelManifestJson.Serialize(manifest));
             // O modelo já é comprimido (pesos); "sem compressão" economiza tempo sem aumentar o pacote.
             zip.CreateEntryFromFile(modelFile, entry.File, CompressionLevel.NoCompression);
+            foreach (var extra in entry.ExtraFiles)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                zip.CreateEntryFromFile(Path.Combine(folder, extra.File), extra.File, CompressionLevel.NoCompression);
+            }
             zip.CreateEntryFromFile(licenseFile, "LICENSE.txt", CompressionLevel.Optimal);
             WriteText(zip, "README.md", Readme(entry));
         }
         File.Move(temp, output, overwrite: true);
         return manifest;
+    }
+
+    private static async Task<string> CheckAsync(ModelCatalogEntry entry, string file, long size, string expectedSha, CancellationToken ct)
+    {
+        var info = new FileInfo(file);
+        if (!info.Exists) throw new FileNotFoundException("Arquivo do modelo não encontrado.", file);
+        string sha;
+        await using (var stream = File.OpenRead(file))
+            sha = Convert.ToHexStringLower(await SHA256.HashDataAsync(stream, ct));
+        if (info.Length != size || !string.Equals(sha, expectedSha, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidDataException($"O arquivo de '{entry.Name}' não confere com o catálogo (tamanho ou SHA-256 diferente).");
+        return sha;
     }
 
     /// <summary>Documentação em pt-BR gerada a partir do catálogo.</summary>
@@ -82,6 +102,12 @@ public static class ModelPackageBuilder
         sb.Append("**Versão:** ").AppendLine(entry.Version).AppendLine();
         sb.Append("**Licença:** ").AppendLine(entry.License).AppendLine();
         sb.Append("**Arquivo original:** ").AppendLine(entry.Url.ToString()).AppendLine();
+        if (entry.ExtraFiles.Count > 0)
+        {
+            sb.AppendLine("**Outros arquivos:**").AppendLine();
+            foreach (var f in entry.ExtraFiles) sb.Append("- `").Append(f.File).Append("`: ").AppendLine(f.Url.ToString());
+            sb.AppendLine();
+        }
         sb.AppendLine("## Requisitos").AppendLine();
         sb.Append(CultureInfo.InvariantCulture, $"- Memória estimada: {entry.MemoryMb} MB").AppendLine();
         sb.Append("- Usa GPU: ").AppendLine(entry.Gpu ? "sim (DirectML), com retorno para CPU" : "não (somente CPU)");

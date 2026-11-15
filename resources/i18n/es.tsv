@@ -1984,3 +1984,38 @@ e6c95e78	Alemán
 25c0623b	Portugués (Brasil)
 a442dc64	Portugués (Portugal)
 4eb7d40e	Seguir el sistema operativo
+251c014e	(interrumpido)
+0e23f29d	La pregunta y los fragmentos del manual superaron el límite del modelo de lenguaje.
+9b29e1bd	Abrir en el manual
+a73293ea	Ahora no
+29d81af6	Las respuestas pueden contener errores: compruébelo en el manual con la fuente indicada.
+e8fba24d	Asistente virtual
+5a7b395d	Cancelar la instalación
+c7bf3af8	¿Cómo divido un clip en dos partes?
+6a1670f6	¿Cómo genero subtítulos automáticos?
+7151d6aa	¿Cómo quito el fondo de un vídeo?
+d7ed6d13	Conversación con el asistente
+dc4070ab	Enviar pregunta
+1b943228	Estas secciones del manual tratan sobre esto:
+7f957aad	Cerrar el asistente
+ae7f7ffc	Fuente en el manual:
+03207eaa	Instalar el modelo de lenguaje
+32208589	Mensaje
+c8b6078a	Mensajes
+e00023c4	Modelo de lenguaje (asistente virtual)
+8e7b4b1a	Nombre de archivo no válido o repetido para '{0}': {1}.
+2ec797fe	Nueva conversación
+adac886e	No encontré ese tema en el manual. Pruebe a preguntar con otras palabras, por ejemplo con el nombre del menú o de la función.
+4bb04799	No se pudo generar la respuesta: {0}
+c5d32e65	El archivo '{0}' del modelo está dañado: el hash SHA-256 o el tamaño no coincide con el manifiesto.
+3cb5f362	El manifiesto repite el archivo '{0}'.
+d18eb8af	El modelo de lenguaje del asistente virtual no está instalado.
+a08a4981	Para respuestas en lenguaje natural, instale el modelo {0} ({1}). Se ejecuta en este equipo; sin él, el asistente muestra las secciones del manual.
+a8677adf	Detener la respuesta
+d6a7cb8d	Pregunta al asistente
+07ef34b8	Preguntas sugeridas
+6b288621	Pregunte sobre cualquier función del programa o sobre edición de vídeo. Por ejemplo:
+31213b1e	¿Qué calidad uso para exportar?
+34db3a15	Responde según el manual, sin internet.
+30f9d184	SHA-256 no válido para '{0}' ({1}).
+a811c9b4	Tamaño no válido para '{0}' ({1}).

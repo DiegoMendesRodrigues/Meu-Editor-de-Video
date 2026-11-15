@@ -82,7 +82,7 @@ Depois de criar ou abrir um projeto, a ecrã de edição aparece. Ela é dividid
   - **Pacotes de conteúdo…** instala, exporta e remove pacotes de autocolantes, títulos e modelos de projeto (ficheiros .medpack). Um pacote é um ZIP com as pastas `figurinhas` (PNG, GIF, WebP, JPEG ou SVG), `titulos` (.medtitle) e `modelos` (.med) e, opcionalmente, um `pacote.json` com o nome (por exemplo `{"nome": "Festa de Verão"}`). Os itens que o utilizador mesmo guarda ficam no pacote **Meus itens**; use **Exportar…** para compartilhá-lo.
   - **Texto para fala…** transforma um texto em narração com as vozes instaladas no Windows, sem internet. Digite o texto, escolha a **Voz** e a **Velocidade** e clique em **Gerar e inserir**: o áudio vai para a biblioteca (categoria Narração) e entra na posição do cursor, na primeira faixa de áudio livre ou numa faixa nova chamada Narração. Para ter mais vozes, como as em português, instale-as em **Definições do Windows › Hora e idioma › Fala**.
   - **Analisar multimédia** dá etiquetas a todas as ficheiros multimédia da biblioteca: tipo, orientação (horizontal, vertical, quadrado), resolução (HD, Full HD, 4K), duração (curto, longo) e som. Com os modelos instalados, também **fala** ou **sem fala**, o número de **cenas** e **pessoa** ou **sem pessoas**. As etiquetas aparecem ao passar o rato sobre a multimédia e a caixa **Pesquisar…** da biblioteca também procura nelas.
-- **Ajuda**: **Manual do utilizador** (F1), **Atalhos de teclado…**, **Informações do sistema…**, **Abrir pasta de logs**, **Licenças de terceiros**, **Sobre o Meu Editor de Vídeo…**, **Verificar atualizações** (consulta pela internet se há uma versão nova: mostra "Tem a versão mais recente!" ou a janela **Nova versão disponível**, com a versão, os idiomas, os sistemas suportados, o autor e as ligações para transferir na Microsoft Store e no site AplicativosIA.Online; ao clicar em **Fechar esta janela**, a data da verificação é guardada). Em **Sobre o Meu Editor de Vídeo…**, o ícone do LinkedIn abre o perfil do autor no navegador.
+- **Ajuda**: **Manual do utilizador** (F1), **Assistente virtual** (Shift+F1), **Atalhos de teclado…**, **Informações do sistema…**, **Abrir pasta de logs**, **Licenças de terceiros**, **Sobre o Meu Editor de Vídeo…**, **Verificar atualizações** (consulta pela internet se há uma versão nova: mostra "Tem a versão mais recente!" ou a janela **Nova versão disponível**, com a versão, os idiomas, os sistemas suportados, o autor e as ligações para transferir na Microsoft Store e no site AplicativosIA.Online; ao clicar em **Fechar esta janela**, a data da verificação é guardada). Em **Sobre o Meu Editor de Vídeo…**, o ícone do LinkedIn abre o perfil do autor no navegador.
 
 O **Manual do utilizador** abre este manual dentro do programa, sem internet. A lista à esquerda leva a cada assunto e Ctrl+F procura uma palavra. A janela pode ficar aberta enquanto o utilizador edita.
 
@@ -154,6 +154,7 @@ A linha temporal é onde o vídeo é montado da esquerda para a direita. O **cur
 - **Mover**: arraste o clipe para outro lugar da faixa ou para outra faixa do mesmo tipo.
 - **Aparar o início ou o fim**: arraste a borda do clipe para encurtar ou alongar o trecho usado.
 - **Dividir**: posicione o cursor no ponto desejado e clique em **Dividir** na barra de ferramentas, ou pressione S. O clipe é cortado em duas partes nesse ponto.
+- **Juntar os cortes** (menu Editar): volta a juntar as duas partes de um clip dividido. Posicione o cursor sobre o ponto do corte; só funciona quando as duas partes são a continuação da mesma multimédia, sem ajustes diferentes.
 - **Eliminar**: selecione o clipe e pressione Delete. Também é possível usar o botão **Eliminar seleção**.
 - **Eliminar e fechar espaço**: apaga o clipe e puxa os clipes seguintes para preencher o vazio. Use Shift+Delete.
 - **Copiar, recortar, colar e duplicar**: use Ctrl+C, Ctrl+X, Ctrl+V e Ctrl+D. Ao colar, o clipe vai para a posição do cursor.
@@ -422,6 +423,7 @@ Cada recurso usa um modelo de IA. O modelo do **Remover fundo** já vem com o pr
 | Detetar cenas | TransNetV2 | Sim, cerca de 31 MB | CPU ou GPU |
 | Melhorar imagem | Swin2SR leve 2× | Sim, cerca de 8 MB | CPU ou GPU |
 | Retocar (beleza e maquiagem) e desfocar rostos | Face Mesh V2 | Sim, cerca de 5 MB | Somente CPU |
+| Assistente virtual (respostas em linguagem natural) | Phi-4-mini-instruct | Sim, cerca de 3,2 GB | CPU ou GPU |
 
 A deteção de cenas funciona mesmo sem o modelo TransNetV2, comparando as imagens do vídeo. Nesse caso, a precisão é menor.
 
@@ -477,6 +479,15 @@ Procura as mudanças de cena do vídeo e cria um marcador em cada uma.
 ### Melhorar imagem
 
 Amplia uma foto em 2× reconstruindo os detalhes. Selecione a imagem, vá à aba **IA** e clique em **Melhorar imagem com IA**. O clipe passa a usar a nova imagem. Para voltar à original, use **Desfazer**.
+
+### Assistente virtual
+
+Esclarece dúvidas sobre o programa e sobre edição de vídeo com base neste manual, no idioma do programa e sem internet. Abra em **Ajuda › Assistente virtual** (Shift+F1): o painel aparece à direita do editor. Escreva a pergunta e prima Enter (Shift+Enter muda de linha); sem conversa, o painel sugere algumas perguntas.
+
+- Com o modelo de linguagem **Phi-4-mini** instalado, o assistente escreve uma resposta curta usando apenas os excertos do manual que encontrou e mostra a **Fonte no manual**: clique nela para abrir o manual nessa secção. O botão de parar interrompe a resposta.
+- Sem o modelo, o assistente mostra as secções do manual que tratam do assunto, com um excerto de cada uma e o botão **Abrir no manual**. O aviso no topo do painel instala o modelo (cerca de 3,2 GB, transferidos uma única vez das origens oficiais) sem sair do editor; **Agora não** esconde o aviso.
+- O modelo usa a placa gráfica quando o **Dispositivo da IA** é **GPU (DirectML)** (em **Definições › Desempenho**) ou, caso contrário, o processador. A primeira pergunta demora alguns segundos mais, porque o modelo é carregado; ao fechar o painel, ele sai da memória.
+- **Nova conversa** apaga a conversa. As respostas podem conter erros: confirme na secção indicada.
 
 ### Cancelar um processamento
 
@@ -627,6 +638,7 @@ Estes são os atalhos padrão. O utilizador pode mudar qualquer um deles em **Fe
 | Refazer | Ctrl+Y ou Ctrl+Shift+Z |
 | Definições | Ctrl+, |
 | Manual do utilizador | F1 |
+| Assistente virtual | Shift+F1 |
 | Reproduzir / pausar | Espaço |
 | Ecrã inteiro | F11 (Esc ou F11 para sair) |
 | Fotograma anterior | ← |

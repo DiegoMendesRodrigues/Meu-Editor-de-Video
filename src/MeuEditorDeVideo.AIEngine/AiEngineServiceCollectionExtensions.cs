@@ -1,9 +1,11 @@
-﻿using MeuEditorDeVideo.AIEngine.Models;
+﻿using MeuEditorDeVideo.AIEngine.Assistant;
+using MeuEditorDeVideo.AIEngine.Models;
 using MeuEditorDeVideo.AIEngine.Runtime;
 using MeuEditorDeVideo.AIEngine.Speech;
 using MeuEditorDeVideo.AIEngine.Vision;
 using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.AI;
+using MeuEditorDeVideo.Core.Help;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -34,6 +36,8 @@ public static class AiEngineServiceCollectionExtensions
         services.AddSingleton<IVoiceActivityService, VoiceActivityService>();
         services.AddSingleton<IVoiceEnhancementService, VoiceEnhancementService>();
         services.AddSingleton<ISpeechRecognitionService, WhisperTranscriber>();
+        services.AddSingleton<GenAiAnswerGenerator>();
+        services.AddSingleton<IHelpAnswerGenerator>(sp => sp.GetRequiredService<GenAiAnswerGenerator>());
         return services;
     }
 }

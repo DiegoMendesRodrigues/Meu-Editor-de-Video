@@ -461,6 +461,7 @@ Arquivos: `src/MeuEditorDeVideo.AIEngine/`. Detalhes em [Inteligência artificia
 - `Runtime/`: `OnnxSessionFactory.cs` (sessões ONNX em DirectML ou CPU), `ModelSessionHolder.cs` (reabre a sessão quando modelo ou dispositivo mudam).
 - `Vision/`: `SegmentationService.cs` e `ModnetSegmenter.cs`, `MatteCache.cs`, `BackgroundCompositor.cs`, `SceneDetectionService.cs`, `ImageEnhancementService.cs`.
 - `Speech/`: `WhisperTranscriber.cs` (Whisper.net), `SileroVad.cs`, `GtcrnEnhancer.cs`, `VoiceActivityService.cs`, `VoiceEnhancementService.cs`.
+- `Assistant/`: `GenAiAnswerGenerator.cs` (`IHelpAnswerGenerator`): modelo de linguagem do assistente virtual pelo ONNX Runtime GenAI. Ver [Assistente virtual](#assistente-virtual).
 
 ### ModelDownloads
 
@@ -576,6 +577,7 @@ Projeto: `src/MeuEditorDeVideo.AIEngine`. Detalhes de uso para o usuário estão
 | `SceneDetection` | `SceneDetectionService` | TransNetV2 (ou diferença de histogramas, sem modelo) |
 | `ImageEnhancement` | `ImageEnhancementService` | Swin2SR leve 2× |
 | `FaceLandmarks` | `FaceLandmarkService` (`FaceMeshDetector`) | Face Mesh V2 (MediaPipe) |
+| `HelpAssistant` | `GenAiAnswerGenerator` | Phi-4-mini-instruct ONNX int4 (DirectML), vários arquivos |
 
 Efeitos de IA do catálogo (categoria `Ai`): `ai.background` (remover fundo), `ai.cameratrack` (rastreamento de câmera), `ai.beauty` e `ai.makeup` (Retocar) e `ai.faceblur` (desfocar rostos, `FaceBlur`). Eles são executados pelo `AiFrameProcessor`, dentro do `FrameRenderer`.
 
@@ -592,8 +594,8 @@ Métodos principais: `Installed`, `Find(capability)`, `IsAvailable`, `InstallAsy
 
 Um ZIP com, na raiz:
 
-- `manifest.json` (`ModelManifest`): `id`, `name`, `version`, `source`, `capability`, `purpose`, `format` (`ONNX` ou `GGML`), `file`, `sizeBytes`, `memoryMb`, `cpu`, `gpu`, `license`, `licenseFile`, `sha256`, `documentation`, `packageFormat` (atual: 1), `parameters`;
-- o arquivo do modelo;
+- `manifest.json` (`ModelManifest`): `id`, `name`, `version`, `source`, `capability`, `purpose`, `format` (`ONNX` ou `GGML`), `file`, `sizeBytes`, `memoryMb`, `cpu`, `gpu`, `license`, `licenseFile`, `sha256`, `documentation`, `packageFormat` (atual: 1), `parameters` e `extraFiles` (opcional: lista de `{file, sha256, sizeBytes}`);
+- o arquivo do modelo e, nos modelos de vários arquivos (ex.: Phi-4-mini: `model.onnx`, `model.onnx.data`, tokenizador e `genai_config.json`), os arquivos de `extraFiles`, todos na raiz;
 - a licença (`LICENSE.txt` ou o nome em `licenseFile`);
 - `README.md`.
 
@@ -602,10 +604,10 @@ Um ZIP com, na raiz:
 1. Lê o manifesto. Recusa `packageFormat` maior que `IModelRegistry.SupportedPackageFormat` (1).
 2. Valida nomes de entrada e caminhos (nenhuma entrada pode sair da pasta de destino).
 3. Extrai a entrada do modelo calculando o SHA-256 durante a extração.
-4. Confere o SHA-256 contra `manifest.sha256`. Se não bater, descarta e recusa.
+4. Confere o SHA-256 contra `manifest.sha256` e cada arquivo de `extraFiles` contra o seu SHA-256 e tamanho. Se algum não bater, descarta e recusa.
 5. Move para `ai-models\{id}\`.
 
-`VerifyAsync` refaz a conferência de um modelo já instalado.
+`VerifyAsync` refaz a conferência de um modelo já instalado (o arquivo principal e os de `extraFiles`). Manifestos antigos, sem `extraFiles`, continuam válidos.
 
 ### Catálogo oficial e instalador de modelos
 
@@ -616,13 +618,14 @@ Um ZIP com, na raiz:
   - `sha256` com 64 caracteres hexadecimais;
   - `sizeBytes` positivo;
   - `file` e `licenseFile` sem separadores de caminho;
+  - `extraFiles` (opcional): cada arquivo com `file` simples e único (nem `manifest.json`, `LICENSE.txt` ou `README.md`), `url` HTTPS num host permitido, `sha256` e `sizeBytes` próprios;
   - todas as dependências (`dependsOn`) existem e não há ciclos.
 - Cada URL é fixada num **commit** (não em `main`).
 - `CatalogModelInstaller.InstallAsync` instala o plano na ordem de dependências. Para cada modelo:
   1. se já existe um pacote `.medmodel` íntegro em `modelos-baixados\pacotes\`, pula o download;
-  2. senão baixa com `IModelDownloader` para `modelos-baixados\downloads\`;
+  2. senão baixa com `IModelDownloader` para `modelos-baixados\downloads\` o arquivo principal e os de `extraFiles` (estes numa subpasta `{id}`), um por vez, cada um conferido pelo SHA-256; o progresso soma todos (`ModelCatalogEntry.TotalBytes`);
   3. gera o pacote com `ModelPackageBuilder` (manifesto, modelo, licença e README);
-  4. apaga o arquivo baixado;
+  4. apaga os arquivos baixados;
   5. instala com `IModelRegistry.InstallAsync` (com as mesmas validações de um pacote feito à mão).
 - Um erro interrompe o plano. Os modelos já instalados continuam valendo.
 - `tools/Build-ModelPackages.ps1` e `tools/New-MedModel.ps1` geram os mesmos pacotes pelo terminal, sem o downloader da aplicação.
@@ -654,6 +657,18 @@ Whisper (`WhisperTranscriber`) não usa ONNX: roda whisper.cpp pelo Whisper.net,
 - **Cenas**: TransNetV2 com janelas de 100 quadros 48×27. Se o modelo não estiver instalado, `SceneDetectors` usa diferença de histogramas.
 - **Melhoria de imagem**: Swin2SR em blocos de 192 px com sobreposição de 16 px.
 - **Retocar** (`ai.beauty`, `ai.makeup`): `FaceLandmarkService` localiza a cabeça pela máscara do MODNet, roda o Face Mesh V2 em dois recortes (enquadrar e refinar) e guarda os pontos por quadro; `FaceRetouch` desenha as máscaras sobre os pontos e aplica pele, deformações e maquiagem só no retângulo do rosto.
+
+### Assistente virtual
+
+Ajuda › Assistente virtual (Shift+F1, id `app.assistente`) responde dúvidas sobre o programa a partir do manual, em três etapas, tudo local:
+
+1. **Base de conhecimento** (`Application/Help/ManualKnowledgeBase.cs`, `IHelpKnowledgeBase` em `Core/Help/`): lê `ajuda\MANUAL_DO_USUARIO[.idioma].md` (o do idioma do aplicativo; sem manual, o pt-BR) e divide nas seções `##`/`###` (`HelpSection`: linha, nível, capítulo, título, texto). Os seis manuais têm os mesmos títulos nas mesmas linhas, então a linha identifica a seção em qualquer idioma (`ManualKnowledgeBaseTests` confere).
+2. **Busca**: BM25 (k1 1,2, b 0,75) sobre termos sem acento, minúsculos, sem palavras vazias (pt, es, fr, de, en) e reduzidos a dois radicais (os 4 e os 7 primeiros caracteres: o curto aproxima conjugações como "junto" e "juntar", o longo mantém a precisão); o título pesa 3×. Sem modelo de IA. No teste com 18 perguntas em pt-BR e inglês, a seção certa fica entre as 4 primeiras em 34 de 36 casos. `HelpAssistantService.Find` repete a busca com a pergunta anterior quando uma pergunta de continuação não acha nada.
+3. **Resposta**: `HelpAssistantService.BuildMessages` monta as instruções no idioma do aplicativo ("use SOMENTE os trechos… se não estiver, diga que o manual não descreve"), as 2 últimas trocas da conversa e a pergunta com até 4 seções, só as de pontuação de pelo menos metade da melhor (2.400 caracteres cada, 7.000 no total); a resposta tem até 384 tokens. `GenAiAnswerGenerator` (AIEngine, `Microsoft.ML.OnnxRuntimeGenAI.DirectML`) carrega o modelo da capacidade `HelpAssistant` na primeira pergunta (`Config` com o provedor `dml` quando o dispositivo da IA é GPU e o manifesto tem `gpu: true`; senão CPU; falha na GPU cai para CPU), monta o formato de conversa do Phi (`<|system|>…<|end|><|user|>…<|end|><|assistant|>`; outros modelos usam o modelo de conversa do tokenizador), decodifica de forma gulosa com janela de 4.096 tokens e devolve os pedaços por um `Channel` (streaming). Sem penalidade de repetição (ela também pune copiar os termos dos trechos); `HelpAssistantService.AnswerAsync` encerra a resposta quando o modelo começa a repetir um parágrafo inteiro, e o painel mostra o texto sem as marcas de Markdown. Uma resposta por vez; cancelar para no próximo token. `Unload` libera o modelo (o painel chama ao fechar), e trocar ou remover o modelo também o libera.
+
+O modelo sugerido é o Phi-4-mini-instruct ONNX int4 para DirectML (`phi4-mini` no catálogo, MIT, cerca de 3,2 GB), escolhido num teste com 20 perguntas em pt-BR e inglês contra o Qwen3-1.7B: mais fatos corretos, idioma certo, recusa quando o manual não cobre o assunto e cerca de 85 tokens/s numa RTX 3070.
+
+No App, `ViewModels/AssistantViewModel.cs` e `Views/Panels/AssistantPanel.xaml` formam o painel, numa coluna própria à direita de Propriedades (`EditorView.MostrarAssistente`, que vale para todos os modos do layout). Sem o modelo instalado, o painel mostra as seções encontradas (`AssistantSourceViewModel.Excerpt`) com **Abrir no manual** (`HelpWindow.ShowFor(owner, título)` seleciona a seção no sumário) e um aviso que instala o modelo pelo `ModelCatalogViewModel`. As instruções do modelo ficam fora de `origem.json` (`SKIP_FILES` em `scripts/extract-strings.py`), porque já estão escritas em cada idioma.
 
 ### Segurança dos modelos
 
@@ -931,7 +946,7 @@ A orientação de assinatura está em [INSTALADOR.md](INSTALADOR.md).
 
 1. Obtenha o arquivo de uma origem permitida (`huggingface.co` ou `github.com`), **em HTTPS**, em uma URL fixada num commit.
 2. Calcule o SHA-256 e o tamanho em bytes do arquivo.
-3. Adicione a entrada em `resources/ai-models/modelos.json`: `id`, `file`, `name`, `version`, `source`, `capability`, `purpose`, `features`, `license`, `licenseFile`, `memoryMb`, `gpu`, `parameters`, `dependsOn`, `url`, `sha256`, `sizeBytes`.
+3. Adicione a entrada em `resources/ai-models/modelos.json`: `id`, `file`, `name`, `version`, `source`, `capability`, `purpose`, `features`, `license`, `licenseFile`, `memoryMb`, `gpu`, `parameters`, `dependsOn`, `url`, `sha256`, `sizeBytes`. Se o modelo tiver vários arquivos, `file`/`url` apontam o principal e `extraFiles` lista os demais (`file`, `url`, `sha256`, `sizeBytes`, cada um fixado no mesmo commit).
 4. Coloque o texto da licença em `resources/ai-models/licencas/{licenseFile}`.
 5. Se a capacidade for nova: adicione o valor em `ModelCapability` (`Core/AI/AiContracts.cs`), implemente o serviço em `AIEngine` (com `ModelSessionHolder<T>` para sessão ONNX, se for ONNX), registre-o em `AiEngineServiceCollectionExtensions.AddAiEngine` e ligue-o ao recurso na UI.
 6. `ModelCatalogTests.Catalogo_do_repositorio_e_valido_e_tem_licencas` valida o catálogo do repositório.

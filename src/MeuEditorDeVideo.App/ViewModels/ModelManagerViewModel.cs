@@ -24,7 +24,7 @@ public sealed partial class ModelItemViewModel(InstalledModel model, ulong avail
     public string Purpose => Manifest.Purpose;
     public string Capability => ModelManagerViewModel.CapabilityName(Manifest.Capability);
     public string Format => Manifest.Format;
-    public string Size => FormatBytes(Manifest.SizeBytes > 0 ? Manifest.SizeBytes : FileSize());
+    public string Size => FormatBytes(Manifest.SizeBytes > 0 ? Manifest.TotalBytes : FileSize());
     public string Memory => $"{Manifest.MemoryMb.ToString("N0", Pt)} MB";
     public string Cpu => Manifest.Cpu ? "Sim" : "Não";
     public string Gpu => Manifest.Gpu ? "Sim (DirectML)" : "Não";
@@ -141,6 +141,7 @@ public sealed partial class ModelManagerViewModel : ObservableObject, IDisposabl
         ModelCapability.SceneDetection => "Detecção de cenas",
         ModelCapability.ImageEnhancement => "Melhoria de imagem",
         ModelCapability.FaceLandmarks => "Pontos do rosto (retoque de beleza e maquiagem)",
+        ModelCapability.HelpAssistant => "Modelo de linguagem (assistente virtual)",
         _ => c.ToString(),
     };
 

@@ -82,7 +82,7 @@ Nachdem Sie ein Projekt erstellt oder geöffnet haben, erscheint der Bearbeitung
   - **Inhaltspakete…** installiert, exportiert und entfernt Pakete mit Stickern, Titeln und Projektvorlagen (.medpack-Dateien). Ein Paket ist ein ZIP mit den Ordnern `figurinhas` (PNG, GIF, WebP, JPEG oder SVG), `titulos` (.medtitle) und `modelos` (.med) und optional einer `pacote.json` mit dem Namen (zum Beispiel `{"nome": "Sommerfest"}`). Elemente, die Sie selbst speichern, landen im Paket **Meine Elemente**; verwenden Sie **Exportieren…**, um es zu teilen.
   - **Text zu Sprache…** verwandelt einen Text mit den unter Windows installierten Stimmen in eine Sprachaufnahme, ohne Internet. Geben Sie den Text ein, wählen Sie **Stimme** und **Geschwindigkeit** und klicken Sie auf **Erzeugen und einfügen**: Das Audio kommt in die Bibliothek (Kategorie Sprecher) und wird an der Abspielposition eingefügt, auf der ersten freien Audiospur oder auf einer neuen Spur namens Sprecher. Für weitere Stimmen installieren Sie diese unter **Windows-Einstellungen › Zeit und Sprache › Spracherkennung**.
   - **Medien analysieren** versieht alle Medien der Bibliothek mit Schlagwörtern: Typ, Ausrichtung (horizontal, vertikal, quadratisch), Auflösung (HD, Full HD, 4K), Dauer (kurz, lang) und Ton. Mit installierten Modellen außerdem **Sprache** oder **ohne Sprache**, die Anzahl der **Szenen** und **Person** oder **ohne Personen**. Die Schlagwörter erscheinen, wenn Sie die Maus über das Medium bewegen, und das Feld **Suchen…** der Bibliothek durchsucht sie ebenfalls.
-- **Hilfe**: **Benutzerhandbuch** (F1), **Tastenkombinationen…**, **Systeminformationen…**, **Protokollordner öffnen**, **Lizenzen von Drittanbietern**, **Über Meu Editor de Vídeo…**, **Nach Updates suchen** (fragt über das Internet ab, ob es eine neue Version gibt: zeigt „Sie haben die neueste Version!“ oder das Fenster **Neue Version verfügbar** mit Version, Sprachen, unterstützten Systemen, Autor und den Download-Links im Microsoft Store und auf der Website AplicativosIA.Online; ein Klick auf **Dieses Fenster schließen** speichert das Datum der Prüfung). In **Über Meu Editor de Vídeo…** öffnet das LinkedIn-Symbol das Profil des Autors im Browser.
+- **Hilfe**: **Benutzerhandbuch** (F1), **Virtueller Assistent** (Umschalt+F1), **Tastenkombinationen…**, **Systeminformationen…**, **Protokollordner öffnen**, **Lizenzen von Drittanbietern**, **Über Meu Editor de Vídeo…**, **Nach Updates suchen** (fragt über das Internet ab, ob es eine neue Version gibt: zeigt „Sie haben die neueste Version!“ oder das Fenster **Neue Version verfügbar** mit Version, Sprachen, unterstützten Systemen, Autor und den Download-Links im Microsoft Store und auf der Website AplicativosIA.Online; ein Klick auf **Dieses Fenster schließen** speichert das Datum der Prüfung). In **Über Meu Editor de Vídeo…** öffnet das LinkedIn-Symbol das Profil des Autors im Browser.
 
 Das **Benutzerhandbuch** öffnet dieses Handbuch im Programm, ohne Internet. Die Liste links führt zu jedem Thema, und Strg+F sucht nach einem Wort. Das Fenster kann während der Bearbeitung geöffnet bleiben.
 
@@ -154,6 +154,7 @@ In der Zeitleiste wird das Video von links nach rechts zusammengesetzt. Die **Ab
 - **Verschieben**: Ziehen Sie den Clip an eine andere Stelle der Spur oder auf eine andere Spur desselben Typs.
 - **Anfang oder Ende trimmen**: Ziehen Sie den Rand des Clips, um den verwendeten Abschnitt zu kürzen oder zu verlängern.
 - **Teilen**: Setzen Sie die Abspielposition an die gewünschte Stelle und klicken Sie in der Symbolleiste auf **Teilen** oder drücken Sie S. Der Clip wird an dieser Stelle in zwei Teile geschnitten.
+- **Schnitte zusammenfügen** (Menü Bearbeiten): fügt die beiden Teile eines geteilten Clips wieder zusammen. Setzen Sie die Abspielposition auf die Schnittstelle; das funktioniert nur, wenn beide Teile die Fortsetzung desselben Mediums ohne unterschiedliche Einstellungen sind.
 - **Löschen**: Wählen Sie den Clip aus und drücken Sie Entf. Sie können auch die Schaltfläche **Auswahl löschen** verwenden.
 - **Löschen und Lücke schließen**: löscht den Clip und zieht die folgenden Clips nach, um die Lücke zu füllen. Verwenden Sie Umschalt+Entf.
 - **Kopieren, ausschneiden, einfügen und duplizieren**: Verwenden Sie Strg+C, Strg+X, Strg+V und Strg+D. Beim Einfügen landet der Clip an der Abspielposition.
@@ -422,6 +423,7 @@ Jede Funktion verwendet ein KI-Modell. Das Modell für **Hintergrund entfernen**
 | Szenen erkennen | TransNetV2 | Ja, etwa 31 MB | CPU oder GPU |
 | Bild verbessern | Swin2SR leicht 2× | Ja, etwa 8 MB | CPU oder GPU |
 | Retuschieren (Schönheit und Make-up) und Gesichter unkenntlich machen | Face Mesh V2 | Ja, etwa 5 MB | Nur CPU |
+| Virtueller Assistent (Antworten in natürlicher Sprache) | Phi-4-mini-instruct | Ja, etwa 3,2 GB | CPU oder GPU |
 
 Die Szenenerkennung funktioniert auch ohne das Modell TransNetV2, indem die Bilder des Videos verglichen werden. In diesem Fall ist die Genauigkeit geringer.
 
@@ -477,6 +479,15 @@ Sucht nach Szenenwechseln im Video und erstellt an jedem einen Marker.
 ### Bild verbessern
 
 Vergrößert ein Foto um 2× und rekonstruiert dabei Details. Wählen Sie das Bild aus, gehen Sie zur Registerkarte **KI** und klicken Sie auf **Bild mit KI verbessern**. Der Clip verwendet nun das neue Bild. Um zum Original zurückzukehren, verwenden Sie **Rückgängig**.
+
+### Virtueller Assistent
+
+Beantwortet Fragen zum Programm und zur Videobearbeitung anhand dieses Handbuchs, in der Sprache des Programms und ohne Internet. Öffnen Sie ihn über **Hilfe › Virtueller Assistent** (Umschalt+F1): Der Bereich erscheint rechts im Editor. Geben Sie die Frage ein und drücken Sie die Eingabetaste (Umschalt+Eingabe fügt eine Zeile ein); ohne Unterhaltung schlägt der Bereich einige Fragen vor.
+
+- Mit installiertem Sprachmodell **Phi-4-mini** schreibt der Assistent eine kurze Antwort, die nur die gefundenen Handbuchauszüge verwendet, und zeigt die **Quelle im Handbuch**: Ein Klick darauf öffnet das Handbuch an dieser Stelle. Die Stopp-Schaltfläche bricht die Antwort ab.
+- Ohne das Modell zeigt der Assistent die Abschnitte des Handbuchs zum Thema, jeweils mit einem Auszug und der Schaltfläche **Im Handbuch öffnen**. Der Hinweis oben im Bereich installiert das Modell (etwa 3,2 GB, einmalig von den offiziellen Quellen heruntergeladen), ohne den Editor zu verlassen; **Jetzt nicht** blendet den Hinweis aus.
+- Das Modell nutzt die Grafikkarte, wenn das **KI-Gerät** auf **GPU (DirectML)** steht (unter **Einstellungen › Leistung**), sonst den Prozessor. Die erste Frage dauert einige Sekunden länger, weil das Modell geladen wird; beim Schließen des Bereichs wird es aus dem Speicher entfernt.
+- **Neue Unterhaltung** löscht die Unterhaltung. Antworten können Fehler enthalten: Prüfen Sie sie im angegebenen Abschnitt.
 
 ### Eine Verarbeitung abbrechen
 
@@ -627,6 +638,7 @@ Dies sind die Standard-Tastenkombinationen. Sie können jede davon unter **Werkz
 | Wiederholen | Strg+Y oder Strg+Umschalt+Z |
 | Einstellungen | Strg+, |
 | Benutzerhandbuch | F1 |
+| Virtueller Assistent | Umschalt+F1 |
 | Wiedergabe / Pause | Leertaste |
 | Vollbild | F11 (Esc oder F11 zum Beenden) |
 | Vorheriges Bild | ← |

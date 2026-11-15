@@ -261,6 +261,9 @@ public partial class App : System.Windows.Application
             AIEngine.Models.ModelCatalog.Load(), sp.GetRequiredService<Core.AI.IModelRegistry>(), sp.GetRequiredService<Core.AI.IModelDownloader>(),
             System.IO.Path.Combine(sp.GetRequiredService<IAppPaths>().LocalData, "modelos-baixados"),
             sp.GetService<ILogger<AIEngine.Models.CatalogModelInstaller>>()));
+        // Assistente virtual: a base de conhecimento são os manuais instalados na pasta "ajuda" do aplicativo.
+        services.AddSingleton<Core.Help.IHelpKnowledgeBase>(_ =>
+            new MeuEditorDeVideo.Application.Help.ManualKnowledgeBase(System.IO.Path.Combine(AppContext.BaseDirectory, "ajuda")));
 
         services.AddSingleton<IThemeService, ThemeService>();
         services.AddSingleton<INavigationService, NavigationService>();

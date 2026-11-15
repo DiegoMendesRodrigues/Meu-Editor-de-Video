@@ -2201,3 +2201,40 @@ e6c95e78	Deutsch
 25c0623b	Portugiesisch (Brasilien)
 a442dc64	Portugiesisch (Portugal)
 4eb7d40e	Wie das Betriebssystem
+251c014e	(abgebrochen)
+0e23f29d	Frage und Handbuchauszüge überschreiten das Limit des Sprachmodells.
+9b29e1bd	Im Handbuch öffnen
+a73293ea	Jetzt nicht
+29d81af6	Antworten können Fehler enthalten: Prüfen Sie sie im Handbuch über die angegebene Quelle.
+e8fba24d	Virtueller Assistent
+5a7b395d	Installation abbrechen
+c7bf3af8	Wie teile ich einen Clip in zwei Teile?
+6a1670f6	Wie erzeuge ich automatische Untertitel?
+7151d6aa	Wie entferne ich den Hintergrund eines Videos?
+d7ed6d13	Unterhaltung mit dem Assistenten
+07c7f6db	Senden (Eingabe)
+dc4070ab	Frage senden
+1b943228	Diese Abschnitte des Handbuchs behandeln das:
+7f957aad	Assistenten schließen
+ae7f7ffc	Quelle im Handbuch:
+03207eaa	Sprachmodell installieren
+32208589	Nachricht
+c8b6078a	Nachrichten
+e00023c4	Sprachmodell (virtueller Assistent)
+8e7b4b1a	Ungültiger oder doppelter Dateiname für '{0}': {1}.
+2ec797fe	Neue Unterhaltung
+adac886e	Dieses Thema habe ich im Handbuch nicht gefunden. Versuchen Sie es mit anderen Worten, zum Beispiel mit dem Namen des Menüs oder der Funktion.
+4bb04799	Die Antwort konnte nicht erzeugt werden: {0}
+c5d32e65	Die Modelldatei '{0}' ist beschädigt: SHA-256-Hash oder Größe stimmen nicht mit dem Manifest überein.
+3cb5f362	Das Manifest enthält die Datei '{0}' mehrfach.
+d18eb8af	Das Sprachmodell des virtuellen Assistenten ist nicht installiert.
+a08a4981	Für Antworten in natürlicher Sprache installieren Sie das Modell {0} ({1}). Es läuft auf diesem Computer; ohne es zeigt der Assistent die Abschnitte des Handbuchs.
+a8677adf	Antwort stoppen
+57b8fe10	Denke nach…
+d6a7cb8d	Frage an den Assistenten
+07ef34b8	Vorgeschlagene Fragen
+6b288621	Fragen Sie nach einer beliebigen Funktion des Programms oder zur Videobearbeitung. Zum Beispiel:
+31213b1e	Welche Qualität sollte ich beim Exportieren verwenden?
+34db3a15	Antwortet anhand des Handbuchs, ohne Internet.
+30f9d184	Ungültiger SHA-256 für '{0}' ({1}).
+a811c9b4	Ungültige Größe für '{0}' ({1}).

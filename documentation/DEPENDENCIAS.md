@@ -19,6 +19,7 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 | OpenCvSharp4 + OpenCvSharp4.runtime.win | 4.13.0.20260627 | Apache-2.0 (OpenCV: Apache-2.0) | Visão computacional (ImageEngine, F9): rastreamento de movimento (CSRT/correspondência de modelo), estabilização (fluxo óptico), máscaras e "Refinar bordas". Inclui `OpenCvSharpExtern.dll` nativa |
 | Svg.Skia (+ SkiaSharp, HarfBuzzSharp) | 5.2.3 | MIT | Importação e rasterização de gráficos vetoriais SVG (MediaEngine, F9). Inclui `libSkiaSharp.dll` e `libHarfBuzzSharp.dll` nativas |
 | Microsoft.ML.OnnxRuntime.DirectML (+ Microsoft.AI.DirectML) | 1.24.4 | MIT | Execução local dos modelos ONNX (AIEngine, F10) na CPU ou na GPU via DirectML, com recuo automático para CPU. Última versão da linha DirectML. Inclui `onnxruntime.dll` e `DirectML.dll` nativas |
+| Microsoft.ML.OnnxRuntimeGenAI.DirectML (+ Microsoft.ML.OnnxRuntimeGenAI.Managed, Microsoft.Extensions.AI.Abstractions) | 0.14.1 | MIT | Modelo de linguagem local do assistente virtual (`GenAiAnswerGenerator`): tokenização, geração token a token e cache de atenção, sobre o mesmo `onnxruntime.dll` (exige 1.23 ou mais nova). Inclui `onnxruntime-genai.dll` nativa |
 | Whisper.net + Whisper.net.Runtime | 1.9.1 | MIT | Reconhecimento de fala local com whisper.cpp (AIEngine, F10): legendas automáticas. Inclui as bibliotecas nativas do whisper.cpp (CPU) |
 
 ## Pacotes NuGet (somente testes)
@@ -58,6 +59,7 @@ licença em `resources\ai-models\licencas\`. Detalhes e uso em [MODELOS_IA.md](M
 | TransNetV2 | Tomáš Souček (ONNX: elya5/transnetv2) | MIT | Detecção de cenas |
 | Swin2SR leve 2× | mv-lab/swin2sr (ONNX: Xenova/swin2SR-lightweight-x2-64) | Apache-2.0 | Melhoria de imagem |
 | Face Mesh V2 | Google MediaPipe (ONNX: fernandotonon/QtMeshEditor-facemesh-onnx) | Apache-2.0 | Retocar: beleza e maquiagem |
+| Phi-4-mini-instruct (ONNX int4 para DirectML, 3,2 GB) | Microsoft (microsoft/Phi-4-mini-instruct-onnx) | MIT | Assistente virtual: respostas em linguagem natural |
 
 ## Ferramentas de compilação do instalador (não fazem parte do aplicativo)
 

@@ -18,6 +18,8 @@ OUT = os.path.join(ROOT, 'resources', 'i18n', 'origem.json')
 
 # Projetos com textos para o usuário (motores incluídos: mensagens de erro e nomes de efeitos).
 SKIP_DIRS = {'bin', 'obj'}
+# Instruções do modelo de linguagem do assistente virtual: já escritas em cada idioma, não são textos da interface.
+SKIP_FILES = {'HelpAssistantService.cs'}
 XAML_ATTRS = ('Text', 'Content', 'Header', 'ToolTip', 'Title', 'AutomationProperties.Name', 'AutomationProperties.HelpText',
               'Tag', 'Description', 'Label', 'PlaceholderText')
 LOG_CALL = re.compile(r'\b(Log(Information|Warning|Error|Debug|Trace|Critical)|_logger\.\w+|logger\.\w+|Debug\.\w+|Trace\.\w+)\s*\($')
@@ -193,6 +195,8 @@ def main():
         dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
         for f in filenames:
             p = os.path.join(dirpath, f)
+            if f in SKIP_FILES:
+                continue
             if f.endswith('.cs') and not f.endswith(('.g.cs', '.g.i.cs', 'AssemblyInfo.cs')):
                 text = open(p, encoding='utf-8-sig').read()
                 strings = cs_strings(text)
