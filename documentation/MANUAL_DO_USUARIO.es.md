@@ -127,7 +127,7 @@ Si un archivo se movió, cambió de nombre o se eliminó, el proyecto muestra el
 1. Haga clic en **Localizar…** para indicar el archivo, o en **Buscar en carpeta…** para que el programa busque en las carpetas y subcarpetas que elija.
 2. Si no quiere localizarlos ahora, haga clic en **Continuar sin los medios**. Los tramos quedan marcados como ausentes y pueden localizarse después.
 
-Puede abrir esta ventana en cualquier momento en **Proyecto › Localizar medios ausentes…**.
+Puede abrir esta ventana en cualquier momento en **Proyecto › Localizar medios ausentes…**. En un proyecto descargado de internet, el programa no busca medios ni LUT que estén en otro equipo de la red, porque solo con consultar ese equipo ya le enviaría sus datos de acceso de Windows: esos medios aparecen como ausentes y esas LUT quedan desactivadas. Si confía en el origen del proyecto, localice los medios en esta ventana y active las LUT en el panel **Propiedades**.
 
 Para evitar este problema al llevar el proyecto a otro equipo, use **Proyecto › Empaquetar medios en el proyecto…**. Copia los medios dentro del archivo del proyecto.
 

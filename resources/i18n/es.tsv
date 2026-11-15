@@ -2019,3 +2019,4 @@ d6a7cb8d	Pregunta al asistente
 34db3a15	Responde según el manual, sin internet.
 30f9d184	SHA-256 no válido para '{0}' ({1}).
 a811c9b4	Tamaño no válido para '{0}' ({1}).
+2576a6be	Una LUT de este proyecto está en otro equipo de la red y se desactivó porque el proyecto vino de internet. Active el efecto en el panel Propiedades si confía en el origen del proyecto.

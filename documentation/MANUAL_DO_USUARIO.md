@@ -127,7 +127,7 @@ Se um arquivo foi movido, renomeado ou apagado, o projeto mostra o aviso "Alguma
 1. Clique em **Localizar…** para indicar o arquivo, ou em **Procurar em pasta…** para o programa procurar nas pastas e subpastas que você escolher.
 2. Se não quiser localizar agora, clique em **Continuar sem as mídias**. Os trechos ficam marcados como ausentes e podem ser localizados depois.
 
-Você pode abrir essa janela a qualquer momento em **Projeto › Localizar mídias ausentes…**.
+Você pode abrir essa janela a qualquer momento em **Projeto › Localizar mídias ausentes…**. Num projeto baixado da internet, o programa não procura mídias nem LUTs que estejam em outro computador da rede, porque só consultar esse computador já enviaria a ele os dados de acesso do Windows: essas mídias aparecem como ausentes, e as LUTs ficam desativadas. Se confiar na origem do projeto, localize as mídias nesta janela e ative as LUTs no painel **Propriedades**.
 
 Para evitar esse problema ao levar o projeto para outro computador, use **Projeto › Empacotar mídias no projeto…**. Ele copia as mídias para dentro do arquivo do projeto.
 

@@ -121,8 +121,9 @@ public sealed class MediaLocator(IAppPaths paths, ILogger<MediaLocator> logger) 
         try
         {
             var zone = File.ReadLines(file + ":Zone.Identifier")
-                .FirstOrDefault(l => l.StartsWith("ZoneId=", StringComparison.OrdinalIgnoreCase));
-            return zone is not null && int.TryParse(zone.AsSpan(7).Trim(), out var id) && id >= 3;
+                .Select(l => l.Split('=', 2))
+                .FirstOrDefault(p => p.Length == 2 && p[0].Trim().Equals("ZoneId", StringComparison.OrdinalIgnoreCase));
+            return zone is not null && int.TryParse(zone[1].Trim(), out var id) && id >= 3;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or NotSupportedException or ArgumentException)
         {

@@ -127,7 +127,7 @@ If a file was moved, renamed or deleted, the project shows the warning "Some pro
 1. Click **Locate…** to point to the file, or **Search in folder…** for the program to search the folders and subfolders you choose.
 2. If you do not want to locate them now, click **Continue without the media**. The clips are marked as missing and can be located later.
 
-You can open this window at any time in **Project › Locate missing media…**.
+You can open this window at any time in **Project › Locate missing media…**. In a project downloaded from the internet, the program does not look for media or LUTs stored on another computer on the network, because merely contacting that computer would send it your Windows sign-in data: such media appear as missing, and such LUTs are turned off. If you trust where the project came from, locate the media in this window and turn the LUTs back on in the **Properties** panel.
 
 To avoid this problem when taking the project to another computer, use **Project › Package media into the project…**. It copies the media into the project file.
 

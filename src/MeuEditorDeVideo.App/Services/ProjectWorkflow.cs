@@ -70,7 +70,8 @@ public sealed class ProjectWorkflow(
         if (!await TryAsync(() => projects.OpenAsync(path))) return false;
 
         if (projects.LastOpenWarnings.Count > 0)
-            dialogs.ShowInfo("Abrir projeto", string.Join("\n\n", projects.LastOpenWarnings));
+            // Cada aviso é traduzido sozinho (o texto em pt-BR é a chave da tradução).
+            dialogs.ShowInfo("Abrir projeto", string.Join("\n\n", projects.LastOpenWarnings.Select(w => Localization.Translator.T(w))));
 
         navigation.NavigateTo<EditorViewModel>();
         if (projects.Current?.HasMissingMedia == true) ShowMissingMedia();

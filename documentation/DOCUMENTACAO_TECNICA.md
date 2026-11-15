@@ -705,6 +705,7 @@ Bibliotecas nativas e de terceiros também ficam sem rede quando leem arquivos q
 - **FFmpeg** (`MediaFile.Open`): `protocol_whitelist=file`. Uma lista de reprodução (HLS, concat) disfarçada de vídeo não abre conexões nem usa outros protocolos, inclusive nos arquivos que ela referencia.
 - **SVG** (`SvgRenderer`): imagens e elementos externos e DTD desligados (`SvgDocument.ResolveExternal* = None`). Por padrão a biblioteca busca `http` e `\\servidor`; uma figurinha de pacote de terceiros abriria conexões só por ser exibida (`SvgTests.Svg_does_not_fetch_external_images`).
 - **Caminhos de rede em projetos baixados** (`MediaLocator.IsAllowedPath`): só consultar `\\servidor\pasta` faz o Windows enviar as credenciais do usuário (NTLM). Num `.med` com a marca da Web (fluxo `Zone.Identifier`, zona Internet ou Sites restritos), mídias em outro servidor não são procuradas e ficam ausentes; o usuário pode reassociá-las. Caminhos de dispositivo (`\\.\`, `\\?\`) nunca são procurados.
+- **LUTs de rede em projetos baixados** (`MedProjectStore.DisableRemoteLuts`): a mesma regra vale para o arquivo `.cube` de uma LUT. Como o efeito é aplicado sem saber de qual `.med` veio, a decisão é tomada ao abrir: a LUT fica desativada (`Enabled = false`, caminho preservado) e o aviso `RemoteLutWarning` aparece. Abrir o projeto não lê a LUT; ela só é lida se o usuário ativar o efeito.
 
 ### Carregamento de bibliotecas e programas
 

@@ -127,7 +127,7 @@ Wenn eine Datei verschoben, umbenannt oder gelöscht wurde, zeigt das Projekt be
 1. Klicken Sie auf **Suchen…**, um die Datei anzugeben, oder auf **In Ordner suchen…**, damit das Programm in den von Ihnen gewählten Ordnern und Unterordnern sucht.
 2. Wenn Sie sie jetzt nicht suchen möchten, klicken Sie auf **Ohne die Medien fortfahren**. Die Abschnitte werden als fehlend markiert und können später gesucht werden.
 
-Sie können dieses Fenster jederzeit über **Projekt › Fehlende Medien suchen…** öffnen.
+Sie können dieses Fenster jederzeit über **Projekt › Fehlende Medien suchen…** öffnen. In einem aus dem Internet heruntergeladenen Projekt sucht das Programm keine Medien und LUTs auf einem anderen Computer im Netzwerk, denn schon die Anfrage an diesen Computer würde ihm Ihre Windows-Anmeldedaten senden: Solche Medien erscheinen als fehlend, und solche LUTs werden deaktiviert. Wenn Sie der Herkunft des Projekts vertrauen, suchen Sie die Medien in diesem Fenster und aktivieren Sie die LUTs im Bereich **Eigenschaften** wieder.
 
 Um dieses Problem beim Mitnehmen des Projekts auf einen anderen Computer zu vermeiden, verwenden Sie **Projekt › Medien ins Projekt einpacken…**. Damit werden die Medien in die Projektdatei kopiert.
 

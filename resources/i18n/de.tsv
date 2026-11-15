@@ -2238,3 +2238,4 @@ d6a7cb8d	Frage an den Assistenten
 34db3a15	Antwortet anhand des Handbuchs, ohne Internet.
 30f9d184	Ungültiger SHA-256 für '{0}' ({1}).
 a811c9b4	Ungültige Größe für '{0}' ({1}).
+2576a6be	Eine LUT dieses Projekts liegt auf einem anderen Computer im Netzwerk und wurde deaktiviert, weil das Projekt aus dem Internet stammt. Aktivieren Sie den Effekt im Bereich Eigenschaften, wenn Sie der Herkunft des Projekts vertrauen.

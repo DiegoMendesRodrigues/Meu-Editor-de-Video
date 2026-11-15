@@ -127,7 +127,7 @@ Se um ficheiro foi movido, renomeado ou apagado, o projeto mostra o aviso "Algum
 1. Clique em **Localizar…** para indicar o ficheiro, ou em **Procurar em pasta…** para o programa procurar nas pastas e subpastas que o utilizador escolher.
 2. Se não quiser localizar agora, clique em **Continuar sem as ficheiros multimédia**. Os trechos ficam marcados como ausentes e podem ser localizados depois.
 
-O utilizador pode abrir essa janela a qualquer momento em **Projeto › Localizar ficheiros multimédia ausentes…**.
+O utilizador pode abrir essa janela a qualquer momento em **Projeto › Localizar ficheiros multimédia ausentes…**. Num projeto transferido da internet, o programa não procura ficheiros multimédia nem LUT que estejam noutro computador da rede, porque só consultar esse computador já lhe enviaria os dados de acesso do Windows: esses ficheiros aparecem como ausentes e essas LUT ficam desativadas. Se confiar na origem do projeto, localize os ficheiros nesta janela e ative as LUT no painel **Propriedades**.
 
 Para evitar esse problema ao levar o projeto para outro computador, use **Projeto › Empacotar ficheiros multimédia no projeto…**. Ele copia as ficheiros multimédia para dentro do ficheiro do projeto.
 

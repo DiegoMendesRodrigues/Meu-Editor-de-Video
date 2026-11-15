@@ -2281,6 +2281,7 @@
  "Um pacote é um arquivo .medpack (ZIP) com as pastas figurinhas, titulos e modelos. Tudo fica neste computador.",
  "Um quadro congelado não pode ser reproduzido ao contrário.",
  "Um quadro congelado não tem curva de velocidade.",
+ "Uma LUT deste projeto está em outro computador da rede e foi desativada, porque o projeto veio da internet. Ative o efeito no painel Propriedades se confiar na origem do projeto.",
  "Uma câmera virtual acompanha a cabeça ou o corpo da pessoa (modelo de segmentação local): corte automático, agitar e fundo desfocado.",
  "Uma volta completa (360°) ao longo de todo o clipe.",
  "Up",

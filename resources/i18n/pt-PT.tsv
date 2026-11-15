@@ -747,3 +747,4 @@ c5d32e65	O ficheiro '{0}' do modelo está corrompido: o hash SHA-256 ou o tamanh
 a08a4981	Para respostas em linguagem natural, instale o modelo {0} ({1}). Corre neste computador; sem ele, o assistente mostra as secções do manual.
 57b8fe10	A pensar…
 6b288621	Pergunte sobre qualquer funcionalidade do programa ou sobre edição de vídeo. Por exemplo:
+2576a6be	Uma LUT deste projeto está noutro computador da rede e foi desativada, porque o projeto veio da internet. Ative o efeito no painel Propriedades se confiar na origem do projeto.

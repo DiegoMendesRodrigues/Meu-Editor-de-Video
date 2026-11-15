@@ -127,7 +127,7 @@ Si un fichier a été déplacé, renommé ou supprimé, le projet affiche l'aver
 1. Cliquez sur **Localiser…** pour indiquer le fichier, ou sur **Rechercher dans un dossier…** pour que le programme cherche dans les dossiers et sous-dossiers que vous choisissez.
 2. Si vous ne voulez pas les localiser maintenant, cliquez sur **Continuer sans les médias**. Les passages restent marqués comme manquants et pourront être localisés plus tard.
 
-Vous pouvez ouvrir cette fenêtre à tout moment dans **Projet › Localiser les médias manquants…**.
+Vous pouvez ouvrir cette fenêtre à tout moment dans **Projet › Localiser les médias manquants…**. Dans un projet téléchargé depuis Internet, le logiciel ne recherche pas les médias ni les LUT situés sur un autre ordinateur du réseau, car le simple fait de contacter cet ordinateur lui enverrait vos informations de connexion Windows : ces médias apparaissent comme manquants et ces LUT sont désactivées. Si vous faites confiance à l'origine du projet, localisez les médias dans cette fenêtre et réactivez les LUT dans le panneau **Propriétés**.
 
 Pour éviter ce problème en emportant le projet sur un autre ordinateur, utilisez **Projet › Intégrer les médias au projet…**. Les médias sont copiés dans le fichier du projet.
 

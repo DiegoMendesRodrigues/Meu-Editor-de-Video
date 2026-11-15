@@ -2222,3 +2222,4 @@ d6a7cb8d	Question for the assistant
 34db3a15	Answers based on the manual, without internet.
 30f9d184	Invalid SHA-256 for '{0}' ({1}).
 a811c9b4	Invalid size for '{0}' ({1}).
+2576a6be	A LUT in this project is on another computer on the network and was turned off because the project came from the internet. Turn the effect on in the Properties panel if you trust where the project came from.

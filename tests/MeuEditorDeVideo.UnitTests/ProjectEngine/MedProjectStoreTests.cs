@@ -125,6 +125,37 @@ public sealed class MedProjectStoreTests : IDisposable
     }
 
     [Fact]
+    public async Task LUT_em_outro_servidor_e_desativada_em_projeto_baixado_da_internet()
+    {
+        // Ler \\servidor\... envia as credenciais do Windows (NTLM): num .med com a marca da Web a LUT fica desativada,
+        // com o caminho guardado. Abrir o projeto não lê o arquivo da LUT.
+        var media = WriteFile(Path.Combine(MediaDir, "clip.mp4"), RandomBytes(1024));
+        var project = BuildProject("LUT de rede", StorageMode.Linked, AssetFor(media, 1024));
+        var seq = project.MainSequence;
+        var lut = new EffectInstance
+        {
+            Id = Guid.NewGuid(), Type = MeuEditorDeVideo.Domain.Effects.EffectCatalog.Lut, Resource = @"\\servidor\luts\filme.cube",
+        };
+        var local = new EffectInstance { Id = Guid.NewGuid(), Type = lut.Type, Resource = Path.Combine(MediaDir, "local.cube") };
+        var clip = seq.Tracks[0].Clips[0] with { Effects = [lut, local] };
+        project = project.WithSequence(seq with { Tracks = seq.Tracks.SetItem(0, seq.Tracks[0] with { Clips = [clip] }) });
+        var target = Path.Combine(ProjectsDir, "lut.med");
+        await _store.SaveAsync(new SaveRequest(project, target, IncludeMedia: false, new Dictionary<Guid, string>()));
+
+        var trusted = await _store.LoadAsync(target);
+        File.WriteAllText(target + ":Zone.Identifier", "[ZoneTransfer]\r\nZoneId=3\r\n");
+        var downloaded = await _store.LoadAsync(target);
+
+        Assert.All(trusted.Project.MainSequence.Tracks[0].Clips[0].Effects, e => Assert.True(e.Enabled));
+        Assert.DoesNotContain(MedProjectStore.RemoteLutWarning, trusted.Warnings);
+        var effects = downloaded.Project.MainSequence.Tracks[0].Clips[0].Effects;
+        Assert.False(effects[0].Enabled);
+        Assert.Equal(lut.Resource, effects[0].Resource);
+        Assert.True(effects[1].Enabled);
+        Assert.Contains(MedProjectStore.RemoteLutWarning, downloaded.Warnings);
+    }
+
+    [Fact]
     public async Task Salvar_e_recarregar_projeto_vinculado_preserva_o_conteudo()
     {
         var media = WriteFile(Path.Combine(MediaDir, "clip.mp4"), RandomBytes(4096));

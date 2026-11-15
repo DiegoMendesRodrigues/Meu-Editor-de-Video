@@ -67,6 +67,11 @@ public sealed class MedProjectStore(IAppPaths paths, ILogger<MedProjectStore> lo
             var allWarnings = warnings.ToList();
             if (manifest.ProjectId != project.Id)
                 allWarnings.Add("O identificador do manifesto não corresponde ao do projeto.");
+            if (DisableRemoteLuts(project, path) is { } safe)
+            {
+                project = safe;
+                allWarnings.Add(RemoteLutWarning);
+            }
 
             logger.LogInformation("Projeto aberto: formato {Version}, {Media} mídias, migrado={Migrated}.",
                 manifest.FormatVersion, project.Media.Count, migrated);
@@ -81,6 +86,39 @@ public sealed class MedProjectStore(IAppPaths paths, ILogger<MedProjectStore> lo
         }
         catch (UnauthorizedAccessException ex) { throw new MedException(MedErrors.AccessDenied(path, ex)); }
         catch (IOException ex) when (IsSharingViolation(ex)) { throw new MedException(MedErrors.FileInUse(path, ex)); }
+    }
+
+    public const string RemoteLutWarning =
+        "Uma LUT deste projeto está em outro computador da rede e foi desativada, porque o projeto veio da internet. Ative o efeito no painel Propriedades se confiar na origem do projeto.";
+
+    /// <summary>
+    /// Num .med baixado da internet, desativa as LUTs em outro servidor de rede (ou em caminho de dispositivo): lê-las faria o
+    /// Windows enviar as credenciais do usuário (NTLM) a esse servidor. O caminho fica guardado; nulo quando nada mudou.
+    /// </summary>
+    internal static Project? DisableRemoteLuts(Project project, string projectFilePath)
+    {
+        bool? fromInternet = null;
+        var changed = false;
+        var sequences = project.Sequences.Select(sequence => sequence with
+        {
+            Tracks = [.. sequence.Tracks.Select(track => track with
+            {
+                Clips = [.. track.Clips.Select(clip => clip.Effects.Any(Blocked)
+                    ? clip with { Effects = [.. clip.Effects.Select(e => Blocked(e) ? e with { Enabled = false } : e)] }
+                    : clip)],
+            })],
+        }).ToList();
+        return changed ? project with { Sequences = [.. sequences] } : null;
+
+        bool Blocked(EffectInstance e)
+        {
+            if (!e.Enabled || e.Type != Domain.Effects.EffectCatalog.Lut || string.IsNullOrEmpty(e.Resource)) return false;
+            // Caminho local comum: nada a fazer (não exige ler a marca da Web).
+            if (!e.Resource.StartsWith(@"\\", StringComparison.Ordinal) && !e.Resource.StartsWith("//", StringComparison.Ordinal)) return false;
+            if (MediaLocator.IsAllowedPath(e.Resource, projectFilePath, ref fromInternet)) return false;
+            changed = true;
+            return true;
+        }
     }
 
     private static MedVersion ParseVersion(string text, string path)

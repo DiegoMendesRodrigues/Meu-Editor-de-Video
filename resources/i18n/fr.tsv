@@ -2223,3 +2223,4 @@ d6a7cb8d	Question à l'assistant
 34db3a15	Répond d'après le manuel, sans internet.
 30f9d184	SHA-256 invalide pour '{0}' ({1}).
 a811c9b4	Taille invalide pour '{0}' ({1}).
+2576a6be	Une LUT de ce projet se trouve sur un autre ordinateur du réseau et a été désactivée, car le projet vient d'Internet. Activez l'effet dans le panneau Propriétés si vous faites confiance à l'origine du projet.
