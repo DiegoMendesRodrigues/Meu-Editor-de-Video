@@ -19,8 +19,8 @@
            Compressed="yes">
     <SummaryInformation Description="Meu Editor de Vídeo $(var.Version) — editor de vídeo com IA local" Manufacturer="Diego Mendes Rodrigues" />
 
-    <!-- Sempre remove a versão instalada antes, inclusive outra compilação da mesma versão. -->
-    <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="Uma versão mais nova do Meu Editor de Vídeo já está instalada." />
+    <!-- Sempre remove todas as versões instaladas antes (mais antigas, outra compilação da mesma versão e mais novas). -->
+    <MajorUpgrade AllowDowngrades="yes" />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
 
     <Icon Id="AppIcon.ico" SourceFile="$(var.RepoRoot)src\MeuEditorDeVideo.App\Assets\icone.ico" />
