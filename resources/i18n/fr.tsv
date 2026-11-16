@@ -119,6 +119,7 @@
 0de5a654	Ce Windows ne dispose pas du service de voix (SAPI).
 0df1ab9f	Mode de fusion
 0dfff1df	Synthèse vocale
+0e2f3080	Déplacer dans le moniteur
 0e37130c	Zoom avant
 0e66ef4d	Sépare la personne de l'arrière-plan avec un modèle de segmentation local et rend l'arrière-plan transparent, coloré, flou ou remplacé par une autre image/vidéo (RF102–RF109).
 0e6dd87b	Autre…
@@ -519,6 +520,7 @@
 3e43a712	Égaliseur
 3e44a0e4	Sélectionnez deux clips audio du même événement (ex. : caméra et enregistreur). Celui de la piste supérieure reste fixe ; l'autre est déplacé.
 3e99f0eb	Le projet doit être enregistré pour devenir un modèle. Enregistrer maintenant ?
+3e9b33ff	Déplacer la piste
 3ea09c4a	Graphique vectoriel SVG
 3ea11abe	Délimitez l'objet sur le moniteur (faites glisser la zone) et cliquez sur Suivre. Les masques et autres éléments peuvent le suivre.
 3ea47a2f	sans personnes
@@ -783,6 +785,7 @@
 61889fa9	Tons de coucher de soleil.
 61af0557	Qualité par défaut :
 61cd11be	Figer l'image
+61ea3ee1	Faites glisser vers le haut ou vers le bas pour changer l'ordre des pistes
 61fc7586	Coin supérieur droit
 620bf6a8	Modèles installés
 623e74ba	Pas de décodage vidéo matériel : utilisez des proxies pour les vidéos haute résolution.
@@ -803,6 +806,7 @@
 63b910bf	Le projet contient des données incohérentes :\n• {0}
 63dc024a	Supprimer le pack
 63e2bbaf	Continuer
+64238dd1	Faire pivoter dans le moniteur
 6432ba75	Échelle
 64678705	Animations prédéfinies
 6483cc8f	Teinte
@@ -851,6 +855,7 @@
 695e820e	Ajuster à la fenêtre
 6969fe0b	Impossible d'utiliser « {0} » : {1}
 697131ea	Identifiant
+6985d69c	Monter la piste
 698a73c2	Italique
 69bd325e	Narration insérée ({0}
 69d920c6	Codec vidéo
@@ -945,6 +950,7 @@
 7677bcb8	Solo : n'écouter que les pistes en solo
 76791ad9	Réduire le bruit
 7688a23b	Nom du modèle :
+768fb9c2	Déplacer, faire pivoter et redimensionner le clip dans le moniteur
 76900f1b	Retour
 769f6a0a	Sans modèle : utilise la comparaison des couleurs (moins précise)
 76b0fb6a	Paramètres
@@ -1091,6 +1097,7 @@
 89423cbc	Installer un modèle d'IA
 8970ea4a	Le presse-papiers est utilisé. Réessayez.
 89929850	_Intervalle de lecture en boucle
+8996824a	Descendre la piste
 8998ed98	Plein écran (F11)
 89a4eae3	Scinder à la tête de lecture (S)
 89c80e34	Durée maximale par fichier en secondes
@@ -1739,6 +1746,7 @@ da88ad51	Sourcils · relever
 daa319da	Les clips sont trop courts pour une transition.
 dac230c4	Adoucir le bord
 dacf0de7	Canaux
+dad8d9fb	Redimensionner dans le moniteur
 dadc7501	« {0} » supprimé.
 dadf3082	Aucune voix trouvée. Installez des voix dans Paramètres Windows › Heure et langue › Voix.
 dae519a0	Largeur en pixels

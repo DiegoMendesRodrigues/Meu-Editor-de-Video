@@ -1,4 +1,4 @@
-﻿"""Gera as 40 figurinhas do pacote Básico (arte original, desenhada aqui) em PNG 512x512 com contorno branco e sombra.
+﻿"""Gera as figurinhas do pacote Básico (símbolos, formas geométricas, pinos e pontos de interesse da cidade) (arte original, desenhada aqui) em PNG 512x512 com contorno branco e sombra.
 
 Uso: python scripts/generate-stickers.py resources/stickers/basico/figurinhas   (requer Pillow e a fonte Segoe UI Bold)
 """
@@ -392,5 +392,302 @@ pill_button("Curtir", "CURTIR", (60, 120, 230, 255), icon="heart")
 word("Novo", "NOVO!", (240, 60, 90, 255)); word("Uau", "UAU!", (170, 80, 240, 255)); word("Oferta", "OFERTA", (255, 150, 20, 255), shape="box"); word("Obrigado", "OBRIGADO!", (50, 180, 110, 255), shape="box")
 pin(); camera(); note(); bulb(); play()
 face("Sorriso", "smile")
+# ---------------------------------------------------------------- formas geométricas
+def geo(name, kind, color):
+    im, d = canvas(); w = 26
+    if kind == "circle": d.ellipse((152, 152, 872, 872), fill=color, outline=INK, width=w)
+    elif kind == "square": d.rounded_rectangle((162, 162, 862, 862), 24, fill=color, outline=INK, width=w)
+    elif kind == "rect": d.rounded_rectangle((80, 292, 944, 732), 24, fill=color, outline=INK, width=w)
+    else:
+        n, rot = {"tri": (3, -90), "diamond": (4, -90), "pent": (5, -90), "hex": (6, 0)}[kind]
+        pts = [(512 + 400 * math.cos(math.radians(rot + i * 360 / n)), 560 + 400 * math.sin(math.radians(rot + i * 360 / n))) for i in range(n)]
+        if kind == "tri": pts = [(x, y - 60) for x, y in pts]
+        d.polygon(pts, fill=color, outline=INK, width=w)
+    finish(im, name)
+
+
+geo("Círculo", "circle", (60, 140, 230, 255)); geo("Quadrado", "square", (240, 70, 60, 255))
+geo("Retângulo", "rect", (50, 180, 110, 255)); geo("Triângulo", "tri", (255, 180, 30, 255))
+geo("Losango", "diamond", (170, 80, 240, 255)); geo("Pentágono", "pent", (20, 170, 190, 255)); geo("Hexágono", "hex", (240, 90, 160, 255))
+
+
+# ---------------------------------------------------------------- pinos de mapa
+HEAD = (512, 400)
+W = (255, 255, 255, 255)
+
+
+def pin_base(d, color, head="circle"):
+    """Pino de mapa: ponta embaixo e cabeça na forma pedida; devolve nada (a cabeça fica em HEAD, raio ~270)."""
+    cx, cy = HEAD
+    d.polygon([(330, 560), (694, 560), (512, 960)], fill=color, outline=INK, width=24)
+    if head == "circle": d.ellipse((cx - 280, cy - 280, cx + 280, cy + 280), fill=color, outline=INK, width=24)
+    elif head == "square": d.rounded_rectangle((cx - 270, cy - 270, cx + 270, cy + 270), 50, fill=color, outline=INK, width=24)
+    elif head == "hex": d.polygon([(cx + 300 * math.cos(math.radians(30 + i * 60)), cy + 300 * math.sin(math.radians(30 + i * 60))) for i in range(6)], fill=color, outline=INK, width=24)
+    elif head == "diamond": d.polygon([(cx, cy - 330), (cx + 330, cy), (cx, cy + 330), (cx - 330, cy)], fill=color, outline=INK, width=24)
+    elif head == "star": d.polygon(star_pts(cx, cy, 340, 165), fill=color, outline=INK, width=24)
+    elif head == "heart": d.polygon(heart_pts(cx, cy + 20, 19), fill=color, outline=INK, width=24)
+    elif head == "tri": d.polygon([(cx, cy - 320), (cx + 330, cy + 250), (cx - 330, cy + 250)], fill=color, outline=INK, width=24)
+    # Esconde a junção entre a ponta e a cabeça.
+    d.polygon([(352, 560), (672, 560), (512, 920)], fill=color)
+
+
+def box_pin(name, head, color):
+    im, d = canvas(); pin_base(d, color, head)
+    cx, cy = HEAD
+    if head in ("square",): d.rounded_rectangle((cx - 130, cy - 130, cx + 130, cy + 130), 24, fill=W, outline=INK, width=16)
+    elif head == "diamond": d.polygon([(cx, cy - 150), (cx + 150, cy), (cx, cy + 150), (cx - 150, cy)], fill=W, outline=INK, width=16)
+    else: d.ellipse((cx - 120, cy - 120, cx + 120, cy + 120), fill=W, outline=INK, width=16)
+    finish(im, name)
+
+
+for nm, hd, col in [("Pino quadrado", "square", (60, 120, 230, 255)), ("Pino redondo", "circle", (235, 60, 60, 255)),
+                    ("Pino hexagonal", "hex", (50, 170, 100, 255)), ("Pino losango", "diamond", (255, 150, 20, 255)),
+                    ("Pino estrela", "star", (255, 190, 30, 255)), ("Pino coração", "heart", (240, 80, 150, 255)),
+                    ("Pino triangular", "tri", (150, 80, 230, 255))]:
+    box_pin(nm, hd, col)
+
+
+# ---------------------------------------------------------------- pontos de interesse da cidade
+TRANSP, FOOD, SERV, CULT, NAT, SHOP = (45, 110, 220, 255), (240, 120, 30, 255), (215, 50, 50, 255), (140, 70, 200, 255), (40, 150, 80, 255), (230, 70, 140, 255)
+
+
+def poi(name, color, draw):
+    im, d = canvas(); pin_base(d, color)
+    cx, cy = HEAD
+    k = 1.75
+
+    def P(x, y): return (cx + x * k, cy + y * k)
+
+    def R(x0, y0, x1, y1): return (*P(x0, y0), *P(x1, y1))
+
+    draw(d, P, R, k, color)
+    finish(im, name)
+
+
+def T(s, size=300):
+    def f(d, P, R, k, c): text(d, P(0, 4), s, size, W)
+    return f
+
+
+def airplane(d, P, R, k, c):
+    d.polygon([P(0, -100), P(10, -85), P(10, -25), P(95, 20), P(95, 38), P(10, 15), P(10, 60), P(35, 80), P(35, 92), P(0, 82),
+               P(-35, 92), P(-35, 80), P(-10, 60), P(-10, 15), P(-95, 38), P(-95, 20), P(-10, -25), P(-10, -85)], fill=W)
+
+
+def museum(d, P, R, k, c):
+    d.polygon([P(-95, -40), P(0, -95), P(95, -40)], fill=W); d.rectangle(R(-95, 70, 95, 90), fill=W); d.rectangle(R(-85, -35, 85, -22), fill=W)
+    for x in (-70, -25, 20, 65): d.rectangle(R(x - 2, -15, x + 7, 62), fill=W)
+
+
+def fish(d, P, R, k, c):
+    d.ellipse(R(-80, -50, 45, 50), fill=W); d.polygon([P(30, 0), P(95, -50), P(95, 50)], fill=W); d.ellipse(R(-55, -18, -35, 2), fill=c)
+    d.arc(R(-20, -35, 20, 35), 300, 60, fill=c, width=int(8 * k))
+
+
+def beach(d, P, R, k, c):
+    d.pieslice(R(-90, -90, 90, 90), 180, 360, fill=W); d.line([P(0, 0), P(0, 70)], fill=W, width=int(10 * k))
+    for i in range(3): d.line([P(-90 + i * 60, 85), P(-60 + i * 60, 75), P(-30 + i * 60, 85)], fill=W, width=int(8 * k), joint="curve")
+
+
+def bus(d, P, R, k, c):
+    d.rounded_rectangle(R(-70, -90, 70, 65), int(22 * k), fill=W); d.rectangle(R(-55, -70, 55, -5), fill=c)
+    d.ellipse(R(-55, 20, -35, 40), fill=c); d.ellipse(R(35, 20, 55, 40), fill=c)
+    d.rectangle(R(-62, 60, -32, 92), fill=W); d.rectangle(R(32, 60, 62, 92), fill=W)
+
+
+def train(d, P, R, k, c):
+    d.rounded_rectangle(R(-60, -95, 60, 55), int(35 * k), fill=W); d.rounded_rectangle(R(-42, -70, 42, -15), int(10 * k), fill=c)
+    d.ellipse(R(-40, 15, -22, 33), fill=c); d.ellipse(R(22, 15, 40, 33), fill=c)
+    d.line([P(-40, 60), P(-70, 95)], fill=W, width=int(10 * k)); d.line([P(40, 60), P(70, 95)], fill=W, width=int(10 * k))
+
+
+def metro(d, P, R, k, c):
+    d.ellipse(R(-90, -90, 90, 90), fill=W); text(d, P(0, 2), "M", 250, c)
+
+
+def casino(d, P, R, k, c):
+    d.rounded_rectangle(R(-75, -75, 75, 75), int(22 * k), fill=W)
+    for x, y in [(-40, -40), (40, -40), (0, 0), (-40, 40), (40, 40)]: d.ellipse(R(x - 14, y - 14, x + 14, y + 14), fill=c)
+
+
+def bar(d, P, R, k, c):
+    d.polygon([P(-80, -80), P(80, -80), P(8, 0), P(8, 65), P(45, 80), P(45, 90), P(-45, 90), P(-45, 80), P(-8, 65), P(-8, 0)], fill=W)
+    d.ellipse(R(20, -110, 50, -80), fill=W); d.polygon([P(-55, -55), P(55, -55), P(0, -5)], fill=c)
+
+
+def restaurant(d, P, R, k, c):
+    for x in (-70, -50, -30): d.rectangle(R(x - 4, -95, x + 4, -35), fill=W)
+    d.rounded_rectangle(R(-76, -45, -24, -15), int(10 * k), fill=W); d.rectangle(R(-58, -20, -42, 95), fill=W)
+    d.pieslice(R(15, -95, 85, 45), 270, 90, fill=W); d.rectangle(R(42, -95, 58, 95), fill=W)
+
+
+def cafe(d, P, R, k, c):
+    d.rounded_rectangle(R(-80, -20, 50, 75), int(25 * k), fill=W); d.rectangle(R(-80, -20, 50, 20), fill=W)
+    d.ellipse(R(30, -10, 90, 50), outline=W, width=int(14 * k)); d.rectangle(R(-95, 82, 70, 95), fill=W)
+    for x in (-50, -15, 20): d.line([P(x, -90), P(x + 10, -65), P(x, -40)], fill=W, width=int(9 * k), joint="curve")
+
+
+def flame(d, P, R, k, c):
+    d.polygon([P(0, -100), P(35, -50), P(70, -5), P(75, 40), P(50, 80), P(0, 95), P(-50, 80), P(-75, 40), P(-60, -20), P(-35, 10), P(-30, -45)], fill=W)
+    d.polygon([P(0, -10), P(30, 30), P(30, 60), P(0, 78), P(-30, 60), P(-25, 25)], fill=c)
+
+
+def police(d, P, R, k, c):
+    d.polygon([P(0, -100), P(85, -65), P(75, 25), P(0, 100), P(-75, 25), P(-85, -65)], fill=W); d.polygon(star_pts(*P(0, -5), 55 * k, 24 * k), fill=c)
+
+
+def fuel(d, P, R, k, c):
+    d.rounded_rectangle(R(-75, -90, 25, 90), int(14 * k), fill=W); d.rectangle(R(-58, -70, 8, -20), fill=c)
+    d.line([P(25, -40), P(60, -20), P(60, 50), P(75, 60), P(85, 40), P(85, -50)], fill=W, width=int(12 * k), joint="curve")
+
+
+def flag(d, P, R, k, c):
+    d.rectangle(R(-75, -95, -60, 95), fill=W); d.polygon([P(-60, -90), P(85, -90), P(55, -50), P(85, -10), P(-60, -10)], fill=W)
+
+
+def city_hall(d, P, R, k, c):
+    d.pieslice(R(-50, -80, 50, 20), 180, 360, fill=W); d.rectangle(R(-3, -110, 3, -75), fill=W)
+    d.rectangle(R(-90, -25, 90, -12), fill=W); d.rectangle(R(-95, 72, 95, 92), fill=W)
+    for x in (-75, -40, -5, 30, 65): d.rectangle(R(x, -5, x + 12, 65), fill=W)
+
+
+def hospital(d, P, R, k, c):
+    d.rectangle(R(-28, -90, 28, 90), fill=W); d.rectangle(R(-90, -28, 90, 28), fill=W)
+
+
+def hotel(d, P, R, k, c):
+    d.rectangle(R(-95, -60, -78, 80), fill=W); d.rectangle(R(-80, 20, 95, 50), fill=W); d.rectangle(R(80, 0, 95, 80), fill=W)
+    d.ellipse(R(-70, -25, -30, 15), fill=W); d.rounded_rectangle(R(-20, -20, 95, 20), int(15 * k), fill=W)
+
+
+def house(d, P, R, k, c):
+    d.polygon([P(0, -95), P(95, -10), P(70, -10), P(70, 85), P(-70, 85), P(-70, -10), P(-95, -10)], fill=W); d.rectangle(R(-20, 20, 20, 85), fill=c)
+
+
+def factory(d, P, R, k, c):
+    d.polygon([P(-95, 85), P(-95, -20), P(-45, 10), P(-45, -20), P(5, 10), P(5, -20), P(55, 10), P(55, -95), P(85, -95), P(85, 85)], fill=W)
+    for x in (-75, -35, 5): d.rectangle(R(x, 35, x + 22, 60), fill=c)
+
+
+def books(d, P, R, k, c):
+    d.rectangle(R(-85, -70, -45, 85), fill=W); d.rectangle(R(-35, -90, 5, 85), fill=W)
+    d.polygon([P(20, -60), P(55, -72), P(95, 75), P(60, 87)], fill=W)
+    for x in (-65, -15): d.rectangle(R(x - 10, -40, x + 10, -30), fill=c)
+
+
+def tree(d, P, R, k, c):
+    d.ellipse(R(-80, -100, 80, 40), fill=W); d.rectangle(R(-14, 20, 14, 95), fill=W); d.rectangle(R(-55, 85, 55, 97), fill=W)
+
+
+def pill(d, P, R, k, c):
+    pts = lambda a, b: [P(a * math.cos(math.radians(45)) - b * math.sin(math.radians(45)), a * math.sin(math.radians(45)) + b * math.cos(math.radians(45)))]
+    d.line([*pts(-55, 0), *pts(55, 0)], fill=W, width=int(80 * k))
+    for a in (-55, 55): x, y = pts(a, 0)[0]; d.ellipse((x - 40 * k, y - 40 * k, x + 40 * k, y + 40 * k), fill=W)
+    d.line([*pts(0, -40), *pts(0, 40)], fill=c, width=int(8 * k))
+
+
+def envelope(d, P, R, k, c):
+    d.rectangle(R(-95, -60, 95, 65), fill=W); d.line([P(-90, -55), P(0, 15), P(90, -55)], fill=c, width=int(10 * k), joint="curve")
+
+
+def pencil(d, P, R, k, c):
+    a = math.radians(-45)
+    def Q(x, y): return P(x * math.cos(a) - y * math.sin(a), x * math.sin(a) + y * math.cos(a))
+    d.polygon([Q(-60, -25), Q(85, -25), Q(85, 25), Q(-60, 25)], fill=W); d.polygon([Q(-60, -25), Q(-110, 0), Q(-60, 25)], fill=W)
+    d.line([Q(60, -25), Q(60, 25)], fill=c, width=int(8 * k)); d.polygon([Q(-95, -8), Q(-110, 0), Q(-95, 8)], fill=c)
+
+
+def bag(d, P, R, k, c):
+    d.arc(R(-40, -100, 40, -20), 180, 360, fill=W, width=int(14 * k)); d.rectangle(R(-40, -62, -26, -40), fill=W); d.rectangle(R(26, -62, 40, -40), fill=W)
+    d.polygon([P(-75, -45), P(75, -45), P(88, 95), P(-88, 95)], fill=W)
+
+
+def ball(d, P, R, k, c):
+    d.ellipse(R(-90, -90, 90, 90), fill=W)
+    d.polygon([P(32 * math.cos(math.radians(-90 + i * 72)), 32 * math.sin(math.radians(-90 + i * 72))) for i in range(5)], fill=c)
+    for i in range(5):
+        a = math.radians(-90 + i * 72)
+        d.line([P(32 * math.cos(a), 32 * math.sin(a)), P(88 * math.cos(a), 88 * math.sin(a))], fill=c, width=int(7 * k))
+
+
+def mask(d, P, R, k, c):
+    d.chord(R(-85, -95, 85, 95), 0, 360, fill=W); d.ellipse(R(-55, -40, -15, -10), fill=c); d.ellipse(R(15, -40, 55, -10), fill=c)
+    d.chord(R(-45, 0, 45, 60), 0, 180, fill=c)
+
+
+def grad_cap(d, P, R, k, c):
+    d.polygon([P(0, -80), P(100, -30), P(0, 20), P(-100, -30)], fill=W); d.polygon([P(-55, -5), P(55, -5), P(55, 50), P(0, 70), P(-55, 50)], fill=W)
+    d.line([P(80, -25), P(80, 55)], fill=W, width=int(8 * k)); d.ellipse(R(70, 50, 90, 70), fill=W)
+
+
+def paw(d, P, R, k, c):
+    d.ellipse(R(-55, 5, 55, 90), fill=W)
+    for x, y in [(-75, -25), (-30, -70), (30, -70), (75, -25)]: d.ellipse(R(x - 22, y - 28, x + 22, y + 28), fill=W)
+
+
+def radio_tower(d, P, R, k, c):
+    lw = int(10 * k)
+    d.line([P(-50, 95), P(0, -45), P(50, 95)], fill=W, width=lw, joint="curve"); d.line([P(-32, 45), P(32, 45)], fill=W, width=lw)
+    d.line([P(-32, 45), P(20, 0)], fill=W, width=lw); d.ellipse(R(-15, -60, 15, -30), fill=W)
+    for r in (45, 75): d.arc(R(-r, -45 - r, r, -45 + r), 200, 340, fill=W, width=int(9 * k))
+
+
+def pylon(d, P, R, k, c):
+    lw = int(9 * k)
+    d.line([P(-55, 95), P(-15, -95), P(15, -95), P(55, 95)], fill=W, width=lw, joint="curve")
+    for y, w in [(-60, 85), (-15, 70)]: d.line([P(-w, y), P(w, y)], fill=W, width=lw)
+    d.line([P(-45, 50), P(25, -15)], fill=W, width=lw); d.line([P(45, 50), P(-25, -15)], fill=W, width=lw); d.line([P(-40, 50), P(40, 50)], fill=W, width=lw)
+
+
+def dumbbell(d, P, R, k, c):
+    d.rectangle(R(-60, -10, 60, 10), fill=W)
+    for x in (-80, 60): d.rounded_rectangle(R(x, -55, x + 20, 55), int(8 * k), fill=W)
+    for x in (-100, 85): d.rounded_rectangle(R(x, -32, x + 15, 32), int(6 * k), fill=W)
+
+
+def clapper(d, P, R, k, c):
+    d.rectangle(R(-85, -20, 85, 85), fill=W); d.polygon([P(-88, -30), P(80, -78), P(86, -58), P(-82, -10)], fill=W)
+    for x in (-50, 0, 50): d.line([P(x, -60 + -x * 0.28), P(x + 20, -30 + -x * 0.28)], fill=c, width=int(9 * k))
+
+
+def cart(d, P, R, k, c):
+    d.line([P(-100, -75), P(-70, -75), P(-45, 40), P(75, 40)], fill=W, width=int(12 * k), joint="curve")
+    d.polygon([P(-65, -50), P(95, -50), P(80, 15), P(-52, 15)], fill=W); d.ellipse(R(-50, 55, -20, 85), fill=W); d.ellipse(R(45, 55, 75, 85), fill=W)
+
+
+def anchor(d, P, R, k, c):
+    lw = int(14 * k)
+    d.ellipse(R(-22, -100, 22, -56), outline=W, width=int(12 * k)); d.line([P(0, -56), P(0, 85)], fill=W, width=lw); d.line([P(-45, -30), P(45, -30)], fill=W, width=lw)
+    d.arc(R(-80, -5, 80, 90), 0, 180, fill=W, width=lw); d.polygon([P(-95, 30), P(-65, 25), P(-80, 55)], fill=W); d.polygon([P(95, 30), P(65, 25), P(80, 55)], fill=W)
+
+
+def bike(d, P, R, k, c):
+    lw = int(9 * k)
+    for x in (-55, 55): d.ellipse(R(x - 42, -2, x + 42, 82), outline=W, width=lw)
+    d.line([P(-55, 40), P(-15, -30), P(40, -30), P(55, 40)], fill=W, width=lw, joint="curve"); d.line([P(-15, -30), P(0, 40), P(40, -30)], fill=W, width=lw)
+    d.line([P(-30, -50), P(0, -50)], fill=W, width=lw); d.line([P(40, -30), P(30, -60), P(55, -60)], fill=W, width=lw)
+
+
+def wifi(d, P, R, k, c):
+    for r in (40, 75, 110): d.arc(R(-r, 50 - r, r, 50 + r), 225, 315, fill=W, width=int(16 * k))
+    d.ellipse(R(-16, 34, 16, 66), fill=W)
+
+
+for args in [("Aeroporto", TRANSP, airplane), ("Estação de ônibus", TRANSP, bus), ("Estação de trem", TRANSP, train), ("Estação de metrô", TRANSP, metro),
+             ("Estacionamento", TRANSP, T("P")), ("Ponto de táxi", (240, 180, 20, 255), T("TÁXI", 130)), ("Porto", TRANSP, anchor), ("Ciclovia", NAT, bike),
+             ("Posto de combustível", TRANSP, fuel),
+             ("Museu", CULT, museum), ("Teatro", CULT, mask), ("Cinema", CULT, clapper), ("Biblioteca", CULT, books), ("Escola", CULT, pencil),
+             ("Universidade", CULT, grad_cap), ("Cassino", CULT, casino),
+             ("Bar", FOOD, bar), ("Restaurante", FOOD, restaurant), ("Cafeteria", FOOD, cafe),
+             ("Bombeiros", SERV, flame), ("Polícia", (35, 60, 140, 255), police), ("Hospital", SERV, hospital), ("Farmácia", NAT, pill),
+             ("Correios", (240, 170, 20, 255), envelope), ("Embaixada", SERV, flag), ("Prefeitura", (90, 100, 120, 255), city_hall),
+             ("Informações", TRANSP, T("i", 320)), ("Banco", NAT, T("$", 300)), ("Wi-Fi", TRANSP, wifi),
+             ("Hotel", (70, 90, 200, 255), hotel), ("Casa", FOOD, house), ("Complexo industrial", (110, 110, 125, 255), factory),
+             ("Praia", (30, 170, 210, 255), beach), ("Aquário", (30, 170, 210, 255), fish), ("Parque", NAT, tree), ("Zoológico", NAT, paw),
+             ("Shopping center", SHOP, bag), ("Supermercado", SHOP, cart), ("Complexo esportivo", NAT, ball), ("Academia", SERV, dumbbell),
+             ("Torre de rádio", (90, 100, 120, 255), radio_tower), ("Torre de energia elétrica", (90, 100, 120, 255), pylon)]:
+    poi(*args)
+
+
 n = len([f for f in os.listdir(OUT) if f.endswith('.png')])
 print(n)

@@ -470,7 +470,7 @@ public sealed class StructuralFeaturesTests
     }
 
     [Fact]
-    public void Built_in_sticker_pack_ships_40_stickers_and_cannot_be_removed()
+    public void Built_in_sticker_pack_ships_96_stickers_and_cannot_be_removed()
     {
         var resources = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "resources", "stickers"));
         var root = Path.Combine(Path.GetTempPath(), "med-pacotes-" + Guid.NewGuid().ToString("N"));
@@ -481,8 +481,8 @@ public sealed class StructuralFeaturesTests
             Assert.Equal("basico", basic.Id);
             Assert.Equal("Básico", basic.Name);
             Assert.True(basic.IsBuiltIn);
-            Assert.Equal(40, basic.Stickers);
-            Assert.Equal(40, store.Stickers().Count);
+            Assert.Equal(96, basic.Stickers);
+            Assert.Equal(96, store.Stickers().Count);
             Assert.Throws<InvalidOperationException>(() => store.Remove("basico"));
 
             // Exportar funciona e um pacote instalado com o mesmo id tem precedência sobre o incluído.

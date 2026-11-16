@@ -147,7 +147,7 @@ In der Zeitleiste wird das Video von links nach rechts zusammengesetzt. Die **Ab
 ### Medien in die Zeitleiste einfügen
 
 - Ziehen Sie ein Medium aus der Bibliothek auf eine Spur.
-- Oder wählen Sie das Medium in der Bibliothek aus und klicken Sie in der Symbolleiste auf **Zur Zeitleiste hinzufügen**.
+- Oder wählen Sie das Medium in der Bibliothek aus und klicken Sie in der Symbolleiste auf **Zur Zeitleiste hinzufügen**. Bilder und Audio werden an der Abspielposition eingefügt: Ein Bild kommt auf eine freie Bildspur, sonst auf eine leere Videospur; Audio kommt auf eine an dieser Stelle freie Audiospur. Passt keine, legt das Programm eine neue Spur an.
 
 ### Verschieben, trimmen und teilen
 
@@ -181,7 +181,7 @@ Jede Spur hat im Kopf links drei Schaltflächen:
 - **Stumm**: schaltet die Audiospur stumm.
 - **Sperren**: verhindert Änderungen an der Spur, damit Fertiges nicht verändert wird.
 
-Klicken Sie mit der rechten Maustaste auf den Spurnamen, um **Spur umbenennen…** oder **Spur entfernen** zu wählen.
+Klicken Sie mit der rechten Maustaste auf den Spurnamen, um **Spur umbenennen…** oder **Spur entfernen** zu wählen. Um die Reihenfolge der Spuren zu ändern, ziehen Sie den Namen einer Spur nach oben oder unten (oder verwenden Sie **Spur nach oben verschieben** und **Spur nach unten verschieben** im selben Menü). Die oberste Spur erscheint vorne.
 
 ### Gruppieren und verknüpfen
 
@@ -245,7 +245,7 @@ Um einen Effekt anzuwenden, wählen Sie den Clip in der Zeitleiste aus und verwe
 
 Diese Registerkarte bündelt die Bewegungs- und Zeiteinstellungen des Clips:
 
-- **Transformation**: Position X und Y, Skalierung, Drehung und Deckkraft. Neben jedem Wert gibt es eine Schaltfläche ◇, die einen Keyframe erstellt.
+- **Transformation**: Position X und Y, Skalierung, Drehung und Deckkraft. Neben jedem Wert gibt es eine Schaltfläche ◇, die einen Keyframe erstellt. Das geht auch direkt im Monitor: Wählen Sie den Clip in der Zeitleiste aus, ziehen Sie ihn im Video, um ihn zu verschieben, ziehen Sie den runden Griff über dem Rahmen, um ihn zu drehen (mit Umschalt in 15°-Schritten), und ziehen Sie bei Bildern, Stickern, Videos und Formen eine Ecke, um die Größe zu ändern. Texte lassen sich nur verschieben und drehen.
 - **Keyframes**: Ein Keyframe speichert einen Wert zu einem bestimmten Zeitpunkt. Wenn es Keyframes gibt, ändert das Programm den Wert zwischen ihnen allmählich. Verwenden Sie **Vorheriger Keyframe** und **Nächster Keyframe**, um zwischen ihnen zu wechseln, und **Interpolation**, um die Kurve zu wählen: Weich (Ein- und Auslauf), Linear, Beschleunigen, Abbremsen oder Halten (Sprung).
 - **3D (Perspektive)**: Drehung X, Drehung Y und Tiefe, um dem Clip Tiefe zu verleihen. Die Schaltfläche **3D-Kartendrehung** lässt den Clip wie eine Karte umdrehen. Es ist kein vollständiges 3D-Modell.
 - **Fertige Animationen**: sofort anwendbare Bewegungseffekte wie von links hereinkommen, mit Zoom erscheinen, Ken Burns (langsamer Zoom), pulsieren, drehen, schwanken, hüpfen sowie ein- und ausblenden.
@@ -324,7 +324,7 @@ Doppelklicken Sie im Bereich **Grafikelemente** der Bibliothek auf eine Form, um
 
 Sie können auch über die Schaltfläche **SVG importieren…** eine Vektorgrafik importieren.
 
-Unter **Sticker** erscheinen die Sticker der installierten Pakete. Das Programm wird mit dem Paket **Basis** mit 40 häufig verwendeten Stickern ausgeliefert (Pfeile, Hervorhebungskreis, richtig und falsch, Sprechblasen, Herz, Stern, Emojis, Schaltflächen Abonnieren und Gefällt mir, Siegel wie Neu und Angebot und andere). Es kann nicht entfernt, aber exportiert werden. Klicken Sie auf einen, um ihn 3 Sekunden lang mit 40 % Größe (auf der Registerkarte Video anpassbar) an der Abspielposition auf einer freien Bildspur (oder einer neuen Spur namens Sticker) einzufügen. Das Bild kommt auch in die Bibliothek, in die Kategorie Sticker.
+Unter **Sticker** erscheinen die Sticker der installierten Pakete. Das Programm wird mit dem Paket **Basis** mit 96 Stickern ausgeliefert: häufig verwendete (Pfeile, Hervorhebungskreis, richtig und falsch, Sprechblasen, Herz, Stern, Emojis, Schaltflächen Abonnieren und Gefällt mir, Siegel wie Neu und Angebot und andere), geometrische Formen (Kreis, Quadrat, Rechteck, Dreieck, Raute, Fünfeck und Sechseck), Kartenpins mit quadratischem, rundem, sechseckigem, rautenförmigem, Stern-, Herz- oder Dreieckskopf sowie Pins für Orte in der Stadt (Flughafen, Bus-, Bahn- und U-Bahn-Station, Krankenhaus, Polizei, Feuerwehr, Schule, Museum, Park, Restaurant, Hotel und andere). Es kann nicht entfernt, aber exportiert werden. Klicken Sie auf einen, um ihn 3 Sekunden lang mit 40 % Größe (auf der Registerkarte Video anpassbar) an der Abspielposition auf einer freien Bildspur (oder einer neuen Spur namens Sticker) einzufügen. Das Bild kommt auch in die Bibliothek, in die Kategorie Sticker.
 
 ### Texte und Untertitel
 

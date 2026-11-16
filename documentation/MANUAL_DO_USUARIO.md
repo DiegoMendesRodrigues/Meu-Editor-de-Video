@@ -147,7 +147,7 @@ A linha do tempo é onde o vídeo é montado da esquerda para a direita. O **cur
 ### Colocar mídias na linha do tempo
 
 - Arraste uma mídia da biblioteca para uma trilha.
-- Ou selecione a mídia na biblioteca e clique em **Adicionar à linha do tempo**, na barra de ferramentas.
+- Ou selecione a mídia na biblioteca e clique em **Adicionar à linha do tempo**, na barra de ferramentas. Imagens e áudios entram na posição do cursor: a imagem vai para uma trilha de Imagem livre, senão para uma trilha de vídeo vazia; o áudio vai para uma trilha de áudio livre nesse trecho. Se nenhuma servir, o programa cria uma trilha nova.
 
 ### Mover, cortar e dividir
 
@@ -181,7 +181,7 @@ Em cada trilha, no cabeçalho à esquerda, há três botões:
 - **Mudo**: silencia a trilha de áudio.
 - **Bloquear**: impede alterações na trilha, para evitar mexer no que já está pronto.
 
-Clique com o botão direito no nome da trilha para **Renomear trilha…** ou **Remover trilha**.
+Clique com o botão direito no nome da trilha para **Renomear trilha…** ou **Remover trilha**. Para mudar a ordem das trilhas, arraste o nome de uma trilha para cima ou para baixo (ou use **Mover trilha para cima** e **Mover trilha para baixo** no mesmo menu). A trilha de cima aparece na frente.
 
 ### Agrupar e vincular
 
@@ -245,7 +245,7 @@ Para aplicar um efeito, selecione o clipe na linha do tempo e use as abas das pr
 
 Esta aba reúne as configurações de movimento e tempo do clipe:
 
-- **Transformação**: posição X e Y, escala, rotação e opacidade. Ao lado de cada valor há um botão ◇ que cria um keyframe.
+- **Transformação**: posição X e Y, escala, rotação e opacidade. Ao lado de cada valor há um botão ◇ que cria um keyframe. Também dá para fazer isso direto no monitor: com o clipe selecionado na linha do tempo, arraste-o dentro do vídeo para movê-lo, arraste a alça redonda acima da caixa para girá-lo (com Shift, de 15° em 15°) e, em imagens, figurinhas, vídeos e formas, arraste um canto para mudar o tamanho. Textos só se movem e giram.
 - **Keyframes**: um keyframe guarda um valor num instante específico. Quando há keyframes, o programa muda o valor gradualmente entre eles. Use **Keyframe anterior** e **Próximo keyframe** para navegar entre eles, e **Interpolação** para escolher a curva: Suave (entrada e saída), Linear, Acelerando, Desacelerando ou Manter (salto).
 - **3D (perspectiva)**: giro X, giro Y e profundidade, para dar sensação de profundidade ao clipe. O botão **Virar cartão 3D** faz o clipe girar como um cartão. Não é um modelo 3D completo.
 - **Animações prontas**: efeitos de movimento prontos para aplicar, como entrar pela esquerda, aparecer com zoom, Ken Burns (zoom lento), pulsar, girar, balançar, quicar e surgir e sumir.
@@ -324,7 +324,7 @@ Na seção **Elementos Gráficos** da biblioteca, clique duas vezes numa forma p
 
 Também é possível importar um gráfico vetorial pelo botão **Importar SVG…**.
 
-Em **Figurinhas** aparecem as figurinhas dos pacotes instalados. O programa já vem com o pacote **Básico**, com 40 figurinhas de uso comum (setas, círculo de destaque, certo e errado, balões de fala, coração, estrela, emojis, botões Inscreva-se e Curtir, selos como Novo e Oferta, entre outras). Ele não pode ser removido, mas pode ser exportado. Clique numa delas para inseri-la no cursor por 3 segundos, com 40% do tamanho (ajuste na aba Vídeo), numa trilha de imagem livre (ou numa trilha nova chamada Figurinhas). A imagem entra também na biblioteca, na categoria Figurinhas.
+Em **Figurinhas** aparecem as figurinhas dos pacotes instalados. O programa já vem com o pacote **Básico**, com 96 figurinhas: de uso comum (setas, círculo de destaque, certo e errado, balões de fala, coração, estrela, emojis, botões Inscreva-se e Curtir, selos como Novo e Oferta, entre outras), formas geométricas (círculo, quadrado, retângulo, triângulo, losango, pentágono e hexágono), pinos de mapa com o topo quadrado, redondo, hexagonal, em losango, estrela, coração ou triângulo, e pinos de pontos de interesse da cidade (aeroporto, estações de ônibus, trem e metrô, hospital, polícia, bombeiros, escola, museu, parque, restaurante, hotel, entre outros). Ele não pode ser removido, mas pode ser exportado. Clique numa delas para inseri-la no cursor por 3 segundos, com 40% do tamanho (ajuste na aba Vídeo), numa trilha de imagem livre (ou numa trilha nova chamada Figurinhas). A imagem entra também na biblioteca, na categoria Figurinhas.
 
 ### Textos e legendas
 

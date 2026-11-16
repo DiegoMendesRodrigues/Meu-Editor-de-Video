@@ -245,6 +245,40 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         return "T  " + (line.Length > 40 ? line[..40] + "…" : line);
     }
 
+    // ---------------------------------------------------------------- alças no monitor
+
+    /// <summary>
+    /// Caixa do clipe selecionado no instante do cursor (pixels do projeto, relativos ao centro), para as alças de
+    /// mover, girar e redimensionar no monitor. Nula sem clipe visual visível (legendas e camadas de ajuste não têm).
+    /// </summary>
+    public MeuEditorDeVideo.RenderingEngine.LayerBox? MonitorBox()
+    {
+        if (Current() is not { } cur || cur.Track.IsLocked || cur.Track.Kind == TrackKind.Subtitle || cur.Clip.IsAdjustment
+            || Timeline.Project is not { } project || Timeline.Sequence is not { } seq) return null;
+        return MeuEditorDeVideo.RenderingEngine.LayerBounds.Of(project, seq, cur.Clip.Id, Timeline.FrameRate.SnapToFrame(Timeline.Playhead));
+    }
+
+    /// <summary>Textos só se movem e giram no monitor; imagens, figurinhas, vídeos e formas também mudam de tamanho.</summary>
+    public bool CanScaleOnMonitor => Current() is { } cur && !cur.Clip.IsText;
+
+    /// <summary>Posição, escala e giro do clipe no instante do cursor (valores animados, se houver keyframes).</summary>
+    public (double X, double Y, double Scale, double Rotation)? MonitorValues()
+    {
+        if (Current() is not { } cur) return null;
+        var c = cur.Clip;
+        var o = Offset(c);
+        return (ClipAnimation.ValueAt(c, AnimatedProperty.X, o), ClipAnimation.ValueAt(c, AnimatedProperty.Y, o),
+            ClipAnimation.ValueAt(c, AnimatedProperty.Scale, o), ClipAnimation.ValueAt(c, AnimatedProperty.Rotation, o));
+    }
+
+    /// <summary>Arraste no monitor: cada gesto vira uma única entrada no histórico (mesma chave enquanto arrasta).</summary>
+    public void SetFromMonitor(string property, double value, string description, string gesture) =>
+        UpdateClip(c => ClipAnimation.SetValue(c, property, Offset(c), value), description, string.Join(":", "monitor", gesture, property));
+
+    public void SetPositionFromMonitor(double x, double y, string gesture) =>
+        UpdateClip(c => ClipAnimation.SetValue(ClipAnimation.SetValue(c, AnimatedProperty.X, Offset(c), Math.Round(x)), AnimatedProperty.Y, Offset(c), Math.Round(y)),
+            "Mover no monitor", string.Join(":", "monitor", gesture, "pos"));
+
     public MediaTime Offset(Clip c)
     {
         var fr = Timeline.FrameRate;

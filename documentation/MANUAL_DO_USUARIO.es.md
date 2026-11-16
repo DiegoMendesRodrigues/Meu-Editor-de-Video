@@ -147,7 +147,7 @@ La línea de tiempo es donde se monta el vídeo de izquierda a derecha. El **cur
 ### Colocar medios en la línea de tiempo
 
 - Arrastre un medio de la biblioteca a una pista.
-- O seleccione el medio en la biblioteca y haga clic en **Añadir a la línea de tiempo**, en la barra de herramientas.
+- O seleccione el medio en la biblioteca y haga clic en **Añadir a la línea de tiempo**, en la barra de herramientas. Las imágenes y los audios entran en la posición del cursor: la imagen va a una pista de Imagen libre o, si no, a una pista de vídeo vacía; el audio va a una pista de audio libre en ese tramo. Si ninguna sirve, el programa crea una pista nueva.
 
 ### Mover, recortar y dividir
 
@@ -181,7 +181,7 @@ Cada pista tiene tres botones en la cabecera de la izquierda:
 - **Silenciar**: silencia la pista de audio.
 - **Bloquear**: impide cambios en la pista, para no tocar lo que ya está listo.
 
-Haga clic derecho en el nombre de la pista para **Cambiar nombre de la pista…** o **Quitar pista**.
+Haga clic derecho en el nombre de la pista para **Cambiar nombre de la pista…** o **Quitar pista**. Para cambiar el orden de las pistas, arrastre el nombre de una pista hacia arriba o hacia abajo (o use **Mover pista hacia arriba** y **Mover pista hacia abajo** en el mismo menú). La pista de arriba aparece delante.
 
 ### Agrupar y vincular
 
@@ -245,7 +245,7 @@ Para aplicar un efecto, seleccione el clip en la línea de tiempo y use las pest
 
 Esta pestaña reúne la configuración de movimiento y tiempo del clip:
 
-- **Transformación**: posición X e Y, escala, rotación y opacidad. Junto a cada valor hay un botón ◇ que crea un fotograma clave.
+- **Transformación**: posición X e Y, escala, rotación y opacidad. Junto a cada valor hay un botón ◇ que crea un fotograma clave. También puede hacerlo directamente en el monitor: con el clip seleccionado en la línea de tiempo, arrástrelo dentro del vídeo para moverlo, arrastre el tirador redondo encima del cuadro para girarlo (con Mayús, de 15° en 15°) y, en imágenes, stickers, vídeos y formas, arrastre una esquina para cambiar el tamaño. Los textos solo se mueven y giran.
 - **Fotogramas clave**: un fotograma clave guarda un valor en un instante concreto. Cuando hay fotogramas clave, el programa cambia el valor gradualmente entre ellos. Use **Fotograma clave anterior** y **Siguiente fotograma clave** para moverse entre ellos, e **Interpolación** para elegir la curva: Suave (entrada y salida), Lineal, Acelerando, Desacelerando o Mantener (salto).
 - **3D (perspectiva)**: giro X, giro Y y profundidad, para dar sensación de profundidad al clip. El botón **Girar tarjeta 3D** hace que el clip gire como una tarjeta. No es un modelo 3D completo.
 - **Animaciones listas**: efectos de movimiento listos para aplicar, como entrar por la izquierda, aparecer con zoom, Ken Burns (zoom lento), pulsar, girar, balancear, rebotar y aparecer y desaparecer.
@@ -324,7 +324,7 @@ En la sección **Elementos gráficos** de la biblioteca, haga doble clic en una 
 
 También puede importar un gráfico vectorial con el botón **Importar SVG…**.
 
-En **Pegatinas** aparecen las pegatinas de los paquetes instalados. El programa trae el paquete **Básico**, con 40 pegatinas de uso común (flechas, círculo de resalte, correcto e incorrecto, bocadillos, corazón, estrella, emojis, botones Suscríbete y Me gusta, sellos como Nuevo y Oferta, entre otras). No puede eliminarse, pero sí exportarse. Haga clic en una para insertarla en el cursor durante 3 segundos, al 40% del tamaño (ajústelo en la pestaña Vídeo), en una pista de imagen libre (o en una pista nueva llamada Pegatinas). La imagen entra también en la biblioteca, en la categoría Pegatinas.
+En **Pegatinas** aparecen las pegatinas de los paquetes instalados. El programa trae el paquete **Básico**, con 96 pegatinas: de uso común (flechas, círculo de resalte, correcto e incorrecto, bocadillos, corazón, estrella, emojis, botones Suscríbete y Me gusta, sellos como Nuevo y Oferta, entre otras), formas geométricas (círculo, cuadrado, rectángulo, triángulo, rombo, pentágono y hexágono), chinchetas de mapa con la parte superior cuadrada, redonda, hexagonal, en rombo, estrella, corazón o triángulo, y chinchetas de puntos de interés de la ciudad (aeropuerto, estaciones de autobús, tren y metro, hospital, policía, bomberos, escuela, museo, parque, restaurante, hotel, entre otros). No puede eliminarse, pero sí exportarse. Haga clic en una para insertarla en el cursor durante 3 segundos, al 40% del tamaño (ajústelo en la pestaña Vídeo), en una pista de imagen libre (o en una pista nueva llamada Pegatinas). La imagen entra también en la biblioteca, en la categoría Pegatinas.
 
 ### Textos y subtítulos
 

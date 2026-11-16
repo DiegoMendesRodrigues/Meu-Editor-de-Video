@@ -120,6 +120,7 @@
 0de5a654	This Windows does not have the voice service (SAPI) available.
 0df1ab9f	Blend mode
 0dfff1df	Text to speech
+0e2f3080	Move in the monitor
 0e37130c	Zoom in
 0e66ef4d	Separates the person from the background with a local segmentation model and makes the background transparent, colored, blurred or replaced by another image/video (RF102–RF109).
 0e6dd87b	Other…
@@ -520,6 +521,7 @@
 3e43a712	Equalizer
 3e44a0e4	Select two audio clips of the same event (e.g. camera and recorder). The one on the upper track stays put; the other is moved.
 3e99f0eb	The project must be saved to become a template. Save now?
+3e9b33ff	Move track
 3ea09c4a	SVG vector graphic
 3ea11abe	Mark the object on the monitor (drag the region) and click Track. Masks and other elements can follow it.
 3ea47a2f	no people
@@ -785,6 +787,7 @@
 61889fa9	Sunset tones.
 61af0557	Default quality:
 61cd11be	Freeze frame
+61ea3ee1	Drag up or down to change the track order
 61fc7586	Top right corner
 620bf6a8	Installed models
 623e74ba	No hardware video decoding: use proxies for high-resolution videos.
@@ -805,6 +808,7 @@
 63b910bf	The project contains inconsistent data:\n• {0}
 63dc024a	Remove pack
 63e2bbaf	Continue
+64238dd1	Rotate in the monitor
 6432ba75	Scale
 64678705	Preset animations
 6483cc8f	Hue
@@ -853,6 +857,7 @@
 695e820e	Fit to window
 6969fe0b	Could not use "{0}": {1}
 697131ea	Identifier
+6985d69c	Move track up
 698a73c2	Italic
 69bd325e	Narration inserted ({0}
 69d920c6	Video codec
@@ -947,6 +952,7 @@
 7677bcb8	Solo: hear only soloed tracks
 76791ad9	Reduce noise
 7688a23b	Template name:
+768fb9c2	Move, rotate and resize the clip in the monitor
 769f6a0a	No model: uses color comparison (less accurate)
 76b0fb6a	Settings
 76c39a8e	Lipstick
@@ -1090,6 +1096,7 @@
 89423cbc	Install AI model
 8970ea4a	The clipboard is in use. Try again.
 89929850	_Loop playback range
+8996824a	Move track down
 8998ed98	Full screen (F11)
 89a4eae3	Split at playhead (S)
 89c80e34	Maximum duration per file in seconds
@@ -1734,6 +1741,7 @@ da88ad51	Eyebrows · raise
 daa319da	The clips are too short for a transition.
 dac230c4	Feather edge
 dacf0de7	Channels
+dad8d9fb	Resize in the monitor
 dadc7501	"{0}" removed.
 dadf3082	No voices found. Install voices in Windows Settings › Time & language › Speech.
 dae519a0	Width in pixels

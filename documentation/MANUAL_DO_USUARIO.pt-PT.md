@@ -147,7 +147,7 @@ A linha temporal é onde o vídeo é montado da esquerda para a direita. O **cur
 ### Colocar ficheiros multimédia na linha temporal
 
 - Arraste uma multimédia da biblioteca para uma faixa.
-- Ou selecione a multimédia na biblioteca e clique em **Adicionar à linha temporal**, na barra de ferramentas.
+- Ou selecione a multimédia na biblioteca e clique em **Adicionar à linha temporal**, na barra de ferramentas. Imagens e áudios entram na posição do cursor: a imagem vai para uma faixa de Imagem livre, senão para uma faixa de vídeo vazia; o áudio vai para uma faixa de áudio livre nesse trecho. Se nenhuma servir, o programa cria uma faixa nova.
 
 ### Mover, cortar e dividir
 
@@ -181,7 +181,7 @@ Em cada faixa, no cabeçalho à esquerda, há três botões:
 - **Mudo**: silencia a faixa de áudio.
 - **Bloquear**: impede alterações na faixa, para evitar mexer no que já está pronto.
 
-Clique com o botão direito no nome da faixa para **Renomear faixa…** ou **Remover faixa**.
+Clique com o botão direito no nome da faixa para **Renomear faixa…** ou **Remover faixa**. Para mudar a ordem das faixas, arraste o nome de uma faixa para cima ou para baixo (ou use **Mover faixa para cima** e **Mover faixa para baixo** no mesmo menu). A faixa de cima aparece à frente.
 
 ### Agrupar e vincular
 
@@ -245,7 +245,7 @@ Para aplicar um efeito, selecione o clipe na linha temporal e use as abas das pr
 
 Esta aba reúne as definições de movimento e tempo do clipe:
 
-- **Transformação**: posição X e Y, escala, rotação e opacidade. Ao lado de cada valor há um botão ◇ que cria um keyframe.
+- **Transformação**: posição X e Y, escala, rotação e opacidade. Ao lado de cada valor há um botão ◇ que cria um keyframe. Também é possível fazê-lo diretamente no monitor: com o clip selecionado na linha temporal, arraste-o dentro do vídeo para o mover, arraste a pega redonda acima da caixa para o rodar (com Shift, de 15° em 15°) e, em imagens, figurinhas, vídeos e formas, arraste um canto para mudar o tamanho. Os textos só se movem e rodam.
 - **Keyframes**: um keyframe guarda um valor num instante específico. Quando há keyframes, o programa muda o valor gradualmente entre eles. Use **Keyframe anterior** e **Próximo keyframe** para navegar entre eles, e **Interpolação** para escolher a curva: Suave (entrada e saída), Linear, Acelerando, Desacelerando ou Manter (salto).
 - **3D (perspectiva)**: giro X, giro Y e profundidade, para dar sensação de profundidade ao clipe. O botão **Virar cartão 3D** faz o clipe girar como um cartão. Não é um modelo 3D completo.
 - **Animações prontas**: efeitos de movimento prontos para aplicar, como entrar pela esquerda, aparecer com zoom, Ken Burns (zoom lento), pulsar, girar, balançar, quicar e surgir e sumir.
@@ -324,7 +324,7 @@ Na seção **Elementos Gráficos** da biblioteca, clique duas vezes numa forma p
 
 Também é possível importar um gráfico vetorial pelo botão **Importar SVG…**.
 
-Em **Autocolantes** aparecem as autocolantes dos pacotes instalados. O programa já vem com o pacote **Básico**, com 40 autocolantes de uso comum (setas, círculo de destaque, certo e errado, balões de fala, coração, estrela, emojis, botões Inscreva-se e Curtir, selos como Novo e Oferta, entre outras). Ele não pode ser removido, mas pode ser exportado. Clique numa delas para inseri-la no cursor por 3 segundos, com 40% do tamanho (ajuste na aba Vídeo), numa faixa de imagem livre (ou numa faixa nova chamada Autocolantes). A imagem entra também na biblioteca, na categoria Autocolantes.
+Em **Autocolantes** aparecem as autocolantes dos pacotes instalados. O programa já vem com o pacote **Básico**, com 96 autocolantes: de uso comum (setas, círculo de destaque, certo e errado, balões de fala, coração, estrela, emojis, botões Inscreva-se e Curtir, selos como Novo e Oferta, entre outras), formas geométricas (círculo, quadrado, retângulo, triângulo, losango, pentágono e hexágono), pinos de mapa com o topo quadrado, redondo, hexagonal, em losango, estrela, coração ou triângulo, e pinos de pontos de interesse da cidade (aeroporto, estações de autocarro, comboio e metro, hospital, polícia, bombeiros, escola, museu, parque, restaurante, hotel, entre outros). Ele não pode ser removido, mas pode ser exportado. Clique numa delas para inseri-la no cursor por 3 segundos, com 40% do tamanho (ajuste na aba Vídeo), numa faixa de imagem livre (ou numa faixa nova chamada Autocolantes). A imagem entra também na biblioteca, na categoria Autocolantes.
 
 ### Textos e legendas
 

@@ -1007,6 +1007,8 @@
                             <Grid x:Name="ConteudoMonitor" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Image x:Name="ImagemMonitor" Source="{Binding Preview.Image}" Stretch="Uniform" RenderOptions.BitmapScalingMode="Linear"
                                    AutomationProperties.Name="{StaticResource Editor.Monitor.Imagem}" SizeChanged="ImagemMonitor_SizeChanged" />
+                            <!-- Alças do clipe selecionado: mover, girar e redimensionar no monitor -->
+                            <ctl:TransformOverlay Inspector="{Binding Inspector}" />
                             <!-- Edição de máscaras e regiões de rastreamento sobre a imagem (F9) -->
                             <ctl:CompositionOverlay Editor="{Binding CompositionInspector}" />
                             <!-- Comparar antes/depois: alça arrastável sobre a linha divisória (desenhada pelo renderizador) -->
@@ -1269,11 +1271,17 @@
                                     <DataTemplate DataType="{x:Type tl:TrackHeaderViewModel}">
                                         <Border Height="{Binding Height}" Background="{DynamicResource Med.Panel}"
                                                 BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,1,1"
-                                                AutomationProperties.Name="{Binding Name}">
+                                                AutomationProperties.Name="{Binding Name}" AllowDrop="True" Cursor="SizeNS"
+                                                ToolTip="{StaticResource Editor.Timeline.ArrastarTrilha}"
+                                                PreviewMouseLeftButtonDown="Trilha_MouseDown" PreviewMouseMove="Trilha_MouseMove"
+                                                DragOver="Trilha_DragOver" Drop="Trilha_Drop">
                                             <Border.ContextMenu>
                                                 <ContextMenu>
                                                     <MenuItem Header="{StaticResource Editor.Timeline.RenomearTrilha}" Command="{Binding RenameCommand}" />
                                                     <MenuItem Header="{StaticResource Editor.Timeline.RemoverTrilha}" Command="{Binding RemoveCommand}" />
+                                                    <Separator />
+                                                    <MenuItem Header="{StaticResource Editor.Timeline.MoverTrilhaCima}" Command="{Binding MoveUpCommand}" />
+                                                    <MenuItem Header="{StaticResource Editor.Timeline.MoverTrilhaBaixo}" Command="{Binding MoveDownCommand}" />
                                                 </ContextMenu>
                                             </Border.ContextMenu>
                                             <Grid Margin="6,0,2,0">

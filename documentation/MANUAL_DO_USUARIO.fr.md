@@ -147,7 +147,7 @@ La timeline est l'endroit où la vidéo est montée de gauche à droite. La **t�
 ### Placer des médias dans la timeline
 
 - Faites glisser un média de la bibliothèque vers une piste.
-- Ou sélectionnez le média dans la bibliothèque et cliquez sur **Ajouter à la timeline** dans la barre d'outils.
+- Ou sélectionnez le média dans la bibliothèque et cliquez sur **Ajouter à la timeline** dans la barre d'outils. Les images et l'audio sont insérés à la position du curseur : l'image va sur une piste Image libre, sinon sur une piste vidéo vide ; l'audio va sur une piste audio libre à cet endroit. Si aucune ne convient, le programme crée une nouvelle piste.
 
 ### Déplacer, rogner et scinder
 
@@ -181,7 +181,7 @@ Chaque piste a trois boutons dans son en-tête, à gauche :
 - **Muet** : coupe le son de la piste audio.
 - **Verrouiller** : empêche les modifications de la piste, pour ne pas toucher à ce qui est terminé.
 
-Faites un clic droit sur le nom de la piste pour **Renommer la piste…** ou **Supprimer la piste**.
+Faites un clic droit sur le nom de la piste pour **Renommer la piste…** ou **Supprimer la piste**. Pour changer l'ordre des pistes, faites glisser le nom d'une piste vers le haut ou vers le bas (ou utilisez **Monter la piste** et **Descendre la piste** dans le même menu). La piste du haut apparaît devant.
 
 ### Grouper et lier
 
@@ -245,7 +245,7 @@ Pour appliquer un effet, sélectionnez le clip dans la timeline et utilisez les 
 
 Cet onglet regroupe les réglages de mouvement et de temps du clip :
 
-- **Transformation** : position X et Y, échelle, rotation et opacité. À côté de chaque valeur se trouve un bouton ◇ qui crée une image clé.
+- **Transformation** : position X et Y, échelle, rotation et opacité. À côté de chaque valeur se trouve un bouton ◇ qui crée une image clé. Vous pouvez aussi le faire directement dans le moniteur : avec le clip sélectionné dans la timeline, faites-le glisser dans la vidéo pour le déplacer, faites glisser la poignée ronde au-dessus du cadre pour le faire pivoter (avec Maj, par pas de 15°) et, sur les images, stickers, vidéos et formes, faites glisser un coin pour changer la taille. Les textes se déplacent et pivotent seulement.
 - **Images clés** : une image clé enregistre une valeur à un instant précis. Quand il y a des images clés, le programme change la valeur progressivement entre elles. Utilisez **Image clé précédente** et **Image clé suivante** pour passer de l'une à l'autre, et **Interpolation** pour choisir la courbe : Douce (entrée et sortie), Linéaire, Accélération, Décélération ou Maintien (saut).
 - **3D (perspective)** : rotation X, rotation Y et profondeur, pour donner une impression de profondeur au clip. Le bouton **Retournement de carte 3D** fait tourner le clip comme une carte. Ce n'est pas un modèle 3D complet.
 - **Animations prêtes** : effets de mouvement prêts à appliquer, comme entrer par la gauche, apparaître avec zoom, Ken Burns (zoom lent), pulser, tourner, se balancer, rebondir et apparaître et disparaître.
@@ -324,7 +324,7 @@ Dans la section **Éléments graphiques** de la bibliothèque, double-cliquez su
 
 Vous pouvez aussi importer un graphique vectoriel avec le bouton **Importer un SVG…**.
 
-**Autocollants** affiche les autocollants des packs installés. Le programme est livré avec le pack **Basique**, avec 40 autocollants courants (flèches, cercle de mise en évidence, juste et faux, bulles de dialogue, cœur, étoile, emojis, boutons S'abonner et J'aime, badges comme Nouveau et Promo, entre autres). Il ne peut pas être supprimé, mais il peut être exporté. Cliquez sur l'un d'eux pour l'insérer à la tête de lecture pendant 3 secondes, à 40 % de la taille (réglable dans l'onglet Vidéo), sur une piste d'image libre (ou sur une nouvelle piste appelée Autocollants). L'image entre aussi dans la bibliothèque, dans la catégorie Autocollants.
+**Autocollants** affiche les autocollants des packs installés. Le programme est livré avec le pack **Basique**, avec 96 autocollants : courants (flèches, cercle de mise en évidence, juste et faux, bulles de dialogue, cœur, étoile, emojis, boutons S'abonner et J'aime, badges comme Nouveau et Promo, entre autres), formes géométriques (cercle, carré, rectangle, triangle, losange, pentagone et hexagone), épingles de carte au sommet carré, rond, hexagonal, en losange, étoile, cœur ou triangle, et épingles de points d'intérêt de la ville (aéroport, gares routière et ferroviaire, métro, hôpital, police, pompiers, école, musée, parc, restaurant, hôtel, entre autres). Il ne peut pas être supprimé, mais il peut être exporté. Cliquez sur l'un d'eux pour l'insérer à la tête de lecture pendant 3 secondes, à 40 % de la taille (réglable dans l'onglet Vidéo), sur une piste d'image libre (ou sur une nouvelle piste appelée Autocollants). L'image entre aussi dans la bibliothèque, dans la catégorie Autocollants.
 
 ### Textes et sous-titres
 

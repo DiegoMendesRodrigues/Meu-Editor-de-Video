@@ -30,6 +30,7 @@
 0be8593b	A medir o loudness…
 0c29e643	O ficheiro não é um projeto válido do Meu Editor de Vídeo ou está danificado:\n{0}
 0ca0a504	Looks prontos, pestanas, sombra, eyeliner, sobrancelhas, batom, blush, contorno, iluminador, cor dos olhos e sardas
+0e2f3080	Mover no monitor
 0e7b59f5	Papos debaixo dos olhos
 0ed26265	Fotograma com tamanho diferente do codificador.
 0f4fda81	O ficheiro não é uma LUT .cube válida.
@@ -155,6 +156,7 @@
 3d6450e5	A renderizar
 3e44a0e4	Selecione dois clipes de áudio do mesmo acontecimento (ex.: câmara e gravador). O da faixa mais acima fica parado; o outro é movido.
 3e99f0eb	O projeto tem de estar guardado para se tornar modelo. Guardar agora?
+3e9b33ff	Mover faixa
 3ea11abe	Marque o objeto no monitor (arraste a região) e clique em Seguir. Máscaras e outros elementos podem segui-lo.
 3ee84c6e	Faixa de efeitos
 3f2796ef	Infraestrutura da aplicação
@@ -247,11 +249,13 @@
 616d51ec	Câmara _1 a partir do cursor
 61af0557	Qualidade predefinida:
 61cd11be	Congelar fotograma
+61ea3ee1	Arraste para cima ou para baixo para mudar a ordem das faixas
 623e74ba	Sem descodificação de vídeo por hardware: use proxies para vídeos de alta resolução.
 623f2504	Selecione um clipe de áudio (ou um vídeo com áudio ligado) na linha temporal.
 62609ef1	Seguimento a seguir
 63257e4f	A calcular o hash SHA-256…
 638d754c	Fotograma {0:N0} de {1:N0}
+64238dd1	Rodar no monitor
 64678705	Animações predefinidas
 64cff131	Ação
 64dee0dc	Um fotograma congelado não tem curva de velocidade.
@@ -270,6 +274,7 @@
 68714cde	Seguimento, estabilização e máscaras
 68b34599	Limitar o tamanho de cada ficheiro a (MB):
 6913e0b0	Abrir ficheiro exportado
+6985d69c	Mover faixa para cima
 6a616597	Ocultar faixa "{0}"
 6b00f1e9	Instale pacotes em Ferramentas › Pacotes de conteúdo. Clique num autocolante para o inserir no cursor.
 6b2787bd	Clipe com início negativo na faixa '{0}'.
@@ -304,6 +309,7 @@
 758dcd0f	Pré-visualização em ecrã inteiro
 75cd5d41	A procurar câmaras e microfones…
 7677bcb8	Solo: ouvir só as faixas em solo
+768fb9c2	Mover, rodar e redimensionar o clip no monitor
 76900f1b	Voltar
 76b0fb6a	Definições
 772bee3a	Seguir movimento
@@ -354,6 +360,7 @@
 88ae9947	Ativar som da faixa
 893056f0	Indique o tamanho alvo em MB.
 8970ea4a	A área de transferência está a ser usada. Tente novamente.
+8996824a	Mover faixa para baixo
 8998ed98	Ecrã inteiro (F11)
 89c80e34	Duração máxima por ficheiro em segundos
 89dd5401	O tipo de letra já estava disponível ou o ficheiro não é um tipo de letra válido.
@@ -595,6 +602,7 @@ da3b0c44	Não há outro clipe com áudio a tocar com este. Coloque a narração 
 da56fad3	{0} batidas marcadas na linha temporal.
 daa319da	Os clipes são demasiado curtos para uma transição.
 dac230c4	Suavizar margem
+dad8d9fb	Redimensionar no monitor
 dadf3082	Nenhuma voz encontrada. Instale vozes em Definições do Windows › Hora e idioma › Voz.
 dae519a0	Largura em píxeis
 daffd2d7	A comparar os áudios…

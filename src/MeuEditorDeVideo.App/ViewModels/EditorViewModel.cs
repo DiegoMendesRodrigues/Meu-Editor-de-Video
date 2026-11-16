@@ -269,7 +269,10 @@ public sealed partial class EditorViewModel(
     private void Refresh()
     {
         var s = _session;
-        ProjectName = s?.Project.Name ?? MeuEditorDeVideo.App.Localization.Translator.T("Sem título");
+        // Projeto salvo: o título é o nome do arquivo (projetos antigos guardavam "Sem título" como nome interno).
+        ProjectName = s?.FilePath is { } file && System.IO.Path.GetFileNameWithoutExtension(file) is { Length: > 0 } fileName
+            ? fileName
+            : s?.Project.Name ?? MeuEditorDeVideo.App.Localization.Translator.T("Sem título");
         IsDirty = s?.IsDirty ?? false;
         MissingMediaCount = s?.Media.Missing.Count() ?? 0;
         shell.Title = s is null

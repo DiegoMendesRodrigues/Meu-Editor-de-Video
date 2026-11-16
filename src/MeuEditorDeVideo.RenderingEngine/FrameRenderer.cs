@@ -311,7 +311,7 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
     /// Rasteriza o texto na escala de saída e converte a posição do clipe (ponto de ancoragem do bloco, conforme
     /// alinhamento e âncora vertical) no centro da imagem; nos créditos, calcula a rolagem de baixo para cima.
     /// </summary>
-    private static (BgraImage Image, VisualLayer Layer)? TextImage(VisualLayer layer, TextLayer text, CompositionGraph graph, int width)
+    internal static (BgraImage Image, VisualLayer Layer)? TextImage(VisualLayer layer, TextLayer text, CompositionGraph graph, int width)
     {
         var scale = graph.Width > 0 ? (double)width / graph.Width : 1;
         var raster = TextRasterizer.Render(text.Text, text.VisibleCharacters, text.Format.Style, scale, width);

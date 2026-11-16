@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Core.Projects;
 using MeuEditorDeVideo.Domain.Editing;
@@ -150,6 +150,33 @@ public sealed class TextTests
         clip = clip with { Effects = [MeuEditorDeVideo.Domain.Effects.EffectCatalog.Create(effect, null)] };
         var p = With(NewProject(), (TrackKind.Text, [clip]));
         Assert.True(Bright(Render(p, 1), 60).Count > 200);
+    }
+
+    [Fact]
+    public void Caixa_do_texto_no_monitor_segue_posicao_giro_e_alinhamento()
+    {
+        var format = new TextFormat { Style = new TextStyle { FontSize = 40, Align = TextAlign.Left } };
+        var clip = TextClip("Tarja", format, transform: Transform.Identity with { X = -280, Y = 100, RotationDegrees = 30 });
+        var p = With(NewProject(), (TrackKind.Text, [clip]));
+
+        var box = Assert.NotNull(LayerBounds.Of(p, p.MainSequence, clip.Id, S(1)));
+        Assert.InRange(box.CenterX - box.Width / 2, -286, -274); // alinhado à esquerda: x é a borda esquerda
+        Assert.Equal(100, box.CenterY, 1);
+        Assert.Equal(30, box.RotationDegrees);
+        Assert.InRange(box.Width, 40, 300);
+        Assert.Null(LayerBounds.Of(p, p.MainSequence, clip.Id, S(5))); // fora do clipe
+    }
+
+    [Fact]
+    public void Caixa_da_imagem_no_monitor_usa_o_ajuste_ao_quadro_e_a_escala()
+    {
+        var asset = new MediaAsset { Id = Guid.NewGuid(), Kind = MediaKind.Image, Name = "f", OriginalPath = "f.png", Width = 400, Height = 400 };
+        var clip = new Clip { Id = Guid.NewGuid(), MediaAssetId = asset.Id, Start = S(0), Duration = S(4), Transform = Transform.Identity with { ScaleX = 0.5, ScaleY = 0.5 } };
+        var p = With(NewProject() with { Media = [asset] }, (TrackKind.Image, [clip]));
+
+        var box = Assert.NotNull(LayerBounds.Of(p, p.MainSequence, clip.Id, S(1)));
+        Assert.Equal(180, box.Width, 1); // 400 × (360/400) × 0,5
+        Assert.Equal(180, box.Height, 1);
     }
 
     [Fact]

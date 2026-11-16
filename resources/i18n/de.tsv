@@ -120,6 +120,7 @@
 0de5a654	Unter diesem Windows ist der Sprachdienst (SAPI) nicht verfügbar.
 0df1ab9f	Mischmodus
 0dfff1df	Text zu Sprache
+0e2f3080	Im Monitor verschieben
 0e37130c	Vergrößern
 0e66ef4d	Trennt die Person mit einem lokalen Segmentierungsmodell vom Hintergrund und macht den Hintergrund transparent, farbig, unscharf oder ersetzt ihn durch ein anderes Bild/Video (RF102–RF109).
 0e6dd87b	Andere…
@@ -522,6 +523,7 @@
 3e43a712	Equalizer
 3e44a0e4	Wählen Sie zwei Audioclips desselben Ereignisses (z. B. Kamera und Recorder). Der auf der oberen Spur bleibt, der andere wird verschoben.
 3e99f0eb	Das Projekt muss gespeichert sein, um eine Vorlage zu werden. Jetzt speichern?
+3e9b33ff	Spur verschieben
 3ea09c4a	SVG-Vektorgrafik
 3ea11abe	Markieren Sie das Objekt im Monitor (Bereich ziehen) und klicken Sie auf Verfolgen. Masken und andere Elemente können ihm folgen.
 3ea47a2f	ohne Personen
@@ -787,6 +789,7 @@
 61889fa9	Sonnenuntergangstöne.
 61af0557	Standardqualität:
 61cd11be	Standbild
+61ea3ee1	Nach oben oder unten ziehen, um die Reihenfolge der Spuren zu ändern
 61fc7586	Obere rechte Ecke
 620bf6a8	Installierte Modelle
 623e74ba	Keine Hardware-Videodekodierung: Verwenden Sie Proxys für hochauflösende Videos.
@@ -807,6 +810,7 @@
 63b910bf	Das Projekt enthält inkonsistente Daten:\n• {0}
 63dc024a	Paket entfernen
 63e2bbaf	Fortfahren
+64238dd1	Im Monitor drehen
 6432ba75	Skalierung
 64678705	Vorgefertigte Animationen
 6483cc8f	Farbton
@@ -856,6 +860,7 @@
 695e820e	An Fenster anpassen
 6969fe0b	„{0}“ konnte nicht verwendet werden: {1}
 697131ea	Kennung
+6985d69c	Spur nach oben verschieben
 698a73c2	Kursiv
 69bd325e	Sprachausgabe eingefügt ({0}
 69d920c6	Videocodec
@@ -952,6 +957,7 @@
 7677bcb8	Solo: nur Solo-Spuren hören
 76791ad9	Rauschen reduzieren
 7688a23b	Vorlagenname:
+768fb9c2	Clip im Monitor verschieben, drehen und skalieren
 76900f1b	Zurück
 769f6a0a	Ohne Modell: nutzt Farbvergleich (weniger genau)
 76b0fb6a	Einstellungen
@@ -1099,6 +1105,7 @@
 89423cbc	KI-Modell installieren
 8970ea4a	Die Zwischenablage ist belegt. Versuchen Sie es erneut.
 89929850	_Bereich für Schleifenwiedergabe
+8996824a	Spur nach unten verschieben
 8998ed98	Vollbild (F11)
 89a4eae3	An Abspielposition teilen (S)
 89c80e34	Maximale Dauer pro Datei in Sekunden
@@ -1751,6 +1758,7 @@ da88ad51	Augenbrauen · anheben
 daa319da	Die Clips sind zu kurz für einen Übergang.
 dac230c4	Rand weichzeichnen
 dacf0de7	Kanäle
+dad8d9fb	Im Monitor skalieren
 dadc7501	„{0}“ entfernt.
 dadf3082	Keine Stimmen gefunden. Installieren Sie Stimmen unter Windows-Einstellungen › Zeit und Sprache › Spracherkennung.
 dae519a0	Breite in Pixeln

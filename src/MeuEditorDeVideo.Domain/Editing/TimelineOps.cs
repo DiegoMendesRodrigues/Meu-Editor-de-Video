@@ -172,6 +172,23 @@ public static class TimelineOps
         return (left, right);
     }
 
+    /// <summary>
+    /// Trilha para "Adicionar à linha do tempo" de uma imagem ou de um áudio no cursor: imagem vai para uma trilha de
+    /// Imagem livre no trecho, senão para uma trilha de vídeo vazia, senão para qualquer trilha visual livre; áudio vai
+    /// para uma trilha de áudio livre no trecho (ocupada ou vazia). Nulo = nenhuma serve (criar uma trilha nova).
+    /// </summary>
+    public static Guid? PlacementTrack(Sequence sequence, MediaAsset asset, MediaTime at, MediaTime duration)
+    {
+        var end = at + duration;
+        bool Free(Track t) => !t.IsLocked && !t.Clips.Any(c => c.Start < end && c.End > at);
+        var tracks = sequence.Tracks;
+        if (asset.Kind == MediaKind.Image)
+            return (tracks.FirstOrDefault(t => t.Kind == TrackKind.Image && Free(t))
+                    ?? tracks.FirstOrDefault(t => t.Kind == TrackKind.Video && !t.IsLocked && t.Clips.IsEmpty)
+                    ?? tracks.FirstOrDefault(t => t.Kind is TrackKind.Video or TrackKind.Image && Free(t)))?.Id;
+        return tracks.FirstOrDefault(t => t.Kind == TrackKind.Audio && Free(t))?.Id;
+    }
+
     /// <summary>A trilha aceita conteúdo desta mídia? (vídeo/imagem em trilhas visuais, áudio em trilhas de áudio).</summary>
     public static bool Accepts(TrackKind track, MediaAsset asset) => track switch
     {

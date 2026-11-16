@@ -187,6 +187,9 @@
     <sys:String x:Key="Editor.Timeline.TrilhaEfeitos">Trilha de efeitos</sys:String>
     <sys:String x:Key="Editor.Timeline.RenomearTrilha">Renomear trilha…</sys:String>
     <sys:String x:Key="Editor.Timeline.RemoverTrilha">Remover trilha</sys:String>
+    <sys:String x:Key="Editor.Timeline.MoverTrilhaCima">Mover trilha para cima</sys:String>
+    <sys:String x:Key="Editor.Timeline.MoverTrilhaBaixo">Mover trilha para baixo</sys:String>
+    <sys:String x:Key="Editor.Timeline.ArrastarTrilha">Arraste para cima ou para baixo para mudar a ordem das trilhas</sys:String>
     <sys:String x:Key="Editor.Timeline.Dividir">Dividir</sys:String>
     <sys:String x:Key="Editor.Timeline.Recortar">Recortar</sys:String>
     <sys:String x:Key="Editor.Timeline.Copiar">Copiar</sys:String>

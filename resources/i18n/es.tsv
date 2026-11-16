@@ -111,6 +111,7 @@
 0de5a654	Este Windows no tiene disponible el servicio de voces (SAPI).
 0df1ab9f	Modo de fusión
 0dfff1df	Texto a voz
+0e2f3080	Mover en el monitor
 0e37130c	Acercar
 0e66ef4d	Separa a la persona del fondo con un modelo de segmentación local y deja el fondo transparente, de color, desenfocado o sustituido por otra imagen/vídeo (RF102–RF109).
 0e6dd87b	Otra…
@@ -482,6 +483,7 @@
 3e43a712	Ecualizador
 3e44a0e4	Seleccione dos clips de audio del mismo evento (p. ej.: cámara y grabadora). El de la pista superior queda fijo; el otro se mueve.
 3e99f0eb	El proyecto debe estar guardado para convertirse en plantilla. ¿Guardar ahora?
+3e9b33ff	Mover pista
 3ea09c4a	Gráfico vectorial SVG
 3ea11abe	Marque el objeto en el monitor (arrastre la región) y haga clic en Rastrear. Máscaras y otros elementos pueden seguirlo.
 3ea47a2f	sin personas
@@ -722,6 +724,7 @@
 61889fa9	Tonos de atardecer.
 61af0557	Calidad predeterminada:
 61cd11be	Congelar fotograma
+61ea3ee1	Arrastre hacia arriba o hacia abajo para cambiar el orden de las pistas
 61fc7586	Esquina superior derecha
 623e74ba	Sin decodificación de vídeo por hardware: use proxies para vídeos de alta resolución.
 623f2504	Seleccione un clip de audio (o un vídeo con audio vinculado) en la línea de tiempo.
@@ -739,6 +742,7 @@
 638d754c	Fotograma {0:N0} de {1:N0}
 63b910bf	El proyecto contiene datos incoherentes:\n• {0}
 63dc024a	Eliminar paquete
+64238dd1	Girar en el monitor
 64678705	Animaciones predefinidas
 64cff131	Acción
 64d1d6b0	Duración mínima
@@ -783,6 +787,7 @@
 6913e0b0	Abrir archivo exportado
 695e820e	Ajustar a la ventana
 6969fe0b	No se pudo usar "{0}": {1}
+6985d69c	Mover pista hacia arriba
 698a73c2	Cursiva
 69bd325e	Narración insertada ({0}
 69d920c6	Códec de vídeo
@@ -870,6 +875,7 @@
 7677bcb8	Solo: escuchar solo las pistas en solo
 76791ad9	Reducir ruido
 7688a23b	Nombre de la plantilla:
+768fb9c2	Mover, girar y redimensionar el clip en el monitor
 76900f1b	Volver
 769f6a0a	Sin modelo: usa comparación de colores (menos precisa)
 76b0fb6a	Configuración
@@ -999,6 +1005,7 @@
 893056f0	Indique el tamaño objetivo en MB.
 8970ea4a	El portapapeles está en uso. Inténtelo de nuevo.
 89929850	_Intervalo de reproducción en bucle
+8996824a	Mover pista hacia abajo
 8998ed98	Pantalla completa (F11)
 89a4eae3	Dividir en el cursor (S)
 89c80e34	Duración máxima por archivo en segundos
@@ -1593,6 +1600,7 @@ da88ad51	Cejas · levantar
 daa319da	Los clips son demasiado cortos para una transición.
 dac230c4	Suavizar borde
 dacf0de7	Canales
+dad8d9fb	Redimensionar en el monitor
 dadc7501	"{0}" eliminado.
 dadf3082	No se encontraron voces. Instale voces en Configuración de Windows › Hora e idioma › Voz.
 dae519a0	Ancho en píxeles

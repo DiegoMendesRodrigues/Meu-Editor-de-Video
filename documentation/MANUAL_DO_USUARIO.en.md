@@ -147,7 +147,7 @@ The timeline is where the video is assembled from left to right. The **playhead*
 ### Placing media on the timeline
 
 - Drag a media item from the library to a track.
-- Or select the media in the library and click **Add to timeline** on the toolbar.
+- Or select the media in the library and click **Add to timeline** on the toolbar. Images and audio go in at the playhead: an image goes to a free Image track, otherwise to an empty video track; audio goes to an audio track that is free at that point. If none fits, the program creates a new track.
 
 ### Moving, trimming and splitting
 
@@ -181,7 +181,7 @@ Each track has three buttons in its header on the left:
 - **Mute**: silences the audio track.
 - **Lock**: prevents changes to the track, so you do not disturb what is already finished.
 
-Right-click the track name to **Rename track…** or **Remove track**.
+Right-click the track name to **Rename track…** or **Remove track**. To change the track order, drag a track's name up or down (or use **Move track up** and **Move track down** in the same menu). The top track appears in front.
 
 ### Grouping and linking
 
@@ -245,7 +245,7 @@ To apply an effect, select the clip on the timeline and use the property tabs. Y
 
 This tab gathers the clip's motion and timing settings:
 
-- **Transform**: X and Y position, scale, rotation and opacity. Next to each value there is a ◇ button that creates a keyframe.
+- **Transform**: X and Y position, scale, rotation and opacity. Next to each value there is a ◇ button that creates a keyframe. You can also do this directly in the monitor: with the clip selected on the timeline, drag it inside the video to move it, drag the round handle above the box to rotate it (with Shift, in 15° steps) and, on images, stickers, videos and shapes, drag a corner to resize it. Texts only move and rotate.
 - **Keyframes**: a keyframe stores a value at a specific instant. When there are keyframes, the program changes the value gradually between them. Use **Previous keyframe** and **Next keyframe** to move between them, and **Interpolation** to choose the curve: Smooth (ease in and out), Linear, Ease in, Ease out or Hold (jump).
 - **3D (perspective)**: X turn, Y turn and depth, to give the clip a sense of depth. The **3D card flip** button makes the clip turn like a card. It is not a full 3D model.
 - **Ready-made animations**: motion effects ready to apply, such as enter from the left, zoom in, Ken Burns (slow zoom), pulse, spin, sway, bounce and fade in and out.
@@ -324,7 +324,7 @@ In the **Graphic Elements** section of the library, double-click a shape to inse
 
 You can also import a vector graphic with the **Import SVG…** button.
 
-**Stickers** shows the stickers from installed packs. The program comes with the **Basic** pack, with 40 common stickers (arrows, highlight circle, check and cross, speech bubbles, heart, star, emojis, Subscribe and Like buttons, badges such as New and Sale, among others). It cannot be removed, but it can be exported. Click one to insert it at the playhead for 3 seconds, at 40% size (adjust in the Video tab), on a free image track (or a new track called Stickers). The image also enters the library, in the Stickers category.
+**Stickers** shows the stickers from installed packs. The program comes with the **Basic** pack, with 96 stickers: common ones (arrows, highlight circle, check and cross, speech bubbles, heart, star, emojis, Subscribe and Like buttons, badges such as New and Sale, among others), geometric shapes (circle, square, rectangle, triangle, diamond, pentagon and hexagon), map pins with a square, round, hexagonal, diamond, star, heart or triangle top, and city point-of-interest pins (airport, bus, train and metro stations, hospital, police, fire station, school, museum, park, restaurant, hotel, among others). It cannot be removed, but it can be exported. Click one to insert it at the playhead for 3 seconds, at 40% size (adjust in the Video tab), on a free image track (or a new track called Stickers). The image also enters the library, in the Stickers category.
 
 ### Texts and subtitles
 

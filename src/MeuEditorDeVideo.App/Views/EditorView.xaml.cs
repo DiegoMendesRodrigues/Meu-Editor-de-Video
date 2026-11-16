@@ -72,6 +72,49 @@ public partial class EditorView : UserControl
         if (e.PropertyName == nameof(EditorViewModel.Timeline)) ObservarLinhaDoTempo();
     }
 
+    // ---------- Reordenar trilhas arrastando o cabeçalho ----------
+
+    private const string FormatoTrilha = "MeuEditorDeVideo.Trilha";
+    private Point? _inicioArrasteTrilha;
+
+    private void Trilha_MouseDown(object sender, MouseButtonEventArgs e) =>
+        // Botões do cabeçalho (ocultar, silenciar, bloquear) continuam só clicáveis.
+        _inicioArrasteTrilha = e.OriginalSource is DependencyObject d && AcimaDe<System.Windows.Controls.Primitives.ButtonBase>(d) is null
+            ? e.GetPosition(this) : null;
+
+    private void Trilha_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (_inicioArrasteTrilha is not { } inicio || e.LeftButton != MouseButtonState.Pressed
+            || sender is not FrameworkElement { DataContext: ViewModels.Timeline.TrackHeaderViewModel trilha } origem) return;
+        if (Math.Abs(e.GetPosition(this).Y - inicio.Y) < SystemParameters.MinimumVerticalDragDistance) return;
+        _inicioArrasteTrilha = null;
+        DragDrop.DoDragDrop(origem, new DataObject(FormatoTrilha, trilha.Id), DragDropEffects.Move);
+    }
+
+    private void Trilha_DragOver(object sender, DragEventArgs e)
+    {
+        e.Effects = e.Data.GetDataPresent(FormatoTrilha) ? DragDropEffects.Move : DragDropEffects.None;
+        e.Handled = true;
+    }
+
+    private void Trilha_Drop(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetData(FormatoTrilha) is not Guid id || _linhaDoTempo is not { } tl
+            || sender is not FrameworkElement { DataContext: ViewModels.Timeline.TrackHeaderViewModel alvo }) return;
+        e.Handled = true;
+        var destino = tl.Tracks.IndexOf(alvo);
+        var origem = tl.Tracks.ToList().FindIndex(t => t.Id == id);
+        if (origem < 0 || destino < 0 || origem == destino) return;
+        tl.MoveTrack(id, destino);
+    }
+
+    private static T? AcimaDe<T>(DependencyObject? d) where T : DependencyObject
+    {
+        for (; d is not null; d = d is Visual or System.Windows.Media.Media3D.Visual3D ? System.Windows.Media.VisualTreeHelper.GetParent(d) : LogicalTreeHelper.GetParent(d))
+            if (d is T t) return t;
+        return null;
+    }
+
     private void ObservarLinhaDoTempo()
     {
         if (_linhaDoTempo is not null)

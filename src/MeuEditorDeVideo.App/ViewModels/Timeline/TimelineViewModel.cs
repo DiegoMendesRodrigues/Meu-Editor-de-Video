@@ -52,6 +52,8 @@ public sealed partial class TrackHeaderViewModel(TimelineViewModel owner, Track 
     [RelayCommand] private void ToggleMuted() => owner.Execute(UpdateTrackCommand.SetMuted(owner.SequenceId, Id, !IsMuted));
     [RelayCommand] private void Rename() => owner.RenameTrack(this);
     [RelayCommand] private void Remove() => owner.RemoveTrack(this);
+    [RelayCommand] private void MoveUp() => owner.MoveTrack(Id, owner.Tracks.IndexOf(this) - 1);
+    [RelayCommand] private void MoveDown() => owner.MoveTrack(Id, owner.Tracks.IndexOf(this) + 1);
 }
 
 /// <summary>
@@ -602,10 +604,47 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
     private void AddSelectedMedia()
     {
         if (Library.SelectedItem is not { IsMissing: false } item) return;
-        // Adiciona no fim da sequência (RF044, botão "Adicionar à linha do tempo").
+        if (Project?.FindMedia(item.Id) is { } asset && Sequence is { } seq && (asset.Kind == MediaKind.Image || !asset.HasVideo))
+        {
+            AddAtPlayhead(seq, asset);
+            return;
+        }
+        // Vídeo: adiciona no fim da sequência (RF044, botão "Adicionar à linha do tempo").
         DropMedia(item.Id, null, Duration);
         Playhead = Duration;
     }
+
+    /// <summary>
+    /// Imagem ou áudio vai para o cursor, numa trilha livre do tipo (<see cref="TimelineOps.PlacementTrack"/>); sem
+    /// nenhuma, cria uma trilha "Imagem" (no alto) ou "Áudio" (no fim), no mesmo passo de desfazer.
+    /// </summary>
+    private void AddAtPlayhead(Sequence seq, MediaAsset asset)
+    {
+        var at = Playhead;
+        var image = asset.Kind == MediaKind.Image;
+        var length = image ? MediaTime.FromSeconds(5) : asset.Duration;
+        if (TimelineOps.PlacementTrack(seq, asset, at, length) is { } trackId)
+        {
+            DropMedia(asset.Id, trackId, at);
+            return;
+        }
+        var kind = image ? TrackKind.Image : TrackKind.Audio;
+        var baseName = image ? "Imagem" : "Áudio";
+        var n = 1;
+        while (seq.Tracks.Exists(t => t.Name == $"{baseName} {n}")) n++;
+        var add = new AddTrackCommand(SequenceId, kind, $"{baseName} {n}", image ? 0 : null);
+        var media = new AddMediaToTimelineCommand(SequenceId, asset.Id, image ? add.TrackId : null, image ? null : add.TrackId, at, MediaTime.FromSeconds(5));
+        if (Execute(new CompositeCommand(media.Description, [add, media])))
+        {
+            _selection.Clear();
+            _selection.Add(image ? media.VideoClipId : media.AudioClipId);
+            SelectionChangedInternal();
+            ClipInserted?.Invoke(this, image ? media.VideoClipId : media.AudioClipId);
+        }
+    }
+
+    /// <summary>Move a trilha para a posição <paramref name="index"/> (arrastar o cabeçalho, ou Mover para cima/baixo).</summary>
+    public void MoveTrack(Guid trackId, int index) => Execute(new MoveTrackCommand(SequenceId, trackId, index));
 
     private bool CanAddSelectedMedia() => HasSession && Library.SelectedItem is { IsMissing: false };
 

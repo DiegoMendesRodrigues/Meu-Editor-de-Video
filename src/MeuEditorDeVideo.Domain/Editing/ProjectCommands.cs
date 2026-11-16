@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 
@@ -154,10 +154,13 @@ public sealed record AddTrackCommand(Guid SequenceId, TrackKind Kind, string Nam
 {
     public string Description => $"Adicionar trilha \"{Name}\"";
 
+    /// <summary>Id da trilha criada (definido antes, para outro comando usá-la no mesmo passo de desfazer).</summary>
+    public Guid TrackId { get; init; } = Guid.NewGuid();
+
     public Project Apply(Project project)
     {
         var seq = project.Sequences.Find(s => s.Id == SequenceId) ?? throw new EditRejectedException("Sequência não encontrada.");
-        var track = new Track { Id = Guid.NewGuid(), Kind = Kind, Name = Name };
+        var track = new Track { Id = TrackId, Kind = Kind, Name = Name };
         var index = Math.Clamp(Index ?? seq.Tracks.Count, 0, seq.Tracks.Count);
         return project.WithSequence(seq with { Tracks = seq.Tracks.Insert(index, track) });
     }
@@ -173,6 +176,21 @@ public sealed record RemoveTrackCommand(Guid SequenceId, Guid TrackId) : IEditCo
         var track = seq.Tracks.Find(t => t.Id == TrackId) ?? throw new EditRejectedException("Trilha não encontrada.");
         if (track.IsLocked) throw new EditRejectedException($"A trilha \"{track.Name}\" está bloqueada.");
         return project.WithSequence(seq with { Tracks = seq.Tracks.Remove(track) });
+    }
+}
+
+/// <summary>Muda a posição de uma trilha na lista (arrastar o cabeçalho): a de cima aparece na frente.</summary>
+public sealed record MoveTrackCommand(Guid SequenceId, Guid TrackId, int NewIndex) : IEditCommand
+{
+    public string Description => "Mover trilha";
+
+    public Project Apply(Project project)
+    {
+        var seq = project.Sequences.Find(s => s.Id == SequenceId) ?? throw new EditRejectedException("Sequência não encontrada.");
+        var track = seq.Tracks.Find(t => t.Id == TrackId) ?? throw new EditRejectedException("Trilha não encontrada.");
+        var index = Math.Clamp(NewIndex, 0, seq.Tracks.Count - 1);
+        if (seq.Tracks.IndexOf(track) == index) return project;
+        return project.WithSequence(seq with { Tracks = seq.Tracks.Remove(track).Insert(index, track) });
     }
 }
 

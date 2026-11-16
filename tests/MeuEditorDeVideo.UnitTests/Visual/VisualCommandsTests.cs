@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Domain.Editing;
+﻿using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 
@@ -250,6 +250,53 @@ public sealed class VisualCommandsTests
         var cmd = new RepeatClipCommand(p.MainSequence.Id, v.Id, count);
 
         Assert.Throws<EditRejectedException>(() => cmd.Apply(p));
+    }
+
+    // ---------------------------------------------------------------- Adicionar no cursor e reordenar trilhas
+
+    [Fact]
+    public void Imagem_vai_para_a_trilha_de_imagem_livre_no_cursor()
+    {
+        var video = VideoAsset();
+        var image = ImageAsset();
+        var p = PlaceClips(NewProject(video, image), Video1, NewClip(video.Id, 0, 10));
+        var add = new AddTrackCommand(p.MainSequence.Id, TrackKind.Image, "Imagem 1", 0);
+        p = add.Apply(p);
+
+        Assert.Equal(add.TrackId, TimelineOps.PlacementTrack(p.MainSequence, image, S(3), S(5)));
+    }
+
+    [Fact]
+    public void Sem_trilha_de_imagem_a_imagem_vai_para_a_trilha_de_video_vazia()
+    {
+        var video = VideoAsset();
+        var image = ImageAsset();
+        var p = PlaceClips(NewProject(video, image), Video1, NewClip(video.Id, 0, 10));
+
+        Assert.Equal(TrackOf(p, 1).Id, TimelineOps.PlacementTrack(p.MainSequence, image, S(3), S(5)));
+    }
+
+    [Fact]
+    public void Audio_vai_para_trilha_de_audio_livre_ou_pede_trilha_nova()
+    {
+        var music = VideoAsset("m.mp3") with { Kind = MediaKind.Audio, Width = 0, Height = 0 };
+        var p = NewProject(music);
+        Assert.Equal(TrackOf(p, Audio1).Id, TimelineOps.PlacementTrack(p.MainSequence, music, S(2), S(10)));
+
+        p = PlaceClips(p, Audio1, NewClip(music.Id, 0, 10));
+        Assert.Null(TimelineOps.PlacementTrack(p.MainSequence, music, S(2), S(10)));
+        Assert.Equal(TrackOf(p, Audio1).Id, TimelineOps.PlacementTrack(p.MainSequence, music, S(10), S(10)));
+    }
+
+    [Fact]
+    public void MoveTrack_muda_a_ordem_das_trilhas()
+    {
+        var p = NewProject();
+        var texto = TrackOf(p, 3);
+        p = new MoveTrackCommand(p.MainSequence.Id, texto.Id, 0).Apply(p);
+
+        Assert.Equal(texto.Id, TrackOf(p, 0).Id);
+        Assert.Equal(4, p.MainSequence.Tracks.Count);
     }
 
     // ---------------------------------------------------------------- SetTransitionCommand
