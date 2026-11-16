@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.Errors;
 using MeuEditorDeVideo.Domain.Editing;
@@ -112,6 +112,19 @@ public sealed class ProjectServiceTests : IDisposable
         var expected = Path.Combine(ProjectsDir, "copia.med");
         Assert.True(File.Exists(expected));
         Assert.Equal(expected, service.Current!.FilePath);
+    }
+
+    [Fact]
+    public async Task SaveAsAsync_da_ao_projeto_o_nome_do_arquivo_e_fica_sem_alteracoes_pendentes()
+    {
+        var service = CreateService();
+        Directory.CreateDirectory(ProjectsDir);
+        await service.CreateAsync(Request("Sem título"));
+
+        await service.SaveAsAsync(Path.Combine(ProjectsDir, "Férias no Brasil.med"));
+
+        Assert.Equal("Férias no Brasil", service.Current!.Project.Name);
+        Assert.False(service.Current.IsDirty);
     }
 
     [Fact]

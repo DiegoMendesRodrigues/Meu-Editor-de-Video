@@ -143,7 +143,7 @@
                            Visibility="{Binding IsFrozen, Converter={StaticResource Ins.BoolToVis}}" />
 
                 <TextBlock Text="Transição de entrada" Style="{StaticResource Ins.Section}" />
-                <StackPanel Visibility="{Binding HasTransitionSlot, Converter={StaticResource Ins.BoolToVis}}">
+                <StackPanel>
                     <ComboBox ItemsSource="{Binding TransitionOptions}" SelectedItem="{Binding SelectedTransition}" DisplayMemberPath="Label"
                               AutomationProperties.Name="Transição de entrada" Margin="0,0,0,6" />
                     <Grid>
@@ -158,7 +158,7 @@
                         <TextBlock Grid.Column="2" Text="{Binding TransitionDisplay}" Style="{StaticResource Ins.Label}" TextAlignment="Right" />
                     </Grid>
                 </StackPanel>
-                <TextBlock TextWrapping="Wrap" Text="Encoste outro clipe antes deste, na mesma trilha, para usar uma transição.">
+                <TextBlock TextWrapping="Wrap" Text="Sem clipe encostado antes deste, a transição é de entrada: revela o clipe sobre as trilhas de baixo.">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource Ins.Label}">
                             <Setter Property="Visibility" Value="Collapsed" />

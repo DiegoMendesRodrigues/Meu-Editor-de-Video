@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
 using MeuEditorDeVideo.App.ViewModels.Media;
@@ -50,7 +50,7 @@ public sealed partial class GraphicsLibraryViewModel(TimelineViewModel timeline,
         if (item is null || Timeline.Project is null) return;
         var clip = ShapePresets.Create(item.Preset.Style, Timeline.Playhead, MediaTime.FromSeconds(5));
         if (Timeline.Execute(new AddTextClipCommand(Timeline.SequenceId, clip, TrackKind.Image)))
-            Timeline.Select(clip.Id, additive: false);
+            Timeline.SelectInserted(clip.Id);
     }
 
     /// <summary>Importa arquivos SVG para a biblioteca de mídias (ficam nítidos em qualquer escala).</summary>

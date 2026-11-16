@@ -239,7 +239,7 @@ Utilisez les boutons de zoom de la barre d'outils, ou les raccourcis :
 
 ## Effets visuels, texte et transitions
 
-Pour appliquer un effet, sélectionnez le clip dans la timeline et utilisez les onglets des propriétés. Vous pouvez aussi utiliser les sections de la bibliothèque, comme **Effets**, **Couleur** et **Transitions** : double-cliquez sur un élément pour l'appliquer à la tête de lecture ou au clip sélectionné, ou utilisez le bouton **Appliquer au clip sélectionné**.
+Pour appliquer un effet, sélectionnez le clip dans la timeline et utilisez les onglets des propriétés. Vous pouvez aussi utiliser les sections de la bibliothèque, comme **Effets**, **Couleur** et **Transitions** : double-cliquez sur un élément pour l'appliquer à la tête de lecture ou au clip sélectionné, ou utilisez le bouton **Appliquer au clip sélectionné**. Les effets et les transitions s'appliquent aussi aux images, aux stickers et aux textes, et l'onglet **Couleur** règle les couleurs des images et des stickers. Quand vous insérez un clip, le panneau des propriétés s'ouvre tout seul sur le bon onglet : **Texte** pour les textes, **Vidéo** pour les vidéos, images et stickers, et **Audio** pour l'audio.
 
 ### Onglet Vidéo
 
@@ -257,7 +257,7 @@ Cet onglet regroupe les réglages de mouvement et de temps du clip :
   - **Courbe** : courbe de vitesse (speed ramping). Choisissez **Montage**, **Héros**, **Bullet time**, **Saut**, **Accélérer** ou **Ralentir** pour que le clip accélère et ralentisse en lui-même, sans changer la durée ni le passage de la vidéo utilisé. **Constante (sans courbe)** revient à la normale. Avec une courbe, l'audio du clip est coupé. Rogner ou scinder le clip revient aussi à la vitesse constante.
   - **Flou de mouvement** : traînée de mouvement quand la position, l'échelle ou la rotation sont animées par images clés. À 100 %, la traînée couvre l'intervalle d'une image entière.
 - **Figer l'image**, **Répéter le passage**, **Remplir le cadre**, **Pivoter de 90°** et **Retourner** horizontalement et verticalement.
-- **Transition d'entrée** : applique une transition entre ce clip et le clip qui le précède sur la même piste. Pour l'utiliser, les deux clips doivent se toucher. Vous choisissez la transition et la **Durée de la transition**.
+- **Transition d'entrée** : applique une transition entre ce clip et le clip qui le précède sur la même piste. Pour l'utiliser, les deux clips doivent se toucher. Vous choisissez la transition et la **Durée de la transition**. S'il n'y a pas de clip collé avant (image, sticker ou texte isolé), la transition est une entrée : elle commence au début du clip et le révèle sur les pistes du dessous.
 
 - **Suivi de caméra** : choisissez **Tête** ou **Corps**, et une caméra virtuelle suit cette partie de la personne. Réglez :
   - **Coupe automatique (zoom)** : rapproche l'image de la cible.
@@ -562,7 +562,7 @@ Utilisez **Annuler l'exportation** pour arrêter un élément, **Retirer de la f
 ### Enregistrer le projet
 
 - **Fichier › Enregistrer** (Ctrl+S) : écrit les modifications dans le fichier du projet.
-- **Fichier › Enregistrer sous…** (Ctrl+Maj+S) : écrit une copie du projet sous un autre nom ou dans un autre dossier.
+- **Fichier › Enregistrer sous…** (Ctrl+Maj+S) : écrit une copie du projet sous un autre nom ou dans un autre dossier. Le projet prend le nom du fichier, qui apparaît dans le titre de la fenêtre.
 - **Fichier › Créer une sauvegarde** : crée une sauvegarde du projet à l'instant présent. Le programme garde jusqu'à 10 copies de chaque projet, dans le dossier de sauvegardes de l'application.
 
 Le fichier du projet a l'extension .med. Le programme ne modifie pas les fichiers des médias d'origine.

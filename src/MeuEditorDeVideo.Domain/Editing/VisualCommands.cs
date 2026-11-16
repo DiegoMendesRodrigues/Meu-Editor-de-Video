@@ -144,6 +144,7 @@ public sealed record RepeatClipCommand(Guid SequenceId, Guid ClipId, int Count) 
 
 /// <summary>
 /// Define, troca ou remove (Kind nulo = corte seco) a transição entre dois clipes adjacentes da mesma trilha (RF078–RF085).
+/// Com <c>FromClipId</c> vazio, é a transição de entrada do clipe (sem clipe antes dele).
 /// </summary>
 public sealed record SetTransitionCommand(Guid SequenceId, Guid FromClipId, Guid ToClipId, TransitionKind? Kind, MediaTime Duration) : IEditCommand
 {
@@ -157,14 +158,15 @@ public sealed record SetTransitionCommand(Guid SequenceId, Guid FromClipId, Guid
     {
         var seq = RequireSequence(project, SequenceId);
         var fr = project.Settings.FrameRate;
-        var from = Require(seq, FromClipId);
         var to = Require(seq, ToClipId);
-        if (from.Track.Id != to.Track.Id || from.Clip.End != to.Clip.Start)
+        var entrance = FromClipId == Guid.Empty;
+        var from = entrance ? to : Require(seq, FromClipId);
+        if (!entrance && (from.Track.Id != to.Track.Id || from.Clip.End != to.Clip.Start))
             throw new EditRejectedException("A transição precisa de dois clipes encostados na mesma trilha.");
-        if (!from.Track.IsVisual) throw new EditRejectedException("Transições de imagem só se aplicam a trilhas visuais.");
-        EnsureUnlocked(from.Track);
+        if (!to.Track.IsVisual) throw new EditRejectedException("Transições de imagem só se aplicam a trilhas visuais.");
+        EnsureUnlocked(to.Track);
 
-        var track = from.Track;
+        var track = to.Track;
         var existing = track.Transitions.Find(t => t.FromClipId == FromClipId && t.ToClipId == ToClipId);
         if (Kind is null)
         {
@@ -172,7 +174,7 @@ public sealed record SetTransitionCommand(Guid SequenceId, Guid FromClipId, Guid
             return Commit(project, ReplaceTrack(seq, track with { Transitions = track.Transitions.Remove(existing) }));
         }
 
-        var max = TransitionOps.MaxDuration(from.Clip, to.Clip, fr);
+        var max = entrance ? Frames.Floor(fr, to.Clip.Duration) : TransitionOps.MaxDuration(from.Clip, to.Clip, fr);
         if (max < new MediaTime(fr.FrameDuration.Ticks * 2)) throw new EditRejectedException("Os clipes são curtos demais para uma transição.");
         var duration = MediaTime.Max(new MediaTime(fr.FrameDuration.Ticks * 2), MediaTime.Min(max, Frames.Floor(fr, Duration)));
         var transition = new Transition
@@ -213,6 +215,11 @@ public static class TransitionOps
         foreach (var t in track.Transitions)
         {
             if (!byId.TryGetValue(t.ToClipId, out var to)) continue;
+            if (t.IsEntrance)
+            {
+                if (!result.Exists(r => r.ToClipId == to.Id)) result.Add(t with { Duration = MediaTime.Min(t.Duration, to.Duration) });
+                continue;
+            }
             var from = byId.TryGetValue(t.FromClipId, out var f) && f.End == to.Start ? f : track.Clips.Find(c => c.End == to.Start && c.Id != to.Id);
             if (from is null || result.Exists(r => r.ToClipId == to.Id)) continue;
             var max = MediaTime.Min(from.Duration, to.Duration);

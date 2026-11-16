@@ -355,13 +355,14 @@ public sealed class TimelineControl : TimelineSurface
                     clip.LinkId is not null ? linkedPen : null, ghost: isMoving ? 0.35 : 1);
             }
 
-            // Transições: faixa centrada no corte (RF084).
+            // Transições: faixa centrada no corte (RF084) ou, na entrada, a partir do início do clipe.
             foreach (var tr in track.Transitions)
             {
                 var to = track.Clips.Find(c => c.Id == tr.ToClipId);
                 if (to is null) continue;
                 var half = tr.Duration.TotalSeconds * vm.PixelsPerSecond / 2;
-                var cx = vm.TimeToX(to.Start);
+                // Entrada (sem clipe antes): a faixa começa no início do clipe.
+                var cx = vm.TimeToX(to.Start) + (tr.IsEntrance ? half : 0);
                 if (cx + half < 0 || cx - half > w) continue;
                 var band = new Rect(cx - half, top + th / 2 - 7, Math.Max(4, half * 2), 14);
                 dc.DrawRoundedRectangle(Solid(220, 255, 255, 255), MakePen(Brushes.Black, 1), band, 3, 3);

@@ -217,7 +217,7 @@ public sealed record CreateCompoundClipCommand(Guid SequenceId, IReadOnlyList<Gu
                 Volume = track.Volume,
                 Pan = track.Pan,
                 Clips = [.. clips.OrderBy(c => c.Start)],
-                Transitions = [.. track.Transitions.Where(tr => movedIds.Contains(tr.FromClipId) && movedIds.Contains(tr.ToClipId))],
+                Transitions = [.. track.Transitions.Where(tr => (tr.IsEntrance || movedIds.Contains(tr.FromClipId)) && movedIds.Contains(tr.ToClipId))],
             });
             var remaining = track.Clips.Where(c => !movedIds.Contains(c.Id)).ToList();
             seq = ReplaceTrack(seq, WithClips(track with
@@ -289,8 +289,8 @@ public sealed record UnpackCompoundClipCommand(Guid SequenceId, Guid ClipId) : I
             {
                 Id = Guid.NewGuid(),
                 Clips = [.. clips.OrderBy(c => c.Start)],
-                Transitions = [.. track.Transitions.Where(t => ids.ContainsKey(t.FromClipId) && ids.ContainsKey(t.ToClipId))
-                    .Select(t => t with { FromClipId = ids[t.FromClipId], ToClipId = ids[t.ToClipId] })],
+                Transitions = [.. track.Transitions.Where(t => (t.IsEntrance || ids.ContainsKey(t.FromClipId)) && ids.ContainsKey(t.ToClipId))
+                    .Select(t => t with { FromClipId = t.IsEntrance ? Guid.Empty : ids[t.FromClipId], ToClipId = ids[t.ToClipId] })],
             });
         }
 

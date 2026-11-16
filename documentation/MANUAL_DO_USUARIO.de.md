@@ -239,7 +239,7 @@ Verwenden Sie die Zoom-Schaltflächen in der Symbolleiste oder die Tastenkombina
 
 ## Visuelle Effekte, Text und Übergänge
 
-Um einen Effekt anzuwenden, wählen Sie den Clip in der Zeitleiste aus und verwenden die Registerkarten der Eigenschaften. Sie können auch die Bereiche der Bibliothek wie **Effekte**, **Farbe** und **Übergänge** verwenden: Doppelklicken Sie auf ein Element, um es an der Abspielposition oder auf den ausgewählten Clip anzuwenden, oder verwenden Sie die Schaltfläche **Auf ausgewählten Clip anwenden**.
+Um einen Effekt anzuwenden, wählen Sie den Clip in der Zeitleiste aus und verwenden die Registerkarten der Eigenschaften. Sie können auch die Bereiche der Bibliothek wie **Effekte**, **Farbe** und **Übergänge** verwenden: Doppelklicken Sie auf ein Element, um es an der Abspielposition oder auf den ausgewählten Clip anzuwenden, oder verwenden Sie die Schaltfläche **Auf ausgewählten Clip anwenden**. Effekte und Übergänge gelten auch für Bilder, Sticker und Texte, und die Registerkarte **Farbe** passt die Farben von Bildern und Stickern an. Wenn Sie einen Clip einfügen, öffnet sich der Eigenschaftenbereich von selbst auf der passenden Registerkarte: **Text** für Texte, **Video** für Videos, Bilder und Sticker und **Audio** für Audio.
 
 ### Registerkarte Video
 
@@ -257,7 +257,7 @@ Diese Registerkarte bündelt die Bewegungs- und Zeiteinstellungen des Clips:
   - **Kurve**: Geschwindigkeitskurve (Speed Ramping). Wählen Sie **Montage**, **Held**, **Bullet Time**, **Sprung**, **Beschleunigen** oder **Abbremsen**, damit der Clip in sich beschleunigt und abbremst, ohne Dauer oder verwendeten Videoabschnitt zu ändern. **Konstant (ohne Kurve)** stellt den Normalzustand wieder her. Mit Kurve ist der Ton des Clips stumm. Trimmen oder Teilen des Clips kehrt ebenfalls zur konstanten Geschwindigkeit zurück.
   - **Bewegungsunschärfe**: Bewegungsspur, wenn Position, Skalierung oder Drehung mit Keyframes animiert sind. Bei 100 % deckt die Spur die Dauer eines ganzen Bildes ab.
 - **Standbild**, **Abschnitt wiederholen**, **Bild füllen**, **Um 90° drehen** und **Spiegeln** horizontal und vertikal.
-- **Eingangsübergang**: wendet einen Übergang zwischen diesem Clip und dem vorherigen Clip auf derselben Spur an. Dazu müssen die beiden Clips aneinanderstoßen. Sie wählen den Übergang und die **Übergangsdauer**.
+- **Eingangsübergang**: wendet einen Übergang zwischen diesem Clip und dem vorherigen Clip auf derselben Spur an. Dazu müssen die beiden Clips aneinanderstoßen. Sie wählen den Übergang und die **Übergangsdauer**. Liegt davor kein angrenzender Clip (ein einzelnes Bild, ein Sticker oder ein Text), ist der Übergang ein Einstieg: Er beginnt am Anfang des Clips und blendet ihn über den Spuren darunter ein.
 
 - **Kameraverfolgung**: Wählen Sie **Kopf** oder **Körper**, und eine virtuelle Kamera folgt diesem Teil der Person. Einstellungen:
   - **Automatischer Schnitt (Zoom)**: rückt das Bild näher an das Ziel.
@@ -562,7 +562,7 @@ Verwenden Sie **Export abbrechen**, um ein Element anzuhalten, **Aus der Wartesc
 ### Das Projekt speichern
 
 - **Datei › Speichern** (Strg+S): schreibt die Änderungen in die Projektdatei.
-- **Datei › Speichern unter…** (Strg+Umschalt+S): schreibt eine Kopie des Projekts unter einem anderen Namen oder in einen anderen Ordner.
+- **Datei › Speichern unter…** (Strg+Umschalt+S): schreibt eine Kopie des Projekts unter einem anderen Namen oder in einen anderen Ordner. Das Projekt erhält den Namen der Datei, der im Fenstertitel erscheint.
 - **Datei › Sicherungskopie erstellen**: erstellt eine Sicherungskopie des Projekts zum aktuellen Zeitpunkt. Das Programm behält bis zu 10 Kopien jedes Projekts im Sicherungsordner der Anwendung.
 
 Die Projektdatei hat die Endung .med. Das Programm verändert die Original-Mediendateien nicht.

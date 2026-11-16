@@ -269,7 +269,7 @@ public sealed partial class EditorViewModel(
     private void Refresh()
     {
         var s = _session;
-        ProjectName = s?.Project.Name ?? "Sem título";
+        ProjectName = s?.Project.Name ?? MeuEditorDeVideo.App.Localization.Translator.T("Sem título");
         IsDirty = s?.IsDirty ?? false;
         MissingMediaCount = s?.Media.Missing.Count() ?? 0;
         shell.Title = s is null

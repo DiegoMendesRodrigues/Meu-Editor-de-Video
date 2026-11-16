@@ -1321,7 +1321,6 @@ b387f469	Diseño vídeo
 b3dc418d	Transformación
 b426f76d	Los textos solo van en pistas de texto o de subtítulos.
 b428cf3d	El proyecto se convirtió del formato {0} al {1}. Se creó una copia de seguridad del original al guardar.
-b45e0461	Coloque otro clip justo antes del seleccionado, en la misma pista, para aplicar una transición.
 b4689945	Seguimiento seguido por la máscara
 b47459a4	Se descargarán {0} de los orígenes oficiales (huggingface.co y github.com).
 b47523e5	Indique el color que debería ser gris neutro; el efecto compensa la dominante.
@@ -1424,6 +1423,7 @@ c42d7a7e	Quitar negrita
 c43ee61f	Generar proxies automáticamente para vídeos de más de 1080p
 c45641ba	Rendimiento alto: equipo con la configuración recomendada.
 c463002e	El modelo de mejora de imagen no está instalado.
+c466c139	Sin un clip pegado antes de este, la transición es de entrada: revela el clip sobre las pistas de abajo.
 c46d4cbb	El archivo está en uso por otro programa:\n{0}
 c4930de6	Aplicar este estilo a todos los subtítulos de la pista
 c4a917af	GPU (DirectML) o CPU
@@ -1491,7 +1491,6 @@ ccad7dc6	Sin categoría
 ccbf50f2	Instalar paquete de contenido
 ccd4dc1f	Crece a partir del 30% del tamaño, surgiendo de la transparencia.
 cce6f32e	Perfil de color
-ccf20974	Coloque otro clip justo antes de este, en la misma pista, para usar una transición.
 ccf5462e	Disponible (D3D11VA)
 cd16bc71	El archivo no contiene subtítulos válidos.
 cd2b0e42	El proyecto "{0}" no se cerró correctamente. Hay un guardado automático de {1:g}.\n\n

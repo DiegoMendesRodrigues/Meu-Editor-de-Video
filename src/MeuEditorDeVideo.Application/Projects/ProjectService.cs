@@ -138,6 +138,10 @@ public sealed class ProjectService(
     {
         var session = RequireSession();
         if (!path.EndsWith(Extension, StringComparison.OrdinalIgnoreCase)) path += Extension;
+        // O nome do projeto (título da janela e do cabeçalho) passa a ser o nome do arquivo escolhido.
+        var name = Path.GetFileNameWithoutExtension(path).Trim();
+        if (name.Length > 0 && name != session.Project.Name)
+            session.History.Execute(new RenameProjectCommand(name));
         await SaveToAsync(session, Path.GetFullPath(path), progress, cancellationToken).ConfigureAwait(true);
         await AddRecentAsync(session.FilePath!).ConfigureAwait(true);
         SessionChanged?.Invoke(this, EventArgs.Empty);

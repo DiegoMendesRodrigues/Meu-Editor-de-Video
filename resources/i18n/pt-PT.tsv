@@ -479,7 +479,6 @@ b2d639ee	Um pacote é um ficheiro .medpack (ZIP) com as pastas figurinhas, titul
 b2ef043b	Transparente (mostra as faixas abaixo)
 b426f76d	Textos só entram em faixas de texto ou de legendas.
 b428cf3d	O projeto foi convertido do formato {0} para {1}. Foi criada uma cópia de segurança do original ao guardar.
-b45e0461	Encoste outro clipe antes do selecionado, na mesma faixa, para aplicar uma transição.
 b4689945	Seguimento seguido pela máscara
 b47459a4	Serão transferidos {0} das origens oficiais (huggingface.co e github.com).
 b4de2f0a	A verificar o resultado
@@ -516,6 +515,7 @@ c2544121	Ao clicar em Gravar, o programa é minimizado e a gravação começa ap
 c29337f0	Um fotograma congelado não pode ser reproduzido ao contrário.
 c3ed83c8	Corta os silêncios do clipe (e do vídeo ligado) e fecha os espaços
 c420cee5	Nenhum ficheiro corresponde à pesquisa.
+c466c139	Sem um clip encostado antes deste, a transição é de entrada: revela o clip sobre as faixas de baixo.
 c46d4cbb	O ficheiro está a ser usado por outro programa:\n{0}
 c4930de6	Aplicar este estilo a todas as legendas da faixa
 c4af3181	{0}\nFicheiro não encontrado: {1}
@@ -546,7 +546,6 @@ cc172b83	O multimédia do clipe não foi encontrado.
 cc7b20f3	O ficheiro exportado não passou na verificação final:\n{0}\n\nDetalhe: {1}
 cc9d944e	Largura personalizada em píxeis
 ccaa7e34	{0} ficheiro(s) não puderam ser importados:
-ccf20974	Encoste outro clipe antes deste, na mesma faixa, para usar uma transição.
 cd16bc71	O ficheiro não contém legendas válidas.
 cd2b0e42	O projeto "{0}" não foi fechado corretamente. Há uma gravação automática de {1:g}.\n\n
 cd57d86d	Gravação automática

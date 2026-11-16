@@ -708,8 +708,25 @@ public static class EffectProcessor
     private static void BlurFx(byte[] px, int w, int h, double radius)
     {
         if (radius < 0.5) return;
+        // Com transparência (textos, figurinhas, imagens PNG), desfoca em alfa pré-multiplicado: senão os pixels
+        // transparentes (pretos) escurecem a imagem e o texto branco some.
+        var hasAlpha = false;
+        for (var i = 3; i < px.Length; i += 4) if (px[i] < 255) { hasAlpha = true; break; }
+        if (hasAlpha)
+            Rows(px, i =>
+            {
+                var a = px[i + 3];
+                px[i] = (byte)((px[i] * a + 127) / 255); px[i + 1] = (byte)((px[i + 1] * a + 127) / 255); px[i + 2] = (byte)((px[i + 2] * a + 127) / 255);
+            });
         var blurred = GaussianApprox(px, w, h, radius);
         Buffer.BlockCopy(blurred, 0, px, 0, px.Length);
+        if (hasAlpha)
+            Rows(px, i =>
+            {
+                var a = px[i + 3];
+                if (a == 0) { px[i] = px[i + 1] = px[i + 2] = 0; return; }
+                for (var c = 0; c < 3; c++) px[i + c] = (byte)Math.Min(255, (px[i + c] * 255 + a / 2) / a);
+            });
     }
 
     private static void SharpenFx(byte[] px, int w, int h, double amount, double scale)

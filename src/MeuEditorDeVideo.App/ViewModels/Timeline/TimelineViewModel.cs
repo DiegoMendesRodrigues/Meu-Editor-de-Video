@@ -88,6 +88,16 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
 
     public void RequestPlayPause() => PlayPauseRequested?.Invoke(this, EventArgs.Empty);
 
+    /// <summary>Clipe novo inserido pelo usuário (mídia, texto, figurinha…): a janela abre a aba de propriedades adequada.</summary>
+    public event EventHandler<Guid>? ClipInserted;
+
+    /// <summary>Seleciona só o clipe inserido e avisa a janela (<see cref="ClipInserted"/>).</summary>
+    public void SelectInserted(Guid clipId)
+    {
+        Select(clipId, additive: false);
+        ClipInserted?.Invoke(this, clipId);
+    }
+
     /// <summary>Redesenho necessário (estado, seleção, cursor, zoom ou miniaturas mudaram).</summary>
     public event EventHandler? Invalidated;
 
@@ -410,6 +420,8 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
             if (video is not null) _selection.Add(command.VideoClipId);
             if (audio is not null) _selection.Add(command.AudioClipId);
             SelectionChangedInternal();
+            // Vídeo ou imagem abre a aba Vídeo; só áudio, a aba Áudio.
+            ClipInserted?.Invoke(this, video is not null ? command.VideoClipId : command.AudioClipId);
         }
     }
 

@@ -1436,7 +1436,6 @@ b3dc418d	Transform
 b40b2944	In
 b426f76d	Texts only go on text or subtitle tracks.
 b428cf3d	The project was converted from format {0} to {1}. A backup of the original was created when saving.
-b45e0461	Place another clip right before the selected one, on the same track, to apply a transition.
 b4689945	Tracking followed by the mask
 b47459a4	{0} will be downloaded from the official sources (huggingface.co and github.com).
 b47523e5	Pick the color that should be neutral gray; the effect compensates the cast.
@@ -1553,6 +1552,7 @@ c42d7a7e	Remove bold
 c43ee61f	Automatically generate proxies for videos above 1080p
 c45641ba	High performance: computer at the recommended configuration.
 c463002e	The image enhancement model is not installed.
+c466c139	With no clip right before this one, the transition is an entrance: it reveals the clip over the tracks below.
 c46d4cbb	The file is in use by another program:\n{0}
 c4930de6	Apply this style to all subtitles on the track
 c4a917af	GPU (DirectML) or CPU
@@ -1625,7 +1625,6 @@ ccad7dc6	Uncategorized
 ccbf50f2	Install content pack
 ccd4dc1f	Grows from 30% size, emerging from transparency.
 cce6f32e	Color profile
-ccf20974	Place another clip right before this one, on the same track, to use a transition.
 ccf5462e	Available (D3D11VA)
 cd16bc71	The file does not contain valid subtitles.
 cd2b0e42	Project "{0}" was not closed properly. There is an autosave from {1:g}.\n\n

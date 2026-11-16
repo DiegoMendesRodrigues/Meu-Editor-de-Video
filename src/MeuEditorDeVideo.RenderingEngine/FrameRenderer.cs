@@ -43,7 +43,7 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
                 {
                     var (img, positioned) = textLayer;
                     if (layer.Masks.Count > 0) img = MaskRenderer.Apply(img, layer.Masks);
-                    if (!bypassEffects && positioned.Effects.Count > 0) img = EffectProcessor.Apply(img, positioned.Effects, ctx).Image;
+                    if (!bypassEffects && positioned.Effects.Count > 0) img = EffectProcessor.Apply(PadForEffects(img, positioned.Effects, ctx), positioned.Effects, ctx).Image;
                     layers.Add(new LayerImage(positioned, img, HasAlpha: true, NativeSize: true));
                 }
                 continue;
@@ -52,7 +52,7 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
             {
                 var img = ShapeRasterizer.Render(shape, graph.Width > 0 ? (double)width / graph.Width : 1);
                 if (layer.Masks.Count > 0) img = MaskRenderer.Apply(img, layer.Masks);
-                if (!bypassEffects && layer.Effects.Count > 0) img = EffectProcessor.Apply(img, layer.Effects, ctx).Image;
+                if (!bypassEffects && layer.Effects.Count > 0) img = EffectProcessor.Apply(PadForEffects(img, layer.Effects, ctx), layer.Effects, ctx).Image;
                 AddWithTrail(layers, new LayerImage(layer, img, HasAlpha: true, NativeSize: true));
                 continue;
             }
@@ -285,6 +285,26 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
             }
         });
         return new BgraImage(width, height, px);
+    }
+
+    /// <summary>
+    /// Imagens em tamanho nativo (textos, formas) são justas ao conteúdo: desfoque e brilho seriam cortados na borda.
+    /// Acrescenta margem transparente simétrica (o centro, e portanto a posição, não muda).
+    /// </summary>
+    private static BgraImage PadForEffects(BgraImage img, IReadOnlyList<EffectInstance> effects, EffectContext ctx)
+    {
+        double radius = 0;
+        foreach (var e in effects)
+            if (e.Type is EffectCatalog.Blur or EffectCatalog.Glow && !EffectCatalog.IsNeutral(e))
+                radius = Math.Max(radius, EffectCatalog.Value(e, "radius") * ctx.PixelScale);
+        var pad = (int)Math.Ceiling(radius * 2.5);
+        if (pad <= 0) return img;
+        var w = img.Width + pad * 2;
+        var h = img.Height + pad * 2;
+        var px = new byte[w * h * 4];
+        for (var y = 0; y < img.Height; y++)
+            Buffer.BlockCopy(img.Pixels, y * img.Width * 4, px, ((y + pad) * w + pad) * 4, img.Width * 4);
+        return new BgraImage(w, h, px);
     }
 
     /// <summary>

@@ -239,7 +239,7 @@ Use the zoom buttons on the toolbar, or the shortcuts:
 
 ## Visual effects, text and transitions
 
-To apply an effect, select the clip on the timeline and use the property tabs. You can also use the library sections, such as **Effects**, **Color** and **Transitions**: double-click an item to apply it at the playhead or to the selected clip, or use the **Apply to selected clip** button.
+To apply an effect, select the clip on the timeline and use the property tabs. You can also use the library sections, such as **Effects**, **Color** and **Transitions**: double-click an item to apply it at the playhead or to the selected clip, or use the **Apply to selected clip** button. Effects and transitions also work on images, stickers and texts, and the **Color** tab adjusts the colors of images and stickers. When you insert a clip, the properties panel opens on the right tab by itself: **Text** for texts, **Video** for videos, images and stickers, and **Audio** for audio.
 
 ### Video tab
 
@@ -257,7 +257,7 @@ This tab gathers the clip's motion and timing settings:
   - **Curve**: speed curve (speed ramping). Choose **Montage**, **Hero**, **Bullet**, **Jump**, **Speed up** or **Slow down** for the clip to speed up and slow down within itself, without changing the duration or the part of the video used. **Constant (no curve)** returns to normal. With a curve, the clip's audio is muted. Trimming or splitting the clip also returns it to constant speed.
   - **Motion blur**: motion trail when position, scale or rotation are animated by keyframes. At 100%, the trail covers the span of one whole frame.
 - **Freeze frame**, **Repeat section**, **Fill frame**, **Rotate 90°** and **Flip** horizontally and vertically.
-- **In transition**: applies a transition between this clip and the clip before it on the same track. To use it, the two clips must touch. You choose the transition and the **Transition duration**.
+- **In transition**: applies a transition between this clip and the clip before it on the same track. To use it, the two clips must touch. You choose the transition and the **Transition duration**. If no clip touches it from before (a lone image, sticker or text), the transition is an entrance: it starts at the beginning of the clip and reveals it over the tracks below.
 
 - **Camera tracking**: choose **Head** or **Body**, and a virtual camera follows that part of the person. Adjust:
   - **Auto cut (zoom)**: brings the image closer to the target.
@@ -562,7 +562,7 @@ Use **Cancel export** to stop an item, **Remove from queue** to take it off the 
 ### Saving the project
 
 - **File › Save** (Ctrl+S): writes the changes to the project file.
-- **File › Save as…** (Ctrl+Shift+S): writes a copy of the project with another name or in another folder.
+- **File › Save as…** (Ctrl+Shift+S): writes a copy of the project with another name or in another folder. The project takes the file's name, which appears in the window title.
 - **File › Create backup**: creates a backup of the project at the current moment. The program keeps up to 10 copies of each project, in the application's backup folder.
 
 The project file has the .med extension. The program does not change the original media files.

@@ -1449,7 +1449,6 @@ b3dc418d	Transformation
 b40b2944	Eingang
 b426f76d	Texte gehören nur auf Text- oder Untertitelspuren.
 b428cf3d	Das Projekt wurde von Format {0} nach {1} konvertiert. Beim Speichern wurde eine Sicherungskopie des Originals erstellt.
-b45e0461	Legen Sie einen anderen Clip direkt vor den ausgewählten auf dieselbe Spur, um einen Übergang anzuwenden.
 b4689945	Von der Maske verfolgtes Tracking
 b47459a4	{0} werden von den offiziellen Quellen (huggingface.co und github.com) heruntergeladen.
 b47523e5	Wählen Sie die Farbe, die neutralgrau sein sollte; der Effekt gleicht den Farbstich aus.
@@ -1566,6 +1565,7 @@ c42d7a7e	Fett entfernen
 c43ee61f	Proxys für Videos über 1080p automatisch erzeugen
 c45641ba	Hohe Leistung: Computer mit empfohlener Konfiguration.
 c463002e	Das Bildverbesserungsmodell ist nicht installiert.
+c466c139	Ohne direkt davor liegenden Clip ist der Übergang ein Einstieg: Er blendet den Clip über den Spuren darunter ein.
 c46d4cbb	Die Datei wird von einem anderen Programm verwendet:\n{0}
 c4930de6	Diesen Stil auf alle Untertitel der Spur anwenden
 c4a917af	GPU (DirectML) oder CPU
@@ -1640,7 +1640,6 @@ ccad7dc6	Ohne Kategorie
 ccbf50f2	Inhaltspaket installieren
 ccd4dc1f	Wächst ab 30 % Größe aus der Transparenz heraus.
 cce6f32e	Farbprofil
-ccf20974	Legen Sie einen anderen Clip direkt vor diesen auf dieselbe Spur, um einen Übergang zu verwenden.
 ccf5462e	Verfügbar (D3D11VA)
 cd16bc71	Die Datei enthält keine gültigen Untertitel.
 cd2b0e42	Projekt „{0}“ wurde nicht ordnungsgemäß geschlossen. Es gibt eine automatische Speicherung vom {1:g}.\n\n

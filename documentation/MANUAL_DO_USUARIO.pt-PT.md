@@ -239,7 +239,7 @@ Use os botões de zoom na barra de ferramentas, ou os atalhos:
 
 ## Efeitos visuais, texto e transições
 
-Para aplicar um efeito, selecione o clipe na linha temporal e use as abas das propriedades. O utilizador também pode usar as seções da biblioteca, como **Efeitos**, **Cor** e **Transições**: clique duas vezes num item para aplicá-lo no cursor ou ao clipe selecionado, ou use o botão **Aplicar ao clipe selecionado**.
+Para aplicar um efeito, selecione o clipe na linha temporal e use as abas das propriedades. O utilizador também pode usar as seções da biblioteca, como **Efeitos**, **Cor** e **Transições**: clique duas vezes num item para aplicá-lo no cursor ou ao clipe selecionado, ou use o botão **Aplicar ao clipe selecionado**. Efeitos e transições também se aplicam a imagens, figurinhas e textos, e a aba **Cor** ajusta as cores de imagens e figurinhas. Ao inserir um clip, o painel de propriedades abre-se sozinho na aba certa: **Texto** para textos, **Vídeo** para vídeos, imagens e figurinhas, e **Áudio** para áudios.
 
 ### Aba Vídeo
 
@@ -257,7 +257,7 @@ Esta aba reúne as definições de movimento e tempo do clipe:
   - **Curva**: curva de velocidade (speed ramping). Escolha **Montagem**, **Herói**, **Bala**, **Pulo**, **Acelerar** ou **Desacelerar** para o clipe acelerar e desacelerar dentro dele, sem mudar a duração nem o trecho usado do vídeo. **Constante (sem curva)** volta ao normal. Com curva, o áudio do clipe fica mudo. Aparar ou dividir o clipe também volta à velocidade constante.
   - **Desfoque de movimento**: rastro de movimento quando a posição, a escala ou a rotação estão animadas por keyframes. Em 100%, o rastro cobre o intervalo de um fotograma inteiro.
 - **Congelar fotograma**, **Repetir trecho**, **Preencher fotograma**, **Girar 90°** e **Espelhar** na horizontal e na vertical.
-- **Transição de entrada**: aplica uma transição entre este clipe e o clipe que vem antes dele na mesma faixa. Para usar, os dois clipes precisam estar encostados. O utilizador escolhe a transição e a **Duração da transição**.
+- **Transição de entrada**: aplica uma transição entre este clipe e o clipe que vem antes dele na mesma faixa. Para usar, os dois clipes precisam estar encostados. O utilizador escolhe a transição e a **Duração da transição**. Se não houver um clip encostado antes (uma imagem, figurinha ou texto isolado), a transição é de entrada: começa no início do clip e revela-o sobre as faixas de baixo.
 
 - **Rastreamento de câmara**: escolha **Cabeça** ou **Corpo**, e uma câmara virtual acompanha essa parte da pessoa. Ajuste:
   - **Corte automático (zoom)**: aproxima a imagem do alvo.
@@ -562,7 +562,7 @@ Use **Cancelar exportação** para parar um item, **Remover da fila** para tirá
 ### Guardar o projeto
 
 - **Ficheiro › Guardar** (Ctrl+S): grava as alterações no ficheiro do projeto.
-- **Ficheiro › Guardar como…** (Ctrl+Shift+S): grava uma cópia do projeto com outro nome ou em outra pasta.
+- **Ficheiro › Guardar como…** (Ctrl+Shift+S): grava uma cópia do projeto com outro nome ou em outra pasta. O projeto passa a ter o nome do ficheiro, que aparece no título da janela.
 - **Ficheiro › Criar cópia de segurança**: cria uma cópia de segurança do projeto no momento atual. O programa guarda até 10 cópias de cada projeto, na pasta de cópias de segurança do aplicativo.
 
 O ficheiro do projeto tem a extensão .med. Os ficheiros das ficheiros multimédia originais não são alterados pelo programa.

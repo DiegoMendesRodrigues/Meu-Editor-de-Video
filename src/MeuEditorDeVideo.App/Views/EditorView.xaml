@@ -1472,10 +1472,10 @@
                                 </ScrollViewer>
                             </Grid>
                         </TabItem>
-                        <TabItem Tag="&#xE714;" Header="{StaticResource Editor.Propriedades.Video}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Video}">
+                        <TabItem x:Name="AbaVideo" Tag="&#xE714;" Header="{StaticResource Editor.Propriedades.Video}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Video}">
                             <panels:ClipVideoPanel DataContext="{Binding Inspector}" />
                         </TabItem>
-                        <TabItem Tag="&#xE8D2;" Header="{StaticResource Editor.Propriedades.Texto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Texto}">
+                        <TabItem x:Name="AbaTexto" Tag="&#xE8D2;" Header="{StaticResource Editor.Propriedades.Texto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Texto}">
                             <panels:ClipTextPanel DataContext="{Binding TextInspector}" />
                         </TabItem>
                         <TabItem Tag="&#xE81E;" Header="{StaticResource Editor.Propriedades.Composicao}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Composicao}">
@@ -1484,7 +1484,7 @@
                         <TabItem Tag="&#xE99A;" Header="{StaticResource Editor.Propriedades.IA}" AutomationProperties.Name="Inteligência artificial">
                             <panels:ClipAiPanel DataContext="{Binding AiInspector}" />
                         </TabItem>
-                        <TabItem Tag="&#xE8D6;" Header="{StaticResource Editor.Propriedades.Audio}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Audio}">
+                        <TabItem x:Name="AbaAudio" Tag="&#xE8D6;" Header="{StaticResource Editor.Propriedades.Audio}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Audio}">
                             <panels:ClipAudioPanel DataContext="{Binding AudioInspector}" />
                         </TabItem>
                         <TabItem Tag="&#xE706;" Header="{StaticResource Editor.Propriedades.Efeitos}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Efeitos}">

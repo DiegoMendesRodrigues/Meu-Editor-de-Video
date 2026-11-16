@@ -95,7 +95,8 @@ public enum TransitionKind
 }
 
 /// <summary>
-/// Transição entre dois clipes adjacentes da mesma trilha, centrada no ponto de corte (RF084).
+/// Transição entre dois clipes adjacentes da mesma trilha, centrada no ponto de corte (RF084), ou transição de entrada
+/// de um clipe sem vizinho (<see cref="FromClipId"/> vazio): começa no início do clipe e o revela sobre as trilhas de baixo.
 /// Fora do clipe são usados os quadros além dos pontos de entrada/saída quando a mídia tem sobra;
 /// caso contrário o primeiro/último quadro é mantido.
 /// </summary>
@@ -106,4 +107,7 @@ public sealed record Transition
     public required Guid ToClipId { get; init; }
     public TransitionKind Kind { get; init; } = TransitionKind.Dissolve;
     public required MediaTime Duration { get; init; }
+
+    /// <summary>Transição de entrada (sem clipe de origem): imagens, figurinhas e textos isolados.</summary>
+    public bool IsEntrance => FromClipId == Guid.Empty;
 }

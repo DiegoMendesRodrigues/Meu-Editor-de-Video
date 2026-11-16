@@ -55,7 +55,7 @@ public sealed partial class TextLibraryViewModel(TimelineViewModel timeline, IDi
         if (item is null || Timeline.Project is not { } project) return;
         var clip = TextPresets.Create(item.Kind, project.Settings, Timeline.Playhead);
         if (Timeline.Execute(new AddTextClipCommand(Timeline.SequenceId, clip, TextPresets.TrackKindFor(item.Kind))))
-            Timeline.Select(clip.Id, additive: false);
+            Timeline.SelectInserted(clip.Id);
     }
 
     /// <summary>Importa um arquivo SRT/VTT numa trilha de legendas nova (RF140, RF141).</summary>

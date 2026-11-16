@@ -275,6 +275,42 @@ public sealed class VisualCommandsTests
     }
 
     [Fact]
+    public void Transicao_de_entrada_em_clipe_isolado_comeca_no_inicio_e_revela_o_clipe()
+    {
+        var image = ImageAsset();
+        var clip = NewClip(image.Id, 3, 4);
+        var p = PlaceClips(NewProject(image), Video1, clip);
+        p = new SetTransitionCommand(p.MainSequence.Id, Guid.Empty, clip.Id, TransitionKind.Dissolve, S(10)).Apply(p);
+
+        var transition = Assert.Single(TrackOf(p, Video1).Transitions);
+        Assert.True(transition.IsEntrance);
+        Assert.Equal(S(4), transition.Duration); // limitada à duração do clipe
+
+        var track = TrackOf(p, Video1);
+        Assert.Null(MeuEditorDeVideo.TimelineEngine.TimelineEvaluator.ActiveTransition(track, S(2.9)));
+        var active = MeuEditorDeVideo.TimelineEngine.TimelineEvaluator.ActiveTransition(track, S(5));
+        Assert.NotNull(active);
+        Assert.Null(active.Value.From);
+        Assert.Equal(0.5, active.Value.Progress, 2);
+
+        var layer = Assert.Single(MeuEditorDeVideo.TimelineEngine.TimelineEvaluator.Evaluate(p, p.MainSequence, S(5)).Layers);
+        Assert.Equal(0.5, layer.Opacity, 2);
+    }
+
+    [Fact]
+    public void Transicao_de_entrada_sobrevive_a_normalizacao_e_some_com_o_clipe()
+    {
+        var image = ImageAsset();
+        var clip = NewClip(image.Id, 0, 4);
+        var p = PlaceClips(NewProject(image), Video1, clip);
+        p = new SetTransitionCommand(p.MainSequence.Id, Guid.Empty, clip.Id, TransitionKind.SlideLeft, S(1)).Apply(p);
+
+        Assert.Single(TransitionOps.Normalize(TrackOf(p, Video1)).Transitions);
+        p = new SetTransitionCommand(p.MainSequence.Id, Guid.Empty, clip.Id, null, S(1)).Apply(p);
+        Assert.Empty(TrackOf(p, Video1).Transitions);
+    }
+
+    [Fact]
     public void SetTransition_limita_a_duracao_ao_clipe_mais_curto()
     {
         var (p, a, b) = TwoAdjacentClips();

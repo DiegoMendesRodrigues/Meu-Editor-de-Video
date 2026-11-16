@@ -127,16 +127,18 @@ public static class TimelineEvaluator
         return new CompositionGraph(t, width, height, layers);
     }
 
-    /// <summary>Transição cuja janela (centrada no corte) contém o instante, com o progresso 0…1.</summary>
-    public static (Transition Transition, Clip From, Clip To, double Progress)? ActiveTransition(Track track, MediaTime t)
+    /// <summary>Transição cuja janela (centrada no corte, ou a partir do início numa entrada) contém o instante, com o progresso 0…1.</summary>
+    public static (Transition Transition, Clip? From, Clip To, double Progress)? ActiveTransition(Track track, MediaTime t)
     {
         foreach (var tr in track.Transitions)
         {
             if (tr.Duration <= MediaTime.Zero) continue;
             var to = track.Clips.Find(c => c.Id == tr.ToClipId);
-            var from = track.Clips.Find(c => c.Id == tr.FromClipId);
-            if (to is null || from is null || from.End != to.Start) continue;
-            var start = to.Start - new MediaTime(tr.Duration.Ticks / 2);
+            if (to is null) continue;
+            var from = tr.IsEntrance ? null : track.Clips.Find(c => c.Id == tr.FromClipId);
+            if (!tr.IsEntrance && (from is null || from.End != to.Start)) continue;
+            // Entrada: começa no início do clipe; entre clipes: centrada no corte.
+            var start = tr.IsEntrance ? to.Start : to.Start - new MediaTime(tr.Duration.Ticks / 2);
             var end = start + tr.Duration;
             if (t < start || t >= end) continue;
             return (tr, from, to, Math.Clamp((double)(t - start).Ticks / tr.Duration.Ticks, 0, 1));
@@ -144,10 +146,10 @@ public static class TimelineEvaluator
         return null;
     }
 
-    private static void AddTransitionLayers(Project project, Sequence sequence, Track track, TransitionKind kind, Clip from, Clip to, double p,
+    private static void AddTransitionLayers(Project project, Sequence sequence, Track track, TransitionKind kind, Clip? from, Clip to, double p,
         MediaTime t, int width, int height, List<VisualLayer> layers)
     {
-        var a = Layer(project, track, from, t, sequence);
+        var a = from is null ? null : Layer(project, track, from, t, sequence);
         var b = Layer(project, track, to, t, sequence);
         var eased = ClipAnimation.Ease(Easing.EaseInOut, p);
 

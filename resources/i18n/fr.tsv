@@ -1440,7 +1440,6 @@ b3dc418d	Transformation
 b40b2944	Entrée
 b426f76d	Les textes ne vont que sur des pistes de texte ou de sous-titres.
 b428cf3d	Le projet a été converti du format {0} au format {1}. Une sauvegarde de l'original a été créée lors de l'enregistrement.
-b45e0461	Placez un autre clip juste avant celui sélectionné, sur la même piste, pour appliquer une transition.
 b4689945	Suivi utilisé par le masque
 b47459a4	{0} seront téléchargés depuis les sources officielles (huggingface.co et github.com).
 b47523e5	Indiquez la couleur qui devrait être gris neutre ; l'effet compense la dominante.
@@ -1557,6 +1556,7 @@ c42d7a7e	Retirer le gras
 c43ee61f	Générer automatiquement des proxies pour les vidéos au-delà de 1080p
 c45641ba	Performances élevées : ordinateur à la configuration recommandée.
 c463002e	Le modèle d'amélioration d'image n'est pas installé.
+c466c139	Sans clip collé avant celui-ci, la transition est une entrée : elle révèle le clip sur les pistes du dessous.
 c46d4cbb	Le fichier est utilisé par un autre programme :\n{0}
 c4930de6	Appliquer ce style à tous les sous-titres de la piste
 c4af3181	{0}\nFichier introuvable : {1}
@@ -1629,7 +1629,6 @@ ccad7dc6	Sans catégorie
 ccbf50f2	Installer un pack de contenu
 ccd4dc1f	Grandit à partir de 30 % de la taille, en émergeant de la transparence.
 cce6f32e	Profil colorimétrique
-ccf20974	Placez un autre clip juste avant celui-ci, sur la même piste, pour utiliser une transition.
 ccf5462e	Disponible (D3D11VA)
 cd16bc71	Le fichier ne contient pas de sous-titres valides.
 cd2b0e42	Le projet « {0} » n'a pas été fermé correctement. Il existe un enregistrement automatique du {1:g}.\n\n

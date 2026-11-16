@@ -74,9 +74,34 @@ public partial class EditorView : UserControl
 
     private void ObservarLinhaDoTempo()
     {
-        if (_linhaDoTempo is not null) _linhaDoTempo.RevealTopRequested -= RevelarTopo;
+        if (_linhaDoTempo is not null)
+        {
+            _linhaDoTempo.RevealTopRequested -= RevelarTopo;
+            _linhaDoTempo.ClipInserted -= AbrirAbaDoClipeInserido;
+        }
         _linhaDoTempo = (DataContext as EditorViewModel)?.Timeline;
-        if (_linhaDoTempo is not null) _linhaDoTempo.RevealTopRequested += RevelarTopo;
+        if (_linhaDoTempo is not null)
+        {
+            _linhaDoTempo.RevealTopRequested += RevelarTopo;
+            _linhaDoTempo.ClipInserted += AbrirAbaDoClipeInserido;
+        }
+    }
+
+    /// <summary>
+    /// Ao inserir um clipe, abre a aba de propriedades correspondente: texto → Texto; vídeo, imagem, figurinha ou
+    /// forma → Vídeo; só áudio → Áudio.
+    /// </summary>
+    private void AbrirAbaDoClipeInserido(object? sender, Guid clipId)
+    {
+        if (_linhaDoTempo?.Sequence is not { } seq) return;
+        foreach (var track in seq.Tracks)
+        {
+            if (track.Clips.Find(c => c.Id == clipId) is not { } clip) continue;
+            var aba = clip.IsText ? AbaTexto : track.IsVisual ? AbaVideo : AbaAudio;
+            // Depois da seleção ser aplicada aos inspetores (eles escutam a mesma mudança de seleção).
+            Dispatcher.BeginInvoke(() => aba.IsSelected = true, System.Windows.Threading.DispatcherPriority.Background);
+            return;
+        }
     }
 
     private void RevelarTopo(object? sender, EventArgs e) =>

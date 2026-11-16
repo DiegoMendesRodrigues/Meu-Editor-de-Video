@@ -140,6 +140,18 @@ public sealed class TextTests
         Assert.InRange((b.Top + b.Bottom) / 2.0, 170, 192);
     }
 
+    [Theory]
+    [InlineData(MeuEditorDeVideo.Domain.Effects.EffectCatalog.Blur)]
+    [InlineData("fx.sepia")]
+    [InlineData("fx.grayscale")]
+    public void Texto_com_efeito_continua_visivel(string effect)
+    {
+        var clip = TextClip("MEU TEXTO");
+        clip = clip with { Effects = [MeuEditorDeVideo.Domain.Effects.EffectCatalog.Create(effect, null)] };
+        var p = With(NewProject(), (TrackKind.Text, [clip]));
+        Assert.True(Bright(Render(p, 1), 60).Count > 200);
+    }
+
     [Fact]
     public void Alinhamento_a_esquerda_usa_x_como_borda_esquerda_e_ancora_inferior_usa_y_como_base()
     {

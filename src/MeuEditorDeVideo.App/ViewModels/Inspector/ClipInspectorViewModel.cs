@@ -206,7 +206,7 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     [ObservableProperty]
     public partial Option<Easing>? SelectedEasing { get; set; }
 
-    /// <summary>Existe um clipe encostado antes do selecionado (permite transição de entrada).</summary>
+    /// <summary>Existe um clipe encostado antes do selecionado; sem ele, a transição é só de entrada.</summary>
     [ObservableProperty]
     public partial bool HasTransitionSlot { get; set; }
 
@@ -293,11 +293,13 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
             SelectedEasing ??= Easings[0];
 
             var previous = track.Clips.Find(c => c.End == clip.Start && c.Id != clip.Id);
+            // Sem clipe encostado antes (falso), a transição é de entrada: revela o clipe sobre as trilhas de baixo.
             HasTransitionSlot = previous is not null;
             var transition = TransitionOps.Incoming(track, clip.Id);
             SelectedTransition = TransitionOptions.First(o => o.Value == transition?.Kind);
-            if (previous is not null)
-                TransitionMaxSeconds = Math.Max(0.1, TransitionOps.MaxDuration(previous, clip, Timeline.FrameRate).TotalSeconds);
+            TransitionMaxSeconds = Math.Max(0.1, (previous is not null
+                ? TransitionOps.MaxDuration(previous, clip, Timeline.FrameRate)
+                : clip.Duration).TotalSeconds);
             TransitionSeconds = transition?.Duration.TotalSeconds ?? Math.Min(1, TransitionMaxSeconds);
         }
         finally
@@ -571,11 +573,6 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     private void ApplyLibraryTransition(string kind)
     {
         if (!EnsureClip()) return;
-        if (!HasTransitionSlot)
-        {
-            _dialogs.ShowInfo("Transição", "Encoste outro clipe antes do selecionado, na mesma trilha, para aplicar uma transição.");
-            return;
-        }
         SelectedTransition = TransitionOptions.First(o => o.Value?.ToString() == kind);
     }
 
@@ -665,8 +662,9 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     {
         if (Current() is not { } cur) return;
         var previous = cur.Track.Clips.Find(c => c.End == cur.Clip.Start && c.Id != cur.Clip.Id);
-        if (previous is null) return;
-        Timeline.Execute(new SetTransitionCommand(Timeline.SequenceId, previous.Id, cur.Clip.Id, kind, MediaTime.FromSecondsApprox(seconds)));
+        // Transição já gravada (entre clipes ou de entrada) continua no mesmo par; sem vizinho, é de entrada.
+        var fromId = TransitionOps.Incoming(cur.Track, cur.Clip.Id)?.FromClipId ?? previous?.Id ?? Guid.Empty;
+        Timeline.Execute(new SetTransitionCommand(Timeline.SequenceId, fromId, cur.Clip.Id, kind, MediaTime.FromSecondsApprox(seconds)));
     }
 
     [RelayCommand]

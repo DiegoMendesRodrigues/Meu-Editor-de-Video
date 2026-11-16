@@ -76,7 +76,7 @@ public sealed partial class CreativeToolsViewModel(
         if (item is null || Timeline.Project is null) return;
         if (await ImportOneAsync(item.Path, "Figurinhas") is not { } id) return;
         var command = new AddOverlayCommand(Timeline.SequenceId, id, Timeline.Playhead, MediaTime.FromSeconds(3), "Figurinhas") { Scale = 0.4 };
-        if (Timeline.Execute(command)) Timeline.Select(command.VideoClipId, additive: false);
+        if (Timeline.Execute(command)) Timeline.SelectInserted(command.VideoClipId);
     }
 
     /// <summary>Importa (ou reaproveita, se já estiver na biblioteca) e devolve o Id da mídia.</summary>
@@ -113,7 +113,7 @@ public sealed partial class CreativeToolsViewModel(
         }
         clip = clip with { Start = Timeline.Project.Settings.FrameRate.SnapToFrame(Timeline.Playhead) };
         var kind = clip.TextFormat?.Kind == TextKind.Subtitle ? TrackKind.Subtitle : TrackKind.Text;
-        if (Timeline.Execute(new AddTextClipCommand(Timeline.SequenceId, clip, kind))) Timeline.Select(clip.Id, additive: false);
+        if (Timeline.Execute(new AddTextClipCommand(Timeline.SequenceId, clip, kind))) Timeline.SelectInserted(clip.Id);
     }
 
     /// <summary>Salva o texto selecionado (estilo, animações e duração) como título reutilizável em "Meus itens".</summary>
