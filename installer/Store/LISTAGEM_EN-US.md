@@ -68,16 +68,15 @@ A complete video editor with artificial intelligence that runs 100% on your comp
 ## O que há de novo nesta versão (até 1.500 caracteres)
 
 ```text
-Version 1.1.0
-• Six languages: English, Brazilian Portuguese, European Portuguese, Spanish, French and German, each with its own manual.
-• Virtual assistant (Shift+F1): answers questions from the manual, offline.
-• Screen, webcam and microphone recording.
-• Automatic reframing to 9:16, 1:1 and 4:5, reverse playback, speed ramps and export of the current frame.
-• Automatic music ducking under speech, voice changer, text to speech and beat markers.
-• Adjustment layers, compound clips, split screen, multicam and stickers.
-• Color matching, lens correction, video noise reduction and face blur.
-• New layout: the program opens straight into the editor, with recent projects in the File menu.
-• Safer opening of projects and media downloaded from the internet, plus fixes.
+Version 1.3.0
+• Crop and zoom, simple text and drawing tools right on the timeline toolbar.
+• Shape, pin and point-of-interest stickers, with adjustment handles on the monitor.
+• Video effects organized by category, with thumbnails and filters.
+• Audio waveform in the clip's Audio tab.
+• Record a specific window, without a black screen.
+• New tracks are added at the top and can be reordered.
+• User manual with screenshots in all six languages, and an About window with links to the website, GitHub and Technical Support.
+• Improved new-version check and bug fixes.
 ```
 
 ## Recursos do produto (até 20 itens, 200 caracteres cada)

@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -36,6 +36,9 @@ public sealed class UpdateCheckTests
         Assert.False(UpdateEndpoints.IsNewer("1.1.0", "1.1.0"));
         Assert.False(UpdateEndpoints.IsNewer(" 1.1.0 ", "1.1.0"));
         Assert.True(UpdateEndpoints.IsNewer("1.2.0", "1.1.0"));
+        Assert.False(UpdateEndpoints.IsNewer("1.3.0", "1.3.0"));
+        Assert.True(UpdateEndpoints.IsNewer("1.4.0", "1.3.0"));
+        Assert.True(UpdateEndpoints.IsNewer("1.2.0", "1.3.0"));
     }
 
     [Fact]

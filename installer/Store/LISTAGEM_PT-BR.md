@@ -68,16 +68,15 @@ Editor de vídeo completo com inteligência artificial que roda 100% no seu comp
 ## O que há de novo nesta versão (até 1.500 caracteres)
 
 ```text
-Versão 1.1.0
-• Seis idiomas: português do Brasil, português de Portugal, inglês, espanhol, francês e alemão, com o manual em cada um.
-• Assistente virtual (Shift+F1): tira dúvidas a partir do manual, sem internet.
-• Gravação de tela, webcam e microfone.
-• Reenquadrar automaticamente para 9:16, 1:1 e 4:5, reproduzir ao contrário, curva de velocidade e exportar o quadro atual.
-• Atenuação automática da música sob a fala, mudança de voz, texto para fala e marcação de batidas.
-• Camadas de ajuste, clipes compostos, tela dividida, multicâmera e figurinhas.
-• Combinar cor, correção de lente, redução de ruído de vídeo e desfocar rostos.
-• Novo layout: o programa abre direto no editor, com os projetos recentes no menu Arquivo.
-• Mais segurança ao abrir projetos e mídias baixados da internet, e correções.
+Versão 1.3.0
+• Cortar e ampliar, texto simples e ferramentas de desenho direto na barra da linha do tempo.
+• Figurinhas de formas, pinos e pontos de interesse, com alças de ajuste no monitor.
+• Efeitos de vídeo organizados por categoria, com miniaturas e filtros.
+• Forma de onda do áudio na aba Áudio do clipe.
+• Gravação de uma janela específica, sem tela preta.
+• Trilhas novas entram no topo e podem ser reordenadas.
+• Manual com capturas de tela nos seis idiomas e janela Sobre com links para o site, o GitHub e o Suporte Técnico.
+• Melhorias na verificação de novas versões e correções.
 ```
 
 ## Recursos do produto (até 20 itens, 200 caracteres cada)

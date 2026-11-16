@@ -46,13 +46,13 @@ public static class UpdateEndpoints
     public static bool IsDue(DateTimeOffset? lastCheck, DateTimeOffset now) =>
         lastCheck is null || now > lastCheck.Value + Interval;
 
-    /// <summary>Há versão nova quando a publicada é diferente da instalada.</summary>
     /// <summary>Endereço que pode virar link clicável: só http/https; outro texto é mostrado como está.</summary>
     public static Uri? AsLink(string? value) =>
         Uri.TryCreate(value?.Trim(), UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttps || uri.Scheme == Uri.UriSchemeHttp)
             ? uri
             : null;
 
+    /// <summary>Há versão nova quando o campo "version" publicado é diferente da versão instalada (ex.: 1.3.0).</summary>
     public static bool IsNewer(string published, string installed) =>
         !string.Equals(published.Trim(), installed.Trim(), StringComparison.OrdinalIgnoreCase);
 }

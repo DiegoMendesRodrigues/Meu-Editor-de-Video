@@ -68,16 +68,15 @@ Ein vollständiger Videoeditor mit künstlicher Intelligenz, der zu 100 % auf Ih
 ## O que há de novo nesta versão (até 1.500 caracteres)
 
 ```text
-Version 1.1.0
-• Sechs Sprachen: Deutsch, Englisch, Spanisch, Französisch, brasilianisches und europäisches Portugiesisch, jeweils mit eigenem Handbuch.
-• Virtueller Assistent (Umschalt+F1): beantwortet Fragen offline anhand des Handbuchs.
-• Aufnahme von Bildschirm, Webcam und Mikrofon.
-• Automatisches Umrahmen auf 9:16, 1:1 und 4:5, Rückwärtswiedergabe, Geschwindigkeitsrampen und Export des aktuellen Bildes.
-• Automatisches Absenken der Musik unter Sprache, Stimmverzerrer, Text-zu-Sprache und Beat-Marker.
-• Einstellungsebenen, verschachtelte Clips, Splitscreen, Multicam und Sticker.
-• Farbabgleich, Objektivkorrektur, Video-Rauschunterdrückung und Verpixeln von Gesichtern.
-• Neues Layout: Das Programm öffnet direkt im Editor, die zuletzt verwendeten Projekte stehen im Menü Datei.
-• Sichereres Öffnen von aus dem Internet heruntergeladenen Projekten und Medien sowie Fehlerbehebungen.
+Version 1.3.0
+• Zuschneiden und Zoomen, einfacher Text und Zeichenwerkzeuge direkt in der Zeitleistenleiste.
+• Sticker mit Formen, Pins und Points of Interest, mit Anfassern im Monitor.
+• Videoeffekte nach Kategorien geordnet, mit Miniaturansichten und Filtern.
+• Audio-Wellenform im Tab „Audio“ des Clips.
+• Aufnahme eines einzelnen Fensters, ohne schwarzen Bildschirm.
+• Neue Spuren werden oben eingefügt und lassen sich neu anordnen.
+• Handbuch mit Screenshots in allen sechs Sprachen und Info-Fenster mit Links zur Website, zu GitHub und zum technischen Support.
+• Verbesserte Prüfung auf neue Versionen und Fehlerbehebungen.
 ```
 
 ## Recursos do produto (até 20 itens, 200 caracteres cada)
