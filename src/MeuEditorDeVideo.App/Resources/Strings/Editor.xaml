@@ -163,6 +163,15 @@
     <sys:String x:Key="Editor.Ferramenta.Mixer">Mixer de áudio</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Ima">Ímã de alinhamento (N)</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Ripple">Edição em cascata (ripple)</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.TextoSimples">Adicionar texto simples</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.Desenho">Ferramentas de desenho</sys:String>
+    <sys:String x:Key="Editor.Desenho.Retangulo">Retângulo</sys:String>
+    <sys:String x:Key="Editor.Desenho.Seta">Seta</sys:String>
+    <sys:String x:Key="Editor.Desenho.Elipse">Elipse</sys:String>
+    <sys:String x:Key="Editor.Desenho.Triangulo">Triângulo</sys:String>
+    <sys:String x:Key="Editor.Desenho.Linha">Linha</sys:String>
+    <sys:String x:Key="Editor.Desenho.Poligono">Polígono</sys:String>
+    <sys:String x:Key="Editor.Ferramenta.CortarAmpliar">Cortar e ampliar</sys:String>
     <sys:String x:Key="Editor.Ferramenta.Marcador">Adicionar marcador (M)</sys:String>
     <sys:String x:Key="Editor.Ferramenta.AdicionarTrilha">Adicionar trilha</sys:String>
     <sys:String x:Key="Editor.Ferramenta.AdicionarMidia">Adicionar à linha do tempo</sys:String>

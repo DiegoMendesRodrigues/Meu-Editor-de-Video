@@ -232,7 +232,7 @@ public sealed partial class CompositionInspectorViewModel : ObservableObject, IC
         _updating = true;
         try
         {
-            ClipTitle = asset?.Name ?? (clip.IsText ? ClipInspectorViewModel.TextTitle(clip.Text!) : clip.Shape is { } sh ? "◆  " + ShapePresets.Name(sh.Kind) : "Clipe");
+            ClipTitle = asset?.Name ?? (clip.IsText ? ClipInspectorViewModel.TextTitle(clip.Text!) : clip.Shape is { } sh ? "◆  " + ShapePresets.Name(sh) : "Clipe");
             IsShape = clip.IsShape;
             CanMask = asset is { HasVideo: true } || clip.IsShape;
             IsVideo = asset is { Kind: MediaKind.Video };
@@ -302,7 +302,7 @@ public sealed partial class CompositionInspectorViewModel : ObservableObject, IC
     private static double AspectOf(MediaAsset? a) => a is { Width: > 0, Height: > 0 } ? (double)a.Width / a.Height : 16.0 / 9;
 
     private string ClipName(Clip c) =>
-        AssetOf(c)?.Name ?? (c.IsText ? ClipInspectorViewModel.TextTitle(c.Text!) : c.Shape is { } s ? ShapePresets.Name(s.Kind) : "Clipe");
+        AssetOf(c)?.Name ?? (c.IsText ? ClipInspectorViewModel.TextTitle(c.Text!) : c.Shape is { } s ? ShapePresets.Name(s) : "Clipe");
 
     private static string MaskSummary(Mask m)
     {

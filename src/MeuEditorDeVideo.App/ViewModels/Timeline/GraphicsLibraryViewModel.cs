@@ -36,6 +36,17 @@ public sealed partial class GraphicsLibraryViewModel(TimelineViewModel timeline,
         _ => "◆",
     })).ToList();
 
+    /// <summary>Menu Ferramentas de desenho da barra de botões da linha do tempo (ícone Segoe Fluent Icons e forma).</summary>
+    public IReadOnlyList<GraphicPresetItem> DrawingTools { get; } =
+    [
+        new(new ShapePreset(ShapeKind.Rectangle, "Retângulo", new ShapeStyle { Kind = ShapeKind.Rectangle, Width = 480, Height = 270 }), ""),
+        new(new ShapePreset(ShapeKind.Arrow, "Seta", new ShapeStyle { Kind = ShapeKind.Arrow, Width = 420, Height = 160, FillColor = "#FFFF4D4D" }), ""),
+        new(new ShapePreset(ShapeKind.Ellipse, "Elipse", new ShapeStyle { Kind = ShapeKind.Ellipse, Width = 420, Height = 260, FillColor = "#FFFFB13D" }), ""),
+        new(new ShapePreset(ShapeKind.Polygon, "Triângulo", new ShapeStyle { Kind = ShapeKind.Polygon, Width = 320, Height = 280, FillColor = "#FF4DD08A", Sides = 3 }), "△"),
+        new(new ShapePreset(ShapeKind.Line, "Linha", new ShapeStyle { Kind = ShapeKind.Line, Width = 600, Height = 8, FillColor = "#FFFFFFFF" }), "╱"),
+        new(new ShapePreset(ShapeKind.Polygon, "Polígono", new ShapeStyle { Kind = ShapeKind.Polygon, Width = 320, Height = 320, FillColor = "#FFB36BFF", Sides = 5 }), "⬠"),
+    ];
+
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(AddPresetCommand))]
     public partial GraphicPresetItem? SelectedPreset { get; set; }

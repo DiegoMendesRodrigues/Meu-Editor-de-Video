@@ -511,6 +511,53 @@ public partial class EditorView : UserControl
     private Dialogs.MixerWindow? _mixer;
 
     /// <summary>Abre (ou traz para a frente) a janela não modal do mixer (RF130).</summary>
+    /// <summary>Cortar e ampliar: marca a área do clipe selecionado que deve ocupar o quadro.</summary>
+    private void CortarAmpliar_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not EditorViewModel { Inspector: { } inspector, Timeline: { } timeline }) return;
+        if (inspector.CropZoomTarget() is not { } target)
+        {
+            MessageBox.Show(Window.GetWindow(this), Localization.Translator.T("Selecione um clipe de vídeo ou imagem na linha do tempo."),
+                Localization.Translator.T("Cortar e ampliar"), MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+        var (clip, asset) = target;
+        var projects = (MeuEditorDeVideo.Application.Projects.IProjectService)App.Services.GetService(typeof(MeuEditorDeVideo.Application.Projects.IProjectService))!;
+        var factory = (Core.Media.IVideoFrameSourceFactory)App.Services.GetService(typeof(Core.Media.IVideoFrameSourceFactory))!;
+        string? path = null;
+        projects.Current?.Media.AvailablePaths.TryGetValue(asset.Id, out path);
+        var settings = timeline.Project!.Settings;
+        var fps = asset.FrameRate ?? timeline.FrameRate;
+        var frameDuration = TimeSpan.FromSeconds(fps.FrameDuration.TotalSeconds);
+        var playhead = timeline.Playhead >= clip.Start && timeline.Playhead < clip.End ? timeline.Playhead - clip.Start : Domain.Time.MediaTime.Zero;
+
+        using var source = factory.Create(false);
+        var gate = new object();
+        System.Windows.Media.Imaging.BitmapSource? Frame(TimeSpan offset)
+        {
+            if (path is null) return null;
+            var at = clip.Start + Domain.Time.MediaTime.FromSecondsApprox(offset.TotalSeconds);
+            var sourceTime = clip.FreezeAt ?? clip.SourceTimeAt(at);
+            Core.Media.BgraImage? img;
+            lock (gate) img = source.GetFrame(asset, path, sourceTime, 1280, 1280);
+            if (img is null) return null;
+            var bmp = System.Windows.Media.Imaging.BitmapSource.Create(img.Width, img.Height, 96, 96, PixelFormats.Bgra32, null, img.Pixels, img.Stride);
+            bmp.Freeze();
+            return bmp;
+        }
+
+        var t = clip.Transform;
+        var dialog = new Dialogs.CropZoomWindow(Frame, TimeSpan.FromSeconds(clip.Duration.TotalSeconds), frameDuration,
+            TimeSpan.FromSeconds(playhead.TotalSeconds), (asset.Width, asset.Height), (settings.Width, settings.Height),
+            (t.CropLeft, t.CropTop, t.CropRight, t.CropBottom))
+        {
+            Owner = Window.GetWindow(this),
+        };
+        if (dialog.ShowDialog() != true) return;
+        var (l, tp, r, b) = dialog.Crop;
+        inspector.ApplyCropZoom(clip.Id, l, tp, r, b);
+    }
+
     private void Mixer_Click(object sender, RoutedEventArgs e)
     {
         if (_mixer is not null)

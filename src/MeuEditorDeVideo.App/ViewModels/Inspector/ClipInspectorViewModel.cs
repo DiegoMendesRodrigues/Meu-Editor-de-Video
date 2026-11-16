@@ -305,7 +305,7 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         try
         {
             var asset = clip.MediaAssetId is { } id ? Timeline.Project?.FindMedia(id) : null;
-            ClipTitle = asset?.Name ?? (clip.IsText ? TextTitle(clip.Text!) : clip.Shape is { } shape ? "◆  " + ShapePresets.Name(shape.Kind)
+            ClipTitle = asset?.Name ?? (clip.IsText ? TextTitle(clip.Text!) : clip.Shape is { } shape ? "◆  " + ShapePresets.Name(shape)
                 : clip.IsAdjustment ? "☰  Camada de ajuste" : clip.IsCompound ? "⧉  Clipe composto" : "Clipe");
             foreach (var a in Animated) a.Refresh(clip, offset);
             foreach (var a in Animated3D) a.Refresh(clip, offset);
@@ -661,6 +661,15 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
         if (Current() is not { } cur) return;
         Timeline.Execute(new ApplyCropCommand(Timeline.SequenceId, cur.Clip.Id));
     }
+
+    /// <summary>Clipe de vídeo ou imagem selecionado para Cortar e ampliar, com a mídia; nulo se não houver.</summary>
+    public (Clip Clip, MediaAsset Asset)? CropZoomTarget() =>
+        Current() is { } cur && Timeline.Project is { } project && cur.Clip.MediaAssetId is { } id
+        && project.FindMedia(id) is { HasVideo: true, Width: > 0, Height: > 0 } asset ? (cur.Clip, asset) : null;
+
+    /// <summary>Aplica Cortar e ampliar ao clipe selecionado (frações da mídia em cada borda).</summary>
+    public void ApplyCropZoom(Guid clipId, double left, double top, double right, double bottom) =>
+        Timeline.Execute(new CropZoomCommand(Timeline.SequenceId, clipId, left, top, right, bottom));
 
     partial void OnReverseClipChanged(bool value)
     {

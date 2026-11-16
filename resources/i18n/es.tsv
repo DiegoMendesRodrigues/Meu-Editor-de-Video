@@ -2027,3 +2027,15 @@ d6a7cb8d	Pregunta al asistente
 30f9d184	SHA-256 no válido para '{0}' ({1}).
 a811c9b4	Tamaño no válido para '{0}' ({1}).
 2576a6be	Una LUT de este proyecto está en otro equipo de la red y se desactivó porque el proyecto vino de internet. Active el efecto en el panel Propiedades si confía en el origen del proyecto.
+1c4e7503	El área de recorte es demasiado pequeña.
+40b73d02	Arrastre sobre el fotograma para marcar el área que queda en el vídeo. Al aplicar, se amplía para ocupar la pantalla.
+506890a1	Recortar y ampliar
+b1f1f069	Posición en el clip
+05b337f9	Proporción del proyecto ({0})
+d0287f66	Proporción original
+9101f57d	Seleccione un clip de vídeo o imagen para recortar y ampliar.
+d511fafa	Área de recorte
+8ea091ea	Añadir texto simple
+be8ad579	Herramientas de dibujo
+c5c2ad6d	Triángulo
+2c7f3388	Polígono

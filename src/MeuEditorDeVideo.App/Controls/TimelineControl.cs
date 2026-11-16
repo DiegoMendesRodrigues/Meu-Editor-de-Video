@@ -450,7 +450,7 @@ public sealed class TimelineControl : TimelineSurface
         // Faixa do título.
         dc.DrawRectangle(Solid(110, 0, 0, 0), null, new Rect(rect.Left, rect.Top, rect.Width, 16));
         var label = asset?.Name ?? (clip.IsText ? ViewModels.Inspector.ClipInspectorViewModel.TextTitle(clip.Text!)
-            : clip.Shape is { } shapeStyle ? "◆ " + Domain.Editing.ShapePresets.Name(shapeStyle.Kind)
+            : clip.Shape is { } shapeStyle ? "◆ " + Domain.Editing.ShapePresets.Name(shapeStyle)
             : clip.IsAdjustment ? "☰ Camada de ajuste"
             : clip.IsCompound ? "⧉ " + (vm.Project?.Sequences.Find(s => s.Id == clip.NestedSequenceId)?.Name ?? "Clipe composto")
             : "Clipe");

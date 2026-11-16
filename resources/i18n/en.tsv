@@ -2230,3 +2230,15 @@ d6a7cb8d	Question for the assistant
 30f9d184	Invalid SHA-256 for '{0}' ({1}).
 a811c9b4	Invalid size for '{0}' ({1}).
 2576a6be	A LUT in this project is on another computer on the network and was turned off because the project came from the internet. Turn the effect on in the Properties panel if you trust where the project came from.
+1c4e7503	The crop area is too small.
+40b73d02	Drag on the frame to mark the area that stays in the video. When you apply, it is enlarged to fill the screen.
+506890a1	Crop and zoom
+b1f1f069	Position in the clip
+05b337f9	Project aspect ratio ({0})
+d0287f66	Original aspect ratio
+9101f57d	Select a video or image clip to crop and zoom.
+d511fafa	Crop area
+8ea091ea	Add simple text
+be8ad579	Drawing tools
+c5c2ad6d	Triangle
+2c7f3388	Polygon

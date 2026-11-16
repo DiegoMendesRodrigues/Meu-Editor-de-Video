@@ -35,6 +35,16 @@ public static class ShapePresets
     };
 
     public static string Name(ShapeKind kind) => All.FirstOrDefault(p => p.Kind == kind)?.Name ?? "Elemento gráfico";
+
+    /// <summary>Nome da forma para rótulos: distingue triângulo, hexágono e outros polígonos, e círculo de elipse.</summary>
+    public static string Name(ShapeStyle style) => style switch
+    {
+        { Kind: ShapeKind.Polygon, Sides: 3 } => "Triângulo",
+        { Kind: ShapeKind.Polygon, Sides: 6 } => "Hexágono",
+        { Kind: ShapeKind.Polygon } => "Polígono",
+        { Kind: ShapeKind.Ellipse } when Math.Abs(style.Width - style.Height) > 0.5 => "Elipse",
+        _ => Name(style.Kind),
+    };
 }
 
 /// <summary>Operações puras de máscaras, rastreamentos, vínculos e estabilização de um clipe (F9).</summary>

@@ -2246,3 +2246,15 @@ d6a7cb8d	Frage an den Assistenten
 30f9d184	Ungültiger SHA-256 für '{0}' ({1}).
 a811c9b4	Ungültige Größe für '{0}' ({1}).
 2576a6be	Eine LUT dieses Projekts liegt auf einem anderen Computer im Netzwerk und wurde deaktiviert, weil das Projekt aus dem Internet stammt. Aktivieren Sie den Effekt im Bereich Eigenschaften, wenn Sie der Herkunft des Projekts vertrauen.
+1c4e7503	Der Zuschneidebereich ist zu klein.
+40b73d02	Ziehen Sie im Bild, um den Bereich zu markieren, der im Video bleibt. Beim Anwenden wird er vergrößert, bis er den Bildschirm füllt.
+506890a1	Zuschneiden und vergrößern
+b1f1f069	Position im Clip
+05b337f9	Seitenverhältnis des Projekts ({0})
+d0287f66	Ursprüngliches Seitenverhältnis
+9101f57d	Wählen Sie einen Video- oder Bildclip zum Zuschneiden und Vergrößern aus.
+d511fafa	Zuschneidebereich
+8ea091ea	Einfachen Text hinzufügen
+be8ad579	Zeichenwerkzeuge
+c5c2ad6d	Dreieck
+2c7f3388	Polygon

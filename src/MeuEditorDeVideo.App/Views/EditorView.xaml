@@ -1183,6 +1183,49 @@
                                 Command="{Binding Timeline.RippleDeleteCommand}" ToolTip="{StaticResource Editor.Ferramenta.ExcluirRipple}">
                             <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE8BB;" />
                         </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.TextoSimples}" Style="{StaticResource Editor.Controle}"
+                                Command="{Binding TextLibrary.AddPresetCommand}" CommandParameter="{Binding TextLibrary.Presets[0]}" ToolTip="{StaticResource Editor.Ferramenta.TextoSimples}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE8D2;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Desenho}" Style="{StaticResource Editor.Controle}"
+                                IsEnabled="{Binding Timeline.HasSession}" Click="AdicionarTrilha_Click" ToolTip="{StaticResource Editor.Ferramenta.Desenho}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource Editor.Icone}" Text="&#x29C9;" FontFamily="Segoe UI Symbol" />
+                                <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE70D;" FontSize="9" Margin="3,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Retangulo}" AutomationProperties.Name="{StaticResource Editor.Desenho.Retangulo}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[0]}">
+                                        <MenuItem.Icon><TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE739;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets, Segoe UI Symbol" /></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Seta}" AutomationProperties.Name="{StaticResource Editor.Desenho.Seta}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[1]}">
+                                        <MenuItem.Icon><TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE72A;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets, Segoe UI Symbol" /></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Elipse}" AutomationProperties.Name="{StaticResource Editor.Desenho.Elipse}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[2]}">
+                                        <MenuItem.Icon><TextBlock Style="{StaticResource Editor.Icone}" Text="&#xEA3A;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets, Segoe UI Symbol" /></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Triangulo}" AutomationProperties.Name="{StaticResource Editor.Desenho.Triangulo}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[3]}">
+                                        <MenuItem.Icon><TextBlock Style="{StaticResource Editor.Icone}" Text="&#x25B3;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets, Segoe UI Symbol" /></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Linha}" AutomationProperties.Name="{StaticResource Editor.Desenho.Linha}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[4]}">
+                                        <MenuItem.Icon><TextBlock Style="{StaticResource Editor.Icone}" Text="&#x2571;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets, Segoe UI Symbol" /></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Poligono}" AutomationProperties.Name="{StaticResource Editor.Desenho.Poligono}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[5]}">
+                                        <MenuItem.Icon><TextBlock Style="{StaticResource Editor.Icone}" Text="&#x2B20;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets, Segoe UI Symbol" /></MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.CortarAmpliar}" Style="{StaticResource Editor.Controle}"
+                                Click="CortarAmpliar_Click" IsEnabled="{Binding Timeline.HasSelection}" ToolTip="{StaticResource Editor.Ferramenta.CortarAmpliar}">
+                            <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE7A8;" />
+                        </Button>
                         <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Marcador}" Style="{StaticResource Editor.Controle}"
                                 Command="{Binding Timeline.AddMarkerCommand}" ToolTip="{StaticResource Editor.Ferramenta.Marcador}">
                             <TextBlock Style="{StaticResource Editor.Icone}" Text="&#xE7C1;" />

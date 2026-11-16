@@ -2231,3 +2231,15 @@ d6a7cb8d	Question à l'assistant
 30f9d184	SHA-256 invalide pour '{0}' ({1}).
 a811c9b4	Taille invalide pour '{0}' ({1}).
 2576a6be	Une LUT de ce projet se trouve sur un autre ordinateur du réseau et a été désactivée, car le projet vient d'Internet. Activez l'effet dans le panneau Propriétés si vous faites confiance à l'origine du projet.
+1c4e7503	La zone de recadrage est trop petite.
+40b73d02	Faites glisser sur l'image pour marquer la zone qui reste dans la vidéo. À l'application, elle est agrandie pour remplir l'écran.
+506890a1	Recadrer et agrandir
+b1f1f069	Position dans le clip
+05b337f9	Format du projet ({0})
+d0287f66	Format d'origine
+9101f57d	Sélectionnez un clip vidéo ou image à recadrer et agrandir.
+d511fafa	Zone de recadrage
+8ea091ea	Ajouter un texte simple
+be8ad579	Outils de dessin
+c5c2ad6d	Triangle
+2c7f3388	Polygone
