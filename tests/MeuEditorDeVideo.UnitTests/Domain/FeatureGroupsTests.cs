@@ -325,7 +325,7 @@ public sealed class FeatureGroupsTests
         var tracks = p.MainSequence.Tracks.Count;
         p = new AddNarrationCommand(p.MainSequence.Id, voice.Id, S(5)).Apply(p);
         Assert.Equal(tracks + 1, p.MainSequence.Tracks.Count);
-        var narration = p.MainSequence.Tracks[^1];
+        var narration = p.MainSequence.Tracks[0];
         Assert.Equal(TrackKind.Audio, narration.Kind);
         Assert.Equal(S(5), narration.Clips.Single().Start);
 

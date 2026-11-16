@@ -161,7 +161,8 @@ public sealed record AddTrackCommand(Guid SequenceId, TrackKind Kind, string Nam
     {
         var seq = project.Sequences.Find(s => s.Id == SequenceId) ?? throw new EditRejectedException("Sequência não encontrada.");
         var track = new Track { Id = TrackId, Kind = Kind, Name = Name };
-        var index = Math.Clamp(Index ?? seq.Tracks.Count, 0, seq.Tracks.Count);
+        // Trilhas novas entram no topo, acima de todas, salvo índice explícito.
+        var index = Math.Clamp(Index ?? 0, 0, seq.Tracks.Count);
         return project.WithSequence(seq with { Tracks = seq.Tracks.Insert(index, track) });
     }
 }

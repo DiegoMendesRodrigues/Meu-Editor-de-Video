@@ -84,12 +84,19 @@ public sealed partial class ScreenRecorder : IScreenRecorder
         if (o.Screen)
         {
             args.AddRange(["-thread_queue_size", "1024", "-f", "gdigrab", "-framerate", fps, "-draw_mouse", o.ShowCursor ? "1" : "0"]);
-            if (o.Area is { } a)
+            if (o.Window is { } win)
+            {
+                args.AddRange(["-i", "title=" + win.Title]);
+            }
+            else if (o.Area is { } a)
             {
                 var inv = CultureInfo.InvariantCulture;
-                args.AddRange(["-offset_x", a.X.ToString(inv), "-offset_y", a.Y.ToString(inv), "-video_size", $"{a.Width}x{a.Height}"]);
+                args.AddRange(["-offset_x", a.X.ToString(inv), "-offset_y", a.Y.ToString(inv), "-video_size", $"{a.Width}x{a.Height}", "-i", "desktop"]);
             }
-            args.AddRange(["-i", "desktop"]);
+            else
+            {
+                args.AddRange(["-i", "desktop"]);
+            }
             screen = index++;
         }
         if (o.Webcam is { } webcam)
@@ -179,6 +186,87 @@ public sealed partial class ScreenRecorder : IScreenRecorder
             if (previous != IntPtr.Zero) SetThreadDpiAwarenessContext(previous);
         }
     }
+
+    public IReadOnlyList<CaptureWindow> Windows(ScreenArea? area)
+    {
+        if (!OperatingSystem.IsWindows()) return [];
+        var previous = SetThreadDpiAwarenessContext(DpiAwarenessPerMonitorV2);
+        try
+        {
+            var own = Environment.ProcessId;
+            var found = new List<CaptureWindow>();
+            var titles = new HashSet<string>(StringComparer.Ordinal);
+            EnumWindows((hwnd, _) =>
+            {
+                if (!IsWindowVisible(hwnd) || IsIconic(hwnd)) return true;
+                if ((GetWindowLongPtrW(hwnd, GwlExStyle).ToInt64() & WsExToolWindow) != 0) return true;
+                if (DwmGetWindowAttribute(hwnd, DwmwaCloaked, out var cloaked, sizeof(int)) == 0 && cloaked != 0) return true;
+                var length = GetWindowTextLengthW(hwnd);
+                if (length == 0) return true;
+                var buffer = new char[length + 1];
+                var title = new string(buffer, 0, GetWindowTextW(hwnd, buffer, buffer.Length)).Trim();
+                if (title.Length == 0 || title == "Program Manager") return true;
+                GetWindowThreadProcessId(hwnd, out var pid);
+                if (pid == own || !GetWindowRect(hwnd, out var r) || r.Right - r.Left < 80 || r.Bottom - r.Top < 60) return true;
+                if (area is { } a)
+                {
+                    var cx = (r.Left + r.Right) / 2;
+                    var cy = (r.Top + r.Bottom) / 2;
+                    if (cx < a.X || cx >= a.X + a.Width || cy < a.Y || cy >= a.Y + a.Height) return true;
+                }
+                // O gdigrab localiza a janela pelo título: títulos repetidos seriam ambíguos.
+                if (!titles.Add(title)) return true;
+                string process;
+                try { using var p = Process.GetProcessById((int)pid); process = p.ProcessName; }
+                catch (ArgumentException) { process = ""; }
+                catch (InvalidOperationException) { process = ""; }
+                found.Add(new CaptureWindow(hwnd.ToInt64(), title, process));
+                return true;
+            }, IntPtr.Zero);
+            return found;
+        }
+        finally
+        {
+            if (previous != IntPtr.Zero) SetThreadDpiAwarenessContext(previous);
+        }
+    }
+
+    private const int GwlExStyle = -20;
+    private const long WsExToolWindow = 0x80;
+    private const int DwmwaCloaked = 14;
+
+    private delegate bool WindowEnumProc(IntPtr hwnd, IntPtr data);
+
+    [DllImport("user32.dll")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+    private static extern bool EnumWindows(WindowEnumProc callback, IntPtr data);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool IsWindowVisible(IntPtr hwnd);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool IsIconic(IntPtr hwnd);
+
+    [LibraryImport("user32.dll")]
+    private static partial IntPtr GetWindowLongPtrW(IntPtr hwnd, int index);
+
+    [LibraryImport("user32.dll")]
+    private static partial int GetWindowTextLengthW(IntPtr hwnd);
+
+    [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16)]
+    private static partial int GetWindowTextW(IntPtr hwnd, [Out] char[] text, int max);
+
+    [LibraryImport("user32.dll")]
+    private static partial uint GetWindowThreadProcessId(IntPtr hwnd, out uint processId);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool GetWindowRect(IntPtr hwnd, out Rect rect);
+
+    [LibraryImport("dwmapi.dll")]
+    private static partial int DwmGetWindowAttribute(IntPtr hwnd, int attribute, out int value, int size);
 
     private static readonly IntPtr DpiAwarenessPerMonitorV2 = new(-4);
 

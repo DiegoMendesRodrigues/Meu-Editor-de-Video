@@ -162,6 +162,10 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     public IReadOnlyList<LibraryEffectItem> LibraryColor { get; } =
         EffectCatalog.All.Where(d => d.Category == EffectCategory.Color).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "") { HasPreview = true }).ToList();
 
+    /// <summary>Filtros (seção Filtros da biblioteca), com a categoria de cada um.</summary>
+    public IReadOnlyList<LibraryEffectItem> LibraryFilters { get; } =
+        FilterPresets.All.Select(p => new LibraryEffectItem(p.Key, p.Name, "Filtro: muda a cor, o clima e o estilo de uma vez (fica editável na aba Efeitos).", "") { Category = p.Category, HasPreview = true }).ToList();
+
     /// <summary>Descrição do efeito pronto: a do primeiro efeito do catálogo que ele usa.</summary>
     private static string PresetDescription(VideoEffectPreset p) =>
         p.Build() is [var first, ..] && EffectCatalog.Find(first.Type) is { } d ? d.Description : "";
@@ -535,6 +539,12 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     public void AddEffect(string type)
     {
         if (!EnsureClip()) return;
+        if (FilterPresets.Find(type) is { } filter)
+        {
+            var effects = filter.Build();
+            UpdateClip(c => c with { Effects = c.Effects.AddRange(effects) }, $"Filtro: {Localization.Translator.T(filter.Name)}");
+            return;
+        }
         if (VideoEffectPresets.Find(type) is { } preset)
         {
             var added = preset.Build();

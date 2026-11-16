@@ -180,6 +180,14 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="Editor.Nav.Filters" TargetType="Button" BasedOn="{StaticResource Editor.NavBase}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SelectedSection}" Value="{x:Static vm:LibrarySection.Filters}">
+                    <Setter Property="BorderBrush" Value="{DynamicResource Med.Accent}" />
+                    <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="Editor.Nav.Color" TargetType="Button" BasedOn="{StaticResource Editor.NavBase}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding SelectedSection}" Value="{x:Static vm:LibrarySection.Color}">
@@ -502,6 +510,13 @@
                                     <TextBlock Text="{StaticResource Editor.Biblioteca.Efeitos}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
                                 </StackPanel>
                             </Button>
+                            <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.Filtros}" Style="{StaticResource Editor.Nav.Filters}" Command="{Binding SelectSectionCommand}"
+                                    CommandParameter="{x:Static vm:LibrarySection.Filters}">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource Med.Icon}" Text="&#xE71C;" FontSize="18" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{StaticResource Editor.Biblioteca.Filtros}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </Button>
                             <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.Cor}" Style="{StaticResource Editor.Nav.Color}" Command="{Binding SelectSectionCommand}"
                                     CommandParameter="{x:Static vm:LibrarySection.Color}">
                                 <StackPanel>
@@ -730,6 +745,9 @@
                             <ComboBox DockPanel.Dock="Top" Margin="4,0,4,8" AutomationProperties.Name="Categoria de efeitos"
                                       ItemsSource="{Binding EffectCategories}" SelectedItem="{Binding SelectedEffectCategory}" DisplayMemberPath="Label"
                                       Visibility="{Binding IsVideoEffectSection, Converter={StaticResource Editor.BoolToVis}}" />
+                            <ComboBox DockPanel.Dock="Top" Margin="4,0,4,8" AutomationProperties.Name="Categoria de filtros"
+                                      ItemsSource="{Binding FilterCategories}" SelectedItem="{Binding SelectedFilterCategory}" DisplayMemberPath="Label"
+                                      Visibility="{Binding IsFilterSection, Converter={StaticResource Editor.BoolToVis}}" />
                             <Button DockPanel.Dock="Bottom" Content="Aplicar ao clipe selecionado" Margin="4,8,4,0" HorizontalAlignment="Stretch"
                                     AutomationProperties.Name="Aplicar ao clipe selecionado"
                                     Command="{Binding ApplySectionItemCommand}" CommandParameter="{Binding SelectedItem, ElementName=ListaEfeitos}" />

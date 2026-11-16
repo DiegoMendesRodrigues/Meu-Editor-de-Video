@@ -18,11 +18,18 @@ public sealed record ScreenArea(int Number, int X, int Y, int Width, int Height,
     public override string ToString() => $"Tela {Number}{(IsPrimary ? " (principal)" : "")} — {Width} × {Height}";
 }
 
+/// <summary>Uma janela aberta que pode ser gravada sozinha (pelo título, como o gdigrab a encontra).</summary>
+public sealed record CaptureWindow(long Handle, string Title, string ProcessName)
+{
+    public override string ToString() => string.IsNullOrEmpty(ProcessName) ? Title : $"{Title} ({ProcessName})";
+}
+
 /// <summary>O que gravar: a tela (um monitor ou todos), uma webcam e um microfone, ao mesmo tempo.</summary>
 /// <param name="Webcam">Nome da câmera; nulo = sem webcam.</param>
 /// <param name="Microphone">Nome do microfone; nulo = sem som.</param>
 /// <param name="WebcamSize">Largura da webcam em fração da largura da tela gravada (só com a tela).</param>
 /// <param name="Area">Monitor a gravar; nulo = todos os monitores.</param>
+/// <param name="Window">Janela a gravar no lugar da tela inteira; nulo = a tela (ou as telas) inteira.</param>
 public sealed record ScreenRecordingOptions(
     string OutputPath,
     bool Screen,
@@ -32,7 +39,8 @@ public sealed record ScreenRecordingOptions(
     bool ShowCursor = true,
     WebcamCorner Corner = WebcamCorner.BottomRight,
     double WebcamSize = 0.1,
-    ScreenArea? Area = null);
+    ScreenArea? Area = null,
+    CaptureWindow? Window = null);
 
 /// <summary>Gravação em andamento.</summary>
 public interface IScreenRecording : IAsyncDisposable
@@ -55,6 +63,9 @@ public interface IScreenRecorder
 
     /// <summary>Monitores conectados (o principal primeiro).</summary>
     IReadOnlyList<ScreenArea> Screens();
+
+    /// <summary>Janelas visíveis (não minimizadas) cujo centro está na tela <paramref name="area"/> (nula = qualquer tela).</summary>
+    IReadOnlyList<CaptureWindow> Windows(ScreenArea? area);
 
     /// <exception cref="InvalidOperationException">Não foi possível começar (mensagem para o usuário).</exception>
     Task<IScreenRecording> StartAsync(ScreenRecordingOptions options, CancellationToken ct = default);

@@ -70,7 +70,7 @@ public sealed record AddNarrationCommand(Guid SequenceId, Guid AssetId, MediaTim
         if (track is null)
         {
             track = new Track { Id = Guid.NewGuid(), Kind = TrackKind.Audio, Name = TrackName };
-            seq = seq with { Tracks = seq.Tracks.Add(track) };
+            seq = seq with { Tracks = seq.Tracks.Insert(0, track) };
             project = project.WithSequence(seq);
         }
         return new AddMediaToTimelineCommand(SequenceId, AssetId, null, track.Id, start, MediaTime.Zero) { Description = Description }.Apply(project);

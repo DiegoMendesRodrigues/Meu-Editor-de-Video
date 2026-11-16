@@ -29,6 +29,7 @@ public enum LibrarySection
     Effects,
     Color,
     AI,
+    Filters,
 }
 
 /// <summary>Item do painel de histórico (RF014). Index = quantidade de ações aplicadas após clicar.</summary>
@@ -100,6 +101,7 @@ public sealed partial class EditorViewModel(
         OnPropertyChanged(nameof(IsMediaSection));
         OnPropertyChanged(nameof(IsEffectSection));
         OnPropertyChanged(nameof(IsVideoEffectSection));
+        OnPropertyChanged(nameof(IsFilterSection));
         OnPropertyChanged(nameof(IsTextSection));
         OnPropertyChanged(nameof(IsGraphicsSection));
         OnPropertyChanged(nameof(IsAiSection));
@@ -122,11 +124,28 @@ public sealed partial class EditorViewModel(
         }
     }
 
+    /// <summary>Categorias da seção Filtros (nome traduzido; o valor é a chave pt-BR).</summary>
+    public IReadOnlyList<Inspector.Option<string>> FilterCategories { get; } =
+        FilterPresets.Categories.Select(c => new Inspector.Option<string>(c, Localization.Translator.T(c))).ToList();
+
+    /// <summary>Categoria mostrada na seção Filtros.</summary>
+    public Inspector.Option<string>? SelectedFilterCategory
+    {
+        get => field ??= FilterCategories[0];
+        set
+        {
+            if (SetProperty(ref field, value)) OnPropertyChanged(nameof(SectionItems));
+        }
+    }
+
+    /// <summary>Seção Filtros: mostra a escolha de categoria dos filtros.</summary>
+    public bool IsFilterSection => SelectedSection == LibrarySection.Filters;
+
     /// <summary>Seções de mídia mostram a biblioteca.</summary>
     public bool IsMediaSection => SelectedSection is LibrarySection.Media or LibrarySection.Videos or LibrarySection.Images or LibrarySection.Audio;
 
     /// <summary>Transições, efeitos e cor: catálogo aplicável ao clipe selecionado (F6).</summary>
-    public bool IsEffectSection => SelectedSection is LibrarySection.Transitions or LibrarySection.Effects or LibrarySection.Color;
+    public bool IsEffectSection => SelectedSection is LibrarySection.Transitions or LibrarySection.Effects or LibrarySection.Filters or LibrarySection.Color;
 
     /// <summary>Seção Efeitos: mostra a escolha de categoria.</summary>
     public bool IsVideoEffectSection => SelectedSection == LibrarySection.Effects;
@@ -144,6 +163,7 @@ public sealed partial class EditorViewModel(
     {
         (LibrarySection.Transitions, { } i) => i.LibraryTransitions,
         (LibrarySection.Effects, { } i) => i.LibraryEffects.Where(e => e.Category == (SelectedEffectCategory?.Value ?? VideoEffectPresets.Categories[0])).ToList(),
+        (LibrarySection.Filters, { } i) => i.LibraryFilters.Where(e => e.Category == (SelectedFilterCategory?.Value ?? FilterPresets.Categories[0])).ToList(),
         (LibrarySection.Color, { } i) => i.LibraryColor,
         _ => [],
     };

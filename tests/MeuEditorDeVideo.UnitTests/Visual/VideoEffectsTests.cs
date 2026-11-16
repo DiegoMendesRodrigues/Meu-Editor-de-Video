@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.App.ViewModels.Inspector;
+﻿using MeuEditorDeVideo.App.ViewModels.Inspector;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;
@@ -137,5 +137,32 @@ public sealed class VideoEffectsTests
         }
         // Toda categoria, menos Utilitários (efeitos básicos do catálogo), tem efeitos prontos.
         Assert.All(VideoEffectPresets.Categories.Where(c => c != VideoEffectPresets.Utilities), c => Assert.Contains(presets, p => p.Category == c));
+    }
+
+    [Fact]
+    public void Filters_have_unique_keys_known_categories_and_color_effects()
+    {
+        var filters = FilterPresets.All;
+        Assert.Equal(filters.Count, filters.Select(f => f.Key).Distinct().Count());
+        foreach (var f in filters)
+        {
+            Assert.StartsWith(FilterPreset.Prefix, f.Key, StringComparison.Ordinal);
+            Assert.Contains(f.Category, FilterPresets.Categories);
+            Assert.NotEmpty(f.Build());
+            Assert.All(f.Build(), e => Assert.NotNull(EffectCatalog.Find(e.Type)));
+            Assert.Same(f, FilterPresets.Find(f.Key));
+        }
+        Assert.All(FilterPresets.Categories, c => Assert.Contains(filters, f => f.Category == c));
+    }
+
+    [Fact]
+    public void Every_filter_changes_the_image()
+    {
+        var source = Gradient();
+        foreach (var f in FilterPresets.All)
+        {
+            var (img, _) = EffectProcessor.Apply(source, f.Build(), new EffectContext(1, 0));
+            Assert.NotEqual(source.Pixels, img.Pixels);
+        }
     }
 }

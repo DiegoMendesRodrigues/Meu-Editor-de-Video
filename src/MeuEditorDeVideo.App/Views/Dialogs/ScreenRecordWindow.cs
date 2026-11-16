@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Automation;
@@ -28,6 +28,9 @@ public sealed partial class ScreenRecordWindow : Window
     private readonly CheckBox _screen;
     private readonly TextBlock _screensLabel;
     private readonly ComboBox _screens;
+    private readonly ComboBox _mode;
+    private readonly TextBlock _windowsLabel;
+    private readonly ComboBox _windows;
     private readonly CheckBox _cursor;
     private readonly ComboBox _camera;
     private readonly ComboBox _mic;
@@ -71,8 +74,16 @@ public sealed partial class ScreenRecordWindow : Window
             _screensLabel.Visibility = Visibility.Collapsed;
             _screens.Visibility = Visibility.Collapsed;
         }
-        _screen.Checked += (_, _) => _screens.IsEnabled = true;
-        _screen.Unchecked += (_, _) => _screens.IsEnabled = false;
+        // Depois da tela: gravar a tela toda ou só uma janela aberta nela.
+        _mode = Combo("O que gravar", ["Tela inteira", "Apenas uma janela"]);
+        _windowsLabel = Label("Janela a gravar");
+        _windows = new ComboBox { Margin = new Thickness(0, 0, 0, 8) };
+        AutomationProperties.SetName(_windows, "Janela a gravar");
+        _mode.SelectionChanged += (_, _) => RefreshWindows();
+        _screens.SelectionChanged += (_, _) => RefreshWindows();
+        _windows.DropDownOpened += (_, _) => RefreshWindows(keepSelection: true);
+        _screen.Checked += (_, _) => { _screens.IsEnabled = true; _mode.IsEnabled = true; _windows.IsEnabled = true; };
+        _screen.Unchecked += (_, _) => { _screens.IsEnabled = false; _mode.IsEnabled = false; _windows.IsEnabled = false; };
         _cursor = Check("Mostrar o cursor do mouse", true);
         _camera = Combo("Webcam", [None]);
         _mic = Combo("Microfone", [None]);
@@ -85,6 +96,10 @@ public sealed partial class ScreenRecordWindow : Window
         _options.Children.Add(_screen);
         _options.Children.Add(_screensLabel);
         _options.Children.Add(_screens);
+        _options.Children.Add(Label("O que gravar"));
+        _options.Children.Add(_mode);
+        _options.Children.Add(_windowsLabel);
+        _options.Children.Add(_windows);
         _options.Children.Add(_cursor);
         _options.Children.Add(Label("Webcam"));
         _options.Children.Add(_camera);
@@ -93,6 +108,7 @@ public sealed partial class ScreenRecordWindow : Window
         _options.Children.Add(Label("Microfone"));
         _options.Children.Add(_mic);
         _options.Children.Add(_insert);
+        RefreshWindows();
 
         var hint = new TextBlock
         {
@@ -187,8 +203,18 @@ public sealed partial class ScreenRecordWindow : Window
             return;
         }
         var area = _screen.IsChecked == true && _screens.Visibility == Visibility.Visible ? _screens.SelectedItem as ScreenArea : null;
+        CaptureWindow? window = null;
+        if (_screen.IsChecked == true && _mode.SelectedIndex == 1)
+        {
+            window = _windows.SelectedItem as CaptureWindow;
+            if (window is null)
+            {
+                _status.Text = "Escolha a janela a gravar.";
+                return;
+            }
+        }
         var options = new ScreenRecordingOptions(_outputPath, _screen.IsChecked == true, camera, mic,
-            ShowCursor: _cursor.IsChecked == true, Corner: (WebcamCorner)Math.Max(0, _corner.SelectedIndex), Area: area);
+            ShowCursor: _cursor.IsChecked == true, Corner: (WebcamCorner)Math.Max(0, _corner.SelectedIndex), Area: area, Window: window);
 
         if (!RegisterStopKey())
         {
@@ -362,6 +388,23 @@ public sealed partial class ScreenRecordWindow : Window
     [LibraryImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool UnregisterHotKey(IntPtr hwnd, int id);
+
+    /// <summary>Mostra a lista de janelas só no modo "Apenas uma janela", com as janelas abertas na tela escolhida.</summary>
+    private void RefreshWindows(bool keepSelection = false)
+    {
+        var single = _mode.SelectedIndex == 1;
+        _windowsLabel.Visibility = single ? Visibility.Visible : Visibility.Collapsed;
+        _windows.Visibility = single ? Visibility.Visible : Visibility.Collapsed;
+        if (!single) return;
+        var previous = (_windows.SelectedItem as CaptureWindow)?.Title;
+        var area = _screens.Visibility == Visibility.Visible ? _screens.SelectedItem as ScreenArea : null;
+        IReadOnlyList<CaptureWindow> windows;
+        try { windows = _recorder.Windows(area); }
+        catch (System.ComponentModel.Win32Exception) { windows = []; }
+        _windows.ItemsSource = windows;
+        _windows.SelectedItem = (keepSelection ? windows.FirstOrDefault(w => w.Title == previous) : null) ?? windows.FirstOrDefault();
+        if (windows.Count == 0) _status.Text = "Nenhuma janela aberta nesta tela.";
+    }
 
     private static CheckBox Check(string text, bool value)
     {

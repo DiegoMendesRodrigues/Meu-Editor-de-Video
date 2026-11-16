@@ -21,7 +21,6 @@ public sealed record PlaceGeneratedAudioCommand(Guid SequenceId, IReadOnlyList<G
         if (Items.Count == 0 || TrackNames.Count == 0) throw new EditRejectedException("Nada a inserir.");
         var seq = RequireSequence(project, SequenceId);
         var first = Require(seq, Items[0].SourceClipId).Clip;
-        var index = seq.Tracks.FindIndex(t => t.Clips.Any(c => c.Id == first.Id)) + 1;
 
         var tracks = TrackNames.Select(n => new List<Clip>()).ToList();
         foreach (var item in Items)
@@ -38,7 +37,7 @@ public sealed record PlaceGeneratedAudioCommand(Guid SequenceId, IReadOnlyList<G
         for (var k = 0; k < TrackNames.Count; k++)
         {
             var track = WithClips(new Track { Id = Guid.NewGuid(), Kind = TrackKind.Audio, Name = TrackNames[k] }, tracks[k].OrderBy(c => c.Start.Ticks));
-            seq = seq with { Tracks = seq.Tracks.Insert(Math.Clamp(index + k, 0, seq.Tracks.Count), track) };
+            seq = seq with { Tracks = seq.Tracks.Insert(Math.Min(k, seq.Tracks.Count), track) };
         }
 
         if (MuteSource)

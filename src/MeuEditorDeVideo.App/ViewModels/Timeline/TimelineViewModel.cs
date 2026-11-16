@@ -632,7 +632,7 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
         var baseName = image ? "Imagem" : "Áudio";
         var n = 1;
         while (seq.Tracks.Exists(t => t.Name == $"{baseName} {n}")) n++;
-        var add = new AddTrackCommand(SequenceId, kind, $"{baseName} {n}", image ? 0 : null);
+        var add = new AddTrackCommand(SequenceId, kind, $"{baseName} {n}", 0);
         var media = new AddMediaToTimelineCommand(SequenceId, asset.Id, image ? add.TrackId : null, image ? null : add.TrackId, at, MediaTime.FromSeconds(5));
         if (Execute(new CompositeCommand(media.Description, [add, media])))
         {
@@ -664,9 +664,8 @@ public sealed partial class TimelineViewModel : ObservableObject, IDisposable
         };
         var n = seq.Tracks.Count(t => t.Kind == kind) + 1;
         while (seq.Tracks.Any(t => t.Name == $"{baseName} {n}")) n++;
-        // Trilhas visuais entram acima das de áudio; áudio entra no fim.
-        int? index = kind == TrackKind.Audio ? null : seq.Tracks.FindLastIndex(t => t.Kind != TrackKind.Audio) + 1;
-        Execute(new AddTrackCommand(SequenceId, kind, $"{baseName} {n}", index));
+        // Trilhas novas entram sempre no topo, acima de todas as outras.
+        Execute(new AddTrackCommand(SequenceId, kind, $"{baseName} {n}", 0));
     }
 
     public void RenameTrack(TrackHeaderViewModel track)

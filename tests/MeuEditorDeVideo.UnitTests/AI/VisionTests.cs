@@ -429,13 +429,13 @@ public sealed class VisionTests : IDisposable
         var result = new PlaceGeneratedAudioCommand(seq.Id, [new(clip.Id, [voice.Id, ambient.Id])], ["Voz (IA)", "Ambiente (IA)"], true).Apply(p);
         var tracks = result.MainSequence.Tracks;
         Assert.Equal(seq.Tracks.Count + 2, tracks.Count);
-        Assert.Equal("Voz (IA)", tracks[audioIndex + 1].Name);
-        Assert.Equal("Ambiente (IA)", tracks[audioIndex + 2].Name);
-        var placed = tracks[audioIndex + 1].Clips.Single();
+        Assert.Equal("Voz (IA)", tracks[0].Name);
+        Assert.Equal("Ambiente (IA)", tracks[1].Name);
+        var placed = tracks[0].Clips.Single();
         Assert.Equal(voice.Id, placed.MediaAssetId);
         Assert.Equal(clip.Start, placed.Start);
         Assert.Equal(clip.Duration, placed.Duration);
         Assert.Equal(MediaTime.Zero, placed.SourceIn);
-        Assert.Equal(0, tracks[audioIndex].Clips.Single().Volume);
+        Assert.Equal(0, tracks[audioIndex + 2].Clips.Single().Volume);
     }
 }

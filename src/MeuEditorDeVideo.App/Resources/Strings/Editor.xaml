@@ -100,6 +100,7 @@
     <sys:String x:Key="Editor.Biblioteca.Textos">Textos</sys:String>
     <sys:String x:Key="Editor.Biblioteca.Transicoes">Transições</sys:String>
     <sys:String x:Key="Editor.Biblioteca.Efeitos">Efeitos</sys:String>
+    <sys:String x:Key="Editor.Biblioteca.Filtros">Filtros</sys:String>
     <sys:String x:Key="Editor.Biblioteca.Cor">Cor</sys:String>
     <sys:String x:Key="Editor.Biblioteca.IA">IA</sys:String>
     <sys:String x:Key="Editor.Biblioteca.Pesquisar">Pesquisar…</sys:String>

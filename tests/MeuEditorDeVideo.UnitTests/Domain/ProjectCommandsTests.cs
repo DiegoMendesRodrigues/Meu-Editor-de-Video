@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Domain.Editing;
+﻿using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 
@@ -189,5 +189,18 @@ public class ProjectCommandsTests
         Assert.False(history.CanUndo);
         Assert.Equal("Projeto", history.Current.Name);
         Assert.Equal(4, history.Current.MainSequence.Tracks.Count);
+    }
+
+    [Fact]
+    public void New_tracks_are_added_on_top_of_all_others()
+    {
+        var p = Project.CreateNew("Trilhas", new ProjectSettings(), StorageMode.Linked, Now);
+        var seq = p.MainSequence;
+        foreach (var kind in new[] { TrackKind.Audio, TrackKind.Video, TrackKind.Text })
+        {
+            var add = new AddTrackCommand(seq.Id, kind, $"Nova {kind}");
+            p = add.Apply(p);
+            Assert.Equal(add.TrackId, p.MainSequence.Tracks[0].Id);
+        }
     }
 }

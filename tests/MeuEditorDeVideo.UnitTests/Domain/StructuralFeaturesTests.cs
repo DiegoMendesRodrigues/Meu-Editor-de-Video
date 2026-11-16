@@ -367,6 +367,13 @@ public sealed class StructuralFeaturesTests
         Assert.Contains("-offset_x -1280 -offset_y 0 -video_size 1280x1024 -i desktop", one);
         Assert.Contains("[1:v]scale=160:-2[cam]", one);
 
+        // Uma janela só: o gdigrab a localiza pelo título, sem recorte da área de trabalho.
+        var window = new CaptureWindow(42, "Bloco de Notas", "notepad");
+        var win = string.Join(' ', ScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", true, null, null, Area: second, Window: window), 1280));
+        Assert.Contains("-i title=Bloco de Notas", win);
+        Assert.DoesNotContain("-offset_x", win);
+        Assert.DoesNotContain("desktop", win);
+
         var camOnly = string.Join(' ', ScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", false, "Cam", null), 1920));
         Assert.DoesNotContain("gdigrab", camOnly);
         Assert.Contains("[0:v]scale=trunc", camOnly);

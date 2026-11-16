@@ -234,8 +234,7 @@ public sealed record CreateCompoundClipCommand(Guid SequenceId, IReadOnlyList<Gu
         if (target is null)
         {
             target = new Track { Id = NewTrackId, Kind = TrackKind.Video, Name = Name };
-            var firstVisual = seq.Tracks.FindIndex(t => t.Kind is TrackKind.Video or TrackKind.Image);
-            seq = seq with { Tracks = seq.Tracks.Insert(firstVisual < 0 ? 0 : firstVisual, target) };
+            seq = seq with { Tracks = seq.Tracks.Insert(0, target) };
         }
         seq = ReplaceTrack(seq, Place(target, compound));
         return (project with { Sequences = project.Sequences.Add(nested) }).WithSequence(seq);
@@ -349,8 +348,7 @@ public sealed record AddOverlayCommand(Guid SequenceId, Guid AssetId, MediaTime 
         if (video is null)
         {
             video = new Track { Id = Guid.NewGuid(), Kind = kind, Name = TrackName };
-            var firstVisual = seq.Tracks.FindIndex(t => t.Kind is TrackKind.Video or TrackKind.Image or TrackKind.Effect);
-            seq = seq with { Tracks = seq.Tracks.Insert(firstVisual < 0 ? 0 : firstVisual, video) };
+            seq = seq with { Tracks = seq.Tracks.Insert(0, video) };
         }
         Guid? audio = null;
         if (asset.HasAudio && asset.Kind == MediaKind.Video)
@@ -359,7 +357,7 @@ public sealed record AddOverlayCommand(Guid SequenceId, Guid AssetId, MediaTime 
             if (a is null)
             {
                 a = new Track { Id = Guid.NewGuid(), Kind = TrackKind.Audio, Name = TrackName };
-                seq = seq with { Tracks = seq.Tracks.Add(a) };
+                seq = seq with { Tracks = seq.Tracks.Insert(0, a) };
             }
             audio = a.Id;
         }
