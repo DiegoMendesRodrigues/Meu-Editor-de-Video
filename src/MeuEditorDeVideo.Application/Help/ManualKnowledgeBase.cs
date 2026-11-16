@@ -104,7 +104,8 @@ public sealed class ManualKnowledgeBase(string folder) : IHelpKnowledgeBase
         void Close(int end)
         {
             if (start < 0) return;
-            var text = string.Join("\n", lines[(start + 1)..end]).Trim();
+            // As linhas de imagem ("![descrição](arquivo)") não entram no texto pesquisado nem nas respostas.
+            var text = string.Join("\n", lines[(start + 1)..end].Where(l => !l.TrimStart().StartsWith("![", StringComparison.Ordinal))).Trim();
             if (text.Length > 0) sections.Add(new HelpSection(language, start + 1, level, chapter, title, text));
         }
         for (var i = 0; i < lines.Length; i++)

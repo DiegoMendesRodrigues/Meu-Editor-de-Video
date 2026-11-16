@@ -1,4 +1,7 @@
+﻿using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using System.Windows.Documents;
 using System.Windows.Media;
 
@@ -10,7 +13,8 @@ public sealed record HelpTopic(string Title, int Level, Block Target);
 /// <summary>Monta o <see cref="FlowDocument"/> da ajuda a partir dos blocos do manual, com as cores do tema atual.</summary>
 public static class MarkdownFlowDocument
 {
-    public static FlowDocument Build(IReadOnlyList<MdBlock> blocks, out IReadOnlyList<HelpTopic> topics)
+    /// <param name="baseFolder">Pasta do manual, de onde saem as imagens (sem ela, as imagens são ignoradas).</param>
+    public static FlowDocument Build(IReadOnlyList<MdBlock> blocks, out IReadOnlyList<HelpTopic> topics, string? baseFolder = null)
     {
         var doc = new FlowDocument
         {
@@ -32,6 +36,7 @@ public static class MarkdownFlowDocument
                 MdNote n => Note(n),
                 MdList l => List(l),
                 MdTable t => Table(t),
+                MdImage i => Image(i, baseFolder),
                 _ => new Paragraph(),
             };
             if (block is MdHeading heading && heading.Level <= 3) list.Add(new HelpTopic(heading.Text, heading.Level, element));
@@ -40,6 +45,45 @@ public static class MarkdownFlowDocument
 
         topics = list;
         return doc;
+    }
+
+    /// <summary>Captura de tela com a descrição embaixo; se o arquivo faltar, fica só a descrição.</summary>
+    private static Block Image(MdImage image, string? baseFolder)
+    {
+        var caption = Paragraph([new MdInline(image.Alt)]);
+        caption.FontSize = 12;
+        caption.FontStyle = FontStyles.Italic;
+        caption.Margin = new Thickness(0, 2, 0, 12);
+        caption.SetResourceReference(TextElement.ForegroundProperty, "Med.TextMuted");
+        var section = new Section();
+        var path = baseFolder is null ? null : Path.GetFullPath(Path.Combine(baseFolder, image.Path));
+        if (path is not null && path.StartsWith(Path.GetFullPath(baseFolder!), StringComparison.OrdinalIgnoreCase) && File.Exists(path))
+        {
+            try
+            {
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.UriSource = new Uri(path);
+                bitmap.EndInit();
+                bitmap.Freeze();
+                var element = new Image
+                {
+                    Source = bitmap,
+                    Stretch = Stretch.Uniform,
+                    MaxWidth = Math.Min(bitmap.PixelWidth, 900),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                };
+                System.Windows.Automation.AutomationProperties.SetName(element, image.Alt);
+                section.Blocks.Add(new BlockUIContainer(element) { Margin = new Thickness(0, 6, 0, 0) });
+            }
+            catch (Exception ex) when (ex is IOException or NotSupportedException or UriFormatException or UnauthorizedAccessException)
+            {
+                // Imagem ilegível: mostra só a descrição.
+            }
+        }
+        section.Blocks.Add(caption);
+        return section;
     }
 
     private static Paragraph Heading(MdHeading h)

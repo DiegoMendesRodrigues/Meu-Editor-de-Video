@@ -54,6 +54,7 @@
     <None Include="..\..\LICENSE.md" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" Visible="false" />
     <!-- Manual do usuário offline (Ajuda › Manual do usuário, F1). -->
     <None Include="..\..\documentation\MANUAL_DO_USUARIO*.md" Link="ajuda\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="..\..\documentation\imagens\**\*.jpg" Link="ajuda\imagens\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MeuEditorDeVideo.Application\MeuEditorDeVideo.Application.csproj" />

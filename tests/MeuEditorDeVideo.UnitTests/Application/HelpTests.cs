@@ -72,6 +72,28 @@ public class HelpTests
     }
 
     [Fact]
+    public void Imagens_locais_viram_bloco_e_caminhos_fora_da_pasta_ficam_como_texto()
+    {
+        var blocks = MarkdownDocument.Parse("![Janela de edição.](imagens/pt-BR/edicao.jpg)\n\n![x](../segredo.png)\n\n![y](https://exemplo.com/a.png)\n");
+        var image = Assert.Single(blocks.OfType<MdImage>());
+        Assert.Equal("Janela de edição.", image.Alt);
+        Assert.Equal("imagens/pt-BR/edicao.jpg", image.Path);
+        Assert.Equal(2, blocks.OfType<MdParagraph>().Count());
+    }
+
+    [Fact]
+    public void Imagens_dos_seis_manuais_existem()
+    {
+        var folder = Path.Combine(RepoRoot(), "documentation");
+        foreach (var manual in Directory.GetFiles(folder, "MANUAL_DO_USUARIO*.md"))
+        {
+            var images = MarkdownDocument.Parse(File.ReadAllText(manual)).OfType<MdImage>().ToList();
+            Assert.NotEmpty(images);
+            Assert.All(images, i => Assert.True(File.Exists(Path.Combine(folder, i.Path)), $"{Path.GetFileName(manual)}: {i.Path}"));
+        }
+    }
+
+    [Fact]
     public void Manual_do_repositorio_tem_as_secoes_principais()
     {
         var path = Path.Combine(RepoRoot(), "documentation", "MANUAL_DO_USUARIO.md");

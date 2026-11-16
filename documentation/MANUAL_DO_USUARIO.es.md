@@ -26,6 +26,8 @@ No es obligatorio tener una tarjeta gráfica dedicada, pero hace que la vista pr
 
 ### Al abrir el programa
 
+![Ventana de bienvenida, que aparece la primera vez.](imagens/es/boas-vindas.jpg)
+
 La primera vez (o si falta alguna preferencia o está vacía en el registro de Windows), aparece la ventana **Bienvenido a Meu Editor de Vídeos**. Rellene **Nombre completo**, **Idioma del sistema**, **Tema** (Claro, Oscuro o Seguir el sistema operativo) y **Buscar nuevas actualizaciones cada mes** (Sí o No) y haga clic en **Guardar las preferencias**. Todos los campos son obligatorios y la ventana solo se cierra después de guardar. Si elige otro idioma, el programa se reinicia en él. Después puede cambiar las preferencias en **Herramientas › Configuración… › General**.
 
 El programa se abre directamente en la pantalla de edición, con un proyecto nuevo y vacío llamado "Sin título". Si existe una copia de un proyecto que no se cerró correctamente, el programa pregunta si desea recuperarla (vea la sección Guardar, guardado automático y recuperación).
@@ -33,6 +35,8 @@ El programa se abre directamente en la pantalla de edición, con un proyecto nue
 Los cinco últimos proyectos abiertos aparecen en el menú **Archivo**, entre separadores. Haga clic en uno para abrirlo. Si el archivo se movió o se eliminó, el programa avisa y lo quita de la lista.
 
 ### Crear un proyecto
+
+![Ventana Nuevo proyecto, con la plantilla, el nombre, la carpeta y los ajustes del vídeo.](imagens/es/criar.jpg)
 
 1. Elija **Archivo › Nuevo proyecto…**.
 2. Escriba un nombre en "Nombre del proyecto".
@@ -46,6 +50,8 @@ Los cinco últimos proyectos abiertos aparecen en el menú **Archivo**, entre se
 
 ### Abrir un proyecto existente
 
+![Menú Archivo, con Abrir… y la lista de proyectos recientes.](imagens/es/abrir-existente.jpg)
+
 Hay tres maneras:
 
 - Elija **Archivo › Abrir…** y seleccione el archivo .med.
@@ -56,6 +62,8 @@ Hay tres maneras:
 
 Después de crear o abrir un proyecto, aparece la pantalla de edición. Está dividida en áreas:
 
+![Ventana de edición: biblioteca, monitor, panel Propiedades y línea de tiempo.](imagens/es/edicao.jpg)
+
 - **Barra superior** (arriba de la ventana): a la izquierda, los menús **Archivo**, **Editar**, **Ver**, **Proyecto**, **Herramientas** y **Ayuda** y los botones **Guardar**, **Deshacer** y **Rehacer**; en el centro, el nombre del proyecto; a la derecha, **Tema**, **Cola de renderizado**, **Exportar** y los botones para minimizar, maximizar y cerrar la ventana. Arrastre la barra para mover la ventana y haga doble clic en ella para maximizar o restaurar.
 - **Biblioteca de medios** (a la izquierda): arriba están las pestañas Biblioteca de medios, Vídeos, Imágenes, Audios, Elementos gráficos, Textos, Transiciones, Efectos, Color e IA. Pase el ratón sobre una pestaña para ver el nombre completo. Los medios importados aparecen en una cuadrícula, con miniatura y duración.
 - **Vista previa** (en el centro, arriba): muestra el resultado del vídeo. Arriba están la resolución de la vista previa, el botón Proxy y el botón **Maximizar el monitor**, que hace que la vista previa cubra la biblioteca y la línea de tiempo (el panel Propiedades sigue visible; haga clic de nuevo para restaurar); abajo, la barra de posición (arrástrela para ir a cualquier punto), los botones de reproducir, pausar y avanzar fotograma a fotograma, el volumen, la captura de fotograma (guarda el fotograma actual en PNG o JPEG, a la resolución del proyecto; también en **Archivo › Exportar fotograma actual…**) y la pantalla completa.
@@ -65,6 +73,8 @@ Después de crear o abrir un proyecto, aparece la pantalla de edición. Está di
 > Cuando el nombre del proyecto aparece con la marca "● sin guardar", hay cambios que todavía no se han guardado. Use **Archivo › Guardar** o Ctrl+S.
 
 ### Menús
+
+![Menú Herramientas abierto en la barra de menús del editor.](imagens/es/menus.jpg)
 
 - **Archivo**: nuevo proyecto, **nuevo a partir de plantilla**, abrir, importar medios, importar secuencia de imágenes, guardar, guardar como, crear copia de seguridad, exportar, cola de renderizado, exportar fotograma actual (PNG o JPEG) y los cinco proyectos recientes.
 - **Editar**: deshacer y rehacer; seleccionar todo; dividir; **unir los cortes** (deshace una división: haga clic en la regla sobre el punto del corte; solo está disponible cuando los dos lados son la continuación del mismo medio, sin ajustes distintos); cortar, copiar, pegar en el cursor y duplicar; eliminar, eliminar y cerrar el hueco (solo en la pista del clip) y **eliminar y unir** (cierra el hueco en todas las pistas, manteniendo la sincronía; las pistas bloqueadas no se mueven y la operación se rechaza si un clip de otra pista ocupa parte del tramo eliminado).
@@ -94,6 +104,8 @@ Importar es traer al proyecto los archivos que va a usar, como vídeos, fotos, m
 
 ### Formatos admitidos
 
+![Biblioteca de medios con la resolución y la frecuencia de fotogramas de cada archivo.](imagens/es/formatos.jpg)
+
 - **Vídeo**: MP4, M4V, MOV, MKV, WebM, AVI, WMV, FLV, MPG y MPEG, M2TS, MTS, TS, 3GP, OGV, MXF y VOB.
 - **Audio**: MP3, WAV, AAC, M4A, FLAC, OGG, OGA, Opus, WMA, AIFF, AIF, AC3 y AMR.
 - **Imagen**: JPG y JPEG, PNG, BMP, TIF y TIFF, WebP, TGA, JFIF y SVG.
@@ -103,6 +115,8 @@ Importar es traer al proyecto los archivos que va a usar, como vídeos, fotos, m
 Los archivos de otros formatos se rechazan con el mensaje "Formato de archivo no admitido.".
 
 ### Cómo importar
+
+![Editor con la biblioteca de medios y el botón Importar medios.](imagens/es/importar.jpg)
 
 1. Haga clic en **Importar medios** en el panel de la biblioteca, o use **Archivo › Importar medios…** (atajo Ctrl+I).
 2. Elija uno o varios archivos y confirme.
@@ -116,11 +130,15 @@ Cada medio importado recibe una miniatura. Al seleccionar un medio, la pestaña 
 
 ### Organizar la biblioteca
 
+![Menú contextual de un medio de la biblioteca.](imagens/es/organizar.jpg)
+
 - Use el cuadro **Buscar…** para encontrar un medio por nombre, categoría o por las etiquetas creadas en **Herramientas › Analizar medios** (por ejemplo "voz", "persona" o "vertical").
 - Haga clic derecho en un medio para **Cambiar nombre…**, **Definir categoría…**, **Quitar categoría**, **Añadir a la línea de tiempo** o **Quitar del proyecto**.
 - Quitar un medio del proyecto no borra el archivo del equipo.
 
 ### Medios ausentes
+
+![Aviso de medios no encontrados, con los botones Localizar… y Buscar en carpeta…](imagens/es/ausente.jpg)
 
 Si un archivo se movió, cambió de nombre o se eliminó, el proyecto muestra el aviso "No se encontraron algunos medios del proyecto" al abrirse. El aviso también aparece en la barra de estado como "Medios ausentes", con la cantidad de medios afectados. Para resolverlo:
 
@@ -146,10 +164,14 @@ La línea de tiempo es donde se monta el vídeo de izquierda a derecha. El **cur
 
 ### Colocar medios en la línea de tiempo
 
+![Clips de vídeo, audio y texto colocados en las pistas de la línea de tiempo.](imagens/es/colocar.jpg)
+
 - Arrastre un medio de la biblioteca a una pista.
 - O seleccione el medio en la biblioteca y haga clic en **Añadir a la línea de tiempo**, en la barra de herramientas. Las imágenes y los audios entran en la posición del cursor: la imagen va a una pista de Imagen libre o, si no, a una pista de vídeo vacía; el audio va a una pista de audio libre en ese tramo. Si ninguna sirve, el programa crea una pista nueva.
 
 ### Mover, recortar y dividir
+
+![Menú contextual de un clip, con Dividir, Velocidad… y Eliminar y cerrar el hueco.](imagens/es/mover.jpg)
 
 - **Mover**: arrastre el clip a otro lugar de la pista o a otra pista del mismo tipo.
 - **Recortar el inicio o el final**: arrastre el borde del clip para acortar o alargar el tramo usado.
@@ -164,10 +186,14 @@ La línea de tiempo es donde se monta el vídeo de izquierda a derecha. El **cur
 
 ### Imán y edición en cascada
 
+![Barra de herramientas de la línea de tiempo, con el ajuste magnético activado.](imagens/es/ima.jpg)
+
 - **Imán de alineación** (tecla N): cuando está activado, el clip "se pega" a los bordes de otros clips y al cursor, lo que facilita encajar las partes sin dejar huecos. El botón está en la barra de herramientas.
 - **Edición en cascada (ripple)**: cuando está activada, mover o recortar un clip empuja los clips siguientes, sin dejar huecos.
 
 ### Pistas
+
+![Botón Añadir pista abierto, con los tipos de pista.](imagens/es/trilhas.jpg)
 
 Las pistas son las filas horizontales de la línea de tiempo. Para añadir una pista, haga clic en el botón **Añadir pista** y elija el tipo (toda pista nueva, creada por usted o por el programa, se añade arriba, encima de todas las demás):
 
@@ -197,9 +223,13 @@ Haga clic derecho en el clip y elija **Velocidad…** para hacerlo más rápido 
 
 ### Activar y desactivar clips
 
+![Clip desactivado en la línea de tiempo, atenuado y con el símbolo ⊘.](imagens/es/ativar.jpg)
+
 Haga clic derecho en el clip y elija **Activar/desactivar clip**. Un clip desactivado sigue en la línea de tiempo (atenuado y con el símbolo ⊘), pero no se ve ni se oye en la reproducción ni en la exportación.
 
 ### Capas de ajuste, clips compuestos, pantalla dividida y multicámara
+
+![Menú Proyecto, con capa de ajuste, clip compuesto, pantalla dividida y multicámara.](imagens/es/camadas.jpg)
 
 - **Capa de ajuste** (**Proyecto › Añadir capa de ajuste**): crea en el cursor un clip de 5 segundos en una pista de efectos. Los efectos y la corrección de color colocados en él se aplican a **todas las pistas de abajo** durante el tiempo del clip. Seleccione la capa y añada efectos en las pestañas **Efectos** y **Color**. La opacidad de la capa dosifica el efecto y las máscaras limitan el área. Estire o mueva la capa como cualquier clip.
 - **Clip compuesto** (**Proyecto › Crear clip compuesto…** o menú contextual): junta los clips seleccionados (con sus audios vinculados) en un único clip, que se mueve, se recorta y recibe efectos como uno solo. Las pistas y posiciones originales se guardan dentro de él. **Deshacer clip compuesto** devuelve los clips a la línea de tiempo, en pistas nuevas, solo con el tramo que mostraba el clip compuesto. El sonido del clip compuesto solo suena a velocidad normal.
@@ -244,11 +274,15 @@ Use los botones de zoom de la barra de herramientas, o los atajos:
 
 Para aplicar un efecto, seleccione el clip en la línea de tiempo y use las pestañas de las propiedades. También puede usar las secciones de la biblioteca, como **Efectos**, **Color** y **Transiciones**: haga doble clic en un elemento para aplicarlo en el cursor o al clip seleccionado, o use el botón **Aplicar al clip seleccionado**. Los efectos y las transiciones también sirven para imágenes, stickers y textos, y la pestaña **Color** ajusta los colores de imágenes y stickers. Al insertar un clip, el panel de propiedades se abre solo en la pestaña adecuada: **Texto** para textos, **Vídeo** para vídeos, imágenes y stickers, y **Audio** para audios.
 
+![Biblioteca de transiciones junto al monitor y la línea de tiempo.](imagens/es/transicoes.jpg)
+
 La sección **Efectos** de la biblioteca muestra los efectos de vídeo listos como miniaturas, separados por categoría (elija la categoría en la lista encima de las miniaturas): **Tendencias**, **Aperturas**, **Cierres**, **Amor**, **Fiesta**, **Borde**, **Resaltar**, **Distorsión**, **Fallo digital**, **Parpadeo**, **Grunge**, **Lupa**, **Luz**, **Retro**, **Temblor**, **Diapositivas**, **Pantalla dividida**, **Temporizador**, **Visor** y **Utilidades** (desenfoque, nitidez, viñeta, chroma key y los demás efectos básicos). Cada miniatura muestra el efecto en una escena de playa con una persona; en los efectos de movimiento, como el **Temblor**, la miniatura superpone instantes cercanos para indicar el movimiento. Los efectos se animan con el tiempo del clip: las **Aperturas** revelan el vídeo al inicio del clip, los **Cierres** lo ocultan al final y el **Temporizador** sigue la duración del clip. Una vez aplicado, el efecto aparece en la pestaña **Efectos** de las propiedades, donde puede elegir el estilo, la intensidad, la velocidad, el color y otros ajustes.
 
 La sección **Filtros** de la biblioteca (junto a **Efectos**) ofrece looks listos que cambian de una vez el color, el ambiente y el estilo del vídeo o la imagen, sin ajustar cada parámetro. Elija la categoría en la lista encima de las miniaturas: **Básico**, **Destacados**, **Monocromo**, **Estilo de vida**, **Cinematográfico**, **Retro**, **Primavera**, **Interiores**, **Nocturno** y **Creativos**. Cada miniatura muestra el filtro aplicado a una escena colorida de playa con faro, velero y palmera. Seleccione el clip y haga doble clic en el filtro (o use **Aplicar al clip seleccionado**). El filtro está hecho de efectos comunes (ajustes de color, curvas, ruedas de color, viñeta, grano, brillo suave), que aparecen en la pestaña **Efectos** de las propiedades, donde puede ajustar o quitar cada uno.
 
 ### Pestaña Vídeo
+
+![Pestaña Vídeo de las propiedades del clip, con la transformación y el 3D.](imagens/es/aba-video.jpg)
 
 Esta pestaña reúne la configuración de movimiento y tiempo del clip:
 
@@ -284,6 +318,8 @@ Las transiciones disponibles son: Corte seco, Disolver, Fundido a negro, Zoom, D
 
 ### Efectos
 
+![Efectos de vídeo por categoría en la biblioteca y la pestaña Efectos de las propiedades.](imagens/es/efeitos.jpg)
+
 La pestaña **Efectos** tiene dos partes. Arriba, una cuadrícula con una miniatura de cada efecto, que muestra el resultado en una escena de ejemplo: haga clic en una para añadir el efecto al clip. Abajo, la lista **Efectos aplicados**, en el orden en que se procesan. Cada efecto de la lista tiene controles deslizantes para los ajustes y los botones **Subir**, **Bajar** y **Quitar efecto**. La flecha a la izquierda del nombre muestra u oculta los ajustes. Haga doble clic en un control deslizante para volver al valor predeterminado. En los ajustes de color, una franja de color bajo el control muestra el efecto del valor (por ejemplo, de azul a naranja en la temperatura).
 
 Efectos visuales disponibles:
@@ -302,6 +338,8 @@ Las tarjetas de las opciones ya aplicadas al clip tienen el borde resaltado. Un 
 
 ### Color
 
+![Panel Color con los ajustes del clip seleccionado.](imagens/es/cor.jpg)
+
 La pestaña **Color** empieza por los **Ajustes predefinidos**: Blanco y negro, Noir, Cine, Vívido, Cálido, Frío, Desvaído, Retro y Claro y luminoso. Haga clic en una miniatura para aplicar el estilo al clip. El ajuste entra en la lista de correcciones aplicadas como ajustes normales, que puede cambiar o quitar; **Deshacer** (Ctrl+Z) lo revierte todo de una vez.
 
 Debajo, en **Herramientas de color** (y en la sección **Color** de la biblioteca), están las herramientas de corrección de color:
@@ -317,6 +355,8 @@ Debajo, en **Herramientas de color** (y en la sección **Color** de la bibliotec
 
 ### Máscaras, seguimiento y estabilización
 
+![Pestaña Composición, con máscaras, seguimiento de movimiento y estabilización.](imagens/es/mascaras.jpg)
+
 Estas funciones están en la pestaña **Composición**. Sirven para vídeos, imágenes, textos y elementos gráficos.
 
 - **Máscaras**: cree una forma con **+ Rectángulo**, **+ Elipse** o **+ Libre** (puntos, con Ctrl+clic en el monitor). La máscara recorta lo que se ve del clip. Puede sumar, restar o intersecar máscaras, invertir la máscara y suavizar el contorno.
@@ -327,6 +367,8 @@ Estas funciones están en la pestaña **Composición**. Sirven para vídeos, im�
 
 ### Elementos gráficos y formas
 
+![Sección Elementos gráficos de la biblioteca, con formas y pegatinas.](imagens/es/graficos.jpg)
+
 En la sección **Elementos gráficos** de la biblioteca, haga doble clic en una forma para insertarla en el cursor. Las formas disponibles son: Rectángulo, Rectángulo redondeado, Círculo, Línea, Flecha, Estrella, Hexágono, Bocadillo y Corazón. Puede ajustar el relleno y el color del contorno en la pestaña **Composición**.
 
 También puede importar un gráfico vectorial con el botón **Importar SVG…**.
@@ -334,6 +376,8 @@ También puede importar un gráfico vectorial con el botón **Importar SVG…**.
 En **Pegatinas** aparecen las pegatinas de los paquetes instalados. El programa trae el paquete **Básico**, con 96 pegatinas: de uso común (flechas, círculo de resalte, correcto e incorrecto, bocadillos, corazón, estrella, emojis, botones Suscríbete y Me gusta, sellos como Nuevo y Oferta, entre otras), formas geométricas (círculo, cuadrado, rectángulo, triángulo, rombo, pentágono y hexágono), chinchetas de mapa con la parte superior cuadrada, redonda, hexagonal, en rombo, estrella, corazón o triángulo, y chinchetas de puntos de interés de la ciudad (aeropuerto, estaciones de autobús, tren y metro, hospital, policía, bomberos, escuela, museo, parque, restaurante, hotel, entre otros). No puede eliminarse, pero sí exportarse. Haga clic en una para insertarla en el cursor durante 3 segundos, al 40% del tamaño (ajústelo en la pestaña Vídeo), en una pista de imagen libre (o en una pista nueva llamada Pegatinas). La imagen entra también en la biblioteca, en la categoría Pegatinas.
 
 ### Textos y subtítulos
+
+![Sección Textos de la biblioteca y la pestaña Texto del título seleccionado.](imagens/es/textos.jpg)
 
 ### Insertar textos
 
@@ -382,6 +426,8 @@ Abra el mezclador en **Herramientas › Mezclador de audio** o con el botón de 
 
 ### Pestaña Audio del clip
 
+![Pestaña Audio del clip, con la forma de onda, el volumen y la normalización.](imagens/es/aba-audio.jpg)
+
 Seleccione un clip de audio, o un vídeo con sonido, y use la pestaña **Audio**:
 
 - **Forma de onda**: en la parte superior de la pestaña aparece el audio del clip, con el cursor de la línea de tiempo en rojo. Haga clic o arrastre sobre ella para ir a otro momento del audio; el cursor de la línea de tiempo y el monitor lo siguen.
@@ -395,6 +441,8 @@ Seleccione un clip de audio, o un vídeo con sonido, y use la pestaña **Audio**
 - **Mantener el tono con la velocidad**: cuando el clip se acelera o se ralentiza, la voz mantiene un tono natural.
 
 ### Efectos de audio
+
+![Efectos de audio en la pestaña Audio, debajo de la atenuación y la sincronización.](imagens/es/efeitos-audio.jpg)
 
 En la misma pestaña, en **Añadir efecto de audio**, están los efectos:
 
@@ -411,6 +459,8 @@ Los efectos se aplican en el orden en que aparecen en la lista **Efectos de audi
 
 ## Inteligencia artificial
 
+![Sección IA de la biblioteca y la pestaña Inteligencia artificial de las propiedades.](imagens/es/ia.jpg)
+
 Las funciones de inteligencia artificial del programa se ejecutan solo en su equipo. Ningún vídeo, audio, imagen o texto se envía a internet.
 
 Las funciones están en la pestaña **IA** de las propiedades, cuando selecciona un clip en la línea de tiempo. La sección **IA** de la biblioteca resume las funciones y tiene el botón **Gestionar modelos de IA…**, que abre el gestor de modelos.
@@ -418,6 +468,8 @@ Las funciones están en la pestaña **IA** de las propiedades, cuando selecciona
 ### Modelos necesarios
 
 Cada función usa un modelo de IA. El modelo de **Quitar fondo** viene con el programa. Los demás deben instalarse, una sola vez, con la herramienta **Descargar modelos de IA**. Cuando el modelo de una función no está instalado, el botón queda desactivado y aparece el mensaje "No disponible — instale el modelo en Herramientas › Modelos de IA.".
+
+![Ventana Descargar modelos de IA con los modelos opcionales.](imagens/es/modelos-ia.jpg)
 
 | Función | Modelo | Requiere instalación | Se ejecuta en |
 |---|---|---|---|
@@ -440,6 +492,8 @@ El reconocimiento de voz (subtítulos) usa Silero VAD para encontrar los tramos 
 > Los modelos de la tabla ocupan espacio en disco y también memoria al usarse. Whisper, por ejemplo, necesita unos 1,5 GB de memoria libre.
 
 ### Quitar fondo
+
+![Pestaña Inteligencia artificial, con Eliminar fondo arriba.](imagens/es/remover-fundo.jpg)
 
 Separa a la persona del fondo y deja el fondo transparente, o lo sustituye por otra cosa. Úselo en la pestaña **IA**, con **Quitar fondo con IA**.
 
@@ -492,6 +546,8 @@ Amplía una foto 2× reconstruyendo los detalles. Seleccione la imagen, vaya a l
 
 Resuelve dudas sobre el programa y sobre edición de vídeo según este manual, en el idioma del programa y sin internet. Ábralo en **Ayuda › Asistente virtual** (Mayús+F1): el panel aparece a la derecha del editor. Escriba la pregunta y pulse Intro (Mayús+Intro añade una línea); sin conversación, el panel sugiere algunas preguntas.
 
+![Asistente virtual respondiendo a una pregunta, con la sección del manual indicada.](imagens/es/assistente.jpg)
+
 - Con el modelo de lenguaje **Phi-4-mini** instalado, el asistente escribe una respuesta breve usando solo los fragmentos del manual que encontró y muestra la **Fuente en el manual**: haga clic en ella para abrir el manual en esa sección. El botón de detener interrumpe la respuesta.
 - Sin el modelo, el asistente muestra las secciones del manual que tratan el tema, con un fragmento de cada una y el botón **Abrir en el manual**. El aviso en la parte superior del panel instala el modelo (unos 3,2 GB, descargados una sola vez de los orígenes oficiales) sin salir del editor; **Ahora no** oculta el aviso.
 - El modelo usa la tarjeta gráfica cuando el **Dispositivo de IA** es **GPU (DirectML)** (en **Configuración › Rendimiento**) o, si no, el procesador. La primera pregunta tarda unos segundos más porque se carga el modelo; al cerrar el panel, sale de la memoria.
@@ -508,6 +564,8 @@ Exportar es generar el archivo final del vídeo. Haga clic en **Exportar** en la
 ### Plantillas de exportación
 
 En la lista de la izquierda de la ventana de exportación, elija una plantilla. Cada plantilla ya trae la configuración adecuada para una plataforma:
+
+![Ventana Exportar vídeo con las plantillas de exportación y los parámetros.](imagens/es/exportacao.jpg)
 
 - YouTube
 - YouTube Shorts
@@ -567,6 +625,8 @@ Use **Cancelar exportación** para detener un elemento, **Quitar de la cola** pa
 
 ## Guardar, guardado automático y recuperación
 
+![Pestaña General de la configuración, con el guardado automático.](imagens/es/salvar.jpg)
+
 ### Guardar el proyecto
 
 - **Archivo › Guardar** (Ctrl+S): guarda los cambios en el archivo del proyecto.
@@ -592,6 +652,8 @@ Si el programa se cerró sin guardar, al abrirlo de nuevo aparece la pregunta "R
 
 ## Configuración y rendimiento
 
+![Ventana Configuración, en la pestaña Caché.](imagens/es/configuracoes.jpg)
+
 Abra la configuración en **Herramientas › Configuración…** (atajo Ctrl+,). La configuración se divide en cuatro pestañas. No se guarda nada hasta que haga clic en **Guardar**.
 
 ### Pestaña General
@@ -607,6 +669,8 @@ Abra la configuración en **Herramientas › Configuración…** (atajo Ctrl+,).
 El nombre, el idioma, el tema y la preferencia de actualizaciones se guardan en el Registro de Windows, en `HKEY_CURRENT_USER\Software\Meu Editor de Vídeo`.
 
 ### Pestaña Rendimiento
+
+![Pestaña Rendimiento, con el hardware detectado.](imagens/es/desempenho.jpg)
 
 - **Hardware detectado**: muestra el procesador, la memoria, las tarjetas gráficas, los discos y si la tarjeta gráfica puede decodificar y codificar vídeo. El programa también indica las limitaciones del equipo y una recomendación de uso.
 - **Vista previa**: la **Calidad predeterminada de la vista previa** puede ser **Automática**, **Completa**, **1/2 de la resolución** o **1/4 de la resolución**. En Automática, el programa elige según el equipo y el proyecto, y reduce la resolución durante la reproducción si el equipo no da abasto. La **Memoria para fotogramas de la vista previa** define cuánto espacio usar para guardar fotogramas listos.
@@ -731,4 +795,4 @@ Los registros de funcionamiento (logs) están en la carpeta `%LOCALAPPDATA%\MeuE
 
 ### Dudas sobre la versión instalada
 
-Abra **Ayuda › Acerca de Meu Editor de Vídeo** para ver la versión del programa, la licencia, la información de privacidad y la lista de componentes y modelos de IA usados.
+Abra **Ayuda › Acerca de Meu Editor de Vídeo** para ver la versión del programa, la licencia, la información de privacidad y la lista de componentes y modelos de IA usados. En la misma ventana, **Visite nuestro sitio web** abre el sitio de Meu Editor de Vídeo en su idioma y **GitHub** abre el código fuente. Para contactar con el soporte, use **Ayuda › Soporte técnico**.

@@ -26,6 +26,8 @@ A dedicated graphics card is not required for the program to work, but it makes 
 
 ### When the program opens
 
+![Welcome window, shown the first time.](imagens/en/boas-vindas.jpg)
+
 The first time (or if any preference is missing or empty in the Windows registry), the **Welcome to Meu Editor de Vídeos** window appears. Fill in **Full Name**, **System language**, **Theme** (Light, Dark or Follow the operating system) and **Check monthly for new updates** (Yes or No), then click **Save preferences**. All fields are required and the window only closes after saving. If you choose another language, the program restarts in it. You can change these preferences later in **Tools › Settings… › General**.
 
 The program opens straight into the editing screen, with a new empty project called "Untitled". If there is a copy of a project that was not closed properly, the program asks whether you want to recover it (see the section Saving, autosave and recovery).
@@ -33,6 +35,8 @@ The program opens straight into the editing screen, with a new empty project cal
 The last five projects you opened appear in the **File** menu, between separators. Click one to open it. If the file was moved or deleted, the program tells you and removes it from the list.
 
 ### Creating a project
+
+![New project window, with the template, name, folder and video settings.](imagens/en/criar.jpg)
 
 1. Choose **File › New project…**.
 2. Type a name in "Project name".
@@ -46,6 +50,8 @@ The last five projects you opened appear in the **File** menu, between separator
 
 ### Opening an existing project
 
+![File menu, with Open… and the list of recent projects.](imagens/en/abrir-existente.jpg)
+
 There are three ways:
 
 - Choose **File › Open…** and select the .med file.
@@ -56,6 +62,8 @@ There are three ways:
 
 After you create or open a project, the editing screen appears. It is divided into areas:
 
+![Editing window: library, monitor, Properties panel and timeline.](imagens/en/edicao.jpg)
+
 - **Top bar** (at the top of the window): on the left, the **File**, **Edit**, **View**, **Project**, **Tools** and **Help** menus and the **Save**, **Undo** and **Redo** buttons; in the center, the project name; on the right, **Theme**, **Render queue**, **Export** and the buttons to minimize, maximize and close the window. Drag the bar to move the window and double-click it to maximize or restore.
 - **Media library** (on the left): at the top are the tabs Media Library, Videos, Images, Audio, Graphic Elements, Texts, Transitions, Effects, Color and AI. Hover over a tab to see its full name. Imported media appears in a grid, with thumbnail and duration.
 - **Preview** (center, top): shows the result of the video. At the top are the preview resolution, the Proxy button and the **Maximize monitor** button, which makes the preview cover the library and the timeline (the Properties panel stays visible; click again to restore); at the bottom, the position bar (drag to go to any point), the play, pause and frame-by-frame buttons, the volume, frame capture (saves the current frame as PNG or JPEG, at the project resolution; also in **File › Export current frame…**) and full screen.
@@ -65,6 +73,8 @@ After you create or open a project, the editing screen appears. It is divided in
 > When the project name shows the "● not saved" mark, there are changes that have not been saved yet. Use **File › Save** or Ctrl+S.
 
 ### Menus
+
+![Tools menu open in the editor menu bar.](imagens/en/menus.jpg)
 
 - **File**: new project, **new from template**, open, import media, import image sequence, save, save as, create backup, export, render queue, export current frame (PNG or JPEG) and the five recent projects.
 - **Edit**: undo and redo; select all; split; **join cuts** (undoes a split: click the ruler over the cut point; only available when both sides continue the same media, with no different settings); cut, copy, paste at the playhead and duplicate; delete, delete and close the gap (only on the clip's track) and **delete and join** (closes the gap on all tracks, keeping them in sync; locked tracks do not move and the operation is refused if a clip on another track occupies part of the removed range).
@@ -94,6 +104,8 @@ Importing brings into the project the files you will use, such as videos, photos
 
 ### Supported formats
 
+![Media library showing the resolution and frame rate of each file.](imagens/en/formatos.jpg)
+
 - **Video**: MP4, M4V, MOV, MKV, WebM, AVI, WMV, FLV, MPG and MPEG, M2TS, MTS, TS, 3GP, OGV, MXF and VOB.
 - **Audio**: MP3, WAV, AAC, M4A, FLAC, OGG, OGA, Opus, WMA, AIFF, AIF, AC3 and AMR.
 - **Image**: JPG and JPEG, PNG, BMP, TIF and TIFF, WebP, TGA, JFIF and SVG.
@@ -103,6 +115,8 @@ Importing brings into the project the files you will use, such as videos, photos
 Files in other formats are refused, with the message "Unsupported file format.".
 
 ### How to import
+
+![Editor with the media library and the Import Media button.](imagens/en/importar.jpg)
 
 1. Click **Import Media** in the library panel, or use **File › Import media…** (shortcut Ctrl+I).
 2. Choose one or more files and confirm.
@@ -116,11 +130,15 @@ Each imported media item gets a thumbnail. When you select a media item, the **M
 
 ### Organizing the library
 
+![Context menu of a media item in the library.](imagens/en/organizar.jpg)
+
 - Use the **Search…** box to find media by name, category or the tags created in **Tools › Analyze media** (for example "speech", "person" or "vertical").
 - Right-click a media item to **Rename…**, **Set category…**, **Remove category**, **Add to timeline** or **Remove from project**.
 - Removing media from the project does not delete the file from the computer.
 
 ### Missing media
+
+![Missing media warning, with the Locate… and Search folder… buttons.](imagens/en/ausente.jpg)
 
 If a file was moved, renamed or deleted, the project shows the warning "Some project media were not found" when opened. The warning also appears in the status bar as "Missing media", with the number of affected media. To fix it:
 
@@ -146,10 +164,14 @@ The timeline is where the video is assembled from left to right. The **playhead*
 
 ### Placing media on the timeline
 
+![Video, audio and text clips placed on the timeline tracks.](imagens/en/colocar.jpg)
+
 - Drag a media item from the library to a track.
 - Or select the media in the library and click **Add to timeline** on the toolbar. Images and audio go in at the playhead: an image goes to a free Image track, otherwise to an empty video track; audio goes to an audio track that is free at that point. If none fits, the program creates a new track.
 
 ### Moving, trimming and splitting
+
+![Clip context menu, with Split, Speed… and Delete and close gap.](imagens/en/mover.jpg)
 
 - **Move**: drag the clip to another place on the track or to another track of the same type.
 - **Trim the start or end**: drag the edge of the clip to shorten or lengthen the part used.
@@ -164,10 +186,14 @@ The timeline is where the video is assembled from left to right. The **playhead*
 
 ### Magnet and ripple editing
 
+![Timeline toolbar, with snapping turned on.](imagens/en/ima.jpg)
+
 - **Snapping magnet** (N key): when on, the clip "sticks" to the edges of other clips and to the playhead, which makes it easy to fit parts together without leaving gaps. The button is on the toolbar.
 - **Ripple editing**: when on, moving or trimming a clip pushes the following clips, without leaving holes.
 
 ### Tracks
+
+![Add track button open, with the track types.](imagens/en/trilhas.jpg)
 
 Tracks are the horizontal rows of the timeline. To add a track, click the **Add track** button and choose the type (every new track, created by you or by the program, goes on top, above all other tracks):
 
@@ -197,9 +223,13 @@ Right-click the clip and choose **Speed…** to make it faster or slower. In the
 
 ### Enabling and disabling clips
 
+![Disabled clip on the timeline, dimmed and marked with ⊘.](imagens/en/ativar.jpg)
+
 Right-click the clip and choose **Enable/disable clip**. A disabled clip stays on the timeline (dimmed and with the ⊘ symbol), but it is not seen or heard in playback and export.
 
 ### Adjustment layers, compound clips, split screen and multicam
+
+![Project menu, with adjustment layer, compound clip, split screen and multicam.](imagens/en/camadas.jpg)
 
 - **Adjustment layer** (**Project › Add adjustment layer**): creates a 5-second clip at the playhead on an effects track. The effects and color correction placed on it apply to **all tracks below**, for the duration of the clip. Select the layer and add effects in the **Effects** and **Color** tabs. The layer's opacity doses the effect and masks limit the area. Stretch or move the layer like any clip.
 - **Compound clip** (**Project › Create compound clip…** or context menu): joins the selected clips (with their linked audio) into a single clip, which moves, trims and takes effects as one. The original tracks and positions are kept inside it. **Undo compound clip** returns the clips to the timeline, on new tracks, with only the part the compound clip showed. The compound clip's sound only plays at normal speed.
@@ -244,11 +274,15 @@ Use the zoom buttons on the toolbar, or the shortcuts:
 
 To apply an effect, select the clip on the timeline and use the property tabs. You can also use the library sections, such as **Effects**, **Color** and **Transitions**: double-click an item to apply it at the playhead or to the selected clip, or use the **Apply to selected clip** button. Effects and transitions also work on images, stickers and texts, and the **Color** tab adjusts the colors of images and stickers. When you insert a clip, the properties panel opens on the right tab by itself: **Text** for texts, **Video** for videos, images and stickers, and **Audio** for audio.
 
+![Transition library next to the monitor and the timeline.](imagens/en/transicoes.jpg)
+
 The library's **Effects** section shows ready-made video effects as thumbnails, grouped by category (choose the category in the list above the thumbnails): **Trending**, **Openers**, **Endings**, **Love**, **Party**, **Border**, **Highlight**, **Distortion**, **Glitch**, **Flicker**, **Grunge**, **Magnifier**, **Light**, **Retro**, **Shake**, **Slides**, **Split screen**, **Timer**, **Viewfinder** and **Utilities** (blur, sharpen, vignette, chroma key and the other basic effects). Each thumbnail shows the effect on a beach scene with a person; for motion effects such as **Shake**, the thumbnail overlays nearby instants to suggest the movement. The effects are animated by the clip's time: **Openers** reveal the video at the start of the clip, **Endings** hide it at the end, and the **Timer** follows the clip's duration. Once applied, the effect appears in the **Effects** tab of the properties, where you choose the style, intensity, speed, color and other settings.
 
 The library's **Filters** section (next to **Effects**) offers ready-made looks that change the color, mood and style of a video or image at once, without adjusting each setting. Choose the category in the list above the thumbnails: **Basic**, **Featured**, **Mono**, **Lifestyle**, **Cinematic**, **Retro**, **Spring**, **Indoor**, **Night** and **Creative**. Each thumbnail shows the filter applied to a colorful beach scene with a lighthouse, a sailboat and a palm tree. Select the clip and double-click the filter (or use **Apply to selected clip**). A filter is made of regular effects (color adjustments, curves, color wheels, vignette, grain, soft glow), which appear in the **Effects** tab of the properties, where you can adjust or remove each one.
 
 ### Video tab
+
+![Video tab of the clip properties, with transform and 3D.](imagens/en/aba-video.jpg)
 
 This tab gathers the clip's motion and timing settings:
 
@@ -284,6 +318,8 @@ The available transitions are: Hard cut, Dissolve, Fade to black and back, Zoom,
 
 ### Effects
 
+![Video effects by category in the library and the Effects tab of the properties.](imagens/en/efeitos.jpg)
+
 The **Effects** tab has two parts. At the top, a grid with a thumbnail of each effect, showing the result on a sample scene: click one to add the effect to the clip. At the bottom, the **Applied effects** list, in the order in which the effects are processed. Each effect in the list has sliders for its settings, and the **Move up**, **Move down** and **Remove effect** buttons. The arrow to the left of the name shows or hides the settings. Double-click a slider to return to the default value. In color settings, a colored strip under the slider shows the effect of the value (for example, blue to orange for temperature).
 
 Available visual effects:
@@ -302,6 +338,8 @@ The cards of options already applied to the clip have a highlighted border. Doub
 
 ### Color
 
+![Color panel with the settings of the selected clip.](imagens/en/cor.jpg)
+
 The **Color** tab starts with the **Presets**: Black and white, Noir, Cinema, Vivid, Warm, Cool, Faded, Retro and Light and airy. Click a thumbnail to apply the style to the clip. The preset enters the list of applied corrections as regular adjustments, which you can change or remove; **Undo** (Ctrl+Z) reverts everything at once.
 
 Below, in **Color tools** (and in the **Color** section of the library), are the color correction tools:
@@ -317,6 +355,8 @@ Below, in **Color tools** (and in the **Color** section of the library), are the
 
 ### Masks, tracking and stabilization
 
+![Composition tab, with masks, motion tracking and stabilization.](imagens/en/mascaras.jpg)
+
 These features are in the **Composition** tab. They work for videos, images, texts and graphic elements.
 
 - **Masks**: create a shape with **+ Rectangle**, **+ Ellipse** or **+ Freehand** (points, with Ctrl+click in the monitor). The mask crops what is visible of the clip. You can add, subtract or intersect masks, invert the mask and feather the outline.
@@ -327,6 +367,8 @@ These features are in the **Composition** tab. They work for videos, images, tex
 
 ### Graphic elements and shapes
 
+![Graphic Elements section of the library, with shapes and stickers.](imagens/en/graficos.jpg)
+
 In the **Graphic Elements** section of the library, double-click a shape to insert it at the playhead. The available shapes are: Rectangle, Rounded rectangle, Circle, Line, Arrow, Star, Hexagon, Speech bubble and Heart. You can adjust the fill and outline color in the **Composition** tab.
 
 You can also import a vector graphic with the **Import SVG…** button.
@@ -334,6 +376,8 @@ You can also import a vector graphic with the **Import SVG…** button.
 **Stickers** shows the stickers from installed packs. The program comes with the **Basic** pack, with 96 stickers: common ones (arrows, highlight circle, check and cross, speech bubbles, heart, star, emojis, Subscribe and Like buttons, badges such as New and Sale, among others), geometric shapes (circle, square, rectangle, triangle, diamond, pentagon and hexagon), map pins with a square, round, hexagonal, diamond, star, heart or triangle top, and city point-of-interest pins (airport, bus, train and metro stations, hospital, police, fire station, school, museum, park, restaurant, hotel, among others). It cannot be removed, but it can be exported. Click one to insert it at the playhead for 3 seconds, at 40% size (adjust in the Video tab), on a free image track (or a new track called Stickers). The image also enters the library, in the Stickers category.
 
 ### Texts and subtitles
+
+![Texts section of the library and the Text tab of the selected title.](imagens/en/textos.jpg)
 
 ### Inserting texts
 
@@ -382,6 +426,8 @@ Open the mixer in **Tools › Audio mixer** or with the toolbar button. It shows
 
 ### Clip Audio tab
 
+![Audio tab of the clip, with the waveform, volume and normalization.](imagens/en/aba-audio.jpg)
+
 Select an audio clip, or a video with sound, and use the **Audio** tab:
 
 - **Waveform**: the top of the tab shows the clip's audio, with the timeline playhead in red. Click or drag on it to go to another moment of the audio; the timeline playhead and the monitor follow.
@@ -395,6 +441,8 @@ Select an audio clip, or a video with sound, and use the **Audio** tab:
 - **Keep pitch with speed**: when the clip is sped up or slowed down, the voice keeps a natural pitch.
 
 ### Audio effects
+
+![Audio effects in the Audio tab, below ducking and sync.](imagens/en/efeitos-audio.jpg)
 
 In the same tab, under **Add audio effect**, are the effects:
 
@@ -411,6 +459,8 @@ The effects are applied in the order in which they appear in the **Applied audio
 
 ## Artificial intelligence
 
+![AI section of the library and the Artificial intelligence tab of the properties.](imagens/en/ia.jpg)
+
 The program's artificial intelligence features run only on your computer. No video, audio, image or text is sent to the internet.
 
 The features are in the **AI** tab of the properties, when you select a clip on the timeline. The **AI** section of the library summarizes the features and has the **Manage AI models…** button, which opens the model manager.
@@ -418,6 +468,8 @@ The features are in the **AI** tab of the properties, when you select a clip on 
 ### Required models
 
 Each feature uses an AI model. The **Remove background** model comes with the program. The others need to be installed, only once, with the **Download AI models** tool. When a feature's model is not installed, the button is disabled and the message "Unavailable — install the model in Tools › AI Models." appears.
+
+![Download AI models window with the optional models.](imagens/en/modelos-ia.jpg)
 
 | Feature | Model | Needs installing | Runs on |
 |---|---|---|---|
@@ -440,6 +492,8 @@ Speech recognition (subtitles) uses Silero VAD to find the parts with speech. Wh
 > The models in the table take up disk space and also memory when used. Whisper, for example, needs about 1.5 GB of free memory.
 
 ### Remove background
+
+![Artificial intelligence tab, with Remove background at the top.](imagens/en/remover-fundo.jpg)
 
 Separates the person from the background and makes the background transparent, or replaces it with something else. Use it in the **AI** tab, with **Remove background with AI**.
 
@@ -492,6 +546,8 @@ Enlarges a photo 2× by reconstructing details. Select the image, go to the **AI
 
 Answers questions about the program and about video editing based on this manual, in the program's language and without internet. Open it from **Help › Virtual assistant** (Shift+F1): the panel appears on the right of the editor. Type the question and press Enter (Shift+Enter starts a new line); with no conversation, the panel suggests a few questions.
 
+![Virtual assistant answering a question, with the manual section shown.](imagens/en/assistente.jpg)
+
 - With the **Phi-4-mini** language model installed, the assistant writes a short answer using only the manual excerpts it found and shows the **Source in the manual**: click it to open the manual at that section. The stop button interrupts the answer.
 - Without the model, the assistant shows the manual sections about the subject, with an excerpt of each and the **Open in the manual** button. The notice at the top of the panel installs the model (about 3.2 GB, downloaded once from the official sources) without leaving the editor; **Not now** hides the notice.
 - The model uses the graphics card when the **AI device** is **GPU (DirectML)** (in **Settings › Performance**), otherwise the processor. The first question takes a few seconds longer because the model is loaded; closing the panel frees it from memory.
@@ -508,6 +564,8 @@ Exporting generates the final video file. Click **Export** in the top right corn
 ### Export templates
 
 In the list on the left of the export window, choose a template. Each template already has the right settings for a platform:
+
+![Export video window with the export templates and settings.](imagens/en/exportacao.jpg)
 
 - YouTube
 - YouTube Shorts
@@ -567,6 +625,8 @@ Use **Cancel export** to stop an item, **Remove from queue** to take it off the 
 
 ## Saving, autosave and recovery
 
+![General tab of the settings, with autosave.](imagens/en/salvar.jpg)
+
 ### Saving the project
 
 - **File › Save** (Ctrl+S): writes the changes to the project file.
@@ -592,6 +652,8 @@ If the program was closed without saving, when you open it again the question "R
 
 ## Settings and performance
 
+![Settings window, on the Cache tab.](imagens/en/configuracoes.jpg)
+
 Open the settings in **Tools › Settings…** (shortcut Ctrl+,). The settings are divided into four tabs. Nothing is saved until you click **Save**.
 
 ### General tab
@@ -607,6 +669,8 @@ Open the settings in **Tools › Settings…** (shortcut Ctrl+,). The settings a
 The name, language, theme and update preference are stored in the Windows Registry, under `HKEY_CURRENT_USER\Software\Meu Editor de Vídeo`.
 
 ### Performance tab
+
+![Performance tab, with the detected hardware.](imagens/en/desempenho.jpg)
 
 - **Detected hardware**: shows the processor, memory, graphics cards, disks and whether the graphics card can decode and encode video. The program also shows the computer's limitations and a usage recommendation.
 - **Preview**: the **Default preview quality** can be **Automatic**, **Full**, **1/2 resolution** or **1/4 resolution**. With Automatic, the program chooses according to the computer and the project, and lowers the resolution during playback if the computer cannot keep up. **Memory for preview frames** sets how much space to use for storing ready frames.
@@ -731,4 +795,4 @@ The operation logs are in the `%LOCALAPPDATA%\MeuEditorDeVideo\logs` folder. To 
 
 ### Questions about the installed version
 
-Open **Help › About Meu Editor de Vídeo** to see the program version, the license, the privacy information and the list of components and AI models used.
+Open **Help › About Meu Editor de Vídeo** to see the program version, the license, the privacy information and the list of components and AI models used. In the same window, **Visit our website** opens the Meu Editor de Vídeo website in your language and **GitHub** opens the source code. To contact support, use **Help › Technical Support**.

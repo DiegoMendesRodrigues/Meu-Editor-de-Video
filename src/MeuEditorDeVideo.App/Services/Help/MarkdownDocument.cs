@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 
 namespace MeuEditorDeVideo.App.Services.Help;
 
@@ -16,11 +16,14 @@ public sealed record MdNote(IReadOnlyList<MdInline> Inlines) : MdBlock;
 
 public sealed record MdList(bool Numbered, IReadOnlyList<IReadOnlyList<MdInline>> Items) : MdBlock;
 
+/// <summary>Captura de tela do manual: <c>![descrição](imagens/idioma/arquivo.jpg)</c>, relativa à pasta do manual.</summary>
+public sealed record MdImage(string Alt, string Path) : MdBlock;
+
 public sealed record MdTable(IReadOnlyList<IReadOnlyList<MdInline>> Header, IReadOnlyList<IReadOnlyList<IReadOnlyList<MdInline>>> Rows) : MdBlock;
 
 /// <summary>
 /// Interpreta o manual do usuário (Markdown simples: títulos #/##/###, parágrafos, listas "- " e "1. ", tabelas com "|",
-/// notas "> ", **negrito** e `código`). Sem HTML, imagens ou links: a ajuda é local e não abre nada externo.
+/// notas "> ", **negrito**, `código` e imagens locais "![descrição](caminho)"). Sem HTML nem links: a ajuda é local e não abre nada externo.
 /// </summary>
 public static class MarkdownDocument
 {
@@ -54,6 +57,13 @@ public static class MarkdownDocument
                 FlushParagraph();
                 var text = trimmed[(level + 1)..].Trim();
                 blocks.Add(new MdHeading(level, text, UniqueAnchor(text, anchors)));
+                continue;
+            }
+
+            if (Image(trimmed) is { } image)
+            {
+                FlushParagraph();
+                blocks.Add(image);
                 continue;
             }
 
@@ -99,6 +109,16 @@ public static class MarkdownDocument
 
         FlushParagraph();
         return blocks;
+    }
+
+    /// <summary>Linha com só uma imagem, de caminho relativo (sem "..", "://" nem unidade): fica dentro da pasta do manual.</summary>
+    private static MdImage? Image(string line)
+    {
+        var m = System.Text.RegularExpressions.Regex.Match(line, @"^!\[([^\]]*)\]\(([^)\s]+)\)$");
+        if (!m.Success) return null;
+        var path = m.Groups[2].Value;
+        if (path.Contains("..", StringComparison.Ordinal) || path.Contains(':') || path.StartsWith('/') || path.StartsWith('\\')) return null;
+        return new MdImage(m.Groups[1].Value.Trim(), path);
     }
 
     private static int? HeadingLevel(string line)

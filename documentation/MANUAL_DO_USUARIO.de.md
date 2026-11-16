@@ -26,6 +26,8 @@ Eine dedizierte Grafikkarte ist nicht zwingend erforderlich, macht aber Vorschau
 
 ### Beim Öffnen des Programms
 
+![Willkommensfenster, das beim ersten Start erscheint.](imagens/de/boas-vindas.jpg)
+
 Beim ersten Start (oder wenn eine Einstellung in der Windows-Registrierung fehlt oder leer ist) erscheint das Fenster **Willkommen bei Meu Editor de Vídeos**. Füllen Sie **Vollständiger Name**, **Systemsprache**, **Design** (Hell, Dunkel oder Wie das Betriebssystem) und **Monatlich nach neuen Updates suchen** (Ja oder Nein) aus und klicken Sie auf **Einstellungen speichern**. Alle Felder sind Pflichtfelder, und das Fenster schließt sich erst nach dem Speichern. Wenn Sie eine andere Sprache wählen, startet das Programm darin neu. Später können Sie die Einstellungen unter **Werkzeuge › Einstellungen… › Allgemein** ändern.
 
 Das Programm öffnet sich direkt im Bearbeitungsbildschirm, mit einem neuen, leeren Projekt namens „Unbenannt“. Wenn es eine Kopie eines Projekts gibt, das nicht ordnungsgemäß geschlossen wurde, fragt das Programm, ob Sie sie wiederherstellen möchten (siehe Abschnitt Speichern, automatisches Speichern und Wiederherstellung).
@@ -33,6 +35,8 @@ Das Programm öffnet sich direkt im Bearbeitungsbildschirm, mit einem neuen, lee
 Die fünf zuletzt geöffneten Projekte erscheinen im Menü **Datei** zwischen Trennlinien. Klicken Sie auf eines, um es zu öffnen. Wenn die Datei verschoben oder gelöscht wurde, weist das Programm darauf hin und entfernt sie aus der Liste.
 
 ### Ein Projekt erstellen
+
+![Fenster Neues Projekt mit Vorlage, Name, Ordner und Videoeinstellungen.](imagens/de/criar.jpg)
 
 1. Wählen Sie **Datei › Neues Projekt…**.
 2. Geben Sie unter „Projektname“ einen Namen ein.
@@ -46,6 +50,8 @@ Die fünf zuletzt geöffneten Projekte erscheinen im Menü **Datei** zwischen Tr
 
 ### Ein vorhandenes Projekt öffnen
 
+![Menü Datei mit Öffnen… und der Liste der zuletzt verwendeten Projekte.](imagens/de/abrir-existente.jpg)
+
 Es gibt drei Möglichkeiten:
 
 - Wählen Sie **Datei › Öffnen…** und wählen Sie die .med-Datei aus.
@@ -56,6 +62,8 @@ Es gibt drei Möglichkeiten:
 
 Nachdem Sie ein Projekt erstellt oder geöffnet haben, erscheint der Bearbeitungsbildschirm. Er ist in Bereiche aufgeteilt:
 
+![Bearbeitungsfenster: Bibliothek, Monitor, Eigenschaften-Bereich und Zeitleiste.](imagens/de/edicao.jpg)
+
 - **Obere Leiste** (oben im Fenster): links die Menüs **Datei**, **Bearbeiten**, **Ansicht**, **Projekt**, **Werkzeuge** und **Hilfe** sowie die Schaltflächen **Speichern**, **Rückgängig** und **Wiederholen**; in der Mitte der Projektname; rechts **Design**, **Render-Warteschlange**, **Exportieren** und die Schaltflächen zum Minimieren, Maximieren und Schließen des Fensters. Ziehen Sie die Leiste, um das Fenster zu verschieben, und doppelklicken Sie darauf, um es zu maximieren oder wiederherzustellen.
 - **Medienbibliothek** (links): Oben befinden sich die Registerkarten Medienbibliothek, Videos, Bilder, Audio, Grafikelemente, Texte, Übergänge, Effekte, Farbe und KI. Bewegen Sie die Maus über eine Registerkarte, um den vollständigen Namen zu sehen. Importierte Medien erscheinen in einem Raster mit Miniaturbild und Dauer.
 - **Vorschau** (Mitte oben): zeigt das Ergebnis des Videos. Oben befinden sich die Vorschauauflösung, die Schaltfläche Proxy und die Schaltfläche **Monitor maximieren**, mit der die Vorschau Bibliothek und Zeitleiste überdeckt (das Eigenschaftenfeld bleibt sichtbar; klicken Sie erneut, um wiederherzustellen); unten die Positionsleiste (ziehen, um zu einer beliebigen Stelle zu springen), die Schaltflächen für Wiedergabe, Pause und Einzelbild, die Lautstärke, die Bildaufnahme (speichert das aktuelle Bild als PNG oder JPEG in Projektauflösung; auch unter **Datei › Aktuelles Bild exportieren…**) und der Vollbildmodus.
@@ -65,6 +73,8 @@ Nachdem Sie ein Projekt erstellt oder geöffnet haben, erscheint der Bearbeitung
 > Wenn der Projektname die Markierung „● nicht gespeichert“ trägt, gibt es Änderungen, die noch nicht gespeichert wurden. Verwenden Sie **Datei › Speichern** oder Strg+S.
 
 ### Menüs
+
+![Geöffnetes Menü Werkzeuge in der Menüleiste des Editors.](imagens/de/menus.jpg)
 
 - **Datei**: neues Projekt, **neu aus Vorlage**, öffnen, Medien importieren, Bildsequenz importieren, speichern, speichern unter, Sicherungskopie erstellen, exportieren, Render-Warteschlange, aktuelles Bild exportieren (PNG oder JPEG) und die fünf zuletzt verwendeten Projekte.
 - **Bearbeiten**: Rückgängig und Wiederholen; alles auswählen; teilen; **Schnitte zusammenfügen** (macht eine Teilung rückgängig: Klicken Sie auf das Lineal über der Schnittstelle; nur verfügbar, wenn beide Seiten die Fortsetzung desselben Mediums ohne unterschiedliche Einstellungen sind); ausschneiden, kopieren, an der Abspielposition einfügen und duplizieren; löschen, löschen und Lücke schließen (nur auf der Spur des Clips) und **löschen und zusammenfügen** (schließt die Lücke auf allen Spuren und hält sie synchron; gesperrte Spuren bewegen sich nicht, und der Vorgang wird abgelehnt, wenn ein Clip einer anderen Spur einen Teil des entfernten Abschnitts belegt).
@@ -94,6 +104,8 @@ Importieren heißt, die Dateien ins Projekt zu holen, die Sie verwenden möchten
 
 ### Unterstützte Formate
 
+![Medienbibliothek mit Auflösung und Bildrate jeder Datei.](imagens/de/formatos.jpg)
+
 - **Video**: MP4, M4V, MOV, MKV, WebM, AVI, WMV, FLV, MPG und MPEG, M2TS, MTS, TS, 3GP, OGV, MXF und VOB.
 - **Audio**: MP3, WAV, AAC, M4A, FLAC, OGG, OGA, Opus, WMA, AIFF, AIF, AC3 und AMR.
 - **Bild**: JPG und JPEG, PNG, BMP, TIF und TIFF, WebP, TGA, JFIF und SVG.
@@ -103,6 +115,8 @@ Importieren heißt, die Dateien ins Projekt zu holen, die Sie verwenden möchten
 Dateien in anderen Formaten werden mit der Meldung „Nicht unterstütztes Dateiformat.“ abgelehnt.
 
 ### So importieren Sie
+
+![Editor mit der Medienbibliothek und der Schaltfläche Medien importieren.](imagens/de/importar.jpg)
 
 1. Klicken Sie im Bibliotheksbereich auf **Medien importieren** oder verwenden Sie **Datei › Medien importieren…** (Tastenkombination Strg+I).
 2. Wählen Sie eine oder mehrere Dateien aus und bestätigen Sie.
@@ -116,11 +130,15 @@ Jedes importierte Medium erhält ein Miniaturbild. Wenn Sie ein Medium auswähle
 
 ### Die Bibliothek organisieren
 
+![Kontextmenü eines Mediums in der Bibliothek.](imagens/de/organizar.jpg)
+
 - Verwenden Sie das Feld **Suchen…**, um ein Medium nach Name, Kategorie oder den unter **Werkzeuge › Medien analysieren** erstellten Schlagwörtern zu finden (zum Beispiel „Sprache“, „Person“ oder „vertikal“).
 - Klicken Sie mit der rechten Maustaste auf ein Medium, um **Umbenennen…**, **Kategorie festlegen…**, **Kategorie entfernen**, **Zur Zeitleiste hinzufügen** oder **Aus dem Projekt entfernen** auszuwählen.
 - Das Entfernen eines Mediums aus dem Projekt löscht die Datei nicht vom Computer.
 
 ### Fehlende Medien
+
+![Hinweis auf fehlende Medien mit den Schaltflächen Suchen… und In Ordner suchen…](imagens/de/ausente.jpg)
 
 Wenn eine Datei verschoben, umbenannt oder gelöscht wurde, zeigt das Projekt beim Öffnen die Warnung „Einige Medien des Projekts wurden nicht gefunden“. Die Warnung erscheint auch in der Statusleiste als „Fehlende Medien“, mit der Anzahl der betroffenen Medien. So beheben Sie das:
 
@@ -146,10 +164,14 @@ In der Zeitleiste wird das Video von links nach rechts zusammengesetzt. Die **Ab
 
 ### Medien in die Zeitleiste einfügen
 
+![Video-, Audio- und Textclips auf den Spuren der Zeitleiste.](imagens/de/colocar.jpg)
+
 - Ziehen Sie ein Medium aus der Bibliothek auf eine Spur.
 - Oder wählen Sie das Medium in der Bibliothek aus und klicken Sie in der Symbolleiste auf **Zur Zeitleiste hinzufügen**. Bilder und Audio werden an der Abspielposition eingefügt: Ein Bild kommt auf eine freie Bildspur, sonst auf eine leere Videospur; Audio kommt auf eine an dieser Stelle freie Audiospur. Passt keine, legt das Programm eine neue Spur an.
 
 ### Verschieben, trimmen und teilen
+
+![Kontextmenü eines Clips mit Teilen, Geschwindigkeit… und Löschen und Lücke schließen.](imagens/de/mover.jpg)
 
 - **Verschieben**: Ziehen Sie den Clip an eine andere Stelle der Spur oder auf eine andere Spur desselben Typs.
 - **Anfang oder Ende trimmen**: Ziehen Sie den Rand des Clips, um den verwendeten Abschnitt zu kürzen oder zu verlängern.
@@ -164,10 +186,14 @@ In der Zeitleiste wird das Video von links nach rechts zusammengesetzt. Die **Ab
 
 ### Magnet und Ripple-Bearbeitung
 
+![Werkzeugleiste der Zeitleiste mit eingeschaltetem Magnetfang.](imagens/de/ima.jpg)
+
 - **Ausrichtungsmagnet** (Taste N): Wenn er aktiviert ist, „rastet“ der Clip an den Rändern anderer Clips und an der Abspielposition ein, sodass sich Teile leicht ohne Lücken aneinanderfügen lassen. Die Schaltfläche befindet sich in der Symbolleiste.
 - **Ripple-Bearbeitung**: Wenn sie aktiviert ist, schiebt das Verschieben oder Trimmen eines Clips die folgenden Clips mit, ohne Lücken zu hinterlassen.
 
 ### Spuren
+
+![Geöffnete Schaltfläche Spur hinzufügen mit den Spurtypen.](imagens/de/trilhas.jpg)
 
 Spuren sind die horizontalen Zeilen der Zeitleiste. Um eine Spur hinzuzufügen, klicken Sie auf die Schaltfläche **Spur hinzufügen** und wählen den Typ (jede neue Spur, ob von Ihnen oder vom Programm angelegt, wird ganz oben über allen anderen Spuren eingefügt):
 
@@ -197,9 +223,13 @@ Klicken Sie mit der rechten Maustaste auf den Clip und wählen Sie **Geschwindig
 
 ### Clips aktivieren und deaktivieren
 
+![Deaktivierter Clip in der Zeitleiste, abgeblendet und mit dem Symbol ⊘.](imagens/de/ativar.jpg)
+
 Klicken Sie mit der rechten Maustaste auf den Clip und wählen Sie **Clip aktivieren/deaktivieren**. Ein deaktivierter Clip bleibt in der Zeitleiste (abgeblendet und mit dem Symbol ⊘), ist aber bei Wiedergabe und Export weder zu sehen noch zu hören.
 
 ### Einstellungsebenen, verschachtelte Clips, geteilter Bildschirm und Multikamera
+
+![Menü Projekt mit Einstellungsebene, verschachteltem Clip, geteiltem Bildschirm und Multicam.](imagens/de/camadas.jpg)
 
 - **Einstellungsebene** (**Projekt › Einstellungsebene hinzufügen**): erstellt an der Abspielposition einen 5-Sekunden-Clip auf einer Effektspur. Die darauf angewendeten Effekte und Farbkorrekturen gelten für **alle darunterliegenden Spuren**, solange der Clip dauert. Wählen Sie die Ebene aus und fügen Sie auf den Registerkarten **Effekte** und **Farbe** Effekte hinzu. Die Deckkraft der Ebene dosiert den Effekt, und Masken begrenzen den Bereich. Dehnen oder verschieben Sie die Ebene wie jeden Clip.
 - **Verschachtelter Clip** (**Projekt › Verschachtelten Clip erstellen…** oder Kontextmenü): fasst die ausgewählten Clips (mit ihrem verknüpften Audio) zu einem einzigen Clip zusammen, der sich als Ganzes verschieben, schneiden und mit Effekten versehen lässt. Die ursprünglichen Spuren und Positionen bleiben darin erhalten. **Verschachtelten Clip auflösen** bringt die Clips zurück in die Zeitleiste, auf neue Spuren, nur mit dem Abschnitt, den der verschachtelte Clip zeigte. Der Ton des verschachtelten Clips wird nur bei normaler Geschwindigkeit wiedergegeben.
@@ -244,11 +274,15 @@ Verwenden Sie die Zoom-Schaltflächen in der Symbolleiste oder die Tastenkombina
 
 Um einen Effekt anzuwenden, wählen Sie den Clip in der Zeitleiste aus und verwenden die Registerkarten der Eigenschaften. Sie können auch die Bereiche der Bibliothek wie **Effekte**, **Farbe** und **Übergänge** verwenden: Doppelklicken Sie auf ein Element, um es an der Abspielposition oder auf den ausgewählten Clip anzuwenden, oder verwenden Sie die Schaltfläche **Auf ausgewählten Clip anwenden**. Effekte und Übergänge gelten auch für Bilder, Sticker und Texte, und die Registerkarte **Farbe** passt die Farben von Bildern und Stickern an. Wenn Sie einen Clip einfügen, öffnet sich der Eigenschaftenbereich von selbst auf der passenden Registerkarte: **Text** für Texte, **Video** für Videos, Bilder und Sticker und **Audio** für Audio.
 
+![Übergangsbibliothek neben Monitor und Zeitleiste.](imagens/de/transicoes.jpg)
+
 Der Bereich **Effekte** der Bibliothek zeigt fertige Videoeffekte als Miniaturen, nach Kategorien geordnet (wählen Sie die Kategorie in der Liste über den Miniaturen): **Trends**, **Intros**, **Outros**, **Liebe**, **Party**, **Rahmen**, **Hervorheben**, **Verzerrung**, **Glitch**, **Flackern**, **Grunge**, **Lupe**, **Licht**, **Retro**, **Wackeln**, **Dias**, **Geteilter Bildschirm**, **Timer**, **Sucher** und **Werkzeuge** (Weichzeichnen, Schärfen, Vignette, Chroma Key und die übrigen Grundeffekte). Jede Miniatur zeigt den Effekt in einer Strandszene mit einer Person; bei Bewegungseffekten wie **Wackeln** überlagert die Miniatur benachbarte Zeitpunkte, um die Bewegung anzudeuten. Die Effekte werden über die Zeit des Clips animiert: **Intros** blenden das Video am Clipanfang ein, **Outros** blenden es am Ende aus und der **Timer** folgt der Cliplänge. Nach dem Anwenden erscheint der Effekt auf der Registerkarte **Effekte** der Eigenschaften, wo Sie Stil, Intensität, Geschwindigkeit, Farbe und weitere Einstellungen wählen.
 
 Der Bereich **Filter** der Bibliothek (neben **Effekte**) bietet fertige Looks, die Farbe, Stimmung und Stil eines Videos oder Bildes auf einmal ändern, ohne jede Einstellung einzeln anzupassen. Wählen Sie die Kategorie in der Liste über den Miniaturen: **Einfach**, **Empfohlen**, **Monochrom**, **Lifestyle**, **Filmisch**, **Retro**, **Frühling**, **Innenräume**, **Nacht** und **Kreativ**. Jede Miniatur zeigt den Filter auf einer farbigen Strandszene mit Leuchtturm, Segelboot und Palme. Wählen Sie den Clip aus und doppelklicken Sie auf den Filter (oder verwenden Sie **Auf ausgewählten Clip anwenden**). Ein Filter besteht aus normalen Effekten (Farbanpassungen, Kurven, Farbräder, Vignette, Körnung, weiches Leuchten), die auf der Registerkarte **Effekte** der Eigenschaften erscheinen, wo Sie jeden einzeln anpassen oder entfernen können.
 
 ### Registerkarte Video
+
+![Registerkarte Video der Clip-Eigenschaften mit Transformation und 3D.](imagens/de/aba-video.jpg)
 
 Diese Registerkarte bündelt die Bewegungs- und Zeiteinstellungen des Clips:
 
@@ -284,6 +318,8 @@ Die verfügbaren Übergänge sind: Harter Schnitt, Überblenden, Abblenden und A
 
 ### Effekte
 
+![Videoeffekte nach Kategorie in der Bibliothek und die Registerkarte Effekte der Eigenschaften.](imagens/de/efeitos.jpg)
+
 Die Registerkarte **Effekte** hat zwei Teile. Oben ein Raster mit einem Miniaturbild jedes Effekts, das das Ergebnis an einer Beispielszene zeigt: Klicken Sie auf eines, um den Effekt zum Clip hinzuzufügen. Unten die Liste **Angewendete Effekte**, in der Reihenfolge, in der die Effekte verarbeitet werden. Jeder Effekt der Liste hat Schieberegler für seine Einstellungen sowie die Schaltflächen **Nach oben**, **Nach unten** und **Effekt entfernen**. Der Pfeil links neben dem Namen blendet die Einstellungen ein oder aus. Doppelklicken Sie auf einen Schieberegler, um zum Standardwert zurückzukehren. Bei Farbeinstellungen zeigt ein farbiger Streifen unter dem Regler die Wirkung des Werts (zum Beispiel Blau bis Orange bei der Temperatur).
 
 Verfügbare visuelle Effekte:
@@ -302,6 +338,8 @@ Die Karten der bereits auf den Clip angewendeten Optionen haben einen hervorgeho
 
 ### Farbe
 
+![Farbbereich mit den Einstellungen des ausgewählten Clips.](imagens/de/cor.jpg)
+
 Die Registerkarte **Farbe** beginnt mit den **Voreinstellungen**: Schwarzweiß, Noir, Kino, Lebendig, Warm, Kühl, Verblasst, Retro und Hell und luftig. Klicken Sie auf ein Miniaturbild, um den Stil auf den Clip anzuwenden. Die Voreinstellung erscheint in der Liste der angewendeten Korrekturen als normale Anpassungen, die Sie ändern oder entfernen können; **Rückgängig** (Strg+Z) macht alles auf einmal rückgängig.
 
 Darunter, unter **Farbwerkzeuge** (und im Bereich **Farbe** der Bibliothek), befinden sich die Werkzeuge zur Farbkorrektur:
@@ -317,6 +355,8 @@ Darunter, unter **Farbwerkzeuge** (und im Bereich **Farbe** der Bibliothek), bef
 
 ### Masken, Verfolgung und Stabilisierung
 
+![Registerkarte Komposition mit Masken, Bewegungs-Tracking und Stabilisierung.](imagens/de/mascaras.jpg)
+
 Diese Funktionen befinden sich auf der Registerkarte **Komposition**. Sie funktionieren für Videos, Bilder, Texte und Grafikelemente.
 
 - **Masken**: Erstellen Sie eine Form mit **+ Rechteck**, **+ Ellipse** oder **+ Frei** (Punkte, mit Strg+Klick im Monitor). Die Maske beschneidet, was vom Clip sichtbar ist. Sie können Masken addieren, subtrahieren oder schneiden, die Maske umkehren und die Kontur weichzeichnen.
@@ -327,6 +367,8 @@ Diese Funktionen befinden sich auf der Registerkarte **Komposition**. Sie funkti
 
 ### Grafikelemente und Formen
 
+![Bereich Grafikelemente der Bibliothek mit Formen und Stickern.](imagens/de/graficos.jpg)
+
 Doppelklicken Sie im Bereich **Grafikelemente** der Bibliothek auf eine Form, um sie an der Abspielposition einzufügen. Verfügbare Formen sind: Rechteck, Abgerundetes Rechteck, Kreis, Linie, Pfeil, Stern, Sechseck, Sprechblase und Herz. Füllung und Konturfarbe stellen Sie auf der Registerkarte **Komposition** ein.
 
 Sie können auch über die Schaltfläche **SVG importieren…** eine Vektorgrafik importieren.
@@ -334,6 +376,8 @@ Sie können auch über die Schaltfläche **SVG importieren…** eine Vektorgrafi
 Unter **Sticker** erscheinen die Sticker der installierten Pakete. Das Programm wird mit dem Paket **Basis** mit 96 Stickern ausgeliefert: häufig verwendete (Pfeile, Hervorhebungskreis, richtig und falsch, Sprechblasen, Herz, Stern, Emojis, Schaltflächen Abonnieren und Gefällt mir, Siegel wie Neu und Angebot und andere), geometrische Formen (Kreis, Quadrat, Rechteck, Dreieck, Raute, Fünfeck und Sechseck), Kartenpins mit quadratischem, rundem, sechseckigem, rautenförmigem, Stern-, Herz- oder Dreieckskopf sowie Pins für Orte in der Stadt (Flughafen, Bus-, Bahn- und U-Bahn-Station, Krankenhaus, Polizei, Feuerwehr, Schule, Museum, Park, Restaurant, Hotel und andere). Es kann nicht entfernt, aber exportiert werden. Klicken Sie auf einen, um ihn 3 Sekunden lang mit 40 % Größe (auf der Registerkarte Video anpassbar) an der Abspielposition auf einer freien Bildspur (oder einer neuen Spur namens Sticker) einzufügen. Das Bild kommt auch in die Bibliothek, in die Kategorie Sticker.
 
 ### Texte und Untertitel
+
+![Bereich Texte der Bibliothek und die Registerkarte Text des ausgewählten Titels.](imagens/de/textos.jpg)
 
 ### Texte einfügen
 
@@ -382,6 +426,8 @@ Beim Exportieren des Videos können Sie wählen, ob eine Untertiteldatei neben d
 
 ### Registerkarte Audio des Clips
 
+![Registerkarte Audio des Clips mit Wellenform, Lautstärke und Normalisierung.](imagens/de/aba-audio.jpg)
+
 Wählen Sie einen Audioclip oder ein Video mit Ton aus und verwenden Sie die Registerkarte **Audio**:
 
 - **Wellenform**: Oben im Reiter wird das Audio des Clips angezeigt, mit der Abspielposition der Zeitleiste in Rot. Klicken oder ziehen Sie darauf, um zu einer anderen Stelle im Audio zu springen; Abspielposition und Monitor folgen.
@@ -395,6 +441,8 @@ Wählen Sie einen Audioclip oder ein Video mit Ton aus und verwenden Sie die Reg
 - **Tonhöhe bei Geschwindigkeit beibehalten**: Wenn der Clip beschleunigt oder verlangsamt wird, behält die Stimme eine natürliche Tonhöhe.
 
 ### Audioeffekte
+
+![Audioeffekte auf der Registerkarte Audio, unter Absenkung und Synchronisierung.](imagens/de/efeitos-audio.jpg)
 
 Auf derselben Registerkarte finden Sie unter **Audioeffekt hinzufügen** die Effekte:
 
@@ -411,6 +459,8 @@ Die Effekte werden in der Reihenfolge angewendet, in der sie in der Liste **Ange
 
 ## Künstliche Intelligenz
 
+![KI-Bereich der Bibliothek und die Registerkarte Künstliche Intelligenz der Eigenschaften.](imagens/de/ia.jpg)
+
 Die Funktionen der künstlichen Intelligenz laufen ausschließlich auf Ihrem Computer. Weder Video noch Audio, Bild oder Text wird ins Internet gesendet.
 
 Die Funktionen befinden sich auf der Registerkarte **KI** der Eigenschaften, wenn Sie einen Clip in der Zeitleiste auswählen. Der Bereich **KI** der Bibliothek fasst die Funktionen zusammen und enthält die Schaltfläche **KI-Modelle verwalten…**, die die Modellverwaltung öffnet.
@@ -418,6 +468,8 @@ Die Funktionen befinden sich auf der Registerkarte **KI** der Eigenschaften, wen
 ### Benötigte Modelle
 
 Jede Funktion verwendet ein KI-Modell. Das Modell für **Hintergrund entfernen** wird mit dem Programm geliefert. Die übrigen müssen einmalig mit dem Werkzeug **KI-Modelle herunterladen** installiert werden. Wenn das Modell einer Funktion nicht installiert ist, ist die Schaltfläche deaktiviert und die Meldung „Nicht verfügbar — installieren Sie das Modell unter Werkzeuge › KI-Modelle.“ erscheint.
+
+![Fenster KI-Modelle herunterladen mit den optionalen Modellen.](imagens/de/modelos-ia.jpg)
 
 | Funktion | Modell | Installation nötig | Läuft auf |
 |---|---|---|---|
@@ -440,6 +492,8 @@ Die Spracherkennung (Untertitel) verwendet Silero VAD, um die Abschnitte mit Spr
 > Die Modelle der Tabelle belegen Speicherplatz auf der Festplatte und bei der Nutzung auch Arbeitsspeicher. Whisper zum Beispiel benötigt etwa 1,5 GB freien Arbeitsspeicher.
 
 ### Hintergrund entfernen
+
+![Registerkarte Künstliche Intelligenz mit Hintergrund entfernen oben.](imagens/de/remover-fundo.jpg)
 
 Trennt die Person vom Hintergrund und macht den Hintergrund transparent oder ersetzt ihn durch etwas anderes. Verwenden Sie auf der Registerkarte **KI** die Option **Hintergrund mit KI entfernen**.
 
@@ -492,6 +546,8 @@ Vergrößert ein Foto um 2× und rekonstruiert dabei Details. Wählen Sie das Bi
 
 Beantwortet Fragen zum Programm und zur Videobearbeitung anhand dieses Handbuchs, in der Sprache des Programms und ohne Internet. Öffnen Sie ihn über **Hilfe › Virtueller Assistent** (Umschalt+F1): Der Bereich erscheint rechts im Editor. Geben Sie die Frage ein und drücken Sie die Eingabetaste (Umschalt+Eingabe fügt eine Zeile ein); ohne Unterhaltung schlägt der Bereich einige Fragen vor.
 
+![Virtueller Assistent beantwortet eine Frage und nennt den Abschnitt des Handbuchs.](imagens/de/assistente.jpg)
+
 - Mit installiertem Sprachmodell **Phi-4-mini** schreibt der Assistent eine kurze Antwort, die nur die gefundenen Handbuchauszüge verwendet, und zeigt die **Quelle im Handbuch**: Ein Klick darauf öffnet das Handbuch an dieser Stelle. Die Stopp-Schaltfläche bricht die Antwort ab.
 - Ohne das Modell zeigt der Assistent die Abschnitte des Handbuchs zum Thema, jeweils mit einem Auszug und der Schaltfläche **Im Handbuch öffnen**. Der Hinweis oben im Bereich installiert das Modell (etwa 3,2 GB, einmalig von den offiziellen Quellen heruntergeladen), ohne den Editor zu verlassen; **Jetzt nicht** blendet den Hinweis aus.
 - Das Modell nutzt die Grafikkarte, wenn das **KI-Gerät** auf **GPU (DirectML)** steht (unter **Einstellungen › Leistung**), sonst den Prozessor. Die erste Frage dauert einige Sekunden länger, weil das Modell geladen wird; beim Schließen des Bereichs wird es aus dem Speicher entfernt.
@@ -508,6 +564,8 @@ Exportieren heißt, die endgültige Videodatei zu erzeugen. Klicken Sie oben rec
 ### Exportvorlagen
 
 Wählen Sie in der Liste links im Exportfenster eine Vorlage. Jede Vorlage enthält bereits die passenden Einstellungen für eine Plattform:
+
+![Fenster Video exportieren mit den Exportvorlagen und Einstellungen.](imagens/de/exportacao.jpg)
 
 - YouTube
 - YouTube Shorts
@@ -567,6 +625,8 @@ Verwenden Sie **Export abbrechen**, um ein Element anzuhalten, **Aus der Wartesc
 
 ## Speichern, automatisches Speichern und Wiederherstellung
 
+![Registerkarte Allgemein der Einstellungen mit dem automatischen Speichern.](imagens/de/salvar.jpg)
+
 ### Das Projekt speichern
 
 - **Datei › Speichern** (Strg+S): schreibt die Änderungen in die Projektdatei.
@@ -592,6 +652,8 @@ Wenn das Programm ohne Speichern geschlossen wurde, erscheint beim erneuten Öff
 
 ## Einstellungen und Leistung
 
+![Fenster Einstellungen auf der Registerkarte Cache.](imagens/de/configuracoes.jpg)
+
 Öffnen Sie die Einstellungen unter **Werkzeuge › Einstellungen…** (Tastenkombination Strg+,). Die Einstellungen sind auf vier Registerkarten verteilt. Nichts wird gespeichert, bevor Sie auf **Speichern** klicken.
 
 ### Registerkarte Allgemein
@@ -607,6 +669,8 @@ Wenn das Programm ohne Speichern geschlossen wurde, erscheint beim erneuten Öff
 Name, Sprache, Design und Update-Einstellung werden in der Windows-Registrierung unter `HKEY_CURRENT_USER\Software\Meu Editor de Vídeo` gespeichert.
 
 ### Registerkarte Leistung
+
+![Registerkarte Leistung mit der erkannten Hardware.](imagens/de/desempenho.jpg)
 
 - **Erkannte Hardware**: zeigt Prozessor, Arbeitsspeicher, Grafikkarten, Laufwerke und ob die Grafikkarte Video dekodieren und kodieren kann. Das Programm zeigt außerdem die Grenzen des Computers und eine Nutzungsempfehlung.
 - **Vorschau**: Die **Standardqualität der Vorschau** kann **Automatisch**, **Voll**, **1/2 der Auflösung** oder **1/4 der Auflösung** sein. Bei Automatisch wählt das Programm je nach Computer und Projekt und senkt die Auflösung während der Wiedergabe, wenn der Computer nicht mithält. **Speicher für Vorschaubilder** legt fest, wie viel Platz zum Speichern fertiger Bilder verwendet wird.
@@ -731,4 +795,4 @@ Die Betriebsprotokolle (Logs) befinden sich im Ordner `%LOCALAPPDATA%\MeuEditorD
 
 ### Fragen zur installierten Version
 
-Öffnen Sie **Hilfe › Über Meu Editor de Vídeo**, um die Programmversion, die Lizenz, die Datenschutzinformationen und die Liste der verwendeten Komponenten und KI-Modelle zu sehen.
+Öffnen Sie **Hilfe › Über Meu Editor de Vídeo**, um die Programmversion, die Lizenz, die Datenschutzinformationen und die Liste der verwendeten Komponenten und KI-Modelle zu sehen. Im selben Fenster öffnet **Besuchen Sie unsere Website** die Website von Meu Editor de Vídeo in Ihrer Sprache und **GitHub** den Quellcode. Um den Support zu kontaktieren, verwenden Sie **Hilfe › Technischer Support**.

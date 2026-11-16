@@ -26,6 +26,8 @@ Uma placa gráfica dedicada não é obrigatória para o programa funcionar, mas 
 
 ### Ao abrir o programa
 
+![Janela Bem-vindo ao Meu Editor de Vídeos, mostrada na primeira vez.](imagens/pt-PT/boas-vindas.jpg)
+
 Na primeira vez (ou se alguma preferência estiver em falta ou vazia no registo do Windows), aparece a janela **Bem-vindo ao Meu Editor de Vídeos**. Preencha **Nome Completo**, **Idioma do sistema**, **Tema** (Claro, Escuro ou Acompanhar o sistema operativo) e **Verificar mensalmente se há novas atualizações** (Sim ou Não) e clique em **Guardar as preferências**. Todos os campos são obrigatórios e a janela só fecha depois de guardar. Se escolher outro idioma, o programa reinicia nele. Depois, as preferências podem ser mudadas em **Ferramentas › Configurações… › Geral**.
 
 O programa abre direto na ecrã de edição, com um projeto novo e vazio chamado "Sem título". Se existir uma cópia de um projeto que não foi fechado corretamente, o programa pergunta se o utilizador quer recuperá-la (veja a seção Guardar, gravação automático e recuperação).
@@ -33,6 +35,8 @@ O programa abre direto na ecrã de edição, com um projeto novo e vazio chamado
 Os últimos cinco projetos abertos aparecem no menu **Ficheiro**, entre separadores. Clique num deles para abrir. Se o ficheiro tiver sido movido ou apagado, o programa avisa e o tira da lista.
 
 ### Criar um projeto
+
+![Janela Novo projeto, com o modelo, o nome, a pasta e as definições do vídeo.](imagens/pt-PT/criar.jpg)
 
 1. Escolha **Ficheiro › Novo projeto…**.
 2. Escreva um nome em "Nome do projeto".
@@ -46,6 +50,8 @@ Os últimos cinco projetos abertos aparecem no menu **Ficheiro**, entre separado
 
 ### Abrir um projeto existente
 
+![Menu Ficheiro, com Abrir… e a lista de projetos recentes.](imagens/pt-PT/abrir-existente.jpg)
+
 Há três maneiras:
 
 - Escolha **Ficheiro › Abrir…** e selecione o ficheiro .med.
@@ -56,6 +62,8 @@ Há três maneiras:
 
 Depois de criar ou abrir um projeto, a ecrã de edição aparece. Ela é dividida em áreas:
 
+![Janela de edição: biblioteca, monitor, painel Propriedades e linha temporal.](imagens/pt-PT/edicao.jpg)
+
 - **Barra superior** (no topo da janela): à esquerda, os menus **Ficheiro**, **Editar**, **Visualizar**, **Projeto**, **Ferramentas** e **Ajuda** e os botões **Guardar**, **Desfazer** e **Refazer**; no centro, o nome do projeto; à direita, **Tema**, **Fila de renderização**, **Exportar** e os botões de minimizar, maximizar e fechar a janela. Arraste a barra para mover a janela e dê um duplo clique nela para maximizar ou restaurar.
 - **Biblioteca de ficheiros multimédia** (à esquerda): no alto ficam as abas Biblioteca de Multimédia, Vídeos, Imagens, Áudios, Elementos Gráficos, Textos, Transições, Efeitos, Cor e IA. Passe o rato sobre uma aba para ver o nome completo. As ficheiros multimédia importadas aparecem em grade, com miniatura e duração.
 - **Pré-visualização** (no centro, em cima): mostra o resultado do vídeo. Em cima ficam a resolução da pré-visualização, o botão Proxy e o botão **Maximizar o monitor**, que faz a pré-visualização cobrir a biblioteca e a linha temporal (o painel Propriedades continua visível; clique de novo para restaurar); embaixo, a barra de posição (arraste para ir a qualquer ponto), os botões de reproduzir, pausar e avançar fotograma a fotograma, o volume, a captura de fotograma (guarda o fotograma atual em PNG ou JPEG, na resolução do projeto; também em **Ficheiro › Exportar fotograma atual…**) e a ecrã inteiro.
@@ -65,6 +73,8 @@ Depois de criar ou abrir um projeto, a ecrã de edição aparece. Ela é dividid
 > Quando o nome do projeto aparece com a marca "● não guardado", existem alterações que ainda não foram gravadas. Use **Ficheiro › Guardar** ou Ctrl+S.
 
 ### Menus
+
+![Menu Ferramentas aberto na barra de menus do editor.](imagens/pt-PT/menus.jpg)
 
 - **Ficheiro**: novo projeto, **novo a partir de modelo**, abrir, importar multimédia, importar sequência de imagens, guardar, guardar como, criar cópia de segurança, exportar, fila de renderização, exportar fotograma atual (PNG ou JPEG) e os cinco projetos recentes.
 - **Editar**: desfazer e refazer; selecionar tudo; dividir; **juntar os cortes** (desfaz uma divisão: clique na régua sobre o ponto do corte; só fica disponível quando os dois lados são a continuação da mesma multimédia, sem ajustes diferentes); recortar, copiar, colar no cursor e duplicar; eliminar, eliminar e fechar o espaço (só na faixa do clipe) e **eliminar e juntar** (fecha o espaço em todas as faixas, mantendo a sincronia; faixas bloqueadas não se movem e a operação é recusada se um clipe de outra faixa ocupar parte do trecho removido).
@@ -94,6 +104,8 @@ Importar é trazer para o projeto os ficheiros que o utilizador vai usar, como v
 
 ### Formatos aceitos
 
+![Biblioteca de multimédia com a resolução e a taxa de fotogramas de cada ficheiro.](imagens/pt-PT/formatos.jpg)
+
 - **Vídeo**: MP4, M4V, MOV, MKV, WebM, AVI, WMV, FLV, MPG e MPEG, M2TS, MTS, TS, 3GP, OGV, MXF e VOB.
 - **Áudio**: MP3, WAV, AAC, M4A, FLAC, OGG, OGA, Opus, WMA, AIFF, AIF, AC3 e AMR.
 - **Imagem**: JPG e JPEG, PNG, BMP, TIF e TIFF, WebP, TGA, JFIF e SVG.
@@ -103,6 +115,8 @@ Importar é trazer para o projeto os ficheiros que o utilizador vai usar, como v
 Ficheiros de outros formatos são recusados, com a mensagem "Formato de ficheiro não suportado.".
 
 ### Como importar
+
+![Editor com a biblioteca de multimédia e o botão Importar multimédia.](imagens/pt-PT/importar.jpg)
 
 1. Clique em **Importar Multimédia** no painel da biblioteca, ou use **Ficheiro › Importar multimédia…** (atalho Ctrl+I).
 2. Escolha um ou vários ficheiros e confirme.
@@ -116,11 +130,15 @@ Cada multimédia importada ganha uma miniatura. Ao selecionar uma multimédia, a
 
 ### Organizar a biblioteca
 
+![Menu de contexto de um elemento da biblioteca.](imagens/pt-PT/organizar.jpg)
+
 - Use a caixa **Pesquisar…** para encontrar uma multimédia pelo nome, pela categoria ou pelas etiquetas criadas em **Ferramentas › Analisar multimédia** (por exemplo "fala", "pessoa" ou "vertical").
 - Clique com o botão direito numa multimédia para **Renomear…**, **Definir categoria…**, **Remover categoria**, **Adicionar à linha temporal** ou **Remover do projeto**.
 - Remover uma multimédia do projeto não apaga o ficheiro do computador.
 
 ### Multimédia ausente
+
+![Aviso de multimédia não encontrada, com os botões Localizar… e Procurar numa pasta…](imagens/pt-PT/ausente.jpg)
 
 Se um ficheiro foi movido, renomeado ou apagado, o projeto mostra o aviso "Algumas ficheiros multimédia do projeto não foram encontradas" ao ser aberto. O aviso também aparece na barra de status como "Multimédia ausentes", com a quantidade de ficheiros multimédia afetadas. Para resolver:
 
@@ -146,10 +164,14 @@ A linha temporal é onde o vídeo é montado da esquerda para a direita. O **cur
 
 ### Colocar ficheiros multimédia na linha temporal
 
+![Clips de vídeo, áudio e texto colocados nas faixas da linha temporal.](imagens/pt-PT/colocar.jpg)
+
 - Arraste uma multimédia da biblioteca para uma faixa.
 - Ou selecione a multimédia na biblioteca e clique em **Adicionar à linha temporal**, na barra de ferramentas. Imagens e áudios entram na posição do cursor: a imagem vai para uma faixa de Imagem livre, senão para uma faixa de vídeo vazia; o áudio vai para uma faixa de áudio livre nesse trecho. Se nenhuma servir, o programa cria uma faixa nova.
 
 ### Mover, cortar e dividir
+
+![Menu de contexto de um clip, com Dividir, Velocidade… e Eliminar e fechar o espaço.](imagens/pt-PT/mover.jpg)
 
 - **Mover**: arraste o clipe para outro lugar da faixa ou para outra faixa do mesmo tipo.
 - **Aparar o início ou o fim**: arraste a borda do clipe para encurtar ou alongar o trecho usado.
@@ -164,10 +186,14 @@ A linha temporal é onde o vídeo é montado da esquerda para a direita. O **cur
 
 ### Ímã e edição em cascata
 
+![Barra de ferramentas da linha temporal, com o íman de alinhamento ligado.](imagens/pt-PT/ima.jpg)
+
 - **Ímã de alinhamento** (tecla N): quando ligado, o clipe "gruda" nas bordas de outros clipes e no cursor, o que facilita encaixar as partes sem deixar espaços. O botão fica na barra de ferramentas.
 - **Edição em cascata (ripple)**: quando ligada, mover ou aparar um clipe empurra os clipes seguintes, sem deixar buracos.
 
 ### Faixas
+
+![Botão Adicionar faixa aberto, com os tipos de faixa.](imagens/pt-PT/trilhas.jpg)
 
 As faixas são as linhas horizontais da linha temporal. Para adicionar uma faixa, clique no botão **Adicionar faixa** e escolha o tipo (todas as faixas novas, criadas pelo utilizador ou pelo programa, entram no topo, acima de todas as outras):
 
@@ -197,9 +223,13 @@ Clique com o botão direito no clipe e escolha **Velocidade…** para deixá-lo 
 
 ### Ativar e desativar clipes
 
+![Clip desativado na linha temporal, esbatido e com o símbolo ⊘.](imagens/pt-PT/ativar.jpg)
+
 Clique com o botão direito no clipe e escolha **Ativar/desativar clipe**. Um clipe desativado continua na linha temporal (esmaecido e com o símbolo ⊘), mas não aparece nem soa na reprodução e na exportação.
 
 ### Camadas de ajuste, clipes compostos, ecrã dividido e multicâmara
+
+![Menu Projeto, com camada de ajuste, clip composto, ecrã dividido e multicâmara.](imagens/pt-PT/camadas.jpg)
 
 - **Camada de ajuste** (**Projeto › Adicionar camada de ajuste**): cria, no cursor, um clipe de 5 segundos numa faixa de efeitos. Os efeitos e a correção de cor colocados nele valem para **todas as faixas abaixo**, durante o tempo do clipe. Selecione a camada e adicione efeitos nas abas **Efeitos** e **Cor**. A opacidade da camada dosa o efeito e as máscaras limitam a área. Estique ou mova a camada como qualquer clipe.
 - **Clipe composto** (**Projeto › Criar clipe composto…** ou menu de contexto): junta os clipes selecionados (com os áudios vinculados) num único clipe, que se move, corta e recebe efeitos como um só. As faixas e as posições originais ficam guardadas dentro dele. **Desfazer clipe composto** devolve os clipes à linha temporal, em faixas novas, só com o trecho que o clipe composto mostrava. O som do clipe composto só toca em velocidade normal.
@@ -244,11 +274,15 @@ Use os botões de zoom na barra de ferramentas, ou os atalhos:
 
 Para aplicar um efeito, selecione o clipe na linha temporal e use as abas das propriedades. O utilizador também pode usar as seções da biblioteca, como **Efeitos**, **Cor** e **Transições**: clique duas vezes num item para aplicá-lo no cursor ou ao clipe selecionado, ou use o botão **Aplicar ao clipe selecionado**. Efeitos e transições também se aplicam a imagens, figurinhas e textos, e a aba **Cor** ajusta as cores de imagens e figurinhas. Ao inserir um clip, o painel de propriedades abre-se sozinho na aba certa: **Texto** para textos, **Vídeo** para vídeos, imagens e figurinhas, e **Áudio** para áudios.
 
+![Biblioteca de transições ao lado do monitor e da linha temporal.](imagens/pt-PT/transicoes.jpg)
+
 A secção **Efeitos** da biblioteca mostra os efeitos de vídeo prontos em miniaturas, separados por categoria (escolha a categoria na lista acima das miniaturas): **Tendências**, **Aberturas**, **Encerramentos**, **Amor**, **Festa**, **Moldura**, **Destaque**, **Distorção**, **Falha digital**, **Cintilação**, **Grunge**, **Lupa**, **Luz**, **Retro**, **Tremido**, **Diapositivos**, **Ecrã dividido**, **Temporizador**, **Visor** e **Utilitários** (desfocagem, nitidez, vinheta, chroma key e os outros efeitos básicos). Cada miniatura mostra o efeito numa cena de praia com uma pessoa; nos efeitos de movimento, como o **Tremido**, a miniatura sobrepõe instantes vizinhos para indicar o movimento. Os efeitos são animados pelo tempo do clip: as **Aberturas** revelam o vídeo no início do clip, os **Encerramentos** escondem-no no fim e o **Temporizador** acompanha a duração do clip. Depois de aplicado, o efeito aparece no separador **Efeitos** das propriedades, onde o utilizador escolhe o estilo, a intensidade, a velocidade, a cor e outros ajustes.
 
 A secção **Filtros** da biblioteca (ao lado de **Efeitos**) traz looks prontos que mudam de uma vez a cor, o ambiente e o estilo do vídeo ou da imagem, sem ajustar cada parâmetro. Escolha a categoria na lista acima das miniaturas: **Básico**, **Destaques**, **Monocromático**, **Estilo de vida**, **Cinematográfico**, **Retro**, **Primavera**, **Interiores**, **Noturno** e **Criativos**. Cada miniatura mostra o filtro aplicado numa cena colorida de praia com farol, veleiro e palmeira. Selecione o clip e faça duplo clique no filtro (ou use **Aplicar ao clip selecionado**). O filtro é feito de efeitos comuns (ajustes de cor, curvas, rodas de cor, vinheta, grão, brilho suave), que aparecem no separador **Efeitos** das propriedades: aí pode ajustar ou remover cada um.
 
 ### Aba Vídeo
+
+![Separador Vídeo das propriedades do clip, com a transformação e o 3D.](imagens/pt-PT/aba-video.jpg)
 
 Esta aba reúne as definições de movimento e tempo do clipe:
 
@@ -284,6 +318,8 @@ As transições disponíveis são: Corte seco, Dissolver, Escurecer e clarear (f
 
 ### Efeitos
 
+![Efeitos de vídeo por categoria na biblioteca e o separador Efeitos das propriedades.](imagens/pt-PT/efeitos.jpg)
+
 A aba **Efeitos** tem duas partes. Em cima, uma grade com uma miniatura de cada efeito, que mostra o resultado numa cena de exemplo: clique numa delas para adicionar o efeito ao clipe. Embaixo, a lista **Efeitos aplicados**, na ordem em que os efeitos são processados. Cada efeito da lista tem controles deslizantes para os ajustes, e os botões **Mover para cima**, **Mover para baixo** e **Remover efeito**. A seta à esquerda do nome mostra ou oculta os ajustes. Dê um duplo clique num controle deslizante para voltar ao valor padrão. Nos ajustes de cor, uma faixa colorida sob o controle mostra o efeito do valor (por exemplo, azul a laranja na temperatura).
 
 Efeitos visuais disponíveis:
@@ -302,6 +338,8 @@ Os cartões das opções já aplicadas ao clipe ficam com a borda em destaque. U
 
 ### Cor
 
+![Painel Cor com os ajustes do clip selecionado.](imagens/pt-PT/cor.jpg)
+
 A aba **Cor** começa pelas **Predefinições**: Preto e branco, Noir, Cinema, Vívido, Quente, Frio, Desbotado, Retrô e Claro e arejado. Clique numa miniatura para aplicar o estilo ao clipe. A predefinição entra na lista de correções aplicadas como ajustes comuns, que o utilizador pode alterar ou remover; **Desfazer** (Ctrl+Z) volta tudo de uma vez.
 
 Abaixo, em **Ferramentas de cor** (e na seção **Cor** da biblioteca), ficam as ferramentas de correção de cor:
@@ -317,6 +355,8 @@ Abaixo, em **Ferramentas de cor** (e na seção **Cor** da biblioteca), ficam as
 
 ### Máscaras, rastreamento e estabilização
 
+![Separador Composição, com máscaras, seguimento de movimento e estabilização.](imagens/pt-PT/mascaras.jpg)
+
 Esses recursos ficam na aba **Composição**. Eles funcionam para vídeos, imagens, textos e elementos gráficos.
 
 - **Máscaras**: crie uma forma com **+ Retângulo**, **+ Elipse** ou **+ Livre** (pontos, com Ctrl+clique no monitor). A máscara recorta o que aparece do clipe. O utilizador pode somar, subtrair ou fazer a interseção de máscaras, inverter a máscara e suavizar o contorno.
@@ -327,6 +367,8 @@ Esses recursos ficam na aba **Composição**. Eles funcionam para vídeos, image
 
 ### Elementos gráficos e formas
 
+![Secção Elementos gráficos da biblioteca, com formas e autocolantes.](imagens/pt-PT/graficos.jpg)
+
 Na seção **Elementos Gráficos** da biblioteca, clique duas vezes numa forma para inseri-la no cursor. As formas disponíveis são: Retângulo, Retângulo arredondado, Círculo, Linha, Seta, Estrela, Hexágono, Balão de fala e Coração. O utilizador pode ajustar o preenchimento e a cor do contorno na aba **Composição**.
 
 Também é possível importar um gráfico vetorial pelo botão **Importar SVG…**.
@@ -334,6 +376,8 @@ Também é possível importar um gráfico vetorial pelo botão **Importar SVG…
 Em **Autocolantes** aparecem as autocolantes dos pacotes instalados. O programa já vem com o pacote **Básico**, com 96 autocolantes: de uso comum (setas, círculo de destaque, certo e errado, balões de fala, coração, estrela, emojis, botões Inscreva-se e Curtir, selos como Novo e Oferta, entre outras), formas geométricas (círculo, quadrado, retângulo, triângulo, losango, pentágono e hexágono), pinos de mapa com o topo quadrado, redondo, hexagonal, em losango, estrela, coração ou triângulo, e pinos de pontos de interesse da cidade (aeroporto, estações de autocarro, comboio e metro, hospital, polícia, bombeiros, escola, museu, parque, restaurante, hotel, entre outros). Ele não pode ser removido, mas pode ser exportado. Clique numa delas para inseri-la no cursor por 3 segundos, com 40% do tamanho (ajuste na aba Vídeo), numa faixa de imagem livre (ou numa faixa nova chamada Autocolantes). A imagem entra também na biblioteca, na categoria Autocolantes.
 
 ### Textos e legendas
+
+![Secção Textos da biblioteca e o separador Texto do título selecionado.](imagens/pt-PT/textos.jpg)
 
 ### Inserir textos
 
@@ -382,6 +426,8 @@ Abra o mixer em **Ferramentas › Mixer de áudio** ou pelo botão da barra de f
 
 ### Aba Áudio do clipe
 
+![Separador Áudio do clip, com a forma de onda, o volume e a normalização.](imagens/pt-PT/aba-audio.jpg)
+
 Selecione um clipe de áudio, ou um vídeo com som, e use a aba **Áudio**:
 
 - **Forma de onda**: no topo do separador aparece o áudio do clipe, com o cursor da linha do tempo a vermelho. Clique ou arraste sobre ela para ir a outro momento do áudio; o cursor da linha do tempo e o monitor acompanham.
@@ -395,6 +441,8 @@ Selecione um clipe de áudio, ou um vídeo com som, e use a aba **Áudio**:
 - **Manter o tom na velocidade**: quando o clipe é acelerado ou desacelerado, a voz continua com tom natural.
 
 ### Efeitos de áudio
+
+![Efeitos de áudio no separador Áudio, abaixo da atenuação e da sincronização.](imagens/pt-PT/efeitos-audio.jpg)
 
 Na mesma aba, em **Adicionar efeito de áudio**, estão os efeitos:
 
@@ -411,6 +459,8 @@ Os efeitos são aplicados na ordem em que aparecem na lista **Efeitos de áudio 
 
 ## Inteligência artificial
 
+![Secção IA da biblioteca e o separador Inteligência artificial das propriedades.](imagens/pt-PT/ia.jpg)
+
 Os recursos de inteligência artificial do programa são executados somente no seu computador. Nenhum vídeo, áudio, imagem ou texto é enviado para a internet.
 
 Os recursos ficam na aba **IA** das propriedades, quando o utilizador seleciona um clipe na linha temporal. A seção **IA** da biblioteca resume os recursos e tem o botão **Gerenciar modelos de IA…**, que abre o gerenciador de modelos.
@@ -418,6 +468,8 @@ Os recursos ficam na aba **IA** das propriedades, quando o utilizador seleciona 
 ### Modelos necessários
 
 Cada recurso usa um modelo de IA. O modelo do **Remover fundo** já vem com o programa. Os demais precisam ser instalados, uma única vez, pela ferramenta **Transferir modelos de IA**. Quando o modelo de um recurso não está instalado, o botão fica desativado e aparece a mensagem "Indisponível — instale o modelo em Ferramentas › Modelos de IA.".
+
+![Janela Transferir modelos de IA com os modelos opcionais.](imagens/pt-PT/modelos-ia.jpg)
 
 | Recurso | Modelo | Precisa instalar | Processa em |
 |---|---|---|---|
@@ -440,6 +492,8 @@ O reconhecimento de fala (legendas) usa o Silero VAD para encontrar os trechos c
 > Os modelos da tabela ocupam espaço no disco e também memória ao serem usados. O Whisper, por exemplo, precisa de cerca de 1,5 GB de memória livre.
 
 ### Remover fundo
+
+![Separador Inteligência artificial, com Remover fundo no topo.](imagens/pt-PT/remover-fundo.jpg)
 
 Separa a pessoa do fundo e deixa o fundo transparente, ou o substitui por outra coisa. Use na aba **IA**, com **Remover fundo com IA**.
 
@@ -492,6 +546,8 @@ Amplia uma foto em 2× reconstruindo os detalhes. Selecione a imagem, vá à aba
 
 Esclarece dúvidas sobre o programa e sobre edição de vídeo com base neste manual, no idioma do programa e sem internet. Abra em **Ajuda › Assistente virtual** (Shift+F1): o painel aparece à direita do editor. Escreva a pergunta e prima Enter (Shift+Enter muda de linha); sem conversa, o painel sugere algumas perguntas.
 
+![Assistente virtual a responder a uma pergunta, com a secção do manual indicada.](imagens/pt-PT/assistente.jpg)
+
 - Com o modelo de linguagem **Phi-4-mini** instalado, o assistente escreve uma resposta curta usando apenas os excertos do manual que encontrou e mostra a **Fonte no manual**: clique nela para abrir o manual nessa secção. O botão de parar interrompe a resposta.
 - Sem o modelo, o assistente mostra as secções do manual que tratam do assunto, com um excerto de cada uma e o botão **Abrir no manual**. O aviso no topo do painel instala o modelo (cerca de 3,2 GB, transferidos uma única vez das origens oficiais) sem sair do editor; **Agora não** esconde o aviso.
 - O modelo usa a placa gráfica quando o **Dispositivo da IA** é **GPU (DirectML)** (em **Definições › Desempenho**) ou, caso contrário, o processador. A primeira pergunta demora alguns segundos mais, porque o modelo é carregado; ao fechar o painel, ele sai da memória.
@@ -508,6 +564,8 @@ Exportar é gerar o ficheiro final do vídeo. Clique em **Exportar** no canto su
 ### Modelos de exportação
 
 Na lista à esquerda da janela de exportação, escolha um modelo. Cada modelo já traz a configuração adequada para uma plataforma:
+
+![Janela Exportar vídeo com os modelos de exportação e os parâmetros.](imagens/pt-PT/exportacao.jpg)
 
 - YouTube
 - YouTube Shorts
@@ -567,6 +625,8 @@ Use **Cancelar exportação** para parar um item, **Remover da fila** para tirá
 
 ## Guardar, gravação automático e recuperação
 
+![Separador Geral das definições, com a gravação automática.](imagens/pt-PT/salvar.jpg)
+
 ### Guardar o projeto
 
 - **Ficheiro › Guardar** (Ctrl+S): grava as alterações no ficheiro do projeto.
@@ -592,6 +652,8 @@ Se o programa foi fechado sem guardar, ao abri-lo de novo aparece a pergunta "Re
 
 ## Definições e desempenho
 
+![Janela Definições, no separador Cache.](imagens/pt-PT/configuracoes.jpg)
+
 Abra as definições em **Ferramentas › Definições…** (atalho Ctrl+,). As definições são divididas em quatro abas. Nada é gravado até o utilizador clicar em **Guardar**.
 
 ### Aba Geral
@@ -607,6 +669,8 @@ Abra as definições em **Ferramentas › Definições…** (atalho Ctrl+,). As 
 O nome, o idioma, o tema e a preferência de atualizações ficam no Registo do Windows, em `HKEY_CURRENT_USER\Software\Meu Editor de Vídeo`.
 
 ### Aba Desempenho
+
+![Separador Desempenho, com o hardware detetado.](imagens/pt-PT/desempenho.jpg)
 
 - **Hardware detetado**: mostra o processador, a memória, as placas gráficas, os discos e se a placa gráfica pode decodificar e codificar vídeo. O programa também indica as limitações do computador e uma recomendação de uso.
 - **Pré-visualização**: a **Qualidade padrão da pré-visualização** pode ser **Automática**, **Completa**, **1/2 da resolução** ou **1/4 da resolução**. Na opção Automática, o programa escolhe conforme o computador e o projeto, e reduz a resolução durante a reprodução se o computador não acompanhar. A **Memória para fotogramas da pré-visualização** define quanto espaço usar para guardar fotogramas prontos.
@@ -731,4 +795,4 @@ Os registos de funcionamento (logs) ficam na pasta `%LOCALAPPDATA%\MeuEditorDeVi
 
 ### Dúvidas sobre a versão instalada
 
-Abra **Ajuda › Sobre o Meu Editor de Vídeo** para ver a versão do programa, a licença, as informações de privacidade e a lista de componentes e modelos de IA usados.
+Abra **Ajuda › Sobre o Meu Editor de Vídeo** para ver a versão do programa, a licença, as informações de privacidade e a lista de componentes e modelos de IA usados. Na mesma janela, **Visite o nosso website** abre o site do Meu Editor de Vídeo no seu idioma e **GitHub** abre o código-fonte. Para falar com o suporte, use **Ajuda › Suporte Técnico**.

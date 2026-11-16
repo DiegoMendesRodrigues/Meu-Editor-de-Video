@@ -74,7 +74,7 @@ public partial class HelpWindow
         FlowDocument document;
         if (File.Exists(ManualPath))
         {
-            document = MarkdownFlowDocument.Build(MarkdownDocument.Parse(File.ReadAllText(ManualPath)), out topics);
+            document = MarkdownFlowDocument.Build(MarkdownDocument.Parse(File.ReadAllText(ManualPath)), out topics, Path.GetDirectoryName(ManualPath));
         }
         else
         {

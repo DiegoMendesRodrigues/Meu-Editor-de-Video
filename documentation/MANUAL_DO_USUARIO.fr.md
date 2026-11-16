@@ -26,6 +26,8 @@ Une carte graphique dédiée n'est pas obligatoire, mais elle rend l'aperçu, l'
 
 ### À l'ouverture du programme
 
+![Fenêtre de bienvenue, affichée la première fois.](imagens/fr/boas-vindas.jpg)
+
 La première fois (ou si une préférence manque ou est vide dans le registre de Windows), la fenêtre **Bienvenue dans Meu Editor de Vídeos** apparaît. Renseignez **Nom complet**, **Langue du système**, **Thème** (Clair, Sombre ou Suivre le système d'exploitation) et **Rechercher les mises à jour chaque mois** (Oui ou Non), puis cliquez sur **Enregistrer les préférences**. Tous les champs sont obligatoires et la fenêtre ne se ferme qu'après l'enregistrement. Si vous choisissez une autre langue, le programme redémarre dans celle-ci. Vous pouvez ensuite modifier ces préférences dans **Outils › Paramètres… › Général**.
 
 Le programme s'ouvre directement sur l'écran de montage, avec un projet nouveau et vide appelé « Sans titre ». S'il existe une copie d'un projet qui n'a pas été fermé correctement, le programme demande si vous voulez la récupérer (voir la section Enregistrement, enregistrement automatique et récupération).
@@ -33,6 +35,8 @@ Le programme s'ouvre directement sur l'écran de montage, avec un projet nouveau
 Les cinq derniers projets ouverts apparaissent dans le menu **Fichier**, entre des séparateurs. Cliquez sur l'un d'eux pour l'ouvrir. Si le fichier a été déplacé ou supprimé, le programme vous prévient et le retire de la liste.
 
 ### Créer un projet
+
+![Fenêtre Nouveau projet, avec le modèle, le nom, le dossier et les réglages vidéo.](imagens/fr/criar.jpg)
 
 1. Choisissez **Fichier › Nouveau projet…**.
 2. Saisissez un nom dans « Nom du projet ».
@@ -46,6 +50,8 @@ Les cinq derniers projets ouverts apparaissent dans le menu **Fichier**, entre d
 
 ### Ouvrir un projet existant
 
+![Menu Fichier, avec Ouvrir… et la liste des projets récents.](imagens/fr/abrir-existente.jpg)
+
 Il y a trois façons :
 
 - Choisissez **Fichier › Ouvrir…** et sélectionnez le fichier .med.
@@ -56,6 +62,8 @@ Il y a trois façons :
 
 Après la création ou l'ouverture d'un projet, l'écran de montage apparaît. Il est divisé en zones :
 
+![Fenêtre de montage : bibliothèque, moniteur, panneau Propriétés et timeline.](imagens/fr/edicao.jpg)
+
 - **Barre supérieure** (en haut de la fenêtre) : à gauche, les menus **Fichier**, **Édition**, **Affichage**, **Projet**, **Outils** et **Aide** et les boutons **Enregistrer**, **Annuler** et **Rétablir** ; au centre, le nom du projet ; à droite, **Thème**, **File de rendu**, **Exporter** et les boutons pour réduire, agrandir et fermer la fenêtre. Faites glisser la barre pour déplacer la fenêtre et double-cliquez dessus pour l'agrandir ou la restaurer.
 - **Bibliothèque de médias** (à gauche) : en haut se trouvent les onglets Bibliothèque de médias, Vidéos, Images, Audios, Éléments graphiques, Textes, Transitions, Effets, Couleur et IA. Survolez un onglet pour voir son nom complet. Les médias importés apparaissent en grille, avec miniature et durée.
 - **Aperçu** (au centre, en haut) : montre le résultat de la vidéo. En haut se trouvent la résolution de l'aperçu, le bouton Proxy et le bouton **Agrandir le moniteur**, qui fait couvrir la bibliothèque et la timeline par l'aperçu (le panneau Propriétés reste visible ; cliquez de nouveau pour restaurer) ; en bas, la barre de position (faites-la glisser pour aller à n'importe quel point), les boutons lecture, pause et image par image, le volume, la capture d'image (enregistre l'image actuelle en PNG ou JPEG, à la résolution du projet ; aussi dans **Fichier › Exporter l'image actuelle…**) et le plein écran.
@@ -65,6 +73,8 @@ Après la création ou l'ouverture d'un projet, l'écran de montage apparaît. I
 > Quand le nom du projet porte la marque « ● non enregistré », il y a des modifications qui n'ont pas encore été enregistrées. Utilisez **Fichier › Enregistrer** ou Ctrl+S.
 
 ### Menus
+
+![Menu Outils ouvert dans la barre de menus de l'éditeur.](imagens/fr/menus.jpg)
 
 - **Fichier** : nouveau projet, **nouveau à partir d'un modèle**, ouvrir, importer des médias, importer une séquence d'images, enregistrer, enregistrer sous, créer une sauvegarde, exporter, file de rendu, exporter l'image actuelle (PNG ou JPEG) et les cinq projets récents.
 - **Édition** : annuler et rétablir ; tout sélectionner ; scinder ; **joindre les coupes** (annule une scission : cliquez sur la règle au-dessus du point de coupe ; disponible seulement quand les deux côtés sont la suite du même média, sans réglages différents) ; couper, copier, coller à la tête de lecture et dupliquer ; supprimer, supprimer et combler l'espace (seulement sur la piste du clip) et **supprimer et joindre** (comble l'espace sur toutes les pistes, en gardant la synchronisation ; les pistes verrouillées ne bougent pas et l'opération est refusée si un clip d'une autre piste occupe une partie du passage supprimé).
@@ -94,6 +104,8 @@ Importer, c'est apporter au projet les fichiers que vous allez utiliser, comme d
 
 ### Formats pris en charge
 
+![Médiathèque avec la résolution et la fréquence d'images de chaque fichier.](imagens/fr/formatos.jpg)
+
 - **Vidéo** : MP4, M4V, MOV, MKV, WebM, AVI, WMV, FLV, MPG et MPEG, M2TS, MTS, TS, 3GP, OGV, MXF et VOB.
 - **Audio** : MP3, WAV, AAC, M4A, FLAC, OGG, OGA, Opus, WMA, AIFF, AIF, AC3 et AMR.
 - **Image** : JPG et JPEG, PNG, BMP, TIF et TIFF, WebP, TGA, JFIF et SVG.
@@ -103,6 +115,8 @@ Importer, c'est apporter au projet les fichiers que vous allez utiliser, comme d
 Les fichiers d'autres formats sont refusés, avec le message « Format de fichier non pris en charge. ».
 
 ### Comment importer
+
+![Éditeur avec la médiathèque et le bouton Importer des médias.](imagens/fr/importar.jpg)
 
 1. Cliquez sur **Importer des médias** dans le panneau de la bibliothèque, ou utilisez **Fichier › Importer des médias…** (raccourci Ctrl+I).
 2. Choisissez un ou plusieurs fichiers et confirmez.
@@ -116,11 +130,15 @@ Chaque média importé reçoit une miniature. Quand vous sélectionnez un média
 
 ### Organiser la bibliothèque
 
+![Menu contextuel d'un média de la bibliothèque.](imagens/fr/organizar.jpg)
+
 - Utilisez la zone **Rechercher…** pour trouver un média par son nom, sa catégorie ou les étiquettes créées dans **Outils › Analyser les médias** (par exemple « parole », « personne » ou « verticale »).
 - Faites un clic droit sur un média pour **Renommer…**, **Définir la catégorie…**, **Retirer la catégorie**, **Ajouter à la timeline** ou **Retirer du projet**.
 - Retirer un média du projet ne supprime pas le fichier de l'ordinateur.
 
 ### Médias manquants
+
+![Avertissement de médias introuvables, avec les boutons Localiser… et Chercher dans un dossier…](imagens/fr/ausente.jpg)
 
 Si un fichier a été déplacé, renommé ou supprimé, le projet affiche l'avertissement « Certains médias du projet sont introuvables » à l'ouverture. L'avertissement apparaît aussi dans la barre d'état sous la forme « Médias manquants », avec le nombre de médias concernés. Pour résoudre le problème :
 
@@ -146,10 +164,14 @@ La timeline est l'endroit où la vidéo est montée de gauche à droite. La **t�
 
 ### Placer des médias dans la timeline
 
+![Clips vidéo, audio et texte placés sur les pistes de la timeline.](imagens/fr/colocar.jpg)
+
 - Faites glisser un média de la bibliothèque vers une piste.
 - Ou sélectionnez le média dans la bibliothèque et cliquez sur **Ajouter à la timeline** dans la barre d'outils. Les images et l'audio sont insérés à la position du curseur : l'image va sur une piste Image libre, sinon sur une piste vidéo vide ; l'audio va sur une piste audio libre à cet endroit. Si aucune ne convient, le programme crée une nouvelle piste.
 
 ### Déplacer, rogner et scinder
+
+![Menu contextuel d'un clip, avec Couper, Vitesse… et Supprimer et combler l'espace.](imagens/fr/mover.jpg)
 
 - **Déplacer** : faites glisser le clip à un autre endroit de la piste ou sur une autre piste du même type.
 - **Rogner le début ou la fin** : faites glisser le bord du clip pour raccourcir ou allonger le passage utilisé.
@@ -164,10 +186,14 @@ La timeline est l'endroit où la vidéo est montée de gauche à droite. La **t�
 
 ### Aimant et montage en cascade
 
+![Barre d'outils de la timeline, avec le magnétisme activé.](imagens/fr/ima.jpg)
+
 - **Aimant d'alignement** (touche N) : activé, le clip « colle » aux bords des autres clips et à la tête de lecture, ce qui facilite l'assemblage sans laisser d'espaces. Le bouton se trouve dans la barre d'outils.
 - **Montage en cascade (ripple)** : activé, déplacer ou rogner un clip pousse les clips suivants, sans laisser de trous.
 
 ### Pistes
+
+![Bouton Ajouter une piste ouvert, avec les types de piste.](imagens/fr/trilhas.jpg)
 
 Les pistes sont les lignes horizontales de la timeline. Pour ajouter une piste, cliquez sur le bouton **Ajouter une piste** et choisissez le type (toute nouvelle piste, créée par vous ou par le programme, est ajoutée en haut, au-dessus de toutes les autres) :
 
@@ -197,9 +223,13 @@ Faites un clic droit sur le clip et choisissez **Vitesse…** pour l'accélérer
 
 ### Activer et désactiver des clips
 
+![Clip désactivé sur la timeline, estompé et marqué du symbole ⊘.](imagens/fr/ativar.jpg)
+
 Faites un clic droit sur le clip et choisissez **Activer/désactiver le clip**. Un clip désactivé reste dans la timeline (estompé et marqué du symbole ⊘), mais il n'est ni vu ni entendu à la lecture et à l'exportation.
 
 ### Calques de réglage, clips composés, écran partagé et multicaméra
+
+![Menu Projet, avec calque de réglage, clip composé, écran partagé et multicaméra.](imagens/fr/camadas.jpg)
 
 - **Calque de réglage** (**Projet › Ajouter un calque de réglage**) : crée à la tête de lecture un clip de 5 secondes sur une piste d'effets. Les effets et la correction colorimétrique placés dessus s'appliquent à **toutes les pistes en dessous**, pendant la durée du clip. Sélectionnez le calque et ajoutez des effets dans les onglets **Effets** et **Couleur**. L'opacité du calque dose l'effet et les masques limitent la zone. Étirez ou déplacez le calque comme n'importe quel clip.
 - **Clip composé** (**Projet › Créer un clip composé…** ou menu contextuel) : réunit les clips sélectionnés (avec leurs audios liés) en un seul clip, qui se déplace, se rogne et reçoit des effets comme un tout. Les pistes et positions d'origine sont conservées à l'intérieur. **Défaire le clip composé** remet les clips dans la timeline, sur de nouvelles pistes, avec seulement le passage que montrait le clip composé. Le son du clip composé n'est joué qu'à vitesse normale.
@@ -244,11 +274,15 @@ Utilisez les boutons de zoom de la barre d'outils, ou les raccourcis :
 
 Pour appliquer un effet, sélectionnez le clip dans la timeline et utilisez les onglets des propriétés. Vous pouvez aussi utiliser les sections de la bibliothèque, comme **Effets**, **Couleur** et **Transitions** : double-cliquez sur un élément pour l'appliquer à la tête de lecture ou au clip sélectionné, ou utilisez le bouton **Appliquer au clip sélectionné**. Les effets et les transitions s'appliquent aussi aux images, aux stickers et aux textes, et l'onglet **Couleur** règle les couleurs des images et des stickers. Quand vous insérez un clip, le panneau des propriétés s'ouvre tout seul sur le bon onglet : **Texte** pour les textes, **Vidéo** pour les vidéos, images et stickers, et **Audio** pour l'audio.
 
+![Bibliothèque de transitions à côté du moniteur et de la timeline.](imagens/fr/transicoes.jpg)
+
 La section **Effets** de la bibliothèque présente des effets vidéo prêts à l'emploi sous forme de vignettes, classés par catégorie (choisissez la catégorie dans la liste au-dessus des vignettes) : **Tendances**, **Ouvertures**, **Fins**, **Amour**, **Fête**, **Bordure**, **Mise en valeur**, **Distorsion**, **Glitch**, **Scintillement**, **Grunge**, **Loupe**, **Lumière**, **Rétro**, **Tremblement**, **Diapositives**, **Écran partagé**, **Minuteur**, **Viseur** et **Utilitaires** (flou, netteté, vignettage, chroma key et les autres effets de base). Chaque vignette montre l'effet sur une scène de plage avec une personne ; pour les effets de mouvement, comme le **Tremblement**, la vignette superpose des instants voisins pour suggérer le mouvement. Les effets sont animés selon le temps du clip : les **Ouvertures** révèlent la vidéo au début du clip, les **Fins** la masquent à la fin et le **Minuteur** suit la durée du clip. Une fois appliqué, l'effet apparaît dans l'onglet **Effets** des propriétés, où vous choisissez le style, l'intensité, la vitesse, la couleur et les autres réglages.
 
 La section **Filtres** de la bibliothèque (à côté d'**Effets**) propose des looks prêts à l'emploi qui changent d'un coup la couleur, l'ambiance et le style d'une vidéo ou d'une image, sans régler chaque paramètre. Choisissez la catégorie dans la liste au-dessus des vignettes : **Basique**, **À la une**, **Monochrome**, **Style de vie**, **Cinématique**, **Rétro**, **Printemps**, **Intérieur**, **Nuit** et **Créatifs**. Chaque vignette montre le filtre appliqué à une scène de plage colorée avec un phare, un voilier et un palmier. Sélectionnez le clip et double-cliquez sur le filtre (ou utilisez **Appliquer au clip sélectionné**). Un filtre est composé d'effets ordinaires (réglages de couleur, courbes, roues chromatiques, vignettage, grain, lueur douce), qui apparaissent dans l'onglet **Effets** des propriétés, où vous pouvez régler ou supprimer chacun d'eux.
 
 ### Onglet Vidéo
+
+![Onglet Vidéo des propriétés du clip, avec la transformation et la 3D.](imagens/fr/aba-video.jpg)
 
 Cet onglet regroupe les réglages de mouvement et de temps du clip :
 
@@ -284,6 +318,8 @@ Les transitions disponibles sont : Coupe franche, Fondu enchaîné, Fondu au noi
 
 ### Effets
 
+![Effets vidéo par catégorie dans la bibliothèque et l'onglet Effets des propriétés.](imagens/fr/efeitos.jpg)
+
 L'onglet **Effets** comporte deux parties. En haut, une grille avec une miniature de chaque effet, qui montre le résultat sur une scène d'exemple : cliquez sur l'une d'elles pour ajouter l'effet au clip. En bas, la liste **Effets appliqués**, dans l'ordre où les effets sont traités. Chaque effet de la liste a des curseurs pour ses réglages et les boutons **Monter**, **Descendre** et **Supprimer l'effet**. La flèche à gauche du nom affiche ou masque les réglages. Double-cliquez sur un curseur pour revenir à la valeur par défaut. Dans les réglages de couleur, une bande colorée sous le curseur montre l'effet de la valeur (par exemple, du bleu à l'orange pour la température).
 
 Effets visuels disponibles :
@@ -302,6 +338,8 @@ Les cartes des options déjà appliquées au clip ont une bordure mise en évide
 
 ### Couleur
 
+![Panneau Couleur avec les réglages du clip sélectionné.](imagens/fr/cor.jpg)
+
 L'onglet **Couleur** commence par les **Préréglages** : Noir et blanc, Noir, Cinéma, Vif, Chaud, Froid, Délavé, Rétro et Clair et aéré. Cliquez sur une miniature pour appliquer le style au clip. Le préréglage entre dans la liste des corrections appliquées sous forme de réglages ordinaires, que vous pouvez modifier ou supprimer ; **Annuler** (Ctrl+Z) revient sur tout d'un coup.
 
 En dessous, dans **Outils de couleur** (et dans la section **Couleur** de la bibliothèque), se trouvent les outils de correction colorimétrique :
@@ -317,6 +355,8 @@ En dessous, dans **Outils de couleur** (et dans la section **Couleur** de la bib
 
 ### Masques, suivi et stabilisation
 
+![Onglet Composition, avec les masques, le suivi de mouvement et la stabilisation.](imagens/fr/mascaras.jpg)
+
 Ces fonctions se trouvent dans l'onglet **Composition**. Elles marchent pour les vidéos, images, textes et éléments graphiques.
 
 - **Masques** : créez une forme avec **+ Rectangle**, **+ Ellipse** ou **+ Libre** (points, avec Ctrl+clic dans le moniteur). Le masque découpe ce qui est visible du clip. Vous pouvez additionner, soustraire ou intersecter des masques, inverser le masque et adoucir le contour.
@@ -327,6 +367,8 @@ Ces fonctions se trouvent dans l'onglet **Composition**. Elles marchent pour les
 
 ### Éléments graphiques et formes
 
+![Section Éléments graphiques de la bibliothèque, avec formes et autocollants.](imagens/fr/graficos.jpg)
+
 Dans la section **Éléments graphiques** de la bibliothèque, double-cliquez sur une forme pour l'insérer à la tête de lecture. Les formes disponibles sont : Rectangle, Rectangle arrondi, Cercle, Ligne, Flèche, Étoile, Hexagone, Bulle de dialogue et Cœur. Vous pouvez régler le remplissage et la couleur du contour dans l'onglet **Composition**.
 
 Vous pouvez aussi importer un graphique vectoriel avec le bouton **Importer un SVG…**.
@@ -334,6 +376,8 @@ Vous pouvez aussi importer un graphique vectoriel avec le bouton **Importer un S
 **Autocollants** affiche les autocollants des packs installés. Le programme est livré avec le pack **Basique**, avec 96 autocollants : courants (flèches, cercle de mise en évidence, juste et faux, bulles de dialogue, cœur, étoile, emojis, boutons S'abonner et J'aime, badges comme Nouveau et Promo, entre autres), formes géométriques (cercle, carré, rectangle, triangle, losange, pentagone et hexagone), épingles de carte au sommet carré, rond, hexagonal, en losange, étoile, cœur ou triangle, et épingles de points d'intérêt de la ville (aéroport, gares routière et ferroviaire, métro, hôpital, police, pompiers, école, musée, parc, restaurant, hôtel, entre autres). Il ne peut pas être supprimé, mais il peut être exporté. Cliquez sur l'un d'eux pour l'insérer à la tête de lecture pendant 3 secondes, à 40 % de la taille (réglable dans l'onglet Vidéo), sur une piste d'image libre (ou sur une nouvelle piste appelée Autocollants). L'image entre aussi dans la bibliothèque, dans la catégorie Autocollants.
 
 ### Textes et sous-titres
+
+![Section Textes de la bibliothèque et l'onglet Texte du titre sélectionné.](imagens/fr/textos.jpg)
 
 ### Insérer des textes
 
@@ -382,6 +426,8 @@ Ouvrez le mélangeur dans **Outils › Mélangeur audio** ou avec le bouton de l
 
 ### Onglet Audio du clip
 
+![Onglet Audio du clip, avec la forme d'onde, le volume et la normalisation.](imagens/fr/aba-audio.jpg)
+
 Sélectionnez un clip audio, ou une vidéo avec du son, et utilisez l'onglet **Audio** :
 
 - **Forme d'onde** : le haut de l'onglet montre l'audio du clip, avec le curseur de la timeline en rouge. Cliquez ou faites glisser dessus pour aller à un autre moment de l'audio ; le curseur de la timeline et le moniteur suivent.
@@ -395,6 +441,8 @@ Sélectionnez un clip audio, ou une vidéo avec du son, et utilisez l'onglet **A
 - **Conserver la hauteur avec la vitesse** : quand le clip est accéléré ou ralenti, la voix garde une hauteur naturelle.
 
 ### Effets audio
+
+![Effets audio dans l'onglet Audio, sous l'atténuation et la synchronisation.](imagens/fr/efeitos-audio.jpg)
 
 Dans le même onglet, sous **Ajouter un effet audio**, se trouvent les effets :
 
@@ -411,6 +459,8 @@ Les effets sont appliqués dans l'ordre où ils apparaissent dans la liste **Eff
 
 ## Intelligence artificielle
 
+![Section IA de la bibliothèque et l'onglet Intelligence artificielle des propriétés.](imagens/fr/ia.jpg)
+
 Les fonctions d'intelligence artificielle du programme s'exécutent uniquement sur votre ordinateur. Aucune vidéo, aucun audio, aucune image ni aucun texte n'est envoyé sur internet.
 
 Les fonctions se trouvent dans l'onglet **IA** des propriétés, quand vous sélectionnez un clip dans la timeline. La section **IA** de la bibliothèque résume les fonctions et comporte le bouton **Gérer les modèles d'IA…**, qui ouvre le gestionnaire de modèles.
@@ -418,6 +468,8 @@ Les fonctions se trouvent dans l'onglet **IA** des propriétés, quand vous sél
 ### Modèles nécessaires
 
 Chaque fonction utilise un modèle d'IA. Le modèle de **Supprimer l'arrière-plan** est fourni avec le programme. Les autres doivent être installés, une seule fois, avec l'outil **Télécharger des modèles d'IA**. Quand le modèle d'une fonction n'est pas installé, le bouton est désactivé et le message « Indisponible — installez le modèle dans Outils › Modèles d'IA. » apparaît.
+
+![Fenêtre Télécharger des modèles d'IA avec les modèles optionnels.](imagens/fr/modelos-ia.jpg)
 
 | Fonction | Modèle | Installation nécessaire | Exécution sur |
 |---|---|---|---|
@@ -440,6 +492,8 @@ La reconnaissance vocale (sous-titres) utilise Silero VAD pour trouver les passa
 > Les modèles du tableau occupent de l'espace disque et aussi de la mémoire lors de leur utilisation. Whisper, par exemple, a besoin d'environ 1,5 Go de mémoire libre.
 
 ### Supprimer l'arrière-plan
+
+![Onglet Intelligence artificielle, avec Supprimer l'arrière-plan en haut.](imagens/fr/remover-fundo.jpg)
 
 Sépare la personne de l'arrière-plan et rend l'arrière-plan transparent, ou le remplace par autre chose. À utiliser dans l'onglet **IA**, avec **Supprimer l'arrière-plan par IA**.
 
@@ -492,6 +546,8 @@ Agrandit une photo 2× en reconstruisant les détails. Sélectionnez l'image, al
 
 Répond aux questions sur le logiciel et sur le montage vidéo d'après ce manuel, dans la langue du logiciel et sans internet. Ouvrez-le avec **Aide › Assistant virtuel** (Maj+F1) : le panneau apparaît à droite de l'éditeur. Tapez la question et appuyez sur Entrée (Maj+Entrée passe à la ligne) ; sans conversation, le panneau propose quelques questions.
 
+![Assistant virtuel répondant à une question, avec la section du manuel indiquée.](imagens/fr/assistente.jpg)
+
 - Avec le modèle de langage **Phi-4-mini** installé, l'assistant rédige une réponse courte en utilisant uniquement les extraits du manuel trouvés et affiche la **Source dans le manuel** : cliquez dessus pour ouvrir le manuel à cette section. Le bouton d'arrêt interrompt la réponse.
 - Sans le modèle, l'assistant affiche les sections du manuel qui traitent du sujet, avec un extrait de chacune et le bouton **Ouvrir dans le manuel**. L'avis en haut du panneau installe le modèle (environ 3,2 Go, téléchargés une seule fois depuis les sources officielles) sans quitter l'éditeur ; **Pas maintenant** masque l'avis.
 - Le modèle utilise la carte graphique quand le **Périphérique d'IA** est **GPU (DirectML)** (dans **Paramètres › Performances**), sinon le processeur. La première question prend quelques secondes de plus, car le modèle est chargé ; à la fermeture du panneau, il quitte la mémoire.
@@ -508,6 +564,8 @@ Exporter, c'est générer le fichier final de la vidéo. Cliquez sur **Exporter*
 ### Modèles d'exportation
 
 Dans la liste à gauche de la fenêtre d'exportation, choisissez un modèle. Chaque modèle contient déjà les bons réglages pour une plateforme :
+
+![Fenêtre Exporter la vidéo avec les modèles d'export et les réglages.](imagens/fr/exportacao.jpg)
 
 - YouTube
 - YouTube Shorts
@@ -567,6 +625,8 @@ Utilisez **Annuler l'exportation** pour arrêter un élément, **Retirer de la f
 
 ## Enregistrement, enregistrement automatique et récupération
 
+![Onglet Général des paramètres, avec l'enregistrement automatique.](imagens/fr/salvar.jpg)
+
 ### Enregistrer le projet
 
 - **Fichier › Enregistrer** (Ctrl+S) : écrit les modifications dans le fichier du projet.
@@ -592,6 +652,8 @@ Si le programme a été fermé sans enregistrer, à sa réouverture la question 
 
 ## Paramètres et performances
 
+![Fenêtre Paramètres, sur l'onglet Cache.](imagens/fr/configuracoes.jpg)
+
 Ouvrez les paramètres dans **Outils › Paramètres…** (raccourci Ctrl+,). Les paramètres sont répartis en quatre onglets. Rien n'est enregistré tant que vous ne cliquez pas sur **Enregistrer**.
 
 ### Onglet Général
@@ -607,6 +669,8 @@ Ouvrez les paramètres dans **Outils › Paramètres…** (raccourci Ctrl+,). Le
 Le nom, la langue, le thème et la préférence de mises à jour sont stockés dans le Registre de Windows, sous `HKEY_CURRENT_USER\Software\Meu Editor de Vídeo`.
 
 ### Onglet Performances
+
+![Onglet Performances, avec le matériel détecté.](imagens/fr/desempenho.jpg)
 
 - **Matériel détecté** : affiche le processeur, la mémoire, les cartes graphiques, les disques et si la carte graphique peut décoder et encoder la vidéo. Le programme indique aussi les limites de l'ordinateur et une recommandation d'utilisation.
 - **Aperçu** : la **Qualité d'aperçu par défaut** peut être **Automatique**, **Complète**, **1/2 de la résolution** ou **1/4 de la résolution**. En Automatique, le programme choisit selon l'ordinateur et le projet, et réduit la résolution pendant la lecture si l'ordinateur ne suit pas. La **Mémoire pour les images de l'aperçu** définit l'espace utilisé pour garder des images prêtes.
@@ -731,4 +795,4 @@ Les journaux de fonctionnement (logs) se trouvent dans le dossier `%LOCALAPPDATA
 
 ### Questions sur la version installée
 
-Ouvrez **Aide › À propos de Meu Editor de Vídeo** pour voir la version du programme, la licence, les informations de confidentialité et la liste des composants et modèles d'IA utilisés.
+Ouvrez **Aide › À propos de Meu Editor de Vídeo** pour voir la version du programme, la licence, les informations de confidentialité et la liste des composants et modèles d'IA utilisés. Dans la même fenêtre, **Visitez notre site web** ouvre le site de Meu Editor de Vídeo dans votre langue et **GitHub** ouvre le code source. Pour contacter le support, utilisez **Aide › Support technique**.
