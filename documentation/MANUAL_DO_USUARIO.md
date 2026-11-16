@@ -82,7 +82,7 @@ Depois de criar ou abrir um projeto, a tela de edição aparece. Ela é dividida
   - **Pacotes de conteúdo…** instala, exporta e remove pacotes de figurinhas, títulos e modelos de projeto (arquivos .medpack). Um pacote é um ZIP com as pastas `figurinhas` (PNG, GIF, WebP, JPEG ou SVG), `titulos` (.medtitle) e `modelos` (.med) e, opcionalmente, um `pacote.json` com o nome (por exemplo `{"nome": "Festa Junina"}`). Os itens que você mesmo salva ficam no pacote **Meus itens**; use **Exportar…** para compartilhá-lo.
   - **Texto para fala…** transforma um texto em narração com as vozes instaladas no Windows, sem internet. Digite o texto, escolha a **Voz** e a **Velocidade** e clique em **Gerar e inserir**: o áudio vai para a biblioteca (categoria Narração) e entra na posição do cursor, na primeira trilha de áudio livre ou numa trilha nova chamada Narração. Para ter mais vozes, como as em português, instale-as em **Configurações do Windows › Hora e idioma › Fala**.
   - **Analisar mídia** dá etiquetas a todas as mídias da biblioteca: tipo, orientação (horizontal, vertical, quadrado), resolução (HD, Full HD, 4K), duração (curto, longo) e som. Com os modelos instalados, também **fala** ou **sem fala**, o número de **cenas** e **pessoa** ou **sem pessoas**. As etiquetas aparecem ao passar o mouse sobre a mídia e a caixa **Pesquisar…** da biblioteca também procura nelas.
-- **Ajuda**: **Manual do usuário** (F1), **Assistente virtual** (Shift+F1), **Atalhos de teclado…**, **Informações do sistema…**, **Abrir pasta de logs**, **Licenças de terceiros**, **Sobre o Meu Editor de Vídeo…**, **Verificar atualizações** (consulta pela internet se há uma versão nova: mostra "Você está com a versão mais recente!" ou a janela **Nova versão disponível**, com a versão, os idiomas, os sistemas suportados, o autor e os links para baixar na Microsoft Store e no site AplicativosIA.Online; ao clicar em **Fechar essa janela**, a data da verificação é guardada). Em **Sobre o Meu Editor de Vídeo…**, o ícone do LinkedIn abre o perfil do autor no navegador.
+- **Ajuda**: **Manual do usuário** (F1), **Assistente virtual** (Shift+F1), **Atalhos de teclado…**, **Informações do sistema…**, **Abrir pasta de logs**, **Licenças de terceiros**, **Sobre o Meu Editor de Vídeo**, **Suporte Técnico** (abre a página de atendimento no navegador, no idioma do programa), **Verificar atualizações** (consulta pela internet se há uma versão nova: mostra "Você está com a versão mais recente!" ou a janela **Nova versão disponível**, com a versão, os idiomas, os sistemas suportados, o autor e os links para baixar na Microsoft Store e no site AplicativosIA.Online; ao clicar em **Fechar essa janela**, a data da verificação é guardada). Em **Sobre o Meu Editor de Vídeo**, o ícone do LinkedIn abre o perfil do autor no navegador. Lá ficam também os links **Visite nosso website** (o site do programa, no idioma da interface) e **Visite o GitHub do Meu Editor de Vídeo** (o código-fonte).
 
 O **Manual do usuário** abre este manual dentro do programa, sem internet. A lista à esquerda leva a cada assunto e Ctrl+F procura uma palavra. A janela pode ficar aberta enquanto você edita.
 
@@ -685,7 +685,7 @@ O Meu Editor de Vídeo foi feito para funcionar no seu computador:
 
 Existe uma única exceção. Quando você clica em **Instalar** na ferramenta **Baixar modelos de IA**, o programa baixa os arquivos dos modelos de IA dos sites oficiais dos seus autores, que são os endereços huggingface.co e github.com. Só os modelos escolhidos são baixados, e nenhum dado do seu projeto é enviado. Depois de instalados, os modelos funcionam sem internet. Você também pode instalar pacotes de modelo já baixados, com **Instalar pacote…**, sem usar a internet.
 
-Para ver as licenças e os componentes de terceiros usados, abra **Ajuda › Sobre o Meu Editor de Vídeo…**. O texto completo das licenças fica em **Ajuda › Licenças de terceiros**.
+Para ver as licenças e os componentes de terceiros usados, abra **Ajuda › Sobre o Meu Editor de Vídeo**. O texto completo das licenças fica em **Ajuda › Licenças de terceiros**.
 
 ## Solução de problemas
 
@@ -731,4 +731,4 @@ Os registros de funcionamento (logs) ficam na pasta `%LOCALAPPDATA%\MeuEditorDeV
 
 ### Dúvidas sobre a versão instalada
 
-Abra **Ajuda › Sobre o Meu Editor de Vídeo…** para ver a versão do programa, a licença, as informações de privacidade e a lista de componentes e modelos de IA usados.
+Abra **Ajuda › Sobre o Meu Editor de Vídeo** para ver a versão do programa, a licença, as informações de privacidade e a lista de componentes e modelos de IA usados.

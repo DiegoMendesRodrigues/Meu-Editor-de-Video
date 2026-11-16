@@ -82,7 +82,7 @@ After you create or open a project, the editing screen appears. It is divided in
   - **Content packs…** installs, exports and removes packs of stickers, titles and project templates (.medpack files). A pack is a ZIP with the folders `figurinhas` (PNG, GIF, WebP, JPEG or SVG), `titulos` (.medtitle) and `modelos` (.med) and, optionally, a `pacote.json` with the name (for example `{"nome": "Summer Party"}`). Items you save yourself go into the **My items** pack; use **Export…** to share it.
   - **Text to speech…** turns text into narration with the voices installed in Windows, without internet. Type the text, choose the **Voice** and the **Speed** and click **Generate and insert**: the audio goes to the library (Narration category) and is placed at the playhead, on the first free audio track or on a new track called Narration. For more voices, install them in **Windows Settings › Time & language › Speech**.
   - **Analyze media** tags all the media in the library: type, orientation (horizontal, vertical, square), resolution (HD, Full HD, 4K), duration (short, long) and sound. With the models installed, also **speech** or **no speech**, the number of **scenes** and **person** or **no people**. Tags appear when you hover over the media, and the library's **Search…** box also searches them.
-- **Help**: **User manual** (F1), **Virtual assistant** (Shift+F1), **Keyboard shortcuts…**, **System information…**, **Open logs folder**, **Third-party licenses**, **About Meu Editor de Vídeo…**, **Check for updates** (asks over the internet whether there is a new version: it shows "You have the latest version!" or the **New version available** window, with the version, languages, supported systems, author and the download links on the Microsoft Store and the AplicativosIA.Online website; clicking **Close this window** stores the check date). In **About Meu Editor de Vídeo…**, the LinkedIn icon opens the author's profile in the browser.
+- **Help**: **User manual** (F1), **Virtual assistant** (Shift+F1), **Keyboard shortcuts…**, **System information…**, **Open logs folder**, **Third-party licenses**, **About Meu Editor de Vídeo**, **Technical support** (opens the support page in the browser, in the program's language), **Check for updates** (asks over the internet whether there is a new version: it shows "You have the latest version!" or the **New version available** window, with the version, languages, supported systems, author and the download links on the Microsoft Store and the AplicativosIA.Online website; clicking **Close this window** stores the check date). In **About Meu Editor de Vídeo**, the LinkedIn icon opens the author's profile in the browser. It also has the links **Visit our website** (the program's site, in the interface language) and **Visit Meu Editor de Vídeo on GitHub** (the source code).
 
 The **User manual** opens this manual inside the program, without internet. The list on the left takes you to each topic and Ctrl+F searches for a word. The window can stay open while you edit.
 
@@ -685,7 +685,7 @@ Meu Editor de Vídeo was made to work on your computer:
 
 There is a single exception. When you click **Install** in the **Download AI models** tool, the program downloads the AI model files from their authors' official sites, which are huggingface.co and github.com. Only the chosen models are downloaded, and no data from your project is sent. Once installed, the models work without internet. You can also install already-downloaded model packages, with **Install package…**, without using the internet.
 
-To see the licenses and third-party components used, open **Help › About Meu Editor de Vídeo…**. The full text of the licenses is in **Help › Third-party licenses**.
+To see the licenses and third-party components used, open **Help › About Meu Editor de Vídeo**. The full text of the licenses is in **Help › Third-party licenses**.
 
 ## Troubleshooting
 
@@ -731,4 +731,4 @@ The operation logs are in the `%LOCALAPPDATA%\MeuEditorDeVideo\logs` folder. To 
 
 ### Questions about the installed version
 
-Open **Help › About Meu Editor de Vídeo…** to see the program version, the license, the privacy information and the list of components and AI models used.
+Open **Help › About Meu Editor de Vídeo** to see the program version, the license, the privacy information and the list of components and AI models used.

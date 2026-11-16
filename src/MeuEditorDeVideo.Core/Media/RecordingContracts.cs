@@ -18,7 +18,7 @@ public sealed record ScreenArea(int Number, int X, int Y, int Width, int Height,
     public override string ToString() => $"Tela {Number}{(IsPrimary ? " (principal)" : "")} — {Width} × {Height}";
 }
 
-/// <summary>Uma janela aberta que pode ser gravada sozinha (pelo título, como o gdigrab a encontra).</summary>
+/// <summary>Uma janela aberta que pode ser gravada sozinha (a área dela na tela, no início da gravação).</summary>
 public sealed record CaptureWindow(long Handle, string Title, string ProcessName)
 {
     public override string ToString() => string.IsNullOrEmpty(ProcessName) ? Title : $"{Title} ({ProcessName})";

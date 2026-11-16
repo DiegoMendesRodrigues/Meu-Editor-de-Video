@@ -57,6 +57,7 @@ public sealed partial class ScreenRecorder : IScreenRecorder
     public async Task<IScreenRecording> StartAsync(ScreenRecordingOptions options, CancellationToken ct = default)
     {
         var exe = Executable() ?? throw new InvalidOperationException("O ffmpeg.exe não foi encontrado na pasta do aplicativo.");
+        if (options.Window is { } window) options = options with { Area = PrepareWindow(window, options.Area), Window = null };
         var args = BuildArguments(options, options.Area?.Width ?? VirtualScreenWidth());
         var dir = Path.GetDirectoryName(options.OutputPath);
         if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
@@ -84,11 +85,9 @@ public sealed partial class ScreenRecorder : IScreenRecorder
         if (o.Screen)
         {
             args.AddRange(["-thread_queue_size", "1024", "-f", "gdigrab", "-framerate", fps, "-draw_mouse", o.ShowCursor ? "1" : "0"]);
-            if (o.Window is { } win)
-            {
-                args.AddRange(["-i", "title=" + win.Title]);
-            }
-            else if (o.Area is { } a)
+            // Uma janela é gravada como a área dela na tela (ver PrepareWindow): a captura pelo título (title=) sai
+            // preta em programas desenhados pela placa de vídeo (navegadores, WPF, apps da Store).
+            if (o.Area is { } a)
             {
                 var inv = CultureInfo.InvariantCulture;
                 args.AddRange(["-offset_x", a.X.ToString(inv), "-offset_y", a.Y.ToString(inv), "-video_size", $"{a.Width}x{a.Height}", "-i", "desktop"]);
@@ -195,7 +194,6 @@ public sealed partial class ScreenRecorder : IScreenRecorder
         {
             var own = Environment.ProcessId;
             var found = new List<CaptureWindow>();
-            var titles = new HashSet<string>(StringComparer.Ordinal);
             EnumWindows((hwnd, _) =>
             {
                 if (!IsWindowVisible(hwnd) || IsIconic(hwnd)) return true;
@@ -214,8 +212,6 @@ public sealed partial class ScreenRecorder : IScreenRecorder
                     var cy = (r.Top + r.Bottom) / 2;
                     if (cx < a.X || cx >= a.X + a.Width || cy < a.Y || cy >= a.Y + a.Height) return true;
                 }
-                // O gdigrab localiza a janela pelo título: títulos repetidos seriam ambíguos.
-                if (!titles.Add(title)) return true;
                 string process;
                 try { using var p = Process.GetProcessById((int)pid); process = p.ProcessName; }
                 catch (ArgumentException) { process = ""; }
@@ -230,6 +226,70 @@ public sealed partial class ScreenRecorder : IScreenRecorder
             if (previous != IntPtr.Zero) SetThreadDpiAwarenessContext(previous);
         }
     }
+
+    /// <summary>
+    /// Traz a janela para a frente (restaurando-a se minimizada) e devolve a área dela na tela, sem a sombra da borda,
+    /// presa à tela <paramref name="screen"/> (ou à área de trabalho virtual) e com largura e altura pares.
+    /// </summary>
+    private static ScreenArea PrepareWindow(CaptureWindow window, ScreenArea? screen)
+    {
+        var hwnd = new IntPtr(window.Handle);
+        if (!IsWindow(hwnd)) throw new InvalidOperationException($"A janela \"{window.Title}\" foi fechada. Escolha outra janela.");
+        var previous = SetThreadDpiAwarenessContext(DpiAwarenessPerMonitorV2);
+        try
+        {
+            if (IsIconic(hwnd)) ShowWindow(hwnd, SwRestore);
+            SetForegroundWindow(hwnd);
+            BringWindowToTop(hwnd);
+            Thread.Sleep(300);
+            if (DwmGetWindowBounds(hwnd, DwmwaExtendedFrameBounds, out Rect r, Marshal.SizeOf<Rect>()) != 0 && !GetWindowRect(hwnd, out r))
+                throw new InvalidOperationException($"Não foi possível localizar a janela \"{window.Title}\".");
+            var bounds = screen is { } s ? (s.X, s.Y, s.Width, s.Height) : VirtualScreen();
+            return WindowArea((r.Left, r.Top, r.Right, r.Bottom), bounds)
+                   ?? throw new InvalidOperationException($"A janela \"{window.Title}\" está fora da tela escolhida.");
+        }
+        finally
+        {
+            if (previous != IntPtr.Zero) SetThreadDpiAwarenessContext(previous);
+        }
+    }
+
+    /// <summary>Retângulo da janela recortado pela tela, com largura e altura pares (exigência do H.264); null se não sobra área.</summary>
+    public static ScreenArea? WindowArea((int Left, int Top, int Right, int Bottom) window, (int X, int Y, int Width, int Height) screen)
+    {
+        var left = Math.Max(window.Left, screen.X);
+        var top = Math.Max(window.Top, screen.Y);
+        var right = Math.Min(window.Right, screen.X + screen.Width);
+        var bottom = Math.Min(window.Bottom, screen.Y + screen.Height);
+        var w = (right - left) / 2 * 2;
+        var h = (bottom - top) / 2 * 2;
+        return w < 16 || h < 16 ? null : new ScreenArea(0, left, top, w, h, false);
+    }
+
+    private static (int X, int Y, int Width, int Height) VirtualScreen() =>
+        (GetSystemMetrics(76), GetSystemMetrics(77), VirtualScreenWidth(), Math.Max(1, GetSystemMetrics(79)));
+
+    private const int SwRestore = 9;
+    private const int DwmwaExtendedFrameBounds = 9;
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool IsWindow(IntPtr hwnd);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool ShowWindow(IntPtr hwnd, int command);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool SetForegroundWindow(IntPtr hwnd);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool BringWindowToTop(IntPtr hwnd);
+
+    [LibraryImport("dwmapi.dll", EntryPoint = "DwmGetWindowAttribute")]
+    private static partial int DwmGetWindowBounds(IntPtr hwnd, int attribute, out Rect value, int size);
 
     private const int GwlExStyle = -20;
     private const long WsExToolWindow = 0x80;

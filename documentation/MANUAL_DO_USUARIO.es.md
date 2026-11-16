@@ -82,7 +82,7 @@ Después de crear o abrir un proyecto, aparece la pantalla de edición. Está di
   - **Paquetes de contenido…** instala, exporta y elimina paquetes de pegatinas, títulos y plantillas de proyecto (archivos .medpack). Un paquete es un ZIP con las carpetas `figurinhas` (PNG, GIF, WebP, JPEG o SVG), `titulos` (.medtitle) y `modelos` (.med) y, opcionalmente, un `pacote.json` con el nombre (por ejemplo `{"nome": "Fiesta de verano"}`). Los elementos que usted guarda quedan en el paquete **Mis elementos**; use **Exportar…** para compartirlo.
   - **Texto a voz…** convierte un texto en narración con las voces instaladas en Windows, sin internet. Escriba el texto, elija la **Voz** y la **Velocidad** y haga clic en **Generar e insertar**: el audio va a la biblioteca (categoría Narración) y se coloca en el cursor, en la primera pista de audio libre o en una pista nueva llamada Narración. Para tener más voces, instálelas en **Configuración de Windows › Hora e idioma › Voz**.
   - **Analizar medios** pone etiquetas a todos los medios de la biblioteca: tipo, orientación (horizontal, vertical, cuadrado), resolución (HD, Full HD, 4K), duración (corto, largo) y sonido. Con los modelos instalados, también **voz** o **sin voz**, el número de **escenas** y **persona** o **sin personas**. Las etiquetas aparecen al pasar el ratón sobre el medio, y el cuadro **Buscar…** de la biblioteca también busca en ellas.
-- **Ayuda**: **Manual del usuario** (F1), **Asistente virtual** (Mayús+F1), **Atajos de teclado…**, **Información del sistema…**, **Abrir carpeta de registros**, **Licencias de terceros**, **Acerca de Meu Editor de Vídeo…**, **Buscar actualizaciones** (consulta por internet si hay una versión nueva: muestra "¡Tienes la versión más reciente!" o la ventana **Nueva versión disponible**, con la versión, los idiomas, los sistemas compatibles, el autor y los enlaces de descarga en Microsoft Store y en el sitio AplicativosIA.Online; al hacer clic en **Cerrar esta ventana**, se guarda la fecha de la comprobación). En **Acerca de Meu Editor de Vídeo…**, el icono de LinkedIn abre el perfil del autor en el navegador.
+- **Ayuda**: **Manual del usuario** (F1), **Asistente virtual** (Mayús+F1), **Atajos de teclado…**, **Información del sistema…**, **Abrir carpeta de registros**, **Licencias de terceros**, **Acerca de Meu Editor de Vídeo**, **Soporte técnico** (abre la página de atención en el navegador, en el idioma del programa), **Buscar actualizaciones** (consulta por internet si hay una versión nueva: muestra "¡Tienes la versión más reciente!" o la ventana **Nueva versión disponible**, con la versión, los idiomas, los sistemas compatibles, el autor y los enlaces de descarga en Microsoft Store y en el sitio AplicativosIA.Online; al hacer clic en **Cerrar esta ventana**, se guarda la fecha de la comprobación). En **Acerca de Meu Editor de Vídeo**, el icono de LinkedIn abre el perfil del autor en el navegador. También tiene los enlaces **Visite nuestro sitio web** (el sitio del programa, en el idioma de la interfaz) y **Visite el GitHub de Meu Editor de Vídeo** (el código fuente).
 
 El **Manual del usuario** abre este manual dentro del programa, sin internet. La lista de la izquierda lleva a cada tema y Ctrl+F busca una palabra. La ventana puede quedar abierta mientras edita.
 
@@ -685,7 +685,7 @@ Meu Editor de Vídeo está hecho para funcionar en su equipo:
 
 Hay una única excepción. Cuando hace clic en **Instalar** en la herramienta **Descargar modelos de IA**, el programa descarga los archivos de los modelos de IA de los sitios oficiales de sus autores, que son huggingface.co y github.com. Solo se descargan los modelos elegidos y no se envía ningún dato de su proyecto. Una vez instalados, los modelos funcionan sin internet. También puede instalar paquetes de modelos ya descargados, con **Instalar paquete…**, sin usar internet.
 
-Para ver las licencias y los componentes de terceros usados, abra **Ayuda › Acerca de Meu Editor de Vídeo…**. El texto completo de las licencias está en **Ayuda › Licencias de terceros**.
+Para ver las licencias y los componentes de terceros usados, abra **Ayuda › Acerca de Meu Editor de Vídeo**. El texto completo de las licencias está en **Ayuda › Licencias de terceros**.
 
 ## Solución de problemas
 
@@ -731,4 +731,4 @@ Los registros de funcionamiento (logs) están en la carpeta `%LOCALAPPDATA%\MeuE
 
 ### Dudas sobre la versión instalada
 
-Abra **Ayuda › Acerca de Meu Editor de Vídeo…** para ver la versión del programa, la licencia, la información de privacidad y la lista de componentes y modelos de IA usados.
+Abra **Ayuda › Acerca de Meu Editor de Vídeo** para ver la versión del programa, la licencia, la información de privacidad y la lista de componentes y modelos de IA usados.

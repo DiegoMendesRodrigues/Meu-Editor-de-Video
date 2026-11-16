@@ -368,7 +368,8 @@
                 <MenuItem Header="Abrir pasta de logs" Click="PastaLogs_Click" AutomationProperties.Name="Abrir pasta de logs" />
                 <MenuItem Header="Licenças de terceiros" Click="Licencas_Click" AutomationProperties.Name="Licenças de terceiros" />
                 <Separator />
-                <MenuItem Header="Sobre o Meu Editor de Vídeo…" Click="Sobre_Click" AutomationProperties.Name="Sobre" />
+                <MenuItem Header="Sobre o Meu Editor de Vídeo" Click="Sobre_Click" AutomationProperties.Name="Sobre" />
+                <MenuItem Header="Suporte Técnico" Click="Suporte_Click" AutomationProperties.Name="Suporte Técnico" />
                 <MenuItem Header="{StaticResource Editor.Menu.VerificarAtualizacoes}" Click="VerificarAtualizacoes_Click" AutomationProperties.Name="Verificar atualizações" />
             </MenuItem>
             </Menu>

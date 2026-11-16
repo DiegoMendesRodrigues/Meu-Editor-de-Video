@@ -367,12 +367,14 @@ public sealed class StructuralFeaturesTests
         Assert.Contains("-offset_x -1280 -offset_y 0 -video_size 1280x1024 -i desktop", one);
         Assert.Contains("[1:v]scale=160:-2[cam]", one);
 
-        // Uma janela só: o gdigrab a localiza pelo título, sem recorte da área de trabalho.
-        var window = new CaptureWindow(42, "Bloco de Notas", "notepad");
-        var win = string.Join(' ', ScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", true, null, null, Area: second, Window: window), 1280));
-        Assert.Contains("-i title=Bloco de Notas", win);
-        Assert.DoesNotContain("-offset_x", win);
-        Assert.DoesNotContain("desktop", win);
+        // Uma janela: a área dela na tela (com sombra recortada pela tela e tamanho par), nunca title= (sai preto).
+        Assert.Equal(new ScreenArea(0, 0, 0, 800, 600, false), ScreenRecorder.WindowArea((-7, -3, 801, 601), (0, 0, 1920, 1080)));
+        Assert.Equal(new ScreenArea(0, 101, 51, 300, 200, false), ScreenRecorder.WindowArea((101, 51, 402, 252), (0, 0, 1920, 1080)));
+        Assert.Null(ScreenRecorder.WindowArea((2000, 0, 2400, 300), (0, 0, 1920, 1080)));
+        var win = string.Join(' ', ScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", true, null, null,
+            Area: new ScreenArea(0, 101, 51, 300, 200, false), Window: new CaptureWindow(42, "Bloco de Notas", "notepad")), 300));
+        Assert.Contains("-offset_x 101 -offset_y 51 -video_size 300x200 -i desktop", win);
+        Assert.DoesNotContain("title=", win);
 
         var camOnly = string.Join(' ', ScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", false, "Cam", null), 1920));
         Assert.DoesNotContain("gdigrab", camOnly);

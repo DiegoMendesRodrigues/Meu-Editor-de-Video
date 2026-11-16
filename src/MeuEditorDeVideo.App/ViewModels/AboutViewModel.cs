@@ -17,6 +17,41 @@ public sealed class AboutViewModel(IModelRegistry? models = null)
     public System.Windows.Input.ICommand OpenLinkedInCommand { get; } = new CommunityToolkit.Mvvm.Input.RelayCommand(() =>
         System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(DeveloperLinkedIn) { UseShellExecute = true }));
 
+    /// <summary>Site do programa (abre no navegador padrão, no idioma da interface).</summary>
+    public const string Site = "https://meueditordevideos.aplicativoia.online/";
+
+    /// <summary>Repositório do código-fonte no GitHub.</summary>
+    public const string GitHub = "https://github.com/DiegoMendesRodrigues/Meu-Editor-de-Video";
+
+    /// <summary>Valor do parâmetro <c>lang</c> do site para o idioma da interface.</summary>
+    public static string SiteLanguage(string uiLanguage) => uiLanguage switch
+    {
+        "de" => "de",
+        "es" => "es",
+        "fr" => "fr-FR",
+        "en" => "en",
+        "pt-PT" => "pt",
+        _ => "pt-BR",
+    };
+
+    public static string WebsiteUrlFor(string uiLanguage) => $"{Site}?lang={SiteLanguage(uiLanguage)}";
+
+    /// <summary>Página de suporte técnico (Ajuda › Suporte técnico).</summary>
+    public static string SupportUrlFor(string uiLanguage) => $"{Site}atendimento.php?lang={SiteLanguage(uiLanguage)}";
+
+    public string WebsiteUrl => WebsiteUrlFor(Localization.Translator.Language);
+
+    public string GitHubUrl => GitHub;
+
+    public System.Windows.Input.ICommand OpenWebsiteCommand { get; } = new CommunityToolkit.Mvvm.Input.RelayCommand(() =>
+        OpenInBrowser(WebsiteUrlFor(Localization.Translator.Language)));
+
+    public System.Windows.Input.ICommand OpenGitHubCommand { get; } = new CommunityToolkit.Mvvm.Input.RelayCommand(() => OpenInBrowser(GitHub));
+
+    /// <summary>Abre o endereço no navegador padrão (o programa não acessa a rede).</summary>
+    public static void OpenInBrowser(string url) =>
+        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+
     public string Product => "Meu Editor de Vídeo";
 
     public string Version

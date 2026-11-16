@@ -57,6 +57,20 @@
                     </StackPanel>
                 </DockPanel>
 
+                <TextBlock Text="Visite nosso website" Style="{StaticResource Ab.Section}" />
+                <TextBlock>
+                    <Hyperlink Command="{Binding OpenWebsiteCommand}" AutomationProperties.Name="Visite nosso website">
+                        <Run Text="{Binding WebsiteUrl, Mode=OneWay}" />
+                    </Hyperlink>
+                </TextBlock>
+
+                <TextBlock Text="Visite o GitHub do Meu Editor de Vídeo" Style="{StaticResource Ab.Section}" />
+                <TextBlock>
+                    <Hyperlink Command="{Binding OpenGitHubCommand}" AutomationProperties.Name="Visite o GitHub do Meu Editor de Vídeo">
+                        <Run Text="{Binding GitHubUrl, Mode=OneWay}" />
+                    </Hyperlink>
+                </TextBlock>
+
                 <TextBlock Text="Licença" Style="{StaticResource Ab.Section}" />
                 <TextBlock Text="{Binding License}" TextWrapping="Wrap" />
 

@@ -396,6 +396,10 @@ public partial class EditorView : UserControl
     /// <summary>Informações do aplicativo (RF215).</summary>
     private void Sobre_Click(object sender, RoutedEventArgs e) => Dialogs.AboutWindow.ShowFor(Window.GetWindow(this));
 
+    /// <summary>Ajuda › Suporte Técnico: abre a página de atendimento no navegador, no idioma da interface.</summary>
+    private void Suporte_Click(object sender, RoutedEventArgs e) =>
+        ViewModels.AboutViewModel.OpenInBrowser(ViewModels.AboutViewModel.SupportUrlFor(Localization.Translator.Language));
+
     /// <summary>Ajuda › Verificar atualizações (consulta o serviço de versões).</summary>
     private async void VerificarAtualizacoes_Click(object sender, RoutedEventArgs e) =>
         await ((Services.UpdateCheckService)App.Services.GetService(typeof(Services.UpdateCheckService))!).CheckAsync(manual: true);
