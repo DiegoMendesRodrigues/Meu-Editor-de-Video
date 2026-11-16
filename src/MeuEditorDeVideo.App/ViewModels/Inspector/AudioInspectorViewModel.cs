@@ -174,6 +174,10 @@ public sealed partial class AudioInspectorViewModel : ObservableObject, IClipEdi
             .ToList();
     }
 
+    /// <summary>Clipe de áudio selecionado e a forma de onda da mídia dele (nula enquanto carrega), para a visão do áudio.</summary>
+    public (Clip Clip, WaveformData? Peaks)? WaveformClip() =>
+        Current() is { } cur ? (cur.Clip, Timeline.Library.Find(cur.Clip.MediaAssetId!.Value)?.Peaks) : null;
+
     public MediaTime Offset(Clip c)
     {
         var offset = Timeline.FrameRate.SnapToFrame(Timeline.Playhead) - c.Start;

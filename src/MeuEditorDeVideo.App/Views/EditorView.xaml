@@ -727,6 +727,9 @@
                             </DockPanel.Style>
                             <TextBlock DockPanel.Dock="Top" Style="{StaticResource Med.MutedText}" TextWrapping="Wrap" Margin="4,0,4,8"
                                        Text="Selecione um clipe na linha do tempo e clique duas vezes num item (ou use Aplicar)." />
+                            <ComboBox DockPanel.Dock="Top" Margin="4,0,4,8" AutomationProperties.Name="Categoria de efeitos"
+                                      ItemsSource="{Binding EffectCategories}" SelectedItem="{Binding SelectedEffectCategory}" DisplayMemberPath="Label"
+                                      Visibility="{Binding IsVideoEffectSection, Converter={StaticResource Editor.BoolToVis}}" />
                             <Button DockPanel.Dock="Bottom" Content="Aplicar ao clipe selecionado" Margin="4,8,4,0" HorizontalAlignment="Stretch"
                                     AutomationProperties.Name="Aplicar ao clipe selecionado"
                                     Command="{Binding ApplySectionItemCommand}" CommandParameter="{Binding SelectedItem, ElementName=ListaEfeitos}" />
@@ -740,8 +743,29 @@
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                         <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+                                        <Setter Property="ToolTip" Value="{Binding Description}" />
+                                        <Setter Property="Padding" Value="4" />
+                                        <Setter Property="Margin" Value="2" />
+                                        <Setter Property="VerticalContentAlignment" Value="Top" />
                                     </Style>
                                 </ListBox.ItemContainerStyle>
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Width="132">
+                                            <Border CornerRadius="4" ClipToBounds="True" Height="80" Margin="0,0,0,4"
+                                                    Visibility="{Binding HasPreview, Converter={StaticResource Editor.BoolToVis}}">
+                                                <Image Source="{Binding Key, Converter={StaticResource Ins.Preview}}" Stretch="UniformToFill" />
+                                            </Border>
+                                            <TextBlock Text="{Binding Name}" Foreground="{DynamicResource Med.Text}" TextWrapping="Wrap"
+                                                       TextAlignment="Center" FontSize="12" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
                             </ListBox>
                         </DockPanel>
 

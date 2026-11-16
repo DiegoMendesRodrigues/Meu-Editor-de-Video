@@ -244,6 +244,8 @@ Use os botões de zoom na barra de ferramentas, ou os atalhos:
 
 Para aplicar um efeito, selecione o clipe na linha temporal e use as abas das propriedades. O utilizador também pode usar as seções da biblioteca, como **Efeitos**, **Cor** e **Transições**: clique duas vezes num item para aplicá-lo no cursor ou ao clipe selecionado, ou use o botão **Aplicar ao clipe selecionado**. Efeitos e transições também se aplicam a imagens, figurinhas e textos, e a aba **Cor** ajusta as cores de imagens e figurinhas. Ao inserir um clip, o painel de propriedades abre-se sozinho na aba certa: **Texto** para textos, **Vídeo** para vídeos, imagens e figurinhas, e **Áudio** para áudios.
 
+A secção **Efeitos** da biblioteca mostra os efeitos de vídeo prontos em miniaturas, separados por categoria (escolha a categoria na lista acima das miniaturas): **Tendências**, **Aberturas**, **Encerramentos**, **Amor**, **Festa**, **Moldura**, **Destaque**, **Distorção**, **Falha digital**, **Cintilação**, **Grunge**, **Lupa**, **Luz**, **Retro**, **Tremido**, **Diapositivos**, **Ecrã dividido**, **Temporizador**, **Visor** e **Utilitários** (desfocagem, nitidez, vinheta, chroma key e os outros efeitos básicos). Cada miniatura mostra o efeito numa cena de praia com uma pessoa; nos efeitos de movimento, como o **Tremido**, a miniatura sobrepõe instantes vizinhos para indicar o movimento. Os efeitos são animados pelo tempo do clip: as **Aberturas** revelam o vídeo no início do clip, os **Encerramentos** escondem-no no fim e o **Temporizador** acompanha a duração do clip. Depois de aplicado, o efeito aparece no separador **Efeitos** das propriedades, onde o utilizador escolhe o estilo, a intensidade, a velocidade, a cor e outros ajustes.
+
 ### Aba Vídeo
 
 Esta aba reúne as definições de movimento e tempo do clipe:
@@ -280,7 +282,7 @@ As transições disponíveis são: Corte seco, Dissolver, Escurecer e clarear (f
 
 ### Efeitos
 
-A aba **Efeitos** tem duas partes. Em cima, uma grade com uma miniatura de cada efeito, que mostra o resultado numa paisagem de exemplo: clique numa delas para adicionar o efeito ao clipe. Embaixo, a lista **Efeitos aplicados**, na ordem em que os efeitos são processados. Cada efeito da lista tem controles deslizantes para os ajustes, e os botões **Mover para cima**, **Mover para baixo** e **Remover efeito**. A seta à esquerda do nome mostra ou oculta os ajustes. Dê um duplo clique num controle deslizante para voltar ao valor padrão. Nos ajustes de cor, uma faixa colorida sob o controle mostra o efeito do valor (por exemplo, azul a laranja na temperatura).
+A aba **Efeitos** tem duas partes. Em cima, uma grade com uma miniatura de cada efeito, que mostra o resultado numa cena de exemplo: clique numa delas para adicionar o efeito ao clipe. Embaixo, a lista **Efeitos aplicados**, na ordem em que os efeitos são processados. Cada efeito da lista tem controles deslizantes para os ajustes, e os botões **Mover para cima**, **Mover para baixo** e **Remover efeito**. A seta à esquerda do nome mostra ou oculta os ajustes. Dê um duplo clique num controle deslizante para voltar ao valor padrão. Nos ajustes de cor, uma faixa colorida sob o controle mostra o efeito do valor (por exemplo, azul a laranja na temperatura).
 
 Efeitos visuais disponíveis:
 
@@ -380,6 +382,7 @@ Abra o mixer em **Ferramentas › Mixer de áudio** ou pelo botão da barra de f
 
 Selecione um clipe de áudio, ou um vídeo com som, e use a aba **Áudio**:
 
+- **Forma de onda**: no topo do separador aparece o áudio do clipe, com o cursor da linha do tempo a vermelho. Clique ou arraste sobre ela para ir a outro momento do áudio; o cursor da linha do tempo e o monitor acompanham.
 - **Volume**: 100% é o volume original. Com o botão ◇, o utilizador cria um keyframe de volume. Assim é possível atransferir a música durante uma fala, por exemplo.
 - **Entrada gradual** e **Saída gradual**: fades de 0 a 10 segundos, para o som começar e terminar suavemente.
 - **Normalizar loudness**: ajusta o volume para um alvo de loudness (padrão EBU R128), sem passar de um pico seguro. Escolha o **Alvo de loudness** antes de aplicar.

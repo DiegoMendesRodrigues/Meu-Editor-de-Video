@@ -244,6 +244,8 @@ Use los botones de zoom de la barra de herramientas, o los atajos:
 
 Para aplicar un efecto, seleccione el clip en la línea de tiempo y use las pestañas de las propiedades. También puede usar las secciones de la biblioteca, como **Efectos**, **Color** y **Transiciones**: haga doble clic en un elemento para aplicarlo en el cursor o al clip seleccionado, o use el botón **Aplicar al clip seleccionado**. Los efectos y las transiciones también sirven para imágenes, stickers y textos, y la pestaña **Color** ajusta los colores de imágenes y stickers. Al insertar un clip, el panel de propiedades se abre solo en la pestaña adecuada: **Texto** para textos, **Vídeo** para vídeos, imágenes y stickers, y **Audio** para audios.
 
+La sección **Efectos** de la biblioteca muestra los efectos de vídeo listos como miniaturas, separados por categoría (elija la categoría en la lista encima de las miniaturas): **Tendencias**, **Aperturas**, **Cierres**, **Amor**, **Fiesta**, **Borde**, **Resaltar**, **Distorsión**, **Fallo digital**, **Parpadeo**, **Grunge**, **Lupa**, **Luz**, **Retro**, **Temblor**, **Diapositivas**, **Pantalla dividida**, **Temporizador**, **Visor** y **Utilidades** (desenfoque, nitidez, viñeta, chroma key y los demás efectos básicos). Cada miniatura muestra el efecto en una escena de playa con una persona; en los efectos de movimiento, como el **Temblor**, la miniatura superpone instantes cercanos para indicar el movimiento. Los efectos se animan con el tiempo del clip: las **Aperturas** revelan el vídeo al inicio del clip, los **Cierres** lo ocultan al final y el **Temporizador** sigue la duración del clip. Una vez aplicado, el efecto aparece en la pestaña **Efectos** de las propiedades, donde puede elegir el estilo, la intensidad, la velocidad, el color y otros ajustes.
+
 ### Pestaña Vídeo
 
 Esta pestaña reúne la configuración de movimiento y tiempo del clip:
@@ -280,7 +282,7 @@ Las transiciones disponibles son: Corte seco, Disolver, Fundido a negro, Zoom, D
 
 ### Efectos
 
-La pestaña **Efectos** tiene dos partes. Arriba, una cuadrícula con una miniatura de cada efecto, que muestra el resultado en un paisaje de ejemplo: haga clic en una para añadir el efecto al clip. Abajo, la lista **Efectos aplicados**, en el orden en que se procesan. Cada efecto de la lista tiene controles deslizantes para los ajustes y los botones **Subir**, **Bajar** y **Quitar efecto**. La flecha a la izquierda del nombre muestra u oculta los ajustes. Haga doble clic en un control deslizante para volver al valor predeterminado. En los ajustes de color, una franja de color bajo el control muestra el efecto del valor (por ejemplo, de azul a naranja en la temperatura).
+La pestaña **Efectos** tiene dos partes. Arriba, una cuadrícula con una miniatura de cada efecto, que muestra el resultado en una escena de ejemplo: haga clic en una para añadir el efecto al clip. Abajo, la lista **Efectos aplicados**, en el orden en que se procesan. Cada efecto de la lista tiene controles deslizantes para los ajustes y los botones **Subir**, **Bajar** y **Quitar efecto**. La flecha a la izquierda del nombre muestra u oculta los ajustes. Haga doble clic en un control deslizante para volver al valor predeterminado. En los ajustes de color, una franja de color bajo el control muestra el efecto del valor (por ejemplo, de azul a naranja en la temperatura).
 
 Efectos visuales disponibles:
 
@@ -380,6 +382,7 @@ Abra el mezclador en **Herramientas › Mezclador de audio** o con el botón de 
 
 Seleccione un clip de audio, o un vídeo con sonido, y use la pestaña **Audio**:
 
+- **Forma de onda**: en la parte superior de la pestaña aparece el audio del clip, con el cursor de la línea de tiempo en rojo. Haga clic o arrastre sobre ella para ir a otro momento del audio; el cursor de la línea de tiempo y el monitor lo siguen.
 - **Volumen**: 100% es el volumen original. Con el botón ◇ crea un fotograma clave de volumen. Así puede bajar la música durante una frase, por ejemplo.
 - **Entrada gradual** y **Salida gradual**: fundidos de 0 a 10 segundos, para que el sonido empiece y termine suavemente.
 - **Normalizar sonoridad**: ajusta el volumen a un objetivo de sonoridad (estándar EBU R128), sin superar un pico seguro. Elija el **Objetivo de sonoridad** antes de aplicar.

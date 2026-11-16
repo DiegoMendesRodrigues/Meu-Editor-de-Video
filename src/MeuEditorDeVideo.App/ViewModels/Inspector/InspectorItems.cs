@@ -406,6 +406,12 @@ public sealed record LibraryEffectItem(string Key, string Name, string Descripti
 
     public string Description { get; init; } = Localization.Translator.T(Description);
 
+    /// <summary>Categoria da biblioteca de efeitos (pt-BR, chave de filtro); vazia nas outras seções.</summary>
+    public string Category { get; init; } = "";
+
+    /// <summary>Mostra a miniatura do efeito (<see cref="Services.EffectPreviews"/>) na lista.</summary>
+    public bool HasPreview { get; init; }
+
     /// <summary>Nome lido por leitores de tela (o item da lista usa o texto do objeto).</summary>
     public override string ToString() => Name;
 }

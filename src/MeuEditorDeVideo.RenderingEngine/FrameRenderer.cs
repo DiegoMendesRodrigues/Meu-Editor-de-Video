@@ -34,9 +34,11 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
         var graph = TimelineEvaluator.Evaluate(project, sequence, t, includeSubtitles);
         var layers = new List<LayerImage>(graph.Layers.Count);
         var ctx = new EffectContext(graph.Width > 0 ? (double)width / graph.Width : 1, project.Settings.FrameRate.TimeToFrame(t));
+        var baseCtx = ctx;
         foreach (var visual in graph.Layers)
         {
             var layer = visual;
+            ctx = WithClipTime(baseCtx, sequence, layer.ClipId, t);
             if (layer.Text is { } text)
             {
                 if (TextImage(layer, text, graph, width) is { } textLayer)
@@ -108,6 +110,16 @@ public sealed class FrameRenderer(ICompositor compositor, IAiFrameProcessor? ai 
             AddWithTrail(layers, new LayerImage(layer, image, hasAlpha));
         }
         return compositor.Compose(width, height, graph.Width, layers, transparentBackground);
+    }
+
+    /// <summary>Instante dentro do clipe da camada e sua duração (efeitos animados como aberturas e contagens).</summary>
+    private static EffectContext WithClipTime(EffectContext ctx, Sequence sequence, Guid clipId, MediaTime t)
+    {
+        foreach (var track in sequence.Tracks)
+            foreach (var clip in track.Clips)
+                if (clip.Id == clipId)
+                    return ctx with { ClipTime = Math.Max(0, (t - clip.Start).TotalSeconds), ClipDuration = clip.Duration.TotalSeconds };
+        return ctx;
     }
 
     /// <summary>

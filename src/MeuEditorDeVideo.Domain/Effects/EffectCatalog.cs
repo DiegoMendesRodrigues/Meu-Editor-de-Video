@@ -351,6 +351,7 @@ public static class EffectCatalog
             new("drive", "Intensidade", ParameterKind.Slider, 0, 100, 40, "%"),
             new("mix", "Mistura", ParameterKind.Slider, 0, 100, 100, "%"),
         ]),
+        .. VideoEffects.Definitions,
     ];
 
     /// <summary>Efeitos de áudio do clipe (ativos), na ordem de aplicação.</summary>
@@ -459,6 +460,7 @@ public static class EffectCatalog
             Equalizer => new[] { "lowGain", "midGain", "highGain", "lowcut" }.All(k => Math.Abs(Value(e, k)) < 1e-9),
             Denoise or Telephone => Value(e, e.Type == Denoise ? "amount" : "intensity") <= 0,
             Echo or Reverb or Distortion => Value(e, "mix") <= 0,
+            _ when VideoEffects.IsVideoEffect(e.Type) => Find(e.Type)?.Parameters.Any(p => p.Key == "amount") == true && Value(e, "amount") <= 0,
             _ => false,
         };
     }

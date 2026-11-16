@@ -99,6 +99,7 @@ public sealed partial class EditorViewModel(
         if (Library is not null) Library.Filter = FilterFor(value);
         OnPropertyChanged(nameof(IsMediaSection));
         OnPropertyChanged(nameof(IsEffectSection));
+        OnPropertyChanged(nameof(IsVideoEffectSection));
         OnPropertyChanged(nameof(IsTextSection));
         OnPropertyChanged(nameof(IsGraphicsSection));
         OnPropertyChanged(nameof(IsAiSection));
@@ -107,11 +108,28 @@ public sealed partial class EditorViewModel(
 
     partial void OnInspectorChanged(ClipInspectorViewModel? value) => OnPropertyChanged(nameof(SectionItems));
 
+    /// <summary>Categorias da seção Efeitos (nome traduzido; o valor é a chave pt-BR das predefinições).</summary>
+    public IReadOnlyList<Inspector.Option<string>> EffectCategories { get; } =
+        VideoEffectPresets.Categories.Select(c => new Inspector.Option<string>(c, Localization.Translator.T(c))).ToList();
+
+    /// <summary>Categoria mostrada na seção Efeitos.</summary>
+    public Inspector.Option<string>? SelectedEffectCategory
+    {
+        get => field ??= EffectCategories[0];
+        set
+        {
+            if (SetProperty(ref field, value)) OnPropertyChanged(nameof(SectionItems));
+        }
+    }
+
     /// <summary>Seções de mídia mostram a biblioteca.</summary>
     public bool IsMediaSection => SelectedSection is LibrarySection.Media or LibrarySection.Videos or LibrarySection.Images or LibrarySection.Audio;
 
     /// <summary>Transições, efeitos e cor: catálogo aplicável ao clipe selecionado (F6).</summary>
     public bool IsEffectSection => SelectedSection is LibrarySection.Transitions or LibrarySection.Effects or LibrarySection.Color;
+
+    /// <summary>Seção Efeitos: mostra a escolha de categoria.</summary>
+    public bool IsVideoEffectSection => SelectedSection == LibrarySection.Effects;
 
     /// <summary>Textos, títulos, créditos, tarjas e legendas (F8).</summary>
     public bool IsTextSection => SelectedSection == LibrarySection.Texts;
@@ -125,7 +143,7 @@ public sealed partial class EditorViewModel(
     public IReadOnlyList<LibraryEffectItem> SectionItems => (SelectedSection, Inspector) switch
     {
         (LibrarySection.Transitions, { } i) => i.LibraryTransitions,
-        (LibrarySection.Effects, { } i) => i.LibraryEffects,
+        (LibrarySection.Effects, { } i) => i.LibraryEffects.Where(e => e.Category == (SelectedEffectCategory?.Value ?? VideoEffectPresets.Categories[0])).ToList(),
         (LibrarySection.Color, { } i) => i.LibraryColor,
         _ => [],
     };

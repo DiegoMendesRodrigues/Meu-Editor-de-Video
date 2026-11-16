@@ -244,6 +244,8 @@ Verwenden Sie die Zoom-Schaltflächen in der Symbolleiste oder die Tastenkombina
 
 Um einen Effekt anzuwenden, wählen Sie den Clip in der Zeitleiste aus und verwenden die Registerkarten der Eigenschaften. Sie können auch die Bereiche der Bibliothek wie **Effekte**, **Farbe** und **Übergänge** verwenden: Doppelklicken Sie auf ein Element, um es an der Abspielposition oder auf den ausgewählten Clip anzuwenden, oder verwenden Sie die Schaltfläche **Auf ausgewählten Clip anwenden**. Effekte und Übergänge gelten auch für Bilder, Sticker und Texte, und die Registerkarte **Farbe** passt die Farben von Bildern und Stickern an. Wenn Sie einen Clip einfügen, öffnet sich der Eigenschaftenbereich von selbst auf der passenden Registerkarte: **Text** für Texte, **Video** für Videos, Bilder und Sticker und **Audio** für Audio.
 
+Der Bereich **Effekte** der Bibliothek zeigt fertige Videoeffekte als Miniaturen, nach Kategorien geordnet (wählen Sie die Kategorie in der Liste über den Miniaturen): **Trends**, **Intros**, **Outros**, **Liebe**, **Party**, **Rahmen**, **Hervorheben**, **Verzerrung**, **Glitch**, **Flackern**, **Grunge**, **Lupe**, **Licht**, **Retro**, **Wackeln**, **Dias**, **Geteilter Bildschirm**, **Timer**, **Sucher** und **Werkzeuge** (Weichzeichnen, Schärfen, Vignette, Chroma Key und die übrigen Grundeffekte). Jede Miniatur zeigt den Effekt in einer Strandszene mit einer Person; bei Bewegungseffekten wie **Wackeln** überlagert die Miniatur benachbarte Zeitpunkte, um die Bewegung anzudeuten. Die Effekte werden über die Zeit des Clips animiert: **Intros** blenden das Video am Clipanfang ein, **Outros** blenden es am Ende aus und der **Timer** folgt der Cliplänge. Nach dem Anwenden erscheint der Effekt auf der Registerkarte **Effekte** der Eigenschaften, wo Sie Stil, Intensität, Geschwindigkeit, Farbe und weitere Einstellungen wählen.
+
 ### Registerkarte Video
 
 Diese Registerkarte bündelt die Bewegungs- und Zeiteinstellungen des Clips:
@@ -280,7 +282,7 @@ Die verfügbaren Übergänge sind: Harter Schnitt, Überblenden, Abblenden und A
 
 ### Effekte
 
-Die Registerkarte **Effekte** hat zwei Teile. Oben ein Raster mit einem Miniaturbild jedes Effekts, das das Ergebnis an einer Beispiellandschaft zeigt: Klicken Sie auf eines, um den Effekt zum Clip hinzuzufügen. Unten die Liste **Angewendete Effekte**, in der Reihenfolge, in der die Effekte verarbeitet werden. Jeder Effekt der Liste hat Schieberegler für seine Einstellungen sowie die Schaltflächen **Nach oben**, **Nach unten** und **Effekt entfernen**. Der Pfeil links neben dem Namen blendet die Einstellungen ein oder aus. Doppelklicken Sie auf einen Schieberegler, um zum Standardwert zurückzukehren. Bei Farbeinstellungen zeigt ein farbiger Streifen unter dem Regler die Wirkung des Werts (zum Beispiel Blau bis Orange bei der Temperatur).
+Die Registerkarte **Effekte** hat zwei Teile. Oben ein Raster mit einem Miniaturbild jedes Effekts, das das Ergebnis an einer Beispielszene zeigt: Klicken Sie auf eines, um den Effekt zum Clip hinzuzufügen. Unten die Liste **Angewendete Effekte**, in der Reihenfolge, in der die Effekte verarbeitet werden. Jeder Effekt der Liste hat Schieberegler für seine Einstellungen sowie die Schaltflächen **Nach oben**, **Nach unten** und **Effekt entfernen**. Der Pfeil links neben dem Namen blendet die Einstellungen ein oder aus. Doppelklicken Sie auf einen Schieberegler, um zum Standardwert zurückzukehren. Bei Farbeinstellungen zeigt ein farbiger Streifen unter dem Regler die Wirkung des Werts (zum Beispiel Blau bis Orange bei der Temperatur).
 
 Verfügbare visuelle Effekte:
 
@@ -380,6 +382,7 @@ Beim Exportieren des Videos können Sie wählen, ob eine Untertiteldatei neben d
 
 Wählen Sie einen Audioclip oder ein Video mit Ton aus und verwenden Sie die Registerkarte **Audio**:
 
+- **Wellenform**: Oben im Reiter wird das Audio des Clips angezeigt, mit der Abspielposition der Zeitleiste in Rot. Klicken oder ziehen Sie darauf, um zu einer anderen Stelle im Audio zu springen; Abspielposition und Monitor folgen.
 - **Lautstärke**: 100 % ist die Originallautstärke. Mit der Schaltfläche ◇ erstellen Sie einen Lautstärke-Keyframe. So können Sie zum Beispiel die Musik während eines Redebeitrags absenken.
 - **Einblenden** und **Ausblenden**: Blenden von 0 bis 10 Sekunden, damit der Ton sanft beginnt und endet.
 - **Lautheit normalisieren**: passt die Lautstärke an ein Lautheitsziel an (Norm EBU R128), ohne einen sicheren Spitzenpegel zu überschreiten. Wählen Sie das **Lautheitsziel** vor dem Anwenden.

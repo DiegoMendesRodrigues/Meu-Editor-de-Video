@@ -244,6 +244,8 @@ Use the zoom buttons on the toolbar, or the shortcuts:
 
 To apply an effect, select the clip on the timeline and use the property tabs. You can also use the library sections, such as **Effects**, **Color** and **Transitions**: double-click an item to apply it at the playhead or to the selected clip, or use the **Apply to selected clip** button. Effects and transitions also work on images, stickers and texts, and the **Color** tab adjusts the colors of images and stickers. When you insert a clip, the properties panel opens on the right tab by itself: **Text** for texts, **Video** for videos, images and stickers, and **Audio** for audio.
 
+The library's **Effects** section shows ready-made video effects as thumbnails, grouped by category (choose the category in the list above the thumbnails): **Trending**, **Openers**, **Endings**, **Love**, **Party**, **Border**, **Highlight**, **Distortion**, **Glitch**, **Flicker**, **Grunge**, **Magnifier**, **Light**, **Retro**, **Shake**, **Slides**, **Split screen**, **Timer**, **Viewfinder** and **Utilities** (blur, sharpen, vignette, chroma key and the other basic effects). Each thumbnail shows the effect on a beach scene with a person; for motion effects such as **Shake**, the thumbnail overlays nearby instants to suggest the movement. The effects are animated by the clip's time: **Openers** reveal the video at the start of the clip, **Endings** hide it at the end, and the **Timer** follows the clip's duration. Once applied, the effect appears in the **Effects** tab of the properties, where you choose the style, intensity, speed, color and other settings.
+
 ### Video tab
 
 This tab gathers the clip's motion and timing settings:
@@ -280,7 +282,7 @@ The available transitions are: Hard cut, Dissolve, Fade to black and back, Zoom,
 
 ### Effects
 
-The **Effects** tab has two parts. At the top, a grid with a thumbnail of each effect, showing the result on a sample landscape: click one to add the effect to the clip. At the bottom, the **Applied effects** list, in the order in which the effects are processed. Each effect in the list has sliders for its settings, and the **Move up**, **Move down** and **Remove effect** buttons. The arrow to the left of the name shows or hides the settings. Double-click a slider to return to the default value. In color settings, a colored strip under the slider shows the effect of the value (for example, blue to orange for temperature).
+The **Effects** tab has two parts. At the top, a grid with a thumbnail of each effect, showing the result on a sample scene: click one to add the effect to the clip. At the bottom, the **Applied effects** list, in the order in which the effects are processed. Each effect in the list has sliders for its settings, and the **Move up**, **Move down** and **Remove effect** buttons. The arrow to the left of the name shows or hides the settings. Double-click a slider to return to the default value. In color settings, a colored strip under the slider shows the effect of the value (for example, blue to orange for temperature).
 
 Available visual effects:
 
@@ -380,6 +382,7 @@ Open the mixer in **Tools › Audio mixer** or with the toolbar button. It shows
 
 Select an audio clip, or a video with sound, and use the **Audio** tab:
 
+- **Waveform**: the top of the tab shows the clip's audio, with the timeline playhead in red. Click or drag on it to go to another moment of the audio; the timeline playhead and the monitor follow.
 - **Volume**: 100% is the original volume. With the ◇ button, you create a volume keyframe. This way you can lower the music during speech, for example.
 - **Fade in** and **Fade out**: fades from 0 to 10 seconds, so the sound starts and ends smoothly.
 - **Normalize loudness**: adjusts the volume to a loudness target (EBU R128 standard), without exceeding a safe peak. Choose the **Loudness target** before applying.

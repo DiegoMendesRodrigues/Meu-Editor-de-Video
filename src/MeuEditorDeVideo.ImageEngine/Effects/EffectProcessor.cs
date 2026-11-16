@@ -5,8 +5,11 @@ using static MeuEditorDeVideo.Domain.Effects.EffectCatalog;
 
 namespace MeuEditorDeVideo.ImageEngine.Effects;
 
-/// <summary>Contexto do processamento: escala de pixels do projeto para a imagem e número do quadro (granulado).</summary>
-public readonly record struct EffectContext(double PixelScale, long Frame);
+/// <summary>
+/// Contexto do processamento: escala de pixels do projeto para a imagem, número do quadro (granulado) e o instante dentro
+/// do clipe e sua duração em segundos (efeitos animados: tremido, aberturas, encerramentos, contagens).
+/// </summary>
+public readonly record struct EffectContext(double PixelScale, long Frame, double ClipTime = 0, double ClipDuration = 0);
 
 /// <summary>
 /// Aplica a pilha de efeitos de um clipe a uma imagem BGRA (CPU, paralelizado por linhas). A imagem de entrada nunca
@@ -52,6 +55,7 @@ public static class EffectProcessor
                         Reframe360Aspects[Math.Clamp((int)Math.Round(Value(e, "aspect")), 0, Reframe360Aspects.Length - 1)]);
                     break;
                 case VideoDenoise: DenoiseFx(px, w, h, Value(e, "strength") / 100, Value(e, "detail") / 100, ctx.PixelScale); break;
+                case var t when VideoFx.Handles(t): px = VideoFx.Apply(px, w, h, e, ctx); break;
                 case EdgeRefine:
                     px = EdgeRefiner.Apply(new BgraImage(w, h, px), Value(e, "choke") * ctx.PixelScale, Value(e, "feather") * ctx.PixelScale,
                         Value(e, "decontaminate") / 100).Pixels;
@@ -422,7 +426,7 @@ public static class EffectProcessor
         Rows(px, i => { px[i] = t[px[i]]; px[i + 1] = t[px[i + 1]]; px[i + 2] = t[px[i + 2]]; });
     }
 
-    private static void VignetteFx(byte[] px, int w, int h, double amount, double size)
+    internal static void VignetteFx(byte[] px, int w, int h, double amount, double size)
     {
         var inner = 0.25 + 0.6 * size;
         Parallel.For(0, h, y =>
@@ -475,7 +479,7 @@ public static class EffectProcessor
         });
     }
 
-    private static void NoiseFx(byte[] px, int w, int h, double amount, long frame)
+    internal static void NoiseFx(byte[] px, int w, int h, double amount, long frame)
     {
         var k = amount * 90;
         Parallel.For(0, h, y =>
@@ -705,7 +709,7 @@ public static class EffectProcessor
         return new BgraImage(w, h, px);
     }
 
-    private static void BlurFx(byte[] px, int w, int h, double radius)
+    internal static void BlurFx(byte[] px, int w, int h, double radius)
     {
         if (radius < 0.5) return;
         // Com transparência (textos, figurinhas, imagens PNG), desfoca em alfa pré-multiplicado: senão os pixels

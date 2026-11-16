@@ -40,7 +40,7 @@ public partial class ClipEffectsPanel
             ? "Nenhuma correção de cor. Comece por \"Ajustes de cor\"; use \"Comparar antes/depois\" para avaliar."
             : "Nenhum efeito. Os efeitos se combinam na ordem da lista; use as setas para reordenar.";
 
-        Catalogo.SetBinding(ItemsControlItemsSource, color ? nameof(ClipInspectorViewModel.LibraryColor) : nameof(ClipInspectorViewModel.LibraryEffects));
+        Catalogo.SetBinding(ItemsControlItemsSource, color ? nameof(ClipInspectorViewModel.LibraryColor) : nameof(ClipInspectorViewModel.LibraryBasicEffects));
         Pilha.SetBinding(ItemsControlItemsSource, color ? nameof(ClipInspectorViewModel.ColorEffects) : nameof(ClipInspectorViewModel.OtherEffects));
 
         if (_watched is not null) _watched.CollectionChanged -= OnStackChanged;

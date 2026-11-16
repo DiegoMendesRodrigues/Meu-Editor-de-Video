@@ -2242,3 +2242,156 @@ d511fafa	Crop area
 be8ad579	Drawing tools
 c5c2ad6d	Triangle
 2c7f3388	Polygon
+6d2c8ac0	Click or drag on the waveform to change the moment of the audio (the timeline playhead follows).
+08a99c92	Click or drag to change the moment of the audio
+2c4f7e19	Audio waveform
+0755b730	2 columns
+486ce5a9	2 rows
+badc0543	4 frames
+c352900b	9 frames
+71290daf	The image flickers like an unstable light or a strobe.
+529f32a9	Opener
+883e4b9d	Openers
+7e9873c9	Slow zoom out
+84fc4947	Love
+51fd1b14	Magnifies the image: fixed zoom, magnifier, fisheye, pulsing zoom and slow moves (Ken Burns).
+7da2c197	Progress ring
+7530c344	Look of a VHS tape, old film, tube TV or 8 mm camera.
+947e11d9	Slow zoom in
+dcf0ce44	Heat haze
+cc487c63	Rainbow
+69e7f875	Scratches
+608c1ff8	Progress bar
+3f0d8ae9	Binoculars
+dce7bba2	Blocks
+6b70f7a0	Bokeh
+88b9b18f	Romantic bokeh
+ca24d15e	Bulge
+649f094a	Bubbles
+0af15356	Border
+1d566cf2	White border
+6b5da9b3	Neon border
+2d7e40a9	Black border
+c034acc3	Sunlight glow
+b2aa67ac	Pink glow
+2a74dcfa	Sparkles
+9b655f74	Kaleidoscope
+6851e7e5	Rounded corners
+888caf2c	Chaos
+14cb89e6	Chaos 2
+bb7428e5	Effect category
+f2516d1f	Phone
+4def9532	Horizontal center
+3f8d78bb	Vertical center
+ed0de32d	Draws attention to an area: spotlight, circle, or blur or black and white around it.
+283a308d	Rain
+f751eb7c	Heart shower
+bb4fba6f	Flicker
+1cd084df	Confetti
+9d8cef11	Count 3, 2, 1
+e5151524	Countdown
+05b9cdf1	Red countdown
+1d040d0d	Countdown, stopwatch or progress bar that follow the clip's duration.
+d2d52596	Gap color
+863ca108	Hearts
+e5b5419b	Hearts, confetti, sparkles, snow, stars, bubbles, fireworks or rain over the video.
+7bff6181	Colors
+710fe5b9	Curtain
+b6c65671	Stopwatch
+98d4a29b	8 mm camera
+3420643e	Security camera
+2909012b	Camera recording
+a7ee0c03	Warps the image: waves, swirl, ripple, bulge, mirror, kaleidoscope or heat haze.
+6241dc80	Blur around
+f63f4efb	Slide
+994e2875	Highlight
+42be1f53	Digital
+dda4a2bf	Disco
+17fb5805	RGB split
+719052c2	Bottom
+f0dcbac7	Ending
+109bae17	Endings
+3f97c22a	Hides the video at the end of the clip: fade, curtain, iris, cinema bars, blur, zoom, flash…
+0fcedaab	Fade from black
+13ba0569	Fade to black
+0c9ce2cd	Mirror
+a4464bcd	Horizontal mirror
+dae326a5	Vertical mirror
+beacc3e3	Stars
+a8753786	Strobe
+50ad1b4f	Extreme
+5b525319	Cinema bars
+b38bac0e	Glitch
+c38bb613	Shaky glitch
+fbbd4424	Party
+59c2d9e8	Film
+7b855c5b	Old film
+9af9a11a	Dirty film
+e1ecd20b	Damaged tape
+f3577cb5	Flash
+9f7cb82e	Autofocus
+6257cd61	Fireworks
+ae9f768b	Instant photo
+7b69978c	Grunge
+d605d93a	Spotlight
+cb905053	Digital interference: shifted bands, split colors and corrupted blocks.
+60f89017	Sideways
+dee237d3	Sideways 1
+8042dd5c	Sideways 2
+8a7754af	Scanlines
+7ac122aa	Shifted lines
+14b22ec0	Magnifier
+007e20fe	Magnifier and zoom
+10ee0862	Light
+80424101	Unstable light
+252441a6	Party lights
+ef9ee12d	Crosshair
+1bab2e8f	Love frame
+45190a55	Focus frame
+8a791f6f	Frame around the video: plain, neon, rainbow, film, instant photo or blurred.
+1234d9b2	Blue neon
+c4c2de01	Pink neon
+9882a84f	Snow
+7482e206	Fisheye
+7da4cacd	Ripple
+d0abad7f	Pan right
+afe1d5b6	Pan left
+2e4dbbf9	Pan down
+89446027	Pan up
+6d14108b	Aged paper
+e2d23b3c	Particles
+82c8717c	Blinds
+66b92506	Blink
+92c59180	Broken pixels
+d3321ea3	Dust
+8778d1c1	Black and white around
+c98e55fb	Burnt
+59704d7a	Light rays
+60f92f6f	Torn
+25f54698	Swirl
+be89bad2	Lens flare
+2313f437	Repeats the video in several frames side by side or mirrored.
+502b2af6	Reveals the video at the start of the clip: fade, curtain, iris, cinema bars, blur, zoom, flash…
+3bc3567a	Romance
+f8afdd8d	Shakes the image like a handheld camera, with adjustable strength and rhythm.
+878cedb6	Weak signal
+a0ffe381	Slides
+054d9088	Overlays the screen of a camera, phone, crosshair, night vision, binoculars or security camera.
+e8c62d33	Mild
+7d1e43f1	Grime
+4ef7b9ca	Old TV
+9e2ffdc1	Timer
+724b8eaf	Trending
+1feb7033	Worn texture: scratches, dust, aged paper, grime or burnt edges.
+c2e14f61	Shake
+849d2880	Utilities
+678481aa	Light leak
+44513567	Light leaks, lens flare, rays, bokeh and colored lights moving over the image.
+727cd3a6	Vertical
+2a2939fa	Up-down 1
+c36ee81e	Up-down 2
+b11b8edc	Viewfinder
+f7e08538	Night vision
+509c517e	Zoom
+55ec4084	Pulsing zoom
+e9863888	Iris

@@ -244,6 +244,8 @@ Utilisez les boutons de zoom de la barre d'outils, ou les raccourcis :
 
 Pour appliquer un effet, sélectionnez le clip dans la timeline et utilisez les onglets des propriétés. Vous pouvez aussi utiliser les sections de la bibliothèque, comme **Effets**, **Couleur** et **Transitions** : double-cliquez sur un élément pour l'appliquer à la tête de lecture ou au clip sélectionné, ou utilisez le bouton **Appliquer au clip sélectionné**. Les effets et les transitions s'appliquent aussi aux images, aux stickers et aux textes, et l'onglet **Couleur** règle les couleurs des images et des stickers. Quand vous insérez un clip, le panneau des propriétés s'ouvre tout seul sur le bon onglet : **Texte** pour les textes, **Vidéo** pour les vidéos, images et stickers, et **Audio** pour l'audio.
 
+La section **Effets** de la bibliothèque présente des effets vidéo prêts à l'emploi sous forme de vignettes, classés par catégorie (choisissez la catégorie dans la liste au-dessus des vignettes) : **Tendances**, **Ouvertures**, **Fins**, **Amour**, **Fête**, **Bordure**, **Mise en valeur**, **Distorsion**, **Glitch**, **Scintillement**, **Grunge**, **Loupe**, **Lumière**, **Rétro**, **Tremblement**, **Diapositives**, **Écran partagé**, **Minuteur**, **Viseur** et **Utilitaires** (flou, netteté, vignettage, chroma key et les autres effets de base). Chaque vignette montre l'effet sur une scène de plage avec une personne ; pour les effets de mouvement, comme le **Tremblement**, la vignette superpose des instants voisins pour suggérer le mouvement. Les effets sont animés selon le temps du clip : les **Ouvertures** révèlent la vidéo au début du clip, les **Fins** la masquent à la fin et le **Minuteur** suit la durée du clip. Une fois appliqué, l'effet apparaît dans l'onglet **Effets** des propriétés, où vous choisissez le style, l'intensité, la vitesse, la couleur et les autres réglages.
+
 ### Onglet Vidéo
 
 Cet onglet regroupe les réglages de mouvement et de temps du clip :
@@ -280,7 +282,7 @@ Les transitions disponibles sont : Coupe franche, Fondu enchaîné, Fondu au noi
 
 ### Effets
 
-L'onglet **Effets** comporte deux parties. En haut, une grille avec une miniature de chaque effet, qui montre le résultat sur un paysage d'exemple : cliquez sur l'une d'elles pour ajouter l'effet au clip. En bas, la liste **Effets appliqués**, dans l'ordre où les effets sont traités. Chaque effet de la liste a des curseurs pour ses réglages et les boutons **Monter**, **Descendre** et **Supprimer l'effet**. La flèche à gauche du nom affiche ou masque les réglages. Double-cliquez sur un curseur pour revenir à la valeur par défaut. Dans les réglages de couleur, une bande colorée sous le curseur montre l'effet de la valeur (par exemple, du bleu à l'orange pour la température).
+L'onglet **Effets** comporte deux parties. En haut, une grille avec une miniature de chaque effet, qui montre le résultat sur une scène d'exemple : cliquez sur l'une d'elles pour ajouter l'effet au clip. En bas, la liste **Effets appliqués**, dans l'ordre où les effets sont traités. Chaque effet de la liste a des curseurs pour ses réglages et les boutons **Monter**, **Descendre** et **Supprimer l'effet**. La flèche à gauche du nom affiche ou masque les réglages. Double-cliquez sur un curseur pour revenir à la valeur par défaut. Dans les réglages de couleur, une bande colorée sous le curseur montre l'effet de la valeur (par exemple, du bleu à l'orange pour la température).
 
 Effets visuels disponibles :
 
@@ -380,6 +382,7 @@ Ouvrez le mélangeur dans **Outils › Mélangeur audio** ou avec le bouton de l
 
 Sélectionnez un clip audio, ou une vidéo avec du son, et utilisez l'onglet **Audio** :
 
+- **Forme d'onde** : le haut de l'onglet montre l'audio du clip, avec le curseur de la timeline en rouge. Cliquez ou faites glisser dessus pour aller à un autre moment de l'audio ; le curseur de la timeline et le moniteur suivent.
 - **Volume** : 100 % est le volume d'origine. Avec le bouton ◇, vous créez une image clé de volume. Vous pouvez ainsi baisser la musique pendant une prise de parole, par exemple.
 - **Fondu d'entrée** et **Fondu de sortie** : fondus de 0 à 10 secondes, pour que le son commence et finisse en douceur.
 - **Normaliser l'intensité sonore** : ajuste le volume à une cible d'intensité sonore (norme EBU R128), sans dépasser une crête sûre. Choisissez la **Cible d'intensité sonore** avant d'appliquer.

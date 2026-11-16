@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="MeuEditorDeVideo.App.Views.Panels.ClipAudioPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="clr-namespace:MeuEditorDeVideo.App.Controls">
     <!-- Aba "Áudio" do painel C (F7): volume e keyframes, rampas, tom, efeitos, normalização, silêncios e sincronização. -->
     <UserControl.Resources>
         <ResourceDictionary Source="InspectorTemplates.xaml" />
@@ -23,6 +24,9 @@
                       Visibility="{Binding HasClip, Converter={StaticResource Ins.BoolToVis}}">
             <StackPanel>
                 <TextBlock Text="{Binding ClipTitle}" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" TextTrimming="CharacterEllipsis" Margin="0,6,0,0" />
+                <ctl:ClipWaveform Inspector="{Binding}" Margin="0,6,0,0" />
+                <TextBlock Style="{StaticResource Ins.Label}" TextWrapping="Wrap" Margin="0,2,0,0"
+                           Text="Clique ou arraste na forma de onda para mudar o momento do áudio (o cursor da linha do tempo acompanha)." />
 
                 <TextBlock Text="Volume" Style="{StaticResource Ins.Section}" />
                 <ContentControl Content="{Binding Volume}" Focusable="False" />

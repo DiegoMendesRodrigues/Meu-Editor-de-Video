@@ -148,11 +148,23 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     public IReadOnlyList<LibraryEffectItem> LibraryTransitions { get; } =
         AllTransitions.Skip(1).Select(o => new LibraryEffectItem(o.Value!.Value.ToString(), o.Label, "Aplica ao corte antes do clipe selecionado.", "")).ToList();
 
+    /// <summary>Efeitos prontos por categoria e, em Utilitários, os efeitos básicos do catálogo.</summary>
     public IReadOnlyList<LibraryEffectItem> LibraryEffects { get; } =
-        EffectCatalog.All.Where(d => d.Category is not (EffectCategory.Color or EffectCategory.Audio or EffectCategory.Ai)).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "")).ToList();
+    [
+        .. VideoEffectPresets.All.Select(p => new LibraryEffectItem(p.Key, p.Name, PresetDescription(p), "") { Category = p.Category, HasPreview = true }),
+        .. EffectCatalog.All.Where(d => d.Category is not (EffectCategory.Color or EffectCategory.Audio or EffectCategory.Ai) && !VideoEffects.IsVideoEffect(d.Type))
+            .Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "") { Category = VideoEffectPresets.Utilities, HasPreview = true }),
+    ];
+
+    /// <summary>Efeitos básicos do catálogo (aba Efeitos das propriedades).</summary>
+    public IReadOnlyList<LibraryEffectItem> LibraryBasicEffects => field ??= LibraryEffects.Where(e => e.Category == VideoEffectPresets.Utilities).ToList();
 
     public IReadOnlyList<LibraryEffectItem> LibraryColor { get; } =
-        EffectCatalog.All.Where(d => d.Category == EffectCategory.Color).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "")).ToList();
+        EffectCatalog.All.Where(d => d.Category == EffectCategory.Color).Select(d => new LibraryEffectItem(d.Type, d.Name, d.Description, "") { HasPreview = true }).ToList();
+
+    /// <summary>Descrição do efeito pronto: a do primeiro efeito do catálogo que ele usa.</summary>
+    private static string PresetDescription(VideoEffectPreset p) =>
+        p.Build() is [var first, ..] && EffectCatalog.Find(first.Type) is { } d ? d.Description : "";
 
     [ObservableProperty]
     public partial bool HasClip { get; set; }
@@ -523,6 +535,12 @@ public sealed partial class ClipInspectorViewModel : ObservableObject, IClipEdit
     public void AddEffect(string type)
     {
         if (!EnsureClip()) return;
+        if (VideoEffectPresets.Find(type) is { } preset)
+        {
+            var added = preset.Build();
+            UpdateClip(c => c with { Effects = c.Effects.AddRange(added) }, $"Adicionar {Localization.Translator.T(preset.Name)}");
+            return;
+        }
         var definition = EffectCatalog.Find(type);
         if (definition is null) return;
         string? resource = null;
