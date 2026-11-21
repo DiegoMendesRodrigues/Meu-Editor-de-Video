@@ -1,16 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net10.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Superfície de desenho do Skia sobre o buffer BGRA (TextRasterizer.Draw). -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OpenCvSharp4" />
+    <!-- Textos e formas vetoriais (TextRasterizer, ShapeRasterizer): Skia + HarfBuzz em todos os sistemas. -->
+    <PackageReference Include="SkiaSharp" />
+    <PackageReference Include="SkiaSharp.HarfBuzz" />
   </ItemGroup>
   <ItemGroup Condition="'$(MedPlataforma)' == 'windows'">
     <PackageReference Include="OpenCvSharp4.runtime.win" />
   </ItemGroup>
   <ItemGroup Condition="'$(MedPlataforma)' == 'linux'">
     <PackageReference Include="OpenCvSharp4.official.runtime.linux-x64" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MeuEditorDeVideo.Core\MeuEditorDeVideo.Core.csproj" />

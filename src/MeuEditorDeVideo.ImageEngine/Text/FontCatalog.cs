@@ -1,20 +1,28 @@
 using System.Collections.Concurrent;
 using System.IO;
-using System.Windows.Markup;
-using System.Windows.Media;
+using SkiaSharp;
 
 namespace MeuEditorDeVideo.ImageEngine.Text;
 
+/// <summary>Fonte escolhida para um estilo: a face e os efeitos sintéticos quando a família não tem negrito/itálico.</summary>
+public sealed record ResolvedFont(SKTypeface Typeface, bool FakeBold, bool FakeItalic)
+{
+    public string FamilyName => Typeface.FamilyName;
+}
+
 /// <summary>
 /// Fontes disponíveis para textos (RF136): as do sistema e as adicionadas pelo usuário numa pasta própria
-/// (arquivos .ttf/.otf/.ttc), sem precisar instalá-las no Windows.
+/// (arquivos .ttf/.otf/.ttc), sem precisar instalá-las no sistema. Usa o gerenciador de fontes do Skia
+/// (DirectWrite no Windows, Fontconfig no Linux, CoreText no macOS).
 /// </summary>
 public static class FontCatalog
 {
-    private static readonly XmlLanguage English = XmlLanguage.GetLanguage("en-us");
-    private static readonly ConcurrentDictionary<string, FontFamily> Resolved = new(StringComparer.OrdinalIgnoreCase);
+    /// <summary>Famílias tentadas, em ordem, quando a pedida não existe (a primeira é o padrão dos projetos).</summary>
+    private static readonly string[] DefaultFamilies = ["Segoe UI", "Noto Sans", "DejaVu Sans", "Liberation Sans", "Helvetica Neue", "Arial"];
+
+    private static readonly ConcurrentDictionary<(string Name, bool Bold, bool Italic), ResolvedFont> Resolved = new();
     private static readonly Lock Gate = new();
-    private static Dictionary<string, FontFamily>? _userFamilies;
+    private static Dictionary<string, List<SKTypeface>>? _userFamilies;
     private static string? _userFolder;
 
     public static readonly string[] FontExtensions = [".ttf", ".otf", ".ttc"];
@@ -37,24 +45,33 @@ public static class FontCatalog
         Resolved.Clear();
     }
 
-    private static Dictionary<string, FontFamily> UserFamilies()
+    private static Dictionary<string, List<SKTypeface>> UserFamilies()
     {
         lock (Gate)
         {
             if (_userFamilies is not null) return _userFamilies;
-            var result = new Dictionary<string, FontFamily>(StringComparer.OrdinalIgnoreCase);
+            var result = new Dictionary<string, List<SKTypeface>>(StringComparer.OrdinalIgnoreCase);
             if (_userFolder is { } folder && Directory.Exists(folder))
             {
                 try
                 {
-                    var baseUri = new Uri(Path.GetFullPath(folder).TrimEnd('\\') + "\\");
-                    foreach (var family in Fonts.GetFontFamilies(baseUri))
+                    foreach (var file in Directory.EnumerateFiles(folder).Order(StringComparer.OrdinalIgnoreCase))
                     {
-                        var name = NameOf(family);
-                        if (name.Length > 0) result.TryAdd(name, new FontFamily(baseUri, "./#" + name));
+                        if (!FontExtensions.Contains(Path.GetExtension(file), StringComparer.OrdinalIgnoreCase)) continue;
+                        // .ttc: várias faces no mesmo arquivo, lidas pelo índice até acabar.
+                        for (var index = 0; index < 64; index++)
+                        {
+                            var face = SKTypeface.FromFile(file, index);
+                            if (face is null) break;
+                            if (face.FamilyName is { Length: > 0 } name)
+                            {
+                                if (!result.TryGetValue(name, out var faces)) result[name] = faces = [];
+                                faces.Add(face);
+                            }
+                        }
                     }
                 }
-                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or UriFormatException)
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
                 {
                     // Pasta inacessível: ficam só as fontes do sistema.
                 }
@@ -63,22 +80,14 @@ public static class FontCatalog
         }
     }
 
-    /// <summary>Nome da família (em inglês quando houver, como o Windows mostra nos aplicativos).</summary>
-    public static string NameOf(FontFamily family)
-    {
-        if (family.FamilyNames.TryGetValue(English, out var en)) return en;
-        var first = family.FamilyNames.Values.FirstOrDefault();
-        if (first is not null) return first;
-        var source = family.Source;
-        var hash = source.LastIndexOf('#');
-        return hash >= 0 ? source[(hash + 1)..] : source;
-    }
-
     /// <summary>Famílias disponíveis, em ordem alfabética (fontes do usuário incluídas).</summary>
     public static IReadOnlyList<string> Families()
     {
         var names = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var f in Fonts.SystemFontFamilies) names.Add(NameOf(f));
+        foreach (var f in SKFontManager.Default.GetFontFamilies())
+        {
+            if (!string.IsNullOrWhiteSpace(f)) names.Add(f);
+        }
         foreach (var name in UserFamilies().Keys) names.Add(name);
         return [.. names];
     }
@@ -86,10 +95,45 @@ public static class FontCatalog
     /// <summary>A fonte é do usuário (pasta própria) e não do sistema?</summary>
     public static bool IsUserFont(string family) => UserFamilies().ContainsKey(family);
 
-    /// <summary>Família pelo nome; nomes desconhecidos caem na fonte padrão do sistema (Segoe UI).</summary>
-    public static FontFamily Resolve(string? name)
+    /// <summary>Fonte pelo nome e estilo; nomes desconhecidos caem na fonte padrão disponível no sistema.</summary>
+    public static ResolvedFont Resolve(string? name, bool bold, bool italic)
     {
-        name = string.IsNullOrWhiteSpace(name) ? "Segoe UI" : name.Trim();
-        return Resolved.GetOrAdd(name, n => UserFamilies().TryGetValue(n, out var user) ? user : new FontFamily(n + ", Segoe UI"));
+        name = string.IsNullOrWhiteSpace(name) ? DefaultFamilies[0] : name.Trim();
+        return Resolved.GetOrAdd((name, bold, italic), k => ResolveCore(k.Name, k.Bold, k.Italic));
     }
+
+    private static ResolvedFont ResolveCore(string name, bool bold, bool italic)
+    {
+        var style = new SKFontStyle(bold ? SKFontStyleWeight.Bold : SKFontStyleWeight.Normal, SKFontStyleWidth.Normal,
+            italic ? SKFontStyleSlant.Italic : SKFontStyleSlant.Upright);
+        var face = UserFamilies().TryGetValue(name, out var faces) ? BestMatch(faces, style) : null;
+        face ??= SKFontManager.Default.MatchFamily(name, style);
+        foreach (var fallback in DefaultFamilies)
+        {
+            if (face is not null) break;
+            face = SKFontManager.Default.MatchFamily(fallback, style);
+        }
+        face ??= SKTypeface.Default;
+        return new ResolvedFont(face, bold && face.FontWeight < 600, italic && face.FontSlant == SKFontStyleSlant.Upright);
+    }
+
+    private static SKTypeface BestMatch(List<SKTypeface> faces, SKFontStyle style) =>
+        faces.MinBy(f => Math.Abs(f.FontWeight - style.Weight) + ((f.FontSlant == SKFontStyleSlant.Upright) == (style.Slant == SKFontStyleSlant.Upright) ? 0 : 1000))!;
+
+    /// <summary>
+    /// Face que desenha <paramref name="codepoint"/>: a própria ou uma substituta do sistema (emoji, alfabetos que a
+    /// fonte não cobre), como o WPF fazia automaticamente.
+    /// </summary>
+    internal static SKTypeface ForCodepoint(ResolvedFont font, int codepoint)
+    {
+        if (codepoint < 0x20 || Probe(font.Typeface).ContainsGlyph(codepoint)) return font.Typeface;
+        return FallbackCache.GetOrAdd((font.Typeface, codepoint), k =>
+            SKFontManager.Default.MatchCharacter(k.Face.FamilyName, k.Face.FontStyle, [], k.Codepoint) ?? k.Face);
+    }
+
+    private static readonly ConcurrentDictionary<(SKTypeface Face, int Codepoint), SKTypeface> FallbackCache = new();
+    private static readonly ConcurrentDictionary<SKTypeface, SKFont> Probes = new();
+
+    /// <summary>Fonte usada só para consultar a cobertura de caracteres da face.</summary>
+    private static SKFont Probe(SKTypeface face) => Probes.GetOrAdd(face, f => new SKFont(f));
 }

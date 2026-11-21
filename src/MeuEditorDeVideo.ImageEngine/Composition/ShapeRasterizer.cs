@@ -1,15 +1,14 @@
 using System.Collections.Concurrent;
-using System.Windows;
-using System.Windows.Media;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.ImageEngine.Text;
+using SkiaSharp;
 
 namespace MeuEditorDeVideo.ImageEngine.Composition;
 
 /// <summary>
-/// Desenha os elementos gráficos vetoriais (RF152) na resolução de saída — nítidos em qualquer escala — com a pilha
-/// vetorial do WPF, na mesma thread STA dos textos. A forma fica centrada na imagem (o centro é a posição do clipe).
+/// Desenha os elementos gráficos vetoriais (RF152) na resolução de saída — nítidos em qualquer escala — com SkiaSharp.
+/// A forma fica centrada na imagem (o centro é a posição do clipe).
 /// </summary>
 public static class ShapeRasterizer
 {
@@ -21,7 +20,7 @@ public static class ShapeRasterizer
     {
         var key = (style, Math.Round(scale, 4));
         if (Cache.TryGetValue(key, out var cached)) return cached;
-        var image = TextRasterizer.OnWorker(() => RenderCore(style, key.Item2));
+        var image = RenderCore(style, key.Item2);
         if (Cache.Count >= 64) Cache.Clear();
         Cache[key] = image;
         return image;
@@ -35,54 +34,52 @@ public static class ShapeRasterizer
         var margin = Math.Ceiling(stroke / 2 + 2);
         var width = (int)Math.Min(MaxSide, Math.Ceiling(w + 2 * margin));
         var height = (int)Math.Min(MaxSide, Math.Ceiling(h + 2 * margin));
-        var rect = new Rect((width - w) / 2, (height - h) / 2, w, h);
+        var rect = SKRect.Create((float)((width - w) / 2), (float)((height - h) / 2), (float)w, (float)h);
 
-        var fill = TextRasterizer.ParseColor(style.FillColor, Colors.White);
-        var strokeColor = TextRasterizer.ParseColor(style.StrokeColor, Colors.Black);
-        var geometry = Geometry(style, rect, s);
-        var visual = new DrawingVisual();
-        using (var dc = visual.RenderOpen())
+        var fill = TextRasterizer.ParseColor(style.FillColor, SKColors.White);
+        var strokeColor = TextRasterizer.ParseColor(style.StrokeColor, SKColors.Black);
+        var pixels = TextRasterizer.Draw(width, height, canvas =>
         {
             if (style.Kind == ShapeKind.Line)
             {
                 // Linha: traço com a cor de preenchimento e espessura = altura.
-                var pen = new Pen(TextRasterizer.Brush(fill), h) { StartLineCap = PenLineCap.Round, EndLineCap = PenLineCap.Round };
-                pen.Freeze();
-                var y = rect.Top + h / 2;
-                dc.DrawLine(pen, new Point(rect.Left + h / 2, y), new Point(rect.Right - h / 2, y));
+                using var pen = TextRasterizer.Stroke(fill, (float)h, SKStrokeCap.Round);
+                var y = rect.Top + (float)h / 2;
+                canvas.DrawLine(rect.Left + (float)h / 2, y, rect.Right - (float)h / 2, y, pen);
+                return;
             }
-            else
+            using var path = Path(style, rect, s);
+            if (fill.Alpha > 0)
             {
-                Pen? pen = null;
-                if (stroke > 0 && strokeColor.A > 0)
-                {
-                    pen = new Pen(TextRasterizer.Brush(strokeColor), stroke) { LineJoin = PenLineJoin.Round };
-                    pen.Freeze();
-                }
-                dc.DrawGeometry(fill.A > 0 ? TextRasterizer.Brush(fill) : null, pen, geometry);
+                using var paint = TextRasterizer.Paint(fill);
+                canvas.DrawPath(path, paint);
             }
-        }
-        var pixels = TextRasterizer.Rasterize(visual, width, height);
+            if (stroke > 0 && strokeColor.Alpha > 0)
+            {
+                using var pen = TextRasterizer.Stroke(strokeColor, (float)stroke);
+                canvas.DrawPath(path, pen);
+            }
+        });
         TextRasterizer.Unpremultiply(pixels);
         return new BgraImage(width, height, pixels);
     }
 
-    /// <summary>Geometria da forma dentro do retângulo (pixels de saída).</summary>
-    public static Geometry Geometry(ShapeStyle style, Rect r, double scale)
+    /// <summary>Contorno da forma dentro do retângulo (pixels de saída).</summary>
+    public static SKPath Path(ShapeStyle style, SKRect r, double scale)
     {
-        Geometry g;
-        var cx = r.Left + r.Width / 2;
-        var cy = r.Top + r.Height / 2;
+        using var path = new SKPathBuilder();
+        var cx = r.MidX;
+        var cy = r.MidY;
         switch (style.Kind)
         {
             case ShapeKind.Ellipse:
-                g = new EllipseGeometry(r);
+                path.AddOval(r);
                 break;
             case ShapeKind.Arrow:
             {
-                var head = Math.Min(r.Width * 0.45, r.Height * 1.1);
-                var shaft = r.Height * 0.38;
-                g = Polygon([
+                var head = Math.Min(r.Width * 0.45f, r.Height * 1.1f);
+                var shaft = r.Height * 0.38f;
+                path.AddPoly([
                     new(r.Left, cy - shaft / 2), new(r.Right - head, cy - shaft / 2), new(r.Right - head, r.Top),
                     new(r.Right, cy), new(r.Right - head, r.Bottom), new(r.Right - head, cy + shaft / 2), new(r.Left, cy + shaft / 2),
                 ]);
@@ -91,68 +88,67 @@ public static class ShapeRasterizer
             case ShapeKind.Star:
             {
                 var n = Math.Clamp(style.Sides, 3, 24);
-                var pts = new Point[n * 2];
+                var pts = new SKPoint[n * 2];
                 for (var i = 0; i < n * 2; i++)
                 {
                     var a = -Math.PI / 2 + Math.PI * i / n;
                     var k = i % 2 == 0 ? 1 : 0.45;
-                    pts[i] = new Point(cx + Math.Cos(a) * r.Width / 2 * k, cy + Math.Sin(a) * r.Height / 2 * k);
+                    pts[i] = new SKPoint((float)(cx + Math.Cos(a) * r.Width / 2 * k), (float)(cy + Math.Sin(a) * r.Height / 2 * k));
                 }
-                g = Polygon(pts);
+                path.AddPoly(pts);
                 break;
             }
             case ShapeKind.Polygon:
             {
                 var n = Math.Clamp(style.Sides, 3, 24);
-                var pts = new Point[n];
+                var pts = new SKPoint[n];
                 for (var i = 0; i < n; i++)
                 {
                     var a = -Math.PI / 2 + 2 * Math.PI * i / n;
-                    pts[i] = new Point(cx + Math.Cos(a) * r.Width / 2, cy + Math.Sin(a) * r.Height / 2);
+                    pts[i] = new SKPoint((float)(cx + Math.Cos(a) * r.Width / 2), (float)(cy + Math.Sin(a) * r.Height / 2));
                 }
-                g = Polygon(pts);
+                path.AddPoly(pts);
                 break;
             }
             case ShapeKind.SpeechBubble:
             {
-                var body = new Rect(r.Left, r.Top, r.Width, r.Height * 0.78);
-                var radius = Math.Max(style.CornerRadius * scale, Math.Min(body.Width, body.Height) * 0.18);
-                var tail = Polygon([
-                    new(r.Left + r.Width * 0.2, body.Bottom - 1), new(r.Left + r.Width * 0.14, r.Bottom), new(r.Left + r.Width * 0.38, body.Bottom - 1),
+                var body = SKRect.Create(r.Left, r.Top, r.Width, r.Height * 0.78f);
+                var radius = (float)Math.Max(style.CornerRadius * scale, Math.Min(body.Width, body.Height) * 0.18);
+                using var boxBuilder = new SKPathBuilder();
+                boxBuilder.AddRoundRect(body, radius, radius);
+                using var box = boxBuilder.Detach();
+                using var tailBuilder = new SKPathBuilder();
+                tailBuilder.AddPoly([
+                    new(r.Left + r.Width * 0.2f, body.Bottom - 1), new(r.Left + r.Width * 0.14f, r.Bottom), new(r.Left + r.Width * 0.38f, body.Bottom - 1),
                 ]);
-                g = new CombinedGeometry(GeometryCombineMode.Union, new RectangleGeometry(body, radius, radius), tail);
+                using var tail = tailBuilder.Detach();
+                // União: o contorno passa por fora do balão e da ponta, sem a linha entre eles.
+                using var union = box.Op(tail, SKPathOp.Union);
+                path.AddPath(union ?? box);
                 break;
             }
             case ShapeKind.Heart:
             {
-                var fig = new PathFigure { StartPoint = new Point(cx, r.Bottom), IsClosed = true };
-                double X(double f) => r.Left + r.Width * f;
-                double Y(double f) => r.Top + r.Height * f;
-                fig.Segments.Add(new BezierSegment(new Point(X(0.1), Y(0.72)), new Point(X(-0.08), Y(0.3)), new Point(X(0.25), Y(0.05)), true));
-                fig.Segments.Add(new BezierSegment(new Point(X(0.4), Y(-0.05)), new Point(X(0.5), Y(0.12)), new Point(cx, Y(0.25)), true));
-                fig.Segments.Add(new BezierSegment(new Point(X(0.5), Y(0.12)), new Point(X(0.6), Y(-0.05)), new Point(X(0.75), Y(0.05)), true));
-                fig.Segments.Add(new BezierSegment(new Point(X(1.08), Y(0.3)), new Point(X(0.9), Y(0.72)), new Point(cx, r.Bottom), true));
-                g = new PathGeometry([fig]);
+                float X(double f) => (float)(r.Left + r.Width * f);
+                float Y(double f) => (float)(r.Top + r.Height * f);
+                path.MoveTo(cx, r.Bottom);
+                path.CubicTo(X(0.1), Y(0.72), X(-0.08), Y(0.3), X(0.25), Y(0.05));
+                path.CubicTo(X(0.4), Y(-0.05), X(0.5), Y(0.12), cx, Y(0.25));
+                path.CubicTo(X(0.5), Y(0.12), X(0.6), Y(-0.05), X(0.75), Y(0.05));
+                path.CubicTo(X(1.08), Y(0.3), X(0.9), Y(0.72), cx, r.Bottom);
+                path.Close();
                 break;
             }
             case ShapeKind.Line:
-                g = new RectangleGeometry(r);
+                path.AddRect(r);
                 break;
             default:
             {
-                var radius = Math.Clamp(style.CornerRadius * scale, 0, Math.Min(r.Width, r.Height) / 2);
-                g = new RectangleGeometry(r, radius, radius);
+                var radius = (float)Math.Clamp(style.CornerRadius * scale, 0, Math.Min(r.Width, r.Height) / 2);
+                path.AddRoundRect(r, radius, radius);
                 break;
             }
         }
-        g.Freeze();
-        return g;
-    }
-
-    private static PathGeometry Polygon(Point[] points)
-    {
-        var fig = new PathFigure { StartPoint = points[0], IsClosed = true, IsFilled = true };
-        fig.Segments.Add(new PolyLineSegment(points.Skip(1), true));
-        return new PathGeometry([fig]);
+        return path.Detach();
     }
 }

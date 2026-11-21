@@ -15,6 +15,10 @@
     <Using Include="Xunit" />
   </ItemGroup>
   <ItemGroup>
+    <!-- Imagens de referência de textos e formas (RasterReferenceTests). -->
+    <None Include="Text\Referencias\*" CopyToOutputDirectory="PreserveNewest" LinkBase="Text\Referencias" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\src\MeuEditorDeVideo.App\MeuEditorDeVideo.App.csproj" />
   </ItemGroup>
 </Project>

@@ -13,7 +13,10 @@
     <PackageVersion Include="OpenCvSharp4.runtime.win" Version="4.13.0.20260627" />
     <PackageVersion Include="OpenCvSharp4.official.runtime.linux-x64" Version="4.13.0.20260627" />
     <PackageVersion Include="Svg.Skia" Version="5.2.3" />
-    <!-- Biblioteca nativa do SkiaSharp para Linux; mesma versão do SkiaSharp que o Svg.Skia usa. -->
+    <!-- SkiaSharp na mesma versão que o Svg.Skia usa; HarfBuzz para a diagramação de textos (ImageEngine). -->
+    <PackageVersion Include="SkiaSharp" Version="4.148.0" />
+    <PackageVersion Include="SkiaSharp.HarfBuzz" Version="4.148.0" />
+    <!-- Biblioteca nativa do SkiaSharp para Linux. -->
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="4.148.0" />
     <PackageVersion Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.24.4" />
     <PackageVersion Include="Microsoft.ML.OnnxRuntimeGenAI.DirectML" Version="0.14.1" />
