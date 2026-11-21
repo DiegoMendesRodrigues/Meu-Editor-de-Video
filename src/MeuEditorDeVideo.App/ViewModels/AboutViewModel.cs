@@ -80,7 +80,7 @@ public sealed class AboutViewModel(IModelRegistry? models = null)
         new("FFmpeg 9.0 (x264, x265, libvpx, SVT-AV1, libaom, LAME, Opus, Vorbis)", "GPL-3.0-or-later", "Leitura e exportação de vídeo e áudio"),
         new("FFmpeg.AutoGen", "LGPL-3.0", "Acesso ao FFmpeg pelo .NET"),
         new("OpenCV / OpenCvSharp4", "Apache-2.0", "Rastreamento, estabilização e máscaras"),
-        new("ONNX Runtime com DirectML", "MIT", "Execução local dos modelos de IA (CPU/GPU)"),
+        new(OperatingSystem.IsWindows() ? "ONNX Runtime com DirectML" : "ONNX Runtime", "MIT", "Execução local dos modelos de IA (CPU/GPU)"),
         new("Whisper.net (whisper.cpp)", "MIT", "Reconhecimento de fala para legendas"),
         new("NAudio", "MIT", "Saída de áudio da pré-visualização"),
         new("Svg.Skia / SkiaSharp / HarfBuzzSharp", "MIT", "Gráficos vetoriais SVG"),

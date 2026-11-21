@@ -24,7 +24,7 @@ public sealed partial class CatalogItemViewModel(ModelCatalogEntry entry, ModelC
     public string Capability => ModelManagerViewModel.CapabilityName(Entry.Capability);
     public string Download => ModelItemViewModel.FormatBytes(Entry.TotalBytes);
     public string Memory => $"{Entry.MemoryMb.ToString("N0", Pt)} MB";
-    public string Device => Entry.Gpu ? "GPU (DirectML) ou CPU" : "CPU";
+    public string Device => Entry.Gpu && AiPlatform.GpuAvailable ? AiPlatform.GpuLabel() + " ou CPU" : "CPU";
     public string License => Entry.License;
     public string Source => Entry.Source;
     public string Origin => Entry.Url.Host;
@@ -86,7 +86,7 @@ public sealed partial class ModelCatalogViewModel : ObservableObject, IDisposabl
         }
         if (_installer is not null)
         {
-            foreach (var entry in _installer.Catalog.Entries) Items.Add(new CatalogItemViewModel(entry, this));
+            foreach (var entry in _installer.Catalog.EntriesForCurrentOs) Items.Add(new CatalogItemViewModel(entry, this));
             if (Items.Count == 0) Status = "O catálogo de modelos não foi encontrado na pasta do aplicativo.";
         }
         Selected = Items.FirstOrDefault();

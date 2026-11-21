@@ -28,7 +28,7 @@ Todos os recursos de inteligência artificial rodam **somente no computador do u
 | Detectar cenas → marcadores (e dividir o clipe) | RF161 | `SceneDetection` | TransNetV2; sem modelo, comparação de histogramas |
 | Melhorar imagem (ampliar fotos 2×) | RF164 | `ImageEnhancement` | Swin2SR leve 2× |
 | Retocar: beleza e maquiagem (aba Vídeo) | — | `FaceLandmarks` | Face Mesh V2 (MediaPipe, 478 pontos) |
-| Assistente virtual: respostas em linguagem natural (Ajuda › Assistente virtual); sem o modelo, mostra as seções do manual | — | `HelpAssistant` | Phi-4-mini-instruct ONNX int4 (DirectML) |
+| Assistente virtual: respostas em linguagem natural (Ajuda › Assistente virtual); sem o modelo, mostra as seções do manual | — | `HelpAssistant` | Phi-4-mini-instruct ONNX int4 (DirectML no Windows; versão CPU no Linux e no macOS) |
 
 Sem o modelo correspondente (exceto o MODNet, que é incluído), o recurso aparece como **"Indisponível — instale o modelo em Ferramentas › Modelos de IA"**
 e o botão fica desativado (§8.3). A detecção de cenas é a exceção: funciona sem modelo, com precisão menor.
@@ -46,7 +46,7 @@ e o botão fica desativado (§8.3). A detecção de cenas é a exceção: funcio
   instalado com o mesmo identificador (ex.: uma versão nova do `modnet-retrato`) passa a ser usado no lugar do incluído;
   ao removê-lo, o incluído volta a valer. Na inicialização, o modelo incluído com arquivo ausente ou de tamanho
   diferente do manifesto é ignorado.
-- **Executar modelos em:** GPU (DirectML) ou somente CPU (RF167). Na GPU, se a placa ou o driver falharem, o modelo é
+- **Executar modelos em:** GPU ou somente CPU (RF167). A GPU é DirectML no Windows e Core ML no macOS (Apple Silicon); no Linux não há provedor de GPU no pacote padrão do ONNX Runtime, então só existe a CPU (a opção de GPU não é oferecida). Regras em `Core/AI/AiPlatform.cs`. Na GPU, se a placa ou o driver falharem, o modelo é
   carregado na CPU automaticamente. Modelos que declaram `gpu: false` sempre usam a CPU.
 
 Os modelos instalados ficam em `%LOCALAPPDATA%\MeuEditorDeVideo\ai-models\<id>\`, os incluídos em
@@ -162,8 +162,17 @@ aplicativo (Baixar modelos ou o aviso do assistente virtual) e copie o pacote de
 
 ## Detalhes de execução
 
-- **ONNX Runtime 1.24.4 com DirectML** (`OnnxSessionFactory`): sessão por modelo, reaberta quando o modelo ou o
-  dispositivo mudam (`ModelSessionHolder`).
+- **ONNX Runtime 1.24.4** (`OnnxSessionFactory`): sessão por modelo, reaberta quando o modelo ou o dispositivo mudam
+  (`ModelSessionHolder`). Provedor de GPU por sistema (`AiPlatform`): Windows DirectML (pacote `...OnnxRuntime.DirectML`);
+  macOS arm64 Core ML (formato ML Program, todas as unidades de computação); Linux e macOS Intel só CPU. Sempre há
+  retorno para a CPU se o provedor falhar.
+- **Assistente virtual (ONNX Runtime GenAI 0.14.1)**: só o Windows usa GPU (provedor `dml`). No Linux e no macOS roda na
+  CPU (nenhum provedor é anexado). O catálogo tem duas entradas da mesma capacidade `HelpAssistant`: `phi4-mini`
+  (`plataformas: ["windows"]`, pasta `gpu/gpu-int4-rtn-block-32`, DirectML) e `phi4-mini-cpu` (`plataformas: ["linux", "macos"]`,
+  pasta `cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4`, cerca de 4,9 GB), ambas fixadas no mesmo commit do Hugging Face.
+- **Campo `plataformas` do catálogo** (`modelos.json`, opcional): lista de `windows`, `linux` e `macos`; vazio ou ausente =
+  todos os sistemas. `ModelCatalog.EntriesFor(AiOs)` filtra a lista oferecida em "Baixar modelos". Uma entrada não pode
+  depender de outra que não exista em algum dos sistemas dela.
 - **Remover fundo** é o efeito `ai.background` na pilha de efeitos do clipe. O `FrameRenderer` o executa por meio de
   `IAiFrameProcessor` na posição em que está na pilha, por isso a pré-visualização e a exportação têm o mesmo resultado.
   As máscaras do MODNet (lado menor 512 px, múltiplos de 32) são calculadas sempre a partir do quadro de origem

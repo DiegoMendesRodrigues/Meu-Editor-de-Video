@@ -12,6 +12,8 @@ public sealed class ModelCatalog
     /// <summary>Hosts das origens oficiais (o download só começa nesses endereços, sempre por HTTPS).</summary>
     public static IReadOnlyList<string> AllowedHosts { get; } = ["huggingface.co", "github.com"];
 
+    private static readonly string[] ValidPlatforms = ["windows", "linux", "macos"];
+
     public ModelCatalog(IReadOnlyList<ModelCatalogEntry> entries, string licensesDirectory)
     {
         Entries = entries;
@@ -24,6 +26,13 @@ public sealed class ModelCatalog
 
     public IReadOnlyList<ModelCatalogEntry> Entries { get; }
     public string LicensesDirectory { get; }
+
+    /// <summary>Entradas oferecidas no sistema <paramref name="os"/> (as sem <c>plataformas</c> valem para todos).</summary>
+    public IReadOnlyList<ModelCatalogEntry> EntriesFor(AiOs os) =>
+        Entries.Where(e => e.AvailableOn(AiPlatform.Tag(os))).ToList();
+
+    /// <summary>Entradas oferecidas no sistema em que o programa roda.</summary>
+    public IReadOnlyList<ModelCatalogEntry> EntriesForCurrentOs => EntriesFor(AiPlatform.CurrentOs);
 
     public ModelCatalogEntry? Find(string id) => Entries.FirstOrDefault(e => e.Id == id);
 
@@ -80,6 +89,9 @@ public sealed class ModelCatalog
             if (e.Sha256.Length != 64 || !e.Sha256.All(Uri.IsHexDigit))
                 throw new InvalidDataException($"SHA-256 inválido para '{e.Id}'.");
             if (e.SizeBytes <= 0) throw new InvalidDataException($"Tamanho inválido para '{e.Id}'.");
+            foreach (var p in e.Plataformas)
+                if (!ValidPlatforms.Contains(p, StringComparer.OrdinalIgnoreCase))
+                    throw new InvalidDataException($"Plataforma inválida para '{e.Id}': '{p}'. Use {string.Join(", ", ValidPlatforms)}.");
             if (Path.GetFileName(e.File) != e.File || Path.GetFileName(e.LicenseFile) != e.LicenseFile)
                 throw new InvalidDataException($"Nome de arquivo inválido para '{e.Id}'.");
             var files = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { e.File };
@@ -98,7 +110,12 @@ public sealed class ModelCatalog
         }
         foreach (var e in entries)
             foreach (var dep in e.DependsOn)
+            {
                 if (!ids.Contains(dep)) throw new InvalidDataException($"'{e.Id}' depende de '{dep}', que não está no catálogo.");
+                var d = entries.First(x => x.Id == dep);
+                foreach (var os in ValidPlatforms.Where(os => e.AvailableOn(os) && !d.AvailableOn(os)))
+                    throw new InvalidDataException($"'{e.Id}' depende de '{dep}', que não existe para {os}.");
+            }
     }
 
     /// <summary>Compara versões ("3.1" &gt; "3.0.9"); texto não numérico é comparado como texto.</summary>

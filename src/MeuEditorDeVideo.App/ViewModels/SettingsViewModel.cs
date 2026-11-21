@@ -114,7 +114,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         UseProxies = s.UseProxies;
         AutoGenerateProxies = s.AutoGenerateProxies;
         UseGpu = s.UseGpuAcceleration;
-        AiDevice = AiDevices.First(d => d.Value == s.AiDevice);
+        AiDevice = AiDevices.FirstOrDefault(d => d.Value == s.AiDevice) ?? AiDevices[^1];
         BackgroundRendering = s.BackgroundRendering;
         AutosaveEnabled = s.AutosaveEnabled;
         AutosaveMinutes = Math.Clamp(s.AutosaveIntervalMinutes, 1, 60);
@@ -305,11 +305,14 @@ public sealed partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     public partial bool UseGpu { get; set; }
 
-    public IReadOnlyList<Choice<AiDevice>> AiDevices { get; } =
-    [
-        new("GPU (DirectML), com recuo para a CPU", Core.AI.AiDevice.Gpu),
-        new("Somente CPU", Core.AI.AiDevice.Cpu),
-    ];
+    /// <summary>Opções de dispositivo da IA: a GPU só aparece onde há provedor de GPU (DirectML no Windows, Core ML no macOS).</summary>
+    public IReadOnlyList<Choice<AiDevice>> AiDevices { get; } = AiPlatform.GpuAvailable
+        ?
+        [
+            new($"{AiPlatform.GpuLabel()}, com recuo para a CPU", Core.AI.AiDevice.Gpu),
+            new("Somente CPU", Core.AI.AiDevice.Cpu),
+        ]
+        : [new("Somente CPU", Core.AI.AiDevice.Cpu)];
 
     [ObservableProperty]
     public partial Choice<AiDevice> AiDevice { get; set; }
@@ -415,7 +418,7 @@ public sealed partial class SettingsViewModel : ObservableObject
     private void OpenModelManager() => OpenModelManagerRequested?.Invoke(this, EventArgs.Empty);
 
     /// <summary>O gerenciador de modelos grava o dispositivo da IA direto nas configurações; acompanha aqui.</summary>
-    public void ReloadAiDevice() => AiDevice = AiDevices.First(d => d.Value == _settings.Current.AiDevice);
+    public void ReloadAiDevice() => AiDevice = AiDevices.FirstOrDefault(d => d.Value == _settings.Current.AiDevice) ?? AiDevices[^1];
 
     // ---------------------------------------------------------------- Salvar
 

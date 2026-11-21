@@ -26,7 +26,7 @@ public sealed partial class ModelItemViewModel(InstalledModel model, ulong avail
     public string Size => FormatBytes(Manifest.SizeBytes > 0 ? Manifest.TotalBytes : FileSize());
     public string Memory => $"{Manifest.MemoryMb.ToString("N0", Pt)} MB";
     public string Cpu => Manifest.Cpu ? "Sim" : "Não";
-    public string Gpu => Manifest.Gpu ? "Sim (DirectML)" : "Não";
+    public string Gpu => Manifest.Gpu ? (AiPlatform.GpuAvailable ? $"Sim ({AiPlatform.Name(AiPlatform.GpuProvider(AiPlatform.CurrentOs, System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture))})" : "Sim, mas este sistema usa somente a CPU") : "Não";
     public string License => Manifest.License;
     public string Hash => Manifest.Sha256;
     public string Location => Model.ModelPath;
@@ -101,7 +101,7 @@ public sealed partial class ModelManagerViewModel : ObservableObject, IDisposabl
         _registry = registry;
         _settings = settings;
         _dialogs = dialogs;
-        UseGpu = settings.Current.AiDevice == AiDevice.Gpu;
+        UseGpu = AiPlatform.EffectiveDevice(settings.Current.AiDevice) == AiDevice.Gpu;
         _registry.Changed += OnChanged;
         Load();
     }
@@ -234,10 +234,16 @@ public sealed partial class ModelManagerViewModel : ObservableObject, IDisposabl
 
     partial void OnUseGpuChanged(bool value)
     {
+        if (value && !AiPlatform.GpuAvailable)
+        {
+            UseGpu = false; // este sistema não tem provedor de GPU para os modelos: fica na CPU
+            Status = "Este sistema executa os modelos somente na CPU.";
+            return;
+        }
         var device = value ? AiDevice.Gpu : AiDevice.Cpu;
         if (_settings.Current.AiDevice == device) return;
         _ = _settings.SaveAsync(_settings.Current with { AiDevice = device });
-        Status = value ? "Os modelos compatíveis usarão a GPU (DirectML), com retorno automático para a CPU."
+        Status = value ? $"Os modelos compatíveis usarão a {AiPlatform.GpuLabel()}, com retorno automático para a CPU."
             : "Os modelos usarão somente a CPU.";
     }
 

@@ -67,7 +67,7 @@ public sealed partial class AssistantMessageViewModel(bool fromUser) : Observabl
 public sealed partial class AssistantViewModel : ObservableObject, IDisposable
 {
     /// <summary>Id do modelo de linguagem sugerido no catálogo.</summary>
-    public const string SuggestedModelId = "phi4-mini";
+    public static string SuggestedModelId { get; } = OperatingSystem.IsWindows() ? "phi4-mini" : "phi4-mini-cpu";
 
     private readonly HelpAssistantService _assistant;
     private readonly IModelRegistry _registry;

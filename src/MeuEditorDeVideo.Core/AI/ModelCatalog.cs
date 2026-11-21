@@ -25,6 +25,17 @@ public sealed record ModelCatalogEntry
     public required string LicenseFile { get; init; }
 
     public int MemoryMb { get; init; }
+
+    /// <summary>
+    /// Sistemas em que a entrada é oferecida: <c>windows</c>, <c>linux</c>, <c>macos</c> (campo <c>plataformas</c> do JSON).
+    /// Vazio = todos. Serve para não oferecer uma versão de modelo feita para um só sistema (ex.: ONNX para DirectML).
+    /// </summary>
+    public IReadOnlyList<string> Plataformas { get; init; } = [];
+
+    /// <summary>A entrada vale para o sistema de rótulo <paramref name="platformTag"/> (<c>windows</c>, <c>linux</c> ou <c>macos</c>)?</summary>
+    public bool AvailableOn(string platformTag) =>
+        Plataformas.Count == 0 || Plataformas.Contains(platformTag, StringComparer.OrdinalIgnoreCase);
+
     public bool Gpu { get; init; }
     public IReadOnlyDictionary<string, string> Parameters { get; init; } = new Dictionary<string, string>();
 

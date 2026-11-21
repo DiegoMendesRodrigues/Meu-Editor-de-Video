@@ -163,6 +163,9 @@
     ],
     "license": "MIT",
     "licenseFile": "phi4-mini.txt",
+    "plataformas": [
+      "windows"
+    ],
     "memoryMb": 4500,
     "gpu": true,
     "parameters": {
@@ -226,6 +229,91 @@
       {
         "file": "merges.txt",
         "url": "https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/resolve/fc04c8f93df696602fd9f300a30d1bf2e3081347/gpu/gpu-int4-rtn-block-32/merges.txt",
+        "sha256": "856ce61180bb689282eed6b3a6838bb1f438399be23aefe9d20eb379791fb4ad",
+        "sizeBytes": 2418348
+      }
+    ]
+  },
+  {
+    "file": "model.onnx",
+    "id": "phi4-mini-cpu",
+    "name": "Phi-4-mini-instruct (assistente virtual, CPU)",
+    "version": "1.0",
+    "source": "Microsoft Phi-4-mini-instruct, versão ONNX int4 para CPU (microsoft/Phi-4-mini-instruct-onnx)",
+    "capability": "HelpAssistant",
+    "purpose": "Modelo de linguagem que escreve as respostas do assistente virtual a partir dos trechos do manual, no idioma do programa, sem sair do computador.",
+    "features": [
+      "Ajuda › Assistente virtual: respostas em linguagem natural com a fonte no manual"
+    ],
+    "license": "MIT",
+    "licenseFile": "phi4-mini.txt",
+    "plataformas": [
+      "linux",
+      "macos"
+    ],
+    "memoryMb": 5500,
+    "gpu": false,
+    "parameters": {
+      "parameters": "3,8 bilhões (int4, blocos de 32)",
+      "context": "até 4.096 tokens por pergunta",
+      "languages": "pt, en, es, fr, de e outros"
+    },
+    "dependsOn": [],
+    "url": "https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/resolve/fc04c8f93df696602fd9f300a30d1bf2e3081347/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/model.onnx",
+    "sha256": "701aa5d185b6a782bc27104a990dd5b634fa507840b7c42f7ee6f1fb812d0b83",
+    "sizeBytes": 52118230,
+    "extraFiles": [
+      {
+        "file": "model.onnx.data",
+        "url": "https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/resolve/fc04c8f93df696602fd9f300a30d1bf2e3081347/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/model.onnx.data",
+        "sha256": "cb0267fa60befa1a4ade8c98b6d32a3d67f51abbd307c7f793f132e8d9092131",
+        "sizeBytes": 4856573952
+      },
+      {
+        "file": "genai_config.json",
+        "url": "https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/resolve/fc04c8f93df696602fd9f300a30d1bf2e3081347/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/genai_config.json",
+        "sha256": "0fcfa1e663f2bc867f8dc62fae65dd0924f0a4d68b43d1234df742dd19171470",
+        "sizeBytes": 1520
+      },
+      {
+        "file": "config.json",
+        "url": "https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/resolve/fc04c8f93df696602fd9f300a30d1bf2e3081347/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/config.json",
+        "sha256": "ac65d86061d3d0d704ee2511fd0eb8713ef19eb6eedba17c3080a4165d5b933b",
+        "sizeBytes": 2504
+      },
+      {
+        "file": "tokenizer.json",
+        "url": "https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/resolve/fc04c8f93df696602fd9f300a30d1bf2e3081347/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/tokenizer.json",
+        "sha256": "382cc235b56c725945e149cc25f191da667c836655efd0857b004320e90e91ea",
+        "sizeBytes": 15524095
+      },
+      {
+        "file": "tokenizer_config.json",
+        "url": "https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/resolve/fc04c8f93df696602fd9f300a30d1bf2e3081347/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/tokenizer_config.json",
+        "sha256": "c565326a315fbe62cda093a59d298828c8f3f823122661325f41f3ba577a7dec",
+        "sizeBytes": 2960
+      },
+      {
+        "file": "special_tokens_map.json",
+        "url": "https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/resolve/fc04c8f93df696602fd9f300a30d1bf2e3081347/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/special_tokens_map.json",
+        "sha256": "aff38493227d813e29fcf8406e8e90062f1f031aa47d589325e9c31d89ac7cc3",
+        "sizeBytes": 587
+      },
+      {
+        "file": "added_tokens.json",
+        "url": "https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/resolve/fc04c8f93df696602fd9f300a30d1bf2e3081347/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/added_tokens.json",
+        "sha256": "d4f2aceb0f20b71dd1f4bcc7e052e4412946bf281840b8f83d39f259571af486",
+        "sizeBytes": 249
+      },
+      {
+        "file": "vocab.json",
+        "url": "https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/resolve/fc04c8f93df696602fd9f300a30d1bf2e3081347/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/vocab.json",
+        "sha256": "6cb65a857824fa6615bb1782d95d882617a8bbce1da0317118586b36f39e98bd",
+        "sizeBytes": 3910310
+      },
+      {
+        "file": "merges.txt",
+        "url": "https://huggingface.co/microsoft/Phi-4-mini-instruct-onnx/resolve/fc04c8f93df696602fd9f300a30d1bf2e3081347/cpu_and_mobile/cpu-int4-rtn-block-32-acc-level-4/merges.txt",
         "sha256": "856ce61180bb689282eed6b3a6838bb1f438399be23aefe9d20eb379791fb4ad",
         "sizeBytes": 2418348
       }

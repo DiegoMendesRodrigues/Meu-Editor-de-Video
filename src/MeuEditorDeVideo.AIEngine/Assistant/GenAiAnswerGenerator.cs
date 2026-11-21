@@ -13,8 +13,8 @@ namespace MeuEditorDeVideo.AIEngine.Assistant;
 
 /// <summary>
 /// Modelo de linguagem local do assistente virtual (capacidade <see cref="ModelCapability.HelpAssistant"/>, ex.:
-/// Phi-4-mini-instruct ONNX int4) executado pelo ONNX Runtime GenAI: GPU via DirectML quando escolhida nas configurações
-/// (com retorno para CPU) e decodificação gulosa, para respostas estáveis. O modelo é carregado na primeira pergunta
+/// Phi-4-mini-instruct ONNX int4) executado pelo ONNX Runtime GenAI: GPU via DirectML (só no Windows) quando escolhida
+/// nas configurações (com retorno para CPU; no Linux e no macOS o ONNX Runtime GenAI roda na CPU) e decodificação gulosa, para respostas estáveis. O modelo é carregado na primeira pergunta
 /// (alguns segundos) e fica na memória até <see cref="Unload"/>, até o modelo instalado mudar ou o aplicativo fechar.
 /// Uma resposta por vez. Nada sai do computador.
 /// </summary>
@@ -147,11 +147,14 @@ public sealed class GenAiAnswerGenerator : IHelpAnswerGenerator, IDisposable
         _ => "user",
     };
 
+    /// <summary>O ONNX Runtime GenAI só tem provedor de GPU (DirectML) no Windows; no Linux e no macOS roda na CPU.</summary>
+    private static bool GpuSupported => OperatingSystem.IsWindows();
+
     private Loaded EnsureLoaded()
     {
         var model = _registry.Find(ModelCapability.HelpAssistant)
             ?? throw new InvalidOperationException("O modelo de linguagem do assistente virtual não está instalado.");
-        var gpu = model.Manifest.Gpu && (_sessions?.Requested ?? AiDevice.Gpu) == AiDevice.Gpu;
+        var gpu = model.Manifest.Gpu && GpuSupported && (_sessions?.Requested ?? AiDevice.Gpu) == AiDevice.Gpu;
         lock (_gate)
         {
             if (_loaded is not null && _loaded.Directory == model.Directory && (_loaded.Device == AiDevice.Gpu) == gpu) return _loaded;
@@ -183,7 +186,8 @@ public sealed class GenAiAnswerGenerator : IHelpAnswerGenerator, IDisposable
     {
         using var config = new Config(directory);
         config.ClearProviders();
-        if (device == AiDevice.Gpu) config.AppendProvider("dml");
+        // Só o Windows tem provedor de GPU no GenAI (DirectML); nos demais sistemas nenhum provedor é anexado: CPU.
+        if (device == AiDevice.Gpu && GpuSupported) config.AppendProvider("dml");
         var model = new Model(config);
         try
         {

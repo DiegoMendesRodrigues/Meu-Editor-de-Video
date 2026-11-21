@@ -2,6 +2,7 @@ using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.AI;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Runtime.InteropServices;
 using Microsoft.ML.OnnxRuntime;
 
 namespace MeuEditorDeVideo.AIEngine.Runtime;
@@ -13,8 +14,9 @@ public sealed record OnnxModelSession(InferenceSession Session, AiDevice Device,
 }
 
 /// <summary>
-/// Cria sessões do ONNX Runtime (§8.1) no dispositivo escolhido (RF167): GPU via DirectML quando o modelo declara
-/// compatibilidade e a GPU funciona; caso contrário, CPU. Nenhuma sessão acessa a rede.
+/// Cria sessões do ONNX Runtime (§8.1) no dispositivo escolhido (RF167): GPU quando o modelo declara compatibilidade,
+/// o sistema tem provedor de GPU (DirectML no Windows, Core ML no macOS; <see cref="AiPlatform"/>) e a GPU funciona; caso
+/// contrário, CPU (no Linux, sempre CPU). Nenhuma sessão acessa a rede.
 /// </summary>
 public sealed class OnnxSessionFactory(ISettingsService? settings = null, ILogger<OnnxSessionFactory>? logger = null)
 {
@@ -23,8 +25,11 @@ public sealed class OnnxSessionFactory(ISettingsService? settings = null, ILogge
     /// <summary>Dispositivo pedido (configurações). Sem serviço de configurações: CPU.</summary>
     public AiDevice Requested => settings?.Current.AiDevice ?? AiDevice.Cpu;
 
+    /// <summary>Dispositivo pedido já ajustado ao sistema: GPU vira CPU onde não há provedor de GPU (Linux, macOS Intel).</summary>
+    public AiDevice Effective => AiPlatform.EffectiveDevice(Requested);
+
     public OnnxModelSession Create(InstalledModel model) =>
-        Create(model.ModelPath, model.Manifest.Id, model.Manifest.Gpu && Requested == AiDevice.Gpu);
+        Create(model.ModelPath, model.Manifest.Id, model.Manifest.Gpu && Effective == AiDevice.Gpu);
 
     /// <summary>Abre um arquivo .onnx diretamente na CPU (testes e ferramentas).</summary>
     public static OnnxModelSession CreateCpu(string path)
@@ -35,19 +40,20 @@ public sealed class OnnxSessionFactory(ISettingsService? settings = null, ILogge
 
     private OnnxModelSession Create(string path, string id, bool gpu)
     {
-        if (gpu)
+        var provider = AiPlatform.Choose(AiPlatform.CurrentOs, RuntimeInformation.ProcessArchitecture, gpu ? AiDevice.Gpu : AiDevice.Cpu, gpu);
+        if (provider != AiProvider.Cpu)
         {
             try
             {
                 using var options = new SessionOptions
                 {
-                    EnableMemoryPattern = false, // exigido pelo DirectML
+                    EnableMemoryPattern = provider != AiProvider.DirectMl, // desligado: exigido pelo DirectML
                     ExecutionMode = ExecutionMode.ORT_SEQUENTIAL,
                     GraphOptimizationLevel = GraphOptimizationLevel.ORT_ENABLE_ALL,
                 };
-                options.AppendExecutionProvider_DML(0);
+                AppendGpuProvider(options, provider);
                 var session = new InferenceSession(path, options);
-                _log.LogInformation("Modelo {Id} carregado na GPU (DirectML).", id);
+                _log.LogInformation("Modelo {Id} carregado na GPU ({Provider}).", id, AiPlatform.Name(provider));
                 return new OnnxModelSession(session, AiDevice.Gpu, id);
             }
             catch (Exception ex) when (ex is OnnxRuntimeException or DllNotFoundException or EntryPointNotFoundException or InvalidOperationException)
@@ -59,6 +65,27 @@ public sealed class OnnxSessionFactory(ISettingsService? settings = null, ILogge
         var s = new InferenceSession(path, cpu);
         _log.LogInformation("Modelo {Id} carregado na CPU.", id);
         return new OnnxModelSession(s, AiDevice.Cpu, id);
+    }
+
+    /// <summary>
+    /// Registra o provedor de GPU. DirectML: dispositivo 0. Core ML: formato ML Program e todas as unidades de computação
+    /// (CPU, GPU e Neural Engine); passado por nome, já que a API tipada do Core ML não existe em todos os pacotes.
+    /// </summary>
+    private static void AppendGpuProvider(SessionOptions options, AiProvider provider)
+    {
+        switch (provider)
+        {
+            case AiProvider.DirectMl:
+                options.AppendExecutionProvider_DML(0);
+                break;
+            case AiProvider.CoreMl:
+                options.AppendExecutionProvider("CoreML", new Dictionary<string, string>
+                {
+                    ["ModelFormat"] = "MLProgram",
+                    ["MLComputeUnits"] = "ALL",
+                });
+                break;
+        }
     }
 
     private static SessionOptions CpuOptions() => new()

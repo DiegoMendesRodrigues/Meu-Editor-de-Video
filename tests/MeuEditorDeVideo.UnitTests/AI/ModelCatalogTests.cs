@@ -50,7 +50,7 @@ public sealed class ModelCatalogTests : IDisposable
     public void Catalogo_do_repositorio_e_valido_e_tem_licencas()
     {
         var catalog = ModelCatalog.Load(RepoCatalog());
-        Assert.Equal(["whisper-large-v3-turbo", "gtcrn-voz", "silero-vad", "transnetv2", "swin2sr-x2", "facemesh-v2", "phi4-mini"], catalog.Entries.Select(e => e.Id));
+        Assert.Equal(["whisper-large-v3-turbo", "gtcrn-voz", "silero-vad", "transnetv2", "swin2sr-x2", "facemesh-v2", "phi4-mini", "phi4-mini-cpu"], catalog.Entries.Select(e => e.Id));
         Assert.All(catalog.Entries, e =>
         {
             Assert.True(File.Exists(catalog.LicensePath(e)), e.LicenseFile);
@@ -71,6 +71,65 @@ public sealed class ModelCatalogTests : IDisposable
         var commit = phi.Url.Segments[4];
         Assert.All(phi.ExtraFiles, f => Assert.Equal(commit, f.Url.Segments[4]));
         Assert.True(phi.TotalBytes > phi.SizeBytes);
+        Assert.Equal(["windows"], phi.Plataformas); // versão para DirectML
+        Assert.Contains("/gpu/", phi.Url.AbsolutePath);
+
+        // Mesma capacidade, versão para CPU (Linux e macOS), no mesmo commit da origem oficial.
+        var cpu = catalog.Find("phi4-mini-cpu")!;
+        Assert.Equal(ModelCapability.HelpAssistant, cpu.Capability);
+        Assert.Equal(["linux", "macos"], cpu.Plataformas);
+        Assert.False(cpu.Gpu);
+        Assert.Contains("/cpu_and_mobile/", cpu.Url.AbsolutePath);
+        Assert.Equal(commit, cpu.Url.Segments[4]);
+        Assert.All(cpu.ExtraFiles, f => Assert.Contains("/cpu_and_mobile/", f.Url.AbsolutePath));
+        Assert.Contains(cpu.ExtraFiles, f => f.File == "model.onnx.data" && f.SizeBytes > 4_000_000_000L);
+    }
+
+    [Fact]
+    public void Catalogo_filtra_as_entradas_pelo_sistema()
+    {
+        var catalog = ModelCatalog.Load(RepoCatalog());
+        var win = catalog.EntriesFor(AiOs.Windows).Select(e => e.Id).ToList();
+        var linux = catalog.EntriesFor(AiOs.Linux).Select(e => e.Id).ToList();
+        var mac = catalog.EntriesFor(AiOs.MacOs).Select(e => e.Id).ToList();
+        Assert.Contains("phi4-mini", win);
+        Assert.DoesNotContain("phi4-mini-cpu", win);
+        Assert.Contains("phi4-mini-cpu", linux);
+        Assert.DoesNotContain("phi4-mini", linux);
+        Assert.Contains("phi4-mini-cpu", mac);
+        Assert.DoesNotContain("phi4-mini", mac);
+        // Cada sistema oferece exatamente um modelo do assistente virtual; os demais modelos valem para todos.
+        Assert.All(new[] { win, linux, mac }, ids => Assert.Single(ids, i => i.StartsWith("phi4-mini", StringComparison.Ordinal)));
+        Assert.All(catalog.Entries.Where(e => !e.Id.StartsWith("phi4-mini", StringComparison.Ordinal)), e => Assert.Empty(e.Plataformas));
+        Assert.Equal(catalog.Entries.Count - 1, win.Count);
+    }
+
+    [Fact]
+    public void Plataformas_validas_vazio_vale_para_todos_e_dependencia_precisa_existir_no_sistema()
+    {
+        var a = Entry("a", Bytes(1));
+        Assert.True(a.AvailableOn("windows") && a.AvailableOn("linux") && a.AvailableOn("macos"));
+        var onlyMac = Entry("m", Bytes(2)) with { Plataformas = ["MacOS"] };
+        Assert.True(onlyMac.AvailableOn("macos"));
+        Assert.False(onlyMac.AvailableOn("linux"));
+        Assert.Equal(["m"], Catalog(a, onlyMac).EntriesFor(AiOs.MacOs).Where(e => e.Id == "m").Select(e => e.Id));
+        Assert.Throws<InvalidDataException>(() => Catalog(a with { Plataformas = ["amiga"] }));
+        // 'x' vale em todos os sistemas, mas depende de 'm', que só existe no macOS.
+        Assert.Throws<InvalidDataException>(() => Catalog(onlyMac, Entry("x", Bytes(3), "m")));
+        Assert.NotNull(Catalog(onlyMac, Entry("x", Bytes(3), "m") with { Plataformas = ["macos"] }));
+    }
+
+    [Fact]
+    public void Plataformas_do_json_sao_lidas()
+    {
+        var entry = Entry("j", Bytes(4)) with { Plataformas = ["linux"] };
+        var json = System.Text.Json.JsonSerializer.Serialize(new[] { entry }, ModelManifestJson.Options);
+        Assert.Contains("\"plataformas\"", json);
+        File.WriteAllText(Path.Combine(_dir, "modelos.json"), json);
+        var catalog = ModelCatalog.Load(_dir);
+        Assert.Equal(["linux"], catalog.Entries[0].Plataformas);
+        Assert.Empty(catalog.EntriesFor(AiOs.Windows));
+        Assert.Single(catalog.EntriesFor(AiOs.Linux));
     }
 
     private static ModelCatalogFile Extra(string id, string name, byte[] content) => new()

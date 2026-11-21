@@ -110,7 +110,7 @@ public static class ModelPackageBuilder
         }
         sb.AppendLine("## Requisitos").AppendLine();
         sb.Append(CultureInfo.InvariantCulture, $"- Memória estimada: {entry.MemoryMb} MB").AppendLine();
-        sb.Append("- Usa GPU: ").AppendLine(entry.Gpu ? "sim (DirectML), com retorno para CPU" : "não (somente CPU)");
+        sb.Append("- Usa GPU: ").AppendLine(entry.Gpu ? "sim (DirectML no Windows, Core ML no macOS), com retorno para CPU" : "não (somente CPU)");
         if (entry.DependsOn.Count > 0) sb.Append("- Instalado junto com: ").AppendLine(string.Join(", ", entry.DependsOn));
         sb.AppendLine().AppendLine("## Parâmetros").AppendLine();
         if (entry.Parameters.Count == 0) sb.AppendLine("- (nenhum)");
