@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using MeuEditorDeVideo.App.Localization;
+using MeuEditorDeVideo.Presentation.Localization;
 using MeuEditorDeVideo.Core.Abstractions;
 
 namespace MeuEditorDeVideo.UnitTests.Application;

@@ -1,4 +1,4 @@
-﻿using MeuEditorDeVideo.App.ViewModels.Inspector;
+﻿using MeuEditorDeVideo.Presentation.ViewModels.Inspector;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;

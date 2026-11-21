@@ -40,7 +40,7 @@ Versão atual: `1.1.0` (`<Version>` em `Directory.Build.props`).
 
 ### Camadas e projetos
 
-A solução (`MeuEditorDeVideo.sln`) tem 13 projetos em `src/`, 3 projetos de teste em `tests/` e o instalador em `installer/`.
+A solução (`MeuEditorDeVideo.sln`) tem 14 projetos em `src/`, 4 projetos de teste em `tests/` e o instalador em `installer/`.
 
 | Camada | Projeto | Responsabilidade |
 |---|---|---|
@@ -56,13 +56,15 @@ A solução (`MeuEditorDeVideo.sln`) tem 13 projetos em `src/`, 3 projetos de te
 | Motores | `AIEngine` | Registro de modelos, pacotes `.medmodel`, sessões ONNX, segmentação, fala, cenas e melhoria de imagem. |
 | Motores | `RenderingEngine` | Compositor, pré-visualização e exportação (motor de renderização). |
 | Rede (isolado) | `ModelDownloads` | Único assembly com HTTP. Usado pela ferramenta "Baixar modelos de IA" e por Verificar atualizações. |
-| Apresentação | `App` | WPF: janelas, view models, controles, atalhos, composição (DI) e tratamento global de exceções. |
+| Apresentação | `Presentation` | View models, serviços de interface (`IDialogService`, `INavigationService`, atalhos, fluxos de projeto, tradução) e o despachante `UiThread`. `net10.0`, sem WPF nem Avalonia: roda e é testado em Windows, Linux e macOS. |
+| Apresentação | `App` | WPF: janelas, controles, implementação dos diálogos, composição (DI) e tratamento global de exceções. |
 
 ### Grafo de dependências (referências de projeto)
 
 ```mermaid
 graph TD
-    App --> Application
+    App --> Presentation
+    Presentation --> Application
     App --> Infrastructure
     App --> ProjectEngine
     App --> MediaEngine
@@ -94,7 +96,7 @@ graph TD
     Core --> Domain
 ```
 
-Os testes referenciam `App` (`UnitTests`, `MediaTests`, `IntegrationTests`).
+`Presentation` referencia os mesmos projetos que `App` referenciava (Application, Infrastructure, motores e ModelDownloads); o diagrama mostra só a ligação principal. `UnitTests` (`net10.0`) referencia `Presentation`; `AppTests`, `MediaTests` e `IntegrationTests` (`net10.0-windows`) referenciam `App`.
 
 Observações sobre o grafo:
 
@@ -112,7 +114,8 @@ Os testes em `tests/MeuEditorDeVideo.UnitTests/Architecture/` (NetArchTest.Rules
 - `Domain` não depende de `Core`, `Application`, `Infrastructure`, `App`, `System.Windows` nem `Microsoft.Extensions`.
 - `Core` não depende de `Application`, `Infrastructure`, `App` nem `System.Windows`.
 - `Application` não depende de nenhum motor (`ProjectEngine`, `MediaEngine`, `TimelineEngine`, `ImageEngine`, `AudioEngine`, `AIEngine`, `RenderingEngine`), nem de `Infrastructure`, `App` ou `System.Windows`.
-- Motores e `Infrastructure` não dependem de `App` nem de `Application`.
+- Motores e `Infrastructure` não dependem de `App`, `Application` nem `Presentation`.
+- `Presentation` não referencia os assemblies do WPF (`PresentationFramework`, `PresentationCore`, `System.Xaml`, `WindowsBase`), do Avalonia nem `App`, e não usa `Microsoft.Win32`. `System.Windows.Input.ICommand` é permitido: vem da biblioteca base.
 
 **`PrivacyTests.cs`** (RF169, RNF005, CA016)
 
@@ -424,8 +427,8 @@ Decisões: cada leitor é próprio (decodificadores não são compartilhados ent
 Arquivos: `src/MeuEditorDeVideo.ImageEngine/`. Processamento de quadros na CPU. Não usa GPU.
 
 - `Effects/EffectProcessor.cs`: aplica a pilha de efeitos de um clipe por tipo (`switch` sobre `e.Type`). Cobre ajustes de cor, balanço de branco, curvas, roda de cor, LUT, desfoque, nitidez, vinheta, tons de cinza, sépia, inversão, pixelização, ruído, posterização, brilho (glow), chroma key e refino de bordas (`edgeRefine`). Efeitos de IA (`ai.*`) não passam por aqui: são executados por `IAiFrameProcessor`.
-- `Effects/VideoFx.cs`: efeitos de vídeo animados da biblioteca (`vfx.*`, definidos em `Domain/Effects/VideoEffects.cs`): tremido, falha digital, cintilação, borda, luz, partículas, retrô, grunge, lupa e zoom, distorção, tela dividida, visor, destaque, temporizador, abertura e encerramento. Cada tipo tem o parâmetro `style` (índice das opções). Tudo é desenhado em código, sem texturas; a animação usa `EffectContext.ClipTime` e `ClipDuration` (instante e duração do clipe, preenchidos pelo `FrameRenderer`), então prévia e exportação dão o mesmo quadro. As predefinições por categoria da seção Efeitos da biblioteca ficam em `App/ViewModels/Inspector/VideoEffectPresets.cs` (chave `vfx:<id>`); as miniaturas (`App/Services/EffectPreviews.cs`) usam uma cena de praia com uma pessoa, no instante `PreviewTime` da predefinição.
-- Filtros (seção Filtros da biblioteca): `App/ViewModels/Inspector/FilterPresets.cs`, chave `flt:<categoria>.<id>`, 10 categorias. Cada filtro é só uma pilha de efeitos do catálogo (ajustes de cor, curvas, rodas, P&B, sépia, brilho suave, granulado, vinheta), montada pelo construtor `Look`; nada novo no `.med`. As miniaturas usam uma cena própria (`EffectPreviews.CreateFilterSample`: farol, veleiro, palmeira e guarda-sol, com 3×3 amostras por pixel).
+- `Effects/VideoFx.cs`: efeitos de vídeo animados da biblioteca (`vfx.*`, definidos em `Domain/Effects/VideoEffects.cs`): tremido, falha digital, cintilação, borda, luz, partículas, retrô, grunge, lupa e zoom, distorção, tela dividida, visor, destaque, temporizador, abertura e encerramento. Cada tipo tem o parâmetro `style` (índice das opções). Tudo é desenhado em código, sem texturas; a animação usa `EffectContext.ClipTime` e `ClipDuration` (instante e duração do clipe, preenchidos pelo `FrameRenderer`), então prévia e exportação dão o mesmo quadro. As predefinições por categoria da seção Efeitos da biblioteca ficam em `Presentation/ViewModels/Inspector/VideoEffectPresets.cs` (chave `vfx:<id>`); as miniaturas (`App/Services/EffectPreviews.cs`) usam uma cena de praia com uma pessoa, no instante `PreviewTime` da predefinição.
+- Filtros (seção Filtros da biblioteca): `Presentation/ViewModels/Inspector/FilterPresets.cs`, chave `flt:<categoria>.<id>`, 10 categorias. Cada filtro é só uma pilha de efeitos do catálogo (ajustes de cor, curvas, rodas, P&B, sépia, brilho suave, granulado, vinheta), montada pelo construtor `Look`; nada novo no `.med`. As miniaturas usam uma cena própria (`EffectPreviews.CreateFilterSample`: farol, veleiro, palmeira e guarda-sol, com 3×3 amostras por pixel).
 - `Effects/CubeLut.cs` (LUT), `Effects/ToneCurve.cs` (curvas de tons), `Effects/EdgeRefiner.cs` (refino de bordas: contração, suavização e descontaminação de cor).
 - `Composition/MotionAnalyzer.cs`: rastreamento de uma região com OpenCvSharp (CSRT ou correspondência de modelo) e estabilização (fluxo óptico).
 - `Composition/MaskRenderer.cs`, `Composition/ShapeRasterizer.cs`: máscaras e formas vetoriais.
@@ -480,8 +483,19 @@ Arquivos: `src/MeuEditorDeVideo.ModelDownloads/`. É o **único** assembly do pr
 Arquivos: `src/MeuEditorDeVideo.App/`.
 
 - `App.xaml.cs`: composição, ciclo de vida, exceções globais.
-- `Services/`: `ProjectWorkflow.cs` (fluxos de abrir, salvar, fechar, empacotar, cópia de segurança), `ShortcutService.cs` (`ShortcutCatalog` e `ShortcutService`), `StartupArguments.cs`, `ThemeService.cs` (tema escuro, claro ou do sistema), `DialogService.cs`, `NavigationService.cs`, `Help/` (manual, sobre e relatório do sistema).
-- `ViewModels/`: `ShellViewModel`, `EditorViewModel`, `Preview/PreviewViewModel.cs` (exibe os quadros em `WriteableBitmap`), `Timeline/`, `Inspector/`, `Media/`, `Export/`, `SettingsViewModel`, `ModelCatalogViewModel`, `ModelManagerViewModel`.
+- `Services/`: `ThemeService.cs` (tema escuro, claro ou do sistema), `DialogService.cs` (implementação WPF de `IDialogService`), `WpfUiDispatcher.cs` (`IUiDispatcher` sobre o `Dispatcher` do WPF), `Help/` (manual em `FlowDocument`).
+- `Controls/FrameImage.cs` copia o `DisplayFrame` da prévia para um `WriteableBitmap`; `Converters/BgraBitmaps.cs` mostra miniaturas `BgraImage`; `Controls/KeyMapping.cs` converte `Key`/`ModifierKeys` em `MedKey`/`MedModifiers`.
+
+### Presentation
+
+Arquivos: `src/MeuEditorDeVideo.Presentation/` (`net10.0`).
+
+- `ViewModels/`: `ShellViewModel`, `EditorViewModel`, `Preview/PreviewViewModel.cs` (publica cada quadro como um `DisplayFrame` novo), `Timeline/`, `Inspector/`, `Media/`, `Export/`, `SettingsViewModel`, `ModelCatalogViewModel`, `ModelManagerViewModel`.
+- `Services/`: `IDialogService.cs` (cada janela pedida por um view model é um método tipado), `ProjectWorkflow.cs` (fluxos de abrir, salvar, fechar, empacotar, cópia de segurança), `ShortcutService.cs` (`ShortcutCatalog` e `ShortcutService`; no macOS a combinação aparece com Cmd e Option, mas é gravada como Ctrl e Alt), `StartupArguments.cs`, `NavigationService.cs`, `SystemShell.cs` (abrir endereços e mostrar arquivos na pasta em cada sistema), `UpdateCheckService.cs`, `Help/` (relatório do sistema, Markdown do manual e `HelpDocuments`).
+- `Input/`: `MedKey` e `MedModifiers`, com os mesmos nomes e valores do WPF; o texto gravado no `settings.json` ("Ctrl+OemPlus") não muda.
+- `Threading/UiThread.cs`: `IUiDispatcher` (agendar na thread da interface, temporizadores, evento por quadro). Sem interface (testes), `Post` roda na hora e os temporizadores não disparam.
+- `Media/`: `ArgbColor`, `PointD`, `DisplayFrame` e `ImageFiles` (PNG/JPEG via SkiaSharp).
+- `Localization/Translator.cs`.
 - `Controls/`: `TimelineControl.cs` (trilhas e régua), `CompositionOverlay.cs`, `CurveEditor.cs`, `ColorWheel.cs`, `LevelMeter.cs`.
 - `Views/`: `MainWindow`, `EditorView`, `Panels/`, `Dialogs/`.
 
@@ -823,7 +837,7 @@ Definidas em `src/MeuEditorDeVideo.Core/Abstractions/ISettingsService.cs`. Cada 
 
 ### Atalhos
 
-- Catálogo: `src/MeuEditorDeVideo.App/Services/ShortcutService.cs`, classe `ShortcutCatalog`.
+- Catálogo: `src/MeuEditorDeVideo.Presentation/Services/ShortcutService.cs`, classe `ShortcutCatalog`.
 - Cada ação tem um id estável (`area.acao`, ex.: `reproducao.reproduzir`), rótulo, categoria e combinações padrão (a primeira é a principal).
 - Combinações são guardadas como texto nos nomes do WPF (`Ctrl+Shift+S`, `Space`, `Ctrl+OemPlus`) em `AppSettings.Shortcuts`.
 - `ShortcutService.Find(key, modifiers)` resolve a ação. Ações alteradas pelo usuário têm prioridade sobre o padrão.
@@ -978,7 +992,7 @@ A orientação de assinatura está em [INSTALADOR.md](INSTALADOR.md).
 
 ### Novo atalho
 
-1. Adicione a constante do id em `ShortcutCatalog` (`src/MeuEditorDeVideo.App/Services/ShortcutService.cs`), no padrão `área.ação` (ex.: `linha.dividir`).
+1. Adicione a constante do id em `ShortcutCatalog` (`src/MeuEditorDeVideo.Presentation/Services/ShortcutService.cs`), no padrão `área.ação` (ex.: `linha.dividir`).
 2. Adicione um `ShortcutAction(id, "Rótulo", "Categoria", "Combinação padrão")` em `ShortcutCatalog.All`.
 3. Trate a ação onde ela é disparada: `Views/EditorView.xaml.cs` (`switch` sobre `Shortcuts?.Find(...)`) ou `Controls/TimelineControl.cs`, se for de linha do tempo.
 4. Não renomeie ids existentes: eles são gravados em `settings.json`.
@@ -1007,7 +1021,7 @@ Comparação com `ESPECIFICACAO_TECNICA_E_FUNCIONAL.md` e `documentation/PLANO_D
 | Tema | Plano / especificação | Implementado | Observação |
 |---|---|---|---|
 | Composição | Compositor em Direct3D 11 com shaders HLSL (Vortice.Windows). Pipeline duplo GPU/CPU (plano, risco L9). | Compositor **só em CPU** (`RenderingEngine/CpuCompositor.cs`). O plano já previa o CPU como fallback. | Vortice.Windows não está em nenhum `.csproj` nem em `Directory.Packages.props`. |
-| Exibição | Superfície D3D11 compartilhada exibida por `D3DImage` (D3D9Ex); `WriteableBitmap` como fallback. | `WriteableBitmap` (`App/ViewModels/Preview/PreviewViewModel.cs`). | Nenhum uso de `D3DImage`. |
+| Exibição | Superfície D3D11 compartilhada exibida por `D3DImage` (D3D9Ex); `WriteableBitmap` como fallback. | `WriteableBitmap` (`Presentation/ViewModels/Preview/PreviewViewModel.cs`). | Nenhum uso de `D3DImage`. |
 | Texto | DirectWrite/Direct2D via Vortice, renderizado na GPU. | Texto rasterizado na CPU com `FormattedText` e `DrawingVisual` do WPF (`ImageEngine/Text/TextRasterizer.cs`). | Sem interop com DirectWrite. |
 | Uso de D3D11 | Composição, texto e exibição. | Só **decodificação** por D3D11VA no FFmpeg (`MediaEngine/Native/StreamDecoder.cs`, `HardwareProbe.cs`). Efeitos de IA usam DirectML (ONNX). | |
 | FFmpeg | 7.x, build GPL v3, shared. | FFmpeg **9.0.2** `full_build shared` (GPL), via FFmpeg.AutoGen 9.0.1.1. Versão fixada em `scripts/deps.lock.json`. | DEPENDENCIAS.md está consistente com o lock. |

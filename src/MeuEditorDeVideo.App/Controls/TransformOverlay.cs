@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using MeuEditorDeVideo.App.ViewModels.Inspector;
+using MeuEditorDeVideo.Presentation.ViewModels.Inspector;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.RenderingEngine;
 

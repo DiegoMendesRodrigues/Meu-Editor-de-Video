@@ -1,6 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Windows;
-using MeuEditorDeVideo.App.ViewModels.Inspector;
+using MeuEditorDeVideo.Presentation.ViewModels.Inspector;
 
 namespace MeuEditorDeVideo.App.Views.Panels;
 

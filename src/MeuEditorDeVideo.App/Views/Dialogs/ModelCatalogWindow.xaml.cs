@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using MeuEditorDeVideo.App.ViewModels;
+using MeuEditorDeVideo.Presentation.ViewModels;
 
 namespace MeuEditorDeVideo.App.Views.Dialogs;
 
@@ -13,7 +13,7 @@ public partial class ModelCatalogWindow
         Closing += (_, e) =>
         {
             if (!viewModel.IsBusy) return;
-            if (MessageBox.Show(this, Localization.Translator.T("A instalação está em andamento. Cancelar e fechar?"), Localization.Translator.T("Baixar modelos de IA"),
+            if (MessageBox.Show(this, Presentation.Localization.Translator.T("A instalação está em andamento. Cancelar e fechar?"), Presentation.Localization.Translator.T("Baixar modelos de IA"),
                     MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 viewModel.CancelCommand.Execute(null);
             else

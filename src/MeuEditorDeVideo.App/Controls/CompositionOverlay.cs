@@ -1,7 +1,8 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using MeuEditorDeVideo.App.ViewModels.Inspector;
+using MeuEditorDeVideo.Presentation.Media;
+using MeuEditorDeVideo.Presentation.ViewModels.Inspector;
 
 namespace MeuEditorDeVideo.App.Controls;
 
@@ -71,6 +72,10 @@ public sealed class CompositionOverlay : FrameworkElement
         return (new Rect((ActualWidth - w) / 2, (ActualHeight - h) / 2, w, h), scale);
     }
 
+    private static Point W(PointD p) => new(p.X, p.Y);
+
+    private static PointD M(Point p) => new(p.X, p.Y);
+
     private Point ToScreen(Point p)
     {
         var (r, s) = Frame();
@@ -89,9 +94,9 @@ public sealed class CompositionOverlay : FrameworkElement
         var vm = Editor;
         if (vm is null || vm.Overlay == OverlayKind.None) return [];
         var p = vm.OverlayPoints;
-        if (vm.Overlay == OverlayKind.MaskPath) return [.. p];
+        if (vm.Overlay == OverlayKind.MaskPath) return [.. p.Select(W)];
         if (p.Count < 2) return [];
-        return [.. vm.OverlayCorners];
+        return [.. vm.OverlayCorners.Select(W)];
     }
 
     protected override void OnRender(DrawingContext dc)
@@ -100,9 +105,9 @@ public sealed class CompositionOverlay : FrameworkElement
         if (vm is null || vm.Overlay == OverlayKind.None) return;
 
         if (vm.OverlayTracked.Count == 4)
-            dc.DrawGeometry(null, TrackedPen, Polygon(vm.OverlayTracked.Select(ToScreen).ToList()));
+            dc.DrawGeometry(null, TrackedPen, Polygon(vm.OverlayTracked.Select(W).Select(ToScreen).ToList()));
 
-        var outline = vm.OverlayOutline.Select(ToScreen).ToList();
+        var outline = vm.OverlayOutline.Select(W).Select(ToScreen).ToList();
         if (outline.Count >= 3)
         {
             var g = Polygon(outline);
@@ -133,7 +138,7 @@ public sealed class CompositionOverlay : FrameworkElement
         var vm = Editor;
         if (vm is null || vm.Overlay == OverlayKind.None) return null;
         if (HandleAt(hit.HitPoint) >= 0) return new PointHitTestResult(this, hit.HitPoint);
-        var outline = vm.OverlayOutline.Select(ToScreen).ToList();
+        var outline = vm.OverlayOutline.Select(W).Select(ToScreen).ToList();
         return outline.Count >= 3 && Polygon(outline).FillContains(hit.HitPoint) ? new PointHitTestResult(this, hit.HitPoint) : null;
     }
 
@@ -179,7 +184,7 @@ public sealed class CompositionOverlay : FrameworkElement
         {
             handles[_dragHandle] = _dragOrigin[_dragHandle] + d;
         }
-        vm.SetOverlayPoints(FromHandles(vm, handles));
+        vm.SetOverlayPoints([.. FromHandles(vm, handles).Select(M)]);
     }
 
     /// <summary>Alças → pontos do modelo: o canto arrastado e o oposto (diagonal) para retângulo/elipse/região; todos no contorno livre.</summary>
@@ -213,7 +218,7 @@ public sealed class CompositionOverlay : FrameworkElement
     /// <summary>Insere um ponto no segmento do contorno livre mais próximo do clique.</summary>
     private static void InsertPoint(CompositionInspectorViewModel vm, Point p)
     {
-        var pts = vm.OverlayPoints.ToList();
+        var pts = vm.OverlayPoints.Select(W).ToList();
         if (pts.Count < 2) return;
         var best = 0;
         var bestDistance = double.MaxValue;
@@ -231,6 +236,6 @@ public sealed class CompositionOverlay : FrameworkElement
             }
         }
         pts.Insert(best + 1, p);
-        vm.SetOverlayPoints(pts);
+        vm.SetOverlayPoints([.. pts.Select(M)]);
     }
 }

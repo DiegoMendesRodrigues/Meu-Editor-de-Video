@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using MeuEditorDeVideo.App.ViewModels;
+using MeuEditorDeVideo.Presentation.ViewModels;
 
 namespace MeuEditorDeVideo.App.Views.Panels;
 

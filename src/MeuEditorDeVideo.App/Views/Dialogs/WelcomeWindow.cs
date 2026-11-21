@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
 using MeuEditorDeVideo.App.Localization;
-using MeuEditorDeVideo.App.ViewModels;
+using MeuEditorDeVideo.Presentation.ViewModels;
 using MeuEditorDeVideo.Core.Abstractions;
 
 namespace MeuEditorDeVideo.App.Views.Dialogs;

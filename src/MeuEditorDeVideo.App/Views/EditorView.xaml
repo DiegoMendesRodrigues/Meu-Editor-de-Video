@@ -1,10 +1,11 @@
 ﻿<UserControl x:Class="MeuEditorDeVideo.App.Views.EditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:MeuEditorDeVideo.App.ViewModels"
-             xmlns:media="clr-namespace:MeuEditorDeVideo.App.ViewModels.Media"
-             xmlns:tl="clr-namespace:MeuEditorDeVideo.App.ViewModels.Timeline"
+             xmlns:vm="clr-namespace:MeuEditorDeVideo.Presentation.ViewModels;assembly=MeuEditorDeVideo.Presentation"
+             xmlns:media="clr-namespace:MeuEditorDeVideo.Presentation.ViewModels.Media;assembly=MeuEditorDeVideo.Presentation"
+             xmlns:tl="clr-namespace:MeuEditorDeVideo.Presentation.ViewModels.Timeline;assembly=MeuEditorDeVideo.Presentation"
              xmlns:ctl="clr-namespace:MeuEditorDeVideo.App.Controls"
+             xmlns:conv="clr-namespace:MeuEditorDeVideo.App.Converters"
              xmlns:vw="clr-namespace:MeuEditorDeVideo.App.Views"
              xmlns:panels="clr-namespace:MeuEditorDeVideo.App.Views.Panels"
              xmlns:model="clr-namespace:MeuEditorDeVideo.Domain.Model;assembly=MeuEditorDeVideo.Domain"
@@ -879,7 +880,7 @@
                                                 <Border Grid.Row="0" Height="72" CornerRadius="4"
                                                         Background="{DynamicResource Med.MonitorBackground}" ClipToBounds="True">
                                                     <Grid>
-                                                        <Image Source="{Binding Thumbnail}" Stretch="UniformToFill" />
+                                                        <Image Source="{Binding Thumbnail, Converter={x:Static conv:BgraBitmaps.Instance}}" Stretch="UniformToFill" />
                                                         <Path Data="{Binding Waveform}" Stretch="Fill"
                                                               Fill="{DynamicResource Med.ClipAudio}" Margin="2,4">
                                                             <Path.Style>
@@ -1048,7 +1049,7 @@
                             <ScrollViewer x:Name="RolagemMonitor" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled"
                                           Focusable="False" AutomationProperties.Name="{StaticResource Editor.Menu.ZoomVideo}">
                             <Grid x:Name="ConteudoMonitor" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Image x:Name="ImagemMonitor" Source="{Binding Preview.Image}" Stretch="Uniform" RenderOptions.BitmapScalingMode="Linear"
+                            <Image x:Name="ImagemMonitor" ctl:FrameImage.Frame="{Binding Preview.Image}" Stretch="Uniform" RenderOptions.BitmapScalingMode="Linear"
                                    AutomationProperties.Name="{StaticResource Editor.Monitor.Imagem}" SizeChanged="ImagemMonitor_SizeChanged" />
                             <!-- Alças do clipe selecionado: mover, girar e redimensionar no monitor -->
                             <ctl:TransformOverlay Inspector="{Binding Inspector}" />

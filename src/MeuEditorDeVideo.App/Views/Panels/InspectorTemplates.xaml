@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ins="clr-namespace:MeuEditorDeVideo.App.ViewModels.Inspector"
+                    xmlns:ins="clr-namespace:MeuEditorDeVideo.Presentation.ViewModels.Inspector;assembly=MeuEditorDeVideo.Presentation"
                     xmlns:ctl="clr-namespace:MeuEditorDeVideo.App.Controls"
                     xmlns:svc="clr-namespace:MeuEditorDeVideo.App.Services">
     <!-- Modelos do inspetor do clipe (painel C): propriedades, efeitos e parâmetros. -->

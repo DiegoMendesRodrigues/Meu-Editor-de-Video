@@ -5,8 +5,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MeuEditorDeVideo.App.Controls;
 using MeuEditorDeVideo.App.Services;
-using MeuEditorDeVideo.App.ViewModels;
-using MeuEditorDeVideo.App.ViewModels.Media;
+using MeuEditorDeVideo.Presentation.ViewModels;
+using MeuEditorDeVideo.Presentation.ViewModels.Media;
 
 namespace MeuEditorDeVideo.App.Views;
 
@@ -33,7 +33,7 @@ public partial class EditorView : UserControl
         };
     }
 
-    private ViewModels.Timeline.TimelineViewModel? _linhaDoTempo;
+    private Presentation.ViewModels.Timeline.TimelineViewModel? _linhaDoTempo;
     private const string RecentTag = "recente";
 
     /// <summary>
@@ -85,7 +85,7 @@ public partial class EditorView : UserControl
     private void Trilha_MouseMove(object sender, MouseEventArgs e)
     {
         if (_inicioArrasteTrilha is not { } inicio || e.LeftButton != MouseButtonState.Pressed
-            || sender is not FrameworkElement { DataContext: ViewModels.Timeline.TrackHeaderViewModel trilha } origem) return;
+            || sender is not FrameworkElement { DataContext: Presentation.ViewModels.Timeline.TrackHeaderViewModel trilha } origem) return;
         if (Math.Abs(e.GetPosition(this).Y - inicio.Y) < SystemParameters.MinimumVerticalDragDistance) return;
         _inicioArrasteTrilha = null;
         DragDrop.DoDragDrop(origem, new DataObject(FormatoTrilha, trilha.Id), DragDropEffects.Move);
@@ -100,7 +100,7 @@ public partial class EditorView : UserControl
     private void Trilha_Drop(object sender, DragEventArgs e)
     {
         if (e.Data.GetData(FormatoTrilha) is not Guid id || _linhaDoTempo is not { } tl
-            || sender is not FrameworkElement { DataContext: ViewModels.Timeline.TrackHeaderViewModel alvo }) return;
+            || sender is not FrameworkElement { DataContext: Presentation.ViewModels.Timeline.TrackHeaderViewModel alvo }) return;
         e.Handled = true;
         var destino = tl.Tracks.IndexOf(alvo);
         var origem = tl.Tracks.ToList().FindIndex(t => t.Id == id);
@@ -333,7 +333,7 @@ public partial class EditorView : UserControl
     {
         if (Keyboard.FocusedElement is TextBox or PasswordBox) return;
         if (DataContext is not EditorViewModel { Preview: { } preview }) return;
-        switch (Shortcuts?.Find(RealKey(e), Keyboard.Modifiers))
+        switch (Shortcuts?.Find(RealKey(e).ToMed(), Keyboard.Modifiers.ToMed()))
         {
             case ShortcutCatalog.PlayPause:
                 if (preview.PlayPauseCommand.CanExecute(null)) preview.PlayPauseCommand.Execute(null);
@@ -353,7 +353,7 @@ public partial class EditorView : UserControl
     private void EditorView_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Handled || DataContext is not EditorViewModel vm) return;
-        var action = Shortcuts?.Find(RealKey(e), Keyboard.Modifiers);
+        var action = Shortcuts?.Find(RealKey(e).ToMed(), Keyboard.Modifiers.ToMed());
         // Teclas sem modificador não disparam ações gerais enquanto se digita.
         if (action is null || (Keyboard.Modifiers == ModifierKeys.None && Keyboard.FocusedElement is TextBox or PasswordBox)) return;
         if (action == ShortcutCatalog.Settings)
@@ -398,16 +398,16 @@ public partial class EditorView : UserControl
 
     /// <summary>Ajuda › Suporte Técnico: abre a página de atendimento no navegador, no idioma da interface.</summary>
     private void Suporte_Click(object sender, RoutedEventArgs e) =>
-        ViewModels.AboutViewModel.OpenInBrowser(ViewModels.AboutViewModel.SupportUrlFor(Localization.Translator.Language));
+        Presentation.ViewModels.AboutViewModel.OpenInBrowser(Presentation.ViewModels.AboutViewModel.SupportUrlFor(Presentation.Localization.Translator.Language));
 
     /// <summary>Ajuda › Verificar atualizações (consulta o serviço de versões).</summary>
     private async void VerificarAtualizacoes_Click(object sender, RoutedEventArgs e) =>
-        await ((Services.UpdateCheckService)App.Services.GetService(typeof(Services.UpdateCheckService))!).CheckAsync(manual: true);
+        await ((Presentation.Services.UpdateCheckService)App.Services.GetService(typeof(Presentation.Services.UpdateCheckService))!).CheckAsync(manual: true);
 
     /// <summary>Manual do usuário offline (F1).</summary>
     private void Manual_Click(object sender, RoutedEventArgs e) => Dialogs.HelpWindow.ShowFor(Window.GetWindow(this));
 
-    private ViewModels.AssistantViewModel? _assistente;
+    private Presentation.ViewModels.AssistantViewModel? _assistente;
     private GridLength _larguraAssistente = new(380);
     private GridLength? _larguraBibliotecaSemAssistente;
 
@@ -435,8 +435,8 @@ public partial class EditorView : UserControl
             if (_assistente is null)
             {
                 // O catálogo (instalação do modelo pelo aviso do painel) não é serviço: é criado como na janela de modelos.
-                var catalogo = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<ViewModels.ModelCatalogViewModel>(App.Services);
-                _assistente = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<ViewModels.AssistantViewModel>(App.Services, catalogo);
+                var catalogo = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<Presentation.ViewModels.ModelCatalogViewModel>(App.Services);
+                _assistente = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<Presentation.ViewModels.AssistantViewModel>(App.Services, catalogo);
                 _assistente.OpenSectionRequested += (_, section) => Dialogs.HelpWindow.ShowFor(Window.GetWindow(this), section.Title);
                 Assistente.DataContext = _assistente;
             }
@@ -503,7 +503,7 @@ public partial class EditorView : UserControl
         }
         catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
         {
-            MessageBox.Show(Localization.Translator.F("Não foi possível abrir \"{0}\".", path), "Meu Editor de Vídeo", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(Presentation.Localization.Translator.F("Não foi possível abrir \"{0}\".", path), "Meu Editor de Vídeo", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 
@@ -521,8 +521,8 @@ public partial class EditorView : UserControl
         if (DataContext is not EditorViewModel { Inspector: { } inspector, Timeline: { } timeline }) return;
         if (inspector.CropZoomTarget() is not { } target)
         {
-            MessageBox.Show(Window.GetWindow(this), Localization.Translator.T("Selecione um clipe de vídeo ou imagem na linha do tempo."),
-                Localization.Translator.T("Cortar e ampliar"), MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Window.GetWindow(this), Presentation.Localization.Translator.T("Selecione um clipe de vídeo ou imagem na linha do tempo."),
+                Presentation.Localization.Translator.T("Cortar e ampliar"), MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         var (clip, asset) = target;
@@ -570,7 +570,7 @@ public partial class EditorView : UserControl
             return;
         }
         if (DataContext is not EditorViewModel { Timeline: { } timeline, Preview: { } preview } editor) return;
-        _mixer = new Dialogs.MixerWindow(new ViewModels.Timeline.MixerViewModel(timeline, preview), editor.UndoCommand, editor.RedoCommand)
+        _mixer = new Dialogs.MixerWindow(new Presentation.ViewModels.Timeline.MixerViewModel(timeline, preview), editor.UndoCommand, editor.RedoCommand)
         {
             Owner = Window.GetWindow(this),
         };
@@ -589,7 +589,7 @@ public partial class EditorView : UserControl
             _modelos.Activate();
             return;
         }
-        var vm = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<ViewModels.ModelManagerViewModel>(App.Services);
+        var vm = Microsoft.Extensions.DependencyInjection.ActivatorUtilities.CreateInstance<Presentation.ViewModels.ModelManagerViewModel>(App.Services);
         _modelos = new Dialogs.ModelManagerWindow(vm) { Owner = Window.GetWindow(this) };
         _modelos.Closed += (_, _) => _modelos = null;
         _modelos.Show();
@@ -604,7 +604,7 @@ public partial class EditorView : UserControl
             return;
         }
         if (DataContext is not EditorViewModel { Timeline: { } timeline, TextLibrary: { } library } editor) return;
-        _legendas = new Dialogs.SubtitleEditorWindow(new ViewModels.Timeline.SubtitleEditorViewModel(timeline, library, library.Dialogs),
+        _legendas = new Dialogs.SubtitleEditorWindow(new Presentation.ViewModels.Timeline.SubtitleEditorViewModel(timeline, library, library.Dialogs),
             editor.UndoCommand, editor.RedoCommand)
         {
             Owner = Window.GetWindow(this),
@@ -616,7 +616,7 @@ public partial class EditorView : UserControl
     /// <summary>Duplo clique num modelo de texto insere-o no cursor.</summary>
     private void ModelosTexto_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        if (e.OriginalSource is DependencyObject d && ItemsControl.ContainerFromElement((ItemsControl)sender, d) is ListBoxItem { DataContext: ViewModels.Timeline.TextPresetItem item }
+        if (e.OriginalSource is DependencyObject d && ItemsControl.ContainerFromElement((ItemsControl)sender, d) is ListBoxItem { DataContext: Presentation.ViewModels.Timeline.TextPresetItem item }
             && DataContext is EditorViewModel { TextLibrary: { } library })
             library.AddPresetCommand.Execute(item);
     }
@@ -681,7 +681,7 @@ public partial class EditorView : UserControl
     /// <summary>Duplo clique num item do catálogo de transições/efeitos/cor aplica ao clipe selecionado.</summary>
     private void ListaEfeitos_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        if (DataContext is ViewModels.EditorViewModel vm && ListaEfeitos.SelectedItem is ViewModels.Inspector.LibraryEffectItem item)
+        if (DataContext is Presentation.ViewModels.EditorViewModel vm && ListaEfeitos.SelectedItem is Presentation.ViewModels.Inspector.LibraryEffectItem item)
             vm.ApplySectionItemCommand.Execute(item);
     }
 

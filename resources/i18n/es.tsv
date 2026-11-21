@@ -2322,3 +2322,5 @@ ffd495bc	Frecuencia de muestreo no válida.
 23896bc5	SDL3 no abrió un dispositivo de audio: {0}
 393abf95	SDL3 no inició el audio: {0}
 bbebac15	No se pudo crear la superficie de dibujo.
+5304eae0	No se pudo codificar la imagen.
+97bf24fe	No se pudo preparar la imagen.

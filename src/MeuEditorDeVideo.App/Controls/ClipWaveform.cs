@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using MeuEditorDeVideo.App.ViewModels.Inspector;
+using MeuEditorDeVideo.Presentation.ViewModels.Inspector;
 using MeuEditorDeVideo.Domain.Time;
 
 namespace MeuEditorDeVideo.App.Controls;
@@ -68,7 +68,7 @@ public sealed class ClipWaveform : FrameworkElement
 
     private void OnTimelineProperty(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is nameof(ViewModels.Timeline.TimelineViewModel.Playhead) or nameof(ViewModels.Timeline.TimelineViewModel.SelectionSummary)) Dispatcher.BeginInvoke(InvalidateVisual);
+        if (e.PropertyName is nameof(Presentation.ViewModels.Timeline.TimelineViewModel.Playhead) or nameof(Presentation.ViewModels.Timeline.TimelineViewModel.SelectionSummary)) Dispatcher.BeginInvoke(InvalidateVisual);
     }
 
     protected override void OnRender(DrawingContext dc)

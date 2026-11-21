@@ -1,53 +1,18 @@
-﻿using L = MeuEditorDeVideo.App.Localization.Translator;
+﻿using L = MeuEditorDeVideo.Presentation.Localization.Translator;
 using System.Windows;
 using MeuEditorDeVideo.Core.Errors;
 using Microsoft.Win32;
+using MeuEditorDeVideo.Application.Export;
+using MeuEditorDeVideo.Core.Media;
+using MeuEditorDeVideo.Core.Projects;
+using MeuEditorDeVideo.Core.Updates;
+using MeuEditorDeVideo.Presentation.ViewModels;
+using MeuEditorDeVideo.Presentation.ViewModels.Export;
+using MeuEditorDeVideo.App.Views.Dialogs;
 
 namespace MeuEditorDeVideo.App.Services;
 
-public enum UnsavedChoice
-{
-    Save,
-    Discard,
-    Cancel,
-}
-
-public interface IDialogService
-{
-    void ShowError(MedError error);
-
-    void ShowInfo(string title, string message);
-
-    bool Confirm(string title, string message);
-
-    /// <summary>"Deseja salvar as alterações?" — Sim / Não / Cancelar.</summary>
-    UnsavedChoice AskSaveChanges(string projectName);
-
-    string? PickOpenProject(string? initialDirectory);
-
-    string? PickSaveProject(string suggestedName, string? initialDirectory);
-
-    string? PickFile(string title, string filter, string? initialDirectory);
-
-    /// <summary>Escolhe onde salvar um arquivo genérico (ex.: captura de quadro). Null se cancelado.</summary>
-    string? PickSaveFile(string title, string filter, string suggestedName, string? initialDirectory);
-
-    string? PickFolder(string title, string? initialDirectory);
-
-    /// <summary>Seleção de vários arquivos (RF026). Lista vazia se cancelado.</summary>
-    IReadOnlyList<string> PickFiles(string title, string filter, string? initialDirectory);
-
-    /// <summary>Pede um texto ao usuário. Retorna null se cancelado.</summary>
-    string? Prompt(string title, string label, string initialValue);
-
-
-    /// <summary>Abre a janela de configurações. Retorna true se o usuário salvou.</summary>
-    bool ShowSettings();
-
-    /// <summary>Mostra uma janela modal sobre a janela principal. Retorna DialogResult.</summary>
-    bool? ShowModal(Window dialog);
-}
-
+/// <summary>Diálogos do WPF; cada janela pedida pelos ViewModels abre sobre a janela principal.</summary>
 public sealed class DialogService : IDialogService
 {
     private const string ProjectFilter = "Projeto do Meu Editor de Vídeo (*.med)|*.med";
@@ -134,7 +99,89 @@ public sealed class DialogService : IDialogService
 
     public bool ShowSettings() => Views.Dialogs.SettingsWindow.ShowFor(Owner);
 
-    public bool? ShowModal(Window dialog)
+    public int? Choose(string title, string label, IReadOnlyList<string> options, int selected = 0, string okText = "OK")
+    {
+        var window = new ChoiceWindow(title, label, options, selected, okText);
+        return ShowModal(window) == true && window.SelectedIndex >= 0 ? window.SelectedIndex : null;
+    }
+
+    public bool ShowNewProject(NewProjectViewModel viewModel) => ShowModal(new NewProjectWindow(viewModel)) == true;
+
+    public void ShowMissingMedia(MissingMediaViewModel viewModel) => ShowModal(new MissingMediaWindow(viewModel));
+
+    public bool ManageContentPacks(IContentPackStore store)
+    {
+        var window = new ContentPacksWindow(store, this);
+        ShowModal(window);
+        return window.Changed;
+    }
+
+    public ScreenRecordingResult? RecordScreen(IScreenRecorder recorder, string outputPath)
+    {
+        var window = new ScreenRecordWindow(recorder, outputPath);
+        return ShowModal(window) == true && window.RecordedPath is { } path ? new ScreenRecordingResult(path, window.InsertOnTimeline) : null;
+    }
+
+    public bool ShowExport(ExportViewModel viewModel) => ShowModal(new ExportWindow(viewModel)) == true;
+
+    public RenderJob? ShowExportProgress(RenderQueueViewModel queue)
+    {
+        var window = new RenderQueueWindow(queue) { Title = L.T("Exportando…") };
+        RenderJob? finished = null;
+        void OnFinished(object? sender, RenderJob job)
+        {
+            if (!window.IsVisible) return;
+            finished = job;
+            window.Close();
+        }
+        queue.FollowedJobFinished += OnFinished;
+        try
+        {
+            ShowModal(window);
+        }
+        finally
+        {
+            queue.FollowedJobFinished -= OnFinished;
+        }
+        return finished;
+    }
+
+    private RenderQueueWindow? _queueWindow;
+
+    public void ShowRenderQueue(Func<RenderQueueViewModel> create)
+    {
+        if (_queueWindow is { IsLoaded: true })
+        {
+            _queueWindow.Activate();
+            return;
+        }
+        _queueWindow = new RenderQueueWindow(create()) { Owner = Owner };
+        _queueWindow.Closed += (_, _) => _queueWindow = null;
+        _queueWindow.Show();
+    }
+
+    public ReframeChoice? AskReframe(string currentSize, bool trackingAvailable)
+    {
+        var window = new ReframeWindow(currentSize, trackingAvailable);
+        if (ShowModal(window) != true) return null;
+        var (w, h) = window.Format;
+        return new ReframeChoice(w, h, window.FollowHead);
+    }
+
+    public TextToSpeechRequest? AskTextToSpeech(IReadOnlyList<string> voices)
+    {
+        var window = new TextToSpeechWindow(voices);
+        return ShowModal(window) == true ? new TextToSpeechRequest(window.Text, window.Voice, window.Rate) : null;
+    }
+
+    public void ShowUpdateResult(UpdateInfo info, bool isNewer)
+    {
+        if (isNewer) UpdateWindow.ShowNewVersion(Owner, info);
+        else UpdateWindow.ShowUpToDate(Owner);
+    }
+
+    /// <summary>Mostra uma janela modal sobre a janela principal. Retorna DialogResult.</summary>
+    public static bool? ShowModal(Window dialog)
     {
         dialog.Owner = Owner;
         return dialog.ShowDialog();

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using MeuEditorDeVideo.App.Services;
 using System.Windows.Media;
-using MeuEditorDeVideo.App.ViewModels.Timeline;
+using MeuEditorDeVideo.Presentation.ViewModels.Timeline;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
@@ -58,7 +58,7 @@ public abstract class TimelineSurface : FrameworkElement
         if (e.Handled || ViewModel is not { } vm) return;
         var shortcuts = Shortcuts;
         var key = e.Key == Key.System ? e.SystemKey : e.Key;
-        var action = shortcuts?.Find(key, Keyboard.Modifiers);
+        var action = shortcuts?.Find(key.ToMed(), Keyboard.Modifiers.ToMed());
         if (action == ShortcutCatalog.PlayPause)
         {
             vm.RequestPlayPause();
@@ -440,7 +440,7 @@ public sealed class TimelineControl : TimelineSurface
             var tileW = Math.Max(8, tileH * thumb.Width / Math.Max(1, thumb.Height));
             var startX = Math.Max(rect.Left, rect.Left + Math.Floor((-rect.Left) / tileW) * tileW);
             for (var x = startX; x < Math.Min(rect.Right, ActualWidth); x += tileW)
-                dc.DrawImage(thumb, new Rect(x, rect.Top + 17, tileW, tileH));
+                dc.DrawImage(Converters.BgraBitmaps.ToBitmap(thumb), new Rect(x, rect.Top + 17, tileW, tileH));
         }
 
         // Forma de onda do trecho usado (considera ponto de entrada e velocidade).
@@ -449,7 +449,7 @@ public sealed class TimelineControl : TimelineSurface
 
         // Faixa do título.
         dc.DrawRectangle(Solid(110, 0, 0, 0), null, new Rect(rect.Left, rect.Top, rect.Width, 16));
-        var label = asset?.Name ?? (clip.IsText ? ViewModels.Inspector.ClipInspectorViewModel.TextTitle(clip.Text!)
+        var label = asset?.Name ?? (clip.IsText ? Presentation.ViewModels.Inspector.ClipInspectorViewModel.TextTitle(clip.Text!)
             : clip.Shape is { } shapeStyle ? "◆ " + Domain.Editing.ShapePresets.Name(shapeStyle)
             : clip.IsAdjustment ? "☰ Camada de ajuste"
             : clip.IsCompound ? "⧉ " + (vm.Project?.Sequences.Find(s => s.Id == clip.NestedSequenceId)?.Name ?? "Clipe composto")

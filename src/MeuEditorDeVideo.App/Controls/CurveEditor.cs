@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Input;
 using System.Windows.Media;
-using MeuEditorDeVideo.App.ViewModels.Inspector;
+using MeuEditorDeVideo.Presentation.ViewModels.Inspector;
 using MeuEditorDeVideo.ImageEngine.Effects;
 
 namespace MeuEditorDeVideo.App.Controls;
@@ -83,7 +83,7 @@ public sealed class CurveEditor : FrameworkElement
         }
         dc.DrawLine(new Pen(grid, 1) { DashStyle = DashStyles.Dash }, new Point(area.Left, area.Bottom), new Point(area.Right, area.Top));
 
-        var color = Curve?.Stroke ?? Colors.White;
+        var color = Curve?.Stroke is { } s ? Color.FromArgb(s.A, s.R, s.G, s.B) : Colors.White;
         var stroke = new Pen(new SolidColorBrush(color), 2);
         var table = ToneCurve.Table(_points);
         var geometry = new StreamGeometry();

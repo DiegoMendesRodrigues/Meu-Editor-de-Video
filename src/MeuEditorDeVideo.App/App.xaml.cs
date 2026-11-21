@@ -9,7 +9,7 @@ using MeuEditorDeVideo.AIEngine;
 using MeuEditorDeVideo.MediaEngine;
 using MeuEditorDeVideo.ProjectEngine;
 using MeuEditorDeVideo.RenderingEngine;
-using MeuEditorDeVideo.App.ViewModels;
+using MeuEditorDeVideo.Presentation.ViewModels;
 using MeuEditorDeVideo.App.Views;
 using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.Errors;
@@ -32,6 +32,8 @@ public partial class App : System.Windows.Application
 
     protected override async void OnStartup(StartupEventArgs e)
     {
+        // Os ViewModels (projeto Presentation) agendam na thread da interface por esta abstração.
+        UiThread.Dispatcher = new Services.WpfUiDispatcher(Dispatcher);
         WaitForPreviousInstance(e.Args);
         var paths = new AppPaths();
         ImageEngine.Text.FontCatalog.UserFontsFolder = paths.Fonts;
@@ -56,7 +58,7 @@ public partial class App : System.Windows.Application
         var language = Services.GetRequiredService<ISettingsService>().Current.Language;
         if (!SupportedLanguages.IsSupported(language)) language = SupportedLanguages.FromCulture(CultureInfo.CurrentUICulture.Name);
         ApplyCulture(language);
-        Localization.Translator.Load(language, System.IO.Path.Combine(AppContext.BaseDirectory, "i18n"));
+        Presentation.Localization.Translator.Load(language, System.IO.Path.Combine(AppContext.BaseDirectory, "i18n"));
         Localization.LocalizationHook.TranslateResources(Resources);
         Localization.LocalizationHook.Install();
 
@@ -70,7 +72,7 @@ public partial class App : System.Windows.Application
         MainWindow = window;
         // Sem tela inicial: o editor abre com um projeto novo vazio; depois, se for o caso, o projeto pedido, a recuperação
         // de um fechamento inesperado ou o último projeto.
-        Services.GetRequiredService<IProjectService>().CreateUntitled(Localization.Translator.T("Sem título"));
+        Services.GetRequiredService<IProjectService>().CreateUntitled(Presentation.Localization.Translator.T("Sem título"));
         Services.GetRequiredService<INavigationService>().NavigateTo<EditorViewModel>();
         window.Show();
 
@@ -271,7 +273,7 @@ public partial class App : System.Windows.Application
         services.AddSingleton<IProjectWorkflow, ProjectWorkflow>();
         services.AddTransient<NewProjectViewModel>();
         services.AddTransient<MissingMediaViewModel>();
-        services.AddTransient<ViewModels.Media.MediaLibraryViewModel>();
+        services.AddTransient<Presentation.ViewModels.Media.MediaLibraryViewModel>();
 
         services.AddSingleton<ShellViewModel>();
         services.AddTransient<EditorViewModel>();

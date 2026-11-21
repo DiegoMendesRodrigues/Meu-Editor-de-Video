@@ -4,13 +4,6 @@ using Microsoft.Win32;
 
 namespace MeuEditorDeVideo.App.Services;
 
-public interface IThemeService
-{
-    AppTheme Current { get; }
-
-    void Apply(AppTheme theme);
-}
-
 /// <summary>
 /// Alterna o tema Fluent nativo do WPF e a paleta própria do aplicativo (RF207).
 /// A paleta fica no índice 0 dos dicionários mesclados de App.xaml.

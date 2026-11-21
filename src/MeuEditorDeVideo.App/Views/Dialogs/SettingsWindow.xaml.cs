@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MeuEditorDeVideo.App.ViewModels;
+using MeuEditorDeVideo.Presentation.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MeuEditorDeVideo.App.Views.Dialogs;
@@ -37,7 +37,7 @@ public partial class SettingsWindow
         var vm = ActivatorUtilities.CreateInstance<SettingsViewModel>(App.Services);
         var window = new SettingsWindow(vm) { Owner = owner };
         if (owner is null) window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        var before = Localization.Translator.Language;
+        var before = Presentation.Localization.Translator.Language;
         var saved = window.ShowDialog() == true;
         // O idioma escolhido vale na hora: o programa reinicia nele (com o mesmo projeto, se estiver salvo).
         if (saved && !string.Equals(vm.Language.Value, before, StringComparison.OrdinalIgnoreCase))
@@ -52,6 +52,6 @@ public partial class SettingsWindow
         var key = e.Key == Key.System ? e.SystemKey : e.Key;
         if (key == Key.Tab) return; // navegação entre campos
         e.Handled = true;
-        if (SettingsViewModel.Capture(key, Keyboard.Modifiers) is { } chord) item.Assign(chord);
+        if (SettingsViewModel.Capture(key.ToMed(), Keyboard.Modifiers.ToMed()) is { } chord) item.Assign(chord);
     }
 }

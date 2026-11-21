@@ -1,5 +1,5 @@
 using System.Windows;
-using MeuEditorDeVideo.App.ViewModels;
+using MeuEditorDeVideo.Presentation.ViewModels;
 
 namespace MeuEditorDeVideo.App.Views.Dialogs;
 

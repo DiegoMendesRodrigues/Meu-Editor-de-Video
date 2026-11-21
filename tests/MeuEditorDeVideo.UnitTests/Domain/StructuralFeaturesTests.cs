@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.IO.Compression;
+using System.Runtime.Versioning;
 using MeuEditorDeVideo.Application.Packs;
 using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.Media;
@@ -9,6 +10,7 @@ using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;
 using MeuEditorDeVideo.ImageEngine.Effects;
 using MeuEditorDeVideo.MediaEngine.Recording;
+using MeuEditorDeVideo.UnitTests.Support;
 using MeuEditorDeVideo.ProjectEngine.Format;
 using MeuEditorDeVideo.RenderingEngine;
 using MeuEditorDeVideo.TimelineEngine;
@@ -333,7 +335,7 @@ public sealed class StructuralFeaturesTests
 
     // ---------------------------------------------------------------- gravação de tela
 
-    [Fact]
+    [WindowsFact, SupportedOSPlatform("windows")]
     public void Recorder_parses_directshow_devices()
     {
         const string output = """
@@ -347,7 +349,7 @@ public sealed class StructuralFeaturesTests
         Assert.Equal(["Microfone (Realtek(R) Audio)"], devices.Microphones);
     }
 
-    [Fact]
+    [WindowsFact, SupportedOSPlatform("windows")]
     public void Recorder_builds_screen_webcam_and_microphone_arguments()
     {
         var args = WindowsScreenRecorder.BuildArguments(new ScreenRecordingOptions(@"C:\v\g.mp4", true, "Cam", "Mic"), 1920);

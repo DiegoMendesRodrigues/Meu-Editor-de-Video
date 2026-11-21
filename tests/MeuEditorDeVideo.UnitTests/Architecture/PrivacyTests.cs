@@ -21,7 +21,7 @@ public class PrivacyTests
 
     public static TheoryData<string> ProductAssemblies() =>
     [
-        "MeuEditorDeVideo", // App
+        "MeuEditorDeVideo.Presentation",
         "MeuEditorDeVideo.Domain", "MeuEditorDeVideo.Core", "MeuEditorDeVideo.Application",
         "MeuEditorDeVideo.Infrastructure", "MeuEditorDeVideo.ProjectEngine", "MeuEditorDeVideo.MediaEngine",
         "MeuEditorDeVideo.TimelineEngine", "MeuEditorDeVideo.ImageEngine", "MeuEditorDeVideo.AudioEngine",

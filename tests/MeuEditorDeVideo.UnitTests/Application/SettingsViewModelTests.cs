@@ -1,7 +1,11 @@
-﻿using System.Windows;
-using System.Windows.Input;
-using MeuEditorDeVideo.App.Services;
-using MeuEditorDeVideo.App.ViewModels;
+﻿using MeuEditorDeVideo.Presentation.Input;
+using MeuEditorDeVideo.Presentation.Services;
+using MeuEditorDeVideo.Presentation.ViewModels;
+using MeuEditorDeVideo.Application.Export;
+using MeuEditorDeVideo.Core.Media;
+using MeuEditorDeVideo.Core.Projects;
+using MeuEditorDeVideo.Core.Updates;
+using MeuEditorDeVideo.Presentation.ViewModels.Export;
 using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.AI;
 using MeuEditorDeVideo.Core.Errors;
@@ -43,7 +47,17 @@ public sealed class SettingsViewModelTests
         public string? PickSaveFile(string title, string filter, string suggestedName, string? initialDirectory) => null;
         public IReadOnlyList<string> PickFiles(string title, string filter, string? initialDirectory) => [];
         public string? Prompt(string title, string label, string initialValue) => null;
-        public bool? ShowModal(Window dialog) => null;
+        public int? Choose(string title, string label, IReadOnlyList<string> options, int selected = 0, string okText = "OK") => null;
+        public bool ShowNewProject(NewProjectViewModel viewModel) => false;
+        public void ShowMissingMedia(MissingMediaViewModel viewModel) { }
+        public bool ManageContentPacks(IContentPackStore store) => false;
+        public ScreenRecordingResult? RecordScreen(IScreenRecorder recorder, string outputPath) => null;
+        public bool ShowExport(ExportViewModel viewModel) => false;
+        public RenderJob? ShowExportProgress(RenderQueueViewModel queue) => null;
+        public void ShowRenderQueue(Func<RenderQueueViewModel> create) { }
+        public ReframeChoice? AskReframe(string currentSize, bool trackingAvailable) => null;
+        public TextToSpeechRequest? AskTextToSpeech(IReadOnlyList<string> voices) => null;
+        public void ShowUpdateResult(UpdateInfo info, bool isNewer) { }
         public bool ShowSettings() => false;
     }
 
@@ -170,9 +184,9 @@ public sealed class SettingsViewModelTests
     {
         var (vm, settings, _, _, _) = Create();
         var marker = vm.Shortcuts.Single(s => s.Id == ShortcutCatalog.Marker);
-        marker.Assign(new KeyChord(Key.M, ModifierKeys.Control));
+        marker.Assign(new KeyChord(MedKey.M, MedModifiers.Control));
         var save = vm.Shortcuts.Single(s => s.Id == ShortcutCatalog.Save);
-        save.Assign(new KeyChord(Key.S, ModifierKeys.Control)); // igual ao padrão
+        save.Assign(new KeyChord(MedKey.S, MedModifiers.Control)); // igual ao padrão
         vm.Shortcuts.Single(s => s.Id == ShortcutCatalog.Snap).ClearCommand.Execute(null);
 
         Assert.False(save.IsCustom);
@@ -188,7 +202,7 @@ public sealed class SettingsViewModelTests
     {
         var (vm, _, _, _, _) = Create();
         var marker = vm.Shortcuts.Single(s => s.Id == ShortcutCatalog.Marker);
-        marker.Assign(new KeyChord(Key.S, ModifierKeys.Control));
+        marker.Assign(new KeyChord(MedKey.S, MedModifiers.Control));
 
         Assert.False(vm.SaveCommand.CanExecute(null));
         Assert.NotEmpty(vm.ShortcutConflicts);
@@ -214,14 +228,14 @@ public sealed class SettingsViewModelTests
     }
 
     [Theory]
-    [InlineData(Key.LeftCtrl, ModifierKeys.Control, false)]
-    [InlineData(Key.F5, ModifierKeys.None, true)]
-    [InlineData(Key.K, ModifierKeys.Control | ModifierKeys.Windows, true)]
-    public void Captura_ignora_modificadores_sozinhos(Key key, ModifierKeys mods, bool captured)
+    [InlineData(MedKey.LeftCtrl, MedModifiers.Control, false)]
+    [InlineData(MedKey.F5, MedModifiers.None, true)]
+    [InlineData(MedKey.K, MedModifiers.Control | MedModifiers.Windows, true)]
+    public void Captura_ignora_modificadores_sozinhos(MedKey key, MedModifiers mods, bool captured)
     {
         var chord = SettingsViewModel.Capture(key, mods);
         Assert.Equal(captured, chord is not null);
-        if (chord is { } c) Assert.False(c.Modifiers.HasFlag(ModifierKeys.Windows));
+        if (chord is { } c) Assert.False(c.Modifiers.HasFlag(MedModifiers.Windows));
     }
 
     [Fact]

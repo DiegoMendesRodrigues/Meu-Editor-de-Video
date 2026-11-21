@@ -1,8 +1,7 @@
 ﻿using System.IO;
-using System.Windows.Input;
-using MeuEditorDeVideo.App.Services;
-using MeuEditorDeVideo.App.Services.Help;
-using MeuEditorDeVideo.App.Views.Dialogs;
+using MeuEditorDeVideo.Presentation.Input;
+using MeuEditorDeVideo.Presentation.Services;
+using MeuEditorDeVideo.Presentation.Services.Help;
 using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.AI;
 
@@ -108,7 +107,7 @@ public class HelpTests
     public void Tabela_de_atalhos_usa_os_atalhos_em_uso_e_mostra_traco_sem_atalho()
     {
         var service = new ShortcutService();
-        var md = InfoDocumentWindow.ShortcutsMarkdown(ShortcutCatalog.All,
+        var md = HelpDocuments.ShortcutsMarkdown(ShortcutCatalog.All,
             id => id == ShortcutCatalog.Marker ? [] : service.ChordsFor(id));
 
         Assert.Contains("| Manual do usuário | F1 |", md);
@@ -121,7 +120,7 @@ public class HelpTests
     [Fact]
     public void F1_abre_o_manual()
     {
-        Assert.Equal(ShortcutCatalog.Help, new ShortcutService().Find(Key.F1, ModifierKeys.None));
+        Assert.Equal(ShortcutCatalog.Help, new ShortcutService().Find(MedKey.F1, MedModifiers.None));
     }
 
     [Fact]
@@ -151,7 +150,7 @@ public class HelpTests
         Assert.Contains("  - MODNet 1.0 (incluído)", report);
         Assert.Contains(@"Logs: C:\dados\logs", report);
 
-        var md = InfoDocumentWindow.SystemInfoMarkdown(report);
+        var md = HelpDocuments.SystemInfoMarkdown(report);
         Assert.Contains("| Versão | 1.0.0 |", md);
         Assert.Contains("| Placa de vídeo | Placa / teste — 8,0 GB (dedicada) |", md); // "|" não quebra a tabela
         Assert.Contains("- MODNet 1.0 (incluído)", md);

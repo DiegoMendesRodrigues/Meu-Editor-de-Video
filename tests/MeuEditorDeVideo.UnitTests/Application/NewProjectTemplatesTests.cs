@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.App.ViewModels;
+using MeuEditorDeVideo.Presentation.ViewModels;
 using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Domain.Model;
 

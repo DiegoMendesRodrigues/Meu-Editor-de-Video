@@ -2526,3 +2526,5 @@ ffd495bc	Invalid sample rate.
 393abf95	SDL3 did not start audio: {0}
 bbebac15	Could not create the drawing surface.
 16956c08	Vendor {0}
+5304eae0	Could not encode the image.
+97bf24fe	Could not prepare the image.

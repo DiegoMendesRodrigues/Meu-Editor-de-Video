@@ -11,7 +11,7 @@ public partial class HelpWindow
 {
     /// <summary>Local do manual instalado junto com o aplicativo.</summary>
     /// <summary>Manual no idioma escolhido (MANUAL_DO_USUARIO.{idioma}.md); o português do Brasil é o original.</summary>
-    public static string ManualPath => ManualPathFor(Localization.Translator.Language);
+    public static string ManualPath => ManualPathFor(Presentation.Localization.Translator.Language);
 
     public static string ManualPathFor(string? language)
     {

@@ -1,5 +1,5 @@
 using System.Windows.Input;
-using MeuEditorDeVideo.App.ViewModels.Timeline;
+using MeuEditorDeVideo.Presentation.ViewModels.Timeline;
 
 namespace MeuEditorDeVideo.App.Views.Dialogs;
 

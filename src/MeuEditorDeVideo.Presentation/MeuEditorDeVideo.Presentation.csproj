@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- ViewModels e serviços de interface sem toolkit (WPF/Avalonia): rodam e são testados em Windows, Linux e macOS. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="SkiaSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MeuEditorDeVideo.Application\MeuEditorDeVideo.Application.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.Infrastructure\MeuEditorDeVideo.Infrastructure.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.ProjectEngine\MeuEditorDeVideo.ProjectEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.MediaEngine\MeuEditorDeVideo.MediaEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.TimelineEngine\MeuEditorDeVideo.TimelineEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.ImageEngine\MeuEditorDeVideo.ImageEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.AudioEngine\MeuEditorDeVideo.AudioEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.AIEngine\MeuEditorDeVideo.AIEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.RenderingEngine\MeuEditorDeVideo.RenderingEngine.csproj" />
+    <ProjectReference Include="..\MeuEditorDeVideo.ModelDownloads\MeuEditorDeVideo.ModelDownloads.csproj" />
+  </ItemGroup>
+</Project>

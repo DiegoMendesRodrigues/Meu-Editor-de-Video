@@ -2528,3 +2528,5 @@ ffd495bc	Fréquence d'échantillonnage non valide.
 393abf95	SDL3 n'a pas démarré l'audio : {0}
 bbebac15	Impossible de créer la surface de dessin.
 16956c08	Fabricant {0}
+5304eae0	Impossible d'encoder l'image.
+97bf24fe	Impossible de préparer l'image.

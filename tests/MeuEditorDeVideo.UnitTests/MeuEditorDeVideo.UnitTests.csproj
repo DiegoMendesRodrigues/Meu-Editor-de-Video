@@ -1,8 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.collector" />
@@ -19,6 +18,14 @@
     <None Include="Text\Referencias\*" CopyToOutputDirectory="PreserveNewest" LinkBase="Text\Referencias" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\MeuEditorDeVideo.App\MeuEditorDeVideo.App.csproj" />
+    <ProjectReference Include="..\..\src\MeuEditorDeVideo.Presentation\MeuEditorDeVideo.Presentation.csproj" />
+  </ItemGroup>
+  <!-- Modelo de IA incluído no aplicativo (MODNet), como na saída do App (VisionTests, AiDeviceTests). -->
+  <PropertyGroup>
+    <BuiltInModelsDir>$(MSBuildThisFileDirectory)..\..\deps\ai-models\</BuiltInModelsDir>
+  </PropertyGroup>
+  <ItemGroup Condition="Exists('$(BuiltInModelsDir)')">
+    <None Include="..\..\resources\ai-models\incluidos\**\*" Link="ai-models\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(BuiltInModelsDir)**\*.onnx" Link="ai-models\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
 </Project>

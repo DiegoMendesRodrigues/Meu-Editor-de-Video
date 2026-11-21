@@ -57,6 +57,7 @@
     <None Include="..\..\documentation\imagens\**\*.jpg" Link="ajuda\imagens\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MeuEditorDeVideo.Presentation\MeuEditorDeVideo.Presentation.csproj" />
     <ProjectReference Include="..\MeuEditorDeVideo.Application\MeuEditorDeVideo.Application.csproj" />
     <ProjectReference Include="..\MeuEditorDeVideo.Infrastructure\MeuEditorDeVideo.Infrastructure.csproj" />
     <ProjectReference Include="..\MeuEditorDeVideo.ProjectEngine\MeuEditorDeVideo.ProjectEngine.csproj" />

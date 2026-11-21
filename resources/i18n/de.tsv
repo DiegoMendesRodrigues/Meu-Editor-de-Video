@@ -2542,3 +2542,5 @@ ffd495bc	Ungültige Abtastrate.
 393abf95	SDL3 hat die Audioausgabe nicht gestartet: {0}
 bbebac15	Die Zeichenfläche konnte nicht erstellt werden.
 16956c08	Hersteller {0}
+5304eae0	Das Bild konnte nicht codiert werden.
+97bf24fe	Das Bild konnte nicht vorbereitet werden.

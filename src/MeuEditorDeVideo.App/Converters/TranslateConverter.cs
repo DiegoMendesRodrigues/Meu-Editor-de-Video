@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
-using MeuEditorDeVideo.App.Localization;
+using MeuEditorDeVideo.Presentation.Localization;
 
 namespace MeuEditorDeVideo.App.Converters;
 

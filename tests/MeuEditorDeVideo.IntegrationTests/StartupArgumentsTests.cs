@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.App.Services;
+using MeuEditorDeVideo.Presentation.Services;
 
 namespace MeuEditorDeVideo.IntegrationTests;
 

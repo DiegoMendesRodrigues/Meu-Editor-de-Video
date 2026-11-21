@@ -34,7 +34,7 @@ pwsh scripts/offline-check.ps1                    # runtime check that the app o
 
 ## Architecture
 
-Layered solution, 13 projects in `src/`. The layering is **enforced by NetArchTest tests** in `tests/MeuEditorDeVideo.UnitTests/Architecture/`.
+Layered solution, 14 projects in `src/`. The layering is **enforced by NetArchTest tests** in `tests/MeuEditorDeVideo.UnitTests/Architecture/`.
 
 - `Domain`: immutable records (`Project`, `Sequence`, `Track`, `Clip`, `MediaAsset`…). No package references.
   - Time is `MediaTime`, a `long` in **flicks** (705,600,000 per second). Never use `double` for model time.
@@ -46,7 +46,8 @@ Layered solution, 13 projects in `src/`. The layering is **enforced by NetArchTe
 - Engines: `ProjectEngine` (`.med` format), `TimelineEngine` (evaluate the timeline at time t, snapping), `MediaEngine` (FFmpeg), `ImageEngine` (effects, text, masks, tracking), `AudioEngine` (mix, DSP, WASAPI), `AIEngine` (`.medmodel` packages, ONNX sessions), `RenderingEngine` (compositor, `PreviewEngine`, `RenderEngine` export).
   - Engines must not reference `App` or `Application`.
   - Each engine exposes an `Add…` DI extension method.
-- `App`: WPF. **All DI composition lives in `App.xaml.cs`** (`ConfigureServices`). Implementations are bound to `Core` interfaces only here.
+- `Presentation` (`net10.0`): view models, `IDialogService`, `INavigationService`, `ShortcutService`, `ProjectWorkflow`, `Translator`. No WPF/Avalonia (`LayeringTests`): keys are `MedKey`/`MedModifiers` (same names and values as WPF `Key`/`ModifierKeys`; `App/Controls/KeyMapping.cs` casts, `AppTests` checks), colors are `ArgbColor` or `"#AARRGGBB"` strings, points `PointD`, preview frames `DisplayFrame` (shown by the App's `FrameImage.Frame`), thumbnails `BgraImage` (`BgraBitmaps` converter). The UI thread is `UiThread.Dispatcher` (`IUiDispatcher`; the App sets `WpfUiDispatcher` at startup; tests run `Post` inline and timers never fire). Opening files/URLs goes through `SystemShell`.
+- `App`: WPF views, controls and dialogs only. **All DI composition lives in `App.xaml.cs`** (`ConfigureServices`). Implementations are bound to `Core` interfaces only here.
 - `AIEngine` vision services (`Vision/`): `SegmentationService` (MODNet person matte), `CameraTracker` (head/body auto-framing), `FaceLandmarkService` + `FaceMeshDetector` (MediaPipe Face Mesh V2, 478 points) used by `FaceRetouch` (effects `ai.beauty`, `ai.makeup`). Optional models are listed in `resources/ai-models/modelos.json` (pinned URL + SHA-256, license text in `resources/ai-models/licencas/`) and installed by the user from the app; don't copy them into `deps\ai-models`.
 - Virtual assistant (Ajuda › Assistente virtual, Shift+F1): `Application/Help/ManualKnowledgeBase` (manual sections + BM25 search, no model) and `HelpAssistantService` (prompt in the UI language); `AIEngine/Assistant/GenAiAnswerGenerator` runs the optional `HelpAssistant` model (Phi-4-mini ONNX int4, ONNX Runtime GenAI, DirectML). Catalog entries can have `extraFiles` (multi-file models). The six manuals must keep identical heading lines (`ManualKnowledgeBaseTests`).
 - `ModelDownloads`: the **only** assembly allowed to use the network (HTTP to pinned URLs with SHA-256, only when the user clicks Instalar; plus `HttpUpdateChecker` for Ajuda › Verificar atualizações and the 30-day startup check, see `Core/Updates/UpdateEndpoints`). `PrivacyTests` fails the build if any other product assembly touches `System.Net.*`. Keep it that way. A new product assembly must be added to `ProductAssemblies` in those tests.
@@ -75,7 +76,7 @@ Layered solution, 13 projects in `src/`. The layering is **enforced by NetArchTe
 ### App (WPF) conventions
 
 - **Navigation:** pages are `PageViewModel`s mapped to views in `Views/ViewMappings.xaml`. `INavigationService.NavigateTo<T>()` switches pages; `OnNavigatedTo()` refreshes state.
-- **Dialogs:** go through `IDialogService` (`Services/DialogService.cs`), so view models stay testable with fakes.
+- **Dialogs:** view models never create windows: they call a typed `IDialogService` method (interface in `Presentation/Services/IDialogService.cs`, WPF implementation in `App/Services/DialogService.cs`), so they stay testable with fakes.
   - Adding a method means updating the fakes in `tests/MeuEditorDeVideo.UnitTests/Application/*Tests.cs`.
   - Simple custom dialogs are code-only `Window`s in `Views/Dialogs/` (e.g. `PromptWindow`).
 - **Strings:** `Resources/Strings/{Common,Editor}.xaml` (`sys:String` keys like `Editor.NaoSalvo`). Theme brushes are `DynamicResource` keys `Med.*` (`Med.Text`, `Med.Background`, `Med.Panel`, `Med.Accent`, `Med.Danger`…), defined in `Themes/Palette.{Dark,Light}.xaml` and swapped by `ThemeService`.

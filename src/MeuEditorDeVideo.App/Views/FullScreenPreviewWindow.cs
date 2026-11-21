@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using MeuEditorDeVideo.App.ViewModels.Preview;
+using MeuEditorDeVideo.Presentation.ViewModels.Preview;
 
 namespace MeuEditorDeVideo.App.Views;
 
@@ -27,7 +27,7 @@ public sealed class FullScreenPreviewWindow : Window
 
         var image = new Image { Stretch = Stretch.Uniform };
         RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Linear);
-        image.SetBinding(Image.SourceProperty, new Binding(nameof(PreviewViewModel.Image)));
+        image.SetBinding(Controls.FrameImage.FrameProperty, new Binding(nameof(PreviewViewModel.Image)));
 
         _hint = new TextBlock
         {

@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.App.ViewModels;
+using MeuEditorDeVideo.Presentation.ViewModels;
 
 namespace MeuEditorDeVideo.UnitTests.Application;
 
