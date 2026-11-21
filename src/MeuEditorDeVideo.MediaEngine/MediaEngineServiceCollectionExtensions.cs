@@ -15,7 +15,7 @@ public static class MediaEngineServiceCollectionExtensions
         services.AddSingleton<IProxyService, ProxyService>();
         services.AddSingleton<IVideoFrameSourceFactory, VideoFrameSourceFactory>();
         services.AddSingleton<IAudioSampleSourceFactory, AudioSampleSourceFactory>();
-        services.AddSingleton<IScreenRecorder, Recording.ScreenRecorder>();
+        services.AddSingleton(_ => Recording.ScreenRecorderFactory.Create());
         return services;
     }
 }

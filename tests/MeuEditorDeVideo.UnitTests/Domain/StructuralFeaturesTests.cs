@@ -342,7 +342,7 @@ public sealed class StructuralFeaturesTests
             [in#0 @ 000001] "Microfone (Realtek(R) Audio)" (audio)
             [in#0 @ 000001]   Alternative name "@device_cm_{33D9A762}"
             """;
-        var devices = ScreenRecorder.ParseDevices(output);
+        var devices = WindowsScreenRecorder.ParseDevices(output);
         Assert.Equal(["Integrated Camera"], devices.Cameras);
         Assert.Equal(["Microfone (Realtek(R) Audio)"], devices.Microphones);
     }
@@ -350,7 +350,7 @@ public sealed class StructuralFeaturesTests
     [Fact]
     public void Recorder_builds_screen_webcam_and_microphone_arguments()
     {
-        var args = ScreenRecorder.BuildArguments(new ScreenRecordingOptions(@"C:\v\g.mp4", true, "Cam", "Mic"), 1920);
+        var args = WindowsScreenRecorder.BuildArguments(new ScreenRecordingOptions(@"C:\v\g.mp4", true, "Cam", "Mic"), 1920);
         var text = string.Join(' ', args);
         Assert.Contains("-f gdigrab", text);
         Assert.Contains("video=Cam", text);
@@ -363,23 +363,23 @@ public sealed class StructuralFeaturesTests
 
         // Um monitor só: recorte da área de trabalho virtual e webcam proporcional a ele.
         var second = new ScreenArea(2, -1280, 0, 1280, 1024, false);
-        var one = string.Join(' ', ScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", true, "Cam", null, Area: second), second.Width));
+        var one = string.Join(' ', WindowsScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", true, "Cam", null, Area: second), second.Width));
         Assert.Contains("-offset_x -1280 -offset_y 0 -video_size 1280x1024 -i desktop", one);
         Assert.Contains("[1:v]scale=160:-2[cam]", one);
 
         // Uma janela: a área dela na tela (com sombra recortada pela tela e tamanho par), nunca title= (sai preto).
-        Assert.Equal(new ScreenArea(0, 0, 0, 800, 600, false), ScreenRecorder.WindowArea((-7, -3, 801, 601), (0, 0, 1920, 1080)));
-        Assert.Equal(new ScreenArea(0, 101, 51, 300, 200, false), ScreenRecorder.WindowArea((101, 51, 402, 252), (0, 0, 1920, 1080)));
-        Assert.Null(ScreenRecorder.WindowArea((2000, 0, 2400, 300), (0, 0, 1920, 1080)));
-        var win = string.Join(' ', ScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", true, null, null,
+        Assert.Equal(new ScreenArea(0, 0, 0, 800, 600, false), WindowsScreenRecorder.WindowArea((-7, -3, 801, 601), (0, 0, 1920, 1080)));
+        Assert.Equal(new ScreenArea(0, 101, 51, 300, 200, false), WindowsScreenRecorder.WindowArea((101, 51, 402, 252), (0, 0, 1920, 1080)));
+        Assert.Null(WindowsScreenRecorder.WindowArea((2000, 0, 2400, 300), (0, 0, 1920, 1080)));
+        var win = string.Join(' ', WindowsScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", true, null, null,
             Area: new ScreenArea(0, 101, 51, 300, 200, false), Window: new CaptureWindow(42, "Bloco de Notas", "notepad")), 300));
         Assert.Contains("-offset_x 101 -offset_y 51 -video_size 300x200 -i desktop", win);
         Assert.DoesNotContain("title=", win);
 
-        var camOnly = string.Join(' ', ScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", false, "Cam", null), 1920));
+        var camOnly = string.Join(' ', WindowsScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", false, "Cam", null), 1920));
         Assert.DoesNotContain("gdigrab", camOnly);
         Assert.Contains("[0:v]scale=trunc", camOnly);
-        Assert.Throws<InvalidOperationException>(() => ScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", false, null, "Mic"), 1920));
+        Assert.Throws<InvalidOperationException>(() => WindowsScreenRecorder.BuildArguments(new ScreenRecordingOptions("o.mp4", false, null, "Mic"), 1920));
     }
 
     // ---------------------------------------------------------------- pacotes

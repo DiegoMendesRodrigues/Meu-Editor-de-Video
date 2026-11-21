@@ -59,6 +59,9 @@ public interface IScreenRecorder
 {
     bool IsAvailable { get; }
 
+    /// <summary>Por que a tela não pode ser gravada neste sistema (ex.: sessão Wayland); nulo = pode. Webcam e microfone não dependem disso.</summary>
+    string? ScreenCaptureUnavailableReason => null;
+
     Task<CaptureDevices> ListDevicesAsync(CancellationToken ct = default);
 
     /// <summary>Monitores conectados (o principal primeiro).</summary>
