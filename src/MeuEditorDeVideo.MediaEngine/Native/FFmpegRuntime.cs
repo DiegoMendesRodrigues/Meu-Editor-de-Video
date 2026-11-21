@@ -9,8 +9,8 @@ namespace MeuEditorDeVideo.MediaEngine.Native;
 /// </summary>
 public static unsafe class FFmpegRuntime
 {
-    /// <summary>DLL usada para validar a pasta (versão principal do avcodec que o binding espera).</summary>
-    private const string MarkerDll = "avcodec-63.dll";
+    /// <summary>Biblioteca usada para validar a pasta (versão principal do avcodec que o binding espera), conforme o SO.</summary>
+    private static readonly string MarkerDll = FFmpegPlatform.MarkerLibrary(FFmpegPlatform.Current);
 
     private static readonly Lock Gate = new();
     private static bool _initialized;
@@ -18,6 +18,14 @@ public static unsafe class FFmpegRuntime
     public static string? Directory { get; private set; }
 
     public static string? Version { get; private set; }
+
+    /// <summary>Caminho do executável <c>ffmpeg</c> (<c>ffmpeg.exe</c> no Windows) ou nulo se não existir. Inicializa o runtime.</summary>
+    public static string? CliPath()
+    {
+        try { EnsureInitialized(); }
+        catch (Exception) { return null; }
+        return FFmpegPlatform.FindCli(Directory, FFmpegPlatform.Current);
+    }
 
     public static void EnsureInitialized()
     {
@@ -54,12 +62,20 @@ public static unsafe class FFmpegRuntime
 
         var local = Path.Combine(AppContext.BaseDirectory, "ffmpeg");
         if (Valid(local)) return local;
+        // Pacote Linux/macOS: bibliotecas em ffmpeg/lib (ou bin) ao lado do executável.
+        foreach (var sub in FFmpegPlatform.LibrarySubfolders(FFmpegPlatform.Current))
+            if (Valid(Path.Combine(local, sub))) return Path.Combine(local, sub);
 
         // Desenvolvimento: só a pasta deps do repositório (a que tem a solução). Sem essa exigência, um programa instalado
         // aceitaria DLLs plantadas em pastas acima dele que qualquer usuário pode criar (ex.: C:\deps\ffmpeg\bin).
         var repository = RepositoryRoot();
-        var candidate = repository is null ? null : Path.Combine(repository, "deps", "ffmpeg", "bin");
-        return Valid(candidate) ? candidate : null;
+        if (repository is null) return null;
+        foreach (var sub in FFmpegPlatform.LibrarySubfolders(FFmpegPlatform.Current))
+        {
+            var candidate = Path.Combine(repository, "deps", "ffmpeg", sub);
+            if (Valid(candidate)) return candidate;
+        }
+        return null;
     }
 
     /// <summary>Raiz do repositório (pasta com MeuEditorDeVideo.sln) acima do executável, ou nulo no programa instalado.</summary>

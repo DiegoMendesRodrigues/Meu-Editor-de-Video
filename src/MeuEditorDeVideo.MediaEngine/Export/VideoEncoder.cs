@@ -200,6 +200,15 @@ internal sealed unsafe class VideoEncoder : IDisposable
                 Set("preset", "medium");
                 if (cq) c->global_quality = Math.Max(1, s.Quality);
                 break;
+            case "h264_videotoolbox" or "hevc_videotoolbox":
+                Set("allow_sw", "0"); // só hardware: se não houver, o RenderEngine cai para o próximo codificador
+                if (cq)
+                {
+                    // q:v do VideoToolbox vai de 1 a 100 (maior = melhor), via global_quality em lambda.
+                    c->flags |= ffmpeg.AV_CODEC_FLAG_QSCALE;
+                    c->global_quality = ffmpeg.FF_QP2LAMBDA * Math.Clamp(100 - s.Quality * 2, 1, 100);
+                }
+                break;
             case "h264_mf" or "hevc_mf" or "av1_mf":
                 Set("rate_control", cq ? "quality" : s.RateControl == RateControl.Cbr ? "cbr" : "u_vbr");
                 if (cq) Set("quality", (100 - s.Quality * 2).ToString(CultureInfo.InvariantCulture));

@@ -16,10 +16,7 @@ public sealed partial class ScreenRecorder : IScreenRecorder
 {
     private static string? Executable()
     {
-        try { FFmpegRuntime.EnsureInitialized(); }
-        catch (Exception) { return null; }
-        var exe = FFmpegRuntime.Directory is { } dir ? Path.Combine(dir, "ffmpeg.exe") : null;
-        return exe is not null && File.Exists(exe) ? exe : null;
+        return FFmpegRuntime.CliPath();
     }
 
     public bool IsAvailable => Executable() is not null;

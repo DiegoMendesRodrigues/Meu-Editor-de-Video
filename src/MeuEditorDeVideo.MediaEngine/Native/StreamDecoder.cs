@@ -52,23 +52,32 @@ internal unsafe class StreamDecoder : IDisposable
     public bool UsesHardware { get; private set; }
 
     /// <summary>
-    /// Associa um dispositivo D3D11VA se o decodificador suportar. O formato de hardware é escolhido pelo
-    /// get_format padrão do FFmpeg; quadros na GPU são copiados para a memória em <see cref="ReadFrame"/>.
+    /// Associa o primeiro dispositivo de hardware do SO (D3D11VA; VAAPI/CUDA; VideoToolbox) que o decodificador suportar.
+    /// O formato de hardware (D3D11, VAAPI, CUDA, VIDEOTOOLBOX) é escolhido pelo get_format padrão do FFmpeg;
+    /// quadros na GPU são copiados para a memória em <see cref="ReadFrame"/>.
     /// </summary>
     private bool TryEnableHardware(AVCodec* decoder)
+    {
+        foreach (var type in FFmpegPlatform.HardwareDeviceCandidates(FFmpegPlatform.Current))
+        {
+            if (!DecoderSupports(decoder, type)) continue;
+            AVBufferRef* device = null;
+            if (ffmpeg.av_hwdevice_ctx_create(&device, type, null, null, 0) < 0) continue;
+            _codec->hw_device_ctx = ffmpeg.av_buffer_ref(device);
+            ffmpeg.av_buffer_unref(&device);
+            return true;
+        }
+        return false;
+    }
+
+    private static bool DecoderSupports(AVCodec* decoder, AVHWDeviceType type)
     {
         for (var i = 0; ; i++)
         {
             var config = ffmpeg.avcodec_get_hw_config(decoder, i);
             if (config == null) return false;
-            if ((config->methods & 0x01) == 0 // AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX
-                || config->device_type != AVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA) continue;
-
-            AVBufferRef* device = null;
-            if (ffmpeg.av_hwdevice_ctx_create(&device, AVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA, null, null, 0) < 0) return false;
-            _codec->hw_device_ctx = ffmpeg.av_buffer_ref(device);
-            ffmpeg.av_buffer_unref(&device);
-            return true;
+            if ((config->methods & 0x01) != 0 // AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX
+                && config->device_type == type) return true;
         }
     }
 
