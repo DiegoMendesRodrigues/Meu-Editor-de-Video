@@ -429,7 +429,7 @@ Arquivos: `src/MeuEditorDeVideo.ImageEngine/`. Processamento de quadros na CPU. 
 - `Effects/CubeLut.cs` (LUT), `Effects/ToneCurve.cs` (curvas de tons), `Effects/EdgeRefiner.cs` (refino de bordas: contração, suavização e descontaminação de cor).
 - `Composition/MotionAnalyzer.cs`: rastreamento de uma região com OpenCvSharp (CSRT ou correspondência de modelo) e estabilização (fluxo óptico).
 - `Composition/MaskRenderer.cs`, `Composition/ShapeRasterizer.cs`: máscaras e formas vetoriais.
-- `Text/TextRasterizer.cs`: rasterização de texto com `FormattedText` e `DrawingVisual` do WPF (`RenderTargetBitmap`). Sem interop direto com DirectWrite.
+- `Text/TextRasterizer.cs` e `Text/TextLayout.cs`: rasterização de texto com SkiaSharp e HarfBuzz, em qualquer thread e nos três sistemas. `TextLayout` faz a quebra por palavra (e por caractere quando a palavra não cabe), a substituição de fonte por caractere (emoji, outros alfabetos) e o itálico sintético; `TextRasterizer` desenha caixa, barra de destaque, contorno, preenchimento (com negrito sintético) e sombra. `Text/FontCatalog.cs` lista as fontes do sistema (gerenciador de fontes do Skia) e as da pasta do usuário. `Composition/ShapeRasterizer.cs` desenha as formas com `SKPathBuilder`. `RasterReferenceTests` compara o resultado com imagens geradas pela antiga implementação WPF (`tests/MeuEditorDeVideo.UnitTests/Text/Referencias`).
 - `Text/FontCatalog.cs`: fontes do sistema e fontes do usuário (`%APPDATA%\MeuEditorDeVideo\fonts`, definidas pela `App`).
 
 ### AudioEngine

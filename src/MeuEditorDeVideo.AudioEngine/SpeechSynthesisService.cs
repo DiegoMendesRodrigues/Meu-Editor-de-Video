@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using MeuEditorDeVideo.Core.Media;
 
 namespace MeuEditorDeVideo.AudioEngine;
@@ -6,6 +7,7 @@ namespace MeuEditorDeVideo.AudioEngine;
 /// <summary>
 /// Texto para fala com as vozes instaladas no Windows (SAPI 5, COM), 100% local. Gera um WAV 48 kHz 16 bits mono.
 /// O COM do SAPI é usado por ligação tardia (sem pacote extra) numa thread STA dedicada.
+/// No Linux e no macOS ainda não há implementação: <see cref="IsAvailable"/> é falso.
 /// </summary>
 public sealed class SpeechSynthesisService : ISpeechSynthesisService
 {
@@ -13,11 +15,13 @@ public sealed class SpeechSynthesisService : ISpeechSynthesisService
     private const int Format48kMono = 38;
     private const int CreateForWrite = 3;
 
-    public bool IsAvailable => Type.GetTypeFromProgID("SAPI.SpVoice") is not null;
+    public bool IsAvailable => OperatingSystem.IsWindows() && Type.GetTypeFromProgID("SAPI.SpVoice") is not null;
 
-    public IReadOnlyList<string> Voices()
+    public IReadOnlyList<string> Voices() => OperatingSystem.IsWindows() && IsAvailable ? WindowsVoices() : [];
+
+    [SupportedOSPlatform("windows")]
+    private static IReadOnlyList<string> WindowsVoices()
     {
-        if (!IsAvailable) return [];
         return RunSta(() =>
         {
             dynamic voice = Create("SAPI.SpVoice");
@@ -35,7 +39,13 @@ public sealed class SpeechSynthesisService : ISpeechSynthesisService
     public Task SynthesizeAsync(string text, string? voiceName, int rate, string outputPath, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(text)) throw new ArgumentException("Digite o texto a ser falado.", nameof(text));
-        if (!IsAvailable) throw new InvalidOperationException("O Windows não tem vozes de texto para fala instaladas.");
+        if (!OperatingSystem.IsWindows() || !IsAvailable) throw new InvalidOperationException("O Windows não tem vozes de texto para fala instaladas.");
+        return WindowsSynthesizeAsync(text, voiceName, rate, outputPath, cancellationToken);
+    }
+
+    [SupportedOSPlatform("windows")]
+    private static Task WindowsSynthesizeAsync(string text, string? voiceName, int rate, string outputPath, CancellationToken cancellationToken)
+    {
         return Task.Run(() => RunSta(() =>
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -78,9 +88,11 @@ public sealed class SpeechSynthesisService : ISpeechSynthesisService
         }), cancellationToken);
     }
 
+    [SupportedOSPlatform("windows")]
     private static object Create(string progId) =>
         Activator.CreateInstance(Type.GetTypeFromProgID(progId) ?? throw new InvalidOperationException("SAPI indisponível."))!;
 
+    [SupportedOSPlatform("windows")]
     private static T RunSta<T>(Func<T> action)
     {
         T result = default!;

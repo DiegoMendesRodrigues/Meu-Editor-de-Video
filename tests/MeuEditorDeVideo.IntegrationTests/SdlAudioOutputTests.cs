@@ -13,9 +13,10 @@ public sealed class SdlAudioOutputTests
         {
             output = new SdlAudioOutput();
         }
-        catch (Exception ex) when (ex is InvalidOperationException or DllNotFoundException)
+        catch (Exception ex) when (ex is InvalidOperationException or DllNotFoundException
+                                   && Environment.GetEnvironmentVariable("MED_EXIGIR_AUDIO") != "1")
         {
-            return; // sem dispositivo de áudio neste ambiente
+            return; // sem dispositivo de áudio neste ambiente (MED_EXIGIR_AUDIO=1 transforma isso em falha)
         }
 
         using (output)

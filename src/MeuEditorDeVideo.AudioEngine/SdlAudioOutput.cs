@@ -20,6 +20,7 @@ public sealed unsafe class SdlAudioOutput : IAudioOutput
     private readonly PlayedPositionClock _clock = new(AudioFormat.SampleRate);
     private readonly GCHandle _self;
     private volatile AudioRingBuffer? _buffer;
+    private readonly Lock _feedLock = new();
     private float[] _scratch = new float[4096 * AudioFormat.Channels];
     private long _submittedFrames;
     private volatile float _volume = 1;
@@ -125,7 +126,7 @@ public sealed unsafe class SdlAudioOutput : IAudioOutput
     {
         if (frames <= 0) return;
         var samples = frames * AudioFormat.Channels;
-        lock (_scratch)
+        lock (_feedLock)
         {
             if (_scratch.Length < samples) _scratch = new float[samples];
             var span = _scratch.AsSpan(0, samples);
