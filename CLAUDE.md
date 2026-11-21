@@ -30,6 +30,7 @@ pwsh scripts/offline-check.ps1                    # runtime check that the app o
 - AI tests (`ModelFact`/`ModeloFact`, `WhisperFact`) are skipped when their model files are absent (`%MED_MODELS_DIR%`, `deps\ai-models`, installed models).
 - IntegrationTests run sequentially and use `Support/AppContainer.cs`, which mirrors the App's DI composition without a window.
 - Package versions are central in `Directory.Packages.props`. App version is the single `<Version>` in `Directory.Build.props`.
+- Cross-platform port (Linux/macOS) in progress. Packages with per-OS native assets are conditioned on `MedPlataforma` (`windows`/`linux`/`macos`, from `-r <rid>` or the build host; `Directory.Build.props`). Check another OS's restore with `-p:MedPlataforma=linux` in a scratch copy, not in the repo's `obj/`. Projects without Windows APIs target `net10.0`; keep them that way.
 
 ## Architecture
 

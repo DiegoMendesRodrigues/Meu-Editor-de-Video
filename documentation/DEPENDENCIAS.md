@@ -22,6 +22,21 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 | Microsoft.ML.OnnxRuntimeGenAI.DirectML (+ Microsoft.ML.OnnxRuntimeGenAI.Managed, Microsoft.Extensions.AI.Abstractions) | 0.14.1 | MIT | Modelo de linguagem local do assistente virtual (`GenAiAnswerGenerator`): tokenização, geração token a token e cache de atenção, sobre o mesmo `onnxruntime.dll` (exige 1.23 ou mais nova). Inclui `onnxruntime-genai.dll` nativa |
 | Whisper.net + Whisper.net.Runtime | 1.9.1 | MIT | Reconhecimento de fala local com whisper.cpp (AIEngine, F10): legendas automáticas. Inclui as bibliotecas nativas do whisper.cpp (CPU) |
 
+### Pacotes por sistema (porte para Linux e macOS)
+
+Os pacotes com bibliotecas nativas diferentes por sistema são escolhidos pela propriedade `MedPlataforma` de `Directory.Build.props`. Ela vale `windows`, `linux` ou `macos`: vem do `RuntimeIdentifier` passado no build (`-r linux-x64`) ou, sem ele, do sistema em que o build roda. Para conferir a restauração de outro sistema, use `-p:MedPlataforma=linux` ou `-p:MedPlataforma=macos`.
+
+| Pacote | Versão | Licença | Sistema | Uso |
+|---|---|---|---|---|
+| Microsoft.ML.OnnxRuntime.DirectML / Microsoft.ML.OnnxRuntimeGenAI.DirectML | 1.24.4 / 0.14.1 | MIT | windows | Ver acima |
+| Microsoft.ML.OnnxRuntime (+ Managed) | 1.24.4 | MIT | linux, macos | Mesmo ONNX Runtime, sem DirectML (CPU; CoreML no macOS). Nativos só para `linux-x64`, `linux-arm64` e `osx-arm64`: **não há `osx-x64`** nesta versão |
+| Microsoft.ML.OnnxRuntimeGenAI (+ Managed) | 0.14.1 | MIT | linux, macos | Assistente virtual na CPU. Mesmos sistemas do ONNX Runtime (sem `osx-x64`) |
+| OpenCvSharp4.runtime.win | 4.13.0.20260627 | Apache-2.0 | windows | Ver acima |
+| OpenCvSharp4.official.runtime.linux-x64 | 4.13.0.20260627 | Apache-2.0 | linux | `libOpenCvSharpExtern.so` para Linux x64 |
+| SkiaSharp.NativeAssets.Linux | 4.148.0 | MIT | linux | `libSkiaSharp.so` e `libHarfBuzzSharp.so`. No Windows e no macOS os nativos já vêm pelo Svg.Skia |
+
+Lacunas conhecidas: o OpenCvSharp não publica runtime para macOS (o `OpenCvSharpExtern` precisa ser compilado ou os usos do OpenCV substituídos), e a versão atual do ONNX Runtime não tem Macs Intel (`osx-x64`).
+
 ## Pacotes NuGet (somente testes)
 
 | Pacote | Versão | Licença |

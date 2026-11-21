@@ -29,7 +29,7 @@ Características fundamentais:
 | Visão computacional | OpenCvSharp4 4.13 |
 | Logs | Serilog (arquivo rotativo local) |
 | Licença | GPL-3.0-or-later (`LICENSE.md`; `Directory.Build.props`, `Copyright`) |
-| Plataforma alvo | Windows 11 x64 (`RuntimeIdentifier win-x64` no App) |
+| Plataforma alvo | Windows 11 x64 (`RuntimeIdentifier win-x64` no App). Porte em andamento para Linux (Debian/Ubuntu) e macOS: pacotes nativos escolhidos pela propriedade `MedPlataforma` (`Directory.Build.props`; ver `DEPENDENCIAS.md`) |
 | Processamento | 100% local. O único código com rede é o downloader de modelos e o verificador de atualizações (ver [Privacidade e segurança](#privacidade-e-segurança)) |
 
 Versão atual: `1.1.0` (`<Version>` em `Directory.Build.props`).

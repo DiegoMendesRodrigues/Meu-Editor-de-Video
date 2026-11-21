@@ -11,6 +11,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
+  <ItemGroup Condition="'$(MedPlataforma)' == 'linux'">
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MeuEditorDeVideo.Core\MeuEditorDeVideo.Core.csproj" />
   </ItemGroup>

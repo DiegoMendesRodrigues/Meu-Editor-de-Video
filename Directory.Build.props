@@ -4,7 +4,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <PlatformTarget>x64</PlatformTarget>
     <NeutralLanguage>pt-BR</NeutralLanguage>
     <SatelliteResourceLanguages>pt-BR</SatelliteResourceLanguages>
     <Company>Meu Editor de Vídeo</Company>
@@ -14,5 +13,16 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <!-- Tema Fluent do WPF ainda marcado como experimental -->
     <NoWarn>$(NoWarn);WPF0001</NoWarn>
+  </PropertyGroup>
+  <!-- Sistema-alvo (windows, linux ou macos), usado para escolher pacotes com bibliotecas nativas diferentes por sistema.
+       Vem do RuntimeIdentifier passado no build (dotnet publish -r linux-x64); sem ele, é o sistema em que o build roda.
+       Também pode ser forçado com -p:MedPlataforma=linux (por exemplo, para conferir a restauração dos pacotes). -->
+  <PropertyGroup Condition="'$(MedPlataforma)' == ''">
+    <MedPlataforma Condition="$(RuntimeIdentifier.StartsWith('win'))">windows</MedPlataforma>
+    <MedPlataforma Condition="$(RuntimeIdentifier.StartsWith('linux'))">linux</MedPlataforma>
+    <MedPlataforma Condition="$(RuntimeIdentifier.StartsWith('osx'))">macos</MedPlataforma>
+    <MedPlataforma Condition="'$(MedPlataforma)' == '' and $([MSBuild]::IsOSPlatform('Windows'))">windows</MedPlataforma>
+    <MedPlataforma Condition="'$(MedPlataforma)' == '' and $([MSBuild]::IsOSPlatform('Linux'))">linux</MedPlataforma>
+    <MedPlataforma Condition="'$(MedPlataforma)' == '' and $([MSBuild]::IsOSPlatform('OSX'))">macos</MedPlataforma>
   </PropertyGroup>
 </Project>
