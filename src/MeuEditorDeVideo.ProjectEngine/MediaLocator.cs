@@ -11,7 +11,7 @@ namespace MeuEditorDeVideo.ProjectEngine;
 
 /// <summary>
 /// Resolve onde estão as mídias do projeto (RF016, RF017, RF019).
-/// Mídias empacotadas são extraídas para %LOCALAPPDATA%\MeuEditorDeVideo\cache\projects\{id}\media,
+/// Mídias empacotadas são extraídas para LocalData/cache/projects/{id}/media,
 /// com verificação de SHA-256, porque decodificar vídeo diretamente de dentro do ZIP seria inviável.
 /// </summary>
 public sealed class MediaLocator(IAppPaths paths, ILogger<MediaLocator> logger) : IMediaLocator

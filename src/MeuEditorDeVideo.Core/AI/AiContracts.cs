@@ -106,7 +106,7 @@ public sealed record ModelManifest
 /// <summary>Arquivo adicional de um modelo instalado (nome na raiz do pacote, SHA-256 em hex e tamanho).</summary>
 public sealed record ModelFileInfo(string File, string Sha256, long SizeBytes);
 
-/// <summary>Modelo instalado em <c>%LOCALAPPDATA%\MeuEditorDeVideo\ai-models\&lt;id&gt;</c>.</summary>
+/// <summary>Modelo instalado em <c>LocalData/ai-models/&lt;id&gt;</c>.</summary>
 /// <param name="BuiltIn">Modelo que vem com o aplicativo (pasta <c>ai-models</c> ao lado do executável): sempre disponível e não pode ser removido.</param>
 public sealed record InstalledModel(ModelManifest Manifest, string Directory, bool BuiltIn = false)
 {

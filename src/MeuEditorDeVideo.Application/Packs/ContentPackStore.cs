@@ -9,7 +9,7 @@ using MeuEditorDeVideo.Domain.Time;
 namespace MeuEditorDeVideo.Application.Packs;
 
 /// <summary>
-/// Pacotes de conteúdo em <c>%LOCALAPPDATA%\MeuEditorDeVideo\Pacotes\&lt;id&gt;</c>. A instalação só extrai as pastas conhecidas,
+/// Pacotes de conteúdo em <c>LocalData/Pacotes/&lt;id&gt;</c>. A instalação só extrai as pastas conhecidas,
 /// com extensões permitidas, nomes sem caminhos e limite de tamanho; nada é executado.
 /// </summary>
 public sealed class ContentPackStore(IAppPaths paths, IDomainJson json) : IContentPackStore

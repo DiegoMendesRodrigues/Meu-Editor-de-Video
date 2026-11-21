@@ -3,10 +3,16 @@ namespace MeuEditorDeVideo.Core.Abstractions;
 /// <summary>Diretórios usados pelo aplicativo. Todos ficam no computador do usuário (RNF003).</summary>
 public interface IAppPaths
 {
-    /// <summary>%APPDATA%\MeuEditorDeVideo — configurações e modelos de exportação do usuário.</summary>
+    /// <summary>
+    /// Configurações e modelos de exportação do usuário: %APPDATA%\MeuEditorDeVideo no Windows,
+    /// ~/.config/MeuEditorDeVideo no Linux e ~/Library/Application Support/MeuEditorDeVideo no macOS.
+    /// </summary>
     string RoamingData { get; }
 
-    /// <summary>%LOCALAPPDATA%\MeuEditorDeVideo — cache, logs, autosave, modelos de IA.</summary>
+    /// <summary>
+    /// Cache, logs, autosave e modelos de IA: %LOCALAPPDATA%\MeuEditorDeVideo no Windows,
+    /// ~/.local/share/MeuEditorDeVideo no Linux e ~/Library/Application Support/MeuEditorDeVideo no macOS.
+    /// </summary>
     string LocalData { get; }
 
     string Logs { get; }

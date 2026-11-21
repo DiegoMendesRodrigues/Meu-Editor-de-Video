@@ -1,8 +1,9 @@
 ﻿namespace MeuEditorDeVideo.Core.Abstractions;
 
 /// <summary>
-/// Preferências do usuário guardadas no registro do Windows (HKCU\Software\Meu Editor de Vídeo): nome, idioma, tema e
-/// verificação de novas versões. Valor nulo = não armazenado.
+/// Preferências do usuário: nome, idioma, tema e verificação de novas versões. Ficam no registro do Windows
+/// (HKCU\Software\Meu Editor de Vídeo) e, no Linux e no macOS, em preferences.json na pasta de configurações.
+/// Valor nulo = não armazenado.
 /// </summary>
 public sealed record UserPreferences(string? Name, string? Language, string? ThemeColor, bool? CheckForNewVersions, DateTimeOffset? LastCheck)
 {

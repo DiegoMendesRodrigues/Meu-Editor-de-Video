@@ -79,7 +79,7 @@ public interface IRenderQueueService
 
 /// <summary>
 /// Fila de renderização em segundo plano (§7): um trabalho por vez, persistida em
-/// %LOCALAPPDATA%\MeuEditorDeVideo\render-queue (lista, foto do projeto e trechos já codificados por trabalho).
+/// LocalData/render-queue (lista, foto do projeto e trechos já codificados por trabalho).
 /// </summary>
 public sealed class RenderQueueService : IRenderQueueService, IDisposable
 {

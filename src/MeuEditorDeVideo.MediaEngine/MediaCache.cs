@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace MeuEditorDeVideo.MediaEngine;
 
 /// <summary>
-/// Cache em disco de miniaturas e formas de onda em %LOCALAPPDATA%\MeuEditorDeVideo\cache\media\{chave}.
+/// Cache em disco de miniaturas e formas de onda em LocalData/cache/media/{chave}.
 /// A chave depende do conteúdo (impressão digital) e não do caminho, então sobrevive a relocalizações.
 /// Arquivos inválidos são ignorados e recriados.
 /// </summary>
