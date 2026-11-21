@@ -7,6 +7,7 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.14" />
     <PackageVersion Include="FFmpeg.AutoGen" Version="9.0.1.1" />
     <PackageVersion Include="NAudio.Wasapi" Version="2.2.1" />
+    <PackageVersion Include="ppy.SDL3-CS" Version="2026.1002.1" />
     <PackageVersion Include="OpenCvSharp4" Version="4.13.0.20260627" />
     <!-- Bibliotecas nativas por sistema (MedPlataforma, Directory.Build.props). O OpenCvSharp não publica runtime
          para macOS: no macOS o OpenCvSharpExtern precisa ser compilado (ver documentation/DEPENDENCIAS.md). -->

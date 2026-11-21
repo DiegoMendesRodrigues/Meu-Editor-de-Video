@@ -1,9 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- Fase 1 define MedPlataforma (windows/linux/macos); sem ela, assume o SO do build. -->
+    <MedPlataforma Condition="'$(MedPlataforma)' == '' And $([MSBuild]::IsOSPlatform('Windows'))">windows</MedPlataforma>
+    <MedPlataforma Condition="'$(MedPlataforma)' == '' And $([MSBuild]::IsOSPlatform('Linux'))">linux</MedPlataforma>
+    <MedPlataforma Condition="'$(MedPlataforma)' == '' And $([MSBuild]::IsOSPlatform('OSX'))">macos</MedPlataforma>
+    <DefineConstants Condition="'$(MedPlataforma)' == 'windows'">$(DefineConstants);MED_WASAPI</DefineConstants>
+    <!-- TFM condicional: TimelineEngine (referenciado) ainda é net10.0-windows; quando passar a net10.0, usar net10.0 sempre. -->
+    <TargetFramework Condition="'$(MedPlataforma)' == 'windows'">net10.0-windows</TargetFramework>
+    <TargetFramework Condition="'$(MedPlataforma)' != 'windows'">net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NAudio.Wasapi" />
+    <PackageReference Include="NAudio.Wasapi" Condition="'$(MedPlataforma)' == 'windows'" />
+    <PackageReference Include="ppy.SDL3-CS" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>

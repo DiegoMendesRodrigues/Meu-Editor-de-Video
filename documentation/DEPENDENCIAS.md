@@ -13,7 +13,8 @@ Versões de pacotes NuGet: `Directory.Packages.props`. Binários nativos: `scrip
 | Microsoft.Extensions.Hosting | 10.0.14 | MIT | Injeção de dependências, ciclo de vida |
 | Microsoft.Extensions.DependencyInjection.Abstractions / Logging.Abstractions | 10.0.14 | MIT | Contratos de DI e log nas bibliotecas |
 | FFmpeg.AutoGen | 9.0.1.1 | LGPL-3.0 | Binding .NET das bibliotecas do FFmpeg (MediaEngine) |
-| NAudio.Wasapi (+ NAudio.Core) | 2.2.1 | MIT | Saída de áudio WASAPI da pré-visualização (AudioEngine) |
+| NAudio.Wasapi (+ NAudio.Core) | 2.2.1 | MIT | Saída de áudio WASAPI da pré-visualização (AudioEngine); referenciado só quando `MedPlataforma` é `windows` |
+| ppy.SDL3-CS | 2026.1002.1 | MIT (binding) + zlib (SDL3 nativo) | Saída de áudio SDL3 multiplataforma (AudioEngine): Linux, macOS e, opcionalmente, Windows (`MED_AUDIO_BACKEND=sdl`). Traz o SDL3 nativo para win-x64, linux-x64 e osx-arm64 |
 | Serilog.Extensions.Hosting | 10.0.0 | Apache-2.0 | Integração de logs |
 | Serilog.Sinks.File | 7.0.0 | Apache-2.0 | Logs técnicos locais rotativos |
 | OpenCvSharp4 + OpenCvSharp4.runtime.win | 4.13.0.20260627 | Apache-2.0 (OpenCV: Apache-2.0) | Visão computacional (ImageEngine, F9): rastreamento de movimento (CSRT/correspondência de modelo), estabilização (fluxo óptico), máscaras e "Refinar bordas". Inclui `OpenCvSharpExtern.dll` nativa |
