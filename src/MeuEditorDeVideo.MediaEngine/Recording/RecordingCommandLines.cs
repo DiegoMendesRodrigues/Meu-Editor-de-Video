@@ -165,10 +165,16 @@ public static partial class RecordingCommandLines
         }
         List<string>? cam = null;
         if (o.Webcam is not null)
-            cam = ["-thread_queue_size", "1024", "-f", "avfoundation", "-i", $"{cameraIndex ?? throw new InvalidOperationException($"A câmera \"{o.Webcam}\" não foi encontrada.")}:none"];
+        {
+            if (cameraIndex is not { } c) throw new InvalidOperationException($"A câmera \"{o.Webcam}\" não foi encontrada.");
+            cam = ["-thread_queue_size", "1024", "-f", "avfoundation", "-i", $"{c}:none"];
+        }
         List<string>? mic = null;
         if (o.Microphone is not null)
-            mic = ["-thread_queue_size", "1024", "-f", "avfoundation", "-i", $":{microphoneIndex ?? throw new InvalidOperationException($"O microfone \"{o.Microphone}\" não foi encontrado.")}"];
+        {
+            if (microphoneIndex is not { } m) throw new InvalidOperationException($"O microfone \"{o.Microphone}\" não foi encontrado.");
+            mic = ["-thread_queue_size", "1024", "-f", "avfoundation", "-i", $":{m}"];
+        }
         return Compose(o, screenWidth, screen, cam, mic);
     }
 

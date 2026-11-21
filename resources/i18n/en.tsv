@@ -81,7 +81,6 @@
 092b9ccf	Maximize
 09456467	There are no subtitles on the timeline.
 094ce26d	Hard black and white, with deep shadows.
-09b0cfc0	Compatible models will use the GPU (DirectML), with automatic fallback to the CPU.
 09b3be7d	System information…
 09c7eebb	Makeup gain
 09de0c0a	Export completed
@@ -736,7 +735,6 @@
 5ba6351b	◇ Shape key
 5c08e459	Auto reframe
 5c59554f	Audio bitrate must be between 32 and 640 kbps.
-5c65e5d0	yes (DirectML), with fallback to CPU
 5c66b8e9	Measured: {0}
 5c8c4760	New track
 5cc33dc3	Vertical video
@@ -831,7 +829,6 @@
 663c4a55	Insert the recording into the timeline, at the playhead
 66846785	Installed
 66ca46a8	_Text to speech…
-66f394a3	Yes (DirectML)
 67075420	GPU encoding
 6711c37f	Changes the project size to that of the cropped area (in original media pixels). The export comes out with these dimensions.
 672ff2e8	End
@@ -1561,7 +1558,6 @@ c463002e	The image enhancement model is not installed.
 c466c139	With no clip right before this one, the transition is an entrance: it reveals the clip over the tracks below.
 c46d4cbb	The file is in use by another program:\n{0}
 c4930de6	Apply this style to all subtitles on the track
-c4a917af	GPU (DirectML) or CPU
 c4af3181	{0}\nFile not found: {1}
 c4d27f4e	No frame could be decoded: the file appears to be damaged.
 c4de21c5	Eye color
@@ -1614,7 +1610,6 @@ ca4a03a9	Could not list the devices: {0}
 ca93daeb	Render the export queue in the background
 caa82c0e	Noise reduction strength
 cac8788d	Render queue
-cad1d646	ffmpeg.exe was not found in the app folder.
 caf0af32	1080 × 1920 · 30 FPS · short videos for phones
 cb181a77	Place each clip on a different track so they appear together.
 cb3a8443	No sequence found: at least 2 images numbered in order are needed (e.g. frame_0001.png, frame_0002.png).
@@ -2112,7 +2107,6 @@ b8f41fc2	Stereo
 5e8780b2	Exposure
 23e05257	Exposure, brightness, contrast, saturation, temperature, tint, shadows and highlights.
 b72611cf	Bass frequency
-59031266	GPU (DirectML), falling back to the CPU
 0cb1e3b6	Rotate X
 0f845589	Rotate Y
 4ea5eb8d	Bass
@@ -2491,3 +2485,44 @@ e141e107	Quantum Pulse Night
 2003ea55	Technical support
 99d8155c	Visit our website
 d8faa83c	Visit Meu Editor de Vídeo on GitHub
+0182c6db	{0} or CPU
+947efc5e	{0}, falling back to the CPU
+31157b16	Yes ({0})
+b7944505	Compatible models will use the {0}, with automatic fallback to the CPU.
+2f96ed04	yes (DirectML on Windows, Core ML on macOS), with CPU fallback
+a502658d	{0} was not found in the application folder.
+1c86d1a1	This system runs the models on the CPU only.
+2a153ba8	Yes, but this system uses the CPU only
+3f9353b4	'{0}' depends on '{1}', which does not exist for {2}.
+c7b19f04	Screen recording does not work in a Wayland session. Sign in to an X11 session (choose "Xorg" on the login screen) to record the screen; the webcam and microphone remain available.
+2ac059b4	There is no graphical session (DISPLAY variable) to record the screen.
+02831ab4	This version of ffmpeg does not include the required capture (x11grab, pulse or v4l2).
+ca55db2c	No permission to use the camera. Add your user to the "video" group and sign in again.
+f1010a79	Could not determine the screen size (install xrandr or xdpyinfo).
+113cb8d4	Could not determine the screen size.
+78655743	No screen was found to record.
+5ff659e1	The camera "{0}" was not found.
+193c6af8	The microphone "{0}" was not found.
+7d6b7152	On macOS a single window cannot be recorded. Record the whole screen.
+6438cd9a	macOS did not allow the recording. In System Settings › Privacy & Security, allow Screen Recording, Camera and Microphone for this application and try again.
+dafb61ac	Camera
+670ca421	Install the espeak-ng package to use text-to-speech.
+806a4117	The macOS 'say' command was not found; text-to-speech is not available.
+3ecfb7a9	Text-to-speech is not available on this computer.
+23b11dab	Could not list the voices: {0}
+e7bc9614	The chosen voice is not installed: {0}
+696fe461	Invalid voice name: {0}
+5a8806e9	Text-to-speech produced no audio.
+ff9823f3	The text-to-speech program took too long and was stopped.
+13a5597e	Could not run text-to-speech: {0}
+390aeaee	The generated audio file is not a valid WAV.
+6f11ed86	Invalid WAV 'fmt' chunk.
+fb428ba2	The WAV 'data' chunk came before 'fmt'.
+7ee2f064	Only 16-bit PCM WAV is supported.
+701b2f70	The WAV has no audio data.
+ffd495bc	Invalid sample rate.
+941b4897	no details
+23896bc5	SDL3 did not open an audio device: {0}
+393abf95	SDL3 did not start audio: {0}
+bbebac15	Could not create the drawing surface.
+16956c08	Vendor {0}

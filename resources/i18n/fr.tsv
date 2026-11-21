@@ -81,7 +81,6 @@
 092b9ccf	Agrandir
 09456467	Il n'y a pas de sous-titres dans la timeline.
 094ce26d	Noir et blanc dur, avec des ombres profondes.
-09b0cfc0	Les modèles compatibles utiliseront le GPU (DirectML), avec repli automatique sur le processeur.
 09b3be7d	Informations système…
 09c7eebb	Gain de compensation
 09de0c0a	Exportation terminée
@@ -734,7 +733,6 @@
 5ba6351b	◇ Forme clé
 5c08e459	Recadrage automatique
 5c59554f	Le débit audio doit être compris entre 32 et 640 kbps.
-5c65e5d0	oui (DirectML), avec repli sur le processeur
 5c66b8e9	Mesuré : {0}
 5c8c4760	Nouvelle piste
 5cc33dc3	Vidéo verticale
@@ -829,7 +827,6 @@
 663c4a55	Insérer l'enregistrement dans la timeline, à la tête de lecture
 66846785	Installé
 66ca46a8	_Synthèse vocale…
-66f394a3	Oui (DirectML)
 67075420	Encodage GPU
 6711c37f	Change la taille du projet pour celle de la zone recadrée (en pixels du média d'origine). L'exportation sort avec ces dimensions.
 672ff2e8	Fin
@@ -1618,7 +1615,6 @@ ca4a03a9	Impossible de lister les périphériques : {0}
 ca93daeb	Effectuer le rendu de la file d'exportation en arrière-plan
 caa82c0e	Intensité de la réduction du bruit
 cac8788d	File de rendu
-cad1d646	ffmpeg.exe est introuvable dans le dossier de l'application.
 caf0af32	1080 × 1920 · 30 FPS · vidéos courtes pour mobile
 cb181a77	Placez chaque clip sur une piste différente pour qu'ils apparaissent ensemble.
 cb3a8443	Aucune séquence trouvée : il faut au moins 2 images numérotées dans l'ordre (ex. : image_0001.png, image_0002.png).
@@ -2114,7 +2110,6 @@ b8f41fc2	Stéréo
 5e8780b2	Exposition
 23e05257	Exposition, luminosité, contraste, saturation, température, teinte, ombres et hautes lumières.
 b72611cf	Fréquence des graves
-59031266	GPU (DirectML), avec repli sur le processeur
 0cb1e3b6	Rotation X
 0f845589	Rotation Y
 1251dfbe	Comme Windows
@@ -2492,3 +2487,44 @@ e141e107	Nuit à pulsation quantique
 2003ea55	Support technique
 99d8155c	Visitez notre site web
 d8faa83c	Visitez le GitHub de Meu Editor de Vídeo
+0182c6db	{0} ou processeur
+947efc5e	{0}, avec repli sur le processeur
+31157b16	Oui ({0})
+b7944505	Les modèles compatibles utiliseront le {0}, avec repli automatique sur le processeur.
+2f96ed04	oui (DirectML sous Windows, Core ML sous macOS), avec repli sur le processeur
+a502658d	{0} est introuvable dans le dossier de l'application.
+1c86d1a1	Ce système exécute les modèles uniquement sur le processeur.
+2a153ba8	Oui, mais ce système utilise uniquement le processeur
+3f9353b4	'{0}' dépend de '{1}', qui n'existe pas pour {2}.
+c7b19f04	L'enregistrement de l'écran ne fonctionne pas dans une session Wayland. Ouvrez une session X11 (choisissez « Xorg » sur l'écran de connexion) pour enregistrer l'écran ; la webcam et le microphone restent disponibles.
+2ac059b4	Aucune session graphique (variable DISPLAY) n'est disponible pour enregistrer l'écran.
+02831ab4	Cette version de ffmpeg n'inclut pas la capture nécessaire (x11grab, pulse ou v4l2).
+ca55db2c	Pas d'autorisation pour utiliser la caméra. Ajoutez votre utilisateur au groupe « video » et rouvrez la session.
+f1010a79	Impossible de déterminer la taille de l'écran (installez xrandr ou xdpyinfo).
+113cb8d4	Impossible de déterminer la taille de l'écran.
+78655743	Aucun écran à enregistrer n'a été trouvé.
+5ff659e1	La caméra « {0} » est introuvable.
+193c6af8	Le microphone « {0} » est introuvable.
+7d6b7152	Sous macOS, il n'est pas possible d'enregistrer une fenêtre seule. Enregistrez l'écran entier.
+6438cd9a	macOS n'a pas autorisé l'enregistrement. Dans Réglages Système › Confidentialité et sécurité, autorisez l'Enregistrement de l'écran, la Caméra et le Micro pour cette application, puis réessayez.
+dafb61ac	Caméra
+670ca421	Installez le paquet espeak-ng pour utiliser la synthèse vocale.
+806a4117	La commande 'say' de macOS est introuvable ; la synthèse vocale n'est pas disponible.
+3ecfb7a9	La synthèse vocale n'est pas disponible sur cet ordinateur.
+23b11dab	Impossible de lister les voix : {0}
+e7bc9614	La voix choisie n'est pas installée : {0}
+696fe461	Nom de voix non valide : {0}
+5a8806e9	La synthèse vocale n'a produit aucun son.
+ff9823f3	Le programme de synthèse vocale a pris trop de temps et a été interrompu.
+13a5597e	Impossible d'exécuter la synthèse vocale : {0}
+390aeaee	Le fichier audio généré n'est pas un WAV valide.
+6f11ed86	Bloc 'fmt' du WAV non valide.
+fb428ba2	Le bloc 'data' du WAV précède le bloc 'fmt'.
+7ee2f064	Seul le WAV PCM 16 bits est pris en charge.
+701b2f70	Le WAV ne contient aucune donnée audio.
+ffd495bc	Fréquence d'échantillonnage non valide.
+941b4897	aucun détail
+23896bc5	SDL3 n'a pas ouvert de périphérique audio : {0}
+393abf95	SDL3 n'a pas démarré l'audio : {0}
+bbebac15	Impossible de créer la surface de dessin.
+16956c08	Fabricant {0}

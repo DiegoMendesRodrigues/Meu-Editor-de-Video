@@ -81,7 +81,6 @@
 092b9ccf	Maximieren
 09456467	In der Zeitleiste gibt es keine Untertitel.
 094ce26d	Hartes Schwarzweiß mit tiefen Schatten.
-09b0cfc0	Kompatible Modelle nutzen die GPU (DirectML) mit automatischem Rückfall auf die CPU.
 09b3be7d	Systeminformationen…
 09c7eebb	Ausgleichsverstärkung
 09de0c0a	Export abgeschlossen
@@ -738,7 +737,6 @@
 5ba6351b	◇ Formschlüssel
 5c08e459	Automatisch neu ausrichten
 5c59554f	Die Audiobitrate muss zwischen 32 und 640 kbps liegen.
-5c65e5d0	ja (DirectML), mit Rückfall auf die CPU
 5c66b8e9	Gemessen: {0}
 5c8c4760	Neue Spur
 5cc33dc3	Vertikales Video
@@ -834,7 +832,6 @@
 663c4a55	Aufnahme an der Abspielposition in die Zeitleiste einfügen
 66846785	Installiert
 66ca46a8	_Text zu Sprache…
-66f394a3	Ja (DirectML)
 67075420	GPU-Kodierung
 6711c37f	Ändert die Projektgröße auf die des zugeschnittenen Bereichs (in Pixeln des Originalmediums). Der Export erfolgt mit diesen Abmessungen.
 672ff2e8	Ende
@@ -1574,7 +1571,6 @@ c463002e	Das Bildverbesserungsmodell ist nicht installiert.
 c466c139	Ohne direkt davor liegenden Clip ist der Übergang ein Einstieg: Er blendet den Clip über den Spuren darunter ein.
 c46d4cbb	Die Datei wird von einem anderen Programm verwendet:\n{0}
 c4930de6	Diesen Stil auf alle Untertitel der Spur anwenden
-c4a917af	GPU (DirectML) oder CPU
 c4af3181	{0}\nDatei nicht gefunden: {1}
 c4d27f4e	Kein Bild konnte dekodiert werden: Die Datei scheint beschädigt zu sein.
 c4de21c5	Augenfarbe
@@ -1629,7 +1625,6 @@ ca4a03a9	Die Geräte konnten nicht aufgelistet werden: {0}
 ca93daeb	Export-Warteschlange im Hintergrund rendern
 caa82c0e	Stärke der Rauschunterdrückung
 cac8788d	Render-Warteschlange
-cad1d646	ffmpeg.exe wurde im App-Ordner nicht gefunden.
 caf0af32	1080 × 1920 · 30 FPS · Kurzvideos fürs Handy
 cb181a77	Legen Sie jeden Clip auf eine eigene Spur, damit sie zusammen erscheinen.
 cb3a8443	Keine Sequenz gefunden: Mindestens 2 fortlaufend nummerierte Bilder sind nötig (z. B. bild_0001.png, bild_0002.png).
@@ -2128,7 +2123,6 @@ b8f41fc2	Stereo
 5e8780b2	Belichtung
 23e05257	Belichtung, Helligkeit, Kontrast, Sättigung, Temperatur, Farbton, Schatten und Lichter.
 b72611cf	Bassfrequenz
-59031266	GPU (DirectML), mit Rückfall auf die CPU
 0cb1e3b6	Drehung X
 0f845589	Drehung Y
 4ea5eb8d	Bässe
@@ -2507,3 +2501,44 @@ e141e107	Quantenpuls-Nacht
 2003ea55	Technischer Support
 99d8155c	Besuchen Sie unsere Website
 d8faa83c	Meu Editor de Vídeo auf GitHub besuchen
+0182c6db	{0} oder CPU
+947efc5e	{0}, mit Rückfall auf die CPU
+31157b16	Ja ({0})
+b7944505	Kompatible Modelle nutzen die {0} mit automatischem Rückfall auf die CPU.
+2f96ed04	ja (DirectML unter Windows, Core ML unter macOS), mit Rückfall auf die CPU
+a502658d	{0} wurde im Anwendungsordner nicht gefunden.
+1c86d1a1	Dieses System führt die Modelle nur auf der CPU aus.
+2a153ba8	Ja, aber dieses System nutzt nur die CPU
+3f9353b4	'{0}' hängt von '{1}' ab, das für {2} nicht existiert.
+c7b19f04	Die Bildschirmaufnahme funktioniert in einer Wayland-Sitzung nicht. Melden Sie sich in einer X11-Sitzung an (wählen Sie „Xorg“ im Anmeldebildschirm), um den Bildschirm aufzunehmen; Webcam und Mikrofon bleiben verfügbar.
+2ac059b4	Es gibt keine grafische Sitzung (Variable DISPLAY), um den Bildschirm aufzunehmen.
+02831ab4	Diese ffmpeg-Version enthält die nötige Aufnahme nicht (x11grab, pulse oder v4l2).
+ca55db2c	Keine Berechtigung für die Kamera. Fügen Sie Ihren Benutzer zur Gruppe „video“ hinzu und melden Sie sich erneut an.
+f1010a79	Die Bildschirmgröße konnte nicht ermittelt werden (installieren Sie xrandr oder xdpyinfo).
+113cb8d4	Die Bildschirmgröße konnte nicht ermittelt werden.
+78655743	Es wurde kein Bildschirm zum Aufnehmen gefunden.
+5ff659e1	Die Kamera „{0}“ wurde nicht gefunden.
+193c6af8	Das Mikrofon „{0}“ wurde nicht gefunden.
+7d6b7152	Unter macOS kann kein einzelnes Fenster aufgenommen werden. Nehmen Sie den ganzen Bildschirm auf.
+6438cd9a	macOS hat die Aufnahme nicht erlaubt. Erlauben Sie unter Systemeinstellungen › Datenschutz & Sicherheit die Bildschirmaufnahme, die Kamera und das Mikrofon für diese App und versuchen Sie es erneut.
+dafb61ac	Kamera
+670ca421	Installieren Sie das Paket espeak-ng, um die Sprachausgabe zu nutzen.
+806a4117	Der macOS-Befehl 'say' wurde nicht gefunden; die Sprachausgabe ist nicht verfügbar.
+3ecfb7a9	Die Sprachausgabe ist auf diesem Computer nicht verfügbar.
+23b11dab	Die Stimmen konnten nicht aufgelistet werden: {0}
+e7bc9614	Die gewählte Stimme ist nicht installiert: {0}
+696fe461	Ungültiger Stimmenname: {0}
+5a8806e9	Die Sprachausgabe hat keinen Ton erzeugt.
+ff9823f3	Das Sprachausgabeprogramm hat zu lange gebraucht und wurde abgebrochen.
+13a5597e	Die Sprachausgabe konnte nicht ausgeführt werden: {0}
+390aeaee	Die erzeugte Audiodatei ist keine gültige WAV-Datei.
+6f11ed86	Ungültiger 'fmt'-Block in der WAV-Datei.
+fb428ba2	Der 'data'-Block der WAV-Datei steht vor dem 'fmt'-Block.
+7ee2f064	Nur 16-Bit-PCM-WAV wird unterstützt.
+701b2f70	Die WAV-Datei enthält keine Audiodaten.
+ffd495bc	Ungültige Abtastrate.
+941b4897	keine Details
+23896bc5	SDL3 hat kein Audiogerät geöffnet: {0}
+393abf95	SDL3 hat die Audioausgabe nicht gestartet: {0}
+bbebac15	Die Zeichenfläche konnte nicht erstellt werden.
+16956c08	Hersteller {0}

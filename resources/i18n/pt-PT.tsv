@@ -543,7 +543,6 @@ c86bc40d	Segmentação de pessoas (remover fundo, seguir pessoa)
 c923d90e	{0} · incluído na aplicação
 c95d98b6	Pastas predefinidas
 c9fd8063	_Ecrã dividido
-cad1d646	O ffmpeg.exe não foi encontrado na pasta da aplicação.
 caf0af32	1080 × 1920 · 30 FPS · vídeos curtos para telemóvel
 cb181a77	Coloque cada clipe numa faixa diferente para que apareçam juntos.
 cb3a8443	Não foi encontrada uma sequência: são necessárias pelo menos 2 imagens numeradas em ordem (ex.: fotograma_0001.png, fotograma_0002.png).
@@ -1017,3 +1016,18 @@ e141e107	Noite de pulso quântico
 2003ea55	Suporte Técnico
 99d8155c	Visite o nosso website
 d8faa83c	Visite o GitHub do Meu Editor de Vídeo
+a502658d	O {0} não foi encontrado na pasta da aplicação.
+1c86d1a1	Este sistema executa os modelos apenas na CPU.
+2a153ba8	Sim, mas este sistema usa apenas a CPU
+c7b19f04	A gravação do ecrã não funciona numa sessão Wayland. Inicie uma sessão X11 (escolha "Xorg" no ecrã de início de sessão) para gravar o ecrã; a webcam e o microfone continuam disponíveis.
+2ac059b4	Não há uma sessão gráfica (variável DISPLAY) para gravar o ecrã.
+ca55db2c	Sem permissão para usar a câmara. Adicione o seu utilizador ao grupo "video" e inicie sessão novamente.
+f1010a79	Não foi possível determinar o tamanho do ecrã (instale xrandr ou xdpyinfo).
+113cb8d4	Não foi possível determinar o tamanho do ecrã.
+78655743	Não foi encontrado nenhum ecrã para gravar.
+5ff659e1	A câmara "{0}" não foi encontrada.
+7d6b7152	No macOS não é possível gravar só uma janela. Grave o ecrã inteiro.
+6438cd9a	O macOS não permitiu a gravação. Em Definições do Sistema › Privacidade e segurança, permita a Gravação de ecrã, a Câmara e o Microfone para esta aplicação e tente novamente.
+dafb61ac	Câmara
+390aeaee	O ficheiro de áudio gerado não é um WAV válido.
+7ee2f064	Só é suportado WAV PCM de 16 bits.

@@ -24,7 +24,7 @@ public sealed partial class CatalogItemViewModel(ModelCatalogEntry entry, ModelC
     public string Capability => ModelManagerViewModel.CapabilityName(Entry.Capability);
     public string Download => ModelItemViewModel.FormatBytes(Entry.TotalBytes);
     public string Memory => $"{Entry.MemoryMb.ToString("N0", Pt)} MB";
-    public string Device => Entry.Gpu && AiPlatform.GpuAvailable ? AiPlatform.GpuLabel() + " ou CPU" : "CPU";
+    public string Device => Entry.Gpu && AiPlatform.GpuAvailable ? $"{AiPlatform.GpuLabel()} ou CPU" : "CPU";
     public string License => Entry.License;
     public string Source => Entry.Source;
     public string Origin => Entry.Url.Host;

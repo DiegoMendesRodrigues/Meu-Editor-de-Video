@@ -75,7 +75,6 @@
 08dc5795	Memoria de {0} (mínimo recomendado: 16 GB): los proyectos largos o 4K pueden ir lentos y la vista previa guarda menos fotogramas.
 09456467	No hay subtítulos en la línea de tiempo.
 094ce26d	Blanco y negro duro, con sombras profundas.
-09b0cfc0	Los modelos compatibles usarán la GPU (DirectML), con retorno automático a la CPU.
 09b3be7d	Información del sistema…
 09c7eebb	Ganancia de compensación
 09de0c0a	Exportación completada
@@ -676,7 +675,6 @@
 5ba6351b	◇ Forma clave
 5c08e459	Reencuadrar automáticamente
 5c59554f	La tasa de bits de audio debe estar entre 32 y 640 kbps.
-5c65e5d0	sí (DirectML), con retorno a la CPU
 5c8c4760	Nueva pista
 5d537a71	No hay subtítulos en la secuencia; no se creó el archivo de subtítulos.
 5d56e7ff	Desactivar sombra
@@ -763,7 +761,6 @@
 65f7a370	Fin del subtítulo
 663c4a55	Insertar la grabación en la línea de tiempo, en el cursor
 66ca46a8	_Texto a voz…
-66f394a3	Sí (DirectML)
 67075420	Codificación por GPU
 6711c37f	Cambia el tamaño del proyecto al del área recortada (en píxeles del medio original). La exportación sale con esas dimensiones.
 672ff2e8	Fin
@@ -1432,7 +1429,6 @@ c463002e	El modelo de mejora de imagen no está instalado.
 c466c139	Sin un clip pegado antes de este, la transición es de entrada: revela el clip sobre las pistas de abajo.
 c46d4cbb	El archivo está en uso por otro programa:\n{0}
 c4930de6	Aplicar este estilo a todos los subtítulos de la pista
-c4a917af	GPU (DirectML) o CPU
 c4af3181	{0}\nArchivo no encontrado: {1}
 c4d27f4e	No se pudo decodificar ningún fotograma: el archivo parece dañado.
 c4de21c5	Color de ojos
@@ -1482,7 +1478,6 @@ ca4a03a9	No se pudieron listar los dispositivos: {0}
 ca93daeb	Renderizar la cola de exportación en segundo plano
 caa82c0e	Intensidad de la reducción de ruido
 cac8788d	Cola de renderizado
-cad1d646	No se encontró ffmpeg.exe en la carpeta de la aplicación.
 caf0af32	1080 × 1920 · 30 FPS · vídeos cortos para móvil
 cb181a77	Coloque cada clip en una pista diferente para que aparezcan juntos.
 cb3a8443	No se encontró una secuencia: se necesitan al menos 2 imágenes numeradas en orden (p. ej.: cuadro_0001.png, cuadro_0002.png).
@@ -1921,7 +1916,6 @@ ed928968	Izquierda
 5e8780b2	Exposición
 23e05257	Exposición, brillo, contraste, saturación, temperatura, matiz, sombras y luces.
 b72611cf	Frecuencia de graves
-59031266	GPU (DirectML), con respaldo en la CPU
 1251dfbe	Igual que Windows
 49b825e0	Imagen o vídeo de la biblioteca
 20abe171	Inclinación (abajo ↔ arriba)
@@ -2288,3 +2282,43 @@ e141e107	Noche de pulso cuántico
 2003ea55	Soporte técnico
 99d8155c	Visite nuestro sitio web
 d8faa83c	Visite el GitHub de Meu Editor de Vídeo
+0182c6db	{0} o CPU
+947efc5e	{0}, con respaldo en la CPU
+31157b16	Sí ({0})
+b7944505	Los modelos compatibles usarán la {0}, con retorno automático a la CPU.
+2f96ed04	sí (DirectML en Windows, Core ML en macOS), con respaldo en la CPU
+a502658d	No se encontró {0} en la carpeta de la aplicación.
+1c86d1a1	Este sistema ejecuta los modelos solo en la CPU.
+2a153ba8	Sí, pero este sistema usa solo la CPU
+3f9353b4	'{0}' depende de '{1}', que no existe para {2}.
+c7b19f04	La grabación de pantalla no funciona en una sesión Wayland. Inicie una sesión X11 (elija "Xorg" en la pantalla de inicio de sesión) para grabar la pantalla; la cámara web y el micrófono siguen disponibles.
+2ac059b4	No hay una sesión gráfica (variable DISPLAY) para grabar la pantalla.
+02831ab4	Esta versión de ffmpeg no incluye la captura necesaria (x11grab, pulse o v4l2).
+ca55db2c	Sin permiso para usar la cámara. Agregue su usuario al grupo "video" y vuelva a iniciar sesión.
+f1010a79	No se pudo determinar el tamaño de la pantalla (instale xrandr o xdpyinfo).
+113cb8d4	No se pudo determinar el tamaño de la pantalla.
+78655743	No se encontró ninguna pantalla para grabar.
+5ff659e1	No se encontró la cámara "{0}".
+193c6af8	No se encontró el micrófono "{0}".
+7d6b7152	En macOS no es posible grabar solo una ventana. Grabe la pantalla completa.
+6438cd9a	macOS no permitió la grabación. En Ajustes del Sistema › Privacidad y seguridad, permita Grabación de pantalla, Cámara y Micrófono para esta aplicación e inténtelo de nuevo.
+dafb61ac	Cámara
+670ca421	Instale el paquete espeak-ng para usar la conversión de texto a voz.
+806a4117	No se encontró el comando 'say' de macOS; la conversión de texto a voz no está disponible.
+3ecfb7a9	La conversión de texto a voz no está disponible en este equipo.
+23b11dab	No se pudieron enumerar las voces: {0}
+e7bc9614	La voz elegida no está instalada: {0}
+696fe461	Nombre de voz no válido: {0}
+5a8806e9	La conversión de texto a voz no generó audio.
+ff9823f3	El programa de texto a voz tardó demasiado y se detuvo.
+13a5597e	No se pudo ejecutar la conversión de texto a voz: {0}
+390aeaee	El archivo de audio generado no es un WAV válido.
+6f11ed86	Bloque 'fmt' del WAV no válido.
+fb428ba2	El bloque 'data' del WAV aparece antes de 'fmt'.
+7ee2f064	Solo se admite WAV PCM de 16 bits.
+701b2f70	El WAV no tiene datos de audio.
+ffd495bc	Frecuencia de muestreo no válida.
+941b4897	sin detalles
+23896bc5	SDL3 no abrió un dispositivo de audio: {0}
+393abf95	SDL3 no inició el audio: {0}
+bbebac15	No se pudo crear la superficie de dibujo.
