@@ -11,7 +11,8 @@ namespace MeuEditorDeVideo.Infrastructure.Export;
 /// <summary>
 /// Biblioteca de modelos de exportação (§10, plano §4.5): os embutidos ficam em JSON somente leitura
 /// (templates\export ao lado do executável) e podem ser revisados sem alterar código; os do usuário — novos ou
-/// personalizações de um embutido (mesmo Id) — ficam em %APPDATA%\MeuEditorDeVideo\templates.
+/// personalizações de um embutido (mesmo Id) — ficam na pasta "templates" dos dados do usuário
+/// (Windows: %APPDATA%\MeuEditorDeVideo; Linux: ~/.config; macOS: ~/Library/Application Support).
 /// </summary>
 public sealed class JsonExportTemplateStore : IExportTemplateStore
 {

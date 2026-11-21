@@ -37,7 +37,7 @@ public partial class App : System.Windows.Application
         ImageEngine.Text.FontCatalog.UserFontsFolder = paths.Fonts;
         // Preferências do registro lidas antes do host: o JsonSettingsService completa os valores que faltam, e a janela de
         // boas-vindas precisa saber o que o usuário ainda não preencheu.
-        var preferenceStore = new Infrastructure.Settings.RegistryPreferencesStore();
+        var preferenceStore = Infrastructure.Settings.UserPreferencesStoreFactory.Create(paths);
         var preferences = preferenceStore.Read();
         // Os argumentos não vão para o host: o único argumento esperado é o caminho de um .med (associação de arquivos).
         _host = Host.CreateDefaultBuilder()

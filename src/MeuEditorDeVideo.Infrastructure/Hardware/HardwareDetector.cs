@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
+﻿using System.Runtime.Versioning;
 using MeuEditorDeVideo.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -9,9 +8,9 @@ namespace MeuEditorDeVideo.Infrastructure.Hardware;
 
 /// <summary>
 /// Detecta CPU, memória, placas de vídeo, discos e aceleração por hardware (§12.3).
-/// A detecção nunca lança exceção: falhas de registro ou de API do Windows são registradas no log.
+/// A detecção nunca lança exceção: falhas de registro, de arquivos do sistema ou de programas de consulta são registradas no log.
 /// </summary>
-public sealed partial class HardwareDetector : IHardwareInfoService
+public sealed class HardwareDetector : IHardwareInfoService
 {
     private const string CpuKeyPath = @"HARDWARE\DESCRIPTION\System\CentralProcessor\0";
     private const string DisplayClassKeyPath = @"SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}";
@@ -96,46 +95,82 @@ public sealed partial class HardwareDetector : IHardwareInfoService
 
     private string ReadCpuName()
     {
+        var name = "";
         try
         {
-            using var key = Registry.LocalMachine.OpenSubKey(CpuKeyPath);
-            if (key?.GetValue("ProcessorNameString") is string raw && raw.Trim().Length > 0)
-                return CollapseSpaces(raw);
+            if (OperatingSystem.IsWindows()) name = ReadWindowsCpuName();
+            else if (OperatingSystem.IsLinux()) name = File.Exists("/proc/cpuinfo") ? HardwareParsing.ParseCpuInfoModelName(File.ReadAllText("/proc/cpuinfo")) : "";
+            else if (OperatingSystem.IsMacOS()) name = CollapseSpaces(ProcessRunner.Run("sysctl", "-n machdep.cpu.brand_string") ?? "");
         }
         catch (Exception ex) when (ex is System.Security.SecurityException or UnauthorizedAccessException or IOException)
         {
-            _logger.LogWarning(ex, "Não foi possível ler o nome do processador no registro.");
+            _logger.LogWarning(ex, "Não foi possível ler o nome do processador.");
         }
 
+        if (name.Length > 0) return name;
         var fallback = Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER");
         return string.IsNullOrWhiteSpace(fallback) ? "Processador desconhecido" : CollapseSpaces(fallback);
     }
 
-    private static string CollapseSpaces(string value) =>
-        MultipleSpaces().Replace(value.Trim(), " ");
+    [SupportedOSPlatform("windows")]
+    private static string ReadWindowsCpuName()
+    {
+        using var key = Registry.LocalMachine.OpenSubKey(CpuKeyPath);
+        return key?.GetValue("ProcessorNameString") is string raw && raw.Trim().Length > 0 ? CollapseSpaces(raw) : "";
+    }
 
-    [GeneratedRegex(@"\s{2,}")]
-    private static partial Regex MultipleSpaces();
+    private static string CollapseSpaces(string value) => HardwareParsing.CollapseSpaces(value);
 
-    private (long Total, long Available) ReadMemory()
+    private (long Total, long Available) ReadMemory() => SystemMemory.Read();
+
+    private List<GpuInfo> ReadGpus()
     {
         try
         {
-            var status = new MemoryStatusEx { dwLength = (uint)Marshal.SizeOf<MemoryStatusEx>() };
-            if (GlobalMemoryStatusEx(ref status))
-                return ((long)status.ullTotalPhys, (long)status.ullAvailPhys);
-
-            _logger.LogWarning("GlobalMemoryStatusEx falhou (erro {Erro}).", Marshal.GetLastWin32Error());
+            if (OperatingSystem.IsWindows()) return ReadWindowsGpus();
+            if (OperatingSystem.IsLinux()) return ReadLinuxGpus();
+            if (OperatingSystem.IsMacOS())
+            {
+                var json = ProcessRunner.Run("system_profiler", "SPDisplaysDataType -json", timeoutMs: 8000);
+                return json is null ? [] : [.. HardwareParsing.ParseSystemProfilerDisplays(json, SystemMemory.Read().Total)];
+            }
         }
-        catch (Exception ex) when (ex is DllNotFoundException or EntryPointNotFoundException or SEHException or InvalidOperationException)
+        catch (Exception ex) when (ex is System.Security.SecurityException or UnauthorizedAccessException or IOException)
         {
-            _logger.LogWarning(ex, "Não foi possível consultar a memória do sistema.");
+            _logger.LogWarning(ex, "Não foi possível detectar as placas de vídeo.");
         }
 
-        return (0, 0);
+        return [];
     }
 
-    private List<GpuInfo> ReadGpus()
+    /// <summary>Placas em <c>/sys/class/drm/card*/device</c> (ids PCI; memória de vídeo só quando o driver informa, como o AMD).</summary>
+    private List<GpuInfo> ReadLinuxGpus()
+    {
+        var gpus = new List<GpuInfo>();
+        const string drm = "/sys/class/drm";
+        if (!Directory.Exists(drm)) return gpus;
+
+        foreach (var card in Directory.GetDirectories(drm, "card*").Order(StringComparer.Ordinal))
+        {
+            // Ignora as saídas de vídeo ("card0-HDMI-A-1"): só "cardN" tem o dispositivo.
+            if (!Path.GetFileName(card).Skip(4).All(char.IsAsciiDigit)) continue;
+            var device = Path.Combine(card, "device");
+            var vendorFile = Path.Combine(device, "vendor");
+            if (!File.Exists(vendorFile)) continue;
+
+            var deviceId = Path.Combine(device, "device");
+            var name = HardwareParsing.GpuNameFromPci(File.ReadAllText(vendorFile), File.Exists(deviceId) ? File.ReadAllText(deviceId) : "");
+            var vramFile = Path.Combine(device, "mem_info_vram_total");
+            var vram = File.Exists(vramFile) ? HardwareParsing.ParseNumber(File.ReadAllText(vramFile)) : 0;
+            if (gpus.All(g => g.Name != name || g.VideoMemoryBytes != vram))
+                gpus.Add(new GpuInfo(name, vram, IsDedicated(name, vram)));
+        }
+
+        return gpus;
+    }
+
+    [SupportedOSPlatform("windows")]
+    private List<GpuInfo> ReadWindowsGpus()
     {
         var gpus = new List<GpuInfo>();
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -179,6 +214,7 @@ public sealed partial class HardwareDetector : IHardwareInfoService
     private static bool IsAdapterKeyName(string name) =>
         name.Length == 4 && name.All(char.IsAsciiDigit);
 
+    [SupportedOSPlatform("windows")]
     private static long ReadVideoMemory(RegistryKey adapter)
     {
         // Os valores ficam na própria chave do adaptador, com o ponto no nome ("HardwareInformation.qwMemorySize").
@@ -264,24 +300,5 @@ public sealed partial class HardwareDetector : IHardwareInfoService
             _logger.LogWarning(ex, "Não foi possível detectar a decodificação por hardware (D3D11VA).");
             return false;
         }
-    }
-
-    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GlobalMemoryStatusEx(ref MemoryStatusEx buffer);
-
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-    private struct MemoryStatusEx
-    {
-        public uint dwLength;
-        public uint dwMemoryLoad;
-        public ulong ullTotalPhys;
-        public ulong ullAvailPhys;
-        public ulong ullTotalPageFile;
-        public ulong ullAvailPageFile;
-        public ulong ullTotalVirtual;
-        public ulong ullAvailVirtual;
-        public ulong ullAvailExtendedVirtual;
     }
 }

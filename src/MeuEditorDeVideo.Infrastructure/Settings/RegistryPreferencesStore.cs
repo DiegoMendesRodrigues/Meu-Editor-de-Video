@@ -1,5 +1,6 @@
 using System.Globalization;
 using MeuEditorDeVideo.Core.Abstractions;
+using System.Runtime.Versioning;
 using Microsoft.Win32;
 
 namespace MeuEditorDeVideo.Infrastructure.Settings;
@@ -9,6 +10,7 @@ namespace MeuEditorDeVideo.Infrastructure.Settings;
 /// <c>Name</c>, <c>Language</c> (pt-BR, pt-PT, en, es, fr, de), <c>ThemeColor</c> (Dark, Light, System),
 /// <c>CheckForNewVersions</c> (DWORD: 1 = Sim, 0 = Não) e <c>LastCheck</c> (data e hora ISO 8601).
 /// </summary>
+[SupportedOSPlatform("windows")]
 public sealed class RegistryPreferencesStore(string keyPath = RegistryPreferencesStore.DefaultKey) : IUserPreferencesStore
 {
     public const string DefaultKey = @"Software\Meu Editor de Vídeo";

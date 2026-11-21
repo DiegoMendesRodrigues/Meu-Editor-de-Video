@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MeuEditorDeVideo.App.Services;
@@ -242,30 +241,8 @@ public sealed partial class ModelManagerViewModel : ObservableObject, IDisposabl
             : "Os modelos usarão somente a CPU.";
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    private struct MemoryStatus
-    {
-        public uint Length;
-        public uint MemoryLoad;
-        public ulong TotalPhys;
-        public ulong AvailPhys;
-        public ulong TotalPageFile;
-        public ulong AvailPageFile;
-        public ulong TotalVirtual;
-        public ulong AvailVirtual;
-        public ulong AvailExtendedVirtual;
-    }
-
-    [DllImport("kernel32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GlobalMemoryStatusEx(ref MemoryStatus status);
-
     /// <summary>Memória física livre (bytes), ou 0 se não for possível medir.</summary>
-    public static ulong AvailableMemory()
-    {
-        var s = new MemoryStatus { Length = (uint)Marshal.SizeOf<MemoryStatus>() };
-        return GlobalMemoryStatusEx(ref s) ? s.AvailPhys : 0;
-    }
+    public static ulong AvailableMemory() => (ulong)Math.Max(0, Infrastructure.Hardware.SystemMemory.AvailableBytes());
 
     public void Dispose() => _registry.Changed -= OnChanged;
 }
