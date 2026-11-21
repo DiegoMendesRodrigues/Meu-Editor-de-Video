@@ -2,18 +2,20 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using MeuEditorDeVideo.Core.Media;
 
-namespace MeuEditorDeVideo.AudioEngine;
+namespace MeuEditorDeVideo.AudioEngine.Speech;
 
 /// <summary>
 /// Texto para fala com as vozes instaladas no Windows (SAPI 5, COM), 100% local. Gera um WAV 48 kHz 16 bits mono.
 /// O COM do SAPI é usado por ligação tardia (sem pacote extra) numa thread STA dedicada.
-/// No Linux e no macOS ainda não há implementação: <see cref="IsAvailable"/> é falso.
+/// No macOS e no Linux, veja <see cref="MacSpeechSynthesisService"/> e <see cref="LinuxSpeechSynthesisService"/>.
 /// </summary>
-public sealed class SpeechSynthesisService : ISpeechSynthesisService
+public sealed class WindowsSpeechSynthesisService : ISpeechSynthesisService
 {
     // SpeechAudioFormatType.SAFT48kHz16BitMono e SpeechStreamFileMode.SSFMCreateForWrite.
     private const int Format48kMono = 38;
     private const int CreateForWrite = 3;
+
+    public string UnavailableReason => "Este Windows não tem o serviço de vozes (SAPI) disponível.";
 
     public bool IsAvailable => OperatingSystem.IsWindows() && Type.GetTypeFromProgID("SAPI.SpVoice") is not null;
 

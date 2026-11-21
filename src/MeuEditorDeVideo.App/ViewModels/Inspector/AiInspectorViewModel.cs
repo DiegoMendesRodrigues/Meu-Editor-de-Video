@@ -682,7 +682,7 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
         if (Timeline.Project is null) return;
         if (!_tts.IsAvailable)
         {
-            _dialogs.ShowInfo("Texto para fala", "Este Windows não tem o serviço de vozes (SAPI) disponível.");
+            _dialogs.ShowInfo("Texto para fala", _tts.UnavailableReason);
             return;
         }
         IReadOnlyList<string> voices;

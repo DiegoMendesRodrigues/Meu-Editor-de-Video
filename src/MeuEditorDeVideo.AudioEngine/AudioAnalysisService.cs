@@ -1,4 +1,5 @@
 ﻿using MeuEditorDeVideo.AudioEngine.Dsp;
+using MeuEditorDeVideo.AudioEngine.Speech;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Model;
@@ -101,7 +102,9 @@ public static class AudioEngineServiceCollectionExtensions
     public static IServiceCollection AddAudioEngine(this IServiceCollection services)
     {
         services.AddSingleton<IAudioAnalysisService, AudioAnalysisService>();
-        services.AddSingleton<ISpeechSynthesisService, SpeechSynthesisService>();
+        // Texto para fala: SAPI no Windows, "say" no macOS, "espeak-ng" no Linux.
+        services.AddSingleton<ISpeechSynthesisService>(_ => OperatingSystem.IsWindows() ? new WindowsSpeechSynthesisService()
+            : OperatingSystem.IsMacOS() ? new MacSpeechSynthesisService() : new LinuxSpeechSynthesisService());
         return services;
     }
 }

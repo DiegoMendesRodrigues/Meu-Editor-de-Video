@@ -88,10 +88,13 @@ public interface IAudioAnalysisService
         CancellationToken cancellationToken = default);
 }
 
-/// <summary>Texto para fala com as vozes do Windows (local, sem rede).</summary>
+/// <summary>Texto para fala com as vozes do sistema (SAPI no Windows, say no macOS, espeak-ng no Linux); local, sem rede.</summary>
 public interface ISpeechSynthesisService
 {
     bool IsAvailable { get; }
+
+    /// <summary>Mensagem para mostrar quando <see cref="IsAvailable"/> é falso, dizendo o que instalar.</summary>
+    string UnavailableReason => "O texto para fala não está disponível neste computador.";
 
     /// <summary>Nomes das vozes instaladas.</summary>
     IReadOnlyList<string> Voices();
