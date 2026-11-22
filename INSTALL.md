@@ -129,8 +129,8 @@ The WiX Toolset (MSI and Setup.exe installers) comes from NuGet and does not nee
 ### 1. Clone the repository
 
 ```powershell
-git clone https://github.com/DiegoMendesRodrigues/Meu-Editor-de-V-deo.git
-cd Meu-Editor-de-V-deo
+git clone https://github.com/DiegoMendesRodrigues/Meu-Editor-de-Video.git
+cd Meu-Editor-de-Video
 ```
 
 ### 2. Download the native dependencies

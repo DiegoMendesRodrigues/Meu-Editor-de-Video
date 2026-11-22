@@ -129,8 +129,8 @@ O WiX Toolset (instaladores MSI e Setup.exe) vem do NuGet: não precisa ser inst
 ### 1. Clonar o repositório
 
 ```powershell
-git clone https://github.com/DiegoMendesRodrigues/Meu-Editor-de-V-deo.git
-cd Meu-Editor-de-V-deo
+git clone https://github.com/DiegoMendesRodrigues/Meu-Editor-de-Video.git
+cd Meu-Editor-de-Video
 ```
 
 ### 2. Baixar as dependências nativas
