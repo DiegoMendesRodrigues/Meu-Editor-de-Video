@@ -9,6 +9,7 @@ jobs:
   build-test:
     name: ${{ matrix.rid }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
@@ -70,10 +71,12 @@ jobs:
         run: dotnet restore MeuEditorDeVideo.sln
 
       - name: Compilar
+        id: compilar
         run: dotnet build MeuEditorDeVideo.sln -c Release --no-restore
 
       - name: Testar
-        run: dotnet test MeuEditorDeVideo.sln -c Release --no-build --logger trx --results-directory TestResults
+        timeout-minutes: 40
+        run: dotnet test MeuEditorDeVideo.sln -c Release --no-build --logger trx --results-directory TestResults --blame-hang-timeout 10m --blame-hang-dump-type none
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -82,11 +85,20 @@ jobs:
           path: TestResults
 
       # ----- Pacotes (só em push para main) -----------------------------------------------------------------------
+      # São gerados e testados (instalar, abrir, desinstalar) mesmo que "Testar" falhe, para uma falha não esconder outra;
+      # só são publicados como artefatos se tudo antes deles passar.
 
       - name: Gerar o instalador (MSI + Setup.exe, sem assinatura)
-        if: github.event_name == 'push' && runner.os == 'Windows'
+        id: instalador
+        if: ${{ !cancelled() && steps.compilar.outcome == 'success' && github.event_name == 'push' && runner.os == 'Windows' }}
         shell: pwsh
         run: ./scripts/build-installer.ps1
+
+      - name: Testar os instaladores (Windows)
+        if: ${{ !cancelled() && steps.instalador.outcome == 'success' }}
+        timeout-minutes: 30
+        shell: pwsh
+        run: ./scripts/ci/testar-instalador.ps1
 
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'push' && runner.os == 'Windows'
@@ -97,13 +109,30 @@ jobs:
             artifacts/installer/*.exe
             artifacts/installer/SHA256SUMS.txt
 
-      # O mantenedor ("Nome <email>") vem da variável do repositório MED_DEB_MAINTAINER; sem ela o pacote não é gerado.
+      # O mantenedor ("Nome <email>") vem da variável do repositório MED_DEB_MAINTAINER; sem ela o pacote é gerado com um
+      # mantenedor fictício, só para o teste de instalação, e não é publicado.
       - name: Gerar o pacote .deb
-        if: github.event_name == 'push' && runner.os == 'Linux' && vars.MED_DEB_MAINTAINER != ''
+        id: deb
+        if: ${{ !cancelled() && steps.compilar.outcome == 'success' && github.event_name == 'push' && runner.os == 'Linux' }}
         shell: pwsh
         env:
-          MED_DEB_MAINTAINER: ${{ vars.MED_DEB_MAINTAINER }}
+          MED_DEB_MAINTAINER: ${{ vars.MED_DEB_MAINTAINER || 'Teste do CI <ci@localhost>' }}
         run: ./scripts/build-deb.ps1 -Rid ${{ matrix.rid }}
+
+      # Contêineres limpos: só o que o pacote declara em Depends.
+      - name: Testar o .deb (Debian 12, Ubuntu 22.04 e 24.04)
+        if: ${{ !cancelled() && steps.deb.outcome == 'success' }}
+        timeout-minutes: 45
+        run: |
+          pacote="$(basename artifacts/linux/*.deb)"
+          falhou=0
+          for imagem in debian:12 ubuntu:22.04 ubuntu:24.04; do
+            echo "===== $imagem"
+            docker run --rm --init -v "$PWD:/repo:ro" -v "$PWD/InstallerResults:/saida" "$imagem" \
+              bash /repo/scripts/ci/testar-deb.sh "/repo/artifacts/linux/$pacote" /repo/tests/instaladores/projeto.med "/saida/${imagem//:/-}" \
+              || { echo "::error::o .deb falhou em $imagem"; falhou=1; }
+          done
+          exit $falhou
 
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'push' && runner.os == 'Linux' && vars.MED_DEB_MAINTAINER != ''
@@ -141,14 +170,28 @@ jobs:
           echo "MED_MACOS_NOTARY_KEYCHAIN=$MED_KEYCHAIN" >> "$GITHUB_ENV"
 
       - name: Gerar o aplicativo e o .dmg (macOS)
-        if: github.event_name == 'push' && runner.os == 'macOS'
+        id: dmg
+        if: ${{ !cancelled() && steps.compilar.outcome == 'success' && github.event_name == 'push' && runner.os == 'macOS' }}
         shell: pwsh
         run: |
-          $parametros = @('-Rid', '${{ matrix.rid }}')
-          if ($env:MED_KEYCHAIN -and $env:MED_MACOS_SIGN_IDENTITY) { $parametros += '-Sign' }
-          if ($env:MED_MACOS_NOTARY_PROFILE) { $parametros += '-Notarize' }
-          Write-Host "build-macos.ps1 $($parametros -join ' ')"
+          $parametros = @{ Rid = '${{ matrix.rid }}' }
+          if ($env:MED_KEYCHAIN -and $env:MED_MACOS_SIGN_IDENTITY) { $parametros.Sign = $true }
+          if ($env:MED_MACOS_NOTARY_PROFILE) { $parametros.Notarize = $true }
+          Write-Host "build-macos.ps1 $($parametros.Keys -join ' ')"
           ./scripts/build-macos.ps1 @parametros
+
+      - name: Testar o .dmg (macOS)
+        if: ${{ !cancelled() && steps.dmg.outcome == 'success' }}
+        timeout-minutes: 30
+        shell: pwsh
+        run: ./scripts/ci/testar-instalador.ps1
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() && github.event_name == 'push' }}
+        with:
+          name: teste-instalador-${{ matrix.rid }}
+          path: InstallerResults
+          if-no-files-found: ignore
 
       - name: Remover o chaveiro temporário (macOS)
         if: always() && runner.os == 'macOS' && env.MED_KEYCHAIN != ''

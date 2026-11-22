@@ -2,4 +2,5 @@
 *.png binary
 *.ico binary
 *.docx binary
+*.med binary
 *.sh text eol=lf

@@ -120,6 +120,19 @@ O script assina, com SHA-256 e carimbo de tempo RFC 3161:
 Requer o `signtool.exe` do Windows SDK. Conferir depois com `signtool verify /pa /v <arquivo>`. Nunca versionar o `.pfx` nem a
 senha; em CI, guardar o certificado em um segredo do repositório ou usar um serviço de assinatura em nuvem.
 
+## Teste automático dos pacotes (CI)
+
+A cada push para `main`, o GitHub Actions gera e testa os pacotes em máquinas descartáveis, mesmo que os testes de código falhem:
+
+- Windows (`scripts/ci/testar-instalador.ps1`): `Setup.exe` e MSI;
+- macOS arm64 e x64 (o mesmo script): `.dmg`;
+- Linux (`scripts/ci/testar-deb.sh`): `.deb` em contêineres do Debian 12 e do Ubuntu 22.04 e 24.04.
+
+Cada teste instala, confere as bibliotecas nativas e o FFmpeg, abre o programa como usuário novo, abre
+`tests/instaladores/projeto.med` pela associação de arquivos, confere o log e a rede e desinstala. Logs e capturas ficam no
+artefato `teste-instalador-<rid>`. Os scripts apagam os dados do programa e se recusam a rodar fora do CI ou de um contêiner.
+Não substituem o teste manual: áudio, GPU, gravação de tela e permissões do macOS não são exercitados.
+
 ## Testes do instalador (F12)
 
 Verificado com o MSI 1.0.0 em instalação silenciosa "somente para mim":
