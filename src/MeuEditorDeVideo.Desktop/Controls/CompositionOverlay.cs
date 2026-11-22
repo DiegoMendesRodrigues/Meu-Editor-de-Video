@@ -13,7 +13,7 @@ namespace MeuEditorDeVideo.Desktop.Controls;
 
 /// <summary>
 /// Camada de edição sobre o monitor (F9): desenha a máscara ou a região de rastreamento do clipe selecionado e permite
-/// arrastar os pontos (alças) ou a forma inteira. No contorno livre, Ctrl+clique insere um ponto e o clique com o botão
+/// arrastar os pontos (alças) ou a forma inteira. No contorno livre, Ctrl+clique (Cmd no macOS) insere um ponto e o clique com o botão
 /// direito numa alça o remove. As coordenadas seguem a imagem exibida (ajuste uniforme do quadro do projeto).
 /// </summary>
 public sealed class CompositionOverlay : Control, ICustomHitTest
@@ -159,7 +159,7 @@ public sealed class CompositionOverlay : Control, ICustomHitTest
         if (!props.IsLeftButtonPressed) return;
         e.Handled = true; // não abre a tela cheia (duplo clique no monitor)
 
-        if (vm.Overlay == OverlayKind.MaskPath && e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        if (vm.Overlay == OverlayKind.MaskPath && e.KeyModifiers.ToMed().HasFlag(MedModifiers.Control))
         {
             InsertPoint(vm, ToProject(pos));
             return;

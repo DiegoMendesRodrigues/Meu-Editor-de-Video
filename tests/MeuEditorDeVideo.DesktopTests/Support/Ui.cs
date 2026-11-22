@@ -1,8 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Headless;
+using Avalonia.Input;
 using Avalonia.Threading;
 using MeuEditorDeVideo.Desktop;
+using MeuEditorDeVideo.Presentation.Input;
 
 namespace MeuEditorDeVideo.DesktopTests.Support;
 
@@ -28,6 +30,9 @@ public static class Ui
 
     public static T Run<T>(Func<T> func) => Session.Value.Dispatch(func, CancellationToken.None).GetAwaiter().GetResult();
 
+    /// <summary>Modificador principal simulado: Cmd no macOS, Ctrl nos demais (os dois enums têm os mesmos valores).</summary>
+    public static RawInputModifiers Principal => (RawInputModifiers)(int)MedModifiers.Control.ToAvalonia();
+
     /// <summary>Pasta das capturas: tests/.../bin/.../telas (o caminho completo vai na saída do teste).</summary>
     public static string ScreenshotsFolder { get; } = Path.Combine(AppContext.BaseDirectory, "telas");
 
@@ -42,7 +47,8 @@ public static class Ui
         AvaloniaHeadlessPlatform.ForceRenderTimerTick();
         // Toda tela capturada confere também o texto dos botões, com os dados do teste.
         Assert.Empty(Centralizacao.Desvios(window));
-        var frame = window.CaptureRenderedFrame() ?? throw new InvalidOperationException("Sem quadro desenhado.");
+        // using: sem referência viva, o coletor libera os pixels durante o Save (o Avalonia codifica sem copiá-los).
+        using var frame = window.CaptureRenderedFrame() ?? throw new InvalidOperationException("Sem quadro desenhado.");
         Directory.CreateDirectory(ScreenshotsFolder);
         var path = Path.Combine(ScreenshotsFolder, name + ".png");
         // PNG padrão; a sobrecarga com BitmapEncoderOptions não acrescenta nada aqui.

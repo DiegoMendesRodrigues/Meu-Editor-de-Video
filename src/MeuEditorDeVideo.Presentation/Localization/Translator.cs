@@ -13,7 +13,8 @@ namespace MeuEditorDeVideo.Presentation.Localization;
 /// 8 primeiros hexadecimais do SHA-256 do texto de origem em UTF-8). Textos com valores ({0}, {1}…) viram modelos:
 /// "Projeto reenquadrado para 1080×1920 (2 clipes)" é reconhecido por "Projeto reenquadrado para {0}×{1} ({2} {3})" e os
 /// valores também são traduzidos ("clipes"); um valor todo em minúsculas também acha o rótulo com maiúscula
-/// ("Ajustar deslocamento x" usa "Deslocamento X"). Sem tradução, o texto fica em português do Brasil.
+/// ("Ajustar deslocamento x" usa "Deslocamento X"). Sem tradução, o texto fica em português do Brasil. No macOS os
+/// textos que citam atalhos saem com Cmd e Option, em todos os idiomas (inclusive pt-BR).
 /// </summary>
 public static partial class Translator
 {
@@ -22,7 +23,7 @@ public static partial class Translator
     private static Dictionary<string, string> _anyCase = new(StringComparer.OrdinalIgnoreCase);
     private static readonly ConcurrentDictionary<(string Text, int Depth, bool Lowered), string> Cache = new();
 
-    /// <summary>Idioma em uso (pt-BR = sem tradução).</summary>
+    /// <summary>Idioma em uso (pt-BR = sem tradução, fora a troca de teclas do macOS).</summary>
     public static string Language { get; private set; } = "pt-BR";
 
     public static bool IsActive => _exact is not null;
@@ -34,28 +35,38 @@ public static partial class Translator
         Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(source)))[..8];
 
     /// <summary>Carrega as traduções de <paramref name="language"/> da pasta <paramref name="folder"/>.</summary>
-    public static void Load(string language, string folder)
+    public static void Load(string language, string folder) => Load(language, folder, OperatingSystem.IsMacOS());
+
+    /// <param name="mac">Troca Ctrl (Strg em alemão) por Cmd e Alt por Option nos textos que citam atalhos.</param>
+    public static void Load(string language, string folder, bool mac)
     {
         Language = language;
         Cache.Clear();
         _exact = null;
         _templates = [];
-        if (language == "pt-BR") return;
+        var translated = language != "pt-BR";
+        if (!translated && !mac) return;
         var origin = Path.Combine(folder, "origem.json");
         var file = Path.Combine(folder, language + ".tsv");
-        if (!File.Exists(origin) || !File.Exists(file)) return;
+        if (!File.Exists(origin) || (translated && !File.Exists(file))) return;
 
         var sources = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(origin)) ?? [];
         var byId = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var s in sources) byId.TryAdd(IdOf(s), s);
         var map = new Dictionary<string, string>(StringComparer.Ordinal);
-        foreach (var line in File.ReadLines(file))
+        foreach (var line in translated ? File.ReadLines(file) : [])
         {
             var tab = line.IndexOf('\t');
             if (tab <= 0) continue;
             if (!byId.TryGetValue(line[..tab], out var source)) continue;
             var text = Unescape(line[(tab + 1)..]);
             if (text.Length > 0 && text != source) map[source] = text;
+        }
+        if (mac)
+        {
+            // Depois da tradução: a chave continua sendo o texto com Ctrl. Só frases: "Ctrl+S" sozinho é o formato gravado.
+            foreach (var source in sources.Where(s => s.Contains(' ') && KeyInText().IsMatch(s)))
+                map[source] = KeyInText().Replace(map.GetValueOrDefault(source, source), m => m.Value == "Alt+" ? "Option+" : "Cmd+");
         }
         Use(map);
     }
@@ -239,6 +250,9 @@ public static partial class Translator
 
     private static string Unescape(string s) =>
         s.Contains('\\') ? s.Replace("\\n", "\n").Replace("\\t", "\t").Replace("\\\\", "\\") : s;
+
+    [GeneratedRegex(@"\b(?:Ctrl|Strg|Alt)\+")]
+    private static partial Regex KeyInText();
 
     [GeneratedRegex(@"\{(\d+)(?:[:,][^}]*)?\}")]
     private static partial Regex Placeholder();

@@ -111,6 +111,34 @@ public sealed partial class TranslatorTests : IDisposable
 
     public static TheoryData<string> Languages => ["en", "es", "fr", "de", "pt-PT"];
 
+    [Theory]
+    [InlineData("pt-BR")]
+    [InlineData("en")]
+    [InlineData("es")]
+    [InlineData("fr")]
+    [InlineData("de")]
+    [InlineData("pt-PT")]
+    public void No_macOS_os_textos_citam_Cmd_em_todos_os_idiomas(string language)
+    {
+        var folder = Path.Combine(FindRepository(), "resources", "i18n");
+        var citam = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(Path.Combine(folder, "origem.json")))!
+            .Where(s => s.Contains(' ') && s.Contains("Ctrl+")).ToList();
+        Assert.NotEmpty(citam);
+
+        Translator.Load(language, folder, mac: true);
+        foreach (var source in citam)
+        {
+            var shown = Translator.T(MarkerRegex().Replace(source, "7")); // já montado, como chega à tela
+            Assert.Contains("Cmd+", shown);
+            Assert.DoesNotMatch("Ctrl|Strg", shown);
+        }
+        Assert.Equal("Ctrl+S", Translator.T("Ctrl+S")); // o formato gravado não muda
+
+        Translator.Load(language, folder, mac: false);
+        Assert.DoesNotContain("Cmd", Translator.T("Desfazer (Ctrl+Z)"));
+        Assert.Equal(language != "pt-BR", Translator.IsActive);
+    }
+
     /// <summary>Cada linha dos .tsv aponta para um texto de origem e mantém os mesmos marcadores {n}.</summary>
     [Theory]
     [MemberData(nameof(Languages))]

@@ -47,8 +47,8 @@ public sealed class ShortcutServiceTests
         Assert.Equal("Shift+Left", chord.ToString());
         Assert.Equal("Shift+←", chord.Display);
         Assert.Equal("Espaço", new KeyChord(MedKey.Space, MedModifiers.None).Display);
-        Assert.Equal("Ctrl+,", new KeyChord(MedKey.OemComma, MedModifiers.Control).Display);
-        Assert.Equal("Ctrl+1", new KeyChord(MedKey.D1, MedModifiers.Control).Display);
+        Assert.Equal($"{Teclas.Principal}+,", new KeyChord(MedKey.OemComma, MedModifiers.Control).Display);
+        Assert.Equal($"{Teclas.Principal}+1", new KeyChord(MedKey.D1, MedModifiers.Control).Display);
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public sealed class ShortcutServiceTests
         Assert.Equal(ShortcutCatalog.Redo, service.Find(MedKey.Z, MedModifiers.Control | MedModifiers.Shift));
         Assert.Equal(ShortcutCatalog.PlayPause, service.Find(MedKey.Space, MedModifiers.None));
         Assert.Null(service.Find(MedKey.Q, MedModifiers.Control));
-        Assert.Equal("Ctrl+Y", service.Display(ShortcutCatalog.Redo));
+        Assert.Equal($"{Teclas.Principal}+Y", service.Display(ShortcutCatalog.Redo));
     }
 
     [Fact]
@@ -120,6 +120,6 @@ public sealed class ShortcutServiceTests
         Assert.Equal(1, changed);
         Assert.Equal(ShortcutCatalog.Marker, service.Find(MedKey.M, MedModifiers.Control));
         Assert.Null(service.Find(MedKey.M, MedModifiers.None));
-        Assert.Equal("Ctrl+M", service.Display(ShortcutCatalog.Marker));
+        Assert.Equal($"{Teclas.Principal}+M", service.Display(ShortcutCatalog.Marker));
     }
 }

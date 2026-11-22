@@ -49,7 +49,7 @@ public partial class HelpWindow : Window
         CampoBusca.KeyDown += CampoBusca_KeyDown;
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.F && e.KeyModifiers.HasFlag(KeyModifiers.Control)) AbrirBusca();
+            if (e.Key == Key.F && e.KeyModifiers.ToMed().HasFlag(MedModifiers.Control)) AbrirBusca(); // Cmd no macOS
         };
     }
 

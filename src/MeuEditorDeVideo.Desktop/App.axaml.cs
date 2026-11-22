@@ -31,7 +31,11 @@ public partial class App : Avalonia.Application
 
     public static IServiceProvider Services => ServicesOrNull ?? throw new InvalidOperationException("O aplicativo ainda não iniciou.");
 
-    public override void Initialize() => AvaloniaXamlLoader.Load(this);
+    public override void Initialize()
+    {
+        AvaloniaXamlLoader.Load(this);
+        JanelasNaTela.Iniciar();
+    }
 
     public override void OnFrameworkInitializationCompleted()
     {

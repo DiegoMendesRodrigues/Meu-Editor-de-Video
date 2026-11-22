@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Automation;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -84,7 +85,8 @@ public sealed class MessageWindow : Window
         var root = new DockPanel { MinWidth = 360 };
         DockPanel.SetDock(footer, Dock.Bottom);
         root.Children.Add(footer);
-        root.Children.Add(body);
+        // Texto longo rola, com os botões sempre à vista.
+        root.Children.Add(new ScrollViewer { Content = body, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled });
         Content = root;
 
         KeyDown += (_, e) =>

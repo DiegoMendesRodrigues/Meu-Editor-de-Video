@@ -146,7 +146,7 @@ public sealed class SettingsViewModelTests
         Assert.Equal(SettingsViewModel.DefaultExportDirectory, vm.ExportDirectory);
         var marker = vm.Shortcuts.Single(s => s.Id == ShortcutCatalog.Marker);
         Assert.True(marker.IsCustom);
-        Assert.Equal("Ctrl+M", marker.Text);
+        Assert.Equal($"{Teclas.Principal}+M", marker.Text);
         Assert.Equal(ShortcutCatalog.All.Count + ShortcutCatalog.Fixed.Count, vm.Shortcuts.Count);
         var fixo = vm.Shortcuts.Single(s => s.Id == ShortcutCatalog.StopRecording);
         Assert.False(fixo.IsEditable);

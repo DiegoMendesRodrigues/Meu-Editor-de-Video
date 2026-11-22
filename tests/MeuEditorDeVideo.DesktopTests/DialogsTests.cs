@@ -27,7 +27,7 @@ using MeuEditorDeVideo.Presentation.ViewModels.Timeline;
 namespace MeuEditorDeVideo.DesktopTests;
 
 /// <summary>Diálogos convertidos do WPF: cada janela abre sem tela, com ViewModel real e serviços falsos, e gera uma captura.</summary>
-public class DialogsTests
+public partial class DialogsTests
 {
     // ---------------------------------------------------------------- utilitários
 
@@ -159,6 +159,19 @@ public class DialogsTests
         });
         AssertPng(path);
     }
+
+    [Fact]
+    public void Busca_do_manual_abre_com_o_modificador_principal() => Ui.Run(() =>
+    {
+        var window = new HelpWindow(Manual());
+        window.Show();
+        Layout(window);
+        var barra = Find<Border>(window, b => b.Name == "BarraBusca");
+        Assert.False(barra.IsVisible);
+        window.KeyPress(Key.F, Ui.Principal, PhysicalKey.F, null);
+        Assert.True(barra.IsVisible);
+        window.Close();
+    });
 
     [Fact]
     public void Manual_aparece_tambem_no_tema_claro()
@@ -713,7 +726,7 @@ public class DialogsTests
             var field = All<TextBox>(window).First(t => t.DataContext == item);
             field.Focus();
             // Ctrl+Alt+F9 não está em uso no catálogo de atalhos.
-            window.KeyPress(Key.F9, RawInputModifiers.Control | RawInputModifiers.Alt, PhysicalKey.F9, "");
+            window.KeyPress(Key.F9, Ui.Principal | RawInputModifiers.Alt, PhysicalKey.F9, "");
             Dispatcher.UIThread.RunJobs();
             Assert.True(item.IsCustom, "o atalho deveria ter sido redefinido");
             Assert.Contains("F9", item.Text);
@@ -779,7 +792,7 @@ public class DialogsTests
             Assert.Equal(6, All<TextBox>(window).Count(t => t.Classes.Contains("time")));
             var file = Ui.Capture(window, "dialogo-editor-legendas");
 
-            window.KeyPress(Key.Z, RawInputModifiers.Control, PhysicalKey.Z, "z");
+            window.KeyPress(Key.Z, Ui.Principal, PhysicalKey.Z, "z");
             Assert.Equal(1, undone);
             window.Close();
             return file;

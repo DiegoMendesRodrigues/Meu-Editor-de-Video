@@ -111,7 +111,7 @@ public class HelpTests
             id => id == ShortcutCatalog.Marker ? [] : service.ChordsFor(id));
 
         Assert.Contains("| Manual do usuário | F1 |", md);
-        Assert.Contains("| Refazer | Ctrl+Y ou Ctrl+Shift+Z |", md);
+        Assert.Contains($"| Refazer | {Teclas.Principal}+Y ou {Teclas.Principal}+Shift+Z |", md);
         Assert.Contains("| Adicionar marcador | — |", md);
         Assert.Contains("| Parar a gravação de tela | F10 |", md);
         Assert.Contains("| Fechar a janela de gravação | Esc |", md);

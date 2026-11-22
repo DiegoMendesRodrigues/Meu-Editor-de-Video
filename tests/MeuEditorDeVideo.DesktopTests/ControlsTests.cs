@@ -131,7 +131,7 @@ public class ControlsTests
         {
             var (window, _, _) = TimelineHost(fx);
             var before = fx.Timeline.PixelsPerSecond;
-            window.MouseWheel(new Point(400, 100), new Vector(0, 1), RawInputModifiers.Control);
+            window.MouseWheel(new Point(400, 100), new Vector(0, 1), Ui.Principal);
             Assert.True(fx.Timeline.PixelsPerSecond > before, $"zoom {before} -> {fx.Timeline.PixelsPerSecond}");
             window.Close();
         });
@@ -379,7 +379,7 @@ public class ControlsTests
             mixer.MasterL = 0.8;
             mixer.MasterR = 0.6;
             var file = Ui.Capture(window, "janela-mixer");
-            window.KeyPress(Key.Z, RawInputModifiers.Control, PhysicalKey.Z, null);
+            window.KeyPress(Key.Z, Ui.Principal, PhysicalKey.Z, null);
             Assert.Equal(1, undone);
             window.Close();
             preview.Dispose();
@@ -440,6 +440,31 @@ public class ControlsTests
             return file;
         });
         AssertCaptured(path);
+    }
+
+    [Fact]
+    public void Clique_com_o_modificador_principal_insere_ponto_na_mascara_livre()
+    {
+        using var fx = Ui.Run(() => new TimelineFixture());
+        Ui.Run(() =>
+        {
+            fx.Timeline.Select(fx.BeachClip, additive: false);
+            using var editor = ActivatorUtilities.CreateInstance<CompositionInspectorViewModel>(fx.Services, fx.Timeline);
+            editor.AddMaskCommand.Execute("Path");
+            Assert.Equal(OverlayKind.MaskPath, editor.Overlay);
+            var pontos = editor.OverlayPoints.Count;
+
+            var overlay = new CompositionOverlay { Width = 400, Height = 225, Editor = editor };
+            var window = Ui.Host(overlay, 400, 225);
+            window.Show();
+            Avalonia.Threading.Dispatcher.UIThread.RunJobs();
+            var centro = overlay.TranslatePoint(new Point(200, 112.5), window)!.Value;
+
+            window.MouseDown(centro, MouseButton.Left, Ui.Principal);
+            window.MouseUp(centro, MouseButton.Left, Ui.Principal);
+            Assert.Equal(pontos + 1, editor.OverlayPoints.Count);
+            window.Close();
+        });
     }
 
     [Fact]

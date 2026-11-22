@@ -201,11 +201,11 @@ public class EditorViewTests
             Assert.Equal(marcadores + 1, timeline.Sequence!.Markers.Count);
 
             // O atalho é tratado pela janela que hospeda o editor, mesmo com o foco no corpo da janela.
-            window.KeyPress(Key.Z, RawInputModifiers.Control, PhysicalKey.Z, null);
+            window.KeyPress(Key.Z, Ui.Principal, PhysicalKey.Z, null);
             Dispatcher.UIThread.RunJobs();
             Assert.Equal(marcadores, timeline.Sequence!.Markers.Count);
 
-            window.KeyPress(Key.Y, RawInputModifiers.Control, PhysicalKey.Y, null);
+            window.KeyPress(Key.Y, Ui.Principal, PhysicalKey.Y, null);
             Dispatcher.UIThread.RunJobs();
             Assert.Equal(marcadores + 1, timeline.Sequence!.Markers.Count);
 
