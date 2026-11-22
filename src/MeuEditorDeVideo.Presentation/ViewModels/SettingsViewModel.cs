@@ -21,12 +21,15 @@ public sealed record Choice<T>(string Label, T Value)
 }
 
 /// <summary>Linha da tabela de atalhos (RF212).</summary>
-public sealed partial class ShortcutItemViewModel(ShortcutAction action, SettingsViewModel owner) : ObservableObject
+public sealed partial class ShortcutItemViewModel(ShortcutAction action, SettingsViewModel owner, bool isEditable = true) : ObservableObject
 {
     public ShortcutAction Action { get; } = action;
     public string Id => Action.Id;
     public string Label => Action.Label;
     public string Category => Action.Category;
+
+    /// <summary>Falso nos atalhos fixos (<see cref="ShortcutCatalog.Fixed"/>), listados só para consulta.</summary>
+    public bool IsEditable { get; } = isEditable;
 
     /// <summary>Combinação escolhida pelo usuário; null = padrão; "" = sem atalho.</summary>
     [ObservableProperty]
@@ -55,6 +58,7 @@ public sealed partial class ShortcutItemViewModel(ShortcutAction action, Setting
     /// <summary>Define a combinação pressionada pelo usuário.</summary>
     public void Assign(KeyChord chord)
     {
+        if (!IsEditable) return;
         var text = chord.ToString();
         Override = Action.Defaults.Length == 1 && Action.Defaults[0] == text ? null : text;
         owner.ShortcutsChanged();
@@ -70,6 +74,7 @@ public sealed partial class ShortcutItemViewModel(ShortcutAction action, Setting
     [RelayCommand]
     private void Clear()
     {
+        if (!IsEditable) return;
         Override = "";
         owner.ShortcutsChanged();
     }
@@ -124,6 +129,8 @@ public sealed partial class SettingsViewModel : ObservableObject
             {
                 Override = s.Shortcuts.TryGetValue(action.Id, out var o) ? o : null,
             });
+        foreach (var action in ShortcutCatalog.Fixed)
+            Shortcuts.Add(new ShortcutItemViewModel(action, this, isEditable: false));
         ShortcutsChanged();
     }
 

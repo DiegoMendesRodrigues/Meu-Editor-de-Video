@@ -14,6 +14,17 @@
                 <ResourceInclude Source="/Resources/Strings/Common.axaml" />
                 <ResourceInclude Source="/Resources/Strings/Editor.axaml" />
             </ResourceDictionary.MergedDictionaries>
+            <!-- Slider compacto em todo o aplicativo: o do Fluent (bolinha de 20 px entre margens de 15 px, 50 px de
+                 altura) ficava cortado nas linhas de parâmetro do inspetor. -->
+            <x:Double x:Key="SliderHorizontalThumbWidth">14</x:Double>
+            <x:Double x:Key="SliderHorizontalThumbHeight">14</x:Double>
+            <x:Double x:Key="SliderVerticalThumbWidth">14</x:Double>
+            <x:Double x:Key="SliderVerticalThumbHeight">14</x:Double>
+            <x:Double x:Key="SliderHorizontalHeight">24</x:Double>
+            <x:Double x:Key="SliderVerticalWidth">24</x:Double>
+            <GridLength x:Key="SliderPreContentMargin">5</GridLength>
+            <GridLength x:Key="SliderPostContentMargin">5</GridLength>
+            <CornerRadius x:Key="SliderThumbCornerRadius">7</CornerRadius>
             <conv:TranslateConverter x:Key="Med.Translate" />
             <!-- Item de lista com texto de origem em pt-BR mostrado no idioma da interface -->
             <DataTemplate x:Key="Med.TranslatedText" x:DataType="x:String">

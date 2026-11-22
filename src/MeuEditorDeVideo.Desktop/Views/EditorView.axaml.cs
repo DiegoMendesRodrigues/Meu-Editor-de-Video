@@ -183,14 +183,26 @@ public partial class EditorView : UserControl
     /// <summary>
     /// A faixa superior ocupa a área de legenda (a área do cliente se estende sob a barra de título no Windows e no
     /// macOS): arrastar uma parte livre da faixa move a janela e o duplo clique maximiza ou restaura.
+    /// O clique num item de menu sobe do popup (outra raiz visual) até a faixa sem estar marcado como tratado: se ele
+    /// iniciasse o arraste, a janela capturaria o mouse e o item nunca receberia o "soltar" (o menu não fazia nada).
     /// </summary>
     private void BarraTitulo_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (e.Handled || OwnerWindow is not { } window || !e.GetCurrentPoint(BarraTitulo).Properties.IsLeftButtonPressed) return;
+        if (!IniciaArrasteDaJanela(e.Source as Visual, window)) return;
         if (e.ClickCount == 2)
             window.WindowState = window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         else
             window.BeginMoveDrag(e);
+    }
+
+    /// <summary>Só a parte livre da faixa (na própria janela, fora de menus e botões) arrasta a janela.</summary>
+    public static bool IniciaArrasteDaJanela(Visual? origem, TopLevel janela)
+    {
+        if (origem is null || !ReferenceEquals(TopLevel.GetTopLevel(origem), janela)) return false;
+        for (var v = origem; v is not null; v = v.GetVisualParent())
+            if (v is MenuItem or Menu or Avalonia.Controls.Primitives.ToggleButton or Button or TextBox) return false;
+        return true;
     }
 
     /// <summary>Barra de menus nativa do macOS: os mesmos itens do menu da janela, mais o menu do aplicativo.</summary>

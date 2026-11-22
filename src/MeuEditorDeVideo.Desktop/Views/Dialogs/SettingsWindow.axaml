@@ -206,13 +206,15 @@
                                                     <StackPanel Margin="0,1">
                                                         <Grid ColumnDefinitions="240,220,Auto,Auto">
                                                             <TextBlock Classes="atalho-rotulo" Classes.custom="{Binding IsCustom}" Text="{Binding Label}" VerticalAlignment="Center" />
-                                                            <TextBox Grid.Column="1" Text="{Binding Text, Mode=OneWay}" IsReadOnly="True" Cursor="Hand"
+                                                            <TextBox Grid.Column="1" Text="{Binding Text, Mode=OneWay}" IsReadOnly="True" Cursor="Hand" IsEnabled="{Binding IsEditable}"
                                                                      ToolTip.Tip="Clique e pressione a nova combinação"
                                                                      AutomationProperties.Name="{Binding Label, StringFormat=Atalho de {0}}" />
-                                                            <Button Grid.Column="2" Content="Padrão" Command="{Binding ResetCommand}" Margin="8,0,0,0" Padding="8,1"
+                                                            <Button Grid.Column="2" Content="Padrão" Command="{Binding ResetCommand}" Margin="8,0,0,0" Padding="8,1" IsVisible="{Binding IsEditable}"
                                                                     AutomationProperties.Name="{Binding Label, StringFormat=Restaurar atalho de {0}}" />
-                                                            <Button Grid.Column="3" Content="Remover" Command="{Binding ClearCommand}" Margin="6,0,0,0" Padding="8,1"
+                                                            <Button Grid.Column="3" Content="Remover" Command="{Binding ClearCommand}" Margin="6,0,0,0" Padding="8,1" IsVisible="{Binding IsEditable}"
                                                                     AutomationProperties.Name="{Binding Label, StringFormat=Remover atalho de {0}}" />
+                                                            <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Classes="st-hint" Text="Atalho fixo" Margin="8,0,0,0"
+                                                                       VerticalAlignment="Center" IsVisible="{Binding !IsEditable}" />
                                                         </Grid>
                                                         <TextBlock Text="{Binding Conflict}" Foreground="{DynamicResource Med.Danger}" TextWrapping="Wrap"
                                                                    Margin="240,1,0,2" IsVisible="{Binding HasConflict}" />

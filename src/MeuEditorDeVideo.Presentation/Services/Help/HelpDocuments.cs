@@ -5,7 +5,7 @@ namespace MeuEditorDeVideo.Presentation.Services.Help;
 /// <summary>Documentos em Markdown das janelas Ajuda › Atalhos de teclado e Ajuda › Informações do sistema.</summary>
 public static class HelpDocuments
 {
-    /// <summary>Tabela de atalhos por categoria; uma ação sem atalho aparece como "—".</summary>
+    /// <summary>Tabela de atalhos por categoria, mais a dos atalhos fixos; uma ação sem atalho aparece como "—".</summary>
     public static string ShortcutsMarkdown(IEnumerable<ShortcutAction> actions, Func<string, IReadOnlyList<KeyChord>> chords)
     {
         var sb = new StringBuilder("# Atalhos de teclado\n\n> Para mudar um atalho, use **Ferramentas › Configurações… › Atalhos**.\n");
@@ -16,6 +16,16 @@ public static class HelpDocuments
             {
                 var keys = chords(action.Id).Select(c => c.Display).ToList();
                 sb.Append("| ").Append(action.Label).Append(" | ").Append(keys.Count > 0 ? string.Join(" ou ", keys) : "—").Append(" |\n");
+            }
+        }
+        foreach (var group in ShortcutCatalog.Fixed.GroupBy(a => a.Category))
+        {
+            sb.Append("\n## ").Append(group.Key).Append("\n\n> ").Append("Estes atalhos são fixos e não podem ser alterados.")
+                .Append("\n\n| Ação | Atalho |\n|---|---|\n");
+            foreach (var action in group)
+            {
+                var keys = action.Defaults.Select(t => KeyChord.TryParse(t, out var c) ? c.Display : t);
+                sb.Append("| ").Append(action.Label).Append(" | ").Append(string.Join(" ou ", keys)).Append(" |\n");
             }
         }
         return sb.ToString();

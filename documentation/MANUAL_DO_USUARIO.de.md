@@ -702,7 +702,7 @@ Wenn die Kombination bereits von einer anderen Aktion verwendet wird, weist das 
 
 ## Tastenkombinationen
 
-Dies sind die Standard-Tastenkombinationen. Sie können jede davon unter **Werkzeuge › Einstellungen… › Tastenkombinationen** ändern.
+Dies sind die Standard-Tastenkombinationen. Sie können sie unter **Werkzeuge › Einstellungen… › Tastenkombinationen** ändern, außer denen der Bildschirmaufnahme, die fest vorgegeben sind.
 
 Unter macOS verwenden Sie in allen Tastenkombinationen die Taste **Cmd (⌘)** statt **Strg** (zum Beispiel Cmd+S zum Speichern) und die Taste **Option (⌥)** statt **Alt**. Auf Mac-Tastaturen brauchen F1, F10 und F11 eventuell die Taste **fn**.
 
@@ -745,6 +745,8 @@ Unter macOS verwenden Sie in allen Tastenkombinationen die Taste **Cmd (⌘)** s
 | Zeitleiste verkleinern | Strg+- (Minustaste) |
 | An Fenster anpassen | Umschalt+Z |
 | Multikamera: Kamera 1 bis 4 | Alt+1 bis Alt+4 |
+| Bildschirmaufnahme beenden | F10 |
+| Aufnahmefenster schließen (wenn keine Aufnahme läuft) | Esc |
 
 ## Datenschutz
 

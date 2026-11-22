@@ -702,7 +702,7 @@ Si la combinación ya la usa otra acción, el programa avisa y no deja guardar. 
 
 ## Atajos de teclado
 
-Estos son los atajos predeterminados. Puede cambiar cualquiera en **Herramientas › Configuración… › Atajos**.
+Estos son los atajos predeterminados. Puede cambiarlos en **Herramientas › Configuración… › Atajos**, excepto los de la grabación de pantalla, que son fijos.
 
 En macOS, use la tecla **Cmd (⌘)** en lugar de **Ctrl** en todos los atajos (por ejemplo, Cmd+S para guardar) y la tecla **Option (⌥)** en lugar de **Alt**. En los teclados de Mac, F1, F10 y F11 pueden requerir la tecla **fn**.
 
@@ -745,6 +745,8 @@ En macOS, use la tecla **Cmd (⌘)** en lugar de **Ctrl** en todos los atajos (p
 | Alejar la línea de tiempo | Ctrl+- (tecla menos) |
 | Ajustar a la ventana | Mayús+Z |
 | Multicámara: cámara 1 a 4 | Alt+1 a Alt+4 |
+| Detener la grabación de pantalla | F10 |
+| Cerrar la ventana de grabación (sin grabación en curso) | Esc |
 
 ## Privacidad
 

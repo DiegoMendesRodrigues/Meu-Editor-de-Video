@@ -147,7 +147,12 @@ public sealed class SettingsViewModelTests
         var marker = vm.Shortcuts.Single(s => s.Id == ShortcutCatalog.Marker);
         Assert.True(marker.IsCustom);
         Assert.Equal("Ctrl+M", marker.Text);
-        Assert.Equal(ShortcutCatalog.All.Count, vm.Shortcuts.Count);
+        Assert.Equal(ShortcutCatalog.All.Count + ShortcutCatalog.Fixed.Count, vm.Shortcuts.Count);
+        var fixo = vm.Shortcuts.Single(s => s.Id == ShortcutCatalog.StopRecording);
+        Assert.False(fixo.IsEditable);
+        fixo.ClearCommand.Execute(null);
+        Assert.Equal("F10", fixo.Text);
+        Assert.Null(fixo.Override);
     }
 
     [Fact]

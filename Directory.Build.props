@@ -9,7 +9,7 @@
     <Company>Meu Editor de Vídeo</Company>
     <Product>Meu Editor de Vídeo</Product>
     <Copyright>Copyright © 2026 — Licenciado sob GPL-3.0-or-later</Copyright>
-    <Version>1.3.0</Version>
+    <Version>1.4.0</Version>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <!-- Sistema-alvo (windows, linux ou macos), usado para escolher pacotes com bibliotecas nativas diferentes por sistema.

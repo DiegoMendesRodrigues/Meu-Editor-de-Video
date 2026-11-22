@@ -25,19 +25,28 @@ public partial class MainWindow : Window
             ExtendClientAreaToDecorationsHint = true;
             ExtendClientAreaTitleBarHeightHint = 40;
             Opened += (_, _) => HideDrawnTitle();
+            // Os botões de legenda podem ser recriados ao maximizar/restaurar.
+            PropertyChanged += (_, e) =>
+            {
+                if (e.Property == WindowStateProperty) Dispatcher.UIThread.Post(HideDrawnTitle, DispatcherPriority.Loaded);
+            };
         }
     }
 
+    /// <summary>Partes da barra de título desenhada pelo Avalonia que o editor esconde.</summary>
+    public static IReadOnlyList<string> HiddenTitleBarParts { get; } = ["PART_TitleTextPanel", "PART_FullScreenButton"];
+
     /// <summary>
     /// A barra de título desenhada pelo Avalonia (camada de decorações, fora da árvore da janela, por isso os estilos
-    /// do aplicativo não a alcançam) mostra o título à esquerda, por baixo dos menus. O editor já mostra o título no
-    /// centro da faixa superior, como no WPF; aqui só o texto padrão é escondido (botões de legenda e arraste ficam).
+    /// do aplicativo não a alcançam) mostra o título à esquerda, por baixo dos menus, e um botão de tela cheia à
+    /// esquerda do minimizar, por cima do botão Exportar. O editor já mostra o título no centro da faixa superior e
+    /// tem tela cheia própria (F11); aqui os dois são escondidos (minimizar, maximizar, fechar e o arraste ficam).
     /// </summary>
     private void HideDrawnTitle()
     {
         Visual root = this;
         while (root.GetVisualParent() is { } parent) root = parent;
-        foreach (var part in root.GetVisualDescendants().OfType<Control>().Where(c => c.Name == "PART_TitleTextPanel"))
+        foreach (var part in root.GetVisualDescendants().OfType<Control>().Where(c => c.Name is { } n && HiddenTitleBarParts.Contains(n)))
             part.IsVisible = false;
     }
 

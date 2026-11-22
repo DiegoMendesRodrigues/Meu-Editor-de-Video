@@ -98,6 +98,7 @@ public static class ShortcutCatalog
         Split = "linha.dividir", Delete = "linha.excluir", RippleDelete = "linha.excluirFechando", Copy = "linha.copiar", Cut = "linha.recortar",
         Paste = "linha.colar", Duplicate = "linha.duplicar", SelectAll = "linha.selecionarTudo", Group = "linha.agrupar", Ungroup = "linha.desagrupar",
         Marker = "linha.marcador", Snap = "linha.ima", ZoomIn = "linha.aproximar", ZoomOut = "linha.afastar", ZoomFit = "linha.ajustar",
+        StopRecording = "gravacao.parar", CloseRecording = "gravacao.fechar",
         Camera1 = "multicam.1", Camera2 = "multicam.2", Camera3 = "multicam.3", Camera4 = "multicam.4";
 
     public static IReadOnlyList<ShortcutAction> All { get; } =
@@ -145,6 +146,17 @@ public static class ShortcutCatalog
         new(Camera2, "Multicâmera: câmera 2", "Linha do tempo", "Alt+D2"),
         new(Camera3, "Multicâmera: câmera 3", "Linha do tempo", "Alt+D3"),
         new(Camera4, "Multicâmera: câmera 4", "Linha do tempo", "Alt+D4"),
+    ];
+
+    /// <summary>
+    /// Atalhos fixos da janela de gravação de tela (F10 é global durante a gravação; Esc é do botão Fechar): aparecem
+    /// nas listas de atalhos, mas não entram em <see cref="All"/>, por isso não são configuráveis nem acionam ações
+    /// do editor.
+    /// </summary>
+    public static IReadOnlyList<ShortcutAction> Fixed { get; } =
+    [
+        new(StopRecording, "Parar a gravação de tela", "Gravação de tela", "F10"),
+        new(CloseRecording, "Fechar a janela de gravação", "Gravação de tela", nameof(MedKey.Escape)),
     ];
 
     public static ShortcutAction? Find(string id) => All.FirstOrDefault(a => a.Id == id);

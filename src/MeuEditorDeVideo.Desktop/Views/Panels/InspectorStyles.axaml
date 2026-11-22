@@ -93,9 +93,9 @@
         <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
     </Style>
 
-    <!-- Painéis de propriedades: o Slider do Fluent é alto; aqui a linha de parâmetro fica compacta como no WPF -->
+    <!-- Painéis de propriedades: linha de parâmetro compacta como no WPF. O tamanho do Slider vem dos recursos
+         Slider* de App.axaml (altura natural de 24 px); fixar a altura aqui cortava a bolinha. -->
     <Style Selector=".inspetor Slider">
-        <Setter Property="Height" Value="32" />
         <Setter Property="MinHeight" Value="0" />
     </Style>
 </Styles>

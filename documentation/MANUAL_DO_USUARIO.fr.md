@@ -702,7 +702,7 @@ Si la combinaison est déjà utilisée par une autre action, le programme vous p
 
 ## Raccourcis clavier
 
-Voici les raccourcis par défaut. Vous pouvez modifier chacun d'eux dans **Outils › Paramètres… › Raccourcis**.
+Voici les raccourcis par défaut. Vous pouvez les modifier dans **Outils › Paramètres… › Raccourcis**, sauf ceux de l'enregistrement de l'écran, qui sont fixes.
 
 Sur macOS, utilisez la touche **Cmd (⌘)** à la place de **Ctrl** dans tous les raccourcis (par exemple, Cmd+S pour enregistrer) et la touche **Option (⌥)** à la place de **Alt**. Sur les claviers Mac, F1, F10 et F11 peuvent nécessiter la touche **fn**.
 
@@ -745,6 +745,8 @@ Sur macOS, utilisez la touche **Cmd (⌘)** à la place de **Ctrl** dans tous le
 | Zoom arrière sur la timeline | Ctrl+- (touche moins) |
 | Ajuster à la fenêtre | Maj+Z |
 | Multicaméra : caméra 1 à 4 | Alt+1 à Alt+4 |
+| Arrêter l'enregistrement de l'écran | F10 |
+| Fermer la fenêtre d'enregistrement (hors enregistrement) | Échap |
 
 ## Confidentialité
 

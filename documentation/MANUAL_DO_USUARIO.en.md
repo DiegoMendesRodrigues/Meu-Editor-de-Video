@@ -702,7 +702,7 @@ If the combination is already used by another action, the program warns you and 
 
 ## Keyboard shortcuts
 
-These are the default shortcuts. You can change any of them in **Tools › Settings… › Shortcuts**.
+These are the default shortcuts. You can change them in **Tools › Settings… › Shortcuts**, except the screen recording ones, which are fixed.
 
 On macOS, use the **Cmd (⌘)** key instead of **Ctrl** in every shortcut (for example, Cmd+S to save) and the **Option (⌥)** key instead of **Alt**. On Mac keyboards, F1, F10 and F11 may need the **fn** key.
 
@@ -745,6 +745,8 @@ On macOS, use the **Cmd (⌘)** key instead of **Ctrl** in every shortcut (for e
 | Zoom out timeline | Ctrl+- (minus key) |
 | Fit to window | Shift+Z |
 | Multicam: camera 1 to 4 | Alt+1 to Alt+4 |
+| Stop screen recording | F10 |
+| Close the recording window (when not recording) | Esc |
 
 ## Privacy
 

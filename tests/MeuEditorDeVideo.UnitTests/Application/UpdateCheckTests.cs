@@ -47,15 +47,31 @@ public sealed class UpdateCheckTests
         Assert.True(UpdateEndpoints.IsDue(now.AddDays(-30).AddMinutes(-1), now));
     }
 
-    [Fact]
-    public void Nova_versao_e_qualquer_versao_diferente()
+    [Theory]
+    [InlineData("1.3.0", false)]
+    [InlineData("1.3.99", false)]
+    [InlineData("0.9", false)]
+    [InlineData("1.4.0", false)]
+    [InlineData(" 1.4.0 ", false)]
+    [InlineData("1.4", false)]
+    [InlineData("1.4.0.0", false)]
+    [InlineData("v1.4.0", false)]
+    [InlineData("1.4.0+abc", false)]
+    [InlineData("", false)]
+    [InlineData("em breve", false)]
+    [InlineData("1.4.1", true)]
+    [InlineData("1.5", true)]
+    [InlineData("1.10.0", true)]
+    [InlineData("2", true)]
+    public void Nova_versao_e_so_a_maior_que_a_instalada(string publicada, bool nova)
     {
-        Assert.False(UpdateEndpoints.IsNewer("1.1.0", "1.1.0"));
-        Assert.False(UpdateEndpoints.IsNewer(" 1.1.0 ", "1.1.0"));
-        Assert.True(UpdateEndpoints.IsNewer("1.2.0", "1.1.0"));
-        Assert.False(UpdateEndpoints.IsNewer("1.3.0", "1.3.0"));
-        Assert.True(UpdateEndpoints.IsNewer("1.4.0", "1.3.0"));
-        Assert.True(UpdateEndpoints.IsNewer("1.2.0", "1.3.0"));
+        Assert.Equal(nova, UpdateEndpoints.IsNewer(publicada, "1.4.0"));
+    }
+
+    [Fact]
+    public void A_versao_de_referencia_e_a_do_aplicativo_1_4_0()
+    {
+        Assert.Equal("1.4.0", MeuEditorDeVideo.Presentation.Services.AppInfo.Version);
     }
 
     [Fact]

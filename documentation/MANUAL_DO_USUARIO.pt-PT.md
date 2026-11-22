@@ -702,7 +702,7 @@ Se a combinação já estiver em uso por outra ação, o programa avisa e não d
 
 ## Atalhos de teclado
 
-Estes são os atalhos padrão. O utilizador pode mudar qualquer um deles em **Ferramentas › Definições… › Atalhos**.
+Estes são os atalhos padrão. O utilizador pode mudá-los em **Ferramentas › Definições… › Atalhos**, exceto os da gravação de ecrã, que são fixos.
 
 No macOS, use a tecla **Cmd (⌘)** em vez de **Ctrl** em todos os atalhos (por exemplo, Cmd+S para guardar) e a tecla **Option (⌥)** em vez de **Alt**. Em teclados de Mac, as teclas F1, F10 e F11 podem exigir a tecla **fn**.
 
@@ -745,6 +745,8 @@ No macOS, use a tecla **Cmd (⌘)** em vez de **Ctrl** em todos os atalhos (por 
 | Afastar a linha temporal | Ctrl+- (tecla de menos) |
 | Ajustar à janela | Shift+Z |
 | Multicâmara: câmara 1 a 4 | Alt+1 a Alt+4 |
+| Parar a gravação de ecrã | F10 |
+| Fechar a janela de gravação (sem gravação em curso) | Esc |
 
 ## Privacidade
 

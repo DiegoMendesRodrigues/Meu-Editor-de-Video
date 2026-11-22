@@ -113,7 +113,9 @@ public class HelpTests
         Assert.Contains("| Manual do usuário | F1 |", md);
         Assert.Contains("| Refazer | Ctrl+Y ou Ctrl+Shift+Z |", md);
         Assert.Contains("| Adicionar marcador | — |", md);
-        Assert.Equal(ShortcutCatalog.All.Select(a => a.Category).Distinct().Count(),
+        Assert.Contains("| Parar a gravação de tela | F10 |", md);
+        Assert.Contains("| Fechar a janela de gravação | Esc |", md);
+        Assert.Equal(ShortcutCatalog.All.Concat(ShortcutCatalog.Fixed).Select(a => a.Category).Distinct().Count(),
             MarkdownDocument.Parse(md).OfType<MdTable>().Count());
     }
 
