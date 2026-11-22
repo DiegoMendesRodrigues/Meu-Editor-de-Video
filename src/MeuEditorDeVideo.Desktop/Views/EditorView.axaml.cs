@@ -28,6 +28,7 @@ public partial class EditorView : UserControl
     private static readonly DataFormat<string> TrilhaFormat = DataFormat.CreateStringApplicationFormat("MeuEditorDeVideo.Trilha");
 
     private TopLevel? _host;
+    private AjusteDeEscala? _ajuste;
     private TimelineViewModel? _linhaDoTempo;
     private EditorViewModel? _editor;
 
@@ -58,6 +59,9 @@ public partial class EditorView : UserControl
             if (e.Property == IsVisibleProperty) PosicionarAlcaComparacao();
         };
         BarraTitulo.PointerPressed += BarraTitulo_PointerPressed;
+        // Em janelas estreitas a biblioteca cede espaço ao painel ao lado (mínimo de 400 e divisor), sem perder a
+        // largura escolhida: ela volta quando houver espaço.
+        AreaCentral.SizeChanged += (_, e) => ColunaBiblioteca.MaxWidth = Math.Max(360, e.NewSize.Width - 403);
 
         // Arrastar arquivos do gerenciador de arquivos sobre a biblioteca (RF027).
         BibliotecaArea.AddHandler(DragDrop.DragEnterEvent, BibliotecaArea_DragOver);
@@ -91,6 +95,14 @@ public partial class EditorView : UserControl
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
+        if (_ajuste is not null) _ajuste.EscalaMudou -= Ajuste_EscalaMudou;
+        _ajuste = this.FindAncestorOfType<AjusteDeEscala>();
+        if (_ajuste is not null)
+        {
+            _ajuste.EscalaMudou += Ajuste_EscalaMudou;
+            ReservarLarguraDoAssistente();
+            CompensarEscala();
+        }
         var top = TopLevel.GetTopLevel(this);
         if (top is null || ReferenceEquals(top, _host)) return;
         Unhook();
@@ -103,7 +115,32 @@ public partial class EditorView : UserControl
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
+        if (_ajuste is not null) _ajuste.EscalaMudou -= Ajuste_EscalaMudou;
+        _ajuste = null;
         Unhook();
+    }
+
+    private void Ajuste_EscalaMudou(object? sender, EventArgs e) => CompensarEscala();
+
+    /// <summary>
+    /// Os botões nativos da janela e os pixels do vídeo não encolhem com o <see cref="AjusteDeEscala"/>: a faixa
+    /// superior, o espaço desses botões e o zoom em pixels descontam a escala.
+    /// </summary>
+    private void CompensarEscala()
+    {
+        var escala = _ajuste?.Escala ?? 1;
+        var colunas = GradeBarraTitulo.ColumnDefinitions;
+        colunas[0].Width = new GridLength(MainWindow.CaptionButtonsLeftWidth.Value / escala);
+        colunas[^1].Width = new GridLength(MainWindow.CaptionButtonsWidth.Value / escala);
+        BarraTitulo.MinHeight = 40 / escala;
+        AplicarZoomVideo();
+    }
+
+    private void ReservarLarguraDoAssistente()
+    {
+        if (_ajuste is null) return;
+        // 3 = divisor.
+        _ajuste.LarguraExtra = PainelAssistente.IsVisible ? Math.Max(300, ColunaAssistente.Width.Value) + 3 : 0;
     }
 
     private void Unhook()
@@ -322,7 +359,7 @@ public partial class EditorView : UserControl
             AreaCentral.Children.Add(PainelPropriedades);
             Posicionar(PainelMonitor, 1, 3, 2);
             GradeEditor.Children.Add(PainelMonitor);
-            ColunaPrincipal.MinWidth = 600;
+            ColunaPrincipal.MinWidth = 763; // biblioteca (360), divisor e Propriedades (400)
             ColunaPrincipal.Width = new GridLength(1, GridUnitType.Star);
             ColunaPropriedades.MinWidth = 400;
             ColunaPropriedades.Width = new GridLength(1, GridUnitType.Star);
@@ -378,7 +415,7 @@ public partial class EditorView : UserControl
             RolagemMonitor.HorizontalScrollBarVisibility = RolagemMonitor.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
             return;
         }
-        var escala = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1;
+        var escala = (TopLevel.GetTopLevel(this)?.RenderScaling ?? 1) * (_ajuste?.Escala ?? 1);
         ConteudoMonitor.Width = ajustes.Width * _zoomVideo / escala;
         ConteudoMonitor.Height = ajustes.Height * _zoomVideo / escala;
         RolagemMonitor.HorizontalScrollBarVisibility = RolagemMonitor.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
@@ -539,7 +576,6 @@ public partial class EditorView : UserControl
 
     private AssistantViewModel? _assistente;
     private GridLength _larguraAssistente = new(380);
-    private GridLength? _larguraBibliotecaSemAssistente;
 
     private void Assistente_CloseRequested(object? sender, EventArgs e) => MostrarAssistente(false);
 
@@ -575,7 +611,7 @@ public partial class EditorView : UserControl
             ColunaAssistente.MinWidth = 300;
             ColunaAssistente.Width = _larguraAssistente;
             PainelAssistente.IsVisible = DivisorAssistente.IsVisible = true;
-            AbrirEspacoParaOMonitor();
+            ReservarLarguraDoAssistente();
             Assistente.FocusQuestion();
         }
         else
@@ -584,26 +620,9 @@ public partial class EditorView : UserControl
             ColunaAssistente.MinWidth = 0;
             ColunaAssistente.Width = ColunaDivisorAssistente.Width = new GridLength(0);
             PainelAssistente.IsVisible = DivisorAssistente.IsVisible = false;
-            if (_larguraBibliotecaSemAssistente is { } largura) ColunaBiblioteca.Width = largura;
-            _larguraBibliotecaSemAssistente = null;
+            ReservarLarguraDoAssistente();
             _assistente?.Suspend();
         }
-    }
-
-    /// <summary>
-    /// Em janelas estreitas, a coluna do assistente sai da área do monitor, que ficaria abaixo do mínimo e cortada:
-    /// encolhe a biblioteca (até o mínimo dela) o que faltar. A largura anterior volta ao fechar o assistente.
-    /// </summary>
-    private void AbrirEspacoParaOMonitor()
-    {
-        UpdateLayout();
-        if (PainelMonitor.Parent != AreaCentral || Grid.GetColumnSpan(AreaCentral) != 1) return; // outro modo do layout
-        // As colunas da área central respeitam os mínimos e passam da coluna principal; o excesso é a parte cortada do monitor.
-        var falta = AreaCentral.ColumnDefinitions.Sum(c => c.ActualWidth) - ColunaPrincipal.ActualWidth;
-        var sobra = ColunaBiblioteca.ActualWidth - ColunaBiblioteca.MinWidth;
-        if (falta <= 0.5 || sobra <= 0) return;
-        _larguraBibliotecaSemAssistente ??= ColunaBiblioteca.Width;
-        ColunaBiblioteca.Width = new GridLength(ColunaBiblioteca.ActualWidth - Math.Min(falta, sobra));
     }
 
     // ---------------------------------------------------------------- janelas auxiliares

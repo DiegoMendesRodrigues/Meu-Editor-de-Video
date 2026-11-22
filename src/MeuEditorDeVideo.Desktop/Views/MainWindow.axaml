@@ -1,12 +1,13 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels"
+        xmlns:ctl="using:MeuEditorDeVideo.Desktop.Controls"
         x:Class="MeuEditorDeVideo.Desktop.Views.MainWindow"
         x:DataType="vm:ShellViewModel"
         Title="{Binding Title}"
         Icon="/Assets/logo-64.png"
         Width="1440" Height="900"
-        MinWidth="1100" MinHeight="680"
+        MinWidth="640" MinHeight="400"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         Background="{DynamicResource Med.Background}">
@@ -15,5 +16,7 @@
       área do cliente se estende até a barra de título e os botões nativos (legenda no Windows, semáforo no macOS) ficam
       por cima; no Linux, a barra do gerenciador de janelas continua (ExtendClientArea não é garantido no X11/Wayland).
     -->
-    <ContentControl Content="{Binding CurrentPage}" Focusable="False" />
+    <ctl:AjusteDeEscala>
+        <ContentControl Content="{Binding CurrentPage}" Focusable="False" />
+    </ctl:AjusteDeEscala>
 </Window>

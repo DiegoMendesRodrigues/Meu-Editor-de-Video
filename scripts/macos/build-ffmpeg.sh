@@ -224,6 +224,7 @@ step "FFmpeg 9.0.2 ($ARCH)"
 extract "$SRC_FFMPEG" ffmpeg
 (
     cd "$WORK/src/ffmpeg"
+    # -liconv explícito: com --disable-autodetect, o configure só procura a iconv na libc, e no macOS ela é à parte.
     ./configure \
         --prefix="$STAGE" \
         --enable-shared --disable-static --enable-pic \
@@ -237,6 +238,7 @@ extract "$SRC_FFMPEG" ffmpeg
         --pkg-config-flags="--static" \
         --extra-cflags="-I$PREFIX/include -mmacosx-version-min=11.0" \
         --extra-ldflags="-L$PREFIX/lib -mmacosx-version-min=11.0" \
+        --extra-libs="-liconv" \
         --install-name-dir="@rpath" \
         --extra-ldsoflags="-Wl,-rpath,@loader_path" \
         --extra-ldexeflags="-Wl,-rpath,@executable_path/../lib" \
@@ -287,5 +289,5 @@ done
 devices="$("$OUT/bin/ffmpeg" -hide_banner -devices 2>/dev/null)"
 grep -q avfoundation <<< "$devices" || { echo "Dispositivo ausente na build: avfoundation" >&2; exit 1; }
 version="$("$OUT/bin/ffmpeg" -hide_banner -version)"
-echo "${version%%$'\n'*}"
+sed -n 1p <<< "$version"
 echo "FFmpeg compilado em $OUT"

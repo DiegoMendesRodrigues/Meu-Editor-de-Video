@@ -167,7 +167,7 @@
              à direita (Windows) ou à esquerda (macOS, semáforo). Arrastar uma parte vazia da faixa move a janela. -->
         <Border x:Name="BarraTitulo" Grid.Row="0" Grid.ColumnSpan="5" Background="{DynamicResource Med.Panel}" MinHeight="40"
                 BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,0,1">
-            <Grid>
+            <Grid x:Name="GradeBarraTitulo">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{x:Static v:MainWindow.CaptionButtonsLeftWidth}" />
                     <ColumnDefinition Width="Auto" />

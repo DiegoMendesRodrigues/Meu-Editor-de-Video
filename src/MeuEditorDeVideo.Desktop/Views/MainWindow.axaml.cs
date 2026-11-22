@@ -19,6 +19,7 @@ public partial class MainWindow : Window
     {
         DataContext = viewModel;
         _workflow = workflow;
+        CaberNaTela();
         // Windows e macOS: conteúdo sob a barra de título, botões nativos por cima (ver MainWindow.axaml).
         if (!OperatingSystem.IsLinux())
         {
@@ -31,6 +32,14 @@ public partial class MainWindow : Window
                 if (e.Property == WindowStateProperty) Dispatcher.UIThread.Post(HideDrawnTitle, DispatcherPriority.Loaded);
             };
         }
+    }
+
+    /// <summary>O tamanho de restaurar (1440 × 900) não pode passar da área útil da tela.</summary>
+    private void CaberNaTela()
+    {
+        if (Screens.Primary is not { Scaling: > 0 } tela) return;
+        Width = Math.Max(MinWidth, Math.Min(Width, tela.WorkingArea.Width / tela.Scaling));
+        Height = Math.Max(MinHeight, Math.Min(Height, tela.WorkingArea.Height / tela.Scaling));
     }
 
     /// <summary>Partes da barra de título desenhada pelo Avalonia que o editor esconde.</summary>

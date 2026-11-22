@@ -492,6 +492,7 @@ Arquivos: `src/MeuEditorDeVideo.Desktop/` (`net10.0`, Avalonia 12, assembly e ex
 - `Controls/`: controles desenhados (`TimelineControl`, `CropCanvas`, `CompositionOverlay`, `TransformOverlay`, `ClipWaveform`, `CurveEditor`, `ColorWheel`, `MonitorRuler`, `LevelMeter`); `FrameImage.cs` copia o `DisplayFrame` da prévia para um `WriteableBitmap`; `KeyMapping.cs` converte as teclas do Avalonia em `MedKey`/`MedModifiers`.
 - `Converters/`: `BgraBitmaps.cs` (miniaturas `BgraImage`), `TranslateConverter.cs` e outros.
 - `Localization/LocalizationHook.cs`: traduz a árvore visual ao carregar (textos, `ToolTip.Tip`, `AutomationProperties.Name`, menus e abas abertos depois).
+- `Controls/AjusteDeEscala.cs`: envolve as páginas na `MainWindow`. Abaixo de 1180 × 680 (mais a coluna do assistente, se aberta) reduz o conteúdo inteiro; o `EditorView` desconta a escala no espaço dos botões nativos da janela, na altura da faixa superior e no zoom em pixels. Ao mudar mínimos de coluna, ajustar a largura base (`TelasPequenasTests`).
 - `Views/`: `MainWindow`, `EditorView`, `Panels/`, `Dialogs/` (janelas em `.axaml` ou só em código), `ViewMappings` e os modelos do inspetor.
 - `app.manifest`: DPI por monitor (PerMonitorV2) e Windows 10/11 como sistemas suportados. `BuiltInComInteropSupport` fica ligado no `.csproj` porque o NAudio (WASAPI) e a fala SAPI usam COM (`RuntimeConfigTests`).
 
