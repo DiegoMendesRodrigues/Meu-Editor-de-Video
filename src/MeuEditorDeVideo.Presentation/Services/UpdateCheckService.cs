@@ -43,7 +43,7 @@ public sealed class UpdateCheckService(IUpdateChecker checker, ISettingsService 
                 return;
             }
 
-            dialogs.ShowUpdateResult(info, UpdateEndpoints.IsNewer(info.Version, AppInfo.Version));
+            dialogs.ShowUpdateResult(info, UpdateEndpoints.IsDifferentVersion(info.Version, AppInfo.Version));
 
             // "Fechar essa janela": guarda a data e a hora da verificação (registro LastCheck).
             await settings.SaveAsync(settings.Current with { LastUpdateCheck = DateTimeOffset.Now });

@@ -360,7 +360,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         };
         rows.AddRange(hw.Gpus.Count == 0
             ? [new Choice<string>("Placa de vídeo", "Não detectada")]
-            : hw.Gpus.Select(g => new Choice<string>("Placa de vídeo", $"{g.Name} · {(g.VideoMemoryBytes > 0 ? gb(g.VideoMemoryBytes) : "memória desconhecida")} · {(g.Dedicated ? "dedicada" : "integrada/compartilhada")}")));
+            : hw.Gpus.Select(g => new Choice<string>("Placa de vídeo", $"{g.Name} · {(g.VideoMemoryBytes > 0 ? gb(g.VideoMemoryBytes) : Localization.Translator.T("memória desconhecida"))} · {Localization.Translator.T(g.Dedicated ? "dedicada" : "integrada/compartilhada")}")));
         rows.Add(new("Decodificação por GPU", hw.HardwareDecoding ? "Disponível (D3D11VA)" : "Indisponível"));
         rows.Add(new("Codificação por GPU", hw.HardwareEncoders.Count == 0 ? "Indisponível" : string.Join("; ", hw.HardwareEncoders)));
         rows.AddRange(hw.Disks.Select(d => new Choice<string>($"Disco ({d.Label})", $"{d.Root} · {gb(d.FreeBytes)} livres de {gb(d.TotalBytes)}")));

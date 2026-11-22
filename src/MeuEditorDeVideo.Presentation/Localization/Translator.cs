@@ -12,20 +12,22 @@ namespace MeuEditorDeVideo.Presentation.Localization;
 /// ficam em <c>i18n\origem.json</c> e cada idioma em <c>i18n\&lt;código&gt;.tsv</c> (linhas "id⇥tradução", em que o id são os
 /// 8 primeiros hexadecimais do SHA-256 do texto de origem em UTF-8). Textos com valores ({0}, {1}…) viram modelos:
 /// "Projeto reenquadrado para 1080×1920 (2 clipes)" é reconhecido por "Projeto reenquadrado para {0}×{1} ({2} {3})" e os
-/// valores também são traduzidos ("clipes"). Sem tradução, o texto fica em português do Brasil.
+/// valores também são traduzidos ("clipes"); um valor todo em minúsculas também acha o rótulo com maiúscula
+/// ("Ajustar deslocamento x" usa "Deslocamento X"). Sem tradução, o texto fica em português do Brasil.
 /// </summary>
 public static partial class Translator
 {
     private static Dictionary<string, string>? _exact;
     private static List<Template> _templates = [];
-    private static readonly ConcurrentDictionary<string, string> Cache = new(StringComparer.Ordinal);
+    private static Dictionary<string, string> _anyCase = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly ConcurrentDictionary<(string Text, int Depth, bool Lowered), string> Cache = new();
 
     /// <summary>Idioma em uso (pt-BR = sem tradução).</summary>
     public static string Language { get; private set; } = "pt-BR";
 
     public static bool IsActive => _exact is not null;
 
-    private sealed record Template(Regex Pattern, string Target, string Prefix);
+    private sealed record Template(Regex Pattern, Regex? AnyCase, string Target, string Prefix);
 
     /// <summary>Id de um texto de origem (o mesmo usado nos arquivos .tsv).</summary>
     public static string IdOf(string source) =>
@@ -70,6 +72,9 @@ public static partial class Translator
             if (Placeholder().IsMatch(source)) templates.Add(Build(source, target));
         }
         // Os modelos mais longos (mais específicos) primeiro.
+        var anyCase = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (source, target) in exact) anyCase.TryAdd(source, target);
+        _anyCase = anyCase;
         templates.Sort((a, b) => b.Pattern.ToString().Length.CompareTo(a.Pattern.ToString().Length));
         _templates = templates;
         _exact = exact;
@@ -86,12 +91,14 @@ public static partial class Translator
     /// <summary>Traduz um texto exibido (exato, por modelo ou linha a linha). Sem tradução, devolve o próprio texto.</summary>
     public static string T(string? text) => T(text, 0);
 
-    private static string T(string? text, int depth)
+    /// <param name="lowered">O texto é um valor fora de aspas: pode ser um rótulo posto em minúsculas.</param>
+    private static string T(string? text, int depth, bool lowered = false)
     {
         if (_exact is null || string.IsNullOrEmpty(text)) return text ?? "";
-        if (Cache.TryGetValue(text, out var cached)) return cached;
+        if (Cache.TryGetValue((text, depth, lowered), out var cached)) return cached;
         var result = Translate(text, depth);
-        if (Cache.Count < 50_000) Cache[text] = result;
+        if (lowered && result == text) result = TranslateLowered(text, depth);
+        if (Cache.Count < 50_000) Cache[(text, depth, lowered)] = result;
         return result;
     }
 
@@ -118,13 +125,23 @@ public static partial class Translator
 
         if (depth < 3)
         {
+            // Item de lista ("• Recurso"): traduz o que vem depois do marcador.
+            if (text.StartsWith("• ", StringComparison.Ordinal) && !text.Contains('\n'))
+                return "• " + T(text[2..], depth + 1);
+
             foreach (var template in _templates)
             {
                 if (template.Prefix.Length > 0 && !text.StartsWith(template.Prefix, StringComparison.Ordinal)) continue;
                 var m = template.Pattern.Match(text);
                 if (!m.Success) continue;
                 var args = new object[m.Groups.Count - 1];
-                for (var i = 1; i < m.Groups.Count; i++) args[i - 1] = T(m.Groups[i].Value, depth + 1);
+                for (var i = 1; i < m.Groups.Count; i++)
+                {
+                    // Entre aspas vem um nome dado pelo usuário ("praia" não é o rótulo "Praia").
+                    var at = m.Groups[i].Index;
+                    var quoted = at > 0 && text[at - 1] is '"' or '“' or '«';
+                    args[i - 1] = T(m.Groups[i].Value, depth + 1, lowered: !quoted);
+                }
                 try
                 {
                     return string.Format(System.Globalization.CultureInfo.CurrentCulture, template.Target, args);
@@ -153,11 +170,40 @@ public static partial class Translator
             // "Rótulo: valor" com rótulo conhecido.
             var colon = text.IndexOf(": ", StringComparison.Ordinal);
             if (colon > 0 && colon < 60 && exact.TryGetValue(text[..(colon + 1)], out var label))
-                return label + text[(colon + 1)..];
+                return label + " " + T(text[(colon + 2)..], depth + 1, lowered: true);
             if (colon > 0 && colon < 60 && exact.TryGetValue(text[..colon], out label))
-                return label + text[colon..];
+                return label + ": " + T(text[(colon + 2)..], depth + 1, lowered: true);
         }
         return text;
+    }
+
+    /// <summary>Rótulo posto em minúsculas pelo código: procura sem diferenciar maiúsculas.</summary>
+    private static string TranslateLowered(string text, int depth)
+    {
+        if (!char.IsLower(text[0]) || text.Any(char.IsUpper)) return text;
+        string? found = null;
+        if (_anyCase.TryGetValue(text, out var exact)) found = exact;
+        else if (depth < 3)
+            foreach (var template in _templates)
+            {
+                if (template.AnyCase is not { } pattern || !text.StartsWith(template.Prefix, StringComparison.OrdinalIgnoreCase)) continue;
+                var m = pattern.Match(text);
+                if (!m.Success) continue;
+                var args = m.Groups.Values.Skip(1).Select(g => (object)T(g.Value, depth + 1)).ToArray();
+                try
+                {
+                    found = string.Format(System.Globalization.CultureInfo.CurrentCulture, template.Target, args);
+                }
+                catch (FormatException)
+                {
+                    return text;
+                }
+                break;
+            }
+        if (string.IsNullOrEmpty(found)) return text;
+        // Em alemão os substantivos têm maiúscula; siglas e letras de eixo ("X", "LUT 3D") ficam como estão.
+        var keep = Language == "de" || found.Length < 2 || !char.IsLower(found[1]);
+        return keep ? found : char.ToLowerInvariant(found[0]) + found[1..];
     }
 
     /// <summary>Formata com o modelo traduzido (para textos montados no código).</summary>
@@ -184,7 +230,11 @@ public static partial class Translator
         sb.Append(Regex.Escape(source[last..].Replace("{{", "{").Replace("}}", "}"))).Append('$');
         // O destino usa só o índice: os valores já chegam formatados.
         var plainTarget = Placeholder().Replace(target, m => "{" + m.Groups[1].Value + "}");
-        return new Template(new Regex(sb.ToString(), RegexOptions.Singleline | RegexOptions.CultureInvariant), plainTarget, prefix);
+        const RegexOptions options = RegexOptions.Singleline | RegexOptions.CultureInvariant;
+        var pattern = sb.ToString();
+        // Sem diferenciar maiúsculas só com começo fixo, para não pegar qualquer texto ("Máscara {0}").
+        var anyCase = prefix.Count(char.IsLetter) >= 3 ? new Regex(pattern, options | RegexOptions.IgnoreCase) : null;
+        return new Template(new Regex(pattern, options), anyCase, plainTarget, prefix);
     }
 
     private static string Unescape(string s) =>

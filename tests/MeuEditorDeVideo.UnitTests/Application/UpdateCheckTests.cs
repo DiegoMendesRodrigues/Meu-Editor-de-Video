@@ -48,24 +48,18 @@ public sealed class UpdateCheckTests
     }
 
     [Theory]
-    [InlineData("1.3.0", false)]
-    [InlineData("1.3.99", false)]
-    [InlineData("0.9", false)]
     [InlineData("1.4.0", false)]
     [InlineData(" 1.4.0 ", false)]
-    [InlineData("1.4", false)]
-    [InlineData("1.4.0.0", false)]
-    [InlineData("v1.4.0", false)]
-    [InlineData("1.4.0+abc", false)]
-    [InlineData("", false)]
-    [InlineData("em breve", false)]
+    [InlineData("1.3.0", true)]
     [InlineData("1.4.1", true)]
-    [InlineData("1.5", true)]
     [InlineData("1.10.0", true)]
-    [InlineData("2", true)]
-    public void Nova_versao_e_so_a_maior_que_a_instalada(string publicada, bool nova)
+    [InlineData("1.4", true)]
+    [InlineData("1.4.0.0", true)]
+    [InlineData("v1.4.0", true)]
+    [InlineData("em breve", true)]
+    public void Nova_versao_e_qualquer_uma_diferente_da_instalada(string publicada, bool nova)
     {
-        Assert.Equal(nova, UpdateEndpoints.IsNewer(publicada, "1.4.0"));
+        Assert.Equal(nova, UpdateEndpoints.IsDifferentVersion(publicada, "1.4.0"));
     }
 
     [Fact]

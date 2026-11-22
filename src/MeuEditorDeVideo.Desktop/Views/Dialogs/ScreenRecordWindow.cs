@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Desktop.Services;
+using MeuEditorDeVideo.Presentation.Localization;
 
 namespace MeuEditorDeVideo.Desktop.Views.Dialogs;
 
@@ -186,7 +187,7 @@ public sealed class ScreenRecordWindow : Window
             _mic.SelectedIndex = devices.Microphones.Count > 0 ? 1 : 0;
             _status.Text = _screenAvailable
                 ? $"{devices.Cameras.Count} câmera(s) e {devices.Microphones.Count} microfone(s) encontrados. O vídeo é gravado em MP4."
-                : (_recorder.ScreenCaptureUnavailableReason ?? "") + $" {devices.Cameras.Count} câmera(s) e {devices.Microphones.Count} microfone(s) encontrados.";
+                : Translator.T(_recorder.ScreenCaptureUnavailableReason ?? "") + Translator.T($" {devices.Cameras.Count} câmera(s) e {devices.Microphones.Count} microfone(s) encontrados.");
         }
         catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception or IOException)
         {

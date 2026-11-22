@@ -31,7 +31,7 @@ public sealed partial class CatalogItemViewModel(ModelCatalogEntry entry, ModelC
 
     public string Dependencies => Entry.DependsOn.Count == 0
         ? "Nenhuma"
-        : string.Join(", ", Entry.DependsOn.Select(id => owner.NameOf(id))) + " (instalado junto)";
+        : string.Join(", ", Entry.DependsOn.Select(id => Localization.Translator.T(owner.NameOf(id)))) + Localization.Translator.T(" (instalado junto)");
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StateText), nameof(ActionText), nameof(IsInstalled))]
@@ -180,7 +180,7 @@ public sealed partial class ModelCatalogViewModel : ObservableObject, IDisposabl
             };
             if (item is not null) item.Progress = text;
             Percent = Math.Min(100, (doneBytes + (p.Stage == ModelInstallStage.Downloading ? p.Bytes : p.TotalBytes)) * 100.0 / totalBytes);
-            Status = $"{p.Index} de {p.Count}: {p.Name} — {text}";
+            Status = Localization.Translator.F("{0} de {1}: {2} — {3}", p.Index, p.Count, Localization.Translator.T(p.Name), Localization.Translator.T(text));
         });
         try
         {

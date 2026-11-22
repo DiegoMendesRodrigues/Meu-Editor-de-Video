@@ -24,7 +24,7 @@
 0838227e	Incluir ficheiros multimédia
 08dc5795	Memória de {0} (mínimo recomendado: 16 GB): projetos longos ou 4K podem ficar lentos, e a pré-visualização guarda menos fotogramas.
 09456467	Não há legendas na linha temporal.
-0ad79817	Deseja recuperá-lo agora? Se escolher não, a cópia continua guardada e é oferecida de novo da próxima vez.
+0ad79817	Deseja recuperá-lo agora? Se escolher não, a cópia continua guardada e é proposta novamente da próxima vez.
 0ba0cb9d	Adicionar faixa
 0bcac467	Guardar projeto como
 0be8593b	A medir o loudness…
@@ -134,7 +134,7 @@
 34f565db	Ficheiros em falta
 354b7cc2	O catálogo de modelos não foi encontrado na pasta da aplicação.
 36c23353	Animação predefinida
-36f71ab3	Para sincronizar, o clipe teria de começar antes do início da linha temporal. Afaste a referência e tente de novo.
+36f71ab3	Para sincronizar, o clipe teria de começar antes do início da linha temporal. Afaste a referência e tente novamente.
 36f8acb2	para transferir e empacotar os modelos, mas há {0}.
 37a0a489	Repor transformação
 37b584ab	Posição na linha temporal
@@ -179,7 +179,7 @@
 49b2426b	Câmara lenta suavizada
 49e49399	Descodificador não disponível para "{0}".
 4b01bca3	Mudar o nome…
-4b26f857	A tecla F10 está a ser usada por outro programa; feche-o e tente de novo.
+4b26f857	A tecla F10 está a ser usada por outro programa; feche-o e tente novamente.
 4ba77551	A reduzir o ruído…
 4bd5688d	Indique a taxa de bits do áudio em kbps.
 4c17b0b8	Voz e ambiente em faixas separadas{0}
@@ -279,8 +279,7 @@
 6b90a5ae	Todos os ficheiros|*.*
 6ba9d30c	1 multimédia foi localizado.
 6d2b1ab0	O ficheiro não foi encontrado.
-6d96c2bd	Ecrã {0}{1}
-6dd2c42d	Para aplicar o recorte, o clipe não pode estar rodado. Coloque a Rotação (e a rotação 3D) a zero e tente de novo.
+6dd2c42d	Para aplicar o recorte, o clipe não pode estar rodado. Coloque a Rotação (e a rotação 3D) a zero e tente novamente.
 6dd717af	Câmara _3 a partir do cursor
 6e099a28	O multimédia "{0}" está em uso na linha temporal. Remova os clipes antes.
 6e236e55	Restaurar predefinição do modelo
@@ -307,7 +306,7 @@
 758dcd0f	Pré-visualização em ecrã inteiro
 75cd5d41	A procurar câmaras e microfones…
 7677bcb8	Solo: ouvir só as faixas em solo
-768fb9c2	Mover, rodar e redimensionar o clip no monitor
+768fb9c2	Mover, rodar e redimensionar o clipe no monitor
 76900f1b	Voltar
 76b0fb6a	Definições
 772bee3a	Seguir movimento
@@ -431,7 +430,7 @@
 9fbdfc69	Faça duplo clique numa forma para a inserir no cursor. Ajuste forma, cores e máscaras no separador Composição.
 9fc16cbd	A finalizar o ficheiro…
 a02d9202	Silenciar faixa "{0}"
-a053b0c0	Verifique a ligação à internet e tente de novo; o que já foi transferido é aproveitado.
+a053b0c0	Verifique a ligação à internet e tente novamente; o que já foi transferido é aproveitado.
 a07187e6	Não foi possível ler os fotogramas do clipe.
 a17a83d9	Pacote gerado pelo Meu Editor de Vídeo (Ferramentas › Modelos de IA › Transferir modelos). Pode ser copiado e
 a1d3b0f3	Biblioteca multimédia
@@ -495,7 +494,6 @@ b6937e77	Selecione um clipe de vídeo para congelar o fotograma.
 b6c3a204	Não foi possível copiar o tipo de letra: {0}
 b72e9d46	A analisar os ficheiros multimédia…
 b7e6dc27	Inserir título guardado
-b874aa98	Movimento medido em {0} fotogramas. Ampliação usada: {1}
 ba20b1c3	O ficheiro SVG não pôde ser lido.
 ba309e78	Software livre licenciado sob a GPL-3.0-or-later (GNU General Public License, versão 3 ou posterior). Pode usar, estudar, modificar e redistribuir o programa nos termos dessa licença; o programa é distribuído sem garantia.
 ba30f96d	Mudar o nome da faixa…
@@ -519,7 +517,7 @@ c2544121	Ao clicar em Gravar, o programa é minimizado e a gravação começa ap
 c29337f0	Um fotograma congelado não pode ser reproduzido ao contrário.
 c3ed83c8	Corta os silêncios do clipe (e do vídeo ligado) e fecha os espaços
 c420cee5	Nenhum ficheiro corresponde à pesquisa.
-c466c139	Sem um clip encostado antes deste, a transição é de entrada: revela o clip sobre as faixas de baixo.
+c466c139	Sem um clipe encostado antes deste, a transição é de entrada: revela o clipe sobre as faixas de baixo.
 c46d4cbb	O ficheiro está a ser usado por outro programa:\n{0}
 c4930de6	Aplicar este estilo a todas as legendas da faixa
 c4af3181	{0}\nFicheiro não encontrado: {1}
@@ -594,7 +592,7 @@ d9da0b53	Eliminar e fechar o espaço
 d9f02f0f	720 × 1280 · 30 FPS · vertical 9:16, ficheiro leve
 da1525a1	Seguimento {0}
 da2f8d8f	Ao instalar, a aplicação transfere os ficheiros dos modelos das origens oficiais (huggingface.co e github.com), em endereços fixos, e confere a assinatura SHA-256 de cada um. Nenhum dado seu é enviado: vídeos, áudios e projetos continuam apenas neste computador. Os pacotes .medmodel gerados ficam guardados e podem ser copiados para instalar noutro computador sem internet.
-da3b0c44	Não há outro clipe com áudio a tocar com este. Coloque a narração ou a fala noutra faixa e tente de novo.
+da3b0c44	Não há outro clipe com áudio a tocar com este. Coloque a narração ou a fala noutra faixa e tente novamente.
 da56fad3	{0} batidas marcadas na linha temporal.
 daa319da	Os clipes são demasiado curtos para uma transição.
 dac230c4	Suavizar margem
@@ -607,7 +605,7 @@ dbbd5fd0	Eliminar seleção (Delete)
 dc55af2c	Repor valores
 dca191f2	A faixa "{0}" tem {1} clipe(s). Remover mesmo assim?
 dcc81347	Selecione um clipe de vídeo ou imagem na linha temporal para editar transformação, keyframes, velocidade e transições.
-ddbb6686	Título "{0}" guardado em Meus itens.
+ddbb6686	Título "{0}" guardado em Os meus itens.
 ddf40d55	⚠ Ficheiro removido
 de085fc7	O ficheiro de documentação '{0}' declarado no manifesto não está no pacote.
 de7fe5d8	O multimédia '{0}' não tem caminho de origem.
@@ -635,7 +633,7 @@ e56d0d19	Gravar o ecrã
 e5b989e0	Mostrar faixa "{0}"
 e5d2c46e	Ficheiros suportados|{0}|Vídeos|{1}|Áudios|{2}|Imagens e GIFs|{3}|Todos os ficheiros|*.*
 e649cc8d	Indique um nome de ficheiro válido.
-e6b9dd39	Transferência incompleta: {0} de {1} bytes. Tente de novo.
+e6b9dd39	Transferência incompleta: {0} de {1} bytes. Tente novamente.
 e6cd0bd5	Ecrã dividido
 e6efbd7c	A gravação vai começar.\nPrima F10 para parar.
 e70460ad	Refinar margens
@@ -686,7 +684,7 @@ f6bfbe13	A procurar silêncios…
 f72685ad	A faixa "{0}" não aceita "{1}".
 f742d3de	 (deteção pelo nível do som; instale o modelo de deteção de fala para mais precisão).
 f7514da1	Seguimento de câmara
-f7f4837b	O ficheiro deste clipe não foi encontrado. Volte a ligar o ficheiro e tente de novo.
+f7f4837b	O ficheiro deste clipe não foi encontrado. Volte a ligar o ficheiro e tente novamente.
 f8515210	Fotograma anterior
 f85e8e02	A transição precisa de dois clipes encostados na mesma faixa.
 f9250d2c	Posição, escala, rotação, opacidade e keyframes ficam no separador Vídeo.
@@ -741,7 +739,7 @@ a25648cb	Verificar mensalmente se há novas atualizações
 4eb7d40e	Acompanhar o sistema operativo
 0e23f29d	A pergunta e os excertos do manual ultrapassaram o limite do modelo de linguagem.
 29d81af6	As respostas podem conter erros: confirme no manual pela fonte indicada.
-c7bf3af8	Como divido um clip em duas partes?
+c7bf3af8	Como divido um clipe em duas partes?
 1b943228	Estas secções do manual falam sobre isso:
 8e7b4b1a	Nome de ficheiro inválido ou repetido para '{0}': {1}.
 adac886e	Não encontrei esse assunto no manual. Experimente perguntar com outras palavras, por exemplo com o nome do menu ou da funcionalidade.
@@ -754,10 +752,10 @@ a08a4981	Para respostas em linguagem natural, instale o modelo {0} ({1}). Corre 
 1c4e7503	A área de corte é demasiado pequena.
 40b73d02	Arraste no fotograma para marcar a área que fica no vídeo. Ao aplicar, ela é ampliada para ocupar o ecrã.
 506890a1	Cortar e ampliar
-b1f1f069	Posição no clip
+b1f1f069	Posição no clipe
 05b337f9	Proporção do projeto ({0})
 d0287f66	Proporção original
-9101f57d	Selecione um clip de vídeo ou imagem para cortar e ampliar.
+9101f57d	Selecione um clipe de vídeo ou imagem para cortar e ampliar.
 d511fafa	Área de corte
 8ea091ea	Adicionar texto simples
 be8ad579	Ferramentas de desenho
@@ -768,8 +766,8 @@ c5c2ad6d	Triângulo
 2c4f7e19	Forma de onda do áudio
 0755b730	2 colunas
 486ce5a9	2 linhas
-badc0543	4 quadros
-c352900b	9 quadros
+badc0543	4 painéis
+c352900b	9 painéis
 71290daf	A imagem pisca, como uma luz instável ou um estroboscópio.
 529f32a9	Abertura
 883e4b9d	Aberturas
@@ -812,7 +810,7 @@ bb4fba6f	Cintilação
 9d8cef11	Contagem 3, 2, 1
 e5151524	Contagem decrescente
 05b9cdf1	Contagem decrescente vermelha
-1d040d0d	Contagem decrescente, cronómetro ou barra de progresso que acompanham a duração do clip.
+1d040d0d	Contagem decrescente, cronómetro ou barra de progresso que acompanham a duração do clipe.
 d2d52596	Cor do espaço
 863ca108	Corações
 e5b5419b	Corações, confettis, brilhos, neve, estrelas, bolhas, fogo de artifício ou chuva sobre o vídeo.
@@ -832,7 +830,7 @@ dda4a2bf	Discoteca
 719052c2	Em baixo
 f0dcbac7	Encerramento
 109bae17	Encerramentos
-3f97c22a	Esconde o vídeo no fim do clip: desvanecer, cortina, íris, faixas de cinema, desfocagem, zoom, flash…
+3f97c22a	Esconde o vídeo no fim do clipe: desvanecer, cortina, íris, faixas de cinema, desfocagem, zoom, flash…
 0fcedaab	Desvanecer do preto
 13ba0569	Desvanecer para o preto
 0c9ce2cd	Espelho
@@ -891,8 +889,8 @@ c98e55fb	Queimado
 60f92f6f	Rasgado
 25f54698	Remoinho
 be89bad2	Reflexo de lente
-2313f437	Repete o vídeo em vários quadros lado a lado ou espelhados.
-502b2af6	Revela o vídeo no início do clip: desvanecer, cortina, íris, faixas de cinema, desfocagem, zoom, flash…
+2313f437	Repete o vídeo em vários painéis lado a lado ou espelhados.
+502b2af6	Revela o vídeo no início do clipe: desvanecer, cortina, íris, faixas de cinema, desfocagem, zoom, flash…
 3bc3567a	Romance
 f8afdd8d	Abana a imagem como uma câmara ao ombro, com força e ritmo ajustáveis.
 878cedb6	Sinal fraco
@@ -1058,3 +1056,119 @@ f2b66c0c	Pistas da linha cronológica
 3d3e005b	● A gravar  {0}   (prima F10 ou clique em Parar para terminar)
 0c60e5be	Parar a gravação de ecrã
 0b2e5195	Gravação de ecrã
+62b0a591	+ Tipo de letra
+6396dda6	+ Novo seguimento
+91243d08	Gerir modelos de IA…
+0dbd11e2	Gerir modelos…
+3c64e4a7	Maquilhagem
+72b295a3	A verificação de integridade do projeto falhou (ficheiro interno "{0}" diferente do esperado). O ficheiro pode estar danificado. Tente abrir uma cópia de segurança.
+c2ab8424	Desfocada
+0d71445e	Espaço entre painéis
+618484e2	Néon
+93904df9	Este projeto foi criado com uma versão mais recente da aplicação (formato {0}). Esta versão abre projetos até ao formato {1}. Atualize o Meu Editor de Vídeo.
+3d3ec81d	A importar {0} de {1}{2}
+95b530ba	Movimento medido em {0} fotogramas. Ampliação usada: {1}×.
+a3b3d36a	Não foi possível transferir {0} de {1}: {2} Verifique a ligação à internet e tente novamente; o que já foi transferido é aproveitado.
+11284106	Não foi possível consultar {0}: {1} Verifique a ligação à internet e tente novamente.
+de5a9a6b	Não há espaço suficiente em disco para concluir a exportação em:\n{0}\nLiberte espaço e retome a exportação; os trechos já prontos serão aproveitados.
+5ab644ff	O codificador de vídeo da placa gráfica ("{0}") falhou. Tente novamente com o codificador por software (opção "Codificador: software").
+4db7a6aa	O projeto "{0}" foi recuperado da gravação automática de {1}.\n\nGuarde o projeto para manter as alterações recuperadas.
+ca34b469	O projeto "{0}" não foi fechado corretamente. Existe uma gravação automática de {1:g}.\n\nDeseja recuperá-lo agora? Se escolher não, a cópia continua guardada e é proposta novamente na próxima vez.
+32f42d5f	O projeto já está no formato {0}:{1} ({2}×{3}) e os vídeos já cobrem o enquadramento, centrados. Não há nada para mudar.\n\nPara cortar as margens do vídeo, use Recorte no separador Vídeo. Para outro formato, escolha 9:16, 1:1 ou 4:5.
+45d6d43a	O projeto usa o formato {0}, mais recente que o desta versão ({1}). Os recursos desconhecidos serão ignorados e podem perder-se ao guardar.
+1abf216d	Recomendado para projetos Full HD: pré-visualização {0}, {1} MB para fotogramas prontos{2}
+f3ab48cd	São necessários cerca de {0} livres no disco para transferir e empacotar os modelos, mas há {1}.
+3dea091f	Ecrã {0} (principal) — {1} × {2}
+3e6a2a3d	Ecrã {0} — {1} × {2}
+984cb7c5	integrada/partilhada
+98d59752	multimédia analisado
+6a9ff032	multimédia analisados
+8a536f7a	meios-tons
+b53c780a	faixa
+c066c8e9	{0} autocolante(s), {1} título(s), {2} modelo(s)
+172a92da	A janela "{0}" está fora do ecrã escolhido.
+63b650a3	A resposta do serviço de versões é demasiado grande.
+ae81b336	Não há a câmara {0} no cursor (há {1}).
+2ff1a41c	descodificar
+934575b1	abrir descodificador
+761b0219	alocar fotograma
+9d76050f	alocar trama de áudio
+29845357	codificar fotograma
+11377e0b	configurar descodificador
+cf5e57be	converter fotograma
+c6905cb4	enviar fotograma à paleta
+506e319f	finalizar descodificação
+5a894418	preparar fotograma
+f2324da5	transferir fotograma da GPU
+93297572	Exportar fotograma atual…
+cb5b463b	Guardar como…
+a31bca92	Guardar como modelo…
+2704d2c1	Analisar ficheiro
+320af51f	Incluir ficheiros no projeto…
+55fe7f6c	Gravar ecrã, webcam e microfone…
+f1375adc	Importar multimédia…
+65811c7b	Localizar ficheiros em falta…
+1cc5806d	3D (perspetiva)
+dba9d8ed	A câmara acompanha a cabeça da pessoa
+e377ade6	A câmara acompanha o corpo inteiro da pessoa
+90a83863	A máscara acompanha o objeto seguido neste clipe
+97ccf959	Arraste as pegas ou a forma sobre o monitor
+c3ef05c4	Aspeto HDR: recupera sombras e realces e reforça os detalhes locais.
+b63a3ccf	Ativar câmara lenta suavizada
+f3a9a5a4	Centro do fotograma (sem acompanhar)
+1a31c2cb	Cinzento
+5efcf38a	Clipe demasiado curto
+ccd4dc1f	Cresce a partir de 30% do tamanho, a surgir do transparente.
+ddb12094	Dependência circular no catálogo que envolve '{0}'.
+674159e7	Desenhar as legendas no vídeo (legendas gravadas na imagem)
+36cf41bb	Desfocagem
+1b6f8069	Desfocagem de movimento
+1613c0b6	Desfocagem do fundo
+4916a7fb	Desfocagem gaussiana.
+bf58245f	Entrada a rodar como um cartão (keyframes de Rotação Y)
+a381073f	Este projeto foi criado com uma versão mais nova do programa (formato {0}). 
+0ced23a0	Gerir modelos de IA
+1ce084c5	Rotação
+0cb1e3b6	Rotação X
+0f845589	Rotação Y
+250f78f1	Hardware detetado
+b47523e5	Indique a cor que deveria ser cinzento neutro; o efeito compensa a dominante.
+9ffb6e4e	Legendas gravadas no vídeo
+02ea4889	Ligar/desligar íman
+1885c8a7	Os meus itens
+1599404a	Muda o formato do projeto (hoje {0}) e reposiciona cada clipe de vídeo e imagem para cobrir o novo fotograma. 
+26d01672	Não há clipes de vídeo ou imagem a tocar junto com esta música.
+d1a14ef8	Não há migração registada a partir do formato {0}.
+a42ec6eb	O clipe não tem recorte. Ajuste Esquerda, Topo, Direita ou Base na secção Recorte e tente novamente.
+cd2b4486	O codificador de vídeo da placa gráfica ("{0}") falhou. 
+1bfac570	O identificador do modelo é inválido ('{0}'): use de 2 a 64 caracteres minúsculos, números, '.', '_' ou '-', a começar por letra ou número.
+ff9823f3	O programa de texto para fala demorou demasiado e foi interrompido.
+03d32210	O projeto já está no formato {0}:{1} ({2}×{3}) e os vídeos já cobrem o quadro, centrados. Não há nada para mudar.\n\n
+8cdd8b73	Ocorreu um erro inesperado. Os detalhes técnicos foram guardados no registo.
+96f7d901	Os créditos deslizam de baixo para cima durante todo o clipe: alongue o clipe para deslizar mais devagar.
+94944ce3	Para aplicar o recorte, o clipe não pode ter keyframes de posição ou escala. Remova-os e tente novamente.
+2d450a5f	Placa gráfica
+680417c6	Pretos levantados e cores suaves, aspeto de filme antigo.
+c4146628	Salto
+9c34b3cd	Registo técnico local
+d10e481f	Retro
+104056ac	Sem permissão para aceder a:\n{0}
+3ec071bd	Sem placa gráfica dedicada: os efeitos e a IA ficam mais lentos e a pré-visualização usa resolução reduzida.
+00e2a93d	Surge do transparente no início e desaparece no fim do clipe.
+268bb9fe	Surgir e desaparecer
+894c5b6d	seguida
+8b680f94	Íman de alinhamento (N)
+e4925bc0	MPEG-2 aceita apenas 23,976, 24, 25, 29,97, 30, 50, 59,94 ou 60 FPS.
+581b58f9	Os modelos usarão apenas a CPU.
+7d08482d	Amplia fotos 2× ao reconstruir detalhes (melhoria de imagem).
+57156980	Detetar cenas com mais precisão (marcadores e divisão de clipes)
+774ad01f	Isolar voz (voz e ambiente em faixas separadas)
+c2de1da2	Localiza 478 pontos do rosto (olhos, sobrancelhas, nariz, boca, contorno e íris) para o retoque de beleza e a maquilhagem virtual.
+e7097168	Melhorar imagem: ampliar fotos 2× ao reconstruir detalhes
+f06001ea	Modelo de linguagem que escreve as respostas do assistente virtual a partir dos excertos do manual, no idioma do programa, sem sair do computador.
+26a6efca	Repor curva {0}
+58967e70	Retocar › Beleza: pele, linhas de expressão, papos, rosto, olhos, nariz, boca e sobrancelhas
+8481719d	Retocar › Maquilhagem: looks, pestanas, sombra, eyeliner, sobrancelhas, batom, blush, contorno, realces, cor dos olhos e sardas
+c7ef9804	Separa a voz dos restantes sons e reduz o ruído de fundo.
+73ca49f9	TransNetV2 (deteção de cenas)
+5b066bdd	Whisper large-v3 turbo (multilingue)

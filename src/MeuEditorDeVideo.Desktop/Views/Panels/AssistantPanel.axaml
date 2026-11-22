@@ -112,7 +112,7 @@
                     <ItemsControl ItemsSource="{Binding Suggestions}" AutomationProperties.Name="Perguntas sugeridas">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="x:String">
-                                <Button Margin="0,0,0,6" Padding="10,6" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                <Button Margin="0,0,0,6" Padding="10,6" HorizontalAlignment="Stretch"
                                         Command="{Binding $parent[UserControl].((vm:AssistantViewModel)DataContext).AskCommand}"
                                         CommandParameter="{Binding}" AutomationProperties.Name="{Binding}">
                                     <TextBlock Text="{Binding}" TextWrapping="Wrap" />

@@ -8,6 +8,19 @@
       Os estilos do Fluent continuam valendo: aqui só se acrescentam setters.
     -->
 
+    <!--
+      Texto no centro de todos os botões (o Fluent põe à esquerda). Os seletores são pelo tipo exato: CheckBox e
+      RadioButton ficam de fora. O TextAlignment vai no ContentPresenter, e não no botão, para centralizar as linhas
+      que quebram sem passar por herança aos menus suspensos do botão. Um tipo novo de botão entra aqui.
+    -->
+    <Style Selector="Button, ToggleButton, HyperlinkButton">
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style Selector="Button /template/ ContentPresenter#PART_ContentPresenter, ToggleButton /template/ ContentPresenter#PART_ContentPresenter, HyperlinkButton /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="TextAlignment" Value="Center" />
+    </Style>
+
     <!-- Botões desabilitados ficam visivelmente esmaecidos (o Fluent escuro diferencia pouco). -->
     <Style Selector="Button:disabled">
         <Setter Property="Opacity" Value="0.45" />

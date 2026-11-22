@@ -136,7 +136,6 @@
 0f66a1e1	Dieses Paket enthält keine Dokumentation.
 0f823152	Schlagschatten
 0f9df0fd	Spur ausblenden
-0fe4dd3c	Lautstärke in {0} {1} reduziert
 0ff11311	Rechteck
 101cbd6c	Löschen und Lücke _schließen
 104056ac	Keine Zugriffsberechtigung für:\n{0}
@@ -734,7 +733,6 @@
 5ba6351b	◇ Formschlüssel
 5c08e459	Automatisch neu ausrichten
 5c59554f	Die Audiobitrate muss zwischen 32 und 640 kbps liegen.
-5c66b8e9	Gemessen: {0}
 5c8c4760	Neue Spur
 5cc33dc3	Vertikales Video
 5d537a71	Die Sequenz enthält keine Untertitel; die Untertiteldatei wurde nicht erstellt.
@@ -855,7 +853,6 @@
 697131ea	Kennung
 6985d69c	Spur nach oben verschieben
 698a73c2	Kursiv
-69bd325e	Sprachausgabe eingefügt ({0}
 69d920c6	Videocodec
 69e07560	Cache-Ordner
 69e0d3f0	Nächster Schnitt
@@ -875,7 +872,6 @@
 6d2b1ab0	Die Datei wurde nicht gefunden.
 6d5c031d	{0} hinzufügen
 6d895b11	8× (beschleunigt)
-6d96c2bd	Bildschirm {0}{1}
 6dc56b9d	Alles auswählen
 6dd2c42d	Zum Anwenden des Zuschnitts darf der Clip nicht gedreht sein. Setzen Sie die Drehung (und 3D-Drehung) zurück und versuchen Sie es erneut.
 6dd717af	Kamera _3 ab Abspielposition
@@ -975,7 +971,6 @@
 791b5a92	Toleranz
 7923816a	Datei nicht gefunden.
 79327250	Löschen und _zusammenführen
-79398ebe	Geschwindigkeit {0}
 794fd4bd	Export starten
 79629b91	Das Projekt hat bereits die Größe dieses Zuschnitts.
 7962c89c	_Inhaltspakete…
@@ -1226,7 +1221,6 @@
 9835016e	Webcam-Position auf dem Bildschirm
 98374ac0	Untertitelspur
 9845c805	Das Medium hat kein Bild.
-988590bb	Projekt auf {0}×{1} umgestellt ({2} {3}
 9889fca2	Funktionen: Hintergrund entfernen oder ersetzen, automatische Untertitel, Stimme isolieren, Rauschen reduzieren, Szenen erkennen, Stille entfernen, Person verfolgen und Bild verbessern. Nur „Hintergrund entfernen“ ist vorinstalliert; die übrigen Modelle werden über die Verwaltung installiert.
 98b5d173	Die Exporteinstellungen sind ungültig:\n• 
 98cf9ae3	Nicht verfügbar — installieren Sie das Modell unter Werkzeuge › KI-Modelle.
@@ -1442,7 +1436,6 @@ b2d639ee	Ein Paket ist eine .medpack-Datei (ZIP) mit den Ordnern figurinhas, tit
 b2dca5fa	Verschachtelten Clip erstellen
 b2de3267	Ungültiger Bereich: hh:mm:ss:bb verwenden, Anfang vor Ende.
 b2ef043b	Transparent (zeigt die Spuren darunter)
-b2f40db4	Untertitel verschieben {0}
 b387f469	Layout Video
 b3dc418d	Transformation
 b40b2944	Eingang
@@ -1481,7 +1474,6 @@ b7f76078	Elliptische Maske hinzufügen
 b8132eef	Übergangsdauer des Duckings
 b8364050	Schreibmaschine
 b838cbac	KI-Verarbeitung abbrechen
-b874aa98	Bewegung über {0} Bilder gemessen. Verwendete Vergrößerung: {1}
 b9338cb5	Nach links schieben
 b95e7e70	Formschlüssel hinzufügen
 b9a919b8	Untertitel hinzufügen
@@ -1771,7 +1763,6 @@ dc7ababc	Katalog
 dca191f2	Spur „{0}“ enthält {1} Clip(s). Trotzdem entfernen?
 dcc81347	Wählen Sie einen Video- oder Bildclip in der Zeitleiste, um Transformation, Keyframes, Geschwindigkeit und Übergänge zu bearbeiten.
 dd01bd46	Nicht beobachtete Ausnahme in asynchroner Aufgabe.
-dd052db6	Synchronisiert: um {0} verschoben
 dd21499b	Bild mit KI verbessern
 dd39c51b	Bearbeitungsproxy
 dd561c36	Gerade Kontur
@@ -1905,7 +1896,6 @@ ebb751ab	Beat
 ebc1fe65	Vertikal spiegeln
 ebc78ef6	Wählen Sie, was die Kamera verfolgt. Passen Sie dann den automatischen Schnitt, das Wackeln und den unscharfen Hintergrund an. Nutzt das Personenfreistellungsmodell (Registerkarte KI).
 ebe55185	Maximale Kompatibilität für PowerPoint, Projektoren und Fernseher.
-ebf8e83d	Audio normalisieren ({0}
 ebff964d	Stabilisierung entfernen
 ecaf3589	Eigenschaften
 ecd8cf20	Bauchbinde (Lower Third)
@@ -1921,7 +1911,6 @@ edca4a4b	Die Projektdatei wurde nicht gefunden:\n{0}
 ee313bb5	Miniaturen, Wellenformen, Proxys und KI-Masken löschen? Sie werden bei Bedarf neu erstellt (Proxys und Masken dauern etwas).
 ee7728ba	|Audio|
 ee9361d0	Hardware-Dekodierung
-ee9dd0a6	Geschwindigkeitskurve{0}
 eeaea3b8	Überlagern
 eee0df8e	Stimme und Umgebung auf getrennten Spuren
 ef49e594	Zum Anfang
@@ -2008,7 +1997,6 @@ f87a8166	Aufnahme-Countdown
 f8838989	Hoch
 f9154968	KI-Modelle
 f9250d2c	Position, Skalierung, Drehung, Deckkraft und Keyframes befinden sich auf der Registerkarte Video.
-f943d8ef	Adresse für „{0}“ nicht erlaubt: {1}. HTTPS unter {2} verwenden
 f959e9b0	Farbe an den vorherigen Clip angeglichen. Intensität unter Video › Farbe › Farbe angleichen einstellen.
 f95c7cec	Ganze Sequenz
 f9801bb3	Gesichtsretusche mit dem Gesichtspunktnetz (lokales Modell): glatte, hellere Haut, weniger Mimikfalten und Tränensäcke sowie Anpassungen von Gesicht, Augen, Nase, Mund und Augenbrauen.
@@ -2571,3 +2559,219 @@ f2b66c0c	Spuren der Zeitleiste
 0b2e5195	Bildschirmaufnahme
 b6346552	Feste Tastenkombination
 db9fe880	Diese Tastenkombinationen sind fest vorgegeben und können nicht geändert werden.
+1d83adde	+ An Abspielposition hinzufügen
+60f5114f	+ Ellipse
+62b0a591	+ Schriftart
+5429fd50	+ Frei
+6396dda6	+ Neues Tracking
+092adb40	+ Rechteck
+a3b808cd	An Szenen teilen ({0})
+5a806a7b	Szenen markieren ({0})
+40836cb5	Untertitel erzeugen ({0})
+a4121f4d	Untertitel importieren ({0})
+bade19cb	Maske hinzufügen ({0})
+dff4b789	Ellipse
+c8f071fc	frei
+c5387d37	 (dediziert)
+81d3ba59	 (im Programm enthalten)
+72b295a3	Die Integritätsprüfung des Projekts ist fehlgeschlagen (interne Datei „{0}“ weicht vom erwarteten Inhalt ab). Die Datei ist möglicherweise beschädigt. Versuchen Sie, eine Sicherungskopie zu öffnen.
+6598a937	Abgerundet
+3aa3a8a9	Anpassung
+7841f970	Hitze
+c2ab8424	Unscharf
+1c82f02b	X-Versatz
+3c4d14a1	Y-Versatz
+8040ef70	Zeilenabstand
+0d71445e	Abstand zwischen den Feldern
+b768a470	Stärke
+5b1505ea	Innenabstand
+618484e2	Neon
+1dd24ca2	Einfach
+9791c58f	Sequenz
+b7468bf8	Geschwindigkeitskurve: {0}
+f89d3290	Code:
+94fb8d86	Untertitel verschieben {0}{1} s
+c9d1f691	Adresse für „{0}“ nicht erlaubt: {1}. Verwenden Sie HTTPS unter {2}.
+93904df9	Dieses Projekt wurde mit einer neueren Version der App erstellt (Format {0}). Diese Version öffnet Projekte bis Format {1}. Aktualisieren Sie Meu Editor de Vídeo.
+3d3ec81d	{0} von {1} wird importiert{2}
+2dc091b1	Gemessen: {0} LUFS · Verstärkung {1} dB
+da2c3fb9	Gemessen: {0} LUFS · Verstärkung {1} dB{2}
+95b530ba	Bewegung über {0} Bilder gemessen. Verwendete Vergrößerung: {1}×.
+418bb50c	Sprachausgabe eingefügt ({0} s).
+81d47037	Audio normalisieren ({0} LUFS)
+a3b3d36a	{0} konnte nicht von {1} heruntergeladen werden: {2} Prüfen Sie die Internetverbindung und versuchen Sie es erneut; bereits Heruntergeladenes wird weiterverwendet.
+11284106	{0} konnte nicht abgefragt werden: {1} Prüfen Sie die Internetverbindung und versuchen Sie es erneut.
+de5a9a6b	Nicht genügend Speicherplatz, um den Export abzuschließen in:\n{0}\nGeben Sie Speicherplatz frei und setzen Sie den Export fort; fertige Abschnitte werden weiterverwendet.
+5ab644ff	Der Video-Encoder der Grafikkarte („{0}“) ist fehlgeschlagen. Versuchen Sie es erneut mit dem Software-Encoder (Option „Encoder: Software“).
+4db7a6aa	Das Projekt „{0}“ wurde aus der automatischen Sicherung vom {1} wiederhergestellt.\n\nSpeichern Sie das Projekt, um die wiederhergestellten Änderungen zu behalten.
+ca34b469	Das Projekt „{0}“ wurde nicht ordnungsgemäß geschlossen. Es gibt eine automatische Sicherung vom {1:g}.\n\nMöchten Sie es jetzt wiederherstellen? Wenn Sie Nein wählen, bleibt die Kopie erhalten und wird beim nächsten Mal erneut angeboten.
+32f42d5f	Das Projekt hat bereits das Format {0}:{1} ({2}×{3}) und die Videos füllen das Bild zentriert aus. Es gibt nichts zu ändern.\n\nUm die Videoränder zu beschneiden, verwenden Sie Zuschnitt auf der Registerkarte Video. Für ein anderes Format wählen Sie 9:16, 1:1 oder 4:5.
+45d6d43a	Das Projekt verwendet Format {0}, neuer als das dieser Version ({1}). Unbekannte Funktionen werden ignoriert und können beim Speichern verloren gehen.
+2ffcc172	Ungültige Plattform für „{0}“: „{1}“. Verwenden Sie {2}.
+df82e183	Projekt auf {0}×{1} umgestellt ({2} {3}).
+1abf216d	Empfohlen für Full-HD-Projekte: Vorschau {0}, {1} MB für fertige Bilder{2}
+b465534e	, Proxys aktiviert.
+98b8ca4f	{0} {1} entfernen (KI)
+b552a7df	Synchronisiert: um {0} s verschoben (Konfidenz {1}).
+f3ab48cd	Zum Herunterladen und Packen der Modelle werden etwa {0} freier Speicherplatz benötigt, vorhanden sind {1}.
+b7e6c1d7	Wenig freier Speicher auf {0} ({1}): {2}. Proxys, Cache und Exporte benötigen Platz.
+3dea091f	Bildschirm {0} (Hauptbildschirm) — {1} × {2}
+3e6a2a3d	Bildschirm {0} — {1} × {2}
+b48e6cce	Geschwindigkeit {0}×
+bf1a26a2	Lautstärke in {0} {1} mit Sprache reduziert
+8ae9c79c	Lautstärke in {0} {1} mit Sprache reduziert{2}
+c715587d	animiert
+91a303dc	Clip
+48bc6790	voll
+56182fa7	dediziert
+984cb7c5	integriert/gemeinsam genutzt
+d32330ff	unbekannt
+f00aff1c	unbekannt
+75adcb36	Effekt
+38b9b9dd	Sprache
+69b273a2	horizontal
+d36c5a99	Bild
+b33b8b9b	invertiert
+a600ac39	Speicher unbekannt
+77d3a161	Szenenwechsel markiert
+4cf74d8b	Szenenwechsel markiert
+98d59752	Mediendatei analysiert
+6a9ff032	Mediendateien analysiert
+560c350a	Person
+e8a08905	quadratisch
+894c5b6d	verfolgt
+8a536f7a	Halbtöne
+19a815b7	Pause
+dbf0ecff	Pausen
+4c0c5e01	Abschnitt
+3f5d0704	Abschnitte
+9d9b2ad4	Abschnitt entfernt
+28de9814	Abschnitte entfernt
+26d14aa2	Abschnitt ohne Sprache entfernt
+493c1192	Abschnitte ohne Sprache entfernt
+b53c780a	Spur
+28d1a795	leer
+34da5602	vertikal
+d9962654	{0} ({1} Bilder)
+43c6a22d	{0} ({1} logische Kerne)
+c066c8e9	{0} Sticker, {1} Titel, {2} Vorlage(n)
+a0932221	{0} {1}. Suchen Sie in der Bibliothek nach Tags wie „Sprache“, „Person“ oder „vertikal“.
+0f6cf465	{0} (frei: {1})
+8a3be517	{0} (Nr. {1} bis {2})
+94bd0bab	Laufwerk ({0})
+172a92da	Das Fenster „{0}“ liegt außerhalb des gewählten Bildschirms.
+f463afbd	Das Fenster „{0}“ wurde geschlossen. Wählen Sie ein anderes Fenster.
+ebf2cda6	Das Fenster „{0}“ wurde nicht gefunden.
+2fe51419	Die Antwort des Versionsdienstes enthält kein Feld „version“.
+16e25796	Die Antwort des Versionsdienstes ist kein gültiges JSON.
+37266cd5	Die Antwort des Versionsdienstes ist kein JSON-Objekt.
+63b650a3	Die Antwort des Versionsdienstes ist zu groß.
+0582b669	Der Versionsdienst antwortete {0} ({1}).
+3a554420	Die FFmpeg-Bibliotheken ({0}) wurden nicht gefunden.
+ae81b336	An der Abspielposition gibt es keine Kamera {0} (vorhanden: {1}).
+2ff1a41c	Dekodieren
+ef92a36f	Encoder {0} öffnen
+934575b1	Decoder öffnen
+b9b5c397	Paket reservieren
+761b0219	Bild reservieren
+9d76050f	Audio-Frame reservieren
+1361154d	Audio reservieren
+74aa10e2	Spuren analysieren
+7937c190	Audio speichern
+29845357	Bild kodieren
+c33b502c	Audio kodieren
+dfad5520	Audiokonvertierung einrichten
+11377e0b	Decoder einrichten
+c082804e	Audiospur einrichten
+69a7696d	GIF-Palette einrichten
+fc913a8b	Farben konvertieren
+cf5e57be	Bild konvertieren
+2e7f44cf	Audio konvertieren
+bd07c7d1	Kanäle kopieren
+ddf085fe	Eingangsfilter erstellen
+ba524c21	Ausgangsfilter erstellen
+2a3f9dd2	Paket senden
+c6905cb4	Bild an die Palette senden
+c1e5e15e	Encoder abschließen
+506e319f	Dekodierung abschließen
+58778b73	Palette abschließen
+f9c187ef	Audio abschließen
+386285e1	GIF-Palette erzeugen
+73c092d7	Header schreiben
+729b076d	Audiokonvertierung starten
+d7193032	Paket lesen
+93a4057e	Audio lesen
+578d2df9	GIF-Palette aufbauen
+5a894418	Bild vorbereiten
+c2573d84	Audiopaket empfangen
+f6b5588c	Paket vom Encoder empfangen
+48d99ef7	Audiokonvertierung neu starten
+f2324da5	Bild von der GPU übertragen
+474dec24	Sicherungskopie erstellen
+b7a40f61	Verschachtelten Clip erstellen…
+93297572	Aktuelles Bild exportieren…
+f1a42086	Bildsequenz importieren…
+c7079ce8	Neu aus Vorlage…
+cb5b463b	Speichern unter…
+a31bca92	Als Vorlage speichern…
+fd53bb6a	Öffnen…
+320af51f	Medien ins Projekt einpacken…
+1018e49c	Render-Warteschlange…
+55fe7f6c	Bildschirm, Webcam und Mikrofon aufnehmen…
+f1375adc	Medien importieren…
+65811c7b	Fehlende Medien suchen…
+c35ea397	Neues Projekt…
+0f317606	Inhaltspakete…
+c9d2565f	Automatisch neu ausrichten…
+15deb25f	Text zu Sprache…
+9bdb3f6f	Hilfe › Virtueller Assistent: Antworten in natürlicher Sprache mit Quelle im Handbuch
+7d08482d	Vergrößert Fotos 2× und rekonstruiert Details (Bildverbesserung).
+6e2cecee	Voreinstellung {0} anwenden
+e56911b9	Aktivieren/deaktivieren
+1c133ec0	Aktuell: {0}
+3b5dddfe	Kanal {0}
+aa7712a4	Verkleinern/erweitern
+c9cde35c	Copyright © 2026 — Lizenziert unter GPL-3.0-or-later
+c2b28f65	Kurve {0}
+57156980	Szenen genauer erkennen (Markierungen und Teilen von Clips)
+07c29340	Findet Szenenwechsel (Schnitte und Übergänge), um Markierungen zu setzen und Clips zu teilen.
+1df7a783	Hersteller/Quelle
+5bcae3ef	Face Mesh V2 (Gesichtspunkte)
+05f4821d	GTCRN (Sprachverbesserung)
+0f27b873	Untertitel aus Sprache erzeugen (Portugiesisch, Englisch, Spanisch oder automatische Sprache)
+693abf71	Google MediaPipe Face Mesh V2 (ONNX-Export fernandotonon/QtMeshEditor-facemesh-onnx)
+a808da00	Erkennt Abschnitte mit Sprache und die Pausen dazwischen.
+774ad01f	Stimme isolieren (Stimme und Umgebung auf getrennten Spuren)
+6c75b95e	Grenze
+c2de1da2	Findet 478 Gesichtspunkte (Augen, Augenbrauen, Nase, Mund, Kontur und Iris) für Beauty-Retusche und virtuelles Make-up.
+6dca63d8	Luminanz: {0}
+e7097168	Bild verbessern: Fotos 2× vergrößern und Details rekonstruieren
+1064940d	Microsoft Phi-4-mini-instruct, ONNX-int4-Version für CPU (microsoft/Phi-4-mini-instruct-onnx)
+6f3929ce	Microsoft Phi-4-mini-instruct, ONNX-int4-Version für DirectML (microsoft/Phi-4-mini-instruct-onnx)
+f06001ea	Sprachmodell, das die Antworten des virtuellen Assistenten aus Handbuchauszügen in der Sprache des Programms schreibt, ohne den Computer zu verlassen.
+a03292a8	Einstellungen für {0} anzeigen
+42967cd9	{0} nach unten verschieben
+0c627066	{0} nach oben verschieben
+01bafbf8	OpenAI Whisper large-v3-turbo, quantisiertes GGML-Format (q5_0) von ggerganov/whisper.cpp
+26ee6bc2	Panorama {0}
+92569ec3	Phi-4-mini-instruct (virtueller Assistent)
+38438ea4	Phi-4-mini-instruct (virtueller Assistent, CPU)
+a34aa6be	Zacken/Seiten
+26a6efca	Kurve {0} zurücksetzen
+6044853c	Rauschen mit einstellbarer Stärke reduzieren
+d6daab90	Wiedergabe/Pause
+58967e70	Retuschieren › Beauty: Haut, Mimikfalten, Tränensäcke, Gesicht, Augen, Nase, Mund und Augenbrauen
+8481719d	Retuschieren › Make-up: Looks, Wimpern, Lidschatten, Eyeliner, Augenbrauen, Lippenstift, Rouge, Kontur, Highlights, Augenfarbe und Sommersprossen
+e9963f73	Farbrad: {0}
+c7ef9804	Trennt die Stimme von anderen Geräuschen und reduziert Hintergrundrauschen.
+ede479b1	Sprache von Pausen trennen beim Erzeugen von Untertiteln (weniger erfundener Text ohne Sprache)
+1375d7b5	{0} stummschalten
+0e50c296	Solo {0}
+97578a67	Swin2SR leicht 2×
+ff780827	Tomáš Souček / TransNetV2 (ONNX-Export elya5/transnetv2)
+73ca49f9	TransNetV2 (Szenenerkennung)
+6fc9581d	Transkribiert die Sprache im Audio (Portugiesisch und andere Sprachen), um Untertitel automatisch und sehr genau zu erzeugen.
+f6f9872c	Lautstärke {0}
+5b066bdd	Whisper large-v3 turbo (mehrsprachig)
+fc450a13	Xiaobin Rong / GTCRN (Streaming-Export andrelgomes/gtcrn-stream)
+fadf924a	mv-lab/swin2sr (ONNX-Export Xenova/swin2SR-lightweight-x2-64)

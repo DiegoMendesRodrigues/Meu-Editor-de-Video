@@ -40,6 +40,8 @@ public static class Ui
         if (!window.IsVisible) window.Show();
         Dispatcher.UIThread.RunJobs();
         AvaloniaHeadlessPlatform.ForceRenderTimerTick();
+        // Toda tela capturada confere também o texto dos botões, com os dados do teste.
+        Assert.Empty(Centralizacao.Desvios(window));
         var frame = window.CaptureRenderedFrame() ?? throw new InvalidOperationException("Sem quadro desenhado.");
         Directory.CreateDirectory(ScreenshotsFolder);
         var path = Path.Combine(ScreenshotsFolder, name + ".png");

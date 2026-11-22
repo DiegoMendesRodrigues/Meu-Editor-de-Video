@@ -511,7 +511,7 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
             var total = gaps.Sum(g => g.Duration.TotalSeconds);
             Status = Timeline.Execute(new RemoveTimeRangesCommand(Timeline.SequenceId, cur.Clip.Id, gaps,
                     $"Remover {gaps.Count} {(gaps.Count == 1 ? "silêncio" : "silêncios")} (IA)"))
-                ? $"{gaps.Count} {(gaps.Count == 1 ? "trecho sem fala removido" : "trechos sem fala removidos")} ({total.ToString("0.0", Pt)} s)."
+                ? $"{gaps.Count} {Localization.Translator.T(gaps.Count == 1 ? "trecho sem fala removido" : "trechos sem fala removidos")} ({total.ToString("0.0", Pt)} s)."
                 : "Não foi possível remover os silêncios.";
         });
     }
@@ -562,8 +562,8 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
             }
             var n = result.Cuts.Count;
             Timeline.Execute(new CompositeCommand(split ? $"Dividir nas cenas ({n})" : $"Marcar cenas ({n})", commands));
-            Status = $"{n} {(n == 1 ? "mudança de cena marcada" : "mudanças de cena marcadas")}" +
-                     (split ? " e clipe dividido" : "") + (result.UsedModel ? " (TransNetV2)." : " (comparação de cores).");
+            Status = $"{n} {Localization.Translator.T(n == 1 ? "mudança de cena marcada" : "mudanças de cena marcadas")}" +
+                     (split ? Localization.Translator.T(" e clipe dividido") : "") + (result.UsedModel ? " (TransNetV2)." : Localization.Translator.T(" (comparação de cores)."));
         });
     }
 

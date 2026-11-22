@@ -76,7 +76,7 @@ public sealed class CatalogModelInstaller(ModelCatalog catalog, IModelRegistry r
                 {
                     var before = done;
                     await downloader.DownloadAsync(url, Path.Combine(folder, name), size, sha,
-                        new Progress<long>(b => Report(ModelInstallStage.Downloading, before + b)), cancellationToken);
+                        new InlineProgress(b => Report(ModelInstallStage.Downloading, before + b)), cancellationToken);
                     done += size;
                 }
                 Report(ModelInstallStage.Packaging, entry.TotalBytes);
@@ -90,6 +90,14 @@ public sealed class CatalogModelInstaller(ModelCatalog catalog, IModelRegistry r
             logger?.LogInformation("Modelo {Id} {Version} instalado a partir do catálogo", entry.Id, entry.Version);
             Report(ModelInstallStage.Done, entry.TotalBytes);
         }
+    }
+
+    /// <summary>
+    /// Repassa na hora, na thread de quem avisa: com <see cref="Progress{T}"/> um "baixando" atrasado chegava depois de "concluído".
+    /// </summary>
+    private sealed class InlineProgress(Action<long> report) : IProgress<long>
+    {
+        public void Report(long value) => report(value);
     }
 
     private static IEnumerable<(Uri Url, string File, long Size, string Sha256)> Files(ModelCatalogEntry entry)

@@ -377,7 +377,7 @@ public sealed partial class AudioInspectorViewModel : ObservableObject, IClipEdi
             var command = new RemoveTimeRangesCommand(Timeline.SequenceId, cur.Clip.Id, ranges,
                 $"Remover {ranges.Count} {(ranges.Count == 1 ? "silêncio" : "silêncios")}");
             AnalysisStatus = Timeline.Execute(command)
-                ? $"{ranges.Count} {(ranges.Count == 1 ? "trecho removido" : "trechos removidos")} ({total.ToString("0.0", Pt)} s)."
+                ? $"{ranges.Count} {Localization.Translator.T(ranges.Count == 1 ? "trecho removido" : "trechos removidos")} ({total.ToString("0.0", Pt)} s)."
                 : "Não foi possível remover os silêncios.";
         });
     }

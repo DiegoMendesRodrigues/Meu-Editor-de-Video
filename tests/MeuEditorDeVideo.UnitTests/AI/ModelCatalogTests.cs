@@ -336,6 +336,50 @@ public sealed class ModelCatalogTests : IDisposable
     }
 
     [Fact]
+    public async Task Aviso_de_download_nao_chega_depois_do_fim()
+    {
+        var vad = Bytes(3);
+        var entry = Entry("vad", vad);
+        var delayed = new DelayedContext();
+        var installer = new CatalogModelInstaller(Catalog(entry), new ModelRegistry(Path.Combine(_dir, "instalados")),
+            new ImmediateDownloader(vad), Path.Combine(_dir, "trabalho"));
+        var reports = new List<ModelInstallProgress>();
+
+        var previous = SynchronizationContext.Current;
+        SynchronizationContext.SetSynchronizationContext(delayed);
+        Task install;
+        try { install = installer.InstallAsync([entry], new SyncProgress(reports.Add)); }
+        finally { SynchronizationContext.SetSynchronizationContext(previous); }
+        await install;
+        delayed.Deliver();
+
+        Assert.Equal(ModelInstallStage.Done, reports[^1].Stage);
+        Assert.Contains(reports, p => p.Stage == ModelInstallStage.Downloading && p.Bytes == vad.Length);
+    }
+
+    /// <summary>Conclui na própria chamada e tira o contexto, para só o progresso criado antes dela ficar retido.</summary>
+    private sealed class ImmediateDownloader(byte[] content) : IModelDownloader
+    {
+        public Task DownloadAsync(Uri url, string destination, long expectedBytes, string sha256, IProgress<long>? progress = null,
+            CancellationToken cancellationToken = default)
+        {
+            File.WriteAllBytes(destination, content);
+            SynchronizationContext.SetSynchronizationContext(null);
+            progress?.Report(expectedBytes);
+            return Task.CompletedTask;
+        }
+    }
+
+    private sealed class DelayedContext : SynchronizationContext
+    {
+        private readonly List<(SendOrPostCallback Callback, object? State)> _held = [];
+
+        public override void Post(SendOrPostCallback d, object? state) => _held.Add((d, state));
+
+        public void Deliver() => _held.ForEach(h => h.Callback(h.State));
+    }
+
+    [Fact]
     public async Task Cancelamento_interrompe_sem_instalar()
     {
         var vad = Bytes(3);

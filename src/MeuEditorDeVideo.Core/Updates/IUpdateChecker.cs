@@ -69,19 +69,9 @@ public static class UpdateEndpoints
             : null;
 
     /// <summary>
-    /// Há versão nova só quando o campo "version" publicado é maior que a versão instalada (ex.: 1.4.0), comparando
-    /// número a número ("1.10.0" é maior que "1.9.0"). Texto que não é versão não gera aviso.
+    /// Há versão nova quando o campo "version" publicado não é igual ao da versão instalada (ex.: 1.4.0), seja ele
+    /// maior ou menor. A comparação é pelo texto, sem os espaços das pontas: "1.4" e "v1.4.0" são diferentes de "1.4.0".
     /// </summary>
-    public static bool IsNewer(string published, string installed) =>
-        ParseVersion(published) is { } site && ParseVersion(installed) is { } local && site > local;
-
-    /// <summary>Lê "1.4", "v1.4.0" ou "1.4.0-beta+abc"; as partes ausentes valem zero e os sufixos são ignorados.</summary>
-    private static Version? ParseVersion(string text)
-    {
-        var number = text.Trim().TrimStart('v', 'V').Split('-', '+')[0];
-        if (!number.Contains('.')) number += ".0";
-        return Version.TryParse(number, out var v)
-            ? new Version(v.Major, v.Minor, Math.Max(v.Build, 0), Math.Max(v.Revision, 0))
-            : null;
-    }
+    public static bool IsDifferentVersion(string published, string installed) =>
+        !string.Equals(published.Trim(), installed.Trim(), StringComparison.Ordinal);
 }

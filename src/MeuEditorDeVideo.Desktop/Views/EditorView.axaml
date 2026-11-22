@@ -1239,7 +1239,7 @@
                             </ListBox.Styles>
                             <ListBox.ItemTemplate>
                                 <DataTemplate x:DataType="vm:HistoryItem">
-                                    <Button Classes="med-toolbar" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                    <Button Classes="med-toolbar" HorizontalAlignment="Stretch"
                                             Padding="8,4" AutomationProperties.Name="{Binding Description}"
                                             Command="{Binding $parent[UserControl].((vm:EditorViewModel)DataContext).GoToHistoryCommand}"
                                             CommandParameter="{Binding}">
@@ -1257,7 +1257,8 @@
                                                     </Style>
                                                 </TextBlock.Styles>
                                             </TextBlock>
-                                            <TextBlock Grid.Column="1" Text="{Binding Time}" Classes="med-muted" Margin="8,0,0,0" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Time}" Classes="med-muted" Margin="8,0,0,0"
+                                                       IsVisible="{Binding Time, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                                         </Grid>
                                     </Button>
                                 </DataTemplate>

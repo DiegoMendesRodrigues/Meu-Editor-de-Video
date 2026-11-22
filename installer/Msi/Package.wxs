@@ -71,9 +71,12 @@
         <Exclude Files="$(var.AppPublishDir)**\*.pdb" />
         <Exclude Files="$(var.AppPublishDir)runtimes\win-x86\**" />
         <Exclude Files="$(var.AppPublishDir)runtimes\win-arm64\**" />
-        <Exclude Files="$(var.AppPublishDir)runtimes\linux*\**" />
-        <Exclude Files="$(var.AppPublishDir)runtimes\macos*\**" />
-        <Exclude Files="$(var.AppPublishDir)runtimes\osx*\**" />
+        <!-- O Exclude só aceita curinga no nome do arquivo: pastas por extenso (build-installer.ps1 confere). -->
+        <Exclude Files="$(var.AppPublishDir)runtimes\linux-arm\**" />
+        <Exclude Files="$(var.AppPublishDir)runtimes\linux-arm64\**" />
+        <Exclude Files="$(var.AppPublishDir)runtimes\linux-x64\**" />
+        <Exclude Files="$(var.AppPublishDir)runtimes\macos-arm64\**" />
+        <Exclude Files="$(var.AppPublishDir)runtimes\macos-x64\**" />
       </Files>
     </ComponentGroup>
 

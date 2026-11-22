@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.IO;
 using MeuEditorDeVideo.AIEngine.Models;
 using MeuEditorDeVideo.AIEngine.Speech;
@@ -54,8 +55,9 @@ public sealed class SpeechRecognitionTests : IDisposable
         var whisper = new WhisperTranscriber(registry, new AudioSampleSourceFactory(NullLoggerFactory.Instance));
         Assert.True(whisper.IsAvailable);
 
-        var progress = new List<double>();
-        var segments = await whisper.TranscribeAsync(project, clip, paths, "pt", new Progress<double>(progress.Add));
+        // Progress<T> chama na thread de um pool, às vezes em paralelo e até depois do fim: a coleta aceita várias threads.
+        var progress = new ConcurrentQueue<double>();
+        var segments = await whisper.TranscribeAsync(project, clip, paths, "pt", new Progress<double>(progress.Enqueue));
 
         Assert.NotEmpty(segments);
         var texto = string.Join(" ", segments.Select(s => s.Text)).ToLowerInvariant();

@@ -312,7 +312,7 @@ public sealed partial class CompositionInspectorViewModel : ObservableObject, IC
         if (m.Invert) parts.Add("invertida");
         if (m.Keys.Count > 0) parts.Add("animada");
         if (m.TrackerId is not null) parts.Add("rastreada");
-        return string.Join(" · ", parts);
+        return string.Join(" · ", parts.Select(Localization.Translator.T));
     }
 
     private static void SyncList<T>(ObservableCollection<T> target, IReadOnlyList<T> items, Func<T, T, bool>? same = null)

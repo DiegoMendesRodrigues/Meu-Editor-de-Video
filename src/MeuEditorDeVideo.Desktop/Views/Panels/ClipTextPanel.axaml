@@ -81,13 +81,13 @@
                             AutomationProperties.Name="Adicionar fonte" ToolTip.Tip="Adicionar um arquivo de fonte (.ttf, .otf) ao aplicativo" />
                 </Grid>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
-                    <ToggleButton IsChecked="{Binding Bold}" Width="32" Margin="0,0,4,0" FontWeight="Bold" Content="N"
+                    <ToggleButton x:Name="BotaoNegrito" IsChecked="{Binding Bold}" Width="32" Margin="0,0,4,0" FontWeight="Bold" Content="N"
                                   HorizontalContentAlignment="Center" AutomationProperties.Name="Negrito" ToolTip.Tip="Negrito" />
-                    <ToggleButton IsChecked="{Binding Italic}" Width="32" Margin="0,0,4,0" FontStyle="Italic" Content="I"
+                    <ToggleButton x:Name="BotaoItalico" IsChecked="{Binding Italic}" Width="32" Margin="0,0,4,0" FontStyle="Italic" Content="I"
                                   HorizontalContentAlignment="Center" AutomationProperties.Name="Itálico" ToolTip.Tip="Itálico" />
                     <ToggleButton IsChecked="{Binding Underline}" Width="32" Margin="0,0,12,0" HorizontalContentAlignment="Center"
                                   AutomationProperties.Name="Sublinhado" ToolTip.Tip="Sublinhado">
-                        <TextBlock Text="S" TextDecorations="Underline" />
+                        <TextBlock x:Name="LetraSublinhado" Text="S" TextDecorations="Underline" />
                     </ToggleButton>
                     <ComboBox ItemsSource="{Binding Alignments}" SelectedItem="{Binding Alignment}" MinWidth="96"
                               AutomationProperties.Name="Alinhamento" ToolTip.Tip="Alinhamento das linhas; à esquerda, a posição X é a borda esquerda do bloco" />

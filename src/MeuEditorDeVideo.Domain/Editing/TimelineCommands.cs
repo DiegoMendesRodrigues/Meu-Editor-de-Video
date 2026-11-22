@@ -531,7 +531,8 @@ public sealed record SetClipReverseCommand(Guid SequenceId, Guid ClipId, bool Re
 /// </summary>
 public sealed record SetSpeedRampCommand(Guid SequenceId, Guid ClipId, IReadOnlyList<SpeedPoint> Points, string? Name = null) : IEditCommand
 {
-    public string Description => Points.Count < 2 ? "Remover curva de velocidade" : $"Curva de velocidade{(Name is null ? "" : ": " + Name)}";
+    public string Description => Points.Count < 2 ? "Remover curva de velocidade"
+        : Name is null ? "Curva de velocidade" : $"Curva de velocidade: {Name}";
 
     public Project Apply(Project project)
     {

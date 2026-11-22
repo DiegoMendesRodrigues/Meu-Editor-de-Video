@@ -73,6 +73,42 @@ public sealed partial class TranslatorTests : IDisposable
         Assert.Equal("Line one.\n\nLine two.", Translator.T("Linha um.\n\nLinha dois."));
     }
 
+    [Fact]
+    public void Descricao_montada_com_o_rotulo_em_minusculas_e_traduzida_por_inteiro()
+    {
+        Translator.Use(new Dictionary<string, string>
+        {
+            ["Ajustar {0}"] = "Adjust {0}",
+            ["Ajustar {0}: {1}"] = "Adjust {0}: {1}",
+            ["Desfazer: {0} (Ctrl+Z)"] = "Undo: {0} (Ctrl+Z)",
+            ["Remover {0}"] = "Remove {0}",
+            ["Máscara {0}"] = "Mask {0}",
+            ["Deslocamento X"] = "X offset",
+            ["Vinheta"] = "Vignette",
+            ["Intensidade"] = "Intensity",
+        });
+        Assert.Equal("Adjust X offset", Translator.T("Ajustar deslocamento x"));
+        Assert.Equal("Adjust Vignette: intensity", Translator.T("Ajustar Vinheta: intensidade"));
+        Assert.Equal("Vignette: intensity", Translator.T("Vinheta: intensidade"));
+        Assert.Equal("Remove mask 2", Translator.T("Remover máscara 2"));
+        Assert.Equal("Undo: Adjust intensity (Ctrl+Z)", Translator.T("Desfazer: Ajustar intensidade (Ctrl+Z)"));
+    }
+
+    [Fact]
+    public void Nome_do_usuario_entre_aspas_nao_vira_rotulo()
+    {
+        Translator.Use(new Dictionary<string, string> { ["Importar \"{0}\""] = "Import \"{0}\"", ["Praia"] = "Beach" });
+        Assert.Equal("Import \"praia\"", Translator.T("Importar \"praia\""));
+        Assert.Equal("praia", Translator.T("praia"));
+    }
+
+    [Fact]
+    public void Lista_de_problemas_e_traduzida_item_a_item()
+    {
+        Translator.Use(new Dictionary<string, string> { ["Problemas:"] = "Problems:", ["Trilha vazia."] = "Empty track." });
+        Assert.Equal("Problems:\n• Empty track.", Translator.T("Problemas:\n• Trilha vazia."));
+    }
+
     public static TheoryData<string> Languages => ["en", "es", "fr", "de", "pt-PT"];
 
     /// <summary>Cada linha dos .tsv aponta para um texto de origem e mantém os mesmos marcadores {n}.</summary>
@@ -97,6 +133,76 @@ public sealed partial class TranslatorTests : IDisposable
         Translator.Load(language, folder);
         Assert.True(Translator.IsActive);
         Assert.Equal(language, Translator.Language);
+    }
+
+    /// <summary>
+    /// Texto novo precisa de tradução. O que fica igual ao português de propósito (nomes, siglas, atalhos, identificadores)
+    /// entra em <c>textos-sem-traducao.json</c>: em "todos" ou na lista do idioma.
+    /// </summary>
+    [Theory]
+    [InlineData("en")]
+    [InlineData("es")]
+    [InlineData("fr")]
+    [InlineData("de")]
+    public void Todo_texto_de_origem_tem_traducao_ou_excecao(string language)
+    {
+        var folder = Path.Combine(FindRepository(), "resources", "i18n");
+        var sources = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(Path.Combine(folder, "origem.json")))!;
+        var translated = File.ReadAllLines(Path.Combine(folder, language + ".tsv")).Select(l => l[..8]).ToHashSet();
+        var exceptions = JsonSerializer.Deserialize<Dictionary<string, string[]>>(File.ReadAllText(Path.Combine(
+            FindRepository(), "tests", "MeuEditorDeVideo.UnitTests", "Application", "textos-sem-traducao.json")))!;
+        var allowed = exceptions["todos"].Concat(exceptions[language]).ToHashSet();
+        var missing = sources.Where(s => !translated.Contains(Translator.IdOf(s)) && !allowed.Contains(s)).ToList();
+        Assert.True(missing.Count == 0, $"Sem tradução em {language}.tsv:\n" + string.Join('\n', missing));
+        var stale = allowed.Except(sources).ToList();
+        Assert.True(stale.Count == 0, "Exceções que saíram de origem.json:\n" + string.Join('\n', stale));
+    }
+
+    /// <summary>A mensagem já montada com os valores encontra o seu modelo e sai traduzida.</summary>
+    [Theory]
+    [MemberData(nameof(Languages))]
+    public void Mensagem_montada_sai_traduzida(string language)
+    {
+        var folder = Path.Combine(FindRepository(), "resources", "i18n");
+        var sources = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(Path.Combine(folder, "origem.json")))!;
+        var translated = File.ReadAllLines(Path.Combine(folder, language + ".tsv")).Select(l => l[..8]).ToHashSet();
+        Translator.Load(language, folder);
+        var untranslated = new List<string>();
+        foreach (var source in sources.Where(s => MarkerRegex().IsMatch(s) && translated.Contains(Translator.IdOf(s))))
+        {
+            var shown = MarkerRegex().Replace(source, "7");
+            if (shown.Count(char.IsLetter) < 3) continue;
+            if (Translator.T(shown) == shown && MarkerRegex().Replace(Translator.T(source), "7") != shown) untranslated.Add(source);
+        }
+        Assert.True(untranslated.Count == 0, $"Sem tradução ao montar ({language}):\n" + string.Join('\n', untranslated));
+    }
+
+    /// <summary>Termos só do Brasil que não podem voltar à interface nem ao manual de Portugal.</summary>
+    [Fact]
+    public void Portugues_de_Portugal_nao_usa_termos_do_Brasil()
+    {
+        var folder = Path.Combine(FindRepository(), "resources", "i18n");
+        var sources = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(Path.Combine(folder, "origem.json")))!;
+        var target = File.ReadAllLines(Path.Combine(folder, "pt-PT.tsv")).ToDictionary(l => l[..8], l => l[9..]);
+        // "**Outros arquivos:**" é conteúdo do LEIA-ME gerado dentro do pacote de modelo, não é interface.
+        var shown = sources.Where(s => s != "**Outros arquivos:**").Select(s => target.GetValueOrDefault(Translator.IdOf(s), s))
+            .Concat(File.ReadAllLines(Path.Combine(FindRepository(), "documentation", "MANUAL_DO_USUARIO.pt-PT.md"))
+                .Select(l => NotProseRegex().Replace(l, "")));
+        var found = shown.Where(t => BrazilianRegex().IsMatch(t)).ToList();
+        Assert.True(found.Count == 0, "Termos do Brasil em pt-PT:\n" + string.Join('\n', found));
+    }
+
+    [GeneratedRegex(@"\(imagens/[^)]+\)|`[^`]+`")]
+    private static partial Regex NotProseRegex();
+
+    [GeneratedRegex(@"\b([Gg]erenci\w+|[Ss]eç(ão|ões)|[Aa]rquivos?|[Ss]alv(ar|e|o|amento)|[Uu]suários?|mouse|[Cc]âmeras?|[Mm]aquiagem|[Aa]plicativo|[Aa]bas?|[Ee]mbaixo|[Nn]otebooks|[Cc]ompartilh\w+|[Dd]etectad[oa]|[Íí]mã|[Cc]ontroles?|[Rr]egistro|[Ss]omente|na ecrã|[Aa]s ecrãs)\b")]
+    private static partial Regex BrazilianRegex();
+
+    private static string FindRepository()
+    {
+        var dir = new DirectoryInfo(AppContext.BaseDirectory);
+        while (!File.Exists(Path.Combine(dir.FullName, "MeuEditorDeVideo.sln"))) dir = dir.Parent!;
+        return dir.FullName;
     }
 
     private static string[] Markers(string text) =>

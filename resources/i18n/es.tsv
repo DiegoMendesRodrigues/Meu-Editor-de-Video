@@ -126,7 +126,6 @@
 0f66a1e1	Este paquete no incluye documentación.
 0f823152	Sombra proyectada
 0f9df0fd	Ocultar pista
-0fe4dd3c	Volumen reducido en {0} {1}
 0ff11311	Rectángulo
 101cbd6c	Eliminar y _cerrar el hueco
 104056ac	Sin permiso para acceder a:\n{0}
@@ -784,7 +783,6 @@
 6969fe0b	No se pudo usar "{0}": {1}
 6985d69c	Mover pista hacia arriba
 698a73c2	Cursiva
-69bd325e	Narración insertada ({0}
 69d920c6	Códec de vídeo
 69e07560	Carpeta de la caché
 69e0d3f0	Corte siguiente
@@ -802,7 +800,6 @@
 6d2b0d64	|Imágenes y GIF|
 6d2b1ab0	No se encontró el archivo.
 6d5c031d	Añadir {0}
-6d96c2bd	Pantalla {0}{1}
 6dc56b9d	Seleccionar todo
 6dd2c42d	Para aplicar el recorte, el clip no puede estar girado. Ponga a cero el Giro (y el giro 3D) e inténtelo de nuevo.
 6dd717af	Cámara _3 desde el cursor
@@ -894,7 +891,6 @@
 791b5a92	Tolerancia
 7923816a	Archivo no encontrado.
 79327250	Eliminar y _unir
-79398ebe	Velocidad {0}
 794fd4bd	Iniciar exportación
 79629b91	El proyecto ya tiene el tamaño de este recorte.
 7962c89c	_Paquetes de contenido…
@@ -1118,7 +1114,6 @@
 9835016e	Posición de la webcam sobre la pantalla
 98374ac0	Pista de subtítulos
 9845c805	El medio no tiene imagen.
-988590bb	Proyecto reencuadrado a {0}×{1} ({2} {3}
 9889fca2	Funciones: eliminar o sustituir el fondo, subtítulos automáticos, aislar la voz, reducir ruido, detectar escenas, eliminar silencios, seguir a la persona y mejorar la imagen. Solo "Eliminar fondo" viene instalado; los demás modelos se instalan desde el gestor.
 98b5d173	La configuración de exportación no es válida:\n• 
 98cf9ae3	No disponible — instale el modelo en Herramientas › Modelos de IA.
@@ -1317,7 +1312,6 @@ b2d639ee	Un paquete es un archivo .medpack (ZIP) con las carpetas figurinhas, ti
 b2dca5fa	Crear clip compuesto
 b2de3267	Intervalo no válido: use hh:mm:ss:ff, con el inicio antes del fin.
 b2ef043b	Transparente (muestra las pistas de abajo)
-b2f40db4	Desplazar subtítulos {0}
 b387f469	Diseño vídeo
 b3dc418d	Transformación
 b426f76d	Los textos solo van en pistas de texto o de subtítulos.
@@ -1350,7 +1344,6 @@ b7f76078	Añadir máscara elíptica
 b8132eef	Duración de la transición de la atenuación
 b8364050	Máquina de escribir
 b838cbac	Cancelar procesamiento de IA
-b874aa98	Movimiento medido en {0} fotogramas. Ampliación usada: {1}
 b9338cb5	Empujar a la izquierda
 b95e7e70	Añadir forma clave
 b9a919b8	Añadir subtítulo
@@ -1614,7 +1607,6 @@ dc55af2c	Restablecer valores
 dca191f2	La pista "{0}" tiene {1} clip(s). ¿Eliminar de todos modos?
 dcc81347	Seleccione un clip de vídeo o imagen en la línea de tiempo para editar transformación, fotogramas clave, velocidad y transiciones.
 dd01bd46	Excepción no observada en tarea asíncrona.
-dd052db6	Sincronizado: desplazado {0}
 dd21499b	Mejorar imagen con IA
 dd39c51b	Proxy de edición
 dd561c36	Contorno recto
@@ -1733,7 +1725,6 @@ ebb751ab	Ritmo
 ebc1fe65	Voltear verticalmente
 ebc78ef6	Elija qué sigue la cámara. Después ajuste el corte automático, la agitación y el fondo desenfocado. Usa el modelo de recorte de persona (pestaña IA).
 ebe55185	Máxima compatibilidad para PowerPoint, proyectores y televisores.
-ebf8e83d	Normalizar audio ({0}
 ebff964d	Eliminar estabilización
 ecaf3589	Propiedades
 ecd8cf20	Rótulo (lower third)
@@ -1748,7 +1739,6 @@ edca4a4b	No se encontró el archivo del proyecto:\n{0}
 ee313bb5	¿Borrar miniaturas, formas de onda, proxies y máscaras de IA? Se volverán a crear cuando sea necesario (proxies y máscaras tardan un poco).
 ee7728ba	|Audios|
 ee9361d0	Decodificación por hardware
-ee9dd0a6	Curva de velocidad{0}
 eeaea3b8	Superposición
 eee0df8e	Voz y ambiente en pistas separadas
 ef49e594	Ir al inicio
@@ -1825,7 +1815,6 @@ f8515210	Fotograma anterior
 f85e8e02	La transición necesita dos clips contiguos en la misma pista.
 f87a8166	Cuenta atrás de grabación
 f9250d2c	Posición, escala, rotación, opacidad y fotogramas clave están en la pestaña Vídeo.
-f943d8ef	Dirección no permitida para '{0}': {1}. Use HTTPS en {2}
 f959e9b0	Color igualado con el clip anterior. Ajuste la intensidad en Vídeo › Color › Igualar color.
 f95c7cec	Secuencia completa
 f9801bb3	Retoque del rostro con la malla de puntos del rostro (modelo local): piel suave y más clara, menos líneas de expresión y bolsas bajo los ojos, y ajustes de rostro, ojos, nariz, boca y cejas.
@@ -2354,3 +2343,199 @@ f2b66c0c	Pistas de la línea de tiempo
 0b2e5195	Grabación de pantalla
 b6346552	Atajo fijo
 db9fe880	Estos atajos son fijos y no se pueden cambiar.
+1d83adde	+ Añadir en el cursor
+62b0a591	+ Fuente
+5429fd50	+ Libre
+6396dda6	+ Nuevo seguimiento
+092adb40	+ Rectángulo
+a3b808cd	Dividir en las escenas ({0})
+5a806a7b	Marcar escenas ({0})
+40836cb5	Generar subtítulos ({0})
+a4121f4d	Importar subtítulos ({0})
+bade19cb	Añadir máscara ({0})
+c8f071fc	libre
+81d3ba59	 (incluido en el programa)
+72b295a3	Falló la comprobación de integridad del proyecto (el archivo interno "{0}" difiere de lo esperado). El archivo puede estar dañado. Intente abrir una copia de seguridad.
+6598a937	Redondeada
+7b47361a	Inferior
+c2ab8424	Desenfocada
+1c82f02b	Desplazamiento X
+3c4d14a1	Desplazamiento Y
+8040ef70	Interlineado
+0d71445e	Espacio entre cuadros
+b768a470	Grosor
+5b1505ea	Margen interior
+618484e2	Neón
+1dd24ca2	Simple
+9791c58f	Secuencia
+b7468bf8	Curva de velocidad: {0}
+94fb8d86	Desplazar subtítulos {0}{1} s
+c9d1f691	Dirección no permitida para '{0}': {1}. Use HTTPS en {2}.
+93904df9	Este proyecto se creó con una versión más reciente de la aplicación (formato {0}). Esta versión abre proyectos hasta el formato {1}. Actualice Meu Editor de Vídeo.
+2dc091b1	Medido: {0} LUFS · ganancia {1} dB
+da2c3fb9	Medido: {0} LUFS · ganancia {1} dB{2}
+95b530ba	Movimiento medido en {0} fotogramas. Ampliación usada: {1}×.
+418bb50c	Narración insertada ({0} s).
+81d47037	Normalizar audio ({0} LUFS)
+a3b3d36a	No se pudo descargar {0} de {1}: {2} Compruebe la conexión a internet e inténtelo de nuevo; lo ya descargado se aprovecha.
+11284106	No se pudo consultar {0}: {1} Compruebe la conexión a internet e inténtelo de nuevo.
+de5a9a6b	No hay espacio suficiente en disco para completar la exportación en:\n{0}\nLibere espacio y reanude la exportación; los fragmentos ya listos se aprovecharán.
+5ab644ff	El codificador de vídeo de la tarjeta gráfica ("{0}") falló. Inténtelo de nuevo con el codificador por software (opción "Codificador: software").
+4db7a6aa	El proyecto "{0}" se recuperó del guardado automático del {1}.\n\nGuarde el proyecto para conservar los cambios recuperados.
+ca34b469	El proyecto "{0}" no se cerró correctamente. Hay un guardado automático del {1:g}.\n\n¿Desea recuperarlo ahora? Si elige No, la copia se conserva y se ofrecerá de nuevo la próxima vez.
+32f42d5f	El proyecto ya está en formato {0}:{1} ({2}×{3}) y los vídeos ya cubren el cuadro, centrados. No hay nada que cambiar.\n\nPara recortar los bordes del vídeo, use Recorte en la pestaña Vídeo. Para otro formato, elija 9:16, 1:1 o 4:5.
+45d6d43a	El proyecto usa el formato {0}, más reciente que el de esta versión ({1}). Las funciones desconocidas se ignorarán y pueden perderse al guardar.
+2ffcc172	Plataforma no válida para '{0}': '{1}'. Use {2}.
+df82e183	Proyecto reencuadrado a {0}×{1} ({2} {3}).
+1abf216d	Recomendado para proyectos Full HD: previsualización {0}, {1} MB para fotogramas listos{2}
+b465534e	, proxies activados.
+98b8ca4f	Eliminar {0} {1} (IA)
+b552a7df	Sincronizado: desplazado {0} s (confianza {1}).
+f3ab48cd	Se necesitan unos {0} libres en el disco para descargar y empaquetar los modelos, pero hay {1}.
+b7e6c1d7	Poco espacio libre en {0} ({1}): {2}. Los proxies, la caché y las exportaciones necesitan espacio.
+3dea091f	Pantalla {0} (principal) — {1} × {2}
+3e6a2a3d	Pantalla {0} — {1} × {2}
+b48e6cce	Velocidad {0}×
+bf1a26a2	Volumen reducido en {0} {1} con voz
+8ae9c79c	Volumen reducido en {0} {1} con voz{2}
+91a303dc	clip
+984cb7c5	integrada/compartida
+d32330ff	desconocida
+f00aff1c	desconocido
+75adcb36	efecto
+38b9b9dd	voz
+d36c5a99	imagen
+a600ac39	memoria desconocida
+77d3a161	cambio de escena marcado
+4cf74d8b	cambios de escena marcados
+98d59752	medio analizado
+6a9ff032	medios analizados
+560c350a	persona
+e8a08905	cuadrado
+8a536f7a	semitonos
+19a815b7	silencio
+dbf0ecff	silencios
+4c0c5e01	fragmento
+3f5d0704	fragmentos
+9d9b2ad4	fragmento eliminado
+28de9814	fragmentos eliminados
+26d14aa2	fragmento sin voz eliminado
+493c1192	fragmentos sin voz eliminados
+b53c780a	pista
+28d1a795	vacío
+d9962654	{0} ({1} imágenes)
+c066c8e9	{0} pegatina(s), {1} título(s), {2} plantilla(s)
+a0932221	{0} {1}. Busque en la biblioteca etiquetas como "voz", "persona" o "vertical".
+0f6cf465	{0} (libre: {1})
+8a3be517	{0} (n.º {1} a {2})
+172a92da	La ventana "{0}" está fuera de la pantalla elegida.
+f463afbd	La ventana "{0}" se cerró. Elija otra ventana.
+ebf2cda6	No se pudo encontrar la ventana "{0}".
+2fe51419	La respuesta del servicio de versiones no tiene el campo "version".
+16e25796	La respuesta del servicio de versiones no es un JSON válido.
+37266cd5	La respuesta del servicio de versiones no es un objeto JSON.
+63b650a3	La respuesta del servicio de versiones es demasiado grande.
+0582b669	El servicio de versiones respondió {0} ({1}).
+3a554420	No se encontraron las bibliotecas de FFmpeg ({0}).
+ae81b336	No hay cámara {0} en el cursor (hay {1}).
+2ff1a41c	descodificar
+ef92a36f	abrir el codificador {0}
+934575b1	abrir el descodificador
+b9b5c397	asignar paquete
+761b0219	asignar fotograma
+9d76050f	asignar trama de audio
+1361154d	asignar audio
+74aa10e2	analizar pistas
+7937c190	almacenar audio
+29845357	codificar fotograma
+c33b502c	codificar audio
+dfad5520	configurar la conversión de audio
+11377e0b	configurar el descodificador
+c082804e	configurar la pista de audio
+69a7696d	configurar la paleta del GIF
+fc913a8b	convertir colores
+cf5e57be	convertir fotograma
+2e7f44cf	convertir audio
+bd07c7d1	copiar canales
+ddf085fe	crear filtro de entrada
+ba524c21	crear filtro de salida
+2a3f9dd2	enviar paquete
+c6905cb4	enviar fotograma a la paleta
+c1e5e15e	finalizar el codificador
+506e319f	finalizar la descodificación
+58778b73	finalizar la paleta
+f9c187ef	finalizar el audio
+386285e1	generar la paleta del GIF
+73c092d7	escribir la cabecera
+729b076d	iniciar la conversión de audio
+d7193032	leer paquete
+93a4057e	leer audio
+578d2df9	montar la paleta del GIF
+5a894418	preparar fotograma
+c2573d84	recibir paquete de audio
+f6b5588c	recibir paquete del codificador
+48d99ef7	reiniciar la conversión de audio
+f2324da5	transferir fotograma de la GPU
+474dec24	Crear copia de seguridad
+b7a40f61	Crear clip compuesto…
+93297572	Exportar fotograma actual…
+f1a42086	Importar secuencia de imágenes…
+c7079ce8	Nuevo a partir de plantilla…
+cb5b463b	Guardar como…
+a31bca92	Guardar como plantilla…
+320af51f	Empaquetar medios en el proyecto…
+1018e49c	Cola de renderizado…
+55fe7f6c	Grabar pantalla, webcam y micrófono…
+f1375adc	Importar medios…
+65811c7b	Localizar medios ausentes…
+c35ea397	Nuevo proyecto…
+0f317606	Paquetes de contenido…
+c9d2565f	Reencuadrar automáticamente…
+15deb25f	Texto a voz…
+9bdb3f6f	Ayuda › Asistente virtual: respuestas en lenguaje natural con la fuente en el manual
+7d08482d	Amplía fotos 2× reconstruyendo detalles (mejora de imagen).
+6e2cecee	Aplicar el preajuste {0}
+e56911b9	Activar/desactivar
+1c133ec0	Actual: {0}
+aa7712a4	Contraer/expandir
+c9cde35c	Copyright © 2026 — Con licencia GPL-3.0-or-later
+57156980	Detectar escenas con más precisión (marcadores y división de clips)
+07c29340	Encuentra los cambios de escena (cortes y transiciones) para crear marcadores y dividir clips.
+1df7a783	Fabricante/origen
+5bcae3ef	Face Mesh V2 (puntos del rostro)
+05f4821d	GTCRN (mejora de voz)
+0f27b873	Generar subtítulos a partir de la voz (portugués, inglés, español o idioma automático)
+693abf71	Google MediaPipe Face Mesh V2 (exportación ONNX fernandotonon/QtMeshEditor-facemesh-onnx)
+a808da00	Identifica los fragmentos con voz y los silencios entre ellos.
+774ad01f	Aislar la voz (voz y ambiente en pistas separadas)
+6c75b95e	Límite
+c2de1da2	Localiza 478 puntos del rostro (ojos, cejas, nariz, boca, contorno e iris) para el retoque de belleza y el maquillaje virtual.
+6dca63d8	Luminancia: {0}
+e7097168	Mejorar imagen: ampliar fotos 2× reconstruyendo detalles
+1064940d	Microsoft Phi-4-mini-instruct, versión ONNX int4 para CPU (microsoft/Phi-4-mini-instruct-onnx)
+6f3929ce	Microsoft Phi-4-mini-instruct, versión ONNX int4 para DirectML (microsoft/Phi-4-mini-instruct-onnx)
+f06001ea	Modelo de lenguaje que escribe las respuestas del asistente virtual a partir de fragmentos del manual, en el idioma del programa, sin salir del equipo.
+a03292a8	Mostrar los ajustes de {0}
+42967cd9	Mover {0} hacia abajo
+0c627066	Mover {0} hacia arriba
+01bafbf8	OpenAI Whisper large-v3-turbo, formato GGML cuantizado (q5_0) de ggerganov/whisper.cpp
+26ee6bc2	Panorámica {0}
+92569ec3	Phi-4-mini-instruct (asistente virtual)
+38438ea4	Phi-4-mini-instruct (asistente virtual, CPU)
+a34aa6be	Puntas/lados
+26a6efca	Restablecer la curva {0}
+6044853c	Reducir el ruido con intensidad ajustable
+d6daab90	Reproducir/Pausar
+58967e70	Retocar › Belleza: piel, líneas de expresión, bolsas, rostro, ojos, nariz, boca y cejas
+8481719d	Retocar › Maquillaje: looks, pestañas, sombra, delineador, cejas, labial, rubor, contorno, iluminador, color de ojos y pecas
+e9963f73	Rueda de color: {0}
+c7ef9804	Separa la voz de los demás sonidos y reduce el ruido de fondo.
+ede479b1	Separar la voz de los silencios al generar subtítulos (menos texto inventado en fragmentos sin voz)
+97578a67	Swin2SR ligero 2×
+ff780827	Tomáš Souček / TransNetV2 (exportación ONNX elya5/transnetv2)
+73ca49f9	TransNetV2 (detección de escenas)
+6fc9581d	Transcribe la voz del audio (portugués y otros idiomas) para generar subtítulos automáticamente, con alta precisión.
+f6f9872c	Volumen {0}
+5b066bdd	Whisper large-v3 turbo (multilingüe)
+fc450a13	Xiaobin Rong / GTCRN (exportación de streaming andrelgomes/gtcrn-stream)
+fadf924a	mv-lab/swin2sr (exportación ONNX Xenova/swin2SR-lightweight-x2-64)

@@ -135,7 +135,6 @@
 0f66a1e1	Ce pack ne contient pas de documentation.
 0f823152	Ombre portée
 0f9df0fd	Masquer la piste
-0fe4dd3c	Volume réduit sur {0} {1}
 0ff11311	Rectangle
 101cbd6c	Supprimer et _refermer l'espace
 104056ac	Pas d'autorisation d'accès à :\n{0}
@@ -730,7 +729,6 @@
 5ba6351b	◇ Forme clé
 5c08e459	Recadrage automatique
 5c59554f	Le débit audio doit être compris entre 32 et 640 kbps.
-5c66b8e9	Mesuré : {0}
 5c8c4760	Nouvelle piste
 5cc33dc3	Vidéo verticale
 5d537a71	Il n'y a pas de sous-titres dans la séquence ; le fichier de sous-titres n'a pas été créé.
@@ -850,7 +848,6 @@
 697131ea	Identifiant
 6985d69c	Monter la piste
 698a73c2	Italique
-69bd325e	Narration insérée ({0}
 69d920c6	Codec vidéo
 69e07560	Dossier du cache
 69e0d3f0	Coupe suivante
@@ -870,7 +867,6 @@
 6d2b1ab0	Le fichier est introuvable.
 6d5c031d	Ajouter {0}
 6d895b11	8× (accéléré)
-6d96c2bd	Écran {0}{1}
 6dc56b9d	Tout sélectionner
 6dd2c42d	Pour appliquer le recadrage, le clip ne doit pas être pivoté. Remettez la rotation (et la rotation 3D) à zéro et réessayez.
 6dd717af	Caméra _3 depuis la tête de lecture
@@ -968,7 +964,6 @@
 791b5a92	Tolérance
 7923816a	Fichier introuvable.
 79327250	Supprimer et _joindre
-79398ebe	Vitesse {0}
 794fd4bd	Démarrer l'exportation
 79629b91	Le projet a déjà la taille de ce recadrage.
 7962c89c	_Packs de contenu…
@@ -1218,7 +1213,6 @@
 9835016e	Position de la webcam sur l'écran
 98374ac0	Piste de sous-titres
 9845c805	Le média n'a pas d'image.
-988590bb	Projet recadré en {0}×{1} ({2} {3}
 9889fca2	Fonctions : supprimer ou remplacer l'arrière-plan, sous-titres automatiques, isoler la voix, réduire le bruit, détecter les scènes, supprimer les silences, suivre la personne et améliorer l'image. Seul « Supprimer l'arrière-plan » est installé d'origine ; les autres modèles s'installent depuis le gestionnaire.
 98b5d173	Les paramètres d'exportation sont invalides :\n• 
 98cf9ae3	Indisponible — installez le modèle dans Outils › Modèles d'IA.
@@ -1433,7 +1427,6 @@ b2d639ee	Un pack est un fichier .medpack (ZIP) avec les dossiers figurinhas, tit
 b2dca5fa	Créer un clip composé
 b2de3267	Intervalle invalide : utilisez hh:mm:ss:ii, le début avant la fin.
 b2ef043b	Transparent (montre les pistes inférieures)
-b2f40db4	Décaler les sous-titres {0}
 b387f469	Disposition vidéo
 b3dc418d	Transformation
 b40b2944	Entrée
@@ -1472,7 +1465,6 @@ b7f76078	Ajouter un masque elliptique
 b8132eef	Durée de la transition de l'atténuation
 b8364050	Machine à écrire
 b838cbac	Annuler le traitement IA
-b874aa98	Mouvement mesuré sur {0} images. Agrandissement utilisé : {1}
 b9338cb5	Pousser vers la gauche
 b95e7e70	Ajouter une forme clé
 b9a919b8	Ajouter un sous-titre
@@ -1760,7 +1752,6 @@ dc7ababc	Catalogue
 dca191f2	La piste « {0} » contient {1} clip(s). Supprimer quand même ?
 dcc81347	Sélectionnez un clip vidéo ou image dans la timeline pour modifier la transformation, les images clés, la vitesse et les transitions.
 dd01bd46	Exception non observée dans une tâche asynchrone.
-dd052db6	Synchronisé : décalé de {0}
 dd21499b	Améliorer l'image avec l'IA
 dd39c51b	Proxy de montage
 dd561c36	Contour droit
@@ -1894,7 +1885,6 @@ ebb751ab	Battement
 ebc1fe65	Retourner verticalement
 ebc78ef6	Choisissez ce que suit la caméra. Réglez ensuite la coupe automatique, le tremblement et l'arrière-plan flou. Utilise le modèle de détourage de personne (onglet IA).
 ebe55185	Compatibilité maximale pour PowerPoint, projecteurs et téléviseurs.
-ebf8e83d	Normaliser l'audio ({0}
 ebff964d	Supprimer la stabilisation
 ecaf3589	Propriétés
 ecd8cf20	Bandeau (lower third)
@@ -1910,7 +1900,6 @@ edca4a4b	Le fichier du projet est introuvable :\n{0}
 ee313bb5	Supprimer les miniatures, formes d'onde, proxies et masques IA ? Ils seront recréés si nécessaire (les proxies et masques prennent un peu de temps).
 ee7728ba	|Audios|
 ee9361d0	Décodage matériel
-ee9dd0a6	Courbe de vitesse{0}
 eeaea3b8	Incrustation
 eee0df8e	Voix et ambiance sur des pistes séparées
 ef49e594	Aller au début
@@ -1995,7 +1984,6 @@ f87a8166	Compte à rebours de l'enregistrement
 f8838989	Aigu
 f9154968	Modèles d'IA
 f9250d2c	Position, échelle, rotation, opacité et images clés se trouvent dans l'onglet Vidéo.
-f943d8ef	Adresse non autorisée pour « {0} » : {1}. Utilisez HTTPS sur {2}
 f959e9b0	Couleur ajustée sur le clip précédent. Réglez l'intensité dans Vidéo › Couleur › Faire correspondre la couleur.
 f95c7cec	Séquence entière
 f9801bb3	Retouche du visage avec le maillage de points du visage (modèle local) : peau lisse et plus claire, moins de rides d'expression et de poches sous les yeux, et réglages du visage, des yeux, du nez, de la bouche et des sourcils.
@@ -2557,3 +2545,220 @@ f2b66c0c	Pistes de la timeline
 0b2e5195	Enregistrement de l'écran
 b6346552	Raccourci fixe
 db9fe880	Ces raccourcis sont fixes et ne peuvent pas être modifiés.
+1d83adde	+ Ajouter à la tête de lecture
+60f5114f	+ Ellipse
+62b0a591	+ Police
+5429fd50	+ Libre
+6396dda6	+ Nouveau suivi
+092adb40	+ Rectangle
+a3b808cd	Diviser aux scènes ({0})
+5a806a7b	Marquer les scènes ({0})
+40836cb5	Générer des sous-titres ({0})
+a4121f4d	Importer des sous-titres ({0})
+bade19cb	Ajouter un masque ({0})
+dff4b789	ellipse
+c8f071fc	libre
+c5387d37	 (dédiée)
+81d3ba59	 (inclus dans le programme)
+72b295a3	La vérification d'intégrité du projet a échoué (le fichier interne « {0} » diffère de celui attendu). Le fichier est peut-être endommagé. Essayez d'ouvrir une copie de sauvegarde.
+6598a937	Arrondie
+3aa3a8a9	Réglage
+7b47361a	Bas
+7841f970	Chaleur
+c2ab8424	Floue
+1c82f02b	Décalage X
+3c4d14a1	Décalage Y
+8040ef70	Interligne
+0d71445e	Espace entre les cadres
+b768a470	Épaisseur
+5b1505ea	Marge intérieure
+618484e2	Néon
+1dd24ca2	Simple
+9791c58f	Séquence
+b7468bf8	Courbe de vitesse : {0}
+f89d3290	Code :
+94fb8d86	Décaler les sous-titres {0}{1} s
+c9d1f691	Adresse non autorisée pour « {0} » : {1}. Utilisez HTTPS sur {2}.
+93904df9	Ce projet a été créé avec une version plus récente de l'application (format {0}). Cette version ouvre les projets jusqu'au format {1}. Mettez à jour Meu Editor de Vídeo.
+3d3ec81d	Importation de {0} sur {1}{2}
+2dc091b1	Mesuré : {0} LUFS · gain {1} dB
+da2c3fb9	Mesuré : {0} LUFS · gain {1} dB{2}
+95b530ba	Mouvement mesuré sur {0} images. Agrandissement utilisé : {1}×.
+418bb50c	Narration insérée ({0} s).
+81d47037	Normaliser l'audio ({0} LUFS)
+a3b3d36a	Impossible de télécharger {0} depuis {1} : {2} Vérifiez la connexion à Internet et réessayez ; ce qui a déjà été téléchargé sera réutilisé.
+11284106	Impossible de consulter {0} : {1} Vérifiez la connexion à Internet et réessayez.
+de5a9a6b	Espace disque insuffisant pour terminer l'exportation dans :\n{0}\nLibérez de l'espace et reprenez l'exportation ; les segments déjà prêts seront réutilisés.
+5ab644ff	L'encodeur vidéo de la carte graphique (« {0} ») a échoué. Réessayez avec l'encodeur logiciel (option « Encodeur : logiciel »).
+4db7a6aa	Le projet « {0} » a été récupéré depuis l'enregistrement automatique du {1}.\n\nEnregistrez le projet pour conserver les modifications récupérées.
+ca34b469	Le projet « {0} » n'a pas été fermé correctement. Un enregistrement automatique du {1:g} existe.\n\nVoulez-vous le récupérer maintenant ? Si vous choisissez Non, la copie est conservée et sera proposée à nouveau la prochaine fois.
+32f42d5f	Le projet est déjà au format {0}:{1} ({2}×{3}) et les vidéos couvrent déjà le cadre, centrées. Il n'y a rien à modifier.\n\nPour rogner les bords de la vidéo, utilisez Recadrage dans l'onglet Vidéo. Pour un autre format, choisissez 9:16, 1:1 ou 4:5.
+45d6d43a	Le projet utilise le format {0}, plus récent que celui de cette version ({1}). Les fonctions inconnues seront ignorées et peuvent être perdues à l'enregistrement.
+2ffcc172	Plateforme non valide pour « {0} » : « {1} ». Utilisez {2}.
+df82e183	Projet recadré en {0}×{1} ({2} {3}).
+1abf216d	Recommandé pour les projets Full HD : aperçu {0}, {1} Mo pour les images prêtes{2}
+b465534e	, proxys activés.
+98b8ca4f	Supprimer {0} {1} (IA)
+b552a7df	Synchronisé : décalé de {0} s (confiance {1}).
+f3ab48cd	Environ {0} d'espace disque libre sont nécessaires pour télécharger et empaqueter les modèles, mais il y a {1}.
+b7e6c1d7	Peu d'espace libre sur {0} ({1}) : {2}. Les proxys, le cache et les exportations ont besoin d'espace.
+3dea091f	Écran {0} (principal) — {1} × {2}
+3e6a2a3d	Écran {0} — {1} × {2}
+b48e6cce	Vitesse {0}×
+bf1a26a2	Volume réduit sur {0} {1} avec parole
+8ae9c79c	Volume réduit sur {0} {1} avec parole{2}
+c715587d	animé
+91a303dc	clip
+48bc6790	complète
+56182fa7	dédiée
+984cb7c5	intégrée/partagée
+d32330ff	inconnue
+f00aff1c	inconnu
+75adcb36	effet
+38b9b9dd	parole
+69b273a2	horizontal
+d36c5a99	image
+b33b8b9b	inversé
+a600ac39	mémoire inconnue
+77d3a161	changement de scène marqué
+4cf74d8b	changements de scène marqués
+98d59752	média analysé
+6a9ff032	médias analysés
+560c350a	personne
+e8a08905	carré
+894c5b6d	suivi
+8a536f7a	demi-tons
+19a815b7	silence
+dbf0ecff	silences
+4c0c5e01	segment
+3f5d0704	segments
+9d9b2ad4	segment supprimé
+28de9814	segments supprimés
+26d14aa2	segment sans parole supprimé
+493c1192	segments sans parole supprimés
+b53c780a	piste
+28d1a795	vide
+34da5602	vertical
+d9962654	{0} ({1} images)
+43c6a22d	{0} ({1} cœurs logiques)
+c066c8e9	{0} autocollant(s), {1} titre(s), {2} modèle(s)
+a0932221	{0} {1}. Recherchez dans la bibliothèque des étiquettes comme « parole », « personne » ou « vertical ».
+0f6cf465	{0} (libre : {1})
+8a3be517	{0} (n° {1} à {2})
+94bd0bab	Disque ({0})
+172a92da	La fenêtre « {0} » est en dehors de l'écran choisi.
+f463afbd	La fenêtre « {0} » a été fermée. Choisissez une autre fenêtre.
+ebf2cda6	Impossible de trouver la fenêtre « {0} ».
+2fe51419	La réponse du service de versions ne contient pas le champ « version ».
+16e25796	La réponse du service de versions n'est pas un JSON valide.
+37266cd5	La réponse du service de versions n'est pas un objet JSON.
+63b650a3	La réponse du service de versions est trop volumineuse.
+0582b669	Le service de versions a répondu {0} ({1}).
+3a554420	Les bibliothèques FFmpeg ({0}) sont introuvables.
+ae81b336	Il n'y a pas de caméra {0} à la tête de lecture (il y en a {1}).
+2ff1a41c	décodage
+ef92a36f	ouverture de l'encodeur {0}
+934575b1	ouverture du décodeur
+b9b5c397	allocation du paquet
+761b0219	allocation de l'image
+9d76050f	allocation de la trame audio
+1361154d	allocation de l'audio
+74aa10e2	analyse des pistes
+7937c190	stockage de l'audio
+29845357	encodage de l'image
+c33b502c	encodage de l'audio
+dfad5520	configuration de la conversion audio
+11377e0b	configuration du décodeur
+c082804e	configuration de la piste audio
+69a7696d	configuration de la palette GIF
+fc913a8b	conversion des couleurs
+cf5e57be	conversion de l'image
+2e7f44cf	conversion de l'audio
+bd07c7d1	copie des canaux
+ddf085fe	création du filtre d'entrée
+ba524c21	création du filtre de sortie
+2a3f9dd2	envoi du paquet
+c6905cb4	envoi de l'image à la palette
+c1e5e15e	finalisation de l'encodeur
+506e319f	fin du décodage
+58778b73	finalisation de la palette
+f9c187ef	finalisation de l'audio
+386285e1	génération de la palette GIF
+73c092d7	écriture de l'en-tête
+729b076d	début de la conversion audio
+d7193032	lecture du paquet
+93a4057e	lecture de l'audio
+578d2df9	assemblage de la palette GIF
+5a894418	préparation de l'image
+c2573d84	réception du paquet audio
+f6b5588c	réception du paquet de l'encodeur
+48d99ef7	redémarrage de la conversion audio
+f2324da5	transfert de l'image depuis le GPU
+474dec24	Créer une sauvegarde
+b7a40f61	Créer un clip composé…
+93297572	Exporter l'image actuelle…
+f1a42086	Importer une séquence d'images…
+c7079ce8	Nouveau à partir d'un modèle…
+cb5b463b	Enregistrer sous…
+a31bca92	Enregistrer comme modèle…
+fd53bb6a	Ouvrir…
+320af51f	Intégrer les médias au projet…
+1018e49c	File de rendu…
+55fe7f6c	Enregistrer l'écran, la webcam et le micro…
+f1375adc	Importer des médias…
+65811c7b	Localiser les médias manquants…
+c35ea397	Nouveau projet…
+0f317606	Packs de contenu…
+c9d2565f	Recadrage automatique…
+15deb25f	Synthèse vocale…
+9bdb3f6f	Aide › Assistant virtuel : réponses en langage naturel avec la source dans le manuel
+7d08482d	Agrandit les photos 2× en reconstruisant les détails (amélioration d'image).
+6e2cecee	Appliquer le préréglage {0}
+e56911b9	Activer/désactiver
+1c133ec0	Actuelle : {0}
+3b5dddfe	Canal {0}
+aa7712a4	Contracter/dilater
+c9cde35c	Copyright © 2026 — Sous licence GPL-3.0-or-later
+c2b28f65	Courbe {0}
+57156980	Détecter les scènes plus précisément (marqueurs et découpe de clips)
+07c29340	Repère les changements de scène (coupes et transitions) pour créer des marqueurs et découper les clips.
+1df7a783	Fabricant/source
+5bcae3ef	Face Mesh V2 (points du visage)
+05f4821d	GTCRN (amélioration de la voix)
+0f27b873	Générer des sous-titres à partir de la parole (portugais, anglais, espagnol ou langue automatique)
+693abf71	Google MediaPipe Face Mesh V2 (export ONNX fernandotonon/QtMeshEditor-facemesh-onnx)
+a808da00	Repère les segments parlés et les silences entre eux.
+774ad01f	Isoler la voix (voix et ambiance sur des pistes séparées)
+6c75b95e	Limite
+c2de1da2	Localise 478 points du visage (yeux, sourcils, nez, bouche, contour et iris) pour la retouche beauté et le maquillage virtuel.
+6dca63d8	Luminance : {0}
+e7097168	Améliorer l'image : agrandir les photos 2× en reconstruisant les détails
+1064940d	Microsoft Phi-4-mini-instruct, version ONNX int4 pour CPU (microsoft/Phi-4-mini-instruct-onnx)
+6f3929ce	Microsoft Phi-4-mini-instruct, version ONNX int4 pour DirectML (microsoft/Phi-4-mini-instruct-onnx)
+f06001ea	Modèle de langage qui rédige les réponses de l'assistant virtuel à partir d'extraits du manuel, dans la langue du programme, sans quitter l'ordinateur.
+a03292a8	Afficher les réglages de {0}
+42967cd9	Descendre {0}
+0c627066	Monter {0}
+01bafbf8	OpenAI Whisper large-v3-turbo, format GGML quantifié (q5_0) de ggerganov/whisper.cpp
+26ee6bc2	Panoramique {0}
+92569ec3	Phi-4-mini-instruct (assistant virtuel)
+38438ea4	Phi-4-mini-instruct (assistant virtuel, CPU)
+a34aa6be	Pointes/côtés
+26a6efca	Réinitialiser la courbe {0}
+6044853c	Réduire le bruit avec une intensité réglable
+d6daab90	Lecture/Pause
+58967e70	Retoucher › Beauté : peau, rides d'expression, poches, visage, yeux, nez, bouche et sourcils
+8481719d	Retoucher › Maquillage : looks, cils, fard, eye-liner, sourcils, rouge à lèvres, blush, contour, reflets, couleur des yeux et taches de rousseur
+e9963f73	Roue chromatique : {0}
+c7ef9804	Sépare la voix des autres sons et réduit le bruit de fond.
+ede479b1	Séparer la parole des silences lors de la génération des sous-titres (moins de texte inventé sans parole)
+1375d7b5	Couper le son de {0}
+0e50c296	Solo {0}
+97578a67	Swin2SR léger 2×
+ff780827	Tomáš Souček / TransNetV2 (export ONNX elya5/transnetv2)
+73ca49f9	TransNetV2 (détection de scènes)
+6fc9581d	Transcrit la parole de l'audio (portugais et autres langues) pour générer des sous-titres automatiquement, avec une grande précision.
+f6f9872c	Volume {0}
+5b066bdd	Whisper large-v3 turbo (multilingue)
+fc450a13	Xiaobin Rong / GTCRN (export streaming andrelgomes/gtcrn-stream)
+fadf924a	mv-lab/swin2sr (export ONNX Xenova/swin2SR-lightweight-x2-64)

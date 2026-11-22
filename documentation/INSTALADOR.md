@@ -10,14 +10,15 @@ Instalador do **Meu Editor de Vídeo** para Windows 11 x64 (CA022, RNF017, ENT00
 |---|---|
 | `MeuEditorDeVideo-<versão>-Setup.exe` | **Instalador recomendado.** Instala o Visual C++ Redistributable x64 (se faltar) e, em seguida, o aplicativo para todos os usuários (pede elevação). |
 | `MeuEditorDeVideo-<versão>-x64.msi` | Instalador do aplicativo. Serve para computadores que já têm o Visual C++ 2015-2026 (14.40 ou mais novo) e para distribuição corporativa (GPO, Intune). Permite escolher "somente para mim" (sem administrador) ou "para todos os usuários". |
-| `SHA256SUMS.txt` | Hashes SHA-256 dos dois arquivos, para conferência. |
+| `SHA256SUMS.txt` | Hashes SHA-256 dos instaladores, para conferência; as linhas das versões anteriores são mantidas. |
 
 O script:
 
 1. publica o aplicativo (`dotnet publish`, Release, win-x64, self-contained: o .NET vai junto) em `artifacts\publish`;
 2. converte `LICENSE.md` (GPL-3.0) em RTF para a tela de licença;
-3. compila `installer\Msi\MeuEditorDeVideo.Installer.wixproj` e `installer\Bundle\MeuEditorDeVideo.Setup.wixproj`;
-4. assina, se houver certificado (ver abaixo).
+3. compila, em `artifacts\installer-build` (para não apagar as versões anteriores), `installer\Msi\MeuEditorDeVideo.Installer.wixproj` e `installer\Bundle\MeuEditorDeVideo.Setup.wixproj`;
+4. assina, se houver certificado (ver abaixo);
+5. copia os arquivos desta versão para `artifacts\installer` e atualiza o `SHA256SUMS.txt`.
 
 Pré-requisitos: .NET SDK 10 e `pwsh scripts\fetch-deps.ps1` já executado (FFmpeg, MODNet e `VC_redist.x64.exe`, todos
 verificados por SHA-256). O WiX vem do NuGet; nada precisa ser instalado. A versão vem de `Directory.Build.props`.
@@ -25,14 +26,16 @@ verificados por SHA-256). O WiX vem do NuGet; nada precisa ser instalado. A vers
 ## Conteúdo do MSI
 
 - Aplicativo publicado (≈ 540 MB instalados), sem símbolos de depuração (`*.pdb`) e sem bibliotecas de outras arquiteturas
-  (`runtimes\win-x86`, `runtimes\win-arm64`).
+  ou de outros sistemas (`runtimes\win-x86`, `win-arm64`, `linux-arm`, `linux-arm64`, `linux-x64`, `macos-arm64` e
+  `macos-x64`). O `Exclude` do WiX não aceita curinga em nome de pasta: cada uma está por extenso em `Package.wxs`, e o
+  script interrompe a geração se a publicação tiver uma pasta em `runtimes` que não seja `win-x64` nem esteja nessa lista.
 - FFmpeg (`ffmpeg\`), modelo MODNet (`ai-models\modnet-retrato\`), catálogo de modelos opcionais (`catalogo-ia\`),
   modelos de exportação (`templates\`), manual do usuário (`ajuda\`), `LICENSE.txt` e `THIRD-PARTY-NOTICES.txt`.
 - Atalho no menu Iniciar e, opcionalmente (recurso marcado por padrão), na área de trabalho.
 - Associação dos arquivos `.med` (ProgId `MeuEditorDeVideo.Projeto`, ícone do aplicativo): um duplo clique abre o projeto.
-- Entrada em **Configurações › Aplicativos** com ícone, versão e editor; atualização por *major upgrade* (instalar uma
-  versão nova, ou outra compilação da mesma versão, remove a anterior; instalar uma versão mais antiga por cima é
-  bloqueado com mensagem em pt-BR). `AllowSameVersionUpgrades` exige suprimir a ICE61.
+- Entrada em **Configurações › Aplicativos** com ícone, versão e editor; atualização por *major upgrade* com
+  `AllowDowngrades="yes"`: instalar qualquer versão (mais nova, a mesma ou mais antiga) remove a que está instalada.
+  Instalar uma versão mais antiga por cima de uma mais nova, portanto, é permitido e não mostra aviso.
 - **Preferências vazias:** a instalação apaga do registro do usuário (`HKCU\Software\Meu Editor de Vídeo`) os valores
   `Name`, `Language`, `ThemeColor`, `CheckForNewVersions` e `LastCheck` (`RemoveRegistryValue` no componente do atalho
   do menu Iniciar). Na primeira abertura, o programa mostra a janela de boas-vindas.
@@ -43,8 +46,8 @@ verificados por SHA-256). O WiX vem do NuGet; nada precisa ser instalado. A vers
 
 - Tema `rtfLicense` do WixStdBA com o logotipo (`Assets\logo-64.png`). Pelo Setup.exe, a desinstalação em
   **Configurações › Aplicativos** abre a mesma janela (o MSI fica oculto da lista).
-- Botões e textos no idioma da interface do Windows: `installer\Bundle\Localizacao	hm.<idioma>.xml` (pt-BR, pt-PT,
-  es, fr, de e en) entram como payloads `<LCID>	hm.wxl` (LCID completo e neutro). Outros idiomas usam o inglês. Os
+- Botões e textos no idioma da interface do Windows: `installer\Bundle\Localizacao\thm.<idioma>.xml` (pt-BR, pt-PT,
+  es, fr, de e en) entram como payloads `<LCID>\thm.wxl` (LCID completo e neutro). Outros idiomas usam o inglês. Os
   arquivos têm extensão `.xml` para o SDK do WiX não os compilar como localização do próprio bundle.
 - Pelo Setup.exe o MSI é sempre instalado para todos os usuários (`MSIINSTALLPERUSER` vazio). Sem isso, o
   "perUserOrMachine" instalava em `%LOCALAPPDATA%\Apps` e o Burn, que procura o pacote na máquina, não o achava para

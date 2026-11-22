@@ -59,7 +59,8 @@ public sealed class ContentPacksWindow : Window
 
     private sealed record Row(ContentPackInfo Pack)
     {
-        public string Text => $"{Pack.Name}{(Pack.IsBuiltIn ? " (incluído no programa)" : "")}  —  {Pack.Stickers} figurinha(s), {Pack.Titles} título(s), {Pack.Templates} modelo(s)";
+        public string Text => Pack.Name + (Pack.IsBuiltIn ? Translator.T(" (incluído no programa)") : "") + "  —  "
+            + Translator.F("{0} figurinha(s), {1} título(s), {2} modelo(s)", Pack.Stickers, Pack.Titles, Pack.Templates);
 
         public override string ToString() => Text;
     }

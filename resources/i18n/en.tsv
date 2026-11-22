@@ -136,7 +136,6 @@
 0f66a1e1	This pack has no documentation.
 0f823152	Drop shadow
 0f9df0fd	Hide track
-0fe4dd3c	Volume reduced in {0} {1}
 0ff11311	Rectangle
 101cbd6c	Delete and _close gap
 104056ac	No permission to access:\n{0}
@@ -732,7 +731,6 @@
 5ba6351b	◇ Shape key
 5c08e459	Auto reframe
 5c59554f	Audio bitrate must be between 32 and 640 kbps.
-5c66b8e9	Measured: {0}
 5c8c4760	New track
 5cc33dc3	Vertical video
 5d537a71	There are no subtitles in the sequence; the subtitle file was not created.
@@ -852,7 +850,6 @@
 697131ea	Identifier
 6985d69c	Move track up
 698a73c2	Italic
-69bd325e	Narration inserted ({0}
 69d920c6	Video codec
 69e07560	Cache folder
 69e0d3f0	Next cut
@@ -872,7 +869,6 @@
 6d2b1ab0	The file was not found.
 6d5c031d	Add {0}
 6d895b11	8× (fast)
-6d96c2bd	Screen {0}{1}
 6dc56b9d	Select all
 6dd2c42d	To apply the crop, the clip cannot be rotated. Reset Rotation (and 3D rotation) and try again.
 6dd717af	Camera _3 from playhead
@@ -969,7 +965,6 @@
 791b5a92	Tolerance
 7923816a	File not found.
 79327250	Delete and _join
-79398ebe	Speed {0}
 794fd4bd	Start export
 79629b91	The project already has the size of this crop.
 7962c89c	_Content packs…
@@ -1216,7 +1211,6 @@
 9835016e	Webcam position on the screen
 98374ac0	Subtitle track
 9845c805	The media has no image.
-988590bb	Project reframed to {0}×{1} ({2} {3}
 9889fca2	Features: remove or replace the background, automatic subtitles, isolate voice, reduce noise, detect scenes, remove silences, track the person and enhance the image. Only "Remove background" comes installed; the other models are installed through the manager.
 98b5d173	The export settings are invalid:\n• 
 98cf9ae3	Unavailable — install the model in Tools › AI Models.
@@ -1430,7 +1424,6 @@ b2d639ee	A pack is a .medpack (ZIP) file with the folders figurinhas, titulos an
 b2dca5fa	Create compound clip
 b2de3267	Invalid range: use hh:mm:ss:ff, with start before end.
 b2ef043b	Transparent (shows the tracks below)
-b2f40db4	Shift subtitles {0}
 b387f469	Video layout
 b3dc418d	Transform
 b40b2944	In
@@ -1469,7 +1462,6 @@ b7f76078	Add elliptical mask
 b8132eef	Ducking transition duration
 b8364050	Typewriter
 b838cbac	Cancel AI processing
-b874aa98	Motion measured over {0} frames. Magnification used: {1}
 b9338cb5	Push left
 b95e7e70	Add shape key
 b9a919b8	Add subtitle
@@ -1755,7 +1747,6 @@ dc7ababc	Catalog
 dca191f2	Track "{0}" has {1} clip(s). Remove anyway?
 dcc81347	Select a video or image clip on the timeline to edit transform, keyframes, speed and transitions.
 dd01bd46	Unobserved exception in asynchronous task.
-dd052db6	Synced: shifted {0}
 dd21499b	Enhance image with AI
 dd39c51b	Editing proxy
 dd561c36	Straight outline
@@ -1889,7 +1880,6 @@ ebb751ab	Beat
 ebc1fe65	Flip vertically
 ebc78ef6	Choose what the camera follows. Then adjust the auto cut, shake and blurred background. Uses the person cutout model (AI tab).
 ebe55185	Maximum compatibility for PowerPoint, projectors and TVs.
-ebf8e83d	Normalize audio ({0}
 ebff964d	Remove stabilization
 ecaf3589	Properties
 ecd8cf20	Lower third
@@ -1905,7 +1895,6 @@ edca4a4b	The project file was not found:\n{0}
 ee313bb5	Delete thumbnails, waveforms, proxies and AI masks? They will be recreated when needed (proxies and masks take some time).
 ee7728ba	|Audio|
 ee9361d0	Hardware decoding
-ee9dd0a6	Speed curve{0}
 eeaea3b8	Overlay
 eee0df8e	Voice and ambience on separate tracks
 ef49e594	Go to start
@@ -1991,7 +1980,6 @@ f87a8166	Recording countdown
 f8838989	High
 f9154968	AI models
 f9250d2c	Position, scale, rotation, opacity and keyframes are in the Video tab.
-f943d8ef	Address not allowed for '{0}': {1}. Use HTTPS at {2}
 f959e9b0	Color matched with the previous clip. Adjust the intensity in Video › Color › Match color.
 f95c7cec	Whole sequence
 f9801bb3	Face retouch with the face landmark mesh (local model): smooth, lighter skin, fewer expression lines and under-eye bags, and face, eye, nose, mouth and eyebrow adjustments.
@@ -2556,3 +2544,220 @@ f2b66c0c	Timeline tracks
 0b2e5195	Screen recording
 b6346552	Fixed shortcut
 db9fe880	These shortcuts are fixed and cannot be changed.
+1d83adde	+ Add at playhead
+60f5114f	+ Ellipse
+62b0a591	+ Font
+5429fd50	+ Freehand
+6396dda6	+ New tracking
+092adb40	+ Rectangle
+a3b808cd	Split at scenes ({0})
+5a806a7b	Mark scenes ({0})
+40836cb5	Generate subtitles ({0})
+a4121f4d	Import subtitles ({0})
+bade19cb	Add mask ({0})
+dff4b789	ellipse
+c8f071fc	freehand
+c5387d37	 (dedicated)
+81d3ba59	 (included with the app)
+72b295a3	The project integrity check failed (internal file "{0}" differs from what was expected). The file may be damaged. Try opening a backup copy.
+6598a937	Rounded
+3aa3a8a9	Adjustment
+7b47361a	Bottom
+7841f970	Heat
+c2ab8424	Blurred
+1c82f02b	X offset
+3c4d14a1	Y offset
+8040ef70	Line spacing
+0d71445e	Space between frames
+b768a470	Thickness
+5b1505ea	Padding
+618484e2	Neon
+1dd24ca2	Simple
+9791c58f	Sequence
+b7468bf8	Speed curve: {0}
+f89d3290	Code:
+94fb8d86	Shift subtitles {0}{1} s
+c9d1f691	Address not allowed for '{0}': {1}. Use HTTPS at {2}.
+93904df9	This project was created with a newer version of the app (format {0}). This version opens projects up to format {1}. Update Meu Editor de Vídeo.
+3d3ec81d	Importing {0} of {1}{2}
+2dc091b1	Measured: {0} LUFS · gain {1} dB
+da2c3fb9	Measured: {0} LUFS · gain {1} dB{2}
+95b530ba	Motion measured over {0} frames. Magnification used: {1}×.
+418bb50c	Narration inserted ({0} s).
+81d47037	Normalize audio ({0} LUFS)
+a3b3d36a	Could not download {0} from {1}: {2} Check your internet connection and try again; what was already downloaded will be reused.
+11284106	Could not contact {0}: {1} Check your internet connection and try again.
+de5a9a6b	There is not enough disk space to finish the export in:\n{0}\nFree up space and resume the export; finished sections will be reused.
+5ab644ff	The graphics card video encoder ("{0}") failed. Try again with the software encoder ("Encoder: software" option).
+4db7a6aa	Project "{0}" was recovered from the autosave of {1}.\n\nSave the project to keep the recovered changes.
+ca34b469	Project "{0}" was not closed properly. There is an autosave from {1:g}.\n\nDo you want to recover it now? If you choose No, the copy is kept and offered again next time.
+32f42d5f	The project is already {0}:{1} ({2}×{3}) and the videos already fill the frame, centered. There is nothing to change.\n\nTo trim the video edges, use Crop on the Video tab. For another format, choose 9:16, 1:1 or 4:5.
+45d6d43a	The project uses format {0}, newer than this version's ({1}). Unknown features will be ignored and may be lost when saving.
+2ffcc172	Invalid platform for '{0}': '{1}'. Use {2}.
+df82e183	Project reframed to {0}×{1} ({2} {3}).
+1abf216d	Recommended for Full HD projects: {0} preview, {1} MB for ready frames{2}
+b465534e	, proxies on.
+98b8ca4f	Remove {0} {1} (AI)
+b552a7df	Synced: shifted {0} s (confidence {1}).
+f3ab48cd	About {0} of free disk space is needed to download and package the models, but there is {1}.
+b7e6c1d7	Low free space on {0} ({1}): {2}. Proxies, cache and exports need space.
+3dea091f	Screen {0} (primary) — {1} × {2}
+3e6a2a3d	Screen {0} — {1} × {2}
+b48e6cce	Speed {0}×
+bf1a26a2	Volume reduced in {0} {1} with speech
+8ae9c79c	Volume reduced in {0} {1} with speech{2}
+c715587d	animated
+91a303dc	clip
+48bc6790	full
+56182fa7	dedicated
+984cb7c5	integrated/shared
+d32330ff	unknown
+f00aff1c	unknown
+75adcb36	effect
+38b9b9dd	speech
+69b273a2	horizontal
+d36c5a99	image
+b33b8b9b	inverted
+a600ac39	unknown memory
+77d3a161	scene change marked
+4cf74d8b	scene changes marked
+98d59752	media file analyzed
+6a9ff032	media files analyzed
+560c350a	person
+e8a08905	square
+894c5b6d	tracked
+8a536f7a	semitones
+19a815b7	silence
+dbf0ecff	silences
+4c0c5e01	section
+3f5d0704	sections
+9d9b2ad4	section removed
+28de9814	sections removed
+26d14aa2	section without speech removed
+493c1192	sections without speech removed
+b53c780a	track
+28d1a795	empty
+34da5602	vertical
+d9962654	{0} ({1} images)
+43c6a22d	{0} ({1} logical cores)
+c066c8e9	{0} sticker(s), {1} title(s), {2} template(s)
+a0932221	{0} {1}. Search the library for tags such as "speech", "person" or "vertical".
+0f6cf465	{0} (free: {1})
+8a3be517	{0} (no. {1} to {2})
+94bd0bab	Disk ({0})
+172a92da	The window "{0}" is outside the selected screen.
+f463afbd	The window "{0}" was closed. Choose another window.
+ebf2cda6	Could not find the window "{0}".
+2fe51419	The version service response has no "version" field.
+16e25796	The version service response is not valid JSON.
+37266cd5	The version service response is not a JSON object.
+63b650a3	The version service response is too large.
+0582b669	The version service responded {0} ({1}).
+3a554420	The FFmpeg libraries ({0}) were not found.
+ae81b336	There is no camera {0} at the playhead (there are {1}).
+2ff1a41c	decode
+ef92a36f	open encoder {0}
+934575b1	open decoder
+b9b5c397	allocate packet
+761b0219	allocate frame
+9d76050f	allocate audio frame
+1361154d	allocate audio
+74aa10e2	analyze streams
+7937c190	store audio
+29845357	encode frame
+c33b502c	encode audio
+dfad5520	set up audio conversion
+11377e0b	set up decoder
+c082804e	set up audio stream
+69a7696d	set up GIF palette
+fc913a8b	convert colors
+cf5e57be	convert frame
+2e7f44cf	convert audio
+bd07c7d1	copy channels
+ddf085fe	create input filter
+ba524c21	create output filter
+2a3f9dd2	send packet
+c6905cb4	send frame to palette
+c1e5e15e	finish encoder
+506e319f	finish decoding
+58778b73	finish palette
+f9c187ef	finish audio
+386285e1	generate GIF palette
+73c092d7	write header
+729b076d	start audio conversion
+d7193032	read packet
+93a4057e	read audio
+578d2df9	build GIF palette
+5a894418	prepare frame
+c2573d84	receive audio packet
+f6b5588c	receive packet from encoder
+48d99ef7	restart audio conversion
+f2324da5	transfer frame from GPU
+474dec24	Create backup
+b7a40f61	Create compound clip…
+93297572	Export current frame…
+f1a42086	Import image sequence…
+c7079ce8	New from template…
+cb5b463b	Save as…
+a31bca92	Save as template…
+fd53bb6a	Open…
+320af51f	Package media into the project…
+1018e49c	Render queue…
+55fe7f6c	Record screen, webcam and microphone…
+f1375adc	Import media…
+65811c7b	Locate missing media…
+c35ea397	New project…
+0f317606	Content packs…
+c9d2565f	Auto reframe…
+15deb25f	Text to speech…
+9bdb3f6f	Help › Virtual assistant: natural-language answers with the source in the manual
+7d08482d	Upscales photos 2× by reconstructing details (image enhancement).
+6e2cecee	Apply preset {0}
+e56911b9	Enable/disable
+1c133ec0	Current: {0}
+3b5dddfe	Channel {0}
+aa7712a4	Contract/expand
+c9cde35c	Copyright © 2026 — Licensed under GPL-3.0-or-later
+c2b28f65	Curve {0}
+57156980	Detect scenes more accurately (markers and clip splitting)
+07c29340	Finds scene changes (cuts and transitions) to create markers and split clips.
+1df7a783	Maker/source
+5bcae3ef	Face Mesh V2 (face landmarks)
+05f4821d	GTCRN (speech enhancement)
+0f27b873	Generate subtitles from speech (Portuguese, English, Spanish or automatic language)
+693abf71	Google MediaPipe Face Mesh V2 (ONNX export fernandotonon/QtMeshEditor-facemesh-onnx)
+a808da00	Identifies sections with speech and the silences between them.
+774ad01f	Isolate voice (voice and ambience on separate tracks)
+6c75b95e	Limit
+c2de1da2	Locates 478 face points (eyes, eyebrows, nose, mouth, outline and irises) for beauty retouching and virtual makeup.
+6dca63d8	Luminance: {0}
+e7097168	Enhance image: upscale photos 2× by reconstructing details
+1064940d	Microsoft Phi-4-mini-instruct, ONNX int4 version for CPU (microsoft/Phi-4-mini-instruct-onnx)
+6f3929ce	Microsoft Phi-4-mini-instruct, ONNX int4 version for DirectML (microsoft/Phi-4-mini-instruct-onnx)
+f06001ea	Language model that writes the virtual assistant's answers from manual excerpts, in the app's language, without leaving the computer.
+a03292a8	Show settings for {0}
+42967cd9	Move {0} down
+0c627066	Move {0} up
+01bafbf8	OpenAI Whisper large-v3-turbo, quantized GGML format (q5_0) from ggerganov/whisper.cpp
+26ee6bc2	Pan {0}
+92569ec3	Phi-4-mini-instruct (virtual assistant)
+38438ea4	Phi-4-mini-instruct (virtual assistant, CPU)
+a34aa6be	Points/sides
+26a6efca	Reset curve {0}
+6044853c	Reduce noise with adjustable strength
+d6daab90	Play/Pause
+58967e70	Retouch › Beauty: skin, expression lines, eye bags, face, eyes, nose, mouth and eyebrows
+8481719d	Retouch › Makeup: looks, lashes, eye shadow, eyeliner, eyebrows, lipstick, blush, contour, highlights, eye color and freckles
+e9963f73	Color wheel: {0}
+c7ef9804	Separates the voice from other sounds and reduces background noise.
+ede479b1	Separate speech from silence when generating subtitles (less made-up text where nobody speaks)
+1375d7b5	Mute {0}
+0e50c296	Solo {0}
+97578a67	Swin2SR lightweight 2×
+ff780827	Tomáš Souček / TransNetV2 (ONNX export elya5/transnetv2)
+73ca49f9	TransNetV2 (scene detection)
+6fc9581d	Transcribes speech in the audio (Portuguese and other languages) to generate subtitles automatically, with high accuracy.
+f6f9872c	Volume {0}
+5b066bdd	Whisper large-v3 turbo (multilingual)
+fc450a13	Xiaobin Rong / GTCRN (streaming export andrelgomes/gtcrn-stream)
+fadf924a	mv-lab/swin2sr (ONNX export Xenova/swin2SR-lightweight-x2-64)

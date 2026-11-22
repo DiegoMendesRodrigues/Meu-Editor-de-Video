@@ -15,7 +15,8 @@ public enum WebcamCorner
 /// <summary>Um monitor, em pixels físicos da área de trabalho virtual (as coordenadas que o gdigrab usa).</summary>
 public sealed record ScreenArea(int Number, int X, int Y, int Width, int Height, bool IsPrimary)
 {
-    public override string ToString() => $"Tela {Number}{(IsPrimary ? " (principal)" : "")} — {Width} × {Height}";
+    // Dois textos inteiros: um modelo com valores colados ("{0}{1}") não dá para reconhecer ao traduzir.
+    public override string ToString() => IsPrimary ? $"Tela {Number} (principal) — {Width} × {Height}" : $"Tela {Number} — {Width} × {Height}";
 }
 
 /// <summary>Uma janela aberta que pode ser gravada sozinha (a área dela na tela, no início da gravação).</summary>
