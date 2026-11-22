@@ -55,9 +55,9 @@
       ],
       "version": "branch stable, commit 0480cb05fa18",
       "license": "GPL-2.0-or-later",
-      "url": "https://code.videolan.org/videolan/x264/-/archive/0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee/x264-0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee.tar.bz2",
-      "sha256": "f05c59f2e83d494c36307025dca2d3afc6b4d185f3a3453d06cc4fecd7094057",
-      "fileName": "x264-0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee.tar.bz2",
+      "url": "https://github.com/mirror/x264/archive/0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee.tar.gz",
+      "sha256": "d0967a1348c85dfde363bb52610403be898171493100561efa0dd05d5fd1ae50",
+      "fileName": "x264-0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee.tar.gz",
       "target": "deps/.downloads/sources"
     },
     {
@@ -120,7 +120,7 @@
       ],
       "version": "3.100",
       "license": "LGPL-2.0-or-later",
-      "url": "https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz",
+      "url": "https://deb.debian.org/debian/pool/main/l/lame/lame_3.100.orig.tar.gz",
       "sha256": "ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e",
       "fileName": "lame-3.100.tar.gz",
       "target": "deps/.downloads/sources"

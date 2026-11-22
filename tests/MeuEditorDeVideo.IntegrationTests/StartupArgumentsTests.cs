@@ -5,8 +5,9 @@ namespace MeuEditorDeVideo.IntegrationTests;
 /// <summary>Argumentos de linha de comando: caminho do .med aberto pelo Windows (associação de arquivo).</summary>
 public sealed class StartupArgumentsTests : IDisposable
 {
-    private const string Obra = @"C:\Projetos\obra.med";
-    private const string Outra = @"C:\Projetos\outra.med";
+    private static readonly string Raiz = OperatingSystem.IsWindows() ? @"C:\" : "/";
+    private static readonly string Obra = Path.Combine(Raiz, "Projetos", "obra.med");
+    private static readonly string Outra = Path.Combine(Raiz, "Projetos", "outra.med");
 
     private readonly string _pasta = Path.Combine(Path.GetTempPath(), "med-startup-" + Guid.NewGuid().ToString("N")[..8]);
 
@@ -16,7 +17,7 @@ public sealed class StartupArgumentsTests : IDisposable
     [Fact]
     public void Retorna_o_caminho_completo_do_primeiro_med_existente()
     {
-        var resultado = StartupArguments.ProjectPath([@"C:\Projetos\rascunho.txt", Obra, Outra], Existentes(Obra, Outra));
+        var resultado = StartupArguments.ProjectPath([Path.Combine(Raiz, "Projetos", "rascunho.txt"), Obra, Outra], Existentes(Obra, Outra));
 
         Assert.Equal(Obra, resultado);
     }
@@ -24,7 +25,7 @@ public sealed class StartupArgumentsTests : IDisposable
     [Fact]
     public void Ignora_med_inexistente_e_usa_o_proximo_existente()
     {
-        var resultado = StartupArguments.ProjectPath([@"C:\Projetos\apagado.med", Outra], Existentes(Outra));
+        var resultado = StartupArguments.ProjectPath([Path.Combine(Raiz, "Projetos", "apagado.med"), Outra], Existentes(Outra));
 
         Assert.Equal(Outra, resultado);
     }
@@ -32,8 +33,9 @@ public sealed class StartupArgumentsTests : IDisposable
     [Fact]
     public void Ignora_arquivos_que_nao_sao_med_mesmo_existindo()
     {
-        var resultado = StartupArguments.ProjectPath([@"C:\Midias\clipe.mp4", @"C:\Textos\notas.med.txt"],
-            Existentes(@"C:\Midias\clipe.mp4", @"C:\Textos\notas.med.txt"));
+        var video = Path.Combine(Raiz, "Midias", "clipe.mp4");
+        var notas = Path.Combine(Raiz, "Textos", "notas.med.txt");
+        var resultado = StartupArguments.ProjectPath([video, notas], Existentes(video, notas));
 
         Assert.Null(resultado);
     }
@@ -41,17 +43,22 @@ public sealed class StartupArgumentsTests : IDisposable
     [Fact]
     public void Ignora_argumentos_que_comecam_com_hifen_ou_barra()
     {
-        var resultado = StartupArguments.ProjectPath(["-open:" + Obra, "/abrir:" + Outra, "--debug.med"], p => true);
+        var resultado = StartupArguments.ProjectPath(["-open:" + Obra, "--debug.med"], p => true);
 
         Assert.Null(resultado);
+        var comBarra = "/abrir:" + Outra;
+        // No Linux e no macOS "/abrir:…" é um caminho absoluto válido.
+        if (OperatingSystem.IsWindows()) Assert.Null(StartupArguments.ProjectPath([comBarra], p => true));
+        else Assert.NotNull(StartupArguments.ProjectPath([comBarra], p => true));
     }
 
     [Fact]
     public void Extensao_e_case_insensitive()
     {
-        var resultado = StartupArguments.ProjectPath([@"C:\Projetos\OBRA.MED"], Existentes(@"C:\Projetos\OBRA.MED"));
+        var maiuscula = Path.Combine(Raiz, "Projetos", "OBRA.MED");
+        var resultado = StartupArguments.ProjectPath([maiuscula], Existentes(maiuscula));
 
-        Assert.Equal(@"C:\Projetos\OBRA.MED", resultado);
+        Assert.Equal(maiuscula, resultado);
     }
 
     [Fact]

@@ -2,7 +2,7 @@ using System.IO;
 
 namespace MeuEditorDeVideo.Presentation.Services;
 
-/// <summary>Argumentos da linha de comando: o Windows passa o caminho do projeto ao abrir um arquivo .med (associação do instalador).</summary>
+/// <summary>Argumentos da linha de comando: o sistema passa o caminho do projeto ao abrir um arquivo .med (associação do instalador).</summary>
 public static class StartupArguments
 {
     /// <summary>Primeiro argumento que é um arquivo .med existente (caminho completo), ou null.</summary>
@@ -12,7 +12,9 @@ public static class StartupArguments
         foreach (var raw in args)
         {
             var arg = raw.Trim().Trim('"');
-            if (arg.Length == 0 || arg.StartsWith('-') || arg.StartsWith("/", StringComparison.Ordinal)) continue;
+            if (arg.Length == 0 || arg.StartsWith('-')) continue;
+            // "/" inicia uma opção só no Windows; no Linux e no macOS é o começo de todo caminho absoluto.
+            if (OperatingSystem.IsWindows() && arg.StartsWith('/')) continue;
             if (!arg.EndsWith(".med", StringComparison.OrdinalIgnoreCase)) continue;
             string full;
             try

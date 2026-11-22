@@ -23,4 +23,9 @@
     <MedPlataforma Condition="'$(MedPlataforma)' == '' and $([MSBuild]::IsOSPlatform('Linux'))">linux</MedPlataforma>
     <MedPlataforma Condition="'$(MedPlataforma)' == '' and $([MSBuild]::IsOSPlatform('OSX'))">macos</MedPlataforma>
   </PropertyGroup>
+  <!-- No Windows o produto é só x64. O pacote Microsoft.AI.DirectML só copia o DirectML.dll quando PlatformTarget está
+       definido; sem a cópia, o ONNX Runtime carrega a versão antiga do System32. -->
+  <PropertyGroup Condition="'$(MedPlataforma)' == 'windows'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
 </Project>

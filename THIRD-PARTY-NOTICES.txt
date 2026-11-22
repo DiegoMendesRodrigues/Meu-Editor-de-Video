@@ -40746,8 +40746,8 @@ FFmpeg 9.0.2
       na arquitetura de quem compila, com as bibliotecas externas ligadas estaticamente. Fontes fixadas (endereço e SHA-256 em scripts/deps.lock.json):
         * ffmpeg 9.0.2 (LGPL-2.1-or-later; GPL-3.0-or-later quando compilado com --enable-gpl --enable-version3): https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz
           sha256 8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e
-        * x264 branch stable, commit 0480cb05fa18 (GPL-2.0-or-later): https://code.videolan.org/videolan/x264/-/archive/0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee/x264-0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee.tar.bz2
-          sha256 f05c59f2e83d494c36307025dca2d3afc6b4d185f3a3453d06cc4fecd7094057
+        * x264 branch stable, commit 0480cb05fa18 (GPL-2.0-or-later): https://github.com/mirror/x264/archive/0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee.tar.gz
+          sha256 d0967a1348c85dfde363bb52610403be898171493100561efa0dd05d5fd1ae50
         * x265 4.3 (GPL-2.0-or-later): https://github.com/Multicorewareinc/x265/archive/refs/tags/4.3.tar.gz
           sha256 fb157f809b74dabbef5002af99489fcaebb4d0073724beffdaaf2be15cbaf7ac
         * libvpx 1.17.0 (BSD-3-Clause): https://github.com/webmproject/libvpx/archive/refs/tags/v1.17.0.tar.gz
@@ -40756,7 +40756,7 @@ FFmpeg 9.0.2
           sha256 ad94f481cb74821af183f37f4533fc52324b76ffbd98ec7723e282bab0cf9fc4
         * libaom 3.15.3 (BSD-2-Clause + AOM Patent License 1.0): https://storage.googleapis.com/aom-releases/libaom-3.15.3.tar.gz
           sha256 12c01dc731ed7b5a999e28120b45bf58a002ba3435a4ba2cfbc1e084a27c9c04
-        * lame 3.100 (LGPL-2.0-or-later): https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
+        * lame 3.100 (LGPL-2.0-or-later): https://deb.debian.org/debian/pool/main/l/lame/lame_3.100.orig.tar.gz
           sha256 ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
         * opus 1.6.1 (BSD-3-Clause): https://downloads.xiph.org/releases/opus/opus-1.6.1.tar.gz
           sha256 6ffcb593207be92584df15b32466ed64bbec99109f007c82205f0194572411a1

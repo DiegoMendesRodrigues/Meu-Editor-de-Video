@@ -75,6 +75,9 @@ $Depends = @(
     'libasound2 | libasound2t64',
     'libpulse0',
     'libva2',
+    # O FFmpeg do BtbN encerra o processo se usar VA-API e faltar uma destas.
+    'libva-drm2',
+    'libva-x11-2',
     # Vistos nos .so da publicação linux-x64 real (ELF NEEDED): OpenCvSharpExtern (OpenCV highgui, ligado ao GTK 3),
     # libuiohook do SharpHook (atalho global: X11, XRecord, libinput, xkbcommon, Wayland), Whisper (OpenMP) e OpenCV.
     'libgtk-3-0 | libgtk-3-0t64',

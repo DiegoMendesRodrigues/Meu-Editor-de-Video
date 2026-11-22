@@ -312,9 +312,13 @@ public sealed class ModelRegistry : IModelRegistry
         return true;
     }
 
+    /// <summary>Nome sem pasta. A barra invertida é recusada em todos os sistemas: só o Windows a trata como separador.</summary>
+    internal static bool IsPlainFileName(string? value) =>
+        value is null || (!value.Contains('\\') && Path.GetFileName(value) == value);
+
     private static void EnsureSimpleFileName(string value, string field)
     {
-        if (Path.GetFileName(value) != value || value is "." or ".." || value.Equals(ManifestFileName, StringComparison.OrdinalIgnoreCase))
+        if (!IsPlainFileName(value) || value is "." or ".." || value.Equals(ManifestFileName, StringComparison.OrdinalIgnoreCase))
             throw new InvalidDataException($"O campo '{field}' do manifesto deve ser o nome de um arquivo na raiz do pacote.");
     }
 

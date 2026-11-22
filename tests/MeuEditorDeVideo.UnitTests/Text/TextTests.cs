@@ -125,7 +125,9 @@ public sealed class TextTests
     {
         var r = TextRasterizer.Render("Teste", 5, new TextStyle { FontFamily = "Fonte Que Nao Existe 123" }, 1, 1000);
         Assert.True(r.BoxWidth > 10);
-        Assert.Contains("Segoe UI", FontCatalog.Families());
+        var familias = FontCatalog.Families();
+        if (OperatingSystem.IsWindows()) Assert.Contains("Segoe UI", familias);
+        else Assert.Contains(familias, f => f is "Noto Sans" or "DejaVu Sans" or "Liberation Sans" or "Helvetica Neue" or "Arial");
     }
 
     // ------------------------------------------------------------------ composição

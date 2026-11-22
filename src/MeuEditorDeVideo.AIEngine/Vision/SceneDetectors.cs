@@ -57,7 +57,9 @@ public sealed class TransNetV2(InferenceSession session)
                 for (var k = 0; k < FrameSize; k++) data[offset + k] = frame[k];
             }
             using var input = OrtValue.CreateTensorValueFromMemory(data, [1, Window, FrameHeight, FrameWidth, 3]);
-            using var outputs = session.Run(new RunOptions(), [_input], [input], [_output]);
+            // Com using: o Run recebe só o ponteiro, e o GC finalizaria um RunOptions temporário no meio da inferência.
+            using var runOptions = new RunOptions();
+            using var outputs = session.Run(runOptions, [_input], [input], [_output]);
             var p = outputs[0].GetTensorDataAsSpan<float>();
             for (var f = Pad; f < Pad + Step; f++)
             {

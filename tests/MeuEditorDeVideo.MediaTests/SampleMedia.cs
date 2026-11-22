@@ -58,10 +58,10 @@ public sealed class SampleMedia : IDisposable
         {
             for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
             {
-                var candidate = Path.Combine(dir.FullName, "deps", "ffmpeg", "bin", "ffmpeg.exe");
+                var candidate = Path.Combine(dir.FullName, "deps", "ffmpeg", "bin", OperatingSystem.IsWindows() ? "ffmpeg.exe" : "ffmpeg");
                 if (File.Exists(candidate)) return candidate;
             }
-            throw new InvalidOperationException("ffmpeg.exe não encontrado. Execute scripts\\fetch-deps.ps1.");
+            throw new InvalidOperationException("ffmpeg não encontrado em deps/ffmpeg/bin. Execute scripts\\fetch-deps.ps1.");
         }
     }
 

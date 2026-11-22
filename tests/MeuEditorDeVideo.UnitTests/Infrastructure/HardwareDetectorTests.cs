@@ -48,7 +48,9 @@ public sealed class HardwareDetectorTests
         Assert.NotNull(info.Gpus);
         // Placas físicas (com driver próprio) informam a memória de vídeo no registro.
         foreach (var gpu in info.Gpus.Where(g => !g.Name.Contains("Basic", StringComparison.OrdinalIgnoreCase)
-            && !g.Name.Contains("Básic", StringComparison.OrdinalIgnoreCase) && !g.Name.Contains("Remote", StringComparison.OrdinalIgnoreCase)))
+            && !g.Name.Contains("Básic", StringComparison.OrdinalIgnoreCase) && !g.Name.Contains("Remote", StringComparison.OrdinalIgnoreCase)
+            // Vídeo virtual do Hyper-V (máquinas do CI): "Microsoft Hyper-V Video" no Windows, "Microsoft GPU [0x…]" no Linux.
+            && !g.Name.Contains("Hyper-V", StringComparison.OrdinalIgnoreCase) && !g.Name.StartsWith("Microsoft GPU", StringComparison.Ordinal)))
             Assert.True(gpu.VideoMemoryBytes > 0, $"memória de vídeo não lida para {gpu.Name}");
 
         var root = Path.GetPathRoot(Path.GetFullPath(Path.GetTempPath()));

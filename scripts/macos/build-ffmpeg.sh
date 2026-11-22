@@ -44,7 +44,7 @@ DARWIN_MAJOR="$(uname -r | cut -d. -f1)"
 
 # Nomes dos arquivos de fonte: os mesmos "fileName" do lock.
 SRC_FFMPEG="$SOURCES/ffmpeg-9.0.2.tar.xz"
-SRC_X264="$SOURCES/x264-0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee.tar.bz2"
+SRC_X264="$SOURCES/x264-0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee.tar.gz"
 SRC_X265="$SOURCES/x265-4.3.tar.gz"
 SRC_VPX="$SOURCES/libvpx-1.17.0.tar.gz"
 SRC_SVT="$SOURCES/SVT-AV1-4.3.1.tar.gz"

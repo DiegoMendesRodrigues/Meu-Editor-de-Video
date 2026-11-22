@@ -92,7 +92,7 @@ public sealed class ModelCatalog
             foreach (var p in e.Plataformas)
                 if (!ValidPlatforms.Contains(p, StringComparer.OrdinalIgnoreCase))
                     throw new InvalidDataException($"Plataforma inválida para '{e.Id}': '{p}'. Use {string.Join(", ", ValidPlatforms)}.");
-            if (Path.GetFileName(e.File) != e.File || Path.GetFileName(e.LicenseFile) != e.LicenseFile)
+            if (!ModelRegistry.IsPlainFileName(e.File) || !ModelRegistry.IsPlainFileName(e.LicenseFile))
                 throw new InvalidDataException($"Nome de arquivo inválido para '{e.Id}'.");
             var files = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { e.File };
             foreach (var f in e.ExtraFiles)
@@ -102,7 +102,7 @@ public sealed class ModelCatalog
                 if (f.Sha256.Length != 64 || !f.Sha256.All(Uri.IsHexDigit))
                     throw new InvalidDataException($"SHA-256 inválido para '{e.Id}' ({f.File}).");
                 if (f.SizeBytes <= 0) throw new InvalidDataException($"Tamanho inválido para '{e.Id}' ({f.File}).");
-                if (string.IsNullOrWhiteSpace(f.File) || Path.GetFileName(f.File) != f.File || !files.Add(f.File)
+                if (string.IsNullOrWhiteSpace(f.File) || !ModelRegistry.IsPlainFileName(f.File) || !files.Add(f.File)
                     || f.File.Equals("manifest.json", StringComparison.OrdinalIgnoreCase) || f.File.Equals("LICENSE.txt", StringComparison.OrdinalIgnoreCase)
                     || f.File.Equals("README.md", StringComparison.OrdinalIgnoreCase))
                     throw new InvalidDataException($"Nome de arquivo inválido ou repetido para '{e.Id}': {f.File}.");

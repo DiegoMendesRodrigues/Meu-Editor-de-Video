@@ -57,7 +57,7 @@ Lacuna conhecida: a versão atual do ONNX Runtime não tem Macs Intel (`osx-x64`
 |---|---|---|---|---|---|
 | FFmpeg (full_build, shared) | 9.0.2 | GPL-3.0-or-later | windows | github.com/GyanD/codexffmpeg | Inclui x264, x265, libvpx, SVT-AV1, libaom, LAME, Opus, Vorbis. Exportação (F5): codificadores sondados em tempo de execução (NVENC/AMF/Quick Sync/Media Foundation quando houver GPU, com recuo automático para software). Carregado pelo MediaEngine via FFmpeg.AutoGen. |
 | FFmpeg (linux64-gpl-shared) | 9.0.2-61 (`n9.0.2-61-gd59078794d`, autobuild de 21/11/2026) | GPL-3.0-or-later | linux (x64) | github.com/FFmpeg-Builds/FFmpeg-Builds (antes BtbN/FFmpeg-Builds), release imutável `autobuild-2026-11-21-12-37` | Ramo 9.0 (soname `libavcodec.so.63`, o que o FFmpeg.AutoGen 9.0.1.1 espera). Mesmos codecs do Windows, ligados estaticamente. Compilado com glibc antiga: o maior símbolo `GLIBC_` das bibliotecas é 2.28. |
-| FFmpeg (compilado das fontes) | 9.0.2 | GPL-3.0-or-later | macos (arm64 e x64) | `scripts/macos/build-ffmpeg.sh` + tarballs `*-src` do lock | Não existe build compartilhado confiável do FFmpeg 9.0 para macOS; compila-se na arquitetura de quem roda (`uname -m`). Fontes: FFmpeg 9.0.2, x264 (ramo stable, commit `0480cb05fa18`), x265 4.3, libvpx 1.17.0, SVT-AV1 4.3.1, libaom 3.15.3, LAME 3.100, Opus 1.6.1, libogg 1.3.6, libvorbis 1.3.7, todas com SHA-256 no lock. Mais VideoToolbox/AudioToolbox do sistema. |
+| FFmpeg (compilado das fontes) | 9.0.2 | GPL-3.0-or-later | macos (arm64 e x64) | `scripts/macos/build-ffmpeg.sh` + tarballs `*-src` do lock | Não existe build compartilhado confiável do FFmpeg 9.0 para macOS; compila-se na arquitetura de quem roda (`uname -m`). Fontes: FFmpeg 9.0.2, x264 (ramo stable, commit `0480cb05fa18`, do espelho github.com/mirror/x264: o servidor da VideoLAN recusa downloads automáticos; o conteúdo foi conferido pelo hash do commit), x265 4.3, libvpx 1.17.0, SVT-AV1 4.3.1, libaom 3.15.3, LAME 3.100 (cópia do Debian, idêntica à do SourceForge), Opus 1.6.1, libogg 1.3.6, libvorbis 1.3.7, todas com SHA-256 no lock. Mais VideoToolbox/AudioToolbox do sistema. |
 | MODNet (`modnet.onnx`) | 1.0 | Apache-2.0 | todos | huggingface.co/Xenova/modnet | Ver "Modelo de IA incluído no aplicativo". |
 | Microsoft Visual C++ Redistributable x64 (`VC_redist.x64.exe`) | 14.51.36247.0 | Licença de redistribuição da Microsoft | windows | download.visualstudio.microsoft.com | Exigido pelas DLLs nativas do ONNX Runtime e do whisper.cpp (MSVCP140, VCRUNTIME140, VCOMP140). Só é usado pelo `Setup.exe` (encadeado antes do MSI, instalado apenas quando falta a versão 14.40 ou mais nova). |
 
@@ -95,7 +95,7 @@ Pacotes que o aplicativo (e o `.deb`, no campo `Depends`) precisa ter instalados
 | `libdrm.so.2`, `libX11.so.6`, `libatomic.so.1` | OpenCvSharpExtern | `libdrm2`, `libx11-6`, `libatomic1` |
 | `libasound.so.2`, `libpulse.so.0` ou `libpipewire-0.3.so.0` (carregadas por `dlopen`, não aparecem no ELF) | SDL3 (saída de áudio da pré-visualização; só `SDL_INIT_AUDIO`) | pelo menos um: `libpulse0`, `libasound2` (`libasound2t64`) ou `libpipewire-0.3-0` |
 | `libinput.so.10`, `libudev.so.1`, `libwayland-client.so.0`, `libxkbcommon.so.0`, `libXt.so.6`, `libXrandr.so.2`, `libXtst.so.6` | libuiohook (atalho global da gravação de tela, SharpHook; há três variantes: `x11`, `xrecord` e `wayland`, e a que carregar basta) | `Recommends`: `libinput10`, `libudev1`, `libwayland-client0`, `libxkbcommon0`, `libxt6` (`libxt6t64`), `libxrandr2`, `libxtst6` |
-| FFmpeg: só glibc e `libgcc_s` (codecs estáticos). Aceleração por VA-API/CUDA/Vulkan, quando existe no PC, vem de `dlopen` das bibliotecas do sistema | FFmpeg | opcionais (`Recommends`): `libva2`, `libvulkan1` |
+| FFmpeg: só glibc e `libgcc_s` (codecs estáticos). Aceleração por VA-API/CUDA/Vulkan vem de `dlopen` das bibliotecas do sistema | FFmpeg | obrigatórias: `libva2`, `libva-drm2`, `libva-x11-2` (ao usar VA-API sem uma delas, o FFmpeg encerra o processo); opcional (`Recommends`): `libvulkan1` |
 
 Lista sugerida para o campo `Depends` do `.deb` (Debian 12 e Ubuntu 22.04; no Ubuntu 24.04 vale a alternativa `t64` de cada nome):
 
@@ -103,10 +103,11 @@ Lista sugerida para o campo `Depends` do `.deb` (Debian 12 e Ubuntu 22.04; no Ub
 libc6 (>= 2.34), libstdc++6 (>= 11), libgcc-s1, libgomp1, libatomic1,
 libfontconfig1, libfreetype6, libharfbuzz0b, libx11-6, libdrm2,
 libgtk-3-0 | libgtk-3-0t64,
+libva2, libva-drm2, libva-x11-2,
 libpulse0 | libasound2 | libasound2t64 | libpipewire-0.3-0
 ```
 
-`Recommends`: `libinput10, libudev1, libwayland-client0, libxkbcommon0, libxt6 | libxt6t64, libxrandr2, libxtst6, libva2, libvulkan1`. Se o pacote não for autocontido, o runtime do .NET pede ainda `libicu`, `libssl` e `zlib1g` (ver a documentação do .NET do sistema-alvo). Nenhum `Depends` foi testado em instalação real (não havia Linux disponível); a lista vem da leitura dos arquivos ELF.
+`Recommends`: `libinput10, libudev1, libwayland-client0, libxkbcommon0, libxt6 | libxt6t64, libxrandr2, libxtst6, libvulkan1`. Se o pacote não for autocontido, o runtime do .NET pede ainda `libicu`, `libssl` e `zlib1g` (ver a documentação do .NET do sistema-alvo). Nenhum `Depends` foi testado em instalação real (não havia Linux disponível); a lista vem da leitura dos arquivos ELF.
 
 ## Modelo de IA incluído no aplicativo
 

@@ -107,7 +107,9 @@ public sealed class Swin2Sr(InferenceSession session)
             data[2 * plane + i] = bytes[i * 3] / 255f;
         }
         using var input = OrtValue.CreateTensorValueFromMemory(data, [1, 3, ph, pw]);
-        using var outputs = session.Run(new RunOptions(), [_input], [input], [_output]);
+        // Com using: o Run recebe só o ponteiro, e o GC finalizaria um RunOptions temporário no meio da inferência.
+        using var runOptions = new RunOptions();
+        using var outputs = session.Run(runOptions, [_input], [input], [_output]);
         var shape = outputs[0].GetTensorTypeAndShape().Shape;
         int oh = (int)shape[2], ow = (int)shape[3];
         var o = outputs[0].GetTensorDataAsSpan<float>();

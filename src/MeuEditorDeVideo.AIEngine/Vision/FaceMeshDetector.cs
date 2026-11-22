@@ -57,7 +57,9 @@ public sealed class FaceMeshDetector(InferenceSession session)
         using var input = OrtValue.CreateTensorValueFromMemory(data, [1, InputSize, InputSize, 3]);
         lock (_gate)
         {
-            using var results = session.Run(new RunOptions(), [_input], [input], _outputs);
+            // Com using: o Run recebe só o ponteiro, e o GC finalizaria um RunOptions temporário no meio da inferência.
+            using var runOptions = new RunOptions();
+            using var results = session.Run(runOptions, [_input], [input], _outputs);
             coords = [];
             foreach (var r in results)
             {

@@ -32,6 +32,28 @@ public sealed class CacheMaintenanceTests : IDisposable
         File.SetLastAccessTimeUtc(arquivo, quando);
     }
 
+    /// <summary>Impede apagar o arquivo: no Linux e no macOS um arquivo aberto pode ser apagado, e o que impede é a pasta sem escrita.</summary>
+    private static IDisposable Travar(string pasta, string nome) => OperatingSystem.IsWindows()
+        ? new FileStream(Path.Combine(pasta, nome), FileMode.Open, FileAccess.Read, FileShare.None)
+        : new PastaSemEscrita(pasta);
+
+    private sealed class PastaSemEscrita : IDisposable
+    {
+        private readonly string _pasta;
+
+        public PastaSemEscrita(string pasta)
+        {
+            _pasta = pasta;
+            if (!OperatingSystem.IsWindows()) File.SetUnixFileMode(pasta, UnixFileMode.UserRead | UnixFileMode.UserExecute);
+        }
+
+        public void Dispose()
+        {
+            if (!OperatingSystem.IsWindows())
+                File.SetUnixFileMode(_pasta, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+        }
+    }
+
     /// <summary>Cria uma entrada (subpasta de uma área) com um único arquivo.</summary>
     private static string Entrada(string area, string nome, int bytes, TimeSpan idade, string arquivo = "dados.bin")
     {
@@ -122,14 +144,15 @@ public sealed class CacheMaintenanceTests : IDisposable
     {
         var pasta = Path.Combine(_media, "k1");
         Arquivo(pasta, "livre.bin", 100, TimeSpan.FromDays(1));
-        Arquivo(pasta, "travado.bin", 200, TimeSpan.FromDays(1));
-        using var trava = new FileStream(Path.Combine(pasta, "travado.bin"), FileMode.Open, FileAccess.Read, FileShare.None);
+        var pastaTravada = OperatingSystem.IsWindows() ? pasta : Path.Combine(pasta, "protegida");
+        Arquivo(pastaTravada, "travado.bin", 200, TimeSpan.FromDays(1));
+        using var trava = Travar(pastaTravada, "travado.bin");
 
         var liberados = Create().Trim(0);
 
         Assert.Equal(100, liberados);
         Assert.False(File.Exists(Path.Combine(pasta, "livre.bin")));
-        Assert.True(File.Exists(Path.Combine(pasta, "travado.bin")));
+        Assert.True(File.Exists(Path.Combine(pastaTravada, "travado.bin")));
     }
 
     [Fact]
@@ -137,14 +160,15 @@ public sealed class CacheMaintenanceTests : IDisposable
     {
         var pasta = Path.Combine(_media, "k1");
         Arquivo(pasta, "livre.bin", 100, TimeSpan.FromDays(1));
-        Arquivo(pasta, "travado.bin", 200, TimeSpan.FromDays(1));
-        using var trava = new FileStream(Path.Combine(pasta, "travado.bin"), FileMode.Open, FileAccess.Read, FileShare.None);
+        var pastaTravada = OperatingSystem.IsWindows() ? pasta : Path.Combine(pasta, "protegida");
+        Arquivo(pastaTravada, "travado.bin", 200, TimeSpan.FromDays(1));
+        using var trava = Travar(pastaTravada, "travado.bin");
 
         var liberados = Create().Clear();
 
         Assert.Equal(100, liberados);
         Assert.False(File.Exists(Path.Combine(pasta, "livre.bin")));
-        Assert.True(File.Exists(Path.Combine(pasta, "travado.bin")));
+        Assert.True(File.Exists(Path.Combine(pastaTravada, "travado.bin")));
     }
 
     [Fact]

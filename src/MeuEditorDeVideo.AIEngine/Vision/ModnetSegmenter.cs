@@ -56,7 +56,9 @@ public sealed class ModnetSegmenter(InferenceSession session, int referenceSize 
         using var input = OrtValue.CreateTensorValueFromMemory(data, [1, 3, h, w]);
         lock (_gate)
         {
-            using var outputs = session.Run(new RunOptions(), [_input], [input], [_output]);
+            // Com using: o Run recebe só o ponteiro, e o GC finalizaria um RunOptions temporário no meio da inferência.
+            using var runOptions = new RunOptions();
+            using var outputs = session.Run(runOptions, [_input], [input], [_output]);
             var m = outputs[0].GetTensorDataAsSpan<float>();
             for (var i = 0; i < plane; i++) alpha[i] = (byte)Math.Clamp((int)(m[i] * 255 + 0.5f), 0, 255);
         }

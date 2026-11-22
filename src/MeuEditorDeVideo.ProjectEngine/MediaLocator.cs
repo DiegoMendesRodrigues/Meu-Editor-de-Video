@@ -104,10 +104,13 @@ public sealed class MediaLocator(IAppPaths paths, ILogger<MediaLocator> logger) 
     public static bool IsAllowedPath(string path, string? projectFilePath, ref bool? fromInternet)
     {
         if (path.StartsWith(@"\\.\", StringComparison.Ordinal) || path.StartsWith(@"\\?\", StringComparison.Ordinal)
-            || path.StartsWith("//", StringComparison.Ordinal) || !Path.IsPathFullyQualified(path))
+            || path.StartsWith("//", StringComparison.Ordinal))
             return false;
-        if (!path.StartsWith(@"\\", StringComparison.Ordinal) || projectFilePath is null) return true;
-        if (string.Equals(UncHost(path), UncHost(Path.GetFullPath(projectFilePath)), StringComparison.OrdinalIgnoreCase)) return true;
+        // \\servidor\pasta é completo em qualquer sistema (projeto feito no Windows), mas o .NET só o reconhece no Windows.
+        if (!path.StartsWith(@"\\", StringComparison.Ordinal)) return Path.IsPathFullyQualified(path);
+        if (projectFilePath is null) return true;
+        var project = !OperatingSystem.IsWindows() && UncHost(projectFilePath) is not null ? projectFilePath : Path.GetFullPath(projectFilePath);
+        if (string.Equals(UncHost(path), UncHost(project), StringComparison.OrdinalIgnoreCase)) return true;
         fromInternet ??= IsFromInternet(projectFilePath);
         return !fromInternet.Value;
     }
