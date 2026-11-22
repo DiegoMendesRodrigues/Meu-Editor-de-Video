@@ -6,7 +6,7 @@ Los textos en **negrita** son nombres de menús, botones y opciones. El símbolo
 
 ## Primeros pasos
 
-Meu Editor de Vídeo funciona en Windows 11 de 64 bits. Para instalarlo, use uno de los dos archivos de instalación:
+Meu Editor de Vídeo funciona en Windows 11 de 64 bits, en Linux de 64 bits (Debian 12 o posterior, Ubuntu 22.04 o posterior) y en macOS. En Windows, use uno de los dos archivos de instalación:
 
 - **MeuEditorDeVideo-…-Setup.exe**: instalador completo. Recomendado para la mayoría de las personas.
 - **MeuEditorDeVideo-…-x64.msi**: paquete de Windows Installer, para quien prefiere la instalación estándar de Windows.
@@ -14,6 +14,10 @@ Meu Editor de Vídeo funciona en Windows 11 de 64 bits. Para instalarlo, use uno
 Ejecute el archivo, siga las pantallas y, al final, abra el programa desde el menú Inicio. No hace falta instalar nada más por separado.
 
 > Si Windows muestra el aviso "Windows protegió su PC", haga clic en "Más información" y luego en "Ejecutar de todas formas". Este aviso aparece en programas sin certificado de firma digital.
+
+En **Linux**, instale el paquete **meu-editor-de-video_…_amd64.deb** con el comando `sudo apt install ./meu-editor-de-video_…_amd64.deb`; apt instala también las bibliotecas necesarias. Después, abra el programa desde el menú de aplicaciones o con el comando `meu-editor-de-video`. Para la narración de textos, instale también el paquete `espeak-ng`.
+
+En **macOS**, abra el archivo **MeuEditorDeVideo-….dmg** y arrastre **Meu Editor de Vídeo** a la carpeta **Aplicaciones**. La primera vez que grabe la pantalla, use la cámara o el micrófono, o use F10 con el programa en segundo plano, macOS pide el permiso correspondiente en **Ajustes del Sistema › Privacidad y seguridad**.
 
 ### Requisitos del equipo
 
@@ -24,11 +28,13 @@ Estos son los requisitos previstos en la especificación del producto:
 
 No es obligatorio tener una tarjeta gráfica dedicada, pero hace que la vista previa, la exportación y las funciones de inteligencia artificial sean mucho más rápidas.
 
+Linux y macOS necesitan la misma memoria y el mismo almacenamiento. En Linux, las funciones de inteligencia artificial se ejecutan en el procesador. En macOS, el programa funciona en Mac con Apple Silicon (M1 o posterior) y con Intel; en los Mac con Intel, las funciones de IA que dependen de ONNX Runtime (como Quitar fondo y el asistente virtual) no están disponibles.
+
 ### Al abrir el programa
 
 ![Ventana de bienvenida, que aparece la primera vez.](imagens/es/boas-vindas.jpg)
 
-La primera vez (o si falta alguna preferencia o está vacía en el registro de Windows), aparece la ventana **Bienvenido a Meu Editor de Vídeos**. Rellene **Nombre completo**, **Idioma del sistema**, **Tema** (Claro, Oscuro o Seguir el sistema operativo) y **Buscar nuevas actualizaciones cada mes** (Sí o No) y haga clic en **Guardar las preferencias**. Todos los campos son obligatorios y la ventana solo se cierra después de guardar. Si elige otro idioma, el programa se reinicia en él. Después puede cambiar las preferencias en **Herramientas › Configuración… › General**.
+La primera vez (o si falta alguna preferencia o está vacía en las preferencias del programa), aparece la ventana **Bienvenido a Meu Editor de Vídeos**. Rellene **Nombre completo**, **Idioma del sistema**, **Tema** (Claro, Oscuro o Seguir el sistema operativo) y **Buscar nuevas actualizaciones cada mes** (Sí o No) y haga clic en **Guardar las preferencias**. Todos los campos son obligatorios y la ventana solo se cierra después de guardar. Si elige otro idioma, el programa se reinicia en él. Después puede cambiar las preferencias en **Herramientas › Configuración… › General**.
 
 El programa se abre directamente en la pantalla de edición, con un proyecto nuevo y vacío llamado "Sin título". Si existe una copia de un proyecto que no se cerró correctamente, el programa pregunta si desea recuperarla (vea la sección Guardar, guardado automático y recuperación).
 
@@ -698,6 +704,8 @@ Si la combinación ya la usa otra acción, el programa avisa y no deja guardar. 
 
 Estos son los atajos predeterminados. Puede cambiar cualquiera en **Herramientas › Configuración… › Atajos**.
 
+En macOS, use la tecla **Cmd (⌘)** en lugar de **Ctrl** en todos los atajos (por ejemplo, Cmd+S para guardar) y la tecla **Option (⌥)** en lugar de **Alt**. En los teclados de Mac, F1, F10 y F11 pueden requerir la tecla **fn**.
+
 | Acción | Atajo |
 |---|---|
 | Nuevo proyecto | Ctrl+N |
@@ -745,9 +753,9 @@ Meu Editor de Vídeo está hecho para funcionar en su equipo:
 - Sus vídeos, fotos, audios, textos y proyectos se procesan solo en su equipo.
 - Las funciones de inteligencia artificial también se ejecutan en su equipo. Ningún contenido se envía a internet.
 - El programa no recopila datos de uso ni envía telemetría.
-- El programa no se actualiza solo por internet.
+- El programa no se actualiza solo: únicamente comprueba si hay una versión nueva, y usted decide si la instala.
 
-Hay una única excepción. Cuando hace clic en **Instalar** en la herramienta **Descargar modelos de IA**, el programa descarga los archivos de los modelos de IA de los sitios oficiales de sus autores, que son huggingface.co y github.com. Solo se descargan los modelos elegidos y no se envía ningún dato de su proyecto. Una vez instalados, los modelos funcionan sin internet. También puede instalar paquetes de modelos ya descargados, con **Instalar paquete…**, sin usar internet.
+Hay dos excepciones. En **Ayuda › Buscar actualizaciones** (y cada 30 días, si la opción está activada), el programa consulta su sitio web enviando solo el idioma de la interfaz y el sistema operativo. Cuando hace clic en **Instalar** en la herramienta **Descargar modelos de IA**, el programa descarga los archivos de los modelos de IA de los sitios oficiales de sus autores, que son huggingface.co y github.com. Solo se descargan los modelos elegidos y no se envía ningún dato de su proyecto. Una vez instalados, los modelos funcionan sin internet. También puede instalar paquetes de modelos ya descargados, con **Instalar paquete…**, sin usar internet.
 
 Para ver las licencias y los componentes de terceros usados, abra **Ayuda › Acerca de Meu Editor de Vídeo**. El texto completo de las licencias está en **Ayuda › Licencias de terceros**.
 
@@ -791,7 +799,11 @@ Al abrir el programa, responda **Sí** a la pregunta "Recuperar proyecto". Si no
 
 ### El programa no se abre o muestra errores
 
-Los registros de funcionamiento (logs) están en la carpeta `%LOCALAPPDATA%\MeuEditorDeVideo\logs`. Para abrirla, use **Ayuda › Abrir carpeta de registros** (o pulse Windows + R, pegue esa ruta y pulse Intro). Al pedir ayuda, envíe el archivo de registro más reciente junto con el texto de **Ayuda › Información del sistema…**. Los registros no contienen el contenido de sus vídeos.
+Los registros de funcionamiento (logs) están en la carpeta `%LOCALAPPDATA%\MeuEditorDeVideo\logs`. Para abrirla, use **Ayuda › Abrir carpeta de registros** (o pulse Windows + R, pegue esa ruta y pulse Intro). Al pedir ayuda, envíe el archivo de registro más reciente junto con el texto de **Ayuda › Información del sistema…**. Los registros no contienen el contenido de sus vídeos. En Linux, la carpeta es `~/.local/share/MeuEditorDeVideo/logs`; en macOS, `~/Library/Application Support/MeuEditorDeVideo/logs`.
+
+### En Linux, la grabación de pantalla no funciona
+
+En Linux con Wayland (el predeterminado en Ubuntu y en Debian con GNOME), el sistema no permite que otros programas capturen la pantalla: la grabación de pantalla no está disponible (con un aviso) y F10 solo funciona con el programa en primer plano. La cámara y el micrófono siguen funcionando. Para grabar la pantalla, cierre la sesión y, en la pantalla de inicio, elija la sesión **Xorg** (por ejemplo, "Ubuntu en Xorg"). En macOS, si la grabación sale negra o F10 no responde, revise los permisos de **Grabación de pantalla** y **Accesibilidad** en **Ajustes del Sistema › Privacidad y seguridad**.
 
 ### Dudas sobre la versión instalada
 

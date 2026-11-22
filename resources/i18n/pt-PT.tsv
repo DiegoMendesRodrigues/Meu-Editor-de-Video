@@ -216,7 +216,6 @@
 5761280e	{0}|*{1}|Todos os ficheiros|*.*
 576a2e8c	A importar {0} de {1}
 58114811	100% = volume original. ◇ cria um keyframe de volume no instante do cursor (ex.: baixar a música durante uma fala).
-58b46f11	● A gravar  {0:hh\\:mm\\:ss}   (prima F10 ou clique em Parar para terminar)
 59040892	Indique um nome para o ficheiro multimédia.
 592f4cc0	Deseja guardar as alterações em "{0}"?
 59f670ec	Clipe com ponto de entrada negativo na faixa '{0}'.
@@ -458,7 +457,6 @@ aaaa1558	Todos os ficheiros serão copiados para dentro do ficheiro do projeto (
 aabd2374	Localizar {0} ficheiros multimédia
 abd7c83a	Remover seguimento
 ac483d96	Não foi possível identificar a duração do ficheiro.
-ac6d9b76	Anexado
 ad136596	Fotograma sem dimensões.
 ad874ae7	Pausa (Espaço)
 ad8df3a5	Não foi possível inserir a narração na linha temporal.

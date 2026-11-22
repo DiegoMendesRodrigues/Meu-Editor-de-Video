@@ -78,7 +78,6 @@
 0848bd4e	Maximum width
 08b9fad3	Apply style to {0} subtitles
 08dc5795	Memory of {0} (recommended minimum: 16 GB): long or 4K projects may be slow, and the preview keeps fewer frames.
-092b9ccf	Maximize
 09456467	There are no subtitles on the timeline.
 094ce26d	Hard black and white, with deep shadows.
 09b3be7d	System information…
@@ -532,7 +531,6 @@
 3f3a9f9e	Graphics
 3f8b3ca7	Add {0} keyframe at this moment
 3fba8694	Keyframe interpolation
-3fc5f90b	Minimize
 3fee37c3	Full HD horizontal video for YouTube. Keeps the project frame rate.
 3fef6833	the 'sizeBytes' field cannot be negative.
 400d96d0	Could not read the first frame.
@@ -708,7 +706,6 @@
 58397e06	Transparency of the removed background
 585cd8ea	Vibrance
 587f165b	Model package (*.medmodel)|*.medmodel
-58b46f11	● Recording  {0:hh\\:mm\\:ss}   (press F10 or click Stop to finish)
 58eda3a6	Bluish shadows and orange highlights (teal & orange).
 59040892	Enter a name for the media.
 590fb42f	Copied to clipboard.
@@ -1904,7 +1901,6 @@ ed437c03	Diego Mendes Rodrigues' LinkedIn profile
 ed4f6762	Invalid WebVTT file: missing WEBVTT header.
 ed5431fc	Capture frame
 ed79bce8	This model requires a newer version of Meu Editor de Vídeo.
-eda02893	Restore
 edca4a4b	The project file was not found:\n{0}
 ee313bb5	Delete thumbnails, waveforms, proxies and AI masks? They will be recreated when needed (proxies and masks take some time).
 ee7728ba	|Audio|

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**Meu Editor de Vídeo** — non-linear video editor for Windows 11 x64 (Linux and macOS port in progress). C#/.NET 10, Avalonia 12 with the Fluent theme, MVVM via CommunityToolkit.Mvvm, DI via Microsoft.Extensions.Hosting. FFmpeg (via FFmpeg.AutoGen), ONNX Runtime (DirectML/CPU), Whisper.net, NAudio (WASAPI) / SDL3 audio, SkiaSharp + HarfBuzz text, OpenCvSharp. License GPL-3.0-or-later (`LICENSE.md`; the build copies it as `LICENSE.txt` next to the exe, and `build-installer.ps1` / `generate-notices.ps1` read it).
+**Meu Editor de Vídeo** — non-linear video editor for Windows 11 x64, Linux x64 (Debian 12+, Ubuntu 22.04+) and macOS (arm64, x64), from one code base. Linux and macOS are validated by CI only (no local VM). C#/.NET 10, Avalonia 12 with the Fluent theme, MVVM via CommunityToolkit.Mvvm, DI via Microsoft.Extensions.Hosting. FFmpeg (via FFmpeg.AutoGen), ONNX Runtime (DirectML/CPU), Whisper.net, NAudio (WASAPI) / SDL3 audio, SkiaSharp + HarfBuzz text, OpenCvSharp. License GPL-3.0-or-later (`LICENSE.md`; the build copies it as `LICENSE.txt` next to the exe, and `build-installer.ps1` / `generate-notices.ps1` read it).
 
 - UI text, docs (`documentation/`), code comments, and commit messages are in **Portuguese (pt-BR)**.
 - Spec: `ESPECIFICACAO_TECNICA_E_FUNCIONAL.zip` (RF/RNF/CA ids referenced in code and comments).
@@ -32,7 +32,7 @@ pwsh scripts/offline-check.ps1                    # runtime check that the app o
 - AI tests (`ModelFact`/`ModeloFact`, `WhisperFact`) are skipped when their model files are absent (`%MED_MODELS_DIR%`, `deps\ai-models`, installed models).
 - IntegrationTests run sequentially and use `Support/AppContainer.cs`, which mirrors the app's DI composition (`AddMeuEditor`) without a window.
 - Package versions are central in `Directory.Packages.props`. App version is the single `<Version>` in `Directory.Build.props`.
-- Cross-platform port (Linux/macOS) in progress. Packages with per-OS native assets are conditioned on `MedPlataforma` (`windows`/`linux`/`macos`, from `-r <rid>` or the build host; `Directory.Build.props`). Check another OS's restore with `-p:MedPlataforma=linux` in a scratch copy, not in the repo's `obj/`. Projects without Windows APIs target `net10.0`; keep them that way. OpenCvSharp on macOS uses the `OpenCvSharp4.runtime.osx.*` packages.
+- Cross-platform: OS-specific code stays behind `OperatingSystem.Is…()` in `net10.0` projects (recipe "Recurso que depende do sistema operacional" in `DOCUMENTACAO_TECNICA.md`). User-visible OS differences (install, Cmd on macOS, Wayland limits) are in the manuals. Packages with per-OS native assets are conditioned on `MedPlataforma` (`windows`/`linux`/`macos`, from `-r <rid>` or the build host; `Directory.Build.props`). Check another OS's restore with `-p:MedPlataforma=linux` in a scratch copy, not in the repo's `obj/`. Projects without Windows APIs target `net10.0`; keep them that way. OpenCvSharp on macOS uses the `OpenCvSharp4.runtime.osx.*` packages.
 - CI (`.github/workflows/build.yml`): win-x64, linux-x64 (ubuntu-22.04), osx-arm64 (macos-14), osx-x64 (macos-15-intel); packages are built on push to main. The `.deb` step needs the repository variable `MED_DEB_MAINTAINER`; macOS signing uses the `MACOS_*`/`APPLE_*` secrets.
 
 ## Architecture

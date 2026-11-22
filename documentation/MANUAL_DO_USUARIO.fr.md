@@ -6,7 +6,7 @@ Les textes en **gras** sont des noms de menus, de boutons et d'options. Le symbo
 
 ## Premiers pas
 
-Meu Editor de Vídeo fonctionne sous Windows 11 64 bits. Pour l'installer, utilisez l'un des deux fichiers d'installation :
+Meu Editor de Vídeo fonctionne sous Windows 11 64 bits, sous Linux 64 bits (Debian 12 ou plus récent, Ubuntu 22.04 ou plus récent) et sous macOS. Sous Windows, utilisez l'un des deux fichiers d'installation :
 
 - **MeuEditorDeVideo-…-Setup.exe** : installateur complet. Recommandé pour la plupart des personnes.
 - **MeuEditorDeVideo-…-x64.msi** : paquet Windows Installer, pour ceux qui préfèrent l'installation standard de Windows.
@@ -14,6 +14,10 @@ Meu Editor de Vídeo fonctionne sous Windows 11 64 bits. Pour l'installer, utili
 Exécutez le fichier, suivez les écrans et, à la fin, ouvrez le programme depuis le menu Démarrer. Rien d'autre n'est à installer séparément.
 
 > Si Windows affiche l'avertissement « Windows a protégé votre ordinateur », cliquez sur « Informations complémentaires » puis sur « Exécuter quand même ». Cet avertissement apparaît pour les programmes sans certificat de signature numérique.
+
+Sous **Linux**, installez le paquet **meu-editor-de-video_…_amd64.deb** avec la commande `sudo apt install ./meu-editor-de-video_…_amd64.deb` ; apt installe aussi les bibliothèques nécessaires. Ouvrez ensuite le programme depuis le menu des applications ou avec la commande `meu-editor-de-video`. Pour la narration de textes, installez aussi le paquet `espeak-ng`.
+
+Sur **macOS**, ouvrez le fichier **MeuEditorDeVideo-….dmg** et faites glisser **Meu Editor de Vídeo** dans le dossier **Applications**. La première fois que vous enregistrez l'écran, utilisez la caméra ou le micro, ou utilisez F10 avec le programme en arrière-plan, macOS demande l'autorisation correspondante dans **Réglages Système › Confidentialité et sécurité**.
 
 ### Configuration requise
 
@@ -24,11 +28,13 @@ Voici la configuration prévue dans la spécification du produit :
 
 Une carte graphique dédiée n'est pas obligatoire, mais elle rend l'aperçu, l'exportation et les fonctions d'intelligence artificielle bien plus rapides.
 
+Linux et macOS demandent la même mémoire et le même stockage. Sous Linux, les fonctions d'intelligence artificielle s'exécutent sur le processeur. Sur macOS, le programme fonctionne sur les Mac Apple Silicon (M1 ou plus récent) et Intel ; sur les Mac Intel, les fonctions d'IA qui dépendent d'ONNX Runtime (comme Supprimer l'arrière-plan et l'assistant virtuel) ne sont pas disponibles.
+
 ### À l'ouverture du programme
 
 ![Fenêtre de bienvenue, affichée la première fois.](imagens/fr/boas-vindas.jpg)
 
-La première fois (ou si une préférence manque ou est vide dans le registre de Windows), la fenêtre **Bienvenue dans Meu Editor de Vídeos** apparaît. Renseignez **Nom complet**, **Langue du système**, **Thème** (Clair, Sombre ou Suivre le système d'exploitation) et **Rechercher les mises à jour chaque mois** (Oui ou Non), puis cliquez sur **Enregistrer les préférences**. Tous les champs sont obligatoires et la fenêtre ne se ferme qu'après l'enregistrement. Si vous choisissez une autre langue, le programme redémarre dans celle-ci. Vous pouvez ensuite modifier ces préférences dans **Outils › Paramètres… › Général**.
+La première fois (ou si une préférence manque ou est vide dans les préférences du programme), la fenêtre **Bienvenue dans Meu Editor de Vídeos** apparaît. Renseignez **Nom complet**, **Langue du système**, **Thème** (Clair, Sombre ou Suivre le système d'exploitation) et **Rechercher les mises à jour chaque mois** (Oui ou Non), puis cliquez sur **Enregistrer les préférences**. Tous les champs sont obligatoires et la fenêtre ne se ferme qu'après l'enregistrement. Si vous choisissez une autre langue, le programme redémarre dans celle-ci. Vous pouvez ensuite modifier ces préférences dans **Outils › Paramètres… › Général**.
 
 Le programme s'ouvre directement sur l'écran de montage, avec un projet nouveau et vide appelé « Sans titre ». S'il existe une copie d'un projet qui n'a pas été fermé correctement, le programme demande si vous voulez la récupérer (voir la section Enregistrement, enregistrement automatique et récupération).
 
@@ -698,6 +704,8 @@ Si la combinaison est déjà utilisée par une autre action, le programme vous p
 
 Voici les raccourcis par défaut. Vous pouvez modifier chacun d'eux dans **Outils › Paramètres… › Raccourcis**.
 
+Sur macOS, utilisez la touche **Cmd (⌘)** à la place de **Ctrl** dans tous les raccourcis (par exemple, Cmd+S pour enregistrer) et la touche **Option (⌥)** à la place de **Alt**. Sur les claviers Mac, F1, F10 et F11 peuvent nécessiter la touche **fn**.
+
 | Action | Raccourci |
 |---|---|
 | Nouveau projet | Ctrl+N |
@@ -745,9 +753,9 @@ Meu Editor de Vídeo est conçu pour fonctionner sur votre ordinateur :
 - Vos vidéos, photos, audios, textes et projets sont traités uniquement sur votre ordinateur.
 - Les fonctions d'intelligence artificielle s'exécutent aussi sur votre ordinateur. Aucun contenu n'est envoyé sur internet.
 - Le programme ne collecte pas de données d'utilisation et n'envoie pas de télémétrie.
-- Le programme ne se met pas à jour tout seul par internet.
+- Le programme ne se met pas à jour tout seul : il vérifie seulement s'il existe une nouvelle version, et vous décidez de l'installer ou non.
 
-Il existe une seule exception. Quand vous cliquez sur **Installer** dans l'outil **Télécharger des modèles d'IA**, le programme télécharge les fichiers des modèles d'IA depuis les sites officiels de leurs auteurs, à savoir huggingface.co et github.com. Seuls les modèles choisis sont téléchargés, et aucune donnée de votre projet n'est envoyée. Une fois installés, les modèles fonctionnent sans internet. Vous pouvez aussi installer des packs de modèles déjà téléchargés, avec **Installer un pack…**, sans utiliser internet.
+Il existe deux exceptions. Dans **Aide › Rechercher des mises à jour** (et tous les 30 jours, si l'option est activée), le programme interroge son site en envoyant uniquement la langue de l'interface et le système d'exploitation. Quand vous cliquez sur **Installer** dans l'outil **Télécharger des modèles d'IA**, le programme télécharge les fichiers des modèles d'IA depuis les sites officiels de leurs auteurs, à savoir huggingface.co et github.com. Seuls les modèles choisis sont téléchargés, et aucune donnée de votre projet n'est envoyée. Une fois installés, les modèles fonctionnent sans internet. Vous pouvez aussi installer des packs de modèles déjà téléchargés, avec **Installer un pack…**, sans utiliser internet.
 
 Pour voir les licences et les composants tiers utilisés, ouvrez **Aide › À propos de Meu Editor de Vídeo**. Le texte complet des licences se trouve dans **Aide › Licences tierces**.
 
@@ -791,7 +799,11 @@ Le programme ne lit pas ce format. Convertissez le fichier dans un format couran
 
 ### Le programme ne s'ouvre pas ou affiche des erreurs
 
-Les journaux de fonctionnement (logs) se trouvent dans le dossier `%LOCALAPPDATA%\MeuEditorDeVideo\logs`. Pour l'ouvrir, utilisez **Aide › Ouvrir le dossier des journaux** (ou appuyez sur Windows + R, collez ce chemin et appuyez sur Entrée). Pour demander de l'aide, envoyez le fichier journal le plus récent avec le texte de **Aide › Informations système…**. Les journaux ne contiennent pas le contenu de vos vidéos.
+Les journaux de fonctionnement (logs) se trouvent dans le dossier `%LOCALAPPDATA%\MeuEditorDeVideo\logs`. Pour l'ouvrir, utilisez **Aide › Ouvrir le dossier des journaux** (ou appuyez sur Windows + R, collez ce chemin et appuyez sur Entrée). Pour demander de l'aide, envoyez le fichier journal le plus récent avec le texte de **Aide › Informations système…**. Les journaux ne contiennent pas le contenu de vos vidéos. Sous Linux, le dossier est `~/.local/share/MeuEditorDeVideo/logs` ; sur macOS, `~/Library/Application Support/MeuEditorDeVideo/logs`.
+
+### Sous Linux, l'enregistrement de l'écran ne fonctionne pas
+
+Sous Linux avec Wayland (par défaut sur Ubuntu et sur Debian avec GNOME), le système ne permet pas aux autres programmes de capturer l'écran : l'enregistrement de l'écran est indisponible (avec un avis) et F10 ne fonctionne qu'avec le programme au premier plan. La caméra et le micro continuent de fonctionner. Pour enregistrer l'écran, fermez la session et, sur l'écran de connexion, choisissez la session **Xorg** (par exemple, « Ubuntu sur Xorg »). Sur macOS, si l'enregistrement est noir ou si F10 ne répond pas, vérifiez les autorisations **Enregistrement de l'écran** et **Accessibilité** dans **Réglages Système › Confidentialité et sécurité**.
 
 ### Questions sur la version installée
 

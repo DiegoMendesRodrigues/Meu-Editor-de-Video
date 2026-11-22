@@ -78,7 +78,6 @@
 0848bd4e	Largeur maximale
 08b9fad3	Appliquer le style à {0} sous-titres
 08dc5795	Mémoire de {0} (minimum recommandé : 16 Go) : les projets longs ou 4K peuvent être lents, et l'aperçu conserve moins d'images.
-092b9ccf	Agrandir
 09456467	Il n'y a pas de sous-titres dans la timeline.
 094ce26d	Noir et blanc dur, avec des ombres profondes.
 09b3be7d	Informations système…
@@ -531,7 +530,6 @@
 3f3a9f9e	Graphiques
 3f8b3ca7	Ajouter une image clé de {0} à cet instant
 3fba8694	Interpolation de l'image clé
-3fc5f90b	Réduire
 3fee37c3	Vidéo horizontale Full HD pour YouTube. Conserve la fréquence d'images du projet.
 3fef6833	le champ « sizeBytes » ne peut pas être négatif.
 400d96d0	Impossible de lire la première image.
@@ -706,7 +704,6 @@
 58397e06	Transparence de l'arrière-plan supprimé
 585cd8ea	Vibrance
 587f165b	Pack de modèle (*.medmodel)|*.medmodel
-58b46f11	● Enregistrement  {0:hh\\:mm\\:ss}   (appuyez sur F10 ou cliquez sur Arrêter pour terminer)
 58eda3a6	Ombres bleutées et hautes lumières orangées (teal & orange).
 59040892	Indiquez un nom pour le média.
 590fb42f	Copié dans le presse-papiers.
@@ -1380,7 +1377,6 @@ abf8b470	1/4 de la résolution
 abfb4b30	Nom du projet
 ac2cbab5	Masques
 ac483d96	Impossible de déterminer la durée du fichier.
-ac6d9b76	Attaché
 ac950bd2	Changer la musique du visualiseur
 acdbbcfc	Grouper
 ad10b62e	Qualité {0}
@@ -1910,7 +1906,6 @@ ed437c03	Profil LinkedIn de Diego Mendes Rodrigues
 ed4f6762	Fichier WebVTT invalide : en-tête WEBVTT manquant.
 ed5431fc	Capturer l'image
 ed79bce8	Ce modèle nécessite une version plus récente de Meu Editor de Vídeo.
-eda02893	Restaurer
 edca4a4b	Le fichier du projet est introuvable :\n{0}
 ee313bb5	Supprimer les miniatures, formes d'onde, proxies et masques IA ? Ils seront recréés si nécessaire (les proxies et masques prennent un peu de temps).
 ee7728ba	|Audios|

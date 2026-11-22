@@ -78,7 +78,6 @@
 0848bd4e	Maximale Breite
 08b9fad3	Stil auf {0} Untertitel anwenden
 08dc5795	Arbeitsspeicher von {0} (empfohlenes Minimum: 16 GB): lange oder 4K-Projekte können langsam sein, und die Vorschau speichert weniger Bilder.
-092b9ccf	Maximieren
 09456467	In der Zeitleiste gibt es keine Untertitel.
 094ce26d	Hartes Schwarzweiß mit tiefen Schatten.
 09b3be7d	Systeminformationen…
@@ -534,7 +533,6 @@
 3f3a9f9e	Grafiken
 3f8b3ca7	{0}-Keyframe an dieser Stelle hinzufügen
 3fba8694	Keyframe-Interpolation
-3fc5f90b	Minimieren
 3fee37c3	Horizontales Full-HD-Video für YouTube. Behält die Bildrate des Projekts bei.
 3fef6833	das Feld „sizeBytes“ darf nicht negativ sein.
 400d96d0	Das erste Bild konnte nicht gelesen werden.
@@ -710,7 +708,6 @@
 58397e06	Transparenz des entfernten Hintergrunds
 585cd8ea	Dynamik
 587f165b	Modellpaket (*.medmodel)|*.medmodel
-58b46f11	● Aufnahme  {0:hh\\:mm\\:ss}   (F10 drücken oder auf Stopp klicken zum Beenden)
 58eda3a6	Bläuliche Schatten und orange Lichter (Teal & Orange).
 59040892	Geben Sie einen Namen für das Medium ein.
 590fb42f	In die Zwischenablage kopiert.
@@ -1388,7 +1385,6 @@ abf8b470	1/4 der Auflösung
 abfb4b30	Projektname
 ac2cbab5	Masken
 ac483d96	Die Dateidauer konnte nicht ermittelt werden.
-ac6d9b76	Angehängt
 ac950bd2	Visualizer-Musik wechseln
 acdbbcfc	Gruppieren
 ad10b62e	Qualität {0}
@@ -1921,7 +1917,6 @@ ed437c03	LinkedIn-Profil von Diego Mendes Rodrigues
 ed4f6762	Ungültige WebVTT-Datei: WEBVTT-Kopfzeile fehlt.
 ed5431fc	Bild erfassen
 ed79bce8	Dieses Modell erfordert eine neuere Version von Meu Editor de Vídeo.
-eda02893	Wiederherstellen
 edca4a4b	Die Projektdatei wurde nicht gefunden:\n{0}
 ee313bb5	Miniaturen, Wellenformen, Proxys und KI-Masken löschen? Sie werden bei Bedarf neu erstellt (Proxys und Masken dauern etwas).
 ee7728ba	|Audio|

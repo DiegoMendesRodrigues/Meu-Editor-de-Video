@@ -6,7 +6,7 @@ Dieses Handbuch erklärt, wie Sie Meu Editor de Vídeo installieren, verwenden u
 
 ## Erste Schritte
 
-Meu Editor de Vídeo läuft unter Windows 11 (64 Bit). Verwenden Sie zur Installation eine der beiden Installationsdateien:
+Meu Editor de Vídeo läuft unter Windows 11 (64 Bit), unter Linux (64 Bit; Debian 12 oder neuer, Ubuntu 22.04 oder neuer) und unter macOS. Verwenden Sie unter Windows eine der beiden Installationsdateien:
 
 - **MeuEditorDeVideo-…-Setup.exe**: vollständiges Installationsprogramm. Für die meisten Personen empfohlen.
 - **MeuEditorDeVideo-…-x64.msi**: Windows-Installer-Paket für alle, die die Standardinstallation von Windows bevorzugen.
@@ -14,6 +14,10 @@ Meu Editor de Vídeo läuft unter Windows 11 (64 Bit). Verwenden Sie zur Install
 Führen Sie die Datei aus, folgen Sie den Bildschirmen und öffnen Sie das Programm zum Schluss über das Startmenü. Es muss nichts weiter separat installiert werden.
 
 > Wenn Windows die Warnung „Der Computer wurde durch Windows geschützt“ anzeigt, klicken Sie auf „Weitere Informationen“ und dann auf „Trotzdem ausführen“. Diese Warnung erscheint bei Programmen ohne digitales Signaturzertifikat.
+
+Unter **Linux** installieren Sie das Paket **meu-editor-de-video_…_amd64.deb** mit dem Befehl `sudo apt install ./meu-editor-de-video_…_amd64.deb`; apt installiert die benötigten Bibliotheken mit. Öffnen Sie das Programm danach über das Anwendungsmenü oder mit dem Befehl `meu-editor-de-video`. Für die Sprachausgabe von Texten installieren Sie zusätzlich das Paket `espeak-ng`.
+
+Unter **macOS** öffnen Sie die Datei **MeuEditorDeVideo-….dmg** und ziehen **Meu Editor de Vídeo** in den Ordner **Programme**. Wenn Sie zum ersten Mal den Bildschirm aufnehmen, Kamera oder Mikrofon verwenden oder F10 bei Programm im Hintergrund drücken, fragt macOS nach der passenden Berechtigung unter **Systemeinstellungen › Datenschutz & Sicherheit**.
 
 ### Systemanforderungen
 
@@ -24,11 +28,13 @@ Dies sind die in der Produktspezifikation vorgesehenen Anforderungen:
 
 Eine dedizierte Grafikkarte ist nicht zwingend erforderlich, macht aber Vorschau, Export und die Funktionen der künstlichen Intelligenz deutlich schneller.
 
+Unter Linux und macOS gelten dieselben Anforderungen an Arbeitsspeicher und Speicherplatz. Unter Linux laufen die Funktionen der künstlichen Intelligenz auf dem Prozessor. Unter macOS läuft das Programm auf Macs mit Apple Silicon (M1 oder neuer) und mit Intel; auf Intel-Macs sind die KI-Funktionen, die ONNX Runtime benötigen (etwa Hintergrund entfernen und der virtuelle Assistent), nicht verfügbar.
+
 ### Beim Öffnen des Programms
 
 ![Willkommensfenster, das beim ersten Start erscheint.](imagens/de/boas-vindas.jpg)
 
-Beim ersten Start (oder wenn eine Einstellung in der Windows-Registrierung fehlt oder leer ist) erscheint das Fenster **Willkommen bei Meu Editor de Vídeos**. Füllen Sie **Vollständiger Name**, **Systemsprache**, **Design** (Hell, Dunkel oder Wie das Betriebssystem) und **Monatlich nach neuen Updates suchen** (Ja oder Nein) aus und klicken Sie auf **Einstellungen speichern**. Alle Felder sind Pflichtfelder, und das Fenster schließt sich erst nach dem Speichern. Wenn Sie eine andere Sprache wählen, startet das Programm darin neu. Später können Sie die Einstellungen unter **Werkzeuge › Einstellungen… › Allgemein** ändern.
+Beim ersten Start (oder wenn eine Einstellung in den Einstellungen des Programms fehlt oder leer ist) erscheint das Fenster **Willkommen bei Meu Editor de Vídeos**. Füllen Sie **Vollständiger Name**, **Systemsprache**, **Design** (Hell, Dunkel oder Wie das Betriebssystem) und **Monatlich nach neuen Updates suchen** (Ja oder Nein) aus und klicken Sie auf **Einstellungen speichern**. Alle Felder sind Pflichtfelder, und das Fenster schließt sich erst nach dem Speichern. Wenn Sie eine andere Sprache wählen, startet das Programm darin neu. Später können Sie die Einstellungen unter **Werkzeuge › Einstellungen… › Allgemein** ändern.
 
 Das Programm öffnet sich direkt im Bearbeitungsbildschirm, mit einem neuen, leeren Projekt namens „Unbenannt“. Wenn es eine Kopie eines Projekts gibt, das nicht ordnungsgemäß geschlossen wurde, fragt das Programm, ob Sie sie wiederherstellen möchten (siehe Abschnitt Speichern, automatisches Speichern und Wiederherstellung).
 
@@ -698,6 +704,8 @@ Wenn die Kombination bereits von einer anderen Aktion verwendet wird, weist das 
 
 Dies sind die Standard-Tastenkombinationen. Sie können jede davon unter **Werkzeuge › Einstellungen… › Tastenkombinationen** ändern.
 
+Unter macOS verwenden Sie in allen Tastenkombinationen die Taste **Cmd (⌘)** statt **Strg** (zum Beispiel Cmd+S zum Speichern) und die Taste **Option (⌥)** statt **Alt**. Auf Mac-Tastaturen brauchen F1, F10 und F11 eventuell die Taste **fn**.
+
 | Aktion | Tastenkombination |
 |---|---|
 | Neues Projekt | Strg+N |
@@ -745,9 +753,9 @@ Meu Editor de Vídeo wurde dafür gemacht, auf Ihrem Computer zu arbeiten:
 - Ihre Videos, Fotos, Audiodateien, Texte und Projekte werden ausschließlich auf Ihrem Computer verarbeitet.
 - Auch die Funktionen der künstlichen Intelligenz laufen auf Ihrem Computer. Es werden keine Inhalte ins Internet gesendet.
 - Das Programm sammelt keine Nutzungsdaten und sendet keine Telemetrie.
-- Das Programm aktualisiert sich nicht selbst über das Internet.
+- Das Programm aktualisiert sich nicht selbst: Es prüft nur, ob es eine neue Version gibt, und Sie entscheiden, ob Sie sie installieren.
 
-Es gibt eine einzige Ausnahme. Wenn Sie im Werkzeug **KI-Modelle herunterladen** auf **Installieren** klicken, lädt das Programm die Dateien der KI-Modelle von den offiziellen Seiten ihrer Autoren herunter, nämlich huggingface.co und github.com. Nur die gewählten Modelle werden heruntergeladen, und es werden keine Daten Ihres Projekts gesendet. Nach der Installation funktionieren die Modelle ohne Internet. Sie können auch bereits heruntergeladene Modellpakete mit **Paket installieren…** ohne Internet installieren.
+Es gibt zwei Ausnahmen. Unter **Hilfe › Nach Updates suchen** (und alle 30 Tage, wenn die Option eingeschaltet ist) fragt das Programm seine Website ab und sendet dabei nur die Sprache der Oberfläche und das Betriebssystem. Wenn Sie im Werkzeug **KI-Modelle herunterladen** auf **Installieren** klicken, lädt das Programm die Dateien der KI-Modelle von den offiziellen Seiten ihrer Autoren herunter, nämlich huggingface.co und github.com. Nur die gewählten Modelle werden heruntergeladen, und es werden keine Daten Ihres Projekts gesendet. Nach der Installation funktionieren die Modelle ohne Internet. Sie können auch bereits heruntergeladene Modellpakete mit **Paket installieren…** ohne Internet installieren.
 
 Um die Lizenzen und die verwendeten Komponenten von Drittanbietern zu sehen, öffnen Sie **Hilfe › Über Meu Editor de Vídeo**. Der vollständige Text der Lizenzen befindet sich unter **Hilfe › Lizenzen von Drittanbietern**.
 
@@ -791,7 +799,11 @@ Beantworten Sie beim Öffnen des Programms die Frage „Projekt wiederherstellen
 
 ### Das Programm öffnet sich nicht oder zeigt Fehler
 
-Die Betriebsprotokolle (Logs) befinden sich im Ordner `%LOCALAPPDATA%\MeuEditorDeVideo\logs`. Um ihn zu öffnen, verwenden Sie **Hilfe › Protokollordner öffnen** (oder drücken Sie Windows + R, fügen Sie diesen Pfad ein und drücken Sie die Eingabetaste). Wenn Sie um Hilfe bitten, senden Sie die neueste Protokolldatei zusammen mit dem Text aus **Hilfe › Systeminformationen…**. Die Protokolle enthalten nicht den Inhalt Ihrer Videos.
+Die Betriebsprotokolle (Logs) befinden sich im Ordner `%LOCALAPPDATA%\MeuEditorDeVideo\logs`. Um ihn zu öffnen, verwenden Sie **Hilfe › Protokollordner öffnen** (oder drücken Sie Windows + R, fügen Sie diesen Pfad ein und drücken Sie die Eingabetaste). Wenn Sie um Hilfe bitten, senden Sie die neueste Protokolldatei zusammen mit dem Text aus **Hilfe › Systeminformationen…**. Die Protokolle enthalten nicht den Inhalt Ihrer Videos. Unter Linux ist der Ordner `~/.local/share/MeuEditorDeVideo/logs`, unter macOS `~/Library/Application Support/MeuEditorDeVideo/logs`.
+
+### Unter Linux funktioniert die Bildschirmaufnahme nicht
+
+Unter Linux mit Wayland (Standard bei Ubuntu und bei Debian mit GNOME) erlaubt das System anderen Programmen nicht, den Bildschirm aufzunehmen: die Bildschirmaufnahme ist nicht verfügbar (mit einem Hinweis), und F10 funktioniert nur, wenn das Programm im Vordergrund ist. Kamera und Mikrofon funktionieren weiterhin. Um den Bildschirm aufzunehmen, melden Sie sich ab und wählen auf dem Anmeldebildschirm die **Xorg**-Sitzung (zum Beispiel „Ubuntu auf Xorg“). Wenn unter macOS die Aufnahme schwarz bleibt oder F10 nicht reagiert, prüfen Sie die Berechtigungen **Bildschirmaufnahme** und **Bedienungshilfen** unter **Systemeinstellungen › Datenschutz & Sicherheit**.
 
 ### Fragen zur installierten Version
 

@@ -6,7 +6,7 @@ Text in **bold** is the name of a menu, button or option. The › symbol separat
 
 ## Getting started
 
-Meu Editor de Vídeo runs on 64-bit Windows 11. To install it, use one of the two setup files:
+Meu Editor de Vídeo runs on 64-bit Windows 11, on 64-bit Linux (Debian 12 or later, Ubuntu 22.04 or later) and on macOS. On Windows, use one of the two setup files:
 
 - **MeuEditorDeVideo-…-Setup.exe**: full installer. Recommended for most people.
 - **MeuEditorDeVideo-…-x64.msi**: Windows Installer package, for those who prefer the standard Windows installation.
@@ -14,6 +14,10 @@ Meu Editor de Vídeo runs on 64-bit Windows 11. To install it, use one of the tw
 Run the file, follow the screens and, at the end, open the program from the Start menu. Nothing else needs to be installed separately.
 
 > If Windows shows the "Windows protected your PC" warning, click "More info" and then "Run anyway". This warning appears for programs without a digital signature certificate.
+
+On **Linux**, install the **meu-editor-de-video_…_amd64.deb** package with the command `sudo apt install ./meu-editor-de-video_…_amd64.deb`; apt also installs the required libraries. Then open the program from the applications menu or with the `meu-editor-de-video` command. For text narration, also install the `espeak-ng` package.
+
+On **macOS**, open the **MeuEditorDeVideo-….dmg** file and drag **Meu Editor de Vídeo** to the **Applications** folder. The first time you record the screen, use the camera or microphone, or use F10 with the program in the background, macOS asks for the matching permission in **System Settings › Privacy & Security**.
 
 ### Computer requirements
 
@@ -24,11 +28,13 @@ These are the requirements set in the product specification:
 
 A dedicated graphics card is not required for the program to work, but it makes preview, export and the artificial intelligence features much faster.
 
+Linux and macOS need the same memory and storage. On Linux, the artificial intelligence features run on the processor. On macOS, the program runs on Macs with Apple Silicon (M1 or later) and with Intel; on Intel Macs, the AI features that depend on ONNX Runtime (such as Remove background and the virtual assistant) are unavailable.
+
 ### When the program opens
 
 ![Welcome window, shown the first time.](imagens/en/boas-vindas.jpg)
 
-The first time (or if any preference is missing or empty in the Windows registry), the **Welcome to Meu Editor de Vídeos** window appears. Fill in **Full Name**, **System language**, **Theme** (Light, Dark or Follow the operating system) and **Check monthly for new updates** (Yes or No), then click **Save preferences**. All fields are required and the window only closes after saving. If you choose another language, the program restarts in it. You can change these preferences later in **Tools › Settings… › General**.
+The first time (or if any preference is missing or empty in the program's preferences), the **Welcome to Meu Editor de Vídeos** window appears. Fill in **Full Name**, **System language**, **Theme** (Light, Dark or Follow the operating system) and **Check monthly for new updates** (Yes or No), then click **Save preferences**. All fields are required and the window only closes after saving. If you choose another language, the program restarts in it. You can change these preferences later in **Tools › Settings… › General**.
 
 The program opens straight into the editing screen, with a new empty project called "Untitled". If there is a copy of a project that was not closed properly, the program asks whether you want to recover it (see the section Saving, autosave and recovery).
 
@@ -698,6 +704,8 @@ If the combination is already used by another action, the program warns you and 
 
 These are the default shortcuts. You can change any of them in **Tools › Settings… › Shortcuts**.
 
+On macOS, use the **Cmd (⌘)** key instead of **Ctrl** in every shortcut (for example, Cmd+S to save) and the **Option (⌥)** key instead of **Alt**. On Mac keyboards, F1, F10 and F11 may need the **fn** key.
+
 | Action | Shortcut |
 |---|---|
 | New project | Ctrl+N |
@@ -745,9 +753,9 @@ Meu Editor de Vídeo was made to work on your computer:
 - Your videos, photos, audio, texts and projects are processed only on your computer.
 - The artificial intelligence features also run on your computer. No content is sent to the internet.
 - The program does not collect usage data and does not send telemetry.
-- The program does not update itself over the internet.
+- The program does not update itself: it only checks whether there is a new version, and you decide whether to install it.
 
-There is a single exception. When you click **Install** in the **Download AI models** tool, the program downloads the AI model files from their authors' official sites, which are huggingface.co and github.com. Only the chosen models are downloaded, and no data from your project is sent. Once installed, the models work without internet. You can also install already-downloaded model packages, with **Install package…**, without using the internet.
+There are two exceptions. In **Help › Check for updates** (and every 30 days, if the option is on), the program queries its website, sending only the interface language and the operating system. When you click **Install** in the **Download AI models** tool, the program downloads the AI model files from their authors' official sites, which are huggingface.co and github.com. Only the chosen models are downloaded, and no data from your project is sent. Once installed, the models work without internet. You can also install already-downloaded model packages, with **Install package…**, without using the internet.
 
 To see the licenses and third-party components used, open **Help › About Meu Editor de Vídeo**. The full text of the licenses is in **Help › Third-party licenses**.
 
@@ -791,7 +799,11 @@ When opening the program, answer **Yes** to the question "Recover project". If i
 
 ### The program does not open or shows errors
 
-The operation logs are in the `%LOCALAPPDATA%\MeuEditorDeVideo\logs` folder. To open it, use **Help › Open logs folder** (or press Windows + R, paste that path and press Enter). When asking for help, send the most recent log file together with the text of **Help › System information…**. The logs do not contain the content of your videos.
+The operation logs are in the `%LOCALAPPDATA%\MeuEditorDeVideo\logs` folder. To open it, use **Help › Open logs folder** (or press Windows + R, paste that path and press Enter). When asking for help, send the most recent log file together with the text of **Help › System information…**. The logs do not contain the content of your videos. On Linux, the folder is `~/.local/share/MeuEditorDeVideo/logs`; on macOS, `~/Library/Application Support/MeuEditorDeVideo/logs`.
+
+### On Linux, screen recording does not work
+
+On Linux with Wayland (the default on Ubuntu and on Debian with GNOME), the system does not let other programs capture the screen: screen recording is unavailable (with a notice) and F10 only works with the program in the foreground. The camera and microphone keep working. To record the screen, log out and, on the login screen, choose the **Xorg** session (for example, "Ubuntu on Xorg"). On macOS, if the recording is black or F10 does not respond, check the **Screen Recording** and **Accessibility** permissions in **System Settings › Privacy & Security**.
 
 ### Questions about the installed version
 

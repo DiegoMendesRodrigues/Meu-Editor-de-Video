@@ -6,7 +6,7 @@ Os textos em **negrito** são nomes de menus, botões e opções. O símbolo ›
 
 ## Primeiros passos
 
-O Meu Editor de Vídeo roda no Windows 11 de 64 bits. Para instalar, use um dos dois arquivos de instalação:
+O Meu Editor de Vídeo roda no Windows 11 de 64 bits, no Linux de 64 bits (Debian 12 ou mais novo, Ubuntu 22.04 ou mais novo) e no macOS. No Windows, use um dos dois arquivos de instalação:
 
 - **MeuEditorDeVideo-…-Setup.exe**: instalador completo. Recomendado para a maioria das pessoas.
 - **MeuEditorDeVideo-…-x64.msi**: pacote do Windows Installer, para quem prefere instalar pelo padrão do Windows.
@@ -14,6 +14,10 @@ O Meu Editor de Vídeo roda no Windows 11 de 64 bits. Para instalar, use um dos 
 Execute o arquivo, siga as telas e, ao final, abra o programa pelo menu Iniciar. Não é preciso instalar mais nada separadamente.
 
 > Se o Windows mostrar o aviso "O Windows protegeu o computador", clique em "Mais informações" e depois em "Executar assim mesmo". Esse aviso aparece em programas sem certificado de assinatura digital.
+
+No **Linux**, instale o pacote **meu-editor-de-video_…_amd64.deb** com o comando `sudo apt install ./meu-editor-de-video_…_amd64.deb`; o apt instala junto as bibliotecas necessárias. Depois, abra o programa pelo menu de aplicativos ou com o comando `meu-editor-de-video`. Para a narração de textos, instale também o pacote `espeak-ng`.
+
+No **macOS**, abra o arquivo **MeuEditorDeVideo-….dmg** e arraste o **Meu Editor de Vídeo** para a pasta **Aplicativos**. Na primeira vez em que você gravar a tela, usar a câmera ou o microfone, ou usar o F10 com o programa em segundo plano, o macOS pede a permissão correspondente em **Ajustes do Sistema › Privacidade e Segurança**.
 
 ### Requisitos do computador
 
@@ -24,11 +28,13 @@ Estes são os requisitos previstos na especificação do produto:
 
 Uma placa de vídeo dedicada não é obrigatória para o programa funcionar, mas deixa a pré-visualização, a exportação e os recursos de inteligência artificial bem mais rápidos.
 
+No Linux e no macOS valem a mesma memória e o mesmo armazenamento. No Linux, os recursos de inteligência artificial rodam no processador. No macOS, o programa roda em Macs com Apple Silicon (M1 ou mais novo) e com Intel; nos Macs com Intel, os recursos de IA que dependem do ONNX Runtime (como Remover fundo e o assistente virtual) ficam indisponíveis.
+
 ### Ao abrir o programa
 
 ![Janela Bem-vindo ao Meu Editor de Vídeos, mostrada na primeira vez.](imagens/pt-BR/boas-vindas.jpg)
 
-Na primeira vez (ou se alguma preferência estiver faltando ou vazia no registro do Windows), aparece a janela **Bem-vindo ao Meu Editor de Vídeos**. Preencha **Nome Completo**, **Idioma do sistema**, **Tema** (Claro, Escuro ou Acompanhar o sistema operacional) e **Verificar mensalmente pelas novas atualizações** (Sim ou Não) e clique em **Salvar as preferências**. Todos os campos são obrigatórios e a janela só fecha depois de salvar. Se você escolher outro idioma, o programa reinicia nele. Depois, as preferências podem ser mudadas em **Ferramentas › Configurações… › Geral**.
+Na primeira vez (ou se alguma preferência estiver faltando ou vazia nas preferências do programa), aparece a janela **Bem-vindo ao Meu Editor de Vídeos**. Preencha **Nome Completo**, **Idioma do sistema**, **Tema** (Claro, Escuro ou Acompanhar o sistema operacional) e **Verificar mensalmente pelas novas atualizações** (Sim ou Não) e clique em **Salvar as preferências**. Todos os campos são obrigatórios e a janela só fecha depois de salvar. Se você escolher outro idioma, o programa reinicia nele. Depois, as preferências podem ser mudadas em **Ferramentas › Configurações… › Geral**.
 
 O programa abre direto na tela de edição, com um projeto novo e vazio chamado "Sem título". Se existir uma cópia de um projeto que não foi fechado corretamente, o programa pergunta se você quer recuperá-la (veja a seção Salvar, salvamento automático e recuperação).
 
@@ -698,6 +704,8 @@ Se a combinação já estiver em uso por outra ação, o programa avisa e não d
 
 Estes são os atalhos padrão. Você pode mudar qualquer um deles em **Ferramentas › Configurações… › Atalhos**.
 
+No macOS, use a tecla **Cmd (⌘)** no lugar de **Ctrl** em todos os atalhos (por exemplo, Cmd+S para salvar) e a tecla **Option (⌥)** no lugar de **Alt**. Em teclados de Mac, as teclas F1, F10 e F11 podem exigir a tecla **fn**.
+
 | Ação | Atalho |
 |---|---|
 | Novo projeto | Ctrl+N |
@@ -745,9 +753,9 @@ O Meu Editor de Vídeo foi feito para funcionar no seu computador:
 - Seus vídeos, fotos, áudios, textos e projetos são processados somente no seu computador.
 - Os recursos de inteligência artificial também rodam no seu computador. Nenhum conteúdo é enviado para a internet.
 - O programa não coleta dados de uso e não envia telemetria.
-- O programa não se atualiza sozinho pela internet.
+- O programa não se atualiza sozinho: ele só verifica se há versão nova, e você decide se a instala.
 
-Existe uma única exceção. Quando você clica em **Instalar** na ferramenta **Baixar modelos de IA**, o programa baixa os arquivos dos modelos de IA dos sites oficiais dos seus autores, que são os endereços huggingface.co e github.com. Só os modelos escolhidos são baixados, e nenhum dado do seu projeto é enviado. Depois de instalados, os modelos funcionam sem internet. Você também pode instalar pacotes de modelo já baixados, com **Instalar pacote…**, sem usar a internet.
+Existem duas exceções. Em **Ajuda › Verificar atualizações** (e a cada 30 dias, se a opção estiver ligada), o programa consulta o site dele enviando apenas o idioma da interface e o sistema operacional. Quando você clica em **Instalar** na ferramenta **Baixar modelos de IA**, o programa baixa os arquivos dos modelos de IA dos sites oficiais dos seus autores, que são os endereços huggingface.co e github.com. Só os modelos escolhidos são baixados, e nenhum dado do seu projeto é enviado. Depois de instalados, os modelos funcionam sem internet. Você também pode instalar pacotes de modelo já baixados, com **Instalar pacote…**, sem usar a internet.
 
 Para ver as licenças e os componentes de terceiros usados, abra **Ajuda › Sobre o Meu Editor de Vídeo**. O texto completo das licenças fica em **Ajuda › Licenças de terceiros**.
 
@@ -791,7 +799,11 @@ Ao abrir o programa, responda **Sim** à pergunta "Recuperar projeto". Se ela n�
 
 ### O programa não abre ou apresenta erros
 
-Os registros de funcionamento (logs) ficam na pasta `%LOCALAPPDATA%\MeuEditorDeVideo\logs`. Para abri-la, use **Ajuda › Abrir pasta de logs** (ou pressione Windows + R, cole esse caminho e pressione Enter). Ao pedir ajuda, envie o arquivo de registro mais recente junto com o texto de **Ajuda › Informações do sistema…**. Os registros não contêm o conteúdo dos seus vídeos.
+Os registros de funcionamento (logs) ficam na pasta `%LOCALAPPDATA%\MeuEditorDeVideo\logs`. Para abri-la, use **Ajuda › Abrir pasta de logs** (ou pressione Windows + R, cole esse caminho e pressione Enter). Ao pedir ajuda, envie o arquivo de registro mais recente junto com o texto de **Ajuda › Informações do sistema…**. Os registros não contêm o conteúdo dos seus vídeos. No Linux, a pasta é `~/.local/share/MeuEditorDeVideo/logs`; no macOS, `~/Library/Application Support/MeuEditorDeVideo/logs`.
+
+### No Linux, a gravação de tela não funciona
+
+No Linux com Wayland (o padrão no Ubuntu e no Debian com GNOME), o sistema não permite que outros programas capturem a tela: a gravação da tela fica indisponível (com um aviso) e o F10 só funciona com o programa em primeiro plano. A câmera e o microfone continuam funcionando. Para gravar a tela, saia da sessão e, na tela de entrada, escolha a sessão **Xorg** (por exemplo, "Ubuntu em Xorg"). No macOS, se a gravação sair preta ou o F10 não responder, confira as permissões de **Gravação de Tela** e **Acessibilidade** em **Ajustes do Sistema › Privacidade e Segurança**.
 
 ### Dúvidas sobre a versão instalada
 

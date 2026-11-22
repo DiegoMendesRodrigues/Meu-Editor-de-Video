@@ -1030,6 +1030,19 @@ Use quando uma mudança no modelo **não** puder ser absorvida por campos opcion
 
 Regra geral para o modelo: campos novos em `Domain` precisam de valor padrão. Sem isso, arquivos antigos não carregam.
 
+### Recurso que depende do sistema operacional
+
+O programa roda no Windows, no Linux e no macOS com uma única base de código. Um recurso que precisa de API do sistema segue o padrão de `IScreenRecorder` (`MediaEngine/Recording/ScreenRecorderFactory`), `ISpeechSynthesisService` (`AudioEngine`, `AddAudioEngine`) e `IUserPreferencesStore` (`Infrastructure/Settings/UserPreferencesStoreFactory`).
+
+1. Defina a interface no `Core` (ou no motor, se só ele a usa), com um modo de dizer que o recurso está indisponível (`IsAvailable`, motivo ou mensagem pt-BR traduzida) em vez de lançar exceção no sistema sem suporte.
+2. Escreva uma implementação por sistema (`Windows…`, `Linux…`, `Mac…`) no mesmo projeto `net10.0`. Chamadas exclusivas de um sistema ficam atrás de `OperatingSystem.IsWindows()`/`IsLinux()`/`IsMacOS()` ou de `[SupportedOSPlatform]`: o analisador CA1416 (erro, por causa de `TreatWarningsAsErrors`) aponta o que faltar.
+3. Escolha a implementação no registro de DI do motor (método `Add…`) ou numa fábrica, por `OperatingSystem.Is…()`. Não crie projetos por sistema.
+4. Pacotes com bibliotecas nativas diferentes por sistema entram com `Condition="'$(MedPlataforma)' == '…'"` no `.csproj` e em `Directory.Packages.props`. Para conferir a restauração de outro sistema, use `-p:MedPlataforma=linux` (ou `macos`) numa cópia, fora do `obj/` do repositório.
+5. Bibliotecas nativas baixadas (como o FFmpeg) vão em `scripts/deps.lock.json` com `platforms` e SHA-256; a cópia para a saída fica em `src/AppContent.props`. Rode `scripts/generate-notices.ps1` e atualize a lista `Depends` de `scripts/build-deb.ps1` e `DEPENDENCIAS.md` se a biblioteca precisar de pacotes do sistema no Linux.
+6. Permissões do macOS (câmera, microfone, gravação de tela, Acessibilidade) precisam da descrição no `Info.plist` gerado por `scripts/build-macos.ps1` e, se for o caso, de um entitlement em `packaging/macos/MeuEditorDeVideo.entitlements`.
+7. Textos novos passam pelo `scripts/extract-strings.py` com as cinco traduções; diferenças visíveis por sistema vão para os seis manuais, nas mesmas linhas (`ManualKnowledgeBaseTests`).
+8. O CI (`.github/workflows/build.yml`) roda a suíte em win-x64, linux-x64, osx-arm64 e osx-x64. Testes que só fazem sentido num sistema usam um atributo com `Skip` condicional (como os que definem `Skip = "Só no Windows."`) ou ramificam por `OperatingSystem.Is…()`.
+
 ---
 
 ## Diferenças em relação ao plano
