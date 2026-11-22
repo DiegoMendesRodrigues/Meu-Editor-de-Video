@@ -172,9 +172,16 @@ public sealed class MedProjectStore(IAppPaths paths, ILogger<MedProjectStore> lo
             await VerifyWrittenAsync(temp, cancellationToken).ConfigureAwait(false);
 
             if (File.Exists(target))
+            {
+                // No Linux e no macOS a troca só depende da permissão da pasta: sem isto um .med protegido seria sobrescrito.
+                if (!OperatingSystem.IsWindows() && new FileInfo(target).IsReadOnly)
+                    throw new UnauthorizedAccessException(target);
                 File.Replace(temp, target, destinationBackupFileName: null, ignoreMetadataErrors: true);
+            }
             else
+            {
                 File.Move(temp, target);
+            }
 
             logger.LogInformation("Projeto salvo ({Mode}, {Media} mídias, incluiMídias={Include}).",
                 project.StorageMode, project.Media.Count, request.IncludeMedia);

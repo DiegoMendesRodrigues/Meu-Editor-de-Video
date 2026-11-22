@@ -257,7 +257,8 @@ pwsh scripts/build-macos.ps1 -Rid osx-arm64 -Sign -Notarize
 
 `-Sign` assina cada biblioteca nativa e a ferramenta `ffmpeg`, depois o aplicativo, com o runtime reforçado e
 `packaging/macos/MeuEditorDeVideo.entitlements`. `-Notarize` envia o aplicativo e o `.dmg` à Apple e grampeia os
-tíquetes. Sem eles, o `.dmg` fica sem assinatura e o Gatekeeper do macOS pede confirmação (botão direito › Abrir). O CI
+tíquetes. Sem eles, o aplicativo recebe só uma assinatura ad hoc e o Gatekeeper do macOS bloqueia a primeira abertura: libere em
+Ajustes do Sistema › Privacidade e Segurança › Abrir Mesmo Assim (no macOS 14 e anteriores, botão direito › Abrir). O CI
 (`.github/workflows/build.yml`) compila os quatro destinos e, nos envios para `main`, gera estes pacotes; assina e
 notariza quando existem os segredos `MACOS_SIGN_IDENTITY`, `MACOS_CERT_P12_BASE64`, `MACOS_CERT_PASSWORD`, `APPLE_ID`,
 `APPLE_TEAM_ID` e `APPLE_APP_PASSWORD` no repositório.

@@ -108,6 +108,8 @@ extract "$SRC_OGG" libogg
 
 step "libvorbis"
 extract "$SRC_VORBIS" libvorbis
+# O configure do 1.3.7 passa -force_cpusubtype_ALL, que o ld atual da Apple recusa.
+sed -i '' 's/-force_cpusubtype_ALL//g' "$WORK/src/libvorbis/configure"
 (cd "$WORK/src/libvorbis" && ./configure --prefix="$PREFIX" --disable-shared --enable-static --with-pic --with-ogg="$PREFIX" --disable-examples --disable-docs && make -j"$JOBS" && make install)
 
 step "Opus"
@@ -118,8 +120,8 @@ step "LAME"
 extract "$SRC_LAME" lame
 (
     cd "$WORK/src/lame"
-    # O config.sub do LAME 3.100 (2008) não conhece arm64-apple-darwin: usa o do automake, se houver.
-    for dir in /opt/homebrew/share/automake-* /usr/local/share/automake-* /usr/share/automake-*; do
+    # O config.sub do LAME 3.100 (2008) não conhece arm64-apple-darwin: usa o do Opus (recente) ou o do automake.
+    for dir in "$WORK/src/opus" /opt/homebrew/share/automake-* /usr/local/share/automake-* /usr/share/automake-*; do
         if [ -f "$dir/config.sub" ] && [ -f "$dir/config.guess" ]; then
             cp "$dir/config.sub" "$dir/config.guess" .
             break
@@ -141,6 +143,8 @@ extract "$SRC_X265" x265
 (
     cd "$WORK/src/x265"
     X265_COMMON=("${CMAKE_COMMON[@]}" -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF)
+    # O CMake 4 recusa políticas fixadas em OLD.
+    sed -i '' -E 's/cmake_policy\(SET (CMP0025|CMP0054) OLD\)/cmake_policy(SET \1 NEW)/g' source/CMakeLists.txt
     cmake -S source -B build-12 "${X265_COMMON[@]}" -DHIGH_BIT_DEPTH=ON -DMAIN12=ON -DEXPORT_C_API=OFF
     cmake --build build-12 --target x265-static -j "$JOBS"
     cmake -S source -B build-10 "${X265_COMMON[@]}" -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF
@@ -157,6 +161,18 @@ extract "$SRC_X265" x265
     cmake --install build-8
     cp build-8/libx265.a "$PREFIX/lib/libx265.a"
     # Se a versão não vier do repositório, o x265.pc fica com "unknown" e o FFmpeg recusa; corrige.
+    if [ ! -f "$PREFIX/lib/pkgconfig/x265.pc" ]; then
+        # O x265 só gera o .pc quando descobre a própria versão.
+        cat > "$PREFIX/lib/pkgconfig/x265.pc" <<PC
+prefix=$PREFIX
+Name: x265
+Description: H.265/HEVC
+Version: 4.3
+Libs: -L$PREFIX/lib -lx265
+Libs.private: -lc++
+Cflags: -I$PREFIX/include
+PC
+    fi
     if ! grep -Eq '^Version: [0-9]' "$PREFIX/lib/pkgconfig/x265.pc"; then
         sed -i '' 's/^Version: .*/Version: 4.3/' "$PREFIX/lib/pkgconfig/x265.pc"
     fi
@@ -187,9 +203,10 @@ step "SVT-AV1"
 extract "$SRC_SVT" svtav1
 (
     cd "$WORK/src/svtav1"
-    cmake -S . -B build "${CMAKE_COMMON[@]}" -DBUILD_APPS=OFF -DBUILD_TESTING=OFF -DSVT_AV1_LTO=OFF
-    cmake --build build -j "$JOBS"
-    cmake --install build
+    # "build-med": as fontes já têm Build/ (o disco do macOS não diferencia maiúsculas).
+    cmake -S . -B build-med "${CMAKE_COMMON[@]}" -DBUILD_APPS=OFF -DBUILD_TESTING=OFF -DSVT_AV1_LTO=OFF
+    cmake --build build-med -j "$JOBS"
+    cmake --install build-med
 )
 
 # ---------------------------------------------------------------- libaom
@@ -197,9 +214,9 @@ step "libaom"
 extract "$SRC_AOM" libaom
 (
     cd "$WORK/src/libaom"
-    cmake -S . -B build "${CMAKE_COMMON[@]}" -DENABLE_DOCS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF -DCONFIG_PIC=1
-    cmake --build build -j "$JOBS"
-    cmake --install build
+    cmake -S . -B build-med "${CMAKE_COMMON[@]}" -DENABLE_DOCS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF -DCONFIG_PIC=1
+    cmake --build build-med -j "$JOBS"
+    cmake --install build-med
 )
 
 # ---------------------------------------------------------------- FFmpeg
@@ -214,13 +231,16 @@ extract "$SRC_FFMPEG" ffmpeg
         --disable-debug --disable-doc --disable-ffplay --disable-ffprobe \
         --enable-libx264 --enable-libx265 --enable-libvpx --enable-libsvtav1 --enable-libaom \
         --enable-libmp3lame --enable-libopus --enable-libvorbis \
+        --disable-autodetect --enable-zlib --enable-bzlib --enable-iconv \
+        --enable-avfoundation --enable-appkit --enable-coreimage \
         --enable-videotoolbox --enable-audiotoolbox \
         --pkg-config-flags="--static" \
         --extra-cflags="-I$PREFIX/include -mmacosx-version-min=11.0" \
         --extra-ldflags="-L$PREFIX/lib -mmacosx-version-min=11.0" \
         --install-name-dir="@rpath" \
         --extra-ldsoflags="-Wl,-rpath,@loader_path" \
-        --extra-ldexeflags="-Wl,-rpath,@executable_path/../lib"
+        --extra-ldexeflags="-Wl,-rpath,@executable_path/../lib" \
+        || { tail -n 60 ffbuild/config.log; exit 1; }
     make -j"$JOBS"
     make install
 )
@@ -261,7 +281,11 @@ done
 
 encoders="$("$OUT/bin/ffmpeg" -hide_banner -encoders 2>/dev/null)"
 for enc in libx264 libx265 libvpx-vp9 libsvtav1 libaom-av1 libmp3lame libopus libvorbis h264_videotoolbox; do
-    echo "$encoders" | grep -q " $enc " || { echo "Codificador ausente na build: $enc" >&2; exit 1; }
+    grep -q " $enc " <<< "$encoders" || { echo "Codificador ausente na build: $enc" >&2; exit 1; }
 done
-"$OUT/bin/ffmpeg" -hide_banner -version | head -n 1
+# A gravação de tela, webcam e microfone usa o avfoundation.
+devices="$("$OUT/bin/ffmpeg" -hide_banner -devices 2>/dev/null)"
+grep -q avfoundation <<< "$devices" || { echo "Dispositivo ausente na build: avfoundation" >&2; exit 1; }
+version="$("$OUT/bin/ffmpeg" -hide_banner -version)"
+echo "${version%%$'\n'*}"
 echo "FFmpeg compilado em $OUT"

@@ -261,7 +261,7 @@ public sealed partial class NewProjectViewModel : ObservableObject
 
         var problems = settings.Validate().ToList();
         var name = Name.Trim();
-        if (name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+        if (ProjectNames.HasInvalidChars(name))
             problems.Insert(0, "O nome não pode conter os caracteres \\ / : * ? \" < > |");
         if (File.Exists(TargetPath))
             problems.Insert(0, "Já existe um projeto com esse nome nesta pasta.");

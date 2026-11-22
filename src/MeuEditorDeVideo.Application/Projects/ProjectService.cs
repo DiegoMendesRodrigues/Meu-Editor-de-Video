@@ -87,7 +87,7 @@ public sealed class ProjectService(
     public async Task CreateAsync(NewProjectRequest request, CancellationToken cancellationToken = default)
     {
         var name = request.Name.Trim();
-        if (name.Length == 0 || name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+        if (name.Length == 0 || ProjectNames.HasInvalidChars(name))
             throw new MedException(new MedError("MED-1101", "Informe um nome de projeto válido (sem os caracteres \\ / : * ? \" < > |)."));
 
         var path = Path.Combine(request.Directory, name + Extension);

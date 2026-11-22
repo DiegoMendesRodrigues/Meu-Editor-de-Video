@@ -114,16 +114,34 @@ function Test-NativeLibraries([string]$dir) {
         # O ONNX Runtime não publica bibliotecas para o Mac Intel.
         if ($arm) { $names += 'libonnxruntime.dylib', 'libonnxruntime-genai.dylib' }
     }
+    # Em outro processo: com a biblioteca carregada aqui, o Restart Manager do MSI encerraria este script ao desinstalar.
+    # No macOS o programa carrega as libggml antes da libwhisper (dependências por @rpath): o teste faz o mesmo.
+    $loader = @'
+import ctypes, glob, os, sys
+path = sys.argv[1]
+if 'whisper' in os.path.basename(path):
+    pending = glob.glob(os.path.join(os.path.dirname(path), 'libggml*.dylib'))
+    for _ in range(len(pending)):
+        for dependency in list(pending):
+            try:
+                ctypes.CDLL(dependency, mode=ctypes.RTLD_GLOBAL)
+                pending.remove(dependency)
+            except OSError:
+                pass
+ctypes.CDLL(path)
+'@
     $bad = foreach ($name in $names) {
         $found = @(Get-ChildItem -LiteralPath $dir -Recurse -File | Where-Object { $_.Name -eq $name })
         $file = @($found | Where-Object { $_.FullName.Contains($folder) }) + $found | Select-Object -First 1
         if (-not $file) { "$name ausente"; continue }
         try {
-            if ($IsWindows) { $null = [Runtime.InteropServices.NativeLibrary]::Load($file.FullName) }
-            else {
-                $out = & python3 -c 'import ctypes,sys; ctypes.CDLL(sys.argv[1])' $file.FullName 2>&1
-                if ($LASTEXITCODE -ne 0) { throw "$out" }
+            if ($IsWindows) {
+                $env:MED_TESTE_DLL = $file.FullName
+                $out = & pwsh -NoProfile -Command '$null = [Runtime.InteropServices.NativeLibrary]::Load($env:MED_TESTE_DLL)' 2>&1
+            } else {
+                $out = & python3 -c $loader $file.FullName 2>&1
             }
+            if ($LASTEXITCODE -ne 0) { throw "$out" }
             Write-Host "carregou $name"
         } catch { "$name não carrega: $($_.Exception.Message)" }
     }

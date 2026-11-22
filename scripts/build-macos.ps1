@@ -11,6 +11,7 @@
   3. -Sign: codesign (runtime reforçado, com carimbo de tempo) em cada Mach-O de dentro para fora e depois no pacote,
      com packaging\macos\MeuEditorDeVideo.entitlements. Identidade em $env:MED_MACOS_SIGN_IDENTITY
      (por exemplo "Developer ID Application: Nome (TEAMID)").
+     Sem -Sign, no macOS, o pacote recebe assinatura ad hoc: fica íntegro, mas o Gatekeeper ainda pede confirmação.
   4. -Notarize (implica -Sign): envia o app (zip) ao notarytool, grampeia o ticket, cria o .dmg, assina, notariza e
      grampeia o .dmg. Perfil do chaveiro em $env:MED_MACOS_NOTARY_PROFILE (xcrun notarytool store-credentials); se estiver
      num chaveiro que não é o padrão, o caminho vai em $env:MED_MACOS_NOTARY_KEYCHAIN.
@@ -297,6 +298,19 @@ if ($Sign) {
     Invoke-Checked codesign @('--force', '--timestamp', '--options', 'runtime', '--entitlements', $entitlements, '--sign', $signIdentity, $exe)
     Invoke-Checked codesign @('--force', '--timestamp', '--options', 'runtime', '--entitlements', $entitlements, '--sign', $signIdentity, $appDir)
     Invoke-Checked codesign @('--verify', '--deep', '--strict', '--verbose=2', $appDir)
+} elseif ($isMac) {
+    # Sem Developer ID: assinatura ad hoc, para o pacote ficar íntegro (sem ela o macOS o dá como danificado). Tudo em
+    # Contents/MacOS conta como código, então cada arquivo é assinado (nos que não são Mach-O, em atributo estendido).
+    $exe = Join-Path $macOsDir $ExeName
+    Invoke-Checked chmod @('-R', 'u+w', $appDir)
+    $inner = @(Get-ChildItem -LiteralPath $macOsDir -Recurse -File -Force | Where-Object { $_.FullName -ne $exe } |
+        Sort-Object { $_.FullName.Split('/').Count } -Descending | ForEach-Object FullName)
+    for ($i = 0; $i -lt $inner.Count; $i += 50) {
+        $last = [Math]::Min($i + 49, $inner.Count - 1)
+        Invoke-Checked codesign (@('--force', '--sign', '-') + $inner[$i..$last])
+    }
+    Invoke-Checked codesign @('--force', '--sign', '-', $appDir)
+    Invoke-Checked codesign @('--verify', '--deep', '--strict', $appDir)
 }
 
 function Submit-ForNotarization([string]$file) {
@@ -324,7 +338,13 @@ if ($isMac) {
     try {
         Invoke-Checked ditto @($appDir, (Join-Path $stage "$AppName.app"))
         New-Item -ItemType SymbolicLink -Path (Join-Path $stage 'Applications') -Target '/Applications' | Out-Null
-        Invoke-Checked hdiutil @('create', '-volname', $AppName, '-srcfolder', $stage, '-ov', '-format', 'UDZO', $dmg)
+        # O hdiutil falha de vez em quando com "Resource busy".
+        for ($attempt = 1; ; $attempt++) {
+            & hdiutil create -volname $AppName -srcfolder $stage -ov -format UDZO $dmg
+            if ($LASTEXITCODE -eq 0) { break }
+            if ($attempt -ge 4) { throw "hdiutil terminou com código $LASTEXITCODE." }
+            Start-Sleep -Seconds 10
+        }
     } finally { Remove-Item -Recurse -Force $stage -ErrorAction SilentlyContinue }
     if ($Sign) { Invoke-Checked codesign @('--force', '--timestamp', '--sign', $signIdentity, $dmg) }
     if ($Notarize) {

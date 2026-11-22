@@ -35,6 +35,11 @@ fi
 
 echo "== bibliotecas nativas"
 LIBS="$(find "$APP" -name '*.so*' -printf '%h\n' | sort -u | paste -sd:)"
+# As libggml têm SONAME "….so.0" e arquivo "….so": o Whisper.net as carrega antes da libwhisper (WhisperNativeTests).
+# Aqui bastam atalhos com o SONAME, para o ldd conferir as demais dependências delas.
+SONAMES="$(mktemp -d)"
+for f in "$APP"/runtimes/linux-x64/libggml*.so; do ln -s "$f" "$SONAMES/$(basename "$f").0"; done
+LIBS="$SONAMES:$LIBS"
 while IFS= read -r f; do
     case "$f" in
         */libcoreclrtraceptprovider.so) continue ;; # rastreamento opcional do .NET

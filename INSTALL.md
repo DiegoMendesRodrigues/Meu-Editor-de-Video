@@ -255,7 +255,8 @@ pwsh scripts/build-macos.ps1 -Rid osx-arm64 -Sign -Notarize
 
 `-Sign` signs every native library and the `ffmpeg` tool, then the app, with the hardened runtime and
 `packaging/macos/MeuEditorDeVideo.entitlements`. `-Notarize` submits the app and the `.dmg` to Apple and staples the
-tickets. Without them, the `.dmg` is unsigned and macOS Gatekeeper asks for confirmation (right-click › Open). The CI
+tickets. Without them, the app only gets an ad hoc signature and macOS Gatekeeper blocks the first launch: allow it in
+System Settings › Privacy & Security › Open Anyway (on macOS 14 and earlier, right-click › Open). The CI
 (`.github/workflows/build.yml`) builds all four targets and, on pushes to `main`, produces these packages; it signs
 and notarizes when the repository secrets `MACOS_SIGN_IDENTITY`, `MACOS_CERT_P12_BASE64`, `MACOS_CERT_PASSWORD`,
 `APPLE_ID`, `APPLE_TEAM_ID` and `APPLE_APP_PASSWORD` exist.

@@ -13,7 +13,7 @@ public sealed record RenameProjectCommand(string NewName) : IEditCommand
     {
         var name = NewName.Trim();
         if (name.Length == 0) throw new EditRejectedException("O nome do projeto não pode ficar vazio.");
-        if (name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+        if (ProjectNames.HasInvalidChars(name))
             throw new EditRejectedException("O nome do projeto contém caracteres não permitidos em nomes de arquivo.");
         return name == project.Name ? project : project with { Name = name };
     }
