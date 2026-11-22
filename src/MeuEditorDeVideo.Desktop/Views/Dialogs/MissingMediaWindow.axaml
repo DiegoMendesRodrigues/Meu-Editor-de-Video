@@ -1,0 +1,68 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels"
+        x:Class="MeuEditorDeVideo.Desktop.Views.Dialogs.MissingMediaWindow"
+        x:DataType="vm:MissingMediaViewModel"
+        Title="Mídias não encontradas"
+        Width="640"
+        MinWidth="520"
+        SizeToContent="Height"
+        CanResize="True"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Background="{DynamicResource Med.WindowBackground}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Enquanto a busca está em andamento, todos os botões ficam desabilitados (IsEnabled do painel raiz). -->
+    <Grid Margin="16" RowDefinitions="Auto,Auto,Auto,Auto,Auto" IsEnabled="{Binding !IsBusy}">
+        <!-- Cabeçalho -->
+        <Grid Grid.Row="0" Margin="0,0,0,16" ColumnDefinitions="Auto,*">
+            <TextBlock Text="&#xE7BA;" Classes="med-icon" FontSize="24" Foreground="{DynamicResource Med.Danger}"
+                       VerticalAlignment="Top" Margin="0,2,12,0" />
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="Algumas mídias do projeto não foram encontradas" Classes="med-section-title" TextWrapping="Wrap" Margin="0,0,0,4" />
+                <TextBlock Classes="med-muted" TextWrapping="Wrap"
+                           Text="Localize os arquivos para que apareçam corretamente. Você pode continuar sem eles; os trechos ficarão marcados como ausentes." />
+            </StackPanel>
+        </Grid>
+
+        <!-- Lista de mídias ausentes -->
+        <ScrollViewer Grid.Row="1" MaxHeight="320" VerticalScrollBarVisibility="Auto" Margin="0,0,0,12">
+            <ItemsControl ItemsSource="{Binding Items}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:MissingMediaItem">
+                        <Border Classes="med-panel" Padding="12,10" Margin="0,0,0,8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Classes="med-muted" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding OriginalPath}">
+                                        <Run Text="{Binding KindLabel, Mode=OneWay}" /><Run Text=" · " /><Run Text="{Binding OriginalPath, Mode=OneWay}" />
+                                    </TextBlock>
+                                </StackPanel>
+                                <Button Grid.Column="1" Content="Localizar…" AutomationProperties.Name="Localizar mídia ausente"
+                                        VerticalAlignment="Center" Padding="12,4"
+                                        Command="{Binding $parent[Window].((vm:MissingMediaViewModel)DataContext).LocateCommand}"
+                                        CommandParameter="{Binding}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Mensagem de status (oculta quando vazia) -->
+        <TextBlock Grid.Row="2" Text="{Binding StatusMessage}" Classes="med-muted" TextWrapping="Wrap" Margin="0,0,0,8"
+                   IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+        <!-- Progresso -->
+        <ProgressBar Grid.Row="3" Height="4" Margin="0,0,0,12" Foreground="{DynamicResource Med.Accent}"
+                     IsIndeterminate="{Binding IsBusy}" IsVisible="{Binding IsBusy}" AutomationProperties.Name="Procurando mídias" />
+
+        <!-- Rodapé -->
+        <Grid Grid.Row="4" ColumnDefinitions="Auto,*">
+            <Button Content="Procurar em pasta…" AutomationProperties.Name="Procurar em pasta" Command="{Binding SearchFolderCommand}"
+                    Padding="16,8" />
+            <Button Grid.Column="1" Content="Continuar sem as mídias" AutomationProperties.Name="Continuar sem as mídias"
+                    Command="{Binding ContinueCommand}" IsCancel="True" HorizontalAlignment="Right" Padding="16,8" />
+        </Grid>
+    </Grid>
+</Window>

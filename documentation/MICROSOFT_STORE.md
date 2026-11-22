@@ -161,7 +161,7 @@ Outros idiomas e regiões sem listagem própria mostram a listagem em inglês.
 O pacote declara a capacidade restrita `runFullTrust`, e o Partner Center pede uma justificativa. Use:
 
 ```text
-O Meu Editor de Vídeo é um aplicativo de área de trabalho Win32 (WPF/.NET 10) empacotado em MSIX. A capacidade runFullTrust é necessária para executar o aplicativo de desktop, que usa FFmpeg para decodificar e codificar vídeo, Direct3D/DirectML para aceleração por GPU e WASAPI para áudio.
+O Meu Editor de Vídeo é um aplicativo de área de trabalho Win32 (Avalonia/.NET 10) empacotado em MSIX. A capacidade runFullTrust é necessária para executar o aplicativo de desktop, que usa FFmpeg para decodificar e codificar vídeo, Direct3D/DirectML para aceleração por GPU e WASAPI para áudio.
 
 Não é necessário login nem conta. Na primeira execução aparece a janela de boas-vindas: preencha o nome, escolha idioma e tema e clique em "Salvar as preferências". Depois o aplicativo abre direto no editor, com um projeto sem título. Para testar: importe um vídeo (Importar Mídia), adicione-o à linha do tempo e clique em "Exportar". A interface pode ser trocada para inglês em Ferramentas › Configurações… › Geral (o programa reinicia no novo idioma).
 

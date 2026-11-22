@@ -1,0 +1,197 @@
+<UserControl x:Class="MeuEditorDeVideo.Desktop.Views.Panels.AssistantPanel"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels"
+             x:DataType="vm:AssistantViewModel"
+             AutomationProperties.Name="Assistente virtual">
+    <!-- Ajuda › Assistente virtual: perguntas respondidas com base no manual, no idioma do programa, sem internet. -->
+    <UserControl.Styles>
+        <Style Selector="Button.assistente-fonte">
+            <Setter Property="Padding" Value="8,3" />
+            <Setter Property="Margin" Value="0,4,6,0" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <!-- Balão de mensagem: do assistente à esquerda; do usuário à direita, com a cor de destaque -->
+        <Style Selector="Border.balao">
+            <Setter Property="Margin" Value="0,0,24,10" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Background" Value="{DynamicResource Med.PanelAlt}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Med.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+        <Style Selector="Border.balao.usuario">
+            <Setter Property="Margin" Value="24,0,0,10" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Background" Value="{DynamicResource Med.Accent}" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="Border.balao TextBox">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+        </Style>
+        <Style Selector="Border.balao TextBox:pointerover /template/ Border#PART_BorderElement, Border.balao TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="Border.balao.usuario TextBox">
+            <Setter Property="Foreground" Value="{DynamicResource Med.OnAccent}" />
+        </Style>
+        <Style Selector="Border.balao.usuario TextBox:pointerover, Border.balao.usuario TextBox:focus">
+            <Setter Property="Foreground" Value="{DynamicResource Med.OnAccent}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" Margin="10,8,10,10">
+
+        <!-- Cabeçalho -->
+        <DockPanel Grid.Row="0" LastChildFill="True">
+            <Button DockPanel.Dock="Right" Classes="med-toolbar" Click="Fechar_Click"
+                    ToolTip.Tip="Fechar o assistente" AutomationProperties.Name="Fechar o assistente">
+                <TextBlock Classes="med-icon" Text="&#xE711;" />
+            </Button>
+            <Button DockPanel.Dock="Right" Classes="med-toolbar" Command="{Binding ClearCommand}"
+                    ToolTip.Tip="Nova conversa" AutomationProperties.Name="Nova conversa">
+                <TextBlock Classes="med-icon" Text="&#xE710;" />
+            </Button>
+            <TextBlock Classes="med-icon" Text="&#xE99A;" Foreground="{DynamicResource Med.Accent}" FontSize="18"
+                       VerticalAlignment="Center" Margin="0,0,8,0" />
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="Assistente virtual" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" />
+                <TextBlock Text="Responde com base no manual, sem internet." FontSize="11" Foreground="{DynamicResource Med.TextMuted}"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+        </DockPanel>
+
+        <!-- Aviso de instalação do modelo de linguagem -->
+        <Border Grid.Row="1" Margin="0,10,0,0" Padding="10" CornerRadius="6" BorderThickness="1"
+                BorderBrush="{DynamicResource Med.Accent}" Background="{DynamicResource Med.PanelAlt}"
+                IsVisible="{Binding ShowInstallCard}"
+                AutomationProperties.Name="Instalar o modelo de linguagem">
+            <StackPanel>
+                <TextBlock Text="{Binding InstallText}" TextWrapping="Wrap" Foreground="{DynamicResource Med.Text}" FontSize="12" />
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0" IsVisible="{Binding !Catalog.IsBusy}">
+                    <Button Content="Instalar" Classes="med-accent" Padding="14,4" Command="{Binding InstallModelCommand}"
+                            AutomationProperties.Name="Instalar o modelo de linguagem" />
+                    <Button Content="Agora não" Margin="8,0,0,0" Padding="12,4" Command="{Binding DismissInstallCardCommand}"
+                            AutomationProperties.Name="Agora não" />
+                </StackPanel>
+                <StackPanel Margin="0,8,0,0" IsVisible="{Binding Catalog.IsBusy}">
+                    <ProgressBar Height="6" Minimum="0" Maximum="100" Value="{Binding Catalog.Percent}" AutomationProperties.Name="Progresso da instalação" />
+                    <DockPanel Margin="0,6,0,0">
+                        <Button DockPanel.Dock="Right" Content="Cancelar" Padding="10,2" Command="{Binding Catalog.CancelCommand}"
+                                AutomationProperties.Name="Cancelar a instalação" />
+                        <TextBlock Text="{Binding Catalog.Status}" TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource Med.TextMuted}"
+                                   VerticalAlignment="Center" Margin="0,0,8,0" />
+                    </DockPanel>
+                </StackPanel>
+                <TextBlock Text="{Binding Catalog.Status}" TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource Med.TextMuted}" Margin="0,6,0,0">
+                    <TextBlock.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="!Catalog.IsBusy" />
+                            <Binding Path="Catalog.Status" Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
+                        </MultiBinding>
+                    </TextBlock.IsVisible>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <!-- Conversa -->
+        <ScrollViewer x:Name="Rolagem" Grid.Row="2" Margin="0,10,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                      AutomationProperties.Name="Conversa com o assistente">
+            <StackPanel>
+                <!-- Conversa vazia: sugestões -->
+                <StackPanel IsVisible="{Binding IsEmpty}" Margin="0,4,0,0">
+                    <TextBlock Text="Pergunte sobre qualquer recurso do programa ou sobre edição de vídeo. Por exemplo:"
+                               TextWrapping="Wrap" Foreground="{DynamicResource Med.TextMuted}" Margin="0,0,0,8" />
+                    <ItemsControl ItemsSource="{Binding Suggestions}" AutomationProperties.Name="Perguntas sugeridas">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Button Margin="0,0,0,6" Padding="10,6" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                        Command="{Binding $parent[UserControl].((vm:AssistantViewModel)DataContext).AskCommand}"
+                                        CommandParameter="{Binding}" AutomationProperties.Name="{Binding}">
+                                    <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <ItemsControl ItemsSource="{Binding Messages}" AutomationProperties.Name="Mensagens">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:AssistantMessageViewModel">
+                            <Border Classes="balao" Classes.usuario="{Binding FromUser}">
+                                <StackPanel>
+                                    <!-- TextBox somente leitura: permite selecionar e copiar a resposta -->
+                                    <TextBox Text="{Binding Text, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap"
+                                             AutomationProperties.Name="Mensagem" />
+                                    <!-- Sem modelo de linguagem: seções com um trecho -->
+                                    <ItemsControl ItemsSource="{Binding Sources}" IsVisible="{Binding ShowExcerpts}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:AssistantSourceViewModel">
+                                                <Border Margin="0,8,0,0" Padding="8" CornerRadius="6" Background="{DynamicResource Med.Panel}"
+                                                        BorderBrush="{DynamicResource Med.Border}" BorderThickness="1">
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Breadcrumb}" FontWeight="SemiBold" TextWrapping="Wrap"
+                                                                   Foreground="{DynamicResource Med.Text}" />
+                                                        <TextBlock Text="{Binding Excerpt}" TextWrapping="Wrap" FontSize="12" Margin="0,4,0,0"
+                                                                   Foreground="{DynamicResource Med.TextMuted}" />
+                                                        <Button Content="Abrir no manual" Classes="assistente-fonte"
+                                                                Command="{Binding $parent[UserControl].((vm:AssistantViewModel)DataContext).OpenSectionCommand}"
+                                                                CommandParameter="{Binding}" AutomationProperties.Name="Abrir no manual" />
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    <!-- Com o modelo de linguagem: fonte da resposta -->
+                                    <StackPanel Margin="0,8,0,0">
+                                        <StackPanel.IsVisible>
+                                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                <Binding Path="HasSources" />
+                                                <Binding Path="!ShowExcerpts" />
+                                            </MultiBinding>
+                                        </StackPanel.IsVisible>
+                                        <TextBlock Text="Fonte no manual:" FontSize="11" Foreground="{DynamicResource Med.TextMuted}" />
+                                        <ItemsControl ItemsSource="{Binding Sources}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate x:DataType="vm:AssistantSourceViewModel">
+                                                    <Button Classes="assistente-fonte" ToolTip.Tip="Abrir no manual"
+                                                            Command="{Binding $parent[UserControl].((vm:AssistantViewModel)DataContext).OpenSectionCommand}"
+                                                            CommandParameter="{Binding}" AutomationProperties.Name="{Binding Breadcrumb}">
+                                                        <TextBlock Text="{Binding Breadcrumb}" TextWrapping="Wrap" />
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Pergunta -->
+        <Grid Grid.Row="3" ColumnDefinitions="*,Auto" Margin="0,8,0,0">
+            <TextBox x:Name="Pergunta" Text="{Binding Question, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="120"
+                     AutomationProperties.Name="Pergunta ao assistente" />
+            <Button Grid.Column="1" Margin="6,0,0,0" Classes="med-accent" Padding="10,6" VerticalAlignment="Bottom"
+                    Command="{Binding SendCommand}" ToolTip.Tip="Enviar (Enter)" AutomationProperties.Name="Enviar pergunta">
+                <TextBlock Classes="med-icon" Text="&#xE724;" Foreground="{DynamicResource Med.OnAccent}" />
+            </Button>
+            <Button Grid.Column="1" Margin="6,0,0,0" Padding="10,6" VerticalAlignment="Bottom" Command="{Binding StopCommand}"
+                    ToolTip.Tip="Parar a resposta" AutomationProperties.Name="Parar a resposta" IsVisible="{Binding IsBusy}">
+                <TextBlock Classes="med-icon" Text="&#xE71A;" />
+            </Button>
+        </Grid>
+        <TextBlock Grid.Row="4" Margin="0,6,0,0" FontSize="11" TextWrapping="Wrap" Foreground="{DynamicResource Med.TextMuted}"
+                   Text="As respostas podem conter erros: confira no manual pela fonte indicada." />
+    </Grid>
+</UserControl>

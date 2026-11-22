@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://learn.microsoft.com/dotnet/csharp/"><img alt="C#" src="https://img.shields.io/badge/C%23-14-68217A?style=for-the-badge&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTEyIDEgMi41IDYuNXYxMUwxMiAyM2w5LjUtNS41di0xMXoiLz48dGV4dCB4PSIxMiIgeT0iMTUuNSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iOC41IiBmb250LXdlaWdodD0iNzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjgyMTdBIj5DIzwvdGV4dD48L3N2Zz4=&logoColor=white"></a>
   <a href="https://dotnet.microsoft.com/"><img alt=".NET 10" src="https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white"></a>
-  <a href="https://learn.microsoft.com/dotnet/desktop/wpf/"><img alt="WPF" src="https://img.shields.io/badge/WPF-Fluent-0C54C2?style=for-the-badge&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMiAzaDIwdjE4SDJ6bTIgNXYxMWgxNlY4eiIvPjwvc3ZnPg==&logoColor=white"></a>
+  <a href="https://avaloniaui.net/"><img alt="Avalonia" src="https://img.shields.io/badge/Avalonia-Fluent-0C54C2?style=for-the-badge"></a>
   <a href="https://ffmpeg.org/"><img alt="FFmpeg 8" src="https://img.shields.io/badge/FFmpeg-8-007808?style=for-the-badge&logo=ffmpeg&logoColor=white"></a>
   <a href="https://github.com/naudio/NAudio"><img alt="NAudio 2.2" src="https://img.shields.io/badge/NAudio-2.2-E65100?style=for-the-badge&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTMgOXY2aDRsNSA1VjRMNyA5em0xMy41IDNBNC41IDQuNSAwIDAgMCAxNCA4djhhNC41IDQuNSAwIDAgMCAyLjUtNHpNMTQgMy4ydjIuMWE3IDcgMCAwIDEgMCAxMy40djIuMWE5IDkgMCAwIDAgMC0xNy42eiIvPjwvc3ZnPg==&logoColor=white"></a>
   <a href="https://github.com/shimat/opencvsharp"><img alt="OpenCvSharp 4.13" src="https://img.shields.io/badge/OpenCvSharp-4.13-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white"></a>
@@ -131,8 +131,8 @@ Version **1.1.0**.
 
 | Area | Technology |
 |---|---|
-| Platform | C# and .NET 10 (`net10.0-windows`, x64, published *self-contained*) |
-| User interface | WPF with the Fluent theme (`ThemeMode`), MVVM with CommunityToolkit.Mvvm 8.4 |
+| Platform | C# and .NET 10 (`net10.0`, Windows x64 published *self-contained*; Linux and macOS port in progress) |
+| User interface | Avalonia 12 with the Fluent theme, MVVM with CommunityToolkit.Mvvm 8.4 |
 | Composition and services | Microsoft.Extensions.Hosting 10 (dependency injection), Serilog (local file logs) |
 | Video and audio | FFmpeg 8 via FFmpeg.AutoGen 9 (decoding, encoding and muxing); `ffmpeg.exe` with gdigrab and DirectShow for screen recording |
 | Audio playback | NAudio 2.2 (WASAPI, master clock of the preview) |
@@ -140,7 +140,7 @@ Version **1.1.0**.
 | AI | ONNX Runtime 1.24 with DirectML (GPU) or CPU: MODNet, MediaPipe Face Mesh V2, Silero VAD, GTCRN, TransNetV2, Swin2SR; Whisper.net 1.9 (subtitles) |
 | Virtual assistant | Knowledge base of the six manuals with local BM25 search; ONNX Runtime GenAI 0.14 (DirectML) with Phi-4-mini-instruct int4 |
 | Project format | `.med` (ZIP with `manifest.json` and `project.json`, versioned with migrations), time in *flicks* (`long`) |
-| Languages | Translation of the WPF tree at load time (`Translator`, one `.tsv` file per language) |
+| Languages | Translation of the visual tree at load time (`Translator`, one `.tsv` file per language) |
 | Interop | Win32 (`LibraryImport`): monitors, F10 global hotkey, Windows registry for preferences |
 | Tests | xUnit, NetArchTest (layering and privacy), coverlet; `offline-check.ps1` runtime check |
 | Installers | WiX Toolset 6 (MSI and Setup.exe with the Visual C++ Redistributable), MSIX for the Microsoft Store |
@@ -148,7 +148,7 @@ Version **1.1.0**.
 ## Structure
 
 ```
-src/        App (WPF/MVVM), Application, Domain, Core, Infrastructure, ModelDownloads and the engines
+src/        Desktop (Avalonia), Presentation (view models), Application, Domain, Core, Infrastructure, ModelDownloads and the engines
             (Project, Media, Timeline, Image, Audio, AI, Rendering)
 tests/      UnitTests, IntegrationTests, MediaTests
 resources/  export templates, transitions, effects, LUTs, fonts, AI model catalog and translations

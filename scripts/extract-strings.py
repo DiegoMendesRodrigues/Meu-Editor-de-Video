@@ -20,8 +20,10 @@ OUT = os.path.join(ROOT, 'resources', 'i18n', 'origem.json')
 SKIP_DIRS = {'bin', 'obj'}
 # Instruções do modelo de linguagem do assistente virtual: já escritas em cada idioma, não são textos da interface.
 SKIP_FILES = {'HelpAssistantService.cs'}
+# Valores técnicos que parecem texto (códigos de tecla, colunas de grade, fontes, nomes de propriedades).
+IGNORED = {'Vc', 'Vc{0}', 'Auto,*', 'Command', 'Contents', 'Cascadia Mono, Consolas, Menlo, DejaVu Sans Mono, monospace'}
 XAML_ATTRS = ('Text', 'Content', 'Header', 'ToolTip', 'Title', 'AutomationProperties.Name', 'AutomationProperties.HelpText',
-              'Tag', 'Description', 'Label', 'PlaceholderText')
+              'Tag', 'Description', 'Label', 'PlaceholderText', 'ToolTip.Tip', 'Watermark')
 LOG_CALL = re.compile(r'\b(Log(Information|Warning|Error|Debug|Trace|Critical)|_logger\.\w+|logger\.\w+|Debug\.\w+|Trace\.\w+)\s*\($')
 
 
@@ -204,7 +206,7 @@ def main():
                     keys.add(s)
                 for c in concat_templates(text, strings):
                     keys.add(c)
-            elif f.endswith('.xaml'):
+            elif f.endswith(('.xaml', '.axaml')):
                 for s in xaml_strings(open(p, encoding='utf-8-sig').read()):
                     keys.add(s)
     for f in os.listdir(os.path.join(ROOT, 'resources', 'templates', 'export')):
@@ -215,7 +217,7 @@ def main():
                     keys.add(data[k])
     # Textos curtos ou montados em código que a extração não reconhece sozinha.
     keys.update(['Auto', 'Automática', 'IA'])
-    texts = sorted(k for k in keys if looks_like_text(k) or k == 'IA')
+    texts = sorted(k for k in keys if (looks_like_text(k) or k == 'IA') and k not in IGNORED)
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     json.dump(texts, open(OUT, 'w', encoding='utf-8', newline='\n'), ensure_ascii=False, indent=1)
     print(len(texts), 'textos em', OUT)

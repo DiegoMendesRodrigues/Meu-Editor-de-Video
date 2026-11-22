@@ -1,0 +1,141 @@
+<UserControl x:Class="MeuEditorDeVideo.Desktop.Views.Panels.ClipAudioPanel"
+             Classes="inspetor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:MeuEditorDeVideo.Presentation.ViewModels.Inspector"
+             xmlns:ctl="using:MeuEditorDeVideo.Desktop.Controls"
+             x:DataType="ins:AudioInspectorViewModel">
+    <!-- Aba "Áudio" do painel C (F7): volume e keyframes, rampas, tom, efeitos, normalização, silêncios e sincronização. -->
+    <Grid>
+        <TextBlock Text="Selecione um clipe de áudio (ou um vídeo com áudio vinculado) na linha do tempo para ajustar volume, efeitos e loudness."
+                   TextWrapping="Wrap" Margin="12" Classes="med-muted" IsVisible="{Binding !HasClip}" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="10,4,10,10"
+                      IsVisible="{Binding HasClip}">
+            <StackPanel>
+                <TextBlock Text="{Binding ClipTitle}" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" TextTrimming="CharacterEllipsis" Margin="0,6,0,0" />
+                <ctl:ClipWaveform Inspector="{Binding}" Margin="0,6,0,0" />
+                <TextBlock Classes="ins-label" TextWrapping="Wrap" Margin="0,2,0,0"
+                           Text="Clique ou arraste na forma de onda para mudar o momento do áudio (o cursor da linha do tempo acompanha)." />
+
+                <TextBlock Text="Volume" Classes="ins-section" />
+                <ContentControl Content="{Binding Volume}" Focusable="False" />
+                <TextBlock Classes="ins-label" TextWrapping="Wrap" Margin="0,2,0,6"
+                           Text="100% = volume original. ◇ cria um keyframe de volume no instante do cursor (ex.: abaixar a música durante uma fala)." />
+                <ItemsControl ItemsSource="{Binding Fades}" />
+
+                <StackPanel IsVisible="{Binding HasSpeedChange}" Margin="0,6,0,0">
+                    <CheckBox IsChecked="{Binding PreservePitch}" AutomationProperties.Name="Manter o tom"
+                              ToolTip.Tip="Mantém a voz natural ao acelerar ou desacelerar o clipe">
+                        <TextBlock>
+                            <Run Text="Manter o tom na velocidade" />
+                            <Run Text="{Binding SpeedText, Mode=OneWay}" />
+                        </TextBlock>
+                    </CheckBox>
+                </StackPanel>
+
+                <TextBlock Text="Normalizar loudness" Classes="ins-section" />
+                <ComboBox ItemsSource="{Binding Targets}" SelectedItem="{Binding SelectedTarget}" HorizontalAlignment="Stretch"
+                          AutomationProperties.Name="Alvo de loudness" Margin="0,0,0,6" />
+                <Button Content="Normalizar" Classes="ins-small" HorizontalAlignment="Left"
+                        Command="{Binding NormalizeCommand}" AutomationProperties.Name="Normalizar"
+                        ToolTip.Tip="Mede o loudness (EBU R128) e ajusta o volume para o alvo, sem passar de −1 dBFS de pico" />
+
+                <TextBlock Text="Remover silêncios" Classes="ins-section" />
+                <Grid ColumnDefinitions="92,*,56" Margin="0,0,0,4">
+                    <TextBlock Text="Limiar" Classes="ins-label" />
+                    <Slider Grid.Column="1" Minimum="-70" Maximum="-20" Value="{Binding SilenceThreshold}" SmallChange="1" LargeChange="5"
+                            AutomationProperties.Name="Limiar de silêncio"
+                            ToolTip.Tip="Abaixo deste nível o som é considerado silêncio" />
+                    <TextBlock Grid.Column="2" Text="{Binding SilenceThresholdDisplay}" Classes="ins-label" TextAlignment="Right" />
+                </Grid>
+                <Grid ColumnDefinitions="92,*,56" Margin="0,0,0,6">
+                    <TextBlock Text="Duração mínima" Classes="ins-label" />
+                    <Slider Grid.Column="1" Minimum="0.2" Maximum="5" Value="{Binding SilenceMinSeconds}" SmallChange="0.1" LargeChange="0.5"
+                            AutomationProperties.Name="Duração mínima do silêncio" />
+                    <TextBlock Grid.Column="2" Text="{Binding SilenceMinDisplay}" Classes="ins-label" TextAlignment="Right" />
+                </Grid>
+                <Button Content="Remover silêncios" Classes="ins-small" HorizontalAlignment="Left"
+                        Command="{Binding RemoveSilenceCommand}" AutomationProperties.Name="Remover silêncios"
+                        ToolTip.Tip="Corta os silêncios do clipe (e do vídeo vinculado) e fecha os espaços" />
+
+                <TextBlock Text="Batidas" Classes="ins-section" />
+                <TextBlock Classes="ins-label" TextWrapping="Wrap" Margin="0,0,0,6"
+                           Text="Encontra as batidas da música selecionada para marcar a linha do tempo ou cortar os vídeos no ritmo." />
+                <Grid ColumnDefinitions="92,*,56" Margin="0,0,0,6">
+                    <TextBlock Text="Sensibilidade" Classes="ins-label" />
+                    <Slider Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding BeatSensitivity}" SmallChange="5" LargeChange="10"
+                            AutomationProperties.Name="Sensibilidade das batidas" />
+                    <TextBlock Grid.Column="2" Text="{Binding BeatSensitivityDisplay}" Classes="ins-label" TextAlignment="Right" />
+                </Grid>
+                <WrapPanel Margin="0,0,0,4">
+                    <Button Content="Marcar batidas" Classes="ins-small"
+                            Command="{Binding DetectBeatsCommand}" AutomationProperties.Name="Marcar batidas"
+                            ToolTip.Tip="Cria um marcador em cada batida da música" />
+                    <Button Content="Cortar vídeos nas batidas" Classes="ins-small"
+                            Command="{Binding CutAtBeatsCommand}" AutomationProperties.Name="Cortar vídeos nas batidas"
+                            ToolTip.Tip="Divide os clipes de vídeo e imagem que tocam junto com a música em cada batida" />
+                </WrapPanel>
+
+                <TextBlock Text="Atenuar sob a fala" Classes="ins-section" />
+                <TextBlock Classes="ins-label" TextWrapping="Wrap" Margin="0,0,0,6"
+                           Text="Abaixa o volume deste clipe (por exemplo, a música) enquanto há fala nas outras trilhas." />
+                <Grid ColumnDefinitions="92,*,56" Margin="0,0,0,4">
+                    <TextBlock Text="Redução" Classes="ins-label" />
+                    <Slider Grid.Column="1" Minimum="-40" Maximum="-3" Value="{Binding DuckGainDb}" SmallChange="1" LargeChange="3"
+                            AutomationProperties.Name="Redução do volume durante a fala" />
+                    <TextBlock Grid.Column="2" Text="{Binding DuckGainDisplay}" Classes="ins-label" TextAlignment="Right" />
+                </Grid>
+                <Grid ColumnDefinitions="92,*,56" Margin="0,0,0,6">
+                    <TextBlock Text="Transição" Classes="ins-label" />
+                    <Slider Grid.Column="1" Minimum="0" Maximum="2" Value="{Binding DuckFadeSeconds}" SmallChange="0.1" LargeChange="0.5"
+                            AutomationProperties.Name="Duração da transição da atenuação" />
+                    <TextBlock Grid.Column="2" Text="{Binding DuckFadeDisplay}" Classes="ins-label" TextAlignment="Right" />
+                </Grid>
+                <WrapPanel Margin="0,0,0,4">
+                    <Button Content="Atenuar sob a fala" Classes="ins-small"
+                            Command="{Binding DuckCommand}" AutomationProperties.Name="Atenuar sob a fala"
+                            ToolTip.Tip="Cria keyframes de volume que abaixam este clipe nos trechos com fala" />
+                    <Button Content="Remover atenuação" Classes="ins-small"
+                            Command="{Binding RemoveDuckCommand}" AutomationProperties.Name="Remover atenuação"
+                            ToolTip.Tip="Remove a animação de volume do clipe" />
+                </WrapPanel>
+
+                <TextBlock Text="Sincronizar pelo áudio" Classes="ins-section" />
+                <TextBlock Classes="ins-label" TextWrapping="Wrap" Margin="0,0,0,6"
+                           Text="Selecione dois clipes de áudio do mesmo acontecimento (ex.: câmera e gravador). O da trilha mais acima fica parado; o outro é movido." />
+                <Button Content="Sincronizar" Classes="ins-small" HorizontalAlignment="Left"
+                        Command="{Binding SyncCommand}" AutomationProperties.Name="Sincronizar pelo áudio" />
+
+                <TextBlock Text="{Binding AnalysisStatus}" Classes="ins-label" TextWrapping="Wrap" Margin="0,8,0,0"
+                           AutomationProperties.AutomationId="StatusAudio" />
+
+                <TextBlock Text="Adicionar efeito de áudio" Classes="ins-section" />
+                <ItemsControl ItemsSource="{Binding LibraryAudio}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="ins:LibraryEffectItem">
+                            <Button Classes="ins-card" ToolTip.Tip="{Binding Description}"
+                                    AutomationProperties.Name="{Binding Name, StringFormat='Adicionar {0}'}"
+                                    Command="{Binding $parent[UserControl].((ins:AudioInspectorViewModel)DataContext).AddEffectCommand}"
+                                    CommandParameter="{Binding Key}">
+                                <StackPanel>
+                                    <Border Classes="ins-thumb" Height="52">
+                                        <TextBlock Classes="med-icon" Text="{Binding Glyph}" FontSize="24"
+                                                   Foreground="{DynamicResource Med.Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <TextBlock Text="{Binding Name}" Classes="ins-card-text" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock Text="Efeitos de áudio aplicados (em ordem)" Classes="ins-section" />
+                <ItemsControl ItemsSource="{Binding Effects}" AutomationProperties.Name="Efeitos de áudio aplicados" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

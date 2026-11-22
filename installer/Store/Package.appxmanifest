@@ -73,7 +73,7 @@
   <Capabilities>
     <!-- Só a ferramenta "Baixar modelos de IA" usa a rede, e apenas quando o usuário clica em Instalar. -->
     <Capability Name="internetClient" />
-    <!-- Aplicativo Win32 (WPF) completo. -->
+    <!-- Aplicativo Win32 completo (Avalonia). -->
     <rescap:Capability Name="runFullTrust" />
   </Capabilities>
 </Package>

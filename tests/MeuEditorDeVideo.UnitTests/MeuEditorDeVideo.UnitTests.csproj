@@ -19,6 +19,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\MeuEditorDeVideo.Presentation\MeuEditorDeVideo.Presentation.csproj" />
+    <!-- O aplicativo entra nas regras de camadas e de privacidade (assembly MeuEditorDeVideo). -->
+    <ProjectReference Include="..\..\src\MeuEditorDeVideo.Desktop\MeuEditorDeVideo.Desktop.csproj" />
   </ItemGroup>
   <!-- Modelo de IA incluído no aplicativo (MODNet), como na saída do App (VisionTests, AiDeviceTests). -->
   <PropertyGroup>

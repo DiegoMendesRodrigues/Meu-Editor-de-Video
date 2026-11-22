@@ -2544,3 +2544,30 @@ bbebac15	Die Zeichenfläche konnte nicht erstellt werden.
 16956c08	Hersteller {0}
 5304eae0	Das Bild konnte nicht codiert werden.
 97bf24fe	Das Bild konnte nicht vorbereitet werden.
+2ac71cca	 {0} Kamera(s) und {1} Mikrofon(e) gefunden.
+3ab49fcd	Die Bildschirmaufnahme ist auf diesem System nicht verfügbar.
+54a4bf26	Die Aufnahme beginnt gleich.
+e4ce7c09	Zurück
+788210bc	Wenn Sie auf Aufnehmen klicken, wird das Programm minimiert und die Aufnahme beginnt nach einem Countdown von 5 Sekunden. Um die Aufnahme zu beenden, öffnen Sie das Programm erneut (über die Taskleiste oder das Dock) und klicken Sie auf Stopp.
+ab917f86	Neuen Hintergrund anwenden
+de3a9c77	Geben Sie den Text ein. Die Sprachausgabe wird mit den in macOS installierten Stimmen erzeugt (ohne Internet) und an der Cursorposition auf einer freien Audiospur eingefügt.
+c98c47b1	Geben Sie den Text ein. Die Sprachausgabe wird mit espeak-ng erzeugt (ohne Internet) und an der Cursorposition auf einer freien Audiospur eingefügt.
+07156da5	Informationen
+d149aeaf	Ändert das Projektformat (derzeit {0}) und positioniert jeden Video- und Bildclip neu, damit er das neue Bild ausfüllt. Texte bleiben unverändert. Alles lässt sich mit Strg+Z rückgängig machen.
+707f35de	Kein geöffnetes Fenster, um die Dateiauswahl anzuzeigen.
+ab173dd7	Keine Stimme gefunden. Installieren Sie das Paket espeak-ng (zum Beispiel sudo apt install espeak-ng).
+67353f3c	Keine Stimme gefunden. Installieren Sie Stimmen unter Systemeinstellungen › Bedienungshilfen › Gesprochene Inhalte.
+992ff84a	Nicht gefunden
+bb372cbd	Nicht speichern
+b84ba1f1	Die Anwendung wurde noch nicht gestartet.
+12e7df83	Der Tastatur-Hook wurde nicht rechtzeitig gestartet.
+ea469185	Der Tastatur-Hook wurde direkt nach dem Start beendet.
+20207fa0	Vorheriger Treffer
+aa5675a3	Im Handbuch suchen
+2fe966af	Weiter
+1b310d90	Nächster Treffer
+9a74cc03	Hintergrund entfernen
+2d023dea	Beenden
+ba5d2abf	Keine Zwischenablage verfügbar.
+f2b66c0c	Spuren der Zeitleiste
+3d3e005b	● Aufnahme  {0}   (F10 drücken oder auf Stopp klicken, um zu beenden)

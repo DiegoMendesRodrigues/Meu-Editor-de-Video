@@ -1,0 +1,101 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+      Estilos do inspetor do clipe (painel C), antes as chaves Ins.* de InspectorTemplates.xaml no WPF:
+        Ins.CardButton → Button.ins-card       Ins.Thumb → Border.ins-thumb      Ins.CardText → TextBlock.ins-card-text
+        Ins.Section    → TextBlock.ins-section  Ins.Label → TextBlock.ins-label   Ins.SmallButton → Button.ins-small
+        Ins.IconButton → Button.ins-icon
+    -->
+
+    <!-- Cartão de catálogo (miniatura + nome), como na biblioteca de efeitos -->
+    <Style Selector="Button.ins-card">
+        <Setter Property="Padding" Value="3" />
+        <Setter Property="Margin" Value="0,0,4,6" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+    </Style>
+    <Style Selector="Button.ins-card:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <!-- Moldura arredondada da miniatura; a borda acende ao passar o mouse no cartão -->
+    <Style Selector="Border.ins-thumb">
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Med.Border}" />
+        <Setter Property="Background" Value="{DynamicResource Med.PanelAlt}" />
+        <Setter Property="ClipToBounds" Value="True" />
+    </Style>
+    <Style Selector="Button.ins-card:pointerover Border.ins-thumb">
+        <Setter Property="BorderBrush" Value="{DynamicResource Med.TextMuted}" />
+    </Style>
+    <!-- Já aplicado ao clipe: anel em destaque sobre a miniatura; duplo clique desaplica -->
+    <Style Selector="Border.ins-applied">
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Med.Accent}" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+
+    <Style Selector="TextBlock.ins-card-text">
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,4,0,0" />
+    </Style>
+
+    <Style Selector="TextBlock.ins-section">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+        <Setter Property="Margin" Value="0,14,0,6" />
+    </Style>
+
+    <Style Selector="TextBlock.ins-label">
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Button.ins-small">
+        <Setter Property="Padding" Value="8,3" />
+        <Setter Property="Margin" Value="0,0,6,6" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <Style Selector="Button.ins-icon">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="4,2" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="MinWidth" Value="24" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="FontFamily" Value="{StaticResource Med.IconFont}" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <!-- Botão de keyframe: ◇ cinza; destaque quando a propriedade é animada -->
+    <Style Selector="TextBlock.chave">
+        <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+    </Style>
+    <Style Selector="TextBlock.chave.animada">
+        <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+    </Style>
+
+    <!-- Seta de expandir/recolher do efeito: sem o preenchimento de destaque do botão alternável marcado -->
+    <Style Selector="ToggleButton.ins-expander /template/ ContentPresenter#PART_ContentPresenter, ToggleButton.ins-expander:checked /template/ ContentPresenter#PART_ContentPresenter, ToggleButton.ins-expander:pointerover /template/ ContentPresenter#PART_ContentPresenter, ToggleButton.ins-expander:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+    </Style>
+
+    <!-- Painéis de propriedades: o Slider do Fluent é alto; aqui a linha de parâmetro fica compacta como no WPF -->
+    <Style Selector=".inspetor Slider">
+        <Setter Property="Height" Value="32" />
+        <Setter Property="MinHeight" Value="0" />
+    </Style>
+</Styles>

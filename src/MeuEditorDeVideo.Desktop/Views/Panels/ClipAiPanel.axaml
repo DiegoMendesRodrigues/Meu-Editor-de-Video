@@ -1,0 +1,141 @@
+<UserControl x:Class="MeuEditorDeVideo.Desktop.Views.Panels.ClipAiPanel"
+             Classes="inspetor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:MeuEditorDeVideo.Presentation.ViewModels.Inspector"
+             x:DataType="ins:AiInspectorViewModel">
+    <!-- Aba "IA" do painel C (F10): recursos de IA local. Sem modelo instalado, cada recurso aparece como indisponível. -->
+    <UserControl.Styles>
+        <Style Selector="TextBlock.ai-status">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+        </Style>
+        <Style Selector="Button.ai-button">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0,2,0,4" />
+        </Style>
+    </UserControl.Styles>
+    <Grid>
+        <TextBlock Text="Selecione um clipe na linha do tempo para usar os recursos de inteligência artificial (processados neste computador)."
+                   TextWrapping="Wrap" Margin="12" Classes="med-muted" IsVisible="{Binding !HasClip}" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="10,4,10,10"
+                      IsVisible="{Binding HasClip}">
+            <StackPanel>
+                <TextBlock Text="{Binding ClipTitle}" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" TextTrimming="CharacterEllipsis" Margin="0,6,0,0" />
+
+                <!-- Processamento em andamento -->
+                <Border IsVisible="{Binding IsBusy}" Background="{DynamicResource Med.PanelAlt}"
+                        CornerRadius="4" Padding="8" Margin="0,10,0,0">
+                    <StackPanel>
+                        <TextBlock Text="{Binding BusyText}" Foreground="{DynamicResource Med.Text}" />
+                        <DockPanel Margin="0,6,0,0">
+                            <Button DockPanel.Dock="Right" Content="Cancelar" Classes="ins-small" Margin="6,0,0,0"
+                                    Command="{Binding CancelCommand}" AutomationProperties.Name="Cancelar processamento de IA" />
+                            <ProgressBar Value="{Binding Progress}" Maximum="100" Height="8" VerticalAlignment="Center"
+                                         AutomationProperties.Name="Progresso da IA" />
+                        </DockPanel>
+                    </StackPanel>
+                </Border>
+                <TextBlock Text="{Binding Status}" TextWrapping="Wrap" Foreground="{DynamicResource Med.Text}" Margin="0,8,0,0" />
+
+                <!-- Fundo e pessoas -->
+                <StackPanel IsVisible="{Binding IsVisualMedia}">
+                    <TextBlock Text="Fundo e pessoas" Classes="ins-section" />
+                    <TextBlock Text="{Binding SegmentationStatus}" Classes="ai-status" />
+                    <Grid ColumnDefinitions="92,*" RowDefinitions="Auto,Auto" Margin="0,0,0,4">
+                        <TextBlock Text="Novo fundo" Classes="ins-label" />
+                        <ComboBox Grid.Column="1" ItemsSource="{Binding BackgroundModes}" SelectedItem="{Binding SelectedBackgroundMode}"
+                                  HorizontalAlignment="Stretch" Margin="0,0,0,4" AutomationProperties.Name="Novo fundo" />
+                        <TextBlock Grid.Row="1" Text="Mídia" Classes="ins-label" />
+                        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding BackgroundMedia}" SelectedItem="{Binding SelectedBackgroundMedia}"
+                                  HorizontalAlignment="Stretch" Margin="0,0,0,4" AutomationProperties.Name="Mídia do fundo"
+                                  ToolTip.Tip="Imagem ou vídeo da biblioteca usado como fundo" />
+                    </Grid>
+                    <Button Command="{Binding RemoveBackgroundCommand}" Classes="ai-button" AutomationProperties.Name="Remover fundo com IA">
+                        <Panel>
+                            <TextBlock Text="Remover fundo" IsVisible="{Binding !HasBackgroundEffect}" />
+                            <TextBlock Text="Aplicar o novo fundo" IsVisible="{Binding HasBackgroundEffect}" />
+                        </Panel>
+                    </Button>
+                    <Button Content="Calcular máscaras em segundo plano" Command="{Binding PrecomputeMattesCommand}" Classes="ai-button"
+                            ToolTip.Tip="Processa todos os quadros e guarda as máscaras no cache: reprodução e exportação ficam mais rápidas." />
+                    <Button Content="Rastrear pessoa" Command="{Binding TrackPersonCommand}" Classes="ai-button"
+                            AutomationProperties.Name="Rastrear pessoa com IA"
+                            ToolTip.Tip="Cria um rastreamento com a posição da pessoa em cada quadro (use na aba Composição para vincular elementos)." />
+                </StackPanel>
+
+                <!-- Cenas -->
+                <StackPanel IsVisible="{Binding IsVideo}">
+                    <TextBlock Text="Cenas" Classes="ins-section" />
+                    <TextBlock Text="{Binding SceneStatus}" Classes="ai-status" />
+                    <DockPanel Margin="0,0,0,4">
+                        <TextBlock Text="Sensibilidade" Classes="ins-label" Width="92" />
+                        <TextBlock DockPanel.Dock="Right" Text="{Binding SceneSensitivityDisplay}" Width="40" TextAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource Med.Text}" />
+                        <Slider Minimum="0" Maximum="100" Value="{Binding SceneSensitivity}" AutomationProperties.Name="Sensibilidade das cenas" />
+                    </DockPanel>
+                    <CheckBox Content="Dividir o clipe em cada cena" IsChecked="{Binding SplitAtScenes}" Margin="0,2,0,4" />
+                    <Button Content="Detectar cenas" Command="{Binding DetectScenesCommand}" Classes="ai-button"
+                            AutomationProperties.Name="Detectar cenas"
+                            ToolTip.Tip="Cria marcadores nas mudanças de cena (e divide o clipe, se marcado)." />
+                </StackPanel>
+
+                <!-- Combinar cor -->
+                <StackPanel IsVisible="{Binding IsVisualMedia}">
+                    <TextBlock Text="Cor" Classes="ins-section" />
+                    <Button Content="Combinar cor com o clipe anterior" Command="{Binding MatchColorCommand}" Classes="ai-button"
+                            AutomationProperties.Name="Combinar cor com o clipe anterior"
+                            ToolTip.Tip="Iguala a cor e o contraste deste clipe aos do clipe anterior da trilha (efeito Combinar cor, ajustável na aba Cor)." />
+                </StackPanel>
+
+                <!-- Melhoria de imagem -->
+                <StackPanel IsVisible="{Binding IsImage}">
+                    <TextBlock Text="Imagem" Classes="ins-section" />
+                    <TextBlock Text="{Binding EnhancerStatus}" Classes="ai-status" />
+                    <Button Content="Melhorar imagem (ampliar 2×)" Command="{Binding EnhanceImageCommand}" Classes="ai-button"
+                            AutomationProperties.Name="Melhorar imagem com IA" />
+                </StackPanel>
+
+                <!-- Fala e áudio -->
+                <StackPanel IsVisible="{Binding HasAudio}">
+                    <TextBlock Text="Legendas automáticas" Classes="ins-section" />
+                    <TextBlock Text="{Binding SpeechStatus}" Classes="ai-status" />
+                    <DockPanel Margin="0,0,0,4">
+                        <TextBlock Text="Idioma" Classes="ins-label" Width="92" />
+                        <ComboBox ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}" HorizontalAlignment="Stretch"
+                                  AutomationProperties.Name="Idioma da fala" />
+                    </DockPanel>
+                    <Button Content="Gerar legendas" Command="{Binding GenerateSubtitlesCommand}" Classes="ai-button"
+                            AutomationProperties.Name="Gerar legendas com IA" />
+
+                    <TextBlock Text="Voz" Classes="ins-section" />
+                    <TextBlock Text="{Binding VoiceStatus}" Classes="ai-status" />
+                    <CheckBox Content="Silenciar o áudio original" IsChecked="{Binding MuteOriginal}" Margin="0,2,0,4" />
+                    <Button Content="Isolar voz (voz e ambiente separados)" Command="{Binding IsolateVoiceCommand}" Classes="ai-button"
+                            AutomationProperties.Name="Isolar voz com IA" />
+                    <DockPanel Margin="0,4,0,4">
+                        <TextBlock Text="Intensidade" Classes="ins-label" Width="92" />
+                        <TextBlock DockPanel.Dock="Right" Text="{Binding DenoiseStrengthDisplay}" Width="40" TextAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource Med.Text}" />
+                        <Slider Minimum="0" Maximum="100" Value="{Binding DenoiseStrength}" AutomationProperties.Name="Intensidade da redução de ruído" />
+                    </DockPanel>
+                    <Button Content="Reduzir ruído" Command="{Binding DenoiseCommand}" Classes="ai-button"
+                            AutomationProperties.Name="Reduzir ruído com IA" />
+
+                    <TextBlock Text="Silêncios" Classes="ins-section" />
+                    <TextBlock Text="{Binding VadStatus}" Classes="ai-status" />
+                    <DockPanel Margin="0,0,0,4">
+                        <TextBlock Text="Pausa mínima" Classes="ins-label" Width="92" />
+                        <TextBlock DockPanel.Dock="Right" Text="{Binding SilenceMinDisplay}" Width="40" TextAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource Med.Text}" />
+                        <Slider Minimum="0.2" Maximum="5" Value="{Binding SilenceMinSeconds}" AutomationProperties.Name="Pausa mínima sem fala" />
+                    </DockPanel>
+                    <Button Content="Remover trechos sem fala" Command="{Binding RemoveSilenceCommand}" Classes="ai-button"
+                            AutomationProperties.Name="Remover trechos sem fala com IA" />
+                </StackPanel>
+
+                <TextBlock Text="Os modelos rodam somente neste computador; nada é enviado para a internet. Gerencie-os em Ferramentas › Modelos de IA."
+                           Classes="ai-status" Margin="0,14,0,0" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

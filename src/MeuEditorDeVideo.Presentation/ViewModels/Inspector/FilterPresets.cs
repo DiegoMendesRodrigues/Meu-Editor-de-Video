@@ -15,7 +15,7 @@ public sealed record FilterPreset(string Id, string Category, string Name, Func<
 {
     public const string Prefix = "flt:";
 
-    /// <summary>Chave na biblioteca e na miniatura (<see cref="Services.EffectPreviews"/>).</summary>
+    /// <summary>Chave na biblioteca e na miniatura (<see cref="Media.EffectPreviews"/>).</summary>
     public string Key => Prefix + Id;
 
     public override string ToString() => Name;

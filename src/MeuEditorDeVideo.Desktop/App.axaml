@@ -1,0 +1,39 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels"
+             xmlns:v="using:MeuEditorDeVideo.Desktop.Views"
+             xmlns:conv="using:MeuEditorDeVideo.Desktop.Converters"
+             xmlns:panels="using:MeuEditorDeVideo.Desktop.Views.Panels"
+             x:Class="MeuEditorDeVideo.Desktop.App"
+             Name="Meu Editor de Vídeo"
+             RequestedThemeVariant="Dark">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Themes/Palette.axaml" />
+                <ResourceInclude Source="/Resources/Strings/Common.axaml" />
+                <ResourceInclude Source="/Resources/Strings/Editor.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <conv:TranslateConverter x:Key="Med.Translate" />
+            <!-- Item de lista com texto de origem em pt-BR mostrado no idioma da interface -->
+            <DataTemplate x:Key="Med.TranslatedText" x:DataType="x:String">
+                <TextBlock Text="{Binding Converter={StaticResource Med.Translate}}" />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <!-- Associação ViewModel → View usada pela navegação (ShellViewModel.CurrentPage). -->
+    <Application.DataTemplates>
+        <DataTemplate DataType="vm:EditorViewModel">
+            <v:EditorView />
+        </DataTemplate>
+        <!-- Itens do inspetor do clipe (parâmetros, efeitos, valores animáveis): modelos em InspectorTemplates.axaml -->
+        <panels:InspectorTemplateSelector />
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="/Themes/Styles.axaml" />
+        <StyleInclude Source="/Views/Panels/InspectorStyles.axaml" />
+    </Application.Styles>
+</Application>

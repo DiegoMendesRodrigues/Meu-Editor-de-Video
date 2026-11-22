@@ -18,7 +18,7 @@ public class LayeringTests
     {
         var result = Types.InAssembly(Load("Domain"))
             .ShouldNot().HaveDependencyOnAny(
-                $"{Root}.Core", $"{Root}.Application", $"{Root}.Infrastructure", $"{Root}.App",
+                $"{Root}.Core", $"{Root}.Application", $"{Root}.Infrastructure", $"{Root}.Desktop",
                 "System.Windows", "Microsoft.Extensions")
             .GetResult();
         Assert.True(result.IsSuccessful, Describe(result));
@@ -29,7 +29,7 @@ public class LayeringTests
     {
         var result = Types.InAssembly(Load("Core"))
             .ShouldNot().HaveDependencyOnAny(
-                $"{Root}.Application", $"{Root}.Infrastructure", $"{Root}.App", "System.Windows")
+                $"{Root}.Application", $"{Root}.Infrastructure", $"{Root}.Desktop", "System.Windows")
             .GetResult();
         Assert.True(result.IsSuccessful, Describe(result));
     }
@@ -38,7 +38,7 @@ public class LayeringTests
     public void Application_nao_conhece_infraestrutura_motores_nem_UI()
     {
         var forbidden = Engines.Select(e => $"{Root}.{e}")
-            .Append($"{Root}.Infrastructure").Append($"{Root}.App").Append($"{Root}.Presentation").Append("System.Windows").ToArray();
+            .Append($"{Root}.Infrastructure").Append($"{Root}.Desktop").Append($"{Root}.Presentation").Append("System.Windows").ToArray();
         var result = Types.InAssembly(Load("Application")).ShouldNot().HaveDependencyOnAny(forbidden).GetResult();
         Assert.True(result.IsSuccessful, Describe(result));
     }
@@ -55,26 +55,26 @@ public class LayeringTests
     public void Motores_e_infraestrutura_nao_dependem_da_UI_nem_da_Application(string assembly)
     {
         var result = Types.InAssembly(Load(assembly))
-            .ShouldNot().HaveDependencyOnAny($"{Root}.App", $"{Root}.Application", $"{Root}.Presentation")
+            .ShouldNot().HaveDependencyOnAny($"{Root}.Desktop", $"{Root}.Application", $"{Root}.Presentation")
             .GetResult();
         Assert.True(result.IsSuccessful, Describe(result));
     }
 
     /// <summary>
-    /// ViewModels e serviços de interface não conhecem o toolkit (WPF hoje, Avalonia depois) nem o aplicativo:
+    /// ViewModels e serviços de interface não conhecem o toolkit (WPF ou Avalonia) nem o aplicativo:
     /// rodam e são testados em Windows, Linux e macOS.
     /// </summary>
     [Fact]
     public void Presentation_nao_depende_do_toolkit_de_interface()
     {
         // System.Windows.Input.ICommand é da biblioteca base (System.ObjectModel) e vale em todos os sistemas; por isso
-        // a regra olha os assemblies do WPF e do Avalonia, e não o namespace System.Windows inteiro.
+        // a regra olha os assemblies do WPF e do Avalonia (e o próprio aplicativo, que se chama MeuEditorDeVideo), e não o namespace System.Windows inteiro.
         string[] toolkits = ["PresentationFramework", "PresentationCore", "System.Xaml", "WindowsBase", "Avalonia", $"{Root}"];
         var refs = Load("Presentation").GetReferencedAssemblies().Select(a => a.Name!).ToList();
         Assert.DoesNotContain(refs, r => toolkits.Any(t => r == t || (t != Root && r.StartsWith(t + ".", StringComparison.Ordinal))));
         var result = Types.InAssembly(Load("Presentation"))
             .ShouldNot().HaveDependencyOnAny("System.Windows.Controls", "System.Windows.Media", "System.Windows.Threading",
-                "System.Windows.Data", "Avalonia", "Microsoft.Win32", $"{Root}.App.")
+                "System.Windows.Data", "Avalonia", "Microsoft.Win32", $"{Root}.Desktop.")
             .GetResult();
         Assert.True(result.IsSuccessful, Describe(result));
     }

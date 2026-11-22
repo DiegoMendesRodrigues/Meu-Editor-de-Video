@@ -1,4 +1,4 @@
-using MeuEditorDeVideo.Core.Abstractions;
+﻿using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.Projects;
 using MeuEditorDeVideo.Domain.Model;
 using Microsoft.Extensions.Logging;
@@ -80,12 +80,13 @@ public sealed class AutosaveScheduler(
         }
     }
 
+    /// <summary>Idempotente: o encerramento chama antes de parar o host, e o host chama de novo ao se descartar.</summary>
     public async ValueTask DisposeAsync()
     {
-        if (_cts is null) return;
-        await _cts.CancelAsync().ConfigureAwait(false);
+        if (Interlocked.Exchange(ref _cts, null) is not { } cts) return;
+        await cts.CancelAsync().ConfigureAwait(false);
         if (_loop is not null) await _loop.ConfigureAwait(false);
-        _cts.Dispose();
+        cts.Dispose();
         _gate.Dispose();
     }
 }

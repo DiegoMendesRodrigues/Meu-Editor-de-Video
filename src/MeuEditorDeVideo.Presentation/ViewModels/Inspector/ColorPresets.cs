@@ -9,7 +9,7 @@ public sealed record ColorPreset(string Id, string Name, string Description, Fun
     /// <summary>Texto lido por leitores de tela (itens de lista usam o texto do objeto).</summary>
     public override string ToString() => Name;
 
-    /// <summary>Chave da miniatura em <see cref="Services.EffectPreviews"/>.</summary>
+    /// <summary>Chave da miniatura em <see cref="Media.EffectPreviews"/>.</summary>
     public string PreviewKey => "preset:" + Id;
 }
 

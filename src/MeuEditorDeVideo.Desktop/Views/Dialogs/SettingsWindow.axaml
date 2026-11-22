@@ -1,0 +1,232 @@
+<Window x:Class="MeuEditorDeVideo.Desktop.Views.Dialogs.SettingsWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels"
+        xmlns:d="using:MeuEditorDeVideo.Desktop.Views.Dialogs"
+        x:DataType="vm:SettingsViewModel"
+        Title="Configurações"
+        Width="900"
+        Height="640"
+        MinWidth="720"
+        MinHeight="480"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        AutomationProperties.Name="Configurações"
+        Background="{DynamicResource Med.WindowBackground}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Configurações (§3.15, RF208–RF214, §12.3). Nada é gravado até "Salvar". -->
+    <Window.Styles>
+        <Style Selector="TextBlock.st-section">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+            <Setter Property="Margin" Value="0,14,0,6" />
+        </Style>
+        <Style Selector="TextBlock.st-hint">
+            <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,2,0,6" />
+        </Style>
+        <Style Selector="TextBlock.st-label">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,4,12,4" />
+        </Style>
+        <!-- O Fluent do Avalonia usa cabeçalhos de aba grandes (28); aqui ficam no tamanho do WPF. -->
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Padding" Value="12,6" />
+        </Style>
+        <Style Selector="CheckBox">
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+        <Style Selector="TextBlock.atalho-rotulo.custom">
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+    </Window.Styles>
+    <DockPanel Margin="12">
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" LastChildFill="False">
+            <TextBlock DockPanel.Dock="Left" Text="{Binding ShortcutConflicts}" Foreground="{DynamicResource Med.Danger}" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="520" />
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Content="Salvar" IsDefault="True" Command="{Binding SaveCommand}" Classes="med-accent" Padding="18,4" Margin="0,0,8,0" AutomationProperties.Name="Salvar configurações" />
+                <Button Content="Cancelar" IsCancel="True" Command="{Binding CancelCommand}" Padding="14,4" />
+            </StackPanel>
+        </DockPanel>
+
+        <TabControl x:Name="Abas" AutomationProperties.Name="Seções das configurações">
+            <!-- Geral e pastas (RF208) -->
+            <TabItem Header="Geral">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" Padding="14,4,14,14">
+                    <StackPanel>
+                        <TextBlock Text="Usuário" Classes="st-section" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Nome Completo:" Classes="st-label" />
+                            <TextBox Text="{Binding UserName}" Width="320" MaxLength="200" AutomationProperties.Name="Nome Completo" />
+                        </StackPanel>
+
+                        <TextBlock Text="Idioma do sistema" Classes="st-section" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Idioma:" Classes="st-label" />
+                            <ComboBox ItemsSource="{Binding Languages}" SelectedItem="{Binding Language}" Width="200" AutomationProperties.Name="Idioma" />
+                        </StackPanel>
+                        <TextBlock Classes="st-hint" Text="Ao salvar, o programa reinicia no novo idioma e reabre o projeto salvo." />
+
+                        <TextBlock Text="Aparência" Classes="st-section" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Tema:" Classes="st-label" />
+                            <ComboBox ItemsSource="{Binding Themes}" SelectedItem="{Binding Theme}" Width="200" AutomationProperties.Name="Tema" />
+                        </StackPanel>
+                        <CheckBox Content="Abrir o último projeto ao iniciar" IsChecked="{Binding OpenLastProject}" />
+
+                        <TextBlock Text="Pastas padrão" Classes="st-section" />
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
+                            <TextBlock Text="Projetos:" Classes="st-label" />
+                            <TextBox Grid.Column="1" Text="{Binding ProjectsDirectory}" Margin="0,3" AutomationProperties.Name="Pasta dos projetos" />
+                            <Button Grid.Column="2" Content="Procurar…" Command="{Binding BrowseProjectsCommand}" Margin="8,3,0,3" Padding="10,2" AutomationProperties.Name="Procurar pasta dos projetos" />
+                            <TextBlock Grid.Row="1" Text="Exportações:" Classes="st-label" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ExportDirectory}" Margin="0,3" AutomationProperties.Name="Pasta das exportações" />
+                            <Button Grid.Row="1" Grid.Column="2" Content="Procurar…" Command="{Binding BrowseExportCommand}" Margin="8,3,0,3" Padding="10,2" AutomationProperties.Name="Procurar pasta das exportações" />
+                            <TextBlock Grid.Row="2" Text="Cache:" Classes="st-label" />
+                            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding CacheDirectory, Mode=OneWay}" IsReadOnly="True" Margin="0,3" Foreground="{DynamicResource Med.TextMuted}" AutomationProperties.Name="Pasta do cache" />
+                        </Grid>
+
+                        <TextBlock Text="Salvamento automático" Classes="st-section" />
+                        <CheckBox Content="Salvar uma cópia de recuperação automaticamente" IsChecked="{Binding AutosaveEnabled}" />
+                        <StackPanel Orientation="Horizontal" IsEnabled="{Binding AutosaveEnabled}">
+                            <Slider Minimum="1" Maximum="30" Width="240" IsSnapToTickEnabled="True" TickFrequency="1" Value="{Binding AutosaveMinutes}" VerticalAlignment="Center" AutomationProperties.Name="Intervalo do salvamento automático" />
+                            <TextBlock Text="{Binding AutosaveText}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Classes="st-hint" Text="A cópia de recuperação não substitui o arquivo do projeto; ela é oferecida ao abrir o aplicativo depois de um fechamento inesperado." />
+
+                        <TextBlock Text="Verificar por atualizações" Classes="st-section" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Verificar mensalmente:" Classes="st-label" />
+                            <ComboBox ItemsSource="{Binding YesNo}" SelectedItem="{Binding CheckForNewVersions}" Width="120" AutomationProperties.Name="Verificar mensalmente" />
+                        </StackPanel>
+                        <TextBlock Classes="st-hint" Text="{Binding LastCheckText}" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Desempenho, GPU e pré-visualização (RF210, RF211, §12.3) -->
+            <TabItem Header="Desempenho">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" Padding="14,4,14,14">
+                    <StackPanel>
+                        <TextBlock Text="Este computador" Classes="st-section" />
+                        <ItemsControl ItemsSource="{Binding HardwareRows}" AutomationProperties.Name="Hardware detectado">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:CompileBindings="False">
+                                    <Grid Margin="0,2" ColumnDefinitions="190,*">
+                                        <TextBlock Text="{Binding Label}" Foreground="{DynamicResource Med.TextMuted}" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Text="{Binding PerformanceSummary}" FontWeight="SemiBold" Margin="0,10,0,4" TextWrapping="Wrap" />
+                        <ItemsControl ItemsSource="{Binding Limitations}" AutomationProperties.Name="Limitações">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <TextBlock Text="{Binding StringFormat=• {0}}" TextWrapping="Wrap" Margin="0,1" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Text="{Binding Recommendation}" Classes="st-hint" Margin="0,6,0,0" />
+
+                        <TextBlock Text="Pré-visualização" Classes="st-section" />
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                            <TextBlock Text="Qualidade padrão:" Classes="st-label" />
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding PreviewQualities}" SelectedItem="{Binding PreviewQuality}" Width="360" HorizontalAlignment="Left" Margin="0,3" AutomationProperties.Name="Qualidade padrão da pré-visualização" />
+                            <TextBlock Grid.Row="1" Text="Memória para quadros:" Classes="st-label" />
+                            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding PreviewMemories}" SelectedItem="{Binding PreviewMemory}" Width="160" HorizontalAlignment="Left" Margin="0,3" AutomationProperties.Name="Memória para quadros da pré-visualização" />
+                        </Grid>
+                        <TextBlock Classes="st-hint" Text="Na qualidade automática, a resolução também é reduzida durante a reprodução quando o computador não acompanha a taxa de quadros." />
+                        <CheckBox Content="Usar proxies na pré-visualização quando existirem" IsChecked="{Binding UseProxies}" />
+                        <CheckBox Content="Gerar proxies automaticamente para vídeos acima de 1080p" IsChecked="{Binding AutoGenerateProxies}" />
+
+                        <TextBlock Text="Aceleração" Classes="st-section" />
+                        <CheckBox Content="Usar a placa de vídeo para decodificar e codificar vídeo" IsChecked="{Binding UseGpu}" AutomationProperties.Name="Aceleração por GPU" />
+                        <CheckBox Content="Renderizar a fila de exportação em segundo plano" IsChecked="{Binding BackgroundRendering}" />
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <TextBlock Text="Modelos de IA:" Classes="st-label" />
+                            <ComboBox ItemsSource="{Binding AiDevices}" SelectedItem="{Binding AiDevice}" Width="300" AutomationProperties.Name="Dispositivo da IA" />
+                            <Button Content="Gerenciar modelos…" Command="{Binding OpenModelManagerCommand}" Margin="10,0,0,0" Padding="10,2" AutomationProperties.Name="Gerenciar modelos de IA" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Cache (RF209) -->
+            <TabItem Header="Cache">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" Padding="14,4,14,14">
+                    <StackPanel>
+                        <TextBlock Text="Cache em disco" Classes="st-section" />
+                        <TextBlock Classes="st-hint" Text="Miniaturas, formas de onda, proxies e máscaras de IA ficam guardados para não serem recalculados. Quando o limite é ultrapassado, os itens usados há mais tempo são apagados. Os projetos nunca são apagados." />
+                        <StackPanel Orientation="Horizontal" Margin="0,6">
+                            <TextBlock Text="Limite:" Classes="st-label" />
+                            <Slider Minimum="1" Maximum="100" Width="300" IsSnapToTickEnabled="True" TickFrequency="1" Value="{Binding CacheGigabytes}" VerticalAlignment="Center" AutomationProperties.Name="Limite do cache" />
+                            <TextBlock Text="{Binding CacheLimitText}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <ItemsControl ItemsSource="{Binding CacheUsage}" Margin="0,8,0,0" AutomationProperties.Name="Uso do cache">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:CompileBindings="False">
+                                    <Grid Margin="0,2" ColumnDefinitions="300,*">
+                                        <TextBlock Text="{Binding Label}" Foreground="{DynamicResource Med.TextMuted}" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Value}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Text="{Binding CacheTotal}" FontWeight="SemiBold" Margin="0,8,0,0" />
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <Button Content="Aplicar o limite agora" Command="{Binding TrimCacheCommand}" Padding="12,4" Margin="0,0,8,0" />
+                            <Button Content="Limpar cache" Command="{Binding ClearCacheCommand}" Padding="12,4" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding CacheStatus}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Atalhos (RF212) -->
+            <TabItem Header="Atalhos">
+                <DockPanel Margin="14,8,14,14">
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8" LastChildFill="True">
+                        <Button DockPanel.Dock="Right" Content="Restaurar todos os padrões" Command="{Binding ResetShortcutsCommand}" Padding="10,2" />
+                        <TextBlock Classes="st-hint" VerticalAlignment="Center" Text="Clique no campo do atalho e pressione a nova combinação de teclas." />
+                    </DockPanel>
+                    <ScrollViewer Padding="0" HorizontalScrollBarVisibility="Disabled">
+                        <!-- Agrupado por categoria (montado no código: ItemsControl não agrupa). -->
+                        <ItemsControl x:Name="ListaAtalhos" AutomationProperties.Name="Atalhos">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="d:ShortcutGroup">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Name}" Classes="st-section" />
+                                        <ItemsControl ItemsSource="{Binding Items}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate x:DataType="vm:ShortcutItemViewModel">
+                                                    <StackPanel Margin="0,1">
+                                                        <Grid ColumnDefinitions="240,220,Auto,Auto">
+                                                            <TextBlock Classes="atalho-rotulo" Classes.custom="{Binding IsCustom}" Text="{Binding Label}" VerticalAlignment="Center" />
+                                                            <TextBox Grid.Column="1" Text="{Binding Text, Mode=OneWay}" IsReadOnly="True" Cursor="Hand"
+                                                                     ToolTip.Tip="Clique e pressione a nova combinação"
+                                                                     AutomationProperties.Name="{Binding Label, StringFormat=Atalho de {0}}" />
+                                                            <Button Grid.Column="2" Content="Padrão" Command="{Binding ResetCommand}" Margin="8,0,0,0" Padding="8,1"
+                                                                    AutomationProperties.Name="{Binding Label, StringFormat=Restaurar atalho de {0}}" />
+                                                            <Button Grid.Column="3" Content="Remover" Command="{Binding ClearCommand}" Margin="6,0,0,0" Padding="8,1"
+                                                                    AutomationProperties.Name="{Binding Label, StringFormat=Remover atalho de {0}}" />
+                                                        </Grid>
+                                                        <TextBlock Text="{Binding Conflict}" Foreground="{DynamicResource Med.Danger}" TextWrapping="Wrap"
+                                                                   Margin="240,1,0,2" IsVisible="{Binding HasConflict}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

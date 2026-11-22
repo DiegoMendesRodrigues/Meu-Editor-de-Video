@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Aplicativo de interface multiplataforma (Avalonia): Windows, Linux e macOS. É o executável do produto
+    (MeuEditorDeVideo.exe); a composição de serviços vem de Presentation.Hosting.EditorComposition. O sistema-alvo
+    vem do -r do dotnet publish (win-x64, linux-x64, osx-arm64...), por isso o RuntimeIdentifier não é fixado aqui.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>MeuEditorDeVideo</AssemblyName>
+    <RootNamespace>MeuEditorDeVideo.Desktop</RootNamespace>
+    <ApplicationIcon>Assets\icone.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Ligações compiladas: erros de caminho aparecem no build (cada view declara x:DataType). -->
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <!-- COM embutido ligado: o NAudio (WASAPI, saída de áudio no Windows) e a fala SAPI usam interop COM. -->
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="SharpHook" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+    <!-- Fonte de ícones gerada por scripts/build-icon-font.py (resources/fonts/icones.json). -->
+    <AvaloniaResource Include="..\..\resources\fonts\MedIcons.ttf" Link="Assets\Fonts\MedIcons.ttf" />
+  </ItemGroup>
+  <!-- FFmpeg, modelos incluídos, catálogo, pacotes, traduções, manuais e licenças (vêm de ..\AppContent.props). -->
+  <Import Project="..\AppContent.props" />
+  <ItemGroup>
+    <ProjectReference Include="..\MeuEditorDeVideo.Presentation\MeuEditorDeVideo.Presentation.csproj" />
+  </ItemGroup>
+</Project>

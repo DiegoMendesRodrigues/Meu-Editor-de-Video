@@ -23,7 +23,7 @@
     <MajorUpgrade AllowDowngrades="yes" />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
 
-    <Icon Id="AppIcon.ico" SourceFile="$(var.RepoRoot)src\MeuEditorDeVideo.App\Assets\icone.ico" />
+    <Icon Id="AppIcon.ico" SourceFile="$(var.RepoRoot)src\MeuEditorDeVideo.Desktop\Assets\icone.ico" />
     <Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
     <Property Id="ARPCONTACT" Value="Diego Mendes Rodrigues" />
     <Property Id="ARPCOMMENTS" Value="Editor de vídeo para Windows 11 com processamento local (inclusive IA). Software livre (GPL-3.0-or-later)." />
@@ -71,6 +71,9 @@
         <Exclude Files="$(var.AppPublishDir)**\*.pdb" />
         <Exclude Files="$(var.AppPublishDir)runtimes\win-x86\**" />
         <Exclude Files="$(var.AppPublishDir)runtimes\win-arm64\**" />
+        <Exclude Files="$(var.AppPublishDir)runtimes\linux*\**" />
+        <Exclude Files="$(var.AppPublishDir)runtimes\macos*\**" />
+        <Exclude Files="$(var.AppPublishDir)runtimes\osx*\**" />
       </Files>
     </ComponentGroup>
 

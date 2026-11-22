@@ -1031,3 +1031,30 @@ f1010a79	Não foi possível determinar o tamanho do ecrã (instale xrandr ou xdp
 dafb61ac	Câmara
 390aeaee	O ficheiro de áudio gerado não é um WAV válido.
 7ee2f064	Só é suportado WAV PCM de 16 bits.
+2ac71cca	 {0} câmara(s) e {1} microfone(s) encontrados.
+3ab49fcd	A gravação de ecrã não está disponível neste sistema.
+54a4bf26	A gravação vai começar.
+e4ce7c09	Anterior
+788210bc	Ao clicar em Gravar, o programa é minimizado e a gravação começa após uma contagem decrescente de 5 segundos. Para parar a gravação, abra o programa novamente (pela barra de tarefas ou pela Dock) e clique em Parar.
+ab917f86	Aplicar o novo fundo
+de3a9c77	Escreva o texto. A narração é gerada com as vozes instaladas no macOS (sem internet) e entra na posição do cursor, numa pista de áudio livre.
+c98c47b1	Escreva o texto. A narração é gerada com o espeak-ng (sem internet) e entra na posição do cursor, numa pista de áudio livre.
+07156da5	Informações
+d149aeaf	Altera o formato do projeto (atualmente {0}) e reposiciona cada clipe de vídeo e imagem para cobrir o novo enquadramento. Os textos ficam como estão. Tudo pode ser desfeito com Ctrl+Z.
+707f35de	Nenhuma janela aberta para mostrar o seletor de ficheiros.
+ab173dd7	Nenhuma voz encontrada. Instale o pacote espeak-ng (por exemplo, sudo apt install espeak-ng).
+67353f3c	Nenhuma voz encontrada. Instale vozes em Definições do Sistema › Acessibilidade › Conteúdo Falado.
+992ff84a	Não encontrado
+bb372cbd	Não guardar
+b84ba1f1	A aplicação ainda não iniciou.
+12e7df83	O gancho de teclado não iniciou a tempo.
+ea469185	O gancho de teclado terminou logo ao iniciar.
+20207fa0	Ocorrência anterior
+aa5675a3	Procurar no manual
+2fe966af	Seguinte
+1b310d90	Ocorrência seguinte
+9a74cc03	Remover fundo
+2d023dea	Sair
+ba5d2abf	Sem área de transferência.
+f2b66c0c	Pistas da linha cronológica
+3d3e005b	● A gravar  {0}   (prima F10 ou clique em Parar para terminar)

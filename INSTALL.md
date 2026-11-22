@@ -116,7 +116,7 @@ More details (in Portuguese): [`documentation/INSTALADOR.md`](documentation/INST
 
 | Tool | Purpose |
 |---|---|
-| Windows 11 x64 | The only supported OS (WPF, DirectML, WASAPI) |
+| Windows 11 x64 | The only supported OS (Avalonia, DirectML, WASAPI) |
 | [.NET SDK 10](https://dotnet.microsoft.com/download/dotnet/10.0) (10.0.4xx) | Build and test |
 | [PowerShell 7](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows) (`pwsh`) | Dependency, installer and check scripts |
 | [Git](https://git-scm.com/download/win) | Clone the repository |
@@ -177,10 +177,10 @@ dotnet test tests/MeuEditorDeVideo.MediaTests --filter "Categoria=Desempenho"
 ### 5. Run
 
 ```powershell
-dotnet run --project src/MeuEditorDeVideo.App
+dotnet run --project src/MeuEditorDeVideo.Desktop
 ```
 
-The executable is at `src/MeuEditorDeVideo.App/bin/Debug/net10.0-windows/win-x64/MeuEditorDeVideo.exe`.
+The executable is at `src/MeuEditorDeVideo.Desktop/bin/Debug/net10.0/MeuEditorDeVideo.exe`.
 
 ### Environment variables
 

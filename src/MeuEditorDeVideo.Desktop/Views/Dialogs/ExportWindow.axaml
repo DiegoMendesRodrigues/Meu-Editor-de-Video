@@ -1,0 +1,236 @@
+<Window x:Class="MeuEditorDeVideo.Desktop.Views.Dialogs.ExportWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels.Export"
+        x:DataType="vm:ExportViewModel"
+        Title="Exportar vídeo"
+        Width="980"
+        Height="760"
+        MinWidth="820"
+        MinHeight="560"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Background="{DynamicResource Med.WindowBackground}"
+        Foreground="{DynamicResource Med.Text}">
+    <Window.Styles>
+        <Style Selector="TextBlock.label">
+            <Setter Property="Margin" Value="0,0,0,4" />
+        </Style>
+        <Style Selector="TextBlock.section">
+            <Setter Property="Margin" Value="0,4,0,8" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="*,Auto" ColumnDefinitions="300,*">
+
+        <!-- Modelos de exportação -->
+        <Border Grid.Row="0" Grid.Column="0" Background="{DynamicResource Med.Panel}"
+                BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,1,0">
+            <DockPanel Margin="12">
+                <TextBlock DockPanel.Dock="Top" Text="Modelos de exportação" Classes="med-section-title section" />
+                <WrapPanel DockPanel.Dock="Bottom" Margin="0,8,0,0">
+                    <Button Content="Salvar alterações" Command="{Binding SaveTemplateCommand}" Padding="8,4" Margin="0,0,6,6"
+                            AutomationProperties.Name="Salvar alterações no modelo" ToolTip.Tip="Grava os parâmetros atuais no modelo selecionado" />
+                    <Button Content="Salvar como novo…" Command="{Binding SaveAsNewTemplateCommand}" Padding="8,4" Margin="0,0,6,6"
+                            AutomationProperties.Name="Salvar como novo modelo" />
+                    <Button Content="Duplicar" Command="{Binding DuplicateTemplateCommand}" Padding="8,4" Margin="0,0,6,6"
+                            AutomationProperties.Name="Duplicar modelo" />
+                    <Button Content="Excluir" Command="{Binding DeleteTemplateCommand}" Padding="8,4" Margin="0,0,6,6"
+                            AutomationProperties.Name="Excluir modelo" />
+                    <Button Content="Restaurar padrão" Command="{Binding RestoreTemplateCommand}" Padding="8,4" Margin="0,0,6,6"
+                            AutomationProperties.Name="Restaurar padrão do modelo" />
+                    <Button Content="Restaurar todos" Command="{Binding RestoreAllTemplatesCommand}" Padding="8,4" Margin="0,0,6,6"
+                            AutomationProperties.Name="Restaurar todos os modelos padrão" />
+                </WrapPanel>
+                <ListBox ItemsSource="{Binding Templates}" SelectedItem="{Binding SelectedTemplate, Mode=TwoWay}"
+                         AutomationProperties.Name="Modelos de exportação"
+                         Background="Transparent" BorderThickness="0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:TemplateItem">
+                            <StackPanel Margin="2,4" AutomationProperties.Name="{Binding Name}">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="{Binding Badge}" Classes="med-muted" />
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                </DockPanel>
+                                <TextBlock Text="{Binding Description}" Classes="med-muted" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <!-- Parâmetros -->
+        <ScrollViewer Grid.Row="0" Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="16,12">
+                <TextBlock Text="{Binding ProjectSummary}" Classes="med-muted" Margin="0,0,0,8" />
+
+                <TextBlock Text="Vídeo" Classes="med-section-title section" />
+                <Grid ColumnDefinitions="*,16,*">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Formato" Classes="label" />
+                        <ComboBox ItemsSource="{Binding Containers}" SelectedItem="{Binding Container, Mode=TwoWay}"
+                                  AutomationProperties.Name="Formato do arquivo" Margin="0,0,0,12" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Codec de vídeo" Classes="label" />
+                        <ComboBox ItemsSource="{Binding VideoCodecs}" SelectedItem="{Binding VideoCodec, Mode=TwoWay}"
+                                  AutomationProperties.Name="Codec de vídeo" Margin="0,0,0,12" />
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="Codificador" Classes="label" />
+                <ComboBox ItemsSource="{Binding EncoderPreferences}" SelectedItem="{Binding Encoder, Mode=TwoWay}"
+                          AutomationProperties.Name="Codificador" Margin="0,0,0,4" />
+                <TextBlock Text="{Binding EncoderInfo}" Classes="med-muted" TextWrapping="Wrap" Margin="0,0,0,12" />
+
+                <CheckBox Content="Usar a resolução do projeto" IsChecked="{Binding UseProjectResolution}" Margin="0,0,0,8"
+                          AutomationProperties.Name="Usar a resolução do projeto" />
+                <Grid IsEnabled="{Binding !UseProjectResolution}" ColumnDefinitions="*,16,*,16,*">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Largura (px)" Classes="label" />
+                        <TextBox Text="{Binding WidthText}" Padding="6,4"
+                                 AutomationProperties.Name="Largura em pixels" Margin="0,0,0,12" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Altura (px)" Classes="label" />
+                        <TextBox Text="{Binding HeightText}" Padding="6,4"
+                                 AutomationProperties.Name="Altura em pixels" Margin="0,0,0,12" />
+                    </StackPanel>
+                </Grid>
+                <Grid ColumnDefinitions="*,16,*">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Taxa de quadros" Classes="label" />
+                        <ComboBox ItemsSource="{Binding FrameRates}" SelectedItem="{Binding FrameRate, Mode=TwoWay}"
+                                  AutomationProperties.Name="Taxa de quadros" Margin="0,0,0,12" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" IsVisible="{Binding HasProfile}">
+                        <TextBlock Text="Perfil" Classes="label" />
+                        <ComboBox ItemsSource="{Binding Profiles}" SelectedItem="{Binding Profile, Mode=TwoWay}"
+                                  AutomationProperties.Name="Perfil do codec" Margin="0,0,0,12" />
+                    </StackPanel>
+                </Grid>
+
+                <Grid IsVisible="{Binding HasRateControl}" ColumnDefinitions="*,16,*">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Controle de taxa" Classes="label" />
+                        <ComboBox ItemsSource="{Binding RateControls}" SelectedItem="{Binding RateControl, Mode=TwoWay}"
+                                  AutomationProperties.Name="Controle de taxa" Margin="0,0,0,12" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" IsVisible="{Binding HasBitrate}">
+                        <TextBlock Text="Taxa de bits do vídeo (kbps)" Classes="label" />
+                        <TextBox Text="{Binding BitrateText}" Padding="6,4"
+                                 AutomationProperties.Name="Taxa de bits do vídeo em kbps" Margin="0,0,0,12" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" IsVisible="{Binding HasQuality}">
+                        <TextBlock Text="{Binding QualityLabel}" Classes="label" />
+                        <Slider Minimum="0" Maximum="51" Value="{Binding Quality}" IsSnapToTickEnabled="True" TickFrequency="1"
+                                AutomationProperties.Name="Qualidade constante" Margin="0,0,0,12" />
+                    </StackPanel>
+                </Grid>
+
+                <CheckBox Content="Exportar transparência (canal alfa)" IsChecked="{Binding Alpha}" Margin="0,0,0,12"
+                          IsVisible="{Binding SupportsAlpha}"
+                          AutomationProperties.Name="Exportar transparência" />
+
+                <StackPanel IsVisible="{Binding HasSubtitles}">
+                    <TextBlock Text="Legendas" Classes="med-section-title section" />
+                    <CheckBox Content="Desenhar as legendas no vídeo (legendas queimadas)" IsChecked="{Binding BurnSubtitles}" Margin="0,0,0,8"
+                              AutomationProperties.Name="Legendas queimadas no vídeo" />
+                    <TextBlock Text="Arquivo de legendas ao lado do vídeo" Classes="label" />
+                    <ComboBox ItemsSource="{Binding SubtitleFiles}" SelectedItem="{Binding SubtitleFile}"
+                              AutomationProperties.Name="Arquivo de legendas" Margin="0,0,0,12" HorizontalAlignment="Left" MinWidth="200" />
+                </StackPanel>
+
+                <TextBlock Text="Áudio" Classes="med-section-title section" />
+                <Grid ColumnDefinitions="*,16,*">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Codec de áudio" Classes="label" />
+                        <ComboBox ItemsSource="{Binding AudioCodecs}" SelectedItem="{Binding AudioCodec, Mode=TwoWay}"
+                                  AutomationProperties.Name="Codec de áudio" Margin="0,0,0,12" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" IsVisible="{Binding HasAudioBitrate}">
+                        <TextBlock Text="Taxa de bits do áudio (kbps)" Classes="label" />
+                        <TextBox Text="{Binding AudioBitrateText}" Padding="6,4"
+                                 AutomationProperties.Name="Taxa de bits do áudio em kbps" Margin="0,0,0,12" />
+                    </StackPanel>
+                </Grid>
+                <Grid IsVisible="{Binding HasAudio}" ColumnDefinitions="*,16,*">
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Taxa de amostragem" Classes="label" />
+                        <ComboBox ItemsSource="{Binding SampleRates}" SelectedItem="{Binding SampleRate, Mode=TwoWay}"
+                                  AutomationProperties.Name="Taxa de amostragem" Margin="0,0,0,12" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Canais" Classes="label" />
+                        <ComboBox ItemsSource="{Binding ChannelOptions}" SelectedItem="{Binding Channels, Mode=TwoWay}"
+                                  AutomationProperties.Name="Canais de áudio" Margin="0,0,0,12" />
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="Arquivo" Classes="med-section-title section" />
+                <Grid Margin="0,0,0,8" ColumnDefinitions="Auto,120,Auto">
+                    <CheckBox Grid.Column="0" Content="Dividir em arquivos de até (segundos):" IsChecked="{Binding SplitByDuration}"
+                              VerticalAlignment="Center" AutomationProperties.Name="Dividir em arquivos" />
+                    <TextBox Grid.Column="1" Text="{Binding MaxSecondsText}" Padding="6,4" Margin="8,0,0,0"
+                             IsEnabled="{Binding SplitByDuration}" AutomationProperties.Name="Duração máxima por arquivo em segundos" />
+                </Grid>
+                <Grid Margin="0,0,0,12" ColumnDefinitions="Auto,120">
+                    <CheckBox Grid.Column="0" Content="Limitar o tamanho de cada arquivo a (MB):" IsChecked="{Binding LimitSize}"
+                              VerticalAlignment="Center" AutomationProperties.Name="Limitar tamanho" />
+                    <TextBox Grid.Column="1" Text="{Binding TargetSizeText}" Padding="6,4" Margin="8,0,0,0"
+                             IsEnabled="{Binding LimitSize}" AutomationProperties.Name="Tamanho alvo em MB" />
+                </Grid>
+
+                <TextBlock Text="Intervalo" Classes="med-section-title section" />
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <RadioButton Content="Sequência inteira" IsChecked="{Binding !ExportRange}"
+                                 Margin="0,0,16,0" AutomationProperties.Name="Sequência inteira" />
+                    <RadioButton Content="Intervalo" IsChecked="{Binding ExportRange}" AutomationProperties.Name="Intervalo personalizado" />
+                </StackPanel>
+                <Grid Margin="0,0,0,12" IsEnabled="{Binding ExportRange}" ColumnDefinitions="Auto,140,Auto,140,Auto">
+                    <TextBlock Grid.Column="0" Text="Início" VerticalAlignment="Center" Margin="0,0,8,0" />
+                    <TextBox Grid.Column="1" Text="{Binding RangeStartText}" Padding="6,4"
+                             AutomationProperties.Name="Início do intervalo" />
+                    <TextBlock Grid.Column="2" Text="Fim" VerticalAlignment="Center" Margin="16,0,8,0" />
+                    <TextBox Grid.Column="3" Text="{Binding RangeEndText}" Padding="6,4"
+                             AutomationProperties.Name="Fim do intervalo" />
+                    <Button Grid.Column="4" Content="Início no cursor" Command="{Binding RangeFromPlayheadCommand}" Padding="8,4" Margin="12,0,0,0"
+                            AutomationProperties.Name="Início no cursor" />
+                </Grid>
+
+                <TextBlock Text="Destino" Classes="med-section-title section" />
+                <Grid Margin="0,0,0,8" ColumnDefinitions="*,Auto">
+                    <TextBox Text="{Binding Directory}" Padding="6,4"
+                             AutomationProperties.Name="Pasta de destino" />
+                    <Button Grid.Column="1" Content="Procurar…" Command="{Binding BrowseDirectoryCommand}" Padding="12,4" Margin="8,0,0,0"
+                            AutomationProperties.Name="Procurar pasta de destino" />
+                </Grid>
+                <Grid Margin="0,0,0,4" ColumnDefinitions="Auto,*,Auto">
+                    <TextBlock Text="Nome" VerticalAlignment="Center" Margin="0,0,8,0" />
+                    <TextBox Grid.Column="1" x:Name="NomeArquivo" Text="{Binding FileName}" Padding="6,4"
+                             AutomationProperties.Name="Nome do arquivo" />
+                    <TextBlock Grid.Column="2" Text="{Binding Extension}" VerticalAlignment="Center" Margin="6,0,0,0" Classes="med-muted" />
+                </Grid>
+                <TextBlock Classes="med-muted" TextWrapping="Wrap" Margin="0,0,0,12">
+                    <Run Text="Arquivo: " /><Run Text="{Binding OutputPath, Mode=OneWay}" />
+                </TextBlock>
+                <CheckBox Content="Renderizar em segundo plano (continuar editando enquanto exporta)" IsChecked="{Binding Background}"
+                          AutomationProperties.Name="Renderizar em segundo plano" Margin="0,0,0,12" />
+
+                <TextBlock Text="{Binding ValidationMessage}" Foreground="{DynamicResource Med.Danger}" TextWrapping="Wrap"
+                           AutomationProperties.Name="Problemas na configuração" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,1,0,0" Padding="16,12">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Cancelar" Command="{Binding CancelCommand}" IsCancel="True" Padding="16,8" Margin="0,0,8,0"
+                        AutomationProperties.Name="Cancelar" />
+                <Button Content="Exportar" Command="{Binding ExportCommand}" IsDefault="True" Classes="med-accent"
+                        AutomationProperties.Name="Iniciar exportação" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

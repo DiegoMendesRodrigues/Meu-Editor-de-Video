@@ -1,0 +1,142 @@
+<UserControl x:Class="MeuEditorDeVideo.Desktop.Views.Panels.ClipTextPanel"
+             Classes="inspetor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:MeuEditorDeVideo.Presentation.ViewModels.Inspector"
+             x:DataType="ins:TextInspectorViewModel">
+    <!-- Aba "Texto" do painel C (F8): conteúdo, fonte, cores, contorno, sombra, caixa, posição e animações. -->
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="ins:TextColorViewModel">
+            <Grid ColumnDefinitions="104,*" Margin="0,0,0,6">
+                <TextBlock Text="{Binding Label}" Classes="ins-label" TextWrapping="Wrap" />
+                <StackPanel Grid.Column="1">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="22" Height="22" CornerRadius="3" BorderBrush="{DynamicResource Med.Border}" BorderThickness="1" ClipToBounds="True">
+                            <Border.Background>
+                                <!-- Xadrez sob a amostra para mostrar transparência -->
+                                <DrawingBrush TileMode="Tile" DestinationRect="0,0,8,8">
+                                    <DrawingBrush.Drawing>
+                                        <GeometryDrawing Brush="#FF9A9A9A" Geometry="M0,0 H1 V1 H0Z M1,1 H2 V2 H1Z" />
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Border.Background>
+                            <Border Background="{Binding Swatch}" CornerRadius="2" />
+                        </Border>
+                        <TextBox Text="{Binding Hex, UpdateSourceTrigger=PropertyChanged}" Width="104" Margin="6,0,0,0" MaxLength="9"
+                                 AutomationProperties.Name="{Binding Label}"
+                                 ToolTip.Tip="Cor em hexadecimal: #RRGGBB ou #AARRGGBB (AA = opacidade, 00 transparente a FF opaca)" />
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding Presets}" Margin="0,4,0,0">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Button Width="18" Height="18" MinHeight="0" MinWidth="0" Margin="0,0,4,4" Padding="0" BorderThickness="1"
+                                        BorderBrush="{DynamicResource Med.Border}" Background="{Binding}" ToolTip.Tip="{Binding}"
+                                        AutomationProperties.Name="{Binding}"
+                                        Command="{Binding $parent[ItemsControl].((ins:TextColorViewModel)DataContext).UsePresetCommand}"
+                                        CommandParameter="{Binding}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+    <Grid>
+        <TextBlock Text="Selecione um texto, título, crédito, tarja ou legenda na linha do tempo. Para criar um, use a seção Textos da biblioteca."
+                   TextWrapping="Wrap" Margin="12" Classes="med-muted" IsVisible="{Binding !HasClip}" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="10,4,10,10"
+                      IsVisible="{Binding HasClip}">
+            <StackPanel>
+                <TextBlock Text="{Binding KindLabel}" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" Margin="0,6,0,0" />
+
+                <TextBlock Text="Conteúdo" Classes="ins-section" />
+                <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="Wrap"
+                         MinHeight="64" MaxHeight="220"
+                         AutomationProperties.Name="Conteúdo do texto" ToolTip.Tip="Enter quebra a linha" />
+                <TextBlock Classes="ins-label" TextWrapping="Wrap" Margin="0,2,0,0"
+                           IsVisible="{Binding IsCredits}"
+                           Text="Os créditos rolam de baixo para cima durante todo o clipe: alongue o clipe para rolar mais devagar." />
+
+                <TextBlock Text="Fonte" Classes="ins-section" />
+                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,6">
+                    <ComboBox ItemsSource="{Binding Fonts}" SelectedItem="{Binding FontFamily}" IsTextSearchEnabled="True" HorizontalAlignment="Stretch"
+                              AutomationProperties.Name="Fonte" ToolTip.Tip="Fonte do texto (do sistema ou adicionadas ao aplicativo)">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <TextBlock Text="{Binding}" FontFamily="{Binding}" FontSize="14" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button Grid.Column="1" Content="+ Fonte" Margin="6,0,0,0" Padding="8,2" Command="{Binding AddFontCommand}"
+                            AutomationProperties.Name="Adicionar fonte" ToolTip.Tip="Adicionar um arquivo de fonte (.ttf, .otf) ao aplicativo" />
+                </Grid>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                    <ToggleButton IsChecked="{Binding Bold}" Width="32" Margin="0,0,4,0" FontWeight="Bold" Content="N"
+                                  HorizontalContentAlignment="Center" AutomationProperties.Name="Negrito" ToolTip.Tip="Negrito" />
+                    <ToggleButton IsChecked="{Binding Italic}" Width="32" Margin="0,0,4,0" FontStyle="Italic" Content="I"
+                                  HorizontalContentAlignment="Center" AutomationProperties.Name="Itálico" ToolTip.Tip="Itálico" />
+                    <ToggleButton IsChecked="{Binding Underline}" Width="32" Margin="0,0,12,0" HorizontalContentAlignment="Center"
+                                  AutomationProperties.Name="Sublinhado" ToolTip.Tip="Sublinhado">
+                        <TextBlock Text="S" TextDecorations="Underline" />
+                    </ToggleButton>
+                    <ComboBox ItemsSource="{Binding Alignments}" SelectedItem="{Binding Alignment}" MinWidth="96"
+                              AutomationProperties.Name="Alinhamento" ToolTip.Tip="Alinhamento das linhas; à esquerda, a posição X é a borda esquerda do bloco" />
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Values}" />
+                <ContentControl Content="{Binding TextColor}" Focusable="False" />
+
+                <TextBlock Text="Contorno" Classes="ins-section" />
+                <ItemsControl ItemsSource="{Binding Outline}" />
+                <ContentControl Content="{Binding OutlineColor}" Focusable="False" />
+
+                <TextBlock Text="Sombra" Classes="ins-section" />
+                <CheckBox IsChecked="{Binding Shadow}" Content="Sombra projetada" Margin="0,0,0,6" AutomationProperties.Name="Sombra projetada" />
+                <StackPanel IsVisible="{Binding Shadow}">
+                    <ItemsControl ItemsSource="{Binding ShadowValues}" />
+                    <ContentControl Content="{Binding ShadowColor}" Focusable="False" />
+                </StackPanel>
+
+                <TextBlock Text="Caixa de fundo" Classes="ins-section" />
+                <ContentControl Content="{Binding BackgroundColor}" Focusable="False" />
+                <ContentControl Content="{Binding AccentColor}" Focusable="False" />
+                <ItemsControl ItemsSource="{Binding BoxValues}" />
+
+                <TextBlock Text="Posição" Classes="ins-section" />
+                <Grid ColumnDefinitions="104,*" Margin="0,0,0,6">
+                    <TextBlock Text="Ponto de apoio" Classes="ins-label" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding Anchors}" SelectedItem="{Binding Anchor}" HorizontalAlignment="Stretch"
+                              AutomationProperties.Name="Ponto de apoio vertical"
+                              ToolTip.Tip="Qual parte do bloco fica na posição Y (aba Vídeo). Na base, linhas novas crescem para cima." />
+                </Grid>
+                <TextBlock Classes="ins-label" TextWrapping="Wrap" Margin="0,0,0,6"
+                           Text="Posição, escala, rotação, opacidade e keyframes ficam na aba Vídeo." />
+
+                <TextBlock Text="Animação" Classes="ins-section" />
+                <Grid ColumnDefinitions="104,*" RowDefinitions="Auto,Auto" Margin="0,0,0,6">
+                    <TextBlock Text="Entrada" Classes="ins-label" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding Animations}" SelectedItem="{Binding AnimationIn}" HorizontalAlignment="Stretch"
+                              AutomationProperties.Name="Animação de entrada" />
+                    <TextBlock Grid.Row="1" Text="Saída" Classes="ins-label" Margin="0,6,0,0" />
+                    <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Animations}" SelectedItem="{Binding AnimationOut}" HorizontalAlignment="Stretch"
+                              AutomationProperties.Name="Animação de saída" Margin="0,6,0,0" />
+                </Grid>
+                <ItemsControl ItemsSource="{Binding AnimationValues}" />
+
+                <StackPanel IsVisible="{Binding IsSubtitle}" Margin="0,8,0,0">
+                    <Button Content="Aplicar este estilo a todas as legendas da trilha" Command="{Binding ApplyStyleToTrackCommand}"
+                            AutomationProperties.Name="Aplicar este estilo a todas as legendas da trilha" HorizontalAlignment="Stretch" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

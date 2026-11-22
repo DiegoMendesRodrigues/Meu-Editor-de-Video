@@ -93,7 +93,7 @@ foreach ($dep in 'deps\ffmpeg', 'deps\ai-models\modnet-retrato') {
 # ---------------------------------------------------------------- 1. Publicação
 if (-not $SkipPublish) {
     if (Test-Path $publish) { Remove-Item -Recurse -Force $publish }
-    Invoke-Checked dotnet @('publish', (Join-Path $root 'src\MeuEditorDeVideo.App\MeuEditorDeVideo.App.csproj'),
+    Invoke-Checked dotnet @('publish', (Join-Path $root 'src\MeuEditorDeVideo.Desktop\MeuEditorDeVideo.Desktop.csproj'),
         '-c', $Configuration, '-r', 'win-x64', '--self-contained', 'true', '-o', $publish, '-nologo', '-v', 'q')
 }
 if (-not (Test-Path (Join-Path $publish 'MeuEditorDeVideo.exe'))) { throw "Publicação não encontrada em $publish." }
@@ -103,6 +103,8 @@ if (Test-Path $out) { Remove-Item -Recurse -Force $out }
 New-Item -ItemType Directory -Force -Path $layout, $priRoot | Out-Null
 Copy-Item -Recurse -Force (Join-Path $publish '*') $layout
 # Arquivos de depuração não vão para a Store.
+# Bibliotecas nativas de outros sistemas e arquiteturas (o publish do Avalonia traz runtimes\linux-*, macos-*, win-x86...).
+Get-ChildItem (Join-Path $layout 'runtimes') -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -ne 'win-x64' } | Remove-Item -Recurse -Force
 Get-ChildItem $layout -Recurse -Include '*.pdb' | Remove-Item -Force
 
 Add-Type -AssemblyName System.Drawing

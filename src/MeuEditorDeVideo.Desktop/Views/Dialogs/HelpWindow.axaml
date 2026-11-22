@@ -1,0 +1,56 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="using:MeuEditorDeVideo.Desktop.Views.Dialogs"
+        x:Class="MeuEditorDeVideo.Desktop.Views.Dialogs.HelpWindow"
+        Title="Manual do usuário — Meu Editor de Vídeo"
+        Width="1040"
+        Height="760"
+        MinWidth="640"
+        MinHeight="420"
+        WindowStartupLocation="CenterOwner"
+        CanResize="True"
+        AutomationProperties.Name="Manual do usuário"
+        Background="{DynamicResource Med.WindowBackground}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Ajuda offline (F1): o manual vem junto com o aplicativo (pasta "ajuda"); a busca é a do Ctrl+F. -->
+    <Grid Margin="12" ColumnDefinitions="260,6,*" RowDefinitions="*,Auto">
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Top" Text="Sumário" FontWeight="SemiBold" Foreground="{DynamicResource Med.Accent}" Margin="4,0,0,6" />
+            <ListBox x:Name="Sumario" AutomationProperties.Name="Sumário" SelectionChanged="Sumario_SelectionChanged"
+                     Background="{DynamicResource Med.Panel}" BorderBrush="{DynamicResource Med.Border}" BorderThickness="1"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="d:HelpTopicItem">
+                        <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="{Binding Indent}" FontWeight="{Binding Weight}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+
+        <GridSplitter Grid.Column="1" Background="Transparent" ResizeDirection="Columns" />
+
+        <DockPanel Grid.Column="2">
+            <!-- Busca (Ctrl+F): Enter vai para a próxima ocorrência, Shift+Enter para a anterior, Esc fecha. -->
+            <Border x:Name="BarraBusca" DockPanel.Dock="Top" IsVisible="False" Padding="8,6" Margin="0,0,0,6"
+                    Background="{DynamicResource Med.Panel}" BorderBrush="{DynamicResource Med.Border}" BorderThickness="1" CornerRadius="4">
+                <DockPanel LastChildFill="True">
+                    <Button DockPanel.Dock="Right" Content="Próxima" Click="Proxima_Click" Padding="12,3" Margin="6,0,0,0"
+                            AutomationProperties.Name="Próxima ocorrência" />
+                    <Button DockPanel.Dock="Right" Content="Anterior" Click="Anterior_Click" Padding="12,3" Margin="6,0,0,0"
+                            AutomationProperties.Name="Ocorrência anterior" />
+                    <TextBlock x:Name="ResultadoBusca" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="8,0,0,0"
+                               Foreground="{DynamicResource Med.TextMuted}" />
+                    <TextBox x:Name="CampoBusca" PlaceholderText="Procurar no manual" AutomationProperties.Name="Procurar no manual" />
+                </DockPanel>
+            </Border>
+            <ScrollViewer x:Name="Leitor" AutomationProperties.Name="Conteúdo do manual" HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto" Background="{DynamicResource Med.Background}" />
+        </DockPanel>
+
+        <DockPanel Grid.Row="1" Grid.ColumnSpan="3" Margin="0,10,0,0" LastChildFill="False">
+            <TextBlock x:Name="Origem" DockPanel.Dock="Left" VerticalAlignment="Center" Foreground="{DynamicResource Med.TextMuted}"
+                       Text="Pressione Ctrl+F para procurar no manual." />
+            <Button DockPanel.Dock="Right" Content="Fechar" IsCancel="True" Click="Fechar_Click" Padding="18,4" />
+        </DockPanel>
+    </Grid>
+</Window>

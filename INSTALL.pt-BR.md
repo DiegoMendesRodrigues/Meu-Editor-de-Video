@@ -116,7 +116,7 @@ Mais detalhes: [`documentation/INSTALADOR.md`](documentation/INSTALADOR.md).
 
 | Ferramenta | Uso |
 |---|---|
-| Windows 11 x64 | Único sistema suportado (WPF, DirectML, WASAPI) |
+| Windows 11 x64 | Único sistema suportado (Avalonia, DirectML, WASAPI) |
 | [.NET SDK 10](https://dotnet.microsoft.com/download/dotnet/10.0) (10.0.4xx) | Compilar e testar |
 | [PowerShell 7](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows) (`pwsh`) | Scripts de dependências, instaladores e verificações |
 | [Git](https://git-scm.com/download/win) | Clonar o repositório |
@@ -177,10 +177,10 @@ dotnet test tests/MeuEditorDeVideo.MediaTests --filter "Categoria=Desempenho"
 ### 5. Executar
 
 ```powershell
-dotnet run --project src/MeuEditorDeVideo.App
+dotnet run --project src/MeuEditorDeVideo.Desktop
 ```
 
-O executável fica em `src/MeuEditorDeVideo.App/bin/Debug/net10.0-windows/win-x64/MeuEditorDeVideo.exe`.
+O executável fica em `src/MeuEditorDeVideo.Desktop/bin/Debug/net10.0/MeuEditorDeVideo.exe`.
 
 ### Variáveis de ambiente
 

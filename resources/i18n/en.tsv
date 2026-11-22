@@ -2528,3 +2528,30 @@ bbebac15	Could not create the drawing surface.
 16956c08	Vendor {0}
 5304eae0	Could not encode the image.
 97bf24fe	Could not prepare the image.
+2ac71cca	 {0} camera(s) and {1} microphone(s) found.
+3ab49fcd	Screen recording is not available on this system.
+54a4bf26	Recording is about to start.
+e4ce7c09	Previous
+788210bc	When you click Record, the program is minimized and recording starts after a 5-second countdown. To stop recording, open the program again (from the taskbar or the Dock) and click Stop.
+ab917f86	Apply the new background
+de3a9c77	Type the text. The narration is generated with the voices installed on macOS (no internet) and is placed at the cursor position, on a free audio track.
+c98c47b1	Type the text. The narration is generated with espeak-ng (no internet) and is placed at the cursor position, on a free audio track.
+07156da5	Information
+d149aeaf	Changes the project format (currently {0}) and repositions each video and image clip to cover the new frame. Texts stay as they are. Everything can be undone with Ctrl+Z.
+707f35de	No open window to show the file picker.
+ab173dd7	No voice found. Install the espeak-ng package (for example, sudo apt install espeak-ng).
+67353f3c	No voice found. Install voices in System Settings › Accessibility › Spoken Content.
+992ff84a	Not found
+bb372cbd	Don't save
+b84ba1f1	The application has not started yet.
+12e7df83	The keyboard hook did not start in time.
+ea469185	The keyboard hook ended right after starting.
+20207fa0	Previous match
+aa5675a3	Search the manual
+2fe966af	Next
+1b310d90	Next match
+9a74cc03	Remove background
+2d023dea	Exit
+ba5d2abf	No clipboard available.
+f2b66c0c	Timeline tracks
+3d3e005b	● Recording  {0}   (press F10 or click Stop to finish)

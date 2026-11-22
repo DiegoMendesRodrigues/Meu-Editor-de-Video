@@ -14,22 +14,22 @@ Documentos complementares, que não são repetidos aqui:
 
 ## Visão geral
 
-O **Meu Editor de Vídeo** é um editor de vídeo não linear para Windows, com interface em português do Brasil. Ele faz edição em múltiplas trilhas, pré-visualização, exportação, textos, composição 2,5D, áudio e recursos de IA.
+O **Meu Editor de Vídeo** é um editor de vídeo não linear para Windows, com porte em andamento para Linux (Debian/Ubuntu) e macOS. A interface é em português do Brasil, com traduções para outros cinco idiomas. Ele faz edição em múltiplas trilhas, pré-visualização, exportação, textos, composição 2,5D, áudio e recursos de IA.
 
 Características fundamentais:
 
 | Item | Valor no código |
 |---|---|
-| Runtime | .NET 10 (`net10.0` e `net10.0-windows`), `LangVersion latest`, `Nullable enable`, `TreatWarningsAsErrors` (`Directory.Build.props`) |
-| Interface | WPF (`UseWPF`) com MVVM via CommunityToolkit.Mvvm 8.4.2 (`ObservableProperty`, `RelayCommand`) |
-| Injeção de dependências | Microsoft.Extensions.Hosting 10.0.14 (`Host.CreateDefaultBuilder` em `src/MeuEditorDeVideo.App/App.xaml.cs`) |
+| Runtime | .NET 10 (`net10.0`), `LangVersion latest`, `Nullable enable`, `TreatWarningsAsErrors` (`Directory.Build.props`) |
+| Interface | Avalonia 12.1.6 (tema Fluent) com MVVM via CommunityToolkit.Mvvm 8.4.2 (`ObservableProperty`, `RelayCommand`) |
+| Injeção de dependências | Microsoft.Extensions.Hosting 10.0.14 (`Host.CreateDefaultBuilder` em `src/MeuEditorDeVideo.Desktop/App.axaml.cs`) |
 | Mídia | FFmpeg 9.0.2 (build `full_build shared`, GPL) acessado por FFmpeg.AutoGen 9.0.1.1 |
 | IA local | ONNX Runtime 1.24.4 (DirectML no Windows, Core ML no macOS arm64, CPU em todos); Whisper.net 1.9.1 (whisper.cpp) |
-| Áudio | NAudio.Wasapi 2.2.1 (saída) e DSP próprio em `src/MeuEditorDeVideo.AudioEngine/Dsp` |
+| Áudio | NAudio.Wasapi 2.2.1 (saída no Windows), SDL3 (saída no Linux e no macOS) e DSP próprio em `src/MeuEditorDeVideo.AudioEngine/Dsp` |
 | Visão computacional | OpenCvSharp4 4.13 |
 | Logs | Serilog (arquivo rotativo local) |
 | Licença | GPL-3.0-or-later (`LICENSE.md`; `Directory.Build.props`, `Copyright`) |
-| Plataforma alvo | Windows 11 x64 (`RuntimeIdentifier win-x64` no App). Porte em andamento para Linux (Debian/Ubuntu) e macOS: pacotes nativos escolhidos pela propriedade `MedPlataforma` (`Directory.Build.props`; ver `DEPENDENCIAS.md`) |
+| Plataforma alvo | Windows 11 x64 (`win-x64`). Porte em andamento para Linux (Debian/Ubuntu) e macOS: pacotes nativos escolhidos pela propriedade `MedPlataforma` (`Directory.Build.props`; ver `DEPENDENCIAS.md`) |
 | Processamento | 100% local. O único código com rede é o downloader de modelos e o verificador de atualizações (ver [Privacidade e segurança](#privacidade-e-segurança)) |
 
 Versão atual: `1.1.0` (`<Version>` em `Directory.Build.props`).
@@ -52,28 +52,28 @@ A solução (`MeuEditorDeVideo.sln`) tem 14 projetos em `src/`, 4 projetos de te
 | Motores | `TimelineEngine` | Avaliação da timeline em um instante (quais camadas aparecem e com qual transformação) e encaixe (snap). |
 | Motores | `MediaEngine` | FFmpeg: sondagem, decodificação, miniaturas, formas de onda, proxies, codificação e SVG. |
 | Motores | `ImageEngine` | Efeitos por quadro, LUT, máscaras, texto, rastreamento e refino de bordas. |
-| Motores | `AudioEngine` | Mixagem, DSP, análise de loudness e saída WASAPI. |
+| Motores | `AudioEngine` | Mixagem, DSP, análise de loudness e saída de áudio (WASAPI no Windows, SDL3 nos demais). |
 | Motores | `AIEngine` | Registro de modelos, pacotes `.medmodel`, sessões ONNX, segmentação, fala, cenas e melhoria de imagem. |
 | Motores | `RenderingEngine` | Compositor, pré-visualização e exportação (motor de renderização). |
 | Rede (isolado) | `ModelDownloads` | Único assembly com HTTP. Usado pela ferramenta "Baixar modelos de IA" e por Verificar atualizações. |
 | Apresentação | `Presentation` | View models, serviços de interface (`IDialogService`, `INavigationService`, atalhos, fluxos de projeto, tradução) e o despachante `UiThread`. `net10.0`, sem WPF nem Avalonia: roda e é testado em Windows, Linux e macOS. |
-| Apresentação | `App` | WPF: janelas, controles, implementação dos diálogos, composição (DI) e tratamento global de exceções. |
+| Apresentação | `Desktop` | Avalonia (assembly e executável `MeuEditorDeVideo`): janelas, controles, implementação dos diálogos, composição (DI) e tratamento global de exceções. `net10.0`, roda em Windows, Linux e macOS. |
 
 ### Grafo de dependências (referências de projeto)
 
 ```mermaid
 graph TD
-    App --> Presentation
+    Desktop --> Presentation
     Presentation --> Application
-    App --> Infrastructure
-    App --> ProjectEngine
-    App --> MediaEngine
-    App --> TimelineEngine
-    App --> ImageEngine
-    App --> AudioEngine
-    App --> AIEngine
-    App --> RenderingEngine
-    App --> ModelDownloads
+    Presentation --> Infrastructure
+    Presentation --> ProjectEngine
+    Presentation --> MediaEngine
+    Presentation --> TimelineEngine
+    Presentation --> ImageEngine
+    Presentation --> AudioEngine
+    Presentation --> AIEngine
+    Presentation --> RenderingEngine
+    Presentation --> ModelDownloads
 
     RenderingEngine --> TimelineEngine
     RenderingEngine --> MediaEngine
@@ -96,14 +96,14 @@ graph TD
     Core --> Domain
 ```
 
-`Presentation` referencia os mesmos projetos que `App` referenciava (Application, Infrastructure, motores e ModelDownloads); o diagrama mostra só a ligação principal. `UnitTests` (`net10.0`) referencia `Presentation`; `AppTests`, `MediaTests` e `IntegrationTests` (`net10.0-windows`) referenciam `App`.
+`Presentation` referencia Application, Infrastructure, os motores e ModelDownloads, e monta a composição comum (`Presentation/Hosting/EditorComposition.AddMeuEditor`); `Desktop` só acrescenta o que depende do Avalonia. `UnitTests` referencia `Presentation`; `DesktopTests` (Avalonia.Headless) referencia `Desktop`.
 
 Observações sobre o grafo:
 
 - `Domain` não tem nenhum `PackageReference`.
-- `Application` não referencia nenhum motor. Ele só enxerga as interfaces de `Core`. A ligação com as implementações é feita apenas em `App`.
-- `Infrastructure` não referencia `MediaEngine`. A detecção de hardware recebe como delegates o resumo dos codificadores e o teste de decodificação D3D11VA, que `App` passa na composição (ver `App.xaml.cs`, `IHardwareInfoService`).
-- `ImageEngine` usa WPF (`UseWPF`) para rasterizar texto (`src/MeuEditorDeVideo.ImageEngine/Text/TextRasterizer.cs`). Motores podem usar WPF; `Core` e `Domain` não podem.
+- `Application` não referencia nenhum motor. Ele só enxerga as interfaces de `Core`. A ligação com as implementações é feita apenas na composição (`EditorComposition` e `Desktop/App.axaml.cs`).
+- `Infrastructure` não referencia `MediaEngine`. A detecção de hardware recebe como delegates o resumo dos codificadores e o teste de decodificação D3D11VA, que a composição passa (ver `EditorComposition`, `IHardwareInfoService`).
+- Nenhum projeto usa WPF. O texto é rasterizado com SkiaSharp e HarfBuzz (`src/MeuEditorDeVideo.ImageEngine/Text/TextRasterizer.cs`).
 
 ### Regras impostas por testes de arquitetura
 
@@ -111,11 +111,11 @@ Os testes em `tests/MeuEditorDeVideo.UnitTests/Architecture/` (NetArchTest.Rules
 
 **`LayeringTests.cs`**
 
-- `Domain` não depende de `Core`, `Application`, `Infrastructure`, `App`, `System.Windows` nem `Microsoft.Extensions`.
-- `Core` não depende de `Application`, `Infrastructure`, `App` nem `System.Windows`.
-- `Application` não depende de nenhum motor (`ProjectEngine`, `MediaEngine`, `TimelineEngine`, `ImageEngine`, `AudioEngine`, `AIEngine`, `RenderingEngine`), nem de `Infrastructure`, `App` ou `System.Windows`.
-- Motores e `Infrastructure` não dependem de `App`, `Application` nem `Presentation`.
-- `Presentation` não referencia os assemblies do WPF (`PresentationFramework`, `PresentationCore`, `System.Xaml`, `WindowsBase`), do Avalonia nem `App`, e não usa `Microsoft.Win32`. `System.Windows.Input.ICommand` é permitido: vem da biblioteca base.
+- `Domain` não depende de `Core`, `Application`, `Infrastructure`, da interface, `System.Windows` nem `Microsoft.Extensions`.
+- `Core` não depende de `Application`, `Infrastructure`, da interface nem `System.Windows`.
+- `Application` não depende de nenhum motor (`ProjectEngine`, `MediaEngine`, `TimelineEngine`, `ImageEngine`, `AudioEngine`, `AIEngine`, `RenderingEngine`), nem de `Infrastructure`, da interface ou `System.Windows`.
+- Motores e `Infrastructure` não dependem da interface, de `Application` nem de `Presentation`.
+- `Presentation` não referencia os assemblies do WPF (`PresentationFramework`, `PresentationCore`, `System.Xaml`, `WindowsBase`), do Avalonia nem `Desktop`, e não usa `Microsoft.Win32`. `System.Windows.Input.ICommand` é permitido: vem da biblioteca base.
 
 **`PrivacyTests.cs`** (RF169, RNF005, CA016)
 
@@ -129,38 +129,40 @@ Para incluir um novo projeto de produto nas regras, adicione-o à lista `Product
 
 ## Composição e ciclo de vida
 
-A composição fica em `src/MeuEditorDeVideo.App/App.xaml.cs`. Não há contêiner fora dessa classe. Cada motor expõe um método de extensão `Add...` que `App.ConfigureServices` chama.
+A composição comum fica em `src/MeuEditorDeVideo.Presentation/Hosting/EditorComposition.cs` (`AddMeuEditor`): motores, casos de uso, view models e serviços que não dependem do toolkit. `src/MeuEditorDeVideo.Desktop/App.axaml.cs` (`ConfigureServices`) só acrescenta `IThemeService`, `IDialogService` e `MainWindow`. Não há contêiner fora dessas duas classes. Cada motor expõe um método de extensão `Add...` que `AddMeuEditor` chama. Os passos que não dependem do toolkit (idioma, recuperação, último projeto, reinício) ficam em `Presentation/Hosting/EditorStartup.cs`.
 
-### Sequência de inicialização (`OnStartup`)
+### Sequência de inicialização (`App.StartAsync`)
 
-1. **Caminhos** (`new AppPaths()`) e pasta de fontes do usuário em `ImageEngine.Text.FontCatalog.UserFontsFolder`.
-3. **Host** (`Host.CreateDefaultBuilder`):
-   - `UseMeuEditorInfrastructure(paths)` cria as pastas (`AppPaths.EnsureCreated`), configura o Serilog e registra `IAppPaths`, `ISettingsService` (`JsonSettingsService`) e `IExportTemplateStore`.
+`OnFrameworkInitializationCompleted` define `UiThread.Dispatcher = new AvaloniaUiDispatcher()`, põe `ShutdownMode.OnExplicitShutdown` (a janela de boas-vindas não pode encerrar o programa) e agenda `StartAsync`:
+
+1. `EditorStartup.WaitForPreviousInstance`: ao reiniciar pela troca de idioma, espera a instância anterior terminar.
+2. **Caminhos** (`new AppPaths()`) e pasta de fontes do usuário em `ImageEngine.Text.FontCatalog.UserFontsFolder`.
+3. **Preferências** (`UserPreferencesStoreFactory.Create`: registro no Windows, arquivo JSON nos demais), lidas antes do host.
+4. **Host** (`Host.CreateDefaultBuilder`):
+   - `UseMeuEditorInfrastructure(paths, preferenceStore)` cria as pastas (`AppPaths.EnsureCreated`), configura o Serilog e registra `IAppPaths`, `ISettingsService` (`JsonSettingsService`) e `IExportTemplateStore`.
    - `ConfigureServices` registra os demais serviços (lista na próxima subseção).
    - Os argumentos da linha de comando não entram no host.
-4. **Tratamento global de exceções** (`RegisterGlobalExceptionHandlers`, RNF010): ver a subseção própria.
-5. `_host.StartAsync()`.
-6. Log de início com `AppInfo.Version`.
-7. **Idioma** (`ApplyCulture` + `Localization.Translator.Load`): o idioma vem do registro (`JsonSettingsService` + `RegistryPreferencesStore`); sem valor, o do Windows (`SupportedLanguages.FromCulture`). Define a cultura das threads e de `FrameworkElement.LanguageProperty`, carrega `i18n\<idioma>.tsv`, traduz os `sys:String` de `App.Resources` e instala `LocalizationHook`. Ver [Idiomas e tradução](#idiomas-e-tradução).
+5. **Tratamento global de exceções** (`RegisterGlobalExceptionHandlers`, RNF010): ver a subseção própria.
+6. `_host.StartAsync()` e log de início com `AppInfo.Version`.
+7. **Idioma** (`EditorStartup.ResolveLanguage` + `ApplyLanguage`): o idioma salvo ou, sem valor, o do sistema (`SupportedLanguages.FromCulture`). Define a cultura das threads, carrega `i18n\<idioma>.tsv` e instala `Localization.LocalizationHook`. Ver [Idiomas e tradução](#idiomas-e-tradução).
 8. `IThemeService.Apply(settings.Theme)`.
-9. Cria e mostra `MainWindow` direto no editor, com um projeto novo "Sem título" (`IProjectService.CreateUntitled`); antes, oferece recuperar um autosave (`OfferRecoveryAsync`) e, se configurado, abre o último projeto.
-10. `AutosaveScheduler.Start()`.
-11. `IRenderQueueService.InitializeAsync()`: lê `render-queue\queue.json`. Trabalhos que estavam `Running` viram `Interrupted`, e a fila é salva de novo.
-12. `StartBackgroundMaintenance`, em `Task.Run` (não bloqueia a UI):
-    - `IHardwareInfoService.Get()` detecta CPU, memória, GPUs, discos e codificadores (`EncoderCatalog.HardwareSummary` testa cada codificador; pode levar alguns segundos).
-    - `ICacheMaintenance.Trim(limite)` reduz o cache ao limite de `PreviewCacheGigabytes` (mínimo 1 GB).
-12. Projeto inicial:
-    - Se houver um argumento `.med` existente (associação de arquivo, `StartupArguments.ProjectPath`), esse projeto é aberto.
-    - Caso contrário, se `OpenLastProjectOnStartup` estiver ligado e existir um projeto recente, abre o primeiro da lista.
-    - Falhas na abertura são registradas em log e não impedem a interface.
+9. **Boas-vindas**, se `UserPreferences.IsComplete` for falso. Se o idioma escolhido for outro, o programa reinicia nele.
+10. **Atalho global** (`GlobalHotkeys.Current = GlobalHotkeySupport.Create`): SharpHook, ou o atalho só com a janela em foco numa sessão Wayland.
+11. Cria e mostra `MainWindow` direto no editor, com um projeto novo "Sem título" (`IProjectService.CreateUntitled`), e passa a `ShutdownMode.OnMainWindowClose`.
+12. `EditorStartup.AfterMainWindowShownAsync`:
+    - `AutosaveScheduler.Start()`;
+    - `IRenderQueueService.InitializeAsync()`: lê `render-queue\queue.json`. Trabalhos que estavam `Running` viram `Interrupted`, e a fila é salva de novo;
+    - manutenção em segundo plano (`Task.Run`, não bloqueia a interface): `IHardwareInfoService.Get()` detecta CPU, memória, GPUs, discos e codificadores (`EncoderCatalog.HardwareSummary` testa cada codificador; pode levar alguns segundos) e `ICacheMaintenance.Trim(limite)` reduz o cache ao limite de `PreviewCacheGigabytes` (mínimo 1 GB);
+    - projeto inicial: um argumento `.med` existente (associação de arquivo, `StartupArguments.ProjectPath`); sem argumento, oferece recuperar um autosave (`OfferRecoveryAsync`) e, se não houver recuperação e `OpenLastProjectOnStartup` estiver ligado, abre o primeiro projeto recente. Falhas na abertura são registradas em log e não impedem a interface.
 
-### Encerramento (`OnExit`)
+### Encerramento (`App.ShutdownServicesAsync`)
 
-1. `AutosaveScheduler.DisposeAsync()` (cancela o loop).
-2. `IProjectService.CloseAsync()`: encerra a sessão de autosave do projeto atual (apaga a pasta de autosave).
-3. `_host.StopAsync(5 s)` e `Dispose`.
+Ao fechar a janela, `MainWindow` pergunta sobre alterações não salvas (`ProjectWorkflow.ConfirmDiscardOrSaveAsync`). Se o usuário escolher "Não", as alterações não salvas são descartadas junto com o autosave. Depois de confirmado, `MainWindow.BeforeClose` chama `ShutdownServicesAsync`:
 
-Ao fechar a janela, `MainWindow.OnClosing` pergunta sobre alterações não salvas (`ProjectWorkflow.ConfirmDiscardOrSaveAsync`). Se o usuário escolher "Não", as alterações não salvas são descartadas junto com o autosave.
+1. Descarta o atalho global (`GlobalHotkeys.Current`).
+2. Se for reinício pela troca de idioma, `EditorStartup.Relaunch` abre a nova instância (no macOS, relança o pacote `.app` com `open -n`).
+3. `EditorStartup.ShutdownAsync`: `AutosaveScheduler.DisposeAsync()` (idempotente) e `IProjectService.CloseAsync()`, que encerra a sessão de autosave do projeto atual (apaga a pasta de autosave).
+4. `_host.StopAsync(5 s)` e `Dispose`.
 
 ### Registro de serviços
 
@@ -168,20 +170,21 @@ Ao fechar a janela, `MainWindow.OnClosing` pergunta sobre alterações não salv
 |---|---|
 | `UseMeuEditorInfrastructure` (Infrastructure) | `IAppPaths`, `ISettingsService` → `JsonSettingsService`, `IExportTemplateStore` → `JsonExportTemplateStore`, Serilog |
 | `AddProjectEngine` (ProjectEngine) | `IProjectStore` → `MedProjectStore`, `IMediaLocator` → `MediaLocator`, `IAutosaveStore` → `AutosaveStore`, `IDomainJson` → `Format.DomainJson` |
-| `AddMediaEngine` (MediaEngine) | `MediaCache`, `IMediaProbe`, `IThumbnailProvider`, `IWaveformProvider`, `IProxyService` → `ProxyService`, `IVideoFrameSourceFactory`, `IAudioSampleSourceFactory`, `IScreenRecorder` → `Recording.ScreenRecorder` (processo `ffmpeg.exe` com gdigrab e DirectShow; `Screens()` lista os monitores em pixels físicos e `ScreenRecordingOptions.Area` recorta um deles com `-offset_x/-offset_y/-video_size`; a janela `ScreenRecordWindow` registra F10 com `RegisterHotKey` só durante a gravação; o exe é copiado para `ffmpeg\` pelo `.csproj` do App) |
+| `AddMediaEngine` (MediaEngine) | `MediaCache`, `IMediaProbe`, `IThumbnailProvider`, `IWaveformProvider`, `IProxyService` → `ProxyService`, `IVideoFrameSourceFactory`, `IAudioSampleSourceFactory`, `IScreenRecorder` → `Recording.ScreenRecorder` (processo `ffmpeg.exe` com gdigrab e DirectShow; `Screens()` lista os monitores em pixels físicos e `ScreenRecordingOptions.Area` recorta um deles com `-offset_x/-offset_y/-video_size`; a janela `ScreenRecordWindow` registra F10 por `IGlobalHotkey` só durante a gravação; o exe é copiado para `ffmpeg\` por `src/AppContent.props`). A gravação tem uma implementação por sistema (`WindowsScreenRecorder`, `LinuxScreenRecorder` com x11grab, `MacScreenRecorder` com avfoundation) |
 | `AddPreviewEngine` (RenderingEngine) | `AddAudioEngine` (`IAudioAnalysisService`), `ICompositor` → `CpuCompositor`, `IAudioOutputFactory`, `PreviewEngine` (transient), `IRenderEngine` → `RenderEngine` |
-| `AddMeuEditorApplication` (Application) | `IProjectService` → `ProjectService`, `AutosaveScheduler`, `IMediaImportService`, `IRenderQueueService` → `RenderQueueService`, `IContentPackStore` → `Packs.ContentPackStore` (pacotes .medpack em `%LOCALAPPDATA%\MeuEditorDeVideo\Pacotes`; extrai só `figurinhas/`, `titulos/*.medtitle` e `modelos/*.med`, sem caminhos e com limite de tamanho). Pacotes incluídos no programa ficam em `pacotes\<id>` ao lado do exe (copiados de `resources/stickers` pelo `.csproj` do App; `ContentPackStore.BuiltInRoot`), são só leitura (`IsBuiltIn`, não podem ser removidos) e um pacote instalado com o mesmo id tem precedência. As 40 figurinhas do pacote Básico são arte original gerada por `scripts/generate-stickers.py` (Pillow) |
+| `AddMeuEditorApplication` (Application) | `IProjectService` → `ProjectService`, `AutosaveScheduler`, `IMediaImportService`, `IRenderQueueService` → `RenderQueueService`, `IContentPackStore` → `Packs.ContentPackStore` (pacotes .medpack em `%LOCALAPPDATA%\MeuEditorDeVideo\Pacotes`; extrai só `figurinhas/`, `titulos/*.medtitle` e `modelos/*.med`, sem caminhos e com limite de tamanho). Pacotes incluídos no programa ficam em `pacotes\<id>` ao lado do exe (copiados de `resources/stickers` por `src/AppContent.props`; `ContentPackStore.BuiltInRoot`), são só leitura (`IsBuiltIn`, não podem ser removidos) e um pacote instalado com o mesmo id tem precedência. As 40 figurinhas do pacote Básico são arte original gerada por `scripts/generate-stickers.py` (Pillow) |
 | `AddAiEngine` (AIEngine) | `IModelRegistry` → `ModelRegistry`, `OnnxSessionFactory`, `MatteCache`, `ISegmentationService`, `IAiFrameProcessor` (inclui `Interpolate`, fluxo óptico Farneback em `FrameInterpolator`), `ISceneDetectionService`, `IReframeService` → `ReframeService`, `IMediaAnalysisService` → `MediaAnalysisService` (etiquetas da biblioteca e "Combinar cor"), `IImageEnhancementService`, `IVoiceActivityService`, `IVoiceEnhancementService`, `ISpeechRecognitionService` → `WhisperTranscriber` |
 | `AddModelDownloads` (ModelDownloads) | `IModelDownloader` → `HttpModelDownloader`, recebendo `ModelCatalog.AllowedHosts`; `IUpdateChecker` → `HttpUpdateChecker` |
-| `App.ConfigureServices` | `CatalogModelInstaller`, `IThemeService`, `INavigationService`, `IDialogService`, `IProjectWorkflow`, view models, `MainWindow`, `ShortcutService`, `ICacheMaintenance`, `IHardwareInfoService` |
+| `AddMeuEditor` (Presentation) | Todos os anteriores, mais `CatalogModelInstaller`, `IHelpKnowledgeBase`, `INavigationService`, `IProjectWorkflow`, view models, `ShortcutService`, `ICacheMaintenance`, `IHardwareInfoService` |
+| `App.ConfigureServices` (Desktop) | `AddMeuEditor`, `IThemeService` → `ThemeService`, `IDialogService` → `DialogService`, `MainWindow` |
 
 `ImageEngine` e `TimelineEngine` não têm método `Add...`. Os motores que os usam recebem as classes diretamente.
 
 ### Tratamento global de exceções (RNF010)
 
-`RegisterGlobalExceptionHandlers` em `App.xaml.cs`:
+`RegisterGlobalExceptionHandlers` em `Desktop/App.axaml.cs`:
 
-- `DispatcherUnhandledException`: registra no log, mostra a mensagem pelo `IDialogService` e marca como tratada. Se a exceção for `MedException`, usa o `MedError` dela. Caso contrário, usa `MedError.Unexpected` (código `MED-0000`, mensagem genérica em pt-BR).
+- `Dispatcher.UIThread.UnhandledException`: registra no log, mostra a mensagem pelo `IDialogService` e marca como tratada. Se a exceção for `MedException`, usa o `MedError` dela. Caso contrário, usa `MedError.Unexpected` (código `MED-0000`, mensagem genérica em pt-BR).
 - `AppDomain.CurrentDomain.UnhandledException`: registra como crítica.
 - `TaskScheduler.UnobservedTaskException`: registra e marca como observada.
 
@@ -478,13 +481,19 @@ Arquivos: `src/MeuEditorDeVideo.ModelDownloads/`. É o **único** assembly do pr
 - `HttpUpdateChecker.cs` (`IUpdateChecker`, Core/Updates): GET em `https://meueditordevideos.aplicativoia.online/version?language=<código>` (`UpdateEndpoints.UrlFor`: de, es, fr-FR, en, pt-BR, pt), só HTTPS, sem redirecionamentos nem cookies, resposta até 64 KB. Lê `version`, `languages`, `operatingSystem`, `author`, `microsoftStoreLink` e `installLink`; falhas viram `IOException`. No App, `Services/UpdateCheckService` compara `version` com `AppInfo.Version` (diferente = versão nova), mostra `Views/Dialogs/UpdateWindow` e, ao fechar, grava `LastUpdateCheck` (registro `LastCheck`). Roda por Ajuda › Verificar atualizações e, ao abrir, quando `CheckForNewVersions` está ligado e passaram mais de 30 dias de `LastCheck` (`UpdateEndpoints.IsDue`). Links só viram clicáveis se forem http/https.
 - `ModelDownloadsServiceCollectionExtensions.cs`: registro. A assinatura não expõe tipos de rede, para que `App` não passe a depender de `System.Net.Http`.
 
-### App
+### Desktop
 
-Arquivos: `src/MeuEditorDeVideo.App/`.
+Arquivos: `src/MeuEditorDeVideo.Desktop/` (`net10.0`, Avalonia 12, assembly e executável `MeuEditorDeVideo`). Testes em `tests/MeuEditorDeVideo.DesktopTests` (Avalonia.Headless: janelas desenhadas sem tela e capturadas em PNG).
 
-- `App.xaml.cs`: composição, ciclo de vida, exceções globais.
-- `Services/`: `ThemeService.cs` (tema escuro, claro ou do sistema), `DialogService.cs` (implementação WPF de `IDialogService`), `WpfUiDispatcher.cs` (`IUiDispatcher` sobre o `Dispatcher` do WPF), `Help/` (manual em `FlowDocument`).
-- `Controls/FrameImage.cs` copia o `DisplayFrame` da prévia para um `WriteableBitmap`; `Converters/BgraBitmaps.cs` mostra miniaturas `BgraImage`; `Controls/KeyMapping.cs` converte `Key`/`ModifierKeys` em `MedKey`/`MedModifiers`.
+- `App.axaml.cs`: composição, ciclo de vida, exceções globais. `Program.cs`: ponto de entrada.
+- `Themes/`: `Palette.axaml` (pincéis `Med.*` por `ThemeVariant`) e `Styles.axaml` (classes `med-panel`, `med-section-title`, `med-muted`, `med-accent`, `med-toolbar`, `med-icon`).
+- Ícones: fonte `Med Icons` (`resources/fonts/MedIcons.ttf`, gerada por `scripts/build-icon-font.py` a partir da Fluent UI System Icons, MIT), com os mesmos pontos de código da Segoe Fluent Icons. Um ícone novo exige uma entrada em `resources/fonts/icones.json` e gerar a fonte de novo; `BaseTests` falha se algum ícone citado no código do Desktop ou do Presentation não tiver glifo.
+- `Services/`: `ThemeService.cs`, `DialogService.cs` (implementação de `IDialogService`), `DialogHost.cs` e `ModalLoop.cs` (diálogos modais síncronos, como a interface pede), `AvaloniaUiDispatcher.cs` (`IUiDispatcher`), `NativeMenuBuilder.cs` (menu nativo do macOS), `IGlobalHotkey.cs` e `SharpHookGlobalHotkey.cs` (F10 da gravação; no Wayland vale só com a janela em foco), `Help/MarkdownControls.cs` (manual com sumário e busca).
+- `Controls/`: controles desenhados (`TimelineControl`, `CropCanvas`, `CompositionOverlay`, `TransformOverlay`, `ClipWaveform`, `CurveEditor`, `ColorWheel`, `MonitorRuler`, `LevelMeter`); `FrameImage.cs` copia o `DisplayFrame` da prévia para um `WriteableBitmap`; `KeyMapping.cs` converte as teclas do Avalonia em `MedKey`/`MedModifiers`.
+- `Converters/`: `BgraBitmaps.cs` (miniaturas `BgraImage`), `TranslateConverter.cs` e outros.
+- `Localization/LocalizationHook.cs`: traduz a árvore visual ao carregar (textos, `ToolTip.Tip`, `AutomationProperties.Name`, menus e abas abertos depois).
+- `Views/`: `MainWindow`, `EditorView`, `Panels/`, `Dialogs/` (janelas em `.axaml` ou só em código), `ViewMappings` e os modelos do inspetor.
+- `app.manifest`: DPI por monitor (PerMonitorV2) e Windows 10/11 como sistemas suportados. `BuiltInComInteropSupport` fica ligado no `.csproj` porque o NAudio (WASAPI) e a fala SAPI usam COM (`RuntimeConfigTests`).
 
 ### Presentation
 
@@ -492,12 +501,11 @@ Arquivos: `src/MeuEditorDeVideo.Presentation/` (`net10.0`).
 
 - `ViewModels/`: `ShellViewModel`, `EditorViewModel`, `Preview/PreviewViewModel.cs` (publica cada quadro como um `DisplayFrame` novo), `Timeline/`, `Inspector/`, `Media/`, `Export/`, `SettingsViewModel`, `ModelCatalogViewModel`, `ModelManagerViewModel`.
 - `Services/`: `IDialogService.cs` (cada janela pedida por um view model é um método tipado), `ProjectWorkflow.cs` (fluxos de abrir, salvar, fechar, empacotar, cópia de segurança), `ShortcutService.cs` (`ShortcutCatalog` e `ShortcutService`; no macOS a combinação aparece com Cmd e Option, mas é gravada como Ctrl e Alt), `StartupArguments.cs`, `NavigationService.cs`, `SystemShell.cs` (abrir endereços e mostrar arquivos na pasta em cada sistema), `UpdateCheckService.cs`, `Help/` (relatório do sistema, Markdown do manual e `HelpDocuments`).
-- `Input/`: `MedKey` e `MedModifiers`, com os mesmos nomes e valores do WPF; o texto gravado no `settings.json` ("Ctrl+OemPlus") não muda.
+- `Input/`: `MedKey` e `MedModifiers`, com os mesmos nomes e valores das teclas do WPF usado até a versão 1.1; o texto gravado no `settings.json` ("Ctrl+OemPlus") não muda.
 - `Threading/UiThread.cs`: `IUiDispatcher` (agendar na thread da interface, temporizadores, evento por quadro). Sem interface (testes), `Post` roda na hora e os temporizadores não disparam.
 - `Media/`: `ArgbColor`, `PointD`, `DisplayFrame` e `ImageFiles` (PNG/JPEG via SkiaSharp).
 - `Localization/Translator.cs`.
-- `Controls/`: `TimelineControl.cs` (trilhas e régua), `CompositionOverlay.cs`, `CurveEditor.cs`, `ColorWheel.cs`, `LevelMeter.cs`.
-- `Views/`: `MainWindow`, `EditorView`, `Panels/`, `Dialogs/`.
+- `Hosting/`: `EditorComposition.cs` (composição comum) e `EditorStartup.cs` (passos da inicialização e do reinício).
 
 ---
 
@@ -686,7 +694,7 @@ Ajuda › Assistente virtual (Shift+F1, id `app.assistente`) responde dúvidas s
 
 O modelo sugerido é o Phi-4-mini-instruct ONNX int4 para DirectML (`phi4-mini` no catálogo, MIT, cerca de 3,2 GB), escolhido num teste com 20 perguntas em pt-BR e inglês contra o Qwen3-1.7B: mais fatos corretos, idioma certo, recusa quando o manual não cobre o assunto e cerca de 85 tokens/s numa RTX 3070.
 
-No App, `ViewModels/AssistantViewModel.cs` e `Views/Panels/AssistantPanel.xaml` formam o painel, numa coluna própria à direita de Propriedades (`EditorView.MostrarAssistente`, que vale para todos os modos do layout). Sem o modelo instalado, o painel mostra as seções encontradas (`AssistantSourceViewModel.Excerpt`) com **Abrir no manual** (`HelpWindow.ShowFor(owner, título)` seleciona a seção no sumário) e um aviso que instala o modelo pelo `ModelCatalogViewModel`. As instruções do modelo ficam fora de `origem.json` (`SKIP_FILES` em `scripts/extract-strings.py`), porque já estão escritas em cada idioma.
+No Desktop, `AssistantViewModel` (Presentation) e `Views/Panels/AssistantPanel.axaml` formam o painel, numa coluna própria à direita de Propriedades (`EditorView.MostrarAssistente`, que vale para todos os modos do layout). Sem o modelo instalado, o painel mostra as seções encontradas (`AssistantSourceViewModel.Excerpt`) com **Abrir no manual** (`HelpWindow.ShowFor(owner, título)` seleciona a seção no sumário) e um aviso que instala o modelo pelo `ModelCatalogViewModel`. As instruções do modelo ficam fora de `origem.json` (`SKIP_FILES` em `scripts/extract-strings.py`), porque já estão escritas em cada idioma.
 
 ### Segurança dos modelos
 
@@ -809,7 +817,7 @@ Definidas em `src/MeuEditorDeVideo.Core/Abstractions/ISettingsService.cs`. Cada 
 | Campo | Padrão | Uso |
 |---|---|---|
 | `UserName` | `""` | Nome completo (Configurações › Geral › Usuário). Guardado no registro (`Name`). |
-| `Language` | idioma do Windows ou `en` | `de`, `es`, `fr`, `en`, `pt-BR` ou `pt-PT` (`SupportedLanguages`). Guardado no registro (`Language`). Ao salvar um idioma diferente, `SettingsWindow.ShowFor` chama `App.RestartForLanguage`: fecha a janela pelo caminho normal (pergunta sobre alterações não salvas) e, no início de `OnExit` (antes de qualquer `await`), abre de novo o executável com `--aguardar-processo=<pid>` e o projeto salvo; a nova instância espera a anterior terminar. |
+| `Language` | idioma do Windows ou `en` | `de`, `es`, `fr`, `en`, `pt-BR` ou `pt-PT` (`SupportedLanguages`). Guardado no registro (`Language`). Ao salvar um idioma diferente, `SettingsWindow.ShowFor` chama `App.RestartForLanguage`: fecha a janela pelo caminho normal (pergunta sobre alterações não salvas) e, no início de `App.ShutdownServicesAsync`, `EditorStartup.Relaunch` abre de novo o executável (no macOS, o pacote `.app` com `open -n`) com `--aguardar-processo=<pid>` e o projeto salvo; a nova instância espera a anterior terminar. |
 | `CheckForNewVersions` | `true` | Verificar mensalmente: ao abrir, consulta o serviço de versões quando passaram mais de 30 dias de `LastCheck`. Registro: `CheckForNewVersions`. |
 | `LastUpdateCheck` | data da primeira gravação | Registro: `LastCheck`. |
 | `Theme` | `Dark` | `Dark`, `Light` ou `System`. |
@@ -839,7 +847,7 @@ Definidas em `src/MeuEditorDeVideo.Core/Abstractions/ISettingsService.cs`. Cada 
 
 - Catálogo: `src/MeuEditorDeVideo.Presentation/Services/ShortcutService.cs`, classe `ShortcutCatalog`.
 - Cada ação tem um id estável (`area.acao`, ex.: `reproducao.reproduzir`), rótulo, categoria e combinações padrão (a primeira é a principal).
-- Combinações são guardadas como texto nos nomes do WPF (`Ctrl+Shift+S`, `Space`, `Ctrl+OemPlus`) em `AppSettings.Shortcuts`.
+- Combinações são guardadas como texto nos nomes de tecla do WPF usado até a versão 1.1, que `MedKey` mantém (`Ctrl+Shift+S`, `Space`, `Ctrl+OemPlus`) em `AppSettings.Shortcuts`.
 - `ShortcutService.Find(key, modifiers)` resolve a ação. Ações alteradas pelo usuário têm prioridade sobre o padrão.
 - Ações sem combinação ficam com texto vazio.
 
@@ -897,7 +905,7 @@ O CI não baixa modelos de IA, então os testes de IA que dependem de modelo sã
 
 1. `pwsh scripts/fetch-deps.ps1`: baixa e verifica as dependências nativas listadas em `scripts/deps.lock.json` (FFmpeg `9.0.2` `full_build shared`, MODNet e `VC_redist.x64.exe`). Cada arquivo é conferido por SHA-256. Downloads ficam em `deps/.downloads`. Ao primeiro uso de uma entrada sem hash, o script calcula o hash e **grava no lock**; esse hash deve ser conferido e commitado. `-Strict` recusa hashes ausentes (usado no CI). `-Force` refaz tudo.
 2. `dotnet build MeuEditorDeVideo.sln -c Release`.
-3. Durante o build do `App` (`src/MeuEditorDeVideo.App/MeuEditorDeVideo.App.csproj`):
+3. Durante o build do `Desktop` (`src/MeuEditorDeVideo.Desktop/MeuEditorDeVideo.Desktop.csproj`, que importa `src/AppContent.props`):
    - copia `deps\ffmpeg\bin\*.dll` para `ffmpeg\` (se a pasta existir);
    - copia `deps\ai-models\` (MODNet) para `ai-models\`, além de `resources\ai-models\incluidos\`;
    - copia `resources\ai-models\modelos.json` e `licencas\*.txt` para `catalogo-ia\`;
@@ -938,15 +946,15 @@ A orientação de assinatura está em [INSTALADOR.md](INSTALADOR.md).
 
 ### Janela de boas-vindas
 
-`App.OnStartup` lê o registro (`RegistryPreferencesStore.Read`) **antes** de montar o host, porque o `JsonSettingsService` completa os valores que faltam. Se `UserPreferences.IsComplete` for falso (algum de `Name`, `Language`, `ThemeColor`, `CheckForNewVersions` ou `LastCheck` ausente ou vazio), `AskPreferencesAsync` mostra `Views/Dialogs/WelcomeWindow` antes da janela principal (com `ShutdownMode` explícito enquanto ela está aberta). A janela só fecha por **Salvar as preferências**, com todos os campos preenchidos; grava os cinco valores no registro (`LastCheck` = agora) e atualiza o `ISettingsService`. Se o idioma escolhido for diferente do carregado, o programa reinicia (`--aguardar-processo=<pid>`).
+`App.StartAsync` lê as preferências (`IUserPreferencesStore.Read`: registro no Windows, arquivo JSON nos demais) **antes** de montar o host, porque o `JsonSettingsService` completa os valores que faltam. Se `UserPreferences.IsComplete` for falso (algum de `Name`, `Language`, `ThemeColor`, `CheckForNewVersions` ou `LastCheck` ausente ou vazio), `AskPreferencesAsync` mostra `Views/Dialogs/WelcomeWindow` antes da janela principal (com `ShutdownMode` explícito enquanto ela está aberta). A janela só fecha por **Salvar as preferências**, com todos os campos preenchidos; grava os cinco valores no repositório de preferências (`LastCheck` = agora) e atualiza o `ISettingsService`. Se o idioma escolhido for diferente do carregado, o programa reinicia (`--aguardar-processo=<pid>`).
 
 ### Idiomas e tradução
 
-- O texto de origem da interface é o português do Brasil escrito no código e no XAML. Não há chaves de recurso por idioma: o texto em pt-BR é a chave.
-- `scripts/extract-strings.py` extrai os textos visíveis (XAML, `sys:String`, literais C# e catálogos) para `resources/i18n/origem.json`.
-- Cada idioma tem `resources/i18n/<código>.tsv` com linhas `id⇥tradução`; o id são os 8 primeiros hexadecimais do SHA-256 do texto de origem em UTF-8 (`Translator.IdOf`). `\n`, `\t` e `\\` são escapados. Texto sem linha fica em pt-BR. O csproj do App copia a pasta para `i18n\` na saída.
-- `App/Localization/Translator.cs`: `T(texto)` procura a tradução exata, depois sem espaços nas pontas, depois em modelos com `{0}` (os valores capturados também são traduzidos, por exemplo "clipes"), depois linha a linha e no formato "Rótulo: valor". `F(formato, args)` traduz o formato antes de formatar.
-- `App/Localization/LocalizationHook.cs`: manipuladores de classe para `Loaded` traduzem `TextBlock.Text`, `Content`, `Header`, `ToolTip`, `Window.Title` e `AutomationProperties.Name/HelpText` com `SetCurrentValue`, inclusive valores que mudam depois por binding. As mensagens de `IDialogService` e `MessageBox` passam por `Translator.T`/`F`.
+- O texto de origem da interface é o português do Brasil escrito no código e no AXAML. Não há chaves de recurso por idioma: o texto em pt-BR é a chave.
+- `scripts/extract-strings.py` extrai os textos visíveis (AXAML, incluindo `ToolTip.Tip` e `Watermark`, literais C# e catálogos) para `resources/i18n/origem.json`.
+- Cada idioma tem `resources/i18n/<código>.tsv` com linhas `id⇥tradução`; o id são os 8 primeiros hexadecimais do SHA-256 do texto de origem em UTF-8 (`Translator.IdOf`). `\n`, `\t` e `\\` são escapados. Texto sem linha fica em pt-BR. `src/AppContent.props` copia a pasta para `i18n\` na saída.
+- `Presentation/Localization/Translator.cs`: `T(texto)` procura a tradução exata, depois sem espaços nas pontas, depois em modelos com `{0}` (os valores capturados também são traduzidos, por exemplo "clipes"), depois linha a linha e no formato "Rótulo: valor". `F(formato, args)` traduz o formato antes de formatar.
+- `Desktop/Localization/LocalizationHook.cs`: manipuladores de classe do Avalonia (`Loaded`, abertura de menus e abas) traduzem `TextBlock.Text`, `Content`, `Header`, `ToolTip.Tip`, `Window.Title` e `AutomationProperties.Name/HelpText` com `SetCurrentValue`, inclusive valores que mudam depois por binding. As mensagens de `IDialogService` passam por `Translator.T`/`F`.
 - **Ao criar ou mudar um texto visível**: rode `python scripts/extract-strings.py` e acrescente a tradução nos cinco `.tsv`. `TranslatorTests.Arquivos_de_traducao_correspondem_a_origem` confere que cada id existe na origem e que os marcadores `{n}` são os mesmos.
 - O manual tem um arquivo por idioma (`documentation/MANUAL_DO_USUARIO.<código>.md`); `HelpWindow.ManualPathFor` escolhe o do idioma atual e recai no pt-BR.
 
@@ -994,7 +1002,7 @@ A orientação de assinatura está em [INSTALADOR.md](INSTALADOR.md).
 
 1. Adicione a constante do id em `ShortcutCatalog` (`src/MeuEditorDeVideo.Presentation/Services/ShortcutService.cs`), no padrão `área.ação` (ex.: `linha.dividir`).
 2. Adicione um `ShortcutAction(id, "Rótulo", "Categoria", "Combinação padrão")` em `ShortcutCatalog.All`.
-3. Trate a ação onde ela é disparada: `Views/EditorView.xaml.cs` (`switch` sobre `Shortcuts?.Find(...)`) ou `Controls/TimelineControl.cs`, se for de linha do tempo.
+3. Trate a ação onde ela é disparada: `Views/EditorView.axaml.cs` (`switch` sobre `Shortcuts?.Find(...)`) ou `Controls/TimelineControl.cs`, se for de linha do tempo.
 4. Não renomeie ids existentes: eles são gravados em `settings.json`.
 5. Testes: `tests/MeuEditorDeVideo.UnitTests/Application/ShortcutServiceTests.cs`.
 
@@ -1022,7 +1030,7 @@ Comparação com `ESPECIFICACAO_TECNICA_E_FUNCIONAL.md` e `documentation/PLANO_D
 |---|---|---|---|
 | Composição | Compositor em Direct3D 11 com shaders HLSL (Vortice.Windows). Pipeline duplo GPU/CPU (plano, risco L9). | Compositor **só em CPU** (`RenderingEngine/CpuCompositor.cs`). O plano já previa o CPU como fallback. | Vortice.Windows não está em nenhum `.csproj` nem em `Directory.Packages.props`. |
 | Exibição | Superfície D3D11 compartilhada exibida por `D3DImage` (D3D9Ex); `WriteableBitmap` como fallback. | `WriteableBitmap` (`Presentation/ViewModels/Preview/PreviewViewModel.cs`). | Nenhum uso de `D3DImage`. |
-| Texto | DirectWrite/Direct2D via Vortice, renderizado na GPU. | Texto rasterizado na CPU com `FormattedText` e `DrawingVisual` do WPF (`ImageEngine/Text/TextRasterizer.cs`). | Sem interop com DirectWrite. |
+| Texto | DirectWrite/Direct2D via Vortice, renderizado na GPU. | Texto rasterizado na CPU com SkiaSharp e HarfBuzz (`ImageEngine/Text/TextRasterizer.cs`). | Sem interop com DirectWrite. |
 | Uso de D3D11 | Composição, texto e exibição. | Só **decodificação** por D3D11VA no FFmpeg (`MediaEngine/Native/StreamDecoder.cs`, `HardwareProbe.cs`). Efeitos de IA usam DirectML (ONNX). | |
 | FFmpeg | 7.x, build GPL v3, shared. | FFmpeg **9.0.2** `full_build shared` (GPL), via FFmpeg.AutoGen 9.0.1.1. Versão fixada em `scripts/deps.lock.json`. | DEPENDENCIAS.md está consistente com o lock. |
 | Filtros de áudio | Filtros do FFmpeg: `loudnorm`, `acompressor`, `equalizer`, `silencedetect`, `afftdn`. | **Não usados.** DSP próprio em `AudioEngine/Dsp/`. Loudness BS.1770-4 próprio (`Dsp/AudioAnalysis.cs`). | FFmpeg é usado só para decodificar e codificar. |

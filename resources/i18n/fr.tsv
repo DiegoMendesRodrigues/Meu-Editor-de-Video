@@ -2530,3 +2530,30 @@ bbebac15	Impossible de créer la surface de dessin.
 16956c08	Fabricant {0}
 5304eae0	Impossible d'encoder l'image.
 97bf24fe	Impossible de préparer l'image.
+2ac71cca	 {0} caméra(s) et {1} microphone(s) trouvés.
+3ab49fcd	L'enregistrement d'écran n'est pas disponible sur ce système.
+54a4bf26	L'enregistrement va commencer.
+e4ce7c09	Précédent
+788210bc	Lorsque vous cliquez sur Enregistrer, le programme est réduit et l'enregistrement démarre après un compte à rebours de 5 secondes. Pour l'arrêter, rouvrez le programme (depuis la barre des tâches ou le Dock) et cliquez sur Arrêter.
+ab917f86	Appliquer le nouvel arrière-plan
+de3a9c77	Saisissez le texte. La narration est générée avec les voix installées sur macOS (sans internet) et placée à la position du curseur, sur une piste audio libre.
+c98c47b1	Saisissez le texte. La narration est générée avec espeak-ng (sans internet) et placée à la position du curseur, sur une piste audio libre.
+07156da5	Informations
+d149aeaf	Modifie le format du projet (actuellement {0}) et repositionne chaque clip vidéo et image pour couvrir le nouveau cadre. Les textes restent inchangés. Tout peut être annulé avec Ctrl+Z.
+707f35de	Aucune fenêtre ouverte pour afficher le sélecteur de fichiers.
+ab173dd7	Aucune voix trouvée. Installez le paquet espeak-ng (par exemple, sudo apt install espeak-ng).
+67353f3c	Aucune voix trouvée. Installez des voix dans Réglages Système › Accessibilité › Contenu énoncé.
+992ff84a	Introuvable
+bb372cbd	Ne pas enregistrer
+b84ba1f1	L'application n'a pas encore démarré.
+12e7df83	Le hook clavier n'a pas démarré à temps.
+ea469185	Le hook clavier s'est arrêté dès son démarrage.
+20207fa0	Occurrence précédente
+aa5675a3	Rechercher dans le manuel
+2fe966af	Suivant
+1b310d90	Occurrence suivante
+9a74cc03	Supprimer l'arrière-plan
+2d023dea	Quitter
+ba5d2abf	Pas de presse-papiers.
+f2b66c0c	Pistes de la timeline
+3d3e005b	● Enregistrement  {0}   (appuyez sur F10 ou cliquez sur Arrêter pour terminer)

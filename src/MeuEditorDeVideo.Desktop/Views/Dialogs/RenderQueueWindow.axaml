@@ -1,0 +1,74 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels.Export"
+        x:Class="MeuEditorDeVideo.Desktop.Views.Dialogs.RenderQueueWindow"
+        x:DataType="vm:RenderQueueViewModel"
+        Title="Fila de renderização"
+        Width="760"
+        Height="460"
+        MinWidth="560"
+        MinHeight="300"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Background="{DynamicResource Med.WindowBackground}"
+        Foreground="{DynamicResource Med.Text}">
+    <Window.Styles>
+        <Style Selector="Button.row-button">
+            <Setter Property="Padding" Value="10,3" />
+        </Style>
+    </Window.Styles>
+    <DockPanel>
+        <Border DockPanel.Dock="Bottom" BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,1,0,0" Padding="12,10">
+            <DockPanel>
+                <Button DockPanel.Dock="Right" Content="Fechar" IsCancel="True" Click="Fechar_Click" Padding="16,6"
+                        AutomationProperties.Name="Fechar" />
+                <Button Content="Limpar concluídas" Command="{Binding ClearFinishedCommand}" Padding="12,6" HorizontalAlignment="Left"
+                        AutomationProperties.Name="Limpar concluídas" />
+            </DockPanel>
+        </Border>
+        <Grid>
+            <TextBlock Text="Nenhuma exportação na fila." Classes="med-muted" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       IsVisible="{Binding IsEmpty}" />
+            <ListBox x:Name="Lista" ItemsSource="{Binding Jobs}" AutomationProperties.Name="Exportações"
+                     Background="Transparent" BorderThickness="0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:RenderJobViewModel">
+                        <Border BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,0,1" Padding="8,8"
+                                AutomationProperties.Name="{Binding Name}" AutomationProperties.ItemStatus="{Binding StatusText}">
+                            <StackPanel>
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="{Binding StatusText}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                </DockPanel>
+                                <TextBlock Classes="med-muted">
+                                    <Run Text="{Binding Template, Mode=OneWay}" /><Run Text=" · " /><Run Text="{Binding Format, Mode=OneWay}" />
+                                </TextBlock>
+                                <ProgressBar Height="6" Margin="0,6,0,4" Maximum="100" Value="{Binding Percent}"
+                                             AutomationProperties.Name="Progresso da exportação" IsVisible="{Binding IsRunning}" />
+                                <TextBlock Text="{Binding Detail}" TextWrapping="Wrap" Classes="med-muted" />
+                                <StackPanel Orientation="Horizontal" Margin="0,6,0,0" Spacing="6">
+                                    <Button Content="Cancelar" Classes="row-button" AutomationProperties.Name="Cancelar exportação"
+                                            Command="{Binding $parent[ListBox].((vm:RenderQueueViewModel)DataContext).CancelCommand}"
+                                            CommandParameter="{Binding}" IsVisible="{Binding CanCancel}" />
+                                    <Button Content="Retomar" Classes="row-button" AutomationProperties.Name="Retomar exportação"
+                                            Command="{Binding $parent[ListBox].((vm:RenderQueueViewModel)DataContext).ResumeCommand}"
+                                            CommandParameter="{Binding}" IsVisible="{Binding CanResume}" />
+                                    <Button Content="Abrir" Classes="row-button" AutomationProperties.Name="Abrir arquivo exportado"
+                                            Command="{Binding $parent[ListBox].((vm:RenderQueueViewModel)DataContext).OpenFileCommand}"
+                                            CommandParameter="{Binding}" IsVisible="{Binding CanOpen}" />
+                                    <Button Content="Mostrar na pasta" Classes="row-button" AutomationProperties.Name="Mostrar na pasta"
+                                            Command="{Binding $parent[ListBox].((vm:RenderQueueViewModel)DataContext).OpenFolderCommand}"
+                                            CommandParameter="{Binding}" IsVisible="{Binding CanOpen}" />
+                                    <Button Content="Remover" Classes="row-button" AutomationProperties.Name="Remover da fila"
+                                            Command="{Binding $parent[ListBox].((vm:RenderQueueViewModel)DataContext).RemoveCommand}"
+                                            CommandParameter="{Binding}" IsVisible="{Binding CanRemove}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </DockPanel>
+</Window>

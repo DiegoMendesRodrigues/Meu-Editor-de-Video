@@ -26,6 +26,8 @@ public class PrivacyTests
         "MeuEditorDeVideo.Infrastructure", "MeuEditorDeVideo.ProjectEngine", "MeuEditorDeVideo.MediaEngine",
         "MeuEditorDeVideo.TimelineEngine", "MeuEditorDeVideo.ImageEngine", "MeuEditorDeVideo.AudioEngine",
         "MeuEditorDeVideo.AIEngine", "MeuEditorDeVideo.RenderingEngine",
+        // Aplicativo Avalonia (projeto src/MeuEditorDeVideo.Desktop, assembly MeuEditorDeVideo).
+        "MeuEditorDeVideo",
     ];
 
     [Theory, MemberData(nameof(ProductAssemblies))]

@@ -11,8 +11,6 @@
     <Copyright>Copyright © 2026 — Licenciado sob GPL-3.0-or-later</Copyright>
     <Version>1.3.0</Version>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <!-- Tema Fluent do WPF ainda marcado como experimental -->
-    <NoWarn>$(NoWarn);WPF0001</NoWarn>
   </PropertyGroup>
   <!-- Sistema-alvo (windows, linux ou macos), usado para escolher pacotes com bibliotecas nativas diferentes por sistema.
        Vem do RuntimeIdentifier passado no build (dotnet publish -r linux-x64); sem ele, é o sistema em que o build roda.

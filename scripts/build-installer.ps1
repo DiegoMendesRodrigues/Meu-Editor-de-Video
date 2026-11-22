@@ -54,7 +54,7 @@ function Invoke-Checked([string]$exe, [string[]]$arguments) {
 # 1. Publicação self-contained.
 if (-not $SkipPublish) {
     if (Test-Path $publish) { Remove-Item -Recurse -Force $publish }
-    Invoke-Checked dotnet @('publish', (Join-Path $root 'src\MeuEditorDeVideo.App\MeuEditorDeVideo.App.csproj'),
+    Invoke-Checked dotnet @('publish', (Join-Path $root 'src\MeuEditorDeVideo.Desktop\MeuEditorDeVideo.Desktop.csproj'),
         '-c', $Configuration, '-r', 'win-x64', '--self-contained', 'true', '-o', $publish, '-nologo', '-v', 'q')
 }
 if (-not (Test-Path (Join-Path $publish 'MeuEditorDeVideo.exe'))) { throw "Publicação não encontrada em $publish." }
@@ -82,7 +82,7 @@ $licenseRtf = Join-Path $artifacts 'License.rtf'
 # Logotipo nas telas do MSI (WixUI): faixa superior 493×58 (logo à direita) e tela de boas-vindas/conclusão 493×312
 # (logo na coluna esquerda de 164 px; o texto do WixUI ocupa o lado direito).
 Add-Type -AssemblyName System.Drawing
-$logo = [System.Drawing.Image]::FromFile((Join-Path $root 'src\MeuEditorDeVideo.App\Assets\logo-256.png'))
+$logo = [System.Drawing.Image]::FromFile((Join-Path $root 'src\MeuEditorDeVideo.Desktop\Assets\logo-256.png'))
 function Save-Bmp([string]$file, [int]$width, [int]$height, [int]$x, [int]$y, [int]$size, [System.Drawing.Color]$panel, [int]$panelWidth) {
     $bmp = New-Object System.Drawing.Bitmap $width, $height, ([System.Drawing.Imaging.PixelFormat]::Format24bppRgb)
     $g = [System.Drawing.Graphics]::FromImage($bmp)

@@ -5,7 +5,7 @@
     distribuídos com o Meu Editor de Vídeo e suas licenças.
 .DESCRIPTION
     Fontes (todas locais, sem rede):
-      - pacotes NuGet de "dotnet list package --include-transitive" (net10.0-windows),
+      - pacotes NuGet de "dotnet list package --include-transitive" (net10.0),
         com os .nuspec e os arquivos de licença do cache do NuGet;
       - binários nativos: scripts/deps.lock.json e deps/ffmpeg;
       - modelo incluído (resources/ai-models/incluidos) e catálogo de modelos
@@ -21,8 +21,8 @@ $ErrorActionPreference = 'Stop'
 
 $utf8Bom   = [System.Text.UTF8Encoding]::new($true)
 $repo      = Split-Path -Parent $PSScriptRoot
-$appProj   = Join-Path $repo 'src/MeuEditorDeVideo.App/MeuEditorDeVideo.App.csproj'
-$tfm       = 'net10.0-windows'
+$appProj   = Join-Path $repo 'src/MeuEditorDeVideo.Desktop/MeuEditorDeVideo.Desktop.csproj'
+$tfm       = 'net10.0'
 $licDir    = Join-Path $repo 'resources/licenses'
 $aiDir     = Join-Path $repo 'resources/ai-models'
 $nugetRoot = if ($env:NUGET_PACKAGES) { $env:NUGET_PACKAGES } else { Join-Path $env:USERPROFILE '.nuget/packages' }
@@ -295,8 +295,22 @@ Add-Linha '  Copyright: FFmpeg developers'
 Add-Linha '  Projeto: https://ffmpeg.org'
 Add-Linha "  Origem do build: $($ffmpeg.url)"
 Add-Texto $textoFfmpeg
+# libuiohook: biblioteca nativa embutida no pacote SharpHook (atalho global F10 da gravação de tela). O pacote declara
+# MIT só para o código .NET do SharpHook e não traz a licença da libuiohook. O cabeçalho do upstream (include/uiohook.h,
+# branch 1.2) diz LGPL-3.0-or-later; a LGPL-3.0 complementa a GPL-3.0, por isso vão os dois textos.
+$sharpHook = @($entradas | Where-Object { $_.Id -eq 'SharpHook' } | Select-Object -First 1)
+if ($sharpHook.Count -eq 0) { Stop-Geracao 'Pacote SharpHook não encontrado no grafo do projeto (libuiohook).' }
 Add-Linha ''
-Add-Linha 'As bibliotecas nativas dos pacotes NuGet (OpenCvSharp, SkiaSharp, HarfBuzzSharp, ONNX Runtime, DirectML, Whisper.net) constam na seção 1.'
+Add-Linha "libuiohook (embutida no pacote SharpHook $($sharpHook[0].Versao))"
+Add-Linha '  Descrição: biblioteca nativa de captura global de teclado e mouse (libuiohook-x11/xrecord/wayland no Linux, libuiohook no Windows e no macOS)'
+Add-Linha '  Licença: LGPL-3.0-or-later'
+Add-Linha '  Copyright: (C) 2006-2023 Alexander Barker'
+Add-Linha '  Projeto: https://github.com/kwhat/libuiohook (build usado pelo SharpHook: https://github.com/TolikPylypchuk/libuiohook)'
+Add-Texto (Read-Texto (Join-Path $repo 'resources/licenses/LGPL-3.0.txt'))
+Add-Linha '  A LGPL-3.0 complementa a GPL-3.0, reproduzida abaixo.'
+Add-Texto (Read-Texto (Join-Path $repo 'LICENSE.md'))
+Add-Linha ''
+Add-Linha 'As bibliotecas nativas dos pacotes NuGet (OpenCvSharp, SkiaSharp, HarfBuzzSharp, Avalonia, SDL3, ONNX Runtime, DirectML, Whisper.net) constam na seção 1.'
 
 # 3. Modelo incluído
 Add-Secao '3. MODELO DE IA INCLUÍDO'

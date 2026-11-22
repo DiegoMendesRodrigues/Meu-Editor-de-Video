@@ -1,0 +1,151 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels"
+        x:Class="MeuEditorDeVideo.Desktop.Views.Dialogs.ModelManagerWindow"
+        x:DataType="vm:ModelManagerViewModel"
+        Title="Modelos de IA"
+        Width="980"
+        Height="760"
+        MinWidth="720"
+        MinHeight="480"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        AutomationProperties.Name="Modelos de IA"
+        Background="{DynamicResource Med.WindowBackground}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Gerenciador de modelos (RF166–RF170, §8.3): instalação por pacotes locais, todos os campos do manifesto, CPU/GPU. -->
+    <Window.Styles>
+        <Style Selector="TextBlock.mm-label">
+            <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+            <Setter Property="Margin" Value="0,7,12,3" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
+        <!-- Valor selecionável (para copiar): caixa de texto só de leitura, sem moldura. -->
+        <Style Selector="TextBox.mm-value">
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,0" />
+            <Setter Property="MinHeight" Value="0" />
+        </Style>
+        <Style Selector="TextBox.mm-value:pointerover /template/ Border#PART_BorderElement, TextBox.mm-value:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="TextBlock.mm-status">
+            <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+            <Setter Property="FontSize" Value="11" />
+        </Style>
+        <Style Selector="TextBlock.mm-status.ok">
+            <Setter Property="Foreground" Value="#4CAF50" />
+        </Style>
+        <Style Selector="TextBlock.mm-status.warn">
+            <Setter Property="Foreground" Value="#E8A33D" />
+        </Style>
+    </Window.Styles>
+    <DockPanel Margin="14">
+        <!-- Rodapé: privacidade, dispositivo, status e ações. Coluna dos botões em Auto: eles sempre cabem inteiros. -->
+        <Grid DockPanel.Dock="Bottom" Margin="0,12,0,0" ColumnDefinitions="*,Auto">
+            <StackPanel Orientation="Vertical" Margin="0,0,16,0">
+                <TextBlock Text="{Binding Privacy}" Foreground="{DynamicResource Med.TextMuted}" TextWrapping="Wrap" />
+                <StackPanel Margin="0,8,0,0">
+                    <TextBlock Text="Executar modelos em:" Margin="0,0,0,2" />
+                    <StackPanel Orientation="Horizontal">
+                    <!-- O nome da GPU depende do sistema (DirectML, Core ML); o texto é definido no código. -->
+                    <RadioButton x:Name="OpcaoGpu" Content="GPU (DirectML)" IsChecked="{Binding UseGpu}" Margin="0,0,12,0"
+                                 AutomationProperties.Name="Usar GPU" />
+                    <RadioButton Content="Somente CPU" IsChecked="{Binding !UseGpu}" AutomationProperties.Name="Usar somente CPU" />
+                    </StackPanel>
+                </StackPanel>
+                <TextBlock Text="{Binding Status}" Margin="0,8,0,0" TextWrapping="Wrap" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" Spacing="8">
+                <Button Content="Baixar modelos…" Click="BaixarModelos_Click" Classes="med-accent" Padding="12,4"
+                        AutomationProperties.Name="Baixar modelos de IA" ToolTip.Tip="Ver os modelos disponíveis e instalar sem usar o terminal" />
+                <Button Content="Instalar pacote…" Command="{Binding InstallCommand}" Padding="12,4" AutomationProperties.Name="Instalar pacote de modelo" />
+                <Button Content="Verificar integridade" Command="{Binding VerifyCommand}" Padding="12,4" />
+                <Button Content="Remover" Command="{Binding RemoveCommand}" Padding="12,4" AutomationProperties.Name="Remover modelo" />
+                <Button Content="Fechar" IsCancel="True" Click="Fechar_Click" Padding="12,4" />
+            </StackPanel>
+        </Grid>
+
+        <Grid ColumnDefinitions="320,14,*">
+            <!-- Recursos e modelos instalados -->
+            <DockPanel Grid.Column="0">
+                <TextBlock DockPanel.Dock="Top" Text="Recursos de IA" FontWeight="SemiBold" Margin="0,0,0,6" />
+                <ItemsControl DockPanel.Dock="Top" ItemsSource="{Binding Capabilities}" AutomationProperties.Name="Recursos de IA" Margin="0,0,0,12">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:CapabilityStatus">
+                            <StackPanel Margin="0,2,0,4" AutomationProperties.Name="{Binding Feature}">
+                                <TextBlock Text="{Binding Feature}" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding Status}" TextWrapping="Wrap" Classes="mm-status" Classes.ok="{Binding Available}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock DockPanel.Dock="Top" Text="Modelos instalados" FontWeight="SemiBold" Margin="0,0,0,6" />
+                <TextBlock DockPanel.Dock="Bottom" Text="{Binding MemorySummary}" Foreground="{DynamicResource Med.TextMuted}" Margin="0,6,0,0" />
+                <ListBox ItemsSource="{Binding Models}" SelectedItem="{Binding Selected}" AutomationProperties.Name="Modelos instalados"
+                         Background="{DynamicResource Med.PanelAlt}" BorderThickness="0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ModelItemViewModel">
+                            <StackPanel Margin="2,4" AutomationProperties.Name="{Binding Name}">
+                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding Subtitle}" FontSize="11" Foreground="{DynamicResource Med.TextMuted}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+
+            <!-- Detalhes do modelo selecionado: todos os campos do §8.3 -->
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" DataContext="{Binding Selected}" x:DataType="vm:ModelItemViewModel">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8" />
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                        <TextBlock Grid.Row="0" Classes="mm-label" Text="Identificador" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Classes="mm-value" Text="{Binding Id, Mode=OneWay}" AutomationProperties.Name="Identificador" />
+                        <TextBlock Grid.Row="1" Classes="mm-label" Text="Versão" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Classes="mm-value" Text="{Binding Version, Mode=OneWay}" AutomationProperties.Name="Versão" />
+                        <TextBlock Grid.Row="2" Classes="mm-label" Text="Fabricante/origem" />
+                        <TextBox Grid.Row="2" Grid.Column="1" Classes="mm-value" Text="{Binding Source, Mode=OneWay}" AutomationProperties.Name="Origem" />
+                        <TextBlock Grid.Row="3" Classes="mm-label" Text="Finalidade" />
+                        <TextBox Grid.Row="3" Grid.Column="1" Classes="mm-value" Text="{Binding Purpose, Mode=OneWay}" AutomationProperties.Name="Finalidade" />
+                        <TextBlock Grid.Row="4" Classes="mm-label" Text="Recurso" />
+                        <TextBox Grid.Row="4" Grid.Column="1" Classes="mm-value" Text="{Binding Capability, Mode=OneWay}" AutomationProperties.Name="Recurso" />
+                        <TextBlock Grid.Row="5" Classes="mm-label" Text="Formato" />
+                        <TextBox Grid.Row="5" Grid.Column="1" Classes="mm-value" Text="{Binding Format, Mode=OneWay}" AutomationProperties.Name="Formato" />
+                        <TextBlock Grid.Row="6" Classes="mm-label" Text="Tamanho" />
+                        <TextBox Grid.Row="6" Grid.Column="1" Classes="mm-value" Text="{Binding Size, Mode=OneWay}" AutomationProperties.Name="Tamanho" />
+                        <TextBlock Grid.Row="7" Classes="mm-label" Text="Memória necessária" />
+                        <StackPanel Grid.Row="7" Grid.Column="1">
+                            <TextBox Classes="mm-value" Text="{Binding Memory, Mode=OneWay}" AutomationProperties.Name="Memória necessária" />
+                            <TextBlock Text="{Binding MemoryCheck}" TextWrapping="Wrap" Classes="mm-status" Classes.warn="{Binding MemoryWarning}" />
+                        </StackPanel>
+                        <TextBlock Grid.Row="8" Classes="mm-label" Text="Compatível com CPU" />
+                        <TextBox Grid.Row="8" Grid.Column="1" Classes="mm-value" Text="{Binding Cpu, Mode=OneWay}" AutomationProperties.Name="Compatível com CPU" />
+                        <TextBlock Grid.Row="9" Classes="mm-label" Text="Compatível com GPU" />
+                        <TextBox Grid.Row="9" Grid.Column="1" Classes="mm-value" Text="{Binding Gpu, Mode=OneWay}" AutomationProperties.Name="Compatível com GPU" />
+                        <TextBlock Grid.Row="10" Classes="mm-label" Text="Licença" />
+                        <TextBox Grid.Row="10" Grid.Column="1" Classes="mm-value" Text="{Binding License, Mode=OneWay}" AutomationProperties.Name="Licença" />
+                        <TextBlock Grid.Row="11" Classes="mm-label" Text="Hash (SHA-256)" />
+                        <TextBox Grid.Row="11" Grid.Column="1" Classes="mm-value" Text="{Binding Hash, Mode=OneWay}"
+                                 FontFamily="Cascadia Mono, Consolas, Menlo, DejaVu Sans Mono, monospace" AutomationProperties.Name="Hash" />
+                        <TextBlock Grid.Row="12" Classes="mm-label" Text="Integridade" />
+                        <TextBox Grid.Row="12" Grid.Column="1" Classes="mm-value" Text="{Binding Integrity, Mode=OneWay}" AutomationProperties.Name="Integridade" />
+                        <TextBlock Grid.Row="13" Classes="mm-label" Text="Localização" />
+                        <TextBox Grid.Row="13" Grid.Column="1" Classes="mm-value" Text="{Binding Location, Mode=OneWay}" AutomationProperties.Name="Localização" />
+                        <TextBlock Grid.Row="14" Classes="mm-label" Text="Instalação" />
+                        <TextBox Grid.Row="14" Grid.Column="1" Classes="mm-value" Text="{Binding Installation, Mode=OneWay}" AutomationProperties.Name="Instalação" />
+                    </Grid>
+                    <TextBlock Text="Documentação" FontWeight="SemiBold" Margin="0,12,0,4" />
+                    <TextBox Text="{Binding Documentation, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" MinHeight="120" MaxHeight="260"
+                             Background="{DynamicResource Med.PanelAlt}" Foreground="{DynamicResource Med.Text}"
+                             AutomationProperties.Name="Documentação do modelo" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Window>

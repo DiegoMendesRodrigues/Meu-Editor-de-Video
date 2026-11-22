@@ -1,0 +1,47 @@
+<Project>
+  <!--
+    Arquivos copiados para a pasta dos aplicativo de interface (Desktop Avalonia): FFmpeg, modelos de IA
+    incluídos, catálogo, pacotes, modelos de exportação, traduções, manuais e licenças.
+  -->
+  <PropertyGroup>
+    <MedRaiz>$(MSBuildThisFileDirectory)..\</MedRaiz>
+  </PropertyGroup>
+  <!-- Bibliotecas nativas do FFmpeg (baixadas por scripts\fetch-deps.ps1) copiadas para a pasta ffmpeg\ do aplicativo. -->
+  <PropertyGroup>
+    <FFmpegBinDir>$(MedRaiz)deps\ffmpeg\bin\</FFmpegBinDir>
+  </PropertyGroup>
+  <ItemGroup Condition="Exists('$(FFmpegBinDir)')">
+    <None Include="$(FFmpegBinDir)*.dll;$(FFmpegBinDir)*.so*;$(FFmpegBinDir)*.dylib" Link="ffmpeg\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <!-- Executável do ffmpeg (ffmpeg.exe no Windows): gravação de tela, webcam e microfone (Ferramentas › Gravar tela). -->
+    <None Include="$(FFmpegBinDir)ffmpeg.exe" Condition="Exists('$(FFmpegBinDir)ffmpeg.exe')" Link="ffmpeg\ffmpeg.exe" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(FFmpegBinDir)ffmpeg" Condition="Exists('$(FFmpegBinDir)ffmpeg')" Link="ffmpeg\ffmpeg" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+  <!-- Modelos de IA incluídos no aplicativo (MODNet): manifesto, licença e documentação do repositório + arquivo do modelo
+       baixado por scripts\fetch-deps.ps1 (SHA-256 no lock), copiados para a pasta ai-models\ do aplicativo. -->
+  <PropertyGroup>
+    <BuiltInModelsDir>$(MedRaiz)deps\ai-models\</BuiltInModelsDir>
+  </PropertyGroup>
+  <ItemGroup Condition="Exists('$(BuiltInModelsDir)')">
+    <None Include="$(MedRaiz)resources\ai-models\incluidos\**\*" Link="ai-models\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(BuiltInModelsDir)**\*.onnx" Link="ai-models\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+  <!-- Catálogo oficial de modelos (endereços fixos, SHA-256, recursos, dependências) e licenças, para a ferramenta
+       "Baixar modelos" gerar os pacotes .medmodel. -->
+  <ItemGroup>
+    <None Include="$(MedRaiz)resources\ai-models\modelos.json" Link="catalogo-ia\modelos.json" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(MedRaiz)resources\ai-models\licencas\*.txt" Link="catalogo-ia\licencas\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MedRaiz)resources\stickers\**\*" Link="pacotes\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(MedRaiz)resources\templates\export\*.json" Link="templates\export\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <!-- Avisos de terceiros (gerados por scripts\generate-notices.ps1) e licença do aplicativo. -->
+  <ItemGroup>
+    <None Include="$(MedRaiz)THIRD-PARTY-NOTICES.txt" Link="THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(MedRaiz)resources\i18n\*" Link="i18n\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(MedRaiz)LICENSE.md" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <!-- Manual do usuário offline (Ajuda › Manual do usuário, F1). -->
+    <None Include="$(MedRaiz)documentation\MANUAL_DO_USUARIO*.md" Link="ajuda\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(MedRaiz)documentation\imagens\**\*.jpg" Link="ajuda\imagens\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+</Project>

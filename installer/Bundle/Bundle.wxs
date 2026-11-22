@@ -11,7 +11,7 @@
           Manufacturer="Diego Mendes Rodrigues"
           Version="$(var.BundleVersion)"
           UpgradeCode="9D2E4F60-3B1A-4C7D-8E5F-1A2B3C4D5E6F"
-          IconSourceFile="$(var.RepoRoot)src\MeuEditorDeVideo.App\Assets\icone.ico">
+          IconSourceFile="$(var.RepoRoot)src\MeuEditorDeVideo.Desktop\Assets\icone.ico">
     <!-- Botões e textos no idioma do Windows: o WixStdBA procura "<LCID>\thm.wxl" (idioma completo e depois o neutro);
          sem correspondência, usa o inglês embutido. -->
     <BootstrapperApplication>
@@ -27,7 +27,7 @@
       <Payload Id="Loc12" Name="12\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.fr.xml" />
       <Payload Id="Loc1031" Name="1031\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.de.xml" />
       <Payload Id="Loc7" Name="7\thm.wxl" SourceFile="$(sys.SOURCEFILEDIR)Localizacao\thm.de.xml" />
-      <bal:WixStandardBootstrapperApplication Theme="rtfLicense" LicenseFile="$(var.LicenseRtf)" LogoFile="$(var.RepoRoot)src\MeuEditorDeVideo.App\Assets\logo-64.png" ShowVersion="yes" SuppressOptionsUI="yes" />
+      <bal:WixStandardBootstrapperApplication Theme="rtfLicense" LicenseFile="$(var.LicenseRtf)" LogoFile="$(var.RepoRoot)src\MeuEditorDeVideo.Desktop\Assets\logo-64.png" ShowVersion="yes" SuppressOptionsUI="yes" />
     </BootstrapperApplication>
 
     <!-- Visual C++ 14.x x64 já instalado? (chave documentada pela Microsoft; Major = 14, Minor >= 40 cobre as DLLs exigidas pelo ONNX Runtime/Whisper) -->

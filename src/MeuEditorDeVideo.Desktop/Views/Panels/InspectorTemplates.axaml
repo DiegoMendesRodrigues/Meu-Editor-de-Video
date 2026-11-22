@@ -1,0 +1,169 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ins="using:MeuEditorDeVideo.Presentation.ViewModels.Inspector"
+                    xmlns:ctl="using:MeuEditorDeVideo.Desktop.Controls"
+                    xmlns:conv="using:MeuEditorDeVideo.Desktop.Converters">
+    <!-- Modelos do inspetor do clipe (painel C): propriedades, efeitos e parâmetros. Estilos em InspectorStyles.axaml. -->
+
+    <!-- Valor numérico do clipe (recorte, entrada/saída gradual) -->
+    <DataTemplate x:Key="Ins.ClipValue" DataType="ins:ClipValueViewModel">
+        <Grid ColumnDefinitions="92,*,56" Margin="0,0,0,4">
+            <TextBlock Text="{Binding Label}" Classes="ins-label" TextTrimming="CharacterEllipsis" />
+            <Slider Grid.Column="1" Minimum="{Binding Min}" Maximum="{Binding Max}" Value="{Binding Value}" SmallChange="{Binding Step}"
+                    LargeChange="{Binding Step}" VerticalAlignment="Center"
+                    ctl:DoubleClickCommand.Command="{Binding ResetCommand}"
+                    AutomationProperties.Name="{Binding Label}" ToolTip.Tip="Duplo clique para redefinir" />
+            <TextBlock Grid.Column="2" Text="{Binding Display}" Classes="ins-label" TextAlignment="Right" />
+        </Grid>
+    </DataTemplate>
+
+    <!-- Propriedade animável: valor + keyframe no instante do cursor -->
+    <DataTemplate x:Key="Ins.AnimatedValue" DataType="ins:AnimatedValueViewModel">
+        <Grid ColumnDefinitions="80,*,56,Auto" Margin="0,0,0,4">
+            <TextBlock Text="{Binding Label}" Classes="ins-label" TextTrimming="CharacterEllipsis" />
+            <Slider Grid.Column="1" Minimum="{Binding Min}" Maximum="{Binding Max}" Value="{Binding Value}"
+                    SmallChange="1" LargeChange="10" VerticalAlignment="Center"
+                    ctl:DoubleClickCommand.Command="{Binding ResetCommand}"
+                    AutomationProperties.Name="{Binding Label}" ToolTip.Tip="Duplo clique para redefinir" />
+            <TextBlock Grid.Column="2" Text="{Binding Display}" Classes="ins-label" TextAlignment="Right" />
+            <Button Grid.Column="3" Command="{Binding ToggleKeyCommand}" ToolTip.Tip="{Binding KeyToolTip}" Margin="4,0,0,0"
+                    AutomationProperties.Name="{Binding KeyToolTip}" Padding="4,0" MinWidth="26" MinHeight="0" Background="Transparent" BorderThickness="0">
+                <Panel>
+                    <!-- ◇ sem keyframe aqui; ◆ keyframe neste instante; cor de destaque quando a propriedade é animada -->
+                    <TextBlock FontSize="13" Text="◇" IsVisible="{Binding !HasKeyHere}" Classes="chave" Classes.animada="{Binding IsAnimated}" />
+                    <TextBlock FontSize="13" Text="◆" IsVisible="{Binding HasKeyHere}" Foreground="{DynamicResource Med.Accent}" />
+                </Panel>
+            </Button>
+        </Grid>
+    </DataTemplate>
+
+    <!-- Parâmetros de efeito -->
+    <DataTemplate x:Key="Ins.SliderParameter" DataType="ins:SliderParameterViewModel">
+        <Grid ColumnDefinitions="104,*,52" Margin="0,0,0,4">
+            <TextBlock Text="{Binding Label}" Classes="ins-label" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Label}" />
+            <!-- Faixa em gradiente sob o controle: mostra o que o parâmetro faz (ex.: temperatura azul→laranja) -->
+            <Border Grid.Column="1" Height="4" CornerRadius="2" VerticalAlignment="Bottom" Margin="9,0,9,2" IsHitTestVisible="False"
+                    Background="{Binding Parameter.Key, Converter={x:Static conv:ParameterGradientConverter.Instance}}" />
+            <Slider Grid.Column="1" Minimum="{Binding Min}" Maximum="{Binding Max}" Value="{Binding Value}" SmallChange="{Binding Step}"
+                    LargeChange="{Binding Step}" VerticalAlignment="Center"
+                    ctl:DoubleClickCommand.Command="{Binding ResetCommand}"
+                    AutomationProperties.Name="{Binding Label}" ToolTip.Tip="Duplo clique para redefinir" />
+            <TextBlock Grid.Column="2" Text="{Binding Display}" Classes="ins-label" TextAlignment="Right" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Ins.ChoiceParameter" DataType="ins:ChoiceParameterViewModel">
+        <Grid ColumnDefinitions="104,*" Margin="0,0,0,6">
+            <TextBlock Text="{Binding Label}" Classes="ins-label" TextTrimming="CharacterEllipsis" />
+            <ComboBox Grid.Column="1" ItemsSource="{Binding Options}" SelectedIndex="{Binding SelectedIndex}"
+                      HorizontalAlignment="Stretch" AutomationProperties.Name="{Binding Label}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Ins.ColorParameter" DataType="ins:ColorParameterViewModel">
+        <Grid ColumnDefinitions="104,*" Margin="0,0,0,6">
+            <TextBlock Text="{Binding Label}" Classes="ins-label" TextWrapping="Wrap" />
+            <StackPanel Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <Border Width="22" Height="22" CornerRadius="3" Background="{Binding Swatch}" BorderBrush="{DynamicResource Med.Border}" BorderThickness="1" />
+                    <TextBox Text="{Binding Hex, UpdateSourceTrigger=PropertyChanged}" Width="96" Margin="6,0,0,0" MaxLength="7"
+                             AutomationProperties.Name="{Binding Label}" ToolTip.Tip="Cor em hexadecimal, ex.: #00B140" />
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Presets}" Margin="0,4,0,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Button Width="18" Height="18" MinHeight="0" MinWidth="0" Margin="0,0,4,0" Padding="0" BorderThickness="1"
+                                    BorderBrush="{DynamicResource Med.Border}" Background="{Binding}" ToolTip.Tip="{Binding}"
+                                    AutomationProperties.Name="{Binding}"
+                                    Command="{Binding $parent[ItemsControl].((ins:ColorParameterViewModel)DataContext).UsePresetCommand}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Ins.WheelParameter" DataType="ins:WheelParameterViewModel">
+        <StackPanel Margin="0,0,0,8" HorizontalAlignment="Center" Width="120">
+            <DockPanel>
+                <Button DockPanel.Dock="Right" Content="&#xE72C;" Classes="ins-icon" Command="{Binding ResetCommand}"
+                        ToolTip.Tip="Redefinir" AutomationProperties.Name="{Binding Label, StringFormat='Redefinir {0}'}" />
+                <TextBlock Text="{Binding Label}" Classes="ins-label" HorizontalAlignment="Center" />
+            </DockPanel>
+            <ctl:ColorWheel X="{Binding X, Mode=TwoWay}" Y="{Binding Y, Mode=TwoWay}" Width="110" Height="110" Margin="0,4"
+                            AutomationProperties.Name="{Binding Label, StringFormat='Roda de cor: {0}'}" />
+            <Border Height="4" CornerRadius="2" Margin="9,2,9,0"
+                    Background="{Binding Source=luminance, Converter={x:Static conv:ParameterGradientConverter.Instance}}" />
+            <Slider Minimum="-1" Maximum="1" Value="{Binding Luminance}" SmallChange="0.01" LargeChange="0.1"
+                    AutomationProperties.Name="{Binding Label, StringFormat='Luminância: {0}'}" ToolTip.Tip="Luminância" />
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Ins.CurveParameter" DataType="ins:CurveParameterViewModel">
+        <StackPanel Margin="0,0,0,8">
+            <DockPanel>
+                <Button DockPanel.Dock="Right" Content="&#xE72C;" Classes="ins-icon" Command="{Binding ResetCommand}"
+                        ToolTip.Tip="Redefinir curva" AutomationProperties.Name="{Binding Label, StringFormat='Redefinir curva {0}'}" />
+                <TextBlock Text="{Binding Label}" Classes="ins-label" />
+            </DockPanel>
+            <ctl:CurveEditor Curve="{Binding}" Height="150" Margin="0,4,0,0" AutomationProperties.Name="{Binding Label, StringFormat='Curva {0}'}"
+                             ToolTip.Tip="Arraste os pontos; clique para criar; botão direito remove" />
+        </StackPanel>
+    </DataTemplate>
+
+    <!-- Efeito da pilha -->
+    <DataTemplate x:Key="Ins.EffectItem" DataType="ins:EffectItemViewModel">
+        <Border Background="{DynamicResource Med.PanelAlt}" CornerRadius="6" Padding="8" Margin="0,0,0,8">
+            <StackPanel>
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                        <Button Content="&#xE70E;" Classes="ins-icon" Command="{Binding MoveUpCommand}" ToolTip.Tip="Mover para cima"
+                                AutomationProperties.Name="{Binding Name, StringFormat='Mover {0} para cima'}" />
+                        <Button Content="&#xE70D;" Classes="ins-icon" Command="{Binding MoveDownCommand}" ToolTip.Tip="Mover para baixo"
+                                AutomationProperties.Name="{Binding Name, StringFormat='Mover {0} para baixo'}" />
+                        <Button Content="&#xE72C;" Classes="ins-icon" Command="{Binding ResetCommand}" ToolTip.Tip="Redefinir valores"
+                                AutomationProperties.Name="{Binding Name, StringFormat='Redefinir {0}'}" />
+                        <Button Content="&#xE74D;" Classes="ins-icon" Command="{Binding RemoveCommand}" ToolTip.Tip="Remover efeito"
+                                AutomationProperties.Name="{Binding Name, StringFormat='Remover {0}'}" />
+                    </StackPanel>
+                    <ToggleButton DockPanel.Dock="Left" Classes="ins-expander" IsChecked="{Binding IsExpanded}" Background="Transparent" BorderThickness="0" Padding="4,2" MinHeight="0"
+                                  Margin="0,0,4,0" FontFamily="{StaticResource Med.IconFont}" FontSize="10" VerticalAlignment="Center"
+                                  ToolTip.Tip="Mostrar/ocultar ajustes" AutomationProperties.Name="{Binding Name, StringFormat='Mostrar ajustes de {0}'}">
+                        <Panel>
+                            <TextBlock Text="&#xE76C;" IsVisible="{Binding !IsExpanded}" />
+                            <TextBlock Text="&#xE70D;" IsVisible="{Binding IsExpanded}" />
+                        </Panel>
+                    </ToggleButton>
+                    <CheckBox IsChecked="{Binding Enabled}" VerticalAlignment="Center" ToolTip.Tip="Ativar/desativar"
+                              AutomationProperties.Name="{Binding Name, StringFormat='Ativar {0}'}">
+                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" TextTrimming="CharacterEllipsis" />
+                    </CheckBox>
+                </DockPanel>
+                <StackPanel IsVisible="{Binding IsExpanded}">
+                    <StackPanel Margin="0,6,0,0" IsVisible="{Binding UsesResource}">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="Escolher…" Classes="ins-small" Margin="6,0,0,0"
+                                    Command="{Binding ChooseResourceCommand}" AutomationProperties.Name="Escolher arquivo da LUT" />
+                            <TextBlock Text="{Binding ResourceName}" Classes="ins-label" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding ResourceName}" />
+                        </DockPanel>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding Parameters}" Margin="0,8,0,0" IsEnabled="{Binding Enabled}" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <!-- Item da biblioteca (painel A) -->
+    <DataTemplate x:Key="Ins.LibraryEffectItem" DataType="ins:LibraryEffectItem">
+        <StackPanel Margin="2,4">
+            <TextBlock Text="{Binding Name}" Foreground="{DynamicResource Med.Text}" FontWeight="SemiBold" />
+            <TextBlock Text="{Binding Description}" Classes="ins-label" TextWrapping="Wrap" />
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

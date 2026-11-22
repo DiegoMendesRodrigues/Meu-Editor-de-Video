@@ -1,0 +1,1299 @@
+<UserControl x:Class="MeuEditorDeVideo.Desktop.Views.EditorView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels"
+             xmlns:media="using:MeuEditorDeVideo.Presentation.ViewModels.Media"
+             xmlns:tl="using:MeuEditorDeVideo.Presentation.ViewModels.Timeline"
+             xmlns:ins="using:MeuEditorDeVideo.Presentation.ViewModels.Inspector"
+             xmlns:pv="using:MeuEditorDeVideo.Presentation.ViewModels.Preview"
+             xmlns:ctl="using:MeuEditorDeVideo.Desktop.Controls"
+             xmlns:conv="using:MeuEditorDeVideo.Desktop.Converters"
+             xmlns:v="using:MeuEditorDeVideo.Desktop.Views"
+             xmlns:panels="using:MeuEditorDeVideo.Desktop.Views.Panels"
+             xmlns:model="using:MeuEditorDeVideo.Domain.Model"
+             xmlns:cp="using:MeuEditorDeVideo.Core.Projects"
+             x:DataType="vm:EditorViewModel"
+             Background="{DynamicResource Med.Background}"
+             Foreground="{DynamicResource Med.Text}"
+             FontSize="12">
+    <UserControl.Resources>
+        <!-- Linha de informação: rótulo à esquerda, valor à direita -->
+        <DataTemplate x:Key="Editor.LinhaInfo" x:DataType="media:MediaInfoLine">
+            <Grid ColumnDefinitions="104,*" Margin="0,0,0,10" ToolTip.Tip="{Binding Value}">
+                <TextBlock Text="{Binding Label}" Classes="med-muted" TextTrimming="CharacterEllipsis" />
+                <TextBlock Grid.Column="1" Text="{Binding Value}" Foreground="{DynamicResource Med.Text}" TextTrimming="CharacterEllipsis" />
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <!-- Painéis do editor: retos e colados, separados por 1 px do fundo (Editor.Painel) -->
+        <Style Selector="Border.med-panel.editor-painel">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+        <!-- Botões da barra de ações (Editor.Acao) e de controles (Editor.Controle) -->
+        <Style Selector="Button.editor-acao">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Button.editor-controle">
+            <Setter Property="Padding" Value="7,4" />
+            <Setter Property="Margin" Value="1,0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="ToolTip.ShowOnDisabled" Value="True" />
+        </Style>
+        <Style Selector="TextBlock.editor-icone">
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+
+        <!-- Botão alternável da barra da linha do tempo (ímã, ripple): Editor.Alternar -->
+        <Style Selector="ToggleButton.editor-alternar">
+            <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="7,4" />
+            <Setter Property="Margin" Value="1,0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style Selector="ToggleButton.editor-alternar:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Med.PanelHover}" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+        </Style>
+        <Style Selector="ToggleButton.editor-alternar:checked /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Med.Accent}" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.OnAccent}" />
+        </Style>
+        <Style Selector="ToggleButton.editor-alternar:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Med.AccentHover}" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.OnAccent}" />
+        </Style>
+
+        <!-- Botões pequenos dos cabeçalhos de trilha: Editor.TrilhaBotao -->
+        <Style Selector="Button.editor-trilha-botao">
+            <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Height" Value="22" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Button.editor-trilha-botao:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Med.PanelHover}" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+        </Style>
+
+        <!-- Navegação vertical do painel A (Editor.Nav.*): a seção ativa ganha sublinhado e cor de destaque -->
+        <Style Selector="Button.editor-nav">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0,0,0,2" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Padding" Value="2,6,2,4" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Button.editor-nav:pointerover /template/ ContentPresenter#PART_ContentPresenter, Button.editor-nav:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+        </Style>
+        <Style Selector="Button.editor-nav.selected">
+            <Setter Property="BorderBrush" Value="{DynamicResource Med.Accent}" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+        </Style>
+        <Style Selector="Button.editor-nav.selected:pointerover /template/ ContentPresenter#PART_ContentPresenter, Button.editor-nav.selected:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="BorderBrush" Value="{DynamicResource Med.Accent}" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+        </Style>
+
+        <!-- Abas das propriedades: ícone + texto na cor de destaque; a ativa fica preenchida e com um ponto vermelho -->
+        <Style Selector="TabItem.editor-aba">
+            <Setter Property="Padding" Value="8,5" />
+            <Setter Property="Margin" Value="0,0,2,2" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="HeaderTemplate">
+                <DataTemplate x:DataType="x:String">
+                    <Panel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Classes="med-icon" FontSize="14" Text="{Binding $parent[TabItem].Tag}" />
+                            <TextBlock Text="{Binding}" Margin="6,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <Ellipse Width="9" Height="9" Fill="{DynamicResource Med.Danger}" Stroke="{DynamicResource Med.Panel}" StrokeThickness="1.5"
+                                 HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-9,-12,0" IsHitTestVisible="False"
+                                 IsVisible="{Binding $parent[TabItem].IsSelected}" />
+                    </Panel>
+                </DataTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="TabItem.editor-aba:pointerover /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="{DynamicResource Med.PanelHover}" />
+        </Style>
+        <Style Selector="TabItem.editor-aba:selected">
+            <Setter Property="Foreground" Value="{DynamicResource Med.OnAccent}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="TabItem.editor-aba:selected /template/ Border#PART_LayoutRoot, TabItem.editor-aba:selected:pointerover /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="{DynamicResource Med.Accent}" />
+        </Style>
+        <Style Selector="TabItem.editor-aba /template/ Border#PART_SelectedPipe">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+
+        <Style Selector="ListBox.editor-lista ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid x:Name="GradeEditor" RowDefinitions="Auto,*,Auto,300" ColumnDefinitions="*,Auto,400,0,0">
+        <!-- 1. Barra de título: logotipo, menu, ações rápidas, projeto e Exportar.
+             Fica sob a área de legenda da janela (ExtendClientArea); os botões de minimizar/maximizar/fechar são do sistema,
+             à direita (Windows) ou à esquerda (macOS, semáforo). Arrastar uma parte vazia da faixa move a janela. -->
+        <Border x:Name="BarraTitulo" Grid.Row="0" Grid.ColumnSpan="5" Background="{DynamicResource Med.Panel}" MinHeight="40"
+                BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{x:Static v:MainWindow.CaptionButtonsLeftWidth}" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="{x:Static v:MainWindow.CaptionButtonsWidth}" />
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="1" Source="avares://MeuEditorDeVideo/Assets/logo-64.png" Width="20" Height="20" Margin="12,0,6,0"
+                       VerticalAlignment="Center" IsHitTestVisible="False" AutomationProperties.Name="Logotipo" />
+                <Menu x:Name="MenuPrincipal" Grid.Column="2" VerticalAlignment="Center" Background="Transparent">
+                    <MenuItem x:Name="MenuArquivo" Header="{StaticResource Editor.Menu.Arquivo}" SubmenuOpened="MenuArquivo_SubmenuOpened">
+                        <MenuItem Header="{StaticResource Editor.Menu.NovoProjeto}" Command="{Binding NewProjectCommand}" ctl:ShortcutText.Action="projeto.novo" />
+                        <MenuItem Header="{StaticResource Editor.Menu.NovoDeModelo}" Command="{Binding CreativeTools.NewFromTemplateCommand}" AutomationProperties.Name="Novo a partir de modelo" />
+                        <MenuItem Header="{StaticResource Editor.Menu.Abrir}" Command="{Binding OpenCommand}" ctl:ShortcutText.Action="projeto.abrir" />
+                        <Separator x:Name="SeparadorRecentes" />
+                        <!-- Os 5 projetos recentes entram aqui (EditorView.axaml.cs), seguidos de um separador. -->
+                        <MenuItem Header="{StaticResource Editor.Menu.ImportarMidia}" Command="{Binding ImportMediaCommand}" ctl:ShortcutText.Action="midia.importar" />
+                        <MenuItem Header="{StaticResource Editor.Menu.ImportarSequencia}" Command="{Binding ImportSequenceCommand}" />
+                        <Separator />
+                        <MenuItem Header="{StaticResource Editor.Menu.Salvar}" Command="{Binding SaveCommand}" ctl:ShortcutText.Action="projeto.salvar" />
+                        <MenuItem Header="{StaticResource Editor.Menu.SalvarComo}" Command="{Binding SaveAsCommand}" ctl:ShortcutText.Action="projeto.salvarComo" />
+                        <MenuItem Header="{StaticResource Editor.Menu.CopiaSeguranca}" Command="{Binding CreateBackupCommand}" />
+                        <Separator />
+                        <MenuItem Header="{StaticResource Editor.Menu.Exportar}" Command="{Binding ExportCommand}" ctl:ShortcutText.Action="projeto.exportar" />
+                        <MenuItem Header="{StaticResource Editor.Menu.FilaRenderizacao}" Command="{Binding ShowRenderQueueCommand}" />
+                        <MenuItem Header="{StaticResource Editor.Menu.ExportarQuadro}" Command="{Binding Preview.CaptureFrameCommand}" AutomationProperties.Name="Exportar quadro atual" />
+                    </MenuItem>
+                    <MenuItem Header="{StaticResource Editor.Menu.Editar}">
+                        <MenuItem Header="{StaticResource Editor.Menu.Desfazer}" Command="{Binding UndoCommand}" ctl:ShortcutText.Action="editar.desfazer" ToolTip.Tip="{Binding UndoToolTip}" />
+                        <MenuItem Header="{StaticResource Editor.Menu.Refazer}" Command="{Binding RedoCommand}" ctl:ShortcutText.Action="editar.refazer" ToolTip.Tip="{Binding RedoToolTip}" />
+                        <Separator />
+                        <MenuItem Header="{StaticResource Editor.Menu.SelecionarTudo}" Command="{Binding Timeline.SelectAllCommand}" ctl:ShortcutText.Action="linha.selecionarTudo" AutomationProperties.Name="Selecionar tudo" />
+                        <Separator />
+                        <MenuItem Header="{StaticResource Editor.Menu.Dividir}" Command="{Binding Timeline.SplitCommand}" ctl:ShortcutText.Action="linha.dividir" AutomationProperties.Name="Dividir" />
+                        <MenuItem Header="{StaticResource Editor.Menu.JuntarCortes}" Command="{Binding Timeline.JoinCutsCommand}" ToolTip.Tip="{StaticResource Editor.Menu.JuntarCortes.Dica}" ToolTip.ShowOnDisabled="True" AutomationProperties.Name="Juntar os cortes" />
+                        <MenuItem Header="{StaticResource Editor.Menu.Recortar}" Command="{Binding Timeline.CutCommand}" ctl:ShortcutText.Action="linha.recortar" AutomationProperties.Name="Recortar" />
+                        <MenuItem Header="{StaticResource Editor.Menu.Copiar}" Command="{Binding Timeline.CopyCommand}" ctl:ShortcutText.Action="linha.copiar" AutomationProperties.Name="Copiar" />
+                        <MenuItem Header="{StaticResource Editor.Menu.ColarNoCursor}" Command="{Binding Timeline.PasteCommand}" ctl:ShortcutText.Action="linha.colar" AutomationProperties.Name="Colar no cursor" />
+                        <MenuItem Header="{StaticResource Editor.Menu.Duplicar}" Command="{Binding Timeline.DuplicateCommand}" ctl:ShortcutText.Action="linha.duplicar" AutomationProperties.Name="Duplicar" />
+                        <Separator />
+                        <MenuItem Header="{StaticResource Editor.Menu.Excluir}" Command="{Binding Timeline.DeleteCommand}" ctl:ShortcutText.Action="linha.excluir" AutomationProperties.Name="Excluir" />
+                        <MenuItem Header="{StaticResource Editor.Menu.ExcluirFechando}" Command="{Binding Timeline.RippleDeleteCommand}" ctl:ShortcutText.Action="linha.excluirFechando" AutomationProperties.Name="Excluir e fechar o espaço" />
+                        <MenuItem Header="{StaticResource Editor.Menu.ExcluirJuntando}" Command="{Binding Timeline.DeleteAndJoinCommand}" AutomationProperties.Name="Excluir e juntar"
+                                  ToolTip.Tip="{StaticResource Editor.Menu.ExcluirJuntando.Dica}" />
+                    </MenuItem>
+                    <MenuItem Header="{StaticResource Editor.Menu.Visualizar}">
+                        <MenuItem x:Name="MenuModoLayout" Header="{StaticResource Editor.Menu.ModoLayout}" AutomationProperties.Name="Modo do layout">
+                            <MenuItem Header="{StaticResource Editor.Layout.Padrao}" Tag="Padrao" ToggleType="Radio" GroupName="layout" IsChecked="True" Click="ModoLayout_Click" AutomationProperties.Name="Layout padrão" />
+                            <MenuItem Header="{StaticResource Editor.Layout.LinhaDoTempo}" Tag="LinhaDoTempo" ToggleType="Radio" GroupName="layout" Click="ModoLayout_Click" AutomationProperties.Name="Layout linha do tempo" />
+                            <MenuItem Header="{StaticResource Editor.Layout.Video}" Tag="Video" ToggleType="Radio" GroupName="layout" Click="ModoLayout_Click" AutomationProperties.Name="Layout vídeo" />
+                        </MenuItem>
+                        <MenuItem x:Name="MenuQualidade" Header="{StaticResource Editor.Menu.QualidadeReproducao}" AutomationProperties.Name="Qualidade de reprodução"
+                                  SubmenuOpened="MenuQualidade_SubmenuOpened">
+                            <MenuItem Header="…" />
+                        </MenuItem>
+                        <MenuItem x:Name="MenuZoomVideo" Header="{StaticResource Editor.Menu.ZoomVideo}" AutomationProperties.Name="Nível de zoom no vídeo">
+                            <MenuItem Header="{StaticResource Editor.Zoom.Ajuste}" Tag="0" ToggleType="Radio" GroupName="zoom" IsChecked="True" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom: ajuste" />
+                            <MenuItem Header="10%" Tag="0.1" ToggleType="Radio" GroupName="zoom" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 10%" />
+                            <MenuItem Header="25%" Tag="0.25" ToggleType="Radio" GroupName="zoom" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 25%" />
+                            <MenuItem Header="50%" Tag="0.5" ToggleType="Radio" GroupName="zoom" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 50%" />
+                            <MenuItem Header="75%" Tag="0.75" ToggleType="Radio" GroupName="zoom" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 75%" />
+                            <MenuItem Header="100%" Tag="1" ToggleType="Radio" GroupName="zoom" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 100%" />
+                            <MenuItem Header="200%" Tag="2" ToggleType="Radio" GroupName="zoom" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 200%" />
+                            <MenuItem Header="400%" Tag="4" ToggleType="Radio" GroupName="zoom" Click="ZoomVideo_Click" AutomationProperties.Name="Zoom 400%" />
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="{StaticResource Editor.Menu.ReproduzirPausar}" Command="{Binding Preview.PlayPauseCommand}" ctl:ShortcutText.Action="reproducao.reproduzir" AutomationProperties.Name="Reproduzir/Pausar" />
+                        <MenuItem Header="{StaticResource Editor.Menu.Parar}" Command="{Binding Preview.StopCommand}" AutomationProperties.Name="Parar" />
+                        <MenuItem Header="{StaticResource Editor.Menu.Loop}" ToggleType="CheckBox" IsChecked="{Binding Preview.LoopPlayback, Mode=TwoWay}" AutomationProperties.Name="Intervalo de reprodução em loop"
+                                  ToolTip.Tip="{StaticResource Editor.Menu.Loop.Dica}" />
+                        <MenuItem x:Name="MenuRegua" Header="{StaticResource Editor.Menu.Regua}" ToggleType="CheckBox" AutomationProperties.Name="Régua" />
+                    </MenuItem>
+                    <MenuItem Header="{StaticResource Editor.Menu.Projeto}">
+                        <MenuItem Header="{StaticResource Editor.Menu.EmpacotarMidias}" Command="{Binding PackageMediaCommand}" />
+                        <MenuItem Header="{StaticResource Editor.Menu.Reenquadrar}" Command="{Binding AiInspector.ReframeProjectCommand}" AutomationProperties.Name="Reenquadrar automaticamente" />
+                        <MenuItem Header="{StaticResource Editor.Menu.SalvarModelo}" Command="{Binding CreativeTools.SaveAsTemplateCommand}" AutomationProperties.Name="Salvar como modelo" />
+                        <Separator />
+                        <MenuItem Header="{StaticResource Editor.Menu.CamadaAjuste}" Command="{Binding Timeline.AddAdjustmentLayerCommand}" AutomationProperties.Name="Adicionar camada de ajuste" />
+                        <MenuItem Header="{StaticResource Editor.Menu.CriarComposto}" Command="{Binding Timeline.CreateCompoundCommand}" AutomationProperties.Name="Criar clipe composto" />
+                        <MenuItem Header="{StaticResource Editor.Menu.DesfazerComposto}" Command="{Binding Timeline.UnpackCompoundCommand}" AutomationProperties.Name="Desfazer clipe composto" />
+                        <!-- Os layouts de tela dividida entram aqui (EditorView.axaml.cs), um item por layout. -->
+                        <MenuItem x:Name="MenuTelaDividida" Header="{StaticResource Editor.Menu.TelaDividida}" AutomationProperties.Name="Tela dividida" />
+                        <MenuItem Header="{StaticResource Editor.Menu.Multicamera}" AutomationProperties.Name="Multicâmera">
+                            <MenuItem Header="Câmera _1 a partir do cursor" Command="{Binding Timeline.SwitchCameraCommand}" CommandParameter="1" ctl:ShortcutText.Action="multicam.1" AutomationProperties.Name="Câmera 1" />
+                            <MenuItem Header="Câmera _2 a partir do cursor" Command="{Binding Timeline.SwitchCameraCommand}" CommandParameter="2" ctl:ShortcutText.Action="multicam.2" AutomationProperties.Name="Câmera 2" />
+                            <MenuItem Header="Câmera _3 a partir do cursor" Command="{Binding Timeline.SwitchCameraCommand}" CommandParameter="3" ctl:ShortcutText.Action="multicam.3" AutomationProperties.Name="Câmera 3" />
+                            <MenuItem Header="Câmera _4 a partir do cursor" Command="{Binding Timeline.SwitchCameraCommand}" CommandParameter="4" ctl:ShortcutText.Action="multicam.4" AutomationProperties.Name="Câmera 4" />
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="{StaticResource Editor.Menu.MidiasAusentes}" Command="{Binding ShowMissingMediaCommand}" />
+                    </MenuItem>
+                    <MenuItem Header="{StaticResource Editor.Menu.Ferramentas}">
+                        <MenuItem Header="{StaticResource Editor.Ferramenta.Mixer}" Click="Mixer_Click" />
+                        <MenuItem Header="{StaticResource Editor.Ferramenta.EditorLegendas}" Click="EditorLegendas_Click" IsEnabled="{Binding Timeline.HasSession}" />
+                        <MenuItem Header="{StaticResource Editor.Ferramenta.ImportarLegendas}" Command="{Binding TextLibrary.ImportSubtitlesCommand}" />
+                        <MenuItem Header="{StaticResource Editor.Ferramenta.ExportarLegendas}" Command="{Binding TextLibrary.ExportSubtitlesCommand}" />
+                        <Separator />
+                        <MenuItem Header="{StaticResource Editor.Ferramenta.TextoParaFala}" Command="{Binding AiInspector.TextToSpeechCommand}" AutomationProperties.Name="Texto para fala" />
+                        <MenuItem Header="{StaticResource Editor.Ferramenta.AnalisarMidia}" Command="{Binding AiInspector.AnalyzeMediaCommand}" AutomationProperties.Name="Analisar mídia" />
+                        <MenuItem Header="{StaticResource Editor.Ferramenta.GravarTela}" Command="{Binding CreativeTools.RecordScreenCommand}" AutomationProperties.Name="Gravar tela" />
+                        <MenuItem Header="{StaticResource Editor.Ferramenta.Pacotes}" Command="{Binding CreativeTools.ManagePacksCommand}" AutomationProperties.Name="Pacotes de conteúdo" />
+                        <Separator />
+                        <MenuItem Header="{StaticResource Editor.Ferramenta.ModelosIA}" Click="ModelosIA_Click" AutomationProperties.Name="Modelos de IA" />
+                        <Separator />
+                        <MenuItem Header="Configurações…" Click="Configuracoes_Click" AutomationProperties.Name="Configurações" ctl:ShortcutText.Action="app.configuracoes" />
+                    </MenuItem>
+                    <MenuItem Header="{StaticResource Editor.Menu.Ajuda}">
+                        <MenuItem Header="Manual do usuário" Click="Manual_Click" AutomationProperties.Name="Manual do usuário" ctl:ShortcutText.Action="app.ajuda" />
+                        <MenuItem x:Name="MenuAssistente" Header="Assistente virtual" ToggleType="CheckBox"
+                                  AutomationProperties.Name="Assistente virtual" ctl:ShortcutText.Action="app.assistente" />
+                        <MenuItem Header="Atalhos de teclado…" Click="Atalhos_Click" AutomationProperties.Name="Atalhos de teclado" />
+                        <Separator />
+                        <MenuItem Header="Informações do sistema…" Click="InformacoesSistema_Click" AutomationProperties.Name="Informações do sistema" />
+                        <MenuItem Header="Abrir pasta de logs" Click="PastaLogs_Click" AutomationProperties.Name="Abrir pasta de logs" />
+                        <MenuItem Header="Licenças de terceiros" Click="Licencas_Click" AutomationProperties.Name="Licenças de terceiros" />
+                        <Separator />
+                        <MenuItem Header="Sobre o Meu Editor de Vídeo" Click="Sobre_Click" AutomationProperties.Name="Sobre" />
+                        <MenuItem Header="Suporte Técnico" Click="Suporte_Click" AutomationProperties.Name="Suporte Técnico" />
+                        <MenuItem Header="{StaticResource Editor.Menu.VerificarAtualizacoes}" Click="VerificarAtualizacoes_Click" AutomationProperties.Name="Verificar atualizações" />
+                    </MenuItem>
+                </Menu>
+
+                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0,0,0">
+                    <Border Width="1" Background="{DynamicResource Med.Border}" Margin="4,10,8,10" />
+                    <Button AutomationProperties.Name="{StaticResource Editor.Acao.Salvar}" Classes="med-toolbar editor-acao" Command="{Binding SaveCommand}"
+                            ToolTip.Tip="{StaticResource Editor.Acao.Salvar}" ToolTip.ShowOnDisabled="True">
+                        <TextBlock Classes="med-icon" Text="&#xE74E;" />
+                    </Button>
+                    <Button AutomationProperties.Name="{StaticResource Editor.Acao.Desfazer}" Classes="med-toolbar editor-acao" Command="{Binding UndoCommand}"
+                            ToolTip.Tip="{Binding UndoToolTip}" ToolTip.ShowOnDisabled="True">
+                        <TextBlock Classes="med-icon" Text="&#xE7A7;" />
+                    </Button>
+                    <Button AutomationProperties.Name="{StaticResource Editor.Acao.Refazer}" Classes="med-toolbar editor-acao" Command="{Binding RedoCommand}"
+                            ToolTip.Tip="{Binding RedoToolTip}" ToolTip.ShowOnDisabled="True">
+                        <TextBlock Classes="med-icon" Text="&#xE7A6;" />
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding ProjectName}" Foreground="{DynamicResource Med.Text}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"
+                               ToolTip.Tip="{Binding ProjectSummary}" />
+                    <TextBlock Text="{StaticResource Editor.NaoSalvo}" FontSize="12" Margin="8,0,0,0" VerticalAlignment="Center"
+                               Foreground="{DynamicResource Med.Accent}" IsVisible="{Binding IsDirty}" />
+                    <Button AutomationProperties.Name="{StaticResource Editor.MidiasAusentes}" Command="{Binding ShowMissingMediaCommand}"
+                            Classes="med-toolbar editor-acao" Margin="12,0,0,0" Padding="8,2"
+                            IsVisible="{Binding MissingMediaCount, Converter={x:Static conv:NumberConverters.IsNotZero}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Classes="med-icon" Text="&#xE7BA;" Foreground="{DynamicResource Med.Danger}" />
+                            <TextBlock Margin="6,0,0,0" Foreground="{DynamicResource Med.Danger}" VerticalAlignment="Center">
+                                <Run Text="{Binding MissingMediaCount, Mode=OneWay}" /><Run Text=" " /><Run Text="{StaticResource Editor.MidiasAusentesSufixo}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button AutomationProperties.Name="{StaticResource Editor.Acao.AlternarTema}" Classes="med-toolbar editor-acao" Command="{Binding ToggleThemeCommand}"
+                            ToolTip.Tip="{StaticResource Editor.Acao.AlternarTema}" ToolTip.ShowOnDisabled="True">
+                        <TextBlock Classes="med-icon" Text="&#xE793;" />
+                    </Button>
+                    <Button AutomationProperties.Name="{StaticResource Editor.Acao.FilaRenderizacao}" Classes="med-toolbar editor-acao" Command="{Binding ShowRenderQueueCommand}"
+                            ToolTip.Tip="{StaticResource Editor.Acao.FilaRenderizacao}" Margin="4,0,0,0">
+                        <TextBlock Classes="med-icon" Text="&#xE896;" />
+                    </Button>
+                    <Button AutomationProperties.Name="{StaticResource Editor.Acao.Exportar}" Classes="med-accent editor-acao" Command="{Binding ExportCommand}"
+                            Margin="8,0,0,0" Padding="12,6">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Classes="med-icon" Text="&#xE898;" />
+                            <TextBlock Text="{StaticResource Editor.Acao.Exportar}" Margin="6,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 3. Área central: Biblioteca | Monitor | Propriedades -->
+        <Grid x:Name="AreaCentral" Grid.Row="1" ColumnDefinitions="560,Auto,*">
+            <!-- Painel A: Biblioteca -->
+            <Border x:Name="PainelBiblioteca" Grid.Column="0" Classes="med-panel editor-painel" Margin="1">
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Abas da biblioteca: ícone em cima, rótulo embaixo -->
+                    <Border Grid.Row="0" BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,0,1" />
+                    <UniformGrid Grid.Row="0" Rows="1" Margin="4,2,4,0">
+                        <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.Midias}" Classes="editor-nav"
+                                Classes.selected="{Binding SelectedSection, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:LibrarySection.Media}}"
+                                Command="{Binding SelectSectionCommand}" CommandParameter="{x:Static vm:LibrarySection.Media}" ToolTip.Tip="{StaticResource Editor.Biblioteca.Midias}">
+                            <StackPanel>
+                                <TextBlock Classes="med-icon" Text="&#xE8F1;" FontSize="18" HorizontalAlignment="Center" />
+                                <TextBlock Text="{StaticResource Editor.Biblioteca.Midias}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.Videos}" Classes="editor-nav"
+                                Classes.selected="{Binding SelectedSection, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:LibrarySection.Videos}}"
+                                Command="{Binding SelectSectionCommand}" CommandParameter="{x:Static vm:LibrarySection.Videos}" ToolTip.Tip="{StaticResource Editor.Biblioteca.Videos}">
+                            <StackPanel>
+                                <TextBlock Classes="med-icon" Text="&#xE714;" FontSize="18" HorizontalAlignment="Center" />
+                                <TextBlock Text="{StaticResource Editor.Biblioteca.Videos}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.Imagens}" Classes="editor-nav"
+                                Classes.selected="{Binding SelectedSection, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:LibrarySection.Images}}"
+                                Command="{Binding SelectSectionCommand}" CommandParameter="{x:Static vm:LibrarySection.Images}" ToolTip.Tip="{StaticResource Editor.Biblioteca.Imagens}">
+                            <StackPanel>
+                                <TextBlock Classes="med-icon" Text="&#xE8B9;" FontSize="18" HorizontalAlignment="Center" />
+                                <TextBlock Text="{StaticResource Editor.Biblioteca.Imagens}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.Audios}" Classes="editor-nav"
+                                Classes.selected="{Binding SelectedSection, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:LibrarySection.Audio}}"
+                                Command="{Binding SelectSectionCommand}" CommandParameter="{x:Static vm:LibrarySection.Audio}" ToolTip.Tip="{StaticResource Editor.Biblioteca.Audios}">
+                            <StackPanel>
+                                <TextBlock Classes="med-icon" Text="&#xE8D6;" FontSize="18" HorizontalAlignment="Center" />
+                                <TextBlock Text="{StaticResource Editor.Biblioteca.Audios}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.ElementosGraficos}" Classes="editor-nav"
+                                Classes.selected="{Binding SelectedSection, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:LibrarySection.Graphics}}"
+                                Command="{Binding SelectSectionCommand}" CommandParameter="{x:Static vm:LibrarySection.Graphics}" ToolTip.Tip="{StaticResource Editor.Biblioteca.ElementosGraficos}">
+                            <StackPanel>
+                                <TextBlock Classes="med-icon" Text="&#xE8F4;" FontSize="18" HorizontalAlignment="Center" />
+                                <TextBlock Text="{StaticResource Editor.Biblioteca.ElementosGraficos}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.Textos}" Classes="editor-nav"
+                                Classes.selected="{Binding SelectedSection, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:LibrarySection.Texts}}"
+                                Command="{Binding SelectSectionCommand}" CommandParameter="{x:Static vm:LibrarySection.Texts}" ToolTip.Tip="{StaticResource Editor.Biblioteca.Textos}">
+                            <StackPanel>
+                                <TextBlock Classes="med-icon" Text="&#xE8D2;" FontSize="18" HorizontalAlignment="Center" />
+                                <TextBlock Text="{StaticResource Editor.Biblioteca.Textos}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.Transicoes}" Classes="editor-nav"
+                                Classes.selected="{Binding SelectedSection, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:LibrarySection.Transitions}}"
+                                Command="{Binding SelectSectionCommand}" CommandParameter="{x:Static vm:LibrarySection.Transitions}" ToolTip.Tip="{StaticResource Editor.Biblioteca.Transicoes}">
+                            <StackPanel>
+                                <TextBlock Classes="med-icon" Text="&#xE8AB;" FontSize="18" HorizontalAlignment="Center" />
+                                <TextBlock Text="{StaticResource Editor.Biblioteca.Transicoes}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.Efeitos}" Classes="editor-nav"
+                                Classes.selected="{Binding SelectedSection, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:LibrarySection.Effects}}"
+                                Command="{Binding SelectSectionCommand}" CommandParameter="{x:Static vm:LibrarySection.Effects}" ToolTip.Tip="{StaticResource Editor.Biblioteca.Efeitos}">
+                            <StackPanel>
+                                <TextBlock Classes="med-icon" Text="&#xE706;" FontSize="18" HorizontalAlignment="Center" />
+                                <TextBlock Text="{StaticResource Editor.Biblioteca.Efeitos}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.Filtros}" Classes="editor-nav"
+                                Classes.selected="{Binding SelectedSection, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:LibrarySection.Filters}}"
+                                Command="{Binding SelectSectionCommand}" CommandParameter="{x:Static vm:LibrarySection.Filters}" ToolTip.Tip="{StaticResource Editor.Biblioteca.Filtros}">
+                            <StackPanel>
+                                <TextBlock Classes="med-icon" Text="&#xE71C;" FontSize="18" HorizontalAlignment="Center" />
+                                <TextBlock Text="{StaticResource Editor.Biblioteca.Filtros}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.Cor}" Classes="editor-nav"
+                                Classes.selected="{Binding SelectedSection, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:LibrarySection.Color}}"
+                                Command="{Binding SelectSectionCommand}" CommandParameter="{x:Static vm:LibrarySection.Color}" ToolTip.Tip="{StaticResource Editor.Biblioteca.Cor}">
+                            <StackPanel>
+                                <TextBlock Classes="med-icon" Text="&#xE790;" FontSize="18" HorizontalAlignment="Center" />
+                                <TextBlock Text="{StaticResource Editor.Biblioteca.Cor}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Biblioteca.IA}" Classes="editor-nav"
+                                Classes.selected="{Binding SelectedSection, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:LibrarySection.AI}}"
+                                Command="{Binding SelectSectionCommand}" CommandParameter="{x:Static vm:LibrarySection.AI}" ToolTip.Tip="{StaticResource Editor.Biblioteca.IA}">
+                            <StackPanel>
+                                <TextBlock Classes="med-icon" Text="&#xE99A;" FontSize="18" HorizontalAlignment="Center" />
+                                <TextBlock Text="{StaticResource Editor.Biblioteca.IA}" Margin="0,3,0,0" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                    </UniformGrid>
+
+                    <Grid Grid.Row="1" Margin="8" RowDefinitions="Auto,*">
+                        <StackPanel Grid.Row="0">
+                            <StackPanel Orientation="Horizontal">
+                                <Button AutomationProperties.Name="{StaticResource Editor.Acao.ImportarMidia}" Classes="med-toolbar editor-acao" Command="{Binding ImportMediaCommand}"
+                                        HorizontalAlignment="Left" Margin="0" Padding="8,5">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Classes="med-icon" Text="&#xE8B5;" FontSize="14" />
+                                        <TextBlock Text="{StaticResource Editor.Acao.ImportarMidia}" Margin="6,0,0,0" FontSize="12" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                                <Button AutomationProperties.Name="{StaticResource Editor.Acao.ImportarSequencia}"
+                                        ToolTip.Tip="{StaticResource Editor.Acao.ImportarSequencia}"
+                                        Classes="med-toolbar editor-controle" Command="{Binding ImportSequenceCommand}"
+                                        Margin="6,0,0,0">
+                                    <TextBlock Classes="med-icon editor-icone" Text="&#xE8B9;" />
+                                </Button>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,8,0,0" IsVisible="{Binding IsMediaSection}">
+                                <TextBox x:Name="CampoPesquisa"
+                                         AutomationProperties.Name="{StaticResource Editor.Biblioteca.Pesquisar}"
+                                         PlaceholderText="{StaticResource Editor.Biblioteca.Pesquisar}"
+                                         Text="{Binding Library.SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                         Background="{DynamicResource Med.PanelAlt}"
+                                         Foreground="{DynamicResource Med.Text}"
+                                         BorderBrush="{DynamicResource Med.Border}"
+                                         CaretBrush="{DynamicResource Med.Text}"
+                                         Padding="6,4" VerticalContentAlignment="Center" />
+
+                                <ComboBox AutomationProperties.Name="{StaticResource Editor.Biblioteca.Categoria}"
+                                          ToolTip.Tip="{StaticResource Editor.Biblioteca.Categoria}"
+                                          ItemsSource="{Binding Library.Categories}"
+                                          SelectedItem="{Binding Library.SelectedCategory}"
+                                          ItemTemplate="{StaticResource Med.TranslatedText}"
+                                          HorizontalAlignment="Stretch"
+                                          Background="{DynamicResource Med.PanelAlt}"
+                                          Foreground="{DynamicResource Med.Text}"
+                                          BorderBrush="{DynamicResource Med.Border}"
+                                          Margin="0,6,0,0" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- IA: os recursos são aplicados ao clipe selecionado (aba IA das propriedades); aqui ficam o guia e os modelos. -->
+                        <StackPanel Grid.Row="1" Margin="12" VerticalAlignment="Top" AutomationProperties.Name="Inteligência artificial"
+                                    IsVisible="{Binding IsAiSection}">
+                            <TextBlock Text="{StaticResource Editor.Biblioteca.IA.Titulo}" FontWeight="SemiBold" Margin="0,0,0,6" />
+                            <TextBlock Text="{StaticResource Editor.Biblioteca.IA.Texto}" TextWrapping="Wrap" Classes="med-muted" />
+                            <TextBlock Text="{StaticResource Editor.Biblioteca.IA.Recursos}" TextWrapping="Wrap" Margin="0,10,0,0" Classes="med-muted" />
+                            <Button Content="{StaticResource Editor.Biblioteca.IA.Modelos}" Click="ModelosIA_Click" Margin="0,12,0,0"
+                                    HorizontalAlignment="Stretch" AutomationProperties.Name="Gerenciar modelos de IA" />
+                        </StackPanel>
+
+                        <!-- Textos: modelos (texto, título, tarja, créditos, legenda) e legendas SRT/VTT (F8) -->
+                        <Panel Grid.Row="1" Margin="0,8,0,0" IsVisible="{Binding IsTextSection}">
+                            <DockPanel DataContext="{Binding TextLibrary}" x:DataType="tl:TextLibraryViewModel">
+                                <StackPanel DockPanel.Dock="Bottom" Margin="4,8,4,0">
+                                    <Button Content="Adicionar no cursor" HorizontalAlignment="Stretch" AutomationProperties.Name="Adicionar texto no cursor"
+                                            Command="{Binding AddPresetCommand}" />
+                                    <StackPanel DataContext="{Binding $parent[UserControl].((vm:EditorViewModel)DataContext).CreativeTools}" x:DataType="vm:CreativeToolsViewModel">
+                                        <TextBlock Text="Títulos salvos" Classes="med-section-title" FontSize="13" Margin="0,12,0,6" />
+                                        <ComboBox x:Name="TitulosSalvos" ItemsSource="{Binding Titles}" SelectedIndex="0" HorizontalAlignment="Stretch"
+                                                  IsEnabled="{Binding HasTitles}" AutomationProperties.Name="Títulos salvos" Margin="0,0,0,4">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate x:DataType="cp:ContentPackItem">
+                                                    <TextBlock Text="{Binding Name}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <Button Content="Inserir título salvo" HorizontalAlignment="Stretch" Margin="0,0,0,4" AutomationProperties.Name="Inserir título salvo"
+                                                Command="{Binding InsertTitleCommand}" CommandParameter="{Binding #TitulosSalvos.SelectedItem}" />
+                                        <Button Content="Salvar texto selecionado como título…" HorizontalAlignment="Stretch" AutomationProperties.Name="Salvar texto selecionado como título"
+                                                Command="{Binding SaveTitleCommand}" />
+                                    </StackPanel>
+                                    <TextBlock Text="Legendas" Classes="med-section-title" FontSize="13" Margin="0,12,0,6" />
+                                    <Button Content="Importar SRT/VTT…" HorizontalAlignment="Stretch" Margin="0,0,0,4" AutomationProperties.Name="Importar legendas SRT ou VTT"
+                                            Command="{Binding ImportSubtitlesCommand}" />
+                                    <Button Content="Editor de legendas…" HorizontalAlignment="Stretch" Margin="0,0,0,4" AutomationProperties.Name="Abrir o editor de legendas"
+                                            Click="EditorLegendas_Click" />
+                                    <Button Content="Exportar SRT/VTT…" HorizontalAlignment="Stretch" AutomationProperties.Name="Exportar legendas SRT ou VTT"
+                                            Command="{Binding ExportSubtitlesCommand}" />
+                                </StackPanel>
+                                <TextBlock DockPanel.Dock="Top" Classes="med-muted" TextWrapping="Wrap" Margin="4,0,4,8"
+                                           Text="Clique duas vezes num modelo para inseri-lo no cursor. Edite o conteúdo e o estilo na aba Texto." />
+                                <ListBox ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset}" AutomationProperties.Name="Modelos de texto"
+                                         Classes="editor-lista" Background="{DynamicResource Med.PanelAlt}" BorderThickness="0"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled" DoubleTapped="ModelosTexto_DoubleTapped">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate x:DataType="tl:TextPresetItem">
+                                            <Grid ColumnDefinitions="40,*" Margin="2,4" AutomationProperties.Name="{Binding Name}">
+                                                <Border Width="34" Height="34" CornerRadius="4" Background="{DynamicResource Med.ClipText}" VerticalAlignment="Top">
+                                                    <TextBlock Text="{Binding Sample}" Foreground="White" FontWeight="Bold" FontSize="14"
+                                                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                </Border>
+                                                <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" />
+                                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Classes="med-muted" FontSize="11" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </Panel>
+
+                        <!-- Elementos gráficos: formas vetoriais e SVG (F9) -->
+                        <Panel Grid.Row="1" Margin="0,8,0,0" IsVisible="{Binding IsGraphicsSection}">
+                            <DockPanel DataContext="{Binding GraphicsLibrary}" x:DataType="tl:GraphicsLibraryViewModel">
+                                <StackPanel DockPanel.Dock="Bottom" Margin="4,8,4,0">
+                                    <Button Content="Adicionar no cursor" HorizontalAlignment="Stretch" AutomationProperties.Name="Adicionar elemento gráfico no cursor"
+                                            Command="{Binding AddPresetCommand}" />
+                                    <Button Content="Importar SVG…" HorizontalAlignment="Stretch" Margin="0,4,0,0" AutomationProperties.Name="Importar gráfico vetorial SVG"
+                                            Command="{Binding ImportSvgCommand}" />
+                                    <StackPanel DataContext="{Binding $parent[UserControl].((vm:EditorViewModel)DataContext).CreativeTools}" x:DataType="vm:CreativeToolsViewModel">
+                                        <TextBlock Text="Figurinhas" Classes="med-section-title" FontSize="13" Margin="0,12,0,6" />
+                                        <TextBlock Text="Instale pacotes em Ferramentas › Pacotes de conteúdo. Clique numa figurinha para inseri-la no cursor."
+                                                   TextWrapping="Wrap" Classes="med-muted" FontSize="11" Margin="0,0,0,6" />
+                                        <ScrollViewer MaxHeight="190" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                            <ItemsControl ItemsSource="{Binding Stickers}" AutomationProperties.Name="Figurinhas">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate x:DataType="cp:ContentPackItem">
+                                                        <Button Width="58" Height="58" Margin="0,0,4,4" Padding="3" ToolTip.Tip="{Binding Name}"
+                                                                AutomationProperties.Name="{Binding Name}"
+                                                                Command="{Binding $parent[ItemsControl].((vm:CreativeToolsViewModel)DataContext).InsertStickerCommand}"
+                                                                CommandParameter="{Binding}">
+                                                            <Panel>
+                                                                <!-- O nome só aparece quando a imagem não carrega (ex.: SVG). -->
+                                                                <TextBlock Text="{Binding Name}" FontSize="9" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                                                           HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Med.TextMuted}"
+                                                                           IsVisible="{Binding #ImagemFigurinha.Source, Converter={x:Static ObjectConverters.IsNull}}" />
+                                                                <Image x:Name="ImagemFigurinha" Source="{Binding Path, Converter={x:Static conv:FileBitmaps.Instance}}" Stretch="Uniform" />
+                                                            </Panel>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </StackPanel>
+                                </StackPanel>
+                                <TextBlock DockPanel.Dock="Top" Classes="med-muted" TextWrapping="Wrap" Margin="4,0,4,8"
+                                           Text="Clique duas vezes numa forma para inseri-la no cursor. Ajuste forma, cores e máscaras na aba Composição." />
+                                <ListBox ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset}" AutomationProperties.Name="Elementos gráficos"
+                                         Classes="editor-lista" Background="{DynamicResource Med.PanelAlt}" BorderThickness="0"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled" DoubleTapped="ElementosGraficos_DoubleTapped">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate x:DataType="tl:GraphicPresetItem">
+                                            <StackPanel Orientation="Horizontal" Margin="2,3" AutomationProperties.Name="{Binding Name}">
+                                                <Border Width="30" Height="30" CornerRadius="4" Background="{DynamicResource Med.MonitorBackground}">
+                                                    <TextBlock Text="{Binding Glyph}" Foreground="{Binding Color}" FontSize="16"
+                                                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                </Border>
+                                                <TextBlock Text="{Binding Name}" Foreground="{DynamicResource Med.Text}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DockPanel>
+                        </Panel>
+
+                        <!-- Transições, efeitos e cor: aplicam ao clipe selecionado na linha do tempo (F6) -->
+                        <DockPanel Grid.Row="1" Margin="0,8,0,0" IsVisible="{Binding IsEffectSection}">
+                            <TextBlock DockPanel.Dock="Top" Classes="med-muted" TextWrapping="Wrap" Margin="4,0,4,8"
+                                       Text="Selecione um clipe na linha do tempo e clique duas vezes num item (ou use Aplicar)." />
+                            <ComboBox DockPanel.Dock="Top" Margin="4,0,4,8" AutomationProperties.Name="Categoria de efeitos" HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding EffectCategories}" SelectedItem="{Binding SelectedEffectCategory}"
+                                      IsVisible="{Binding IsVideoEffectSection}" />
+                            <ComboBox DockPanel.Dock="Top" Margin="4,0,4,8" AutomationProperties.Name="Categoria de filtros" HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding FilterCategories}" SelectedItem="{Binding SelectedFilterCategory}"
+                                      IsVisible="{Binding IsFilterSection}" />
+                            <Button DockPanel.Dock="Bottom" Content="Aplicar ao clipe selecionado" Margin="4,8,4,0" HorizontalAlignment="Stretch"
+                                    AutomationProperties.Name="Aplicar ao clipe selecionado"
+                                    Command="{Binding ApplySectionItemCommand}" CommandParameter="{Binding #ListaEfeitos.SelectedItem}" />
+                            <ListBox x:Name="ListaEfeitos" ItemsSource="{Binding SectionItems}" AutomationProperties.Name="Catálogo"
+                                     Background="{DynamicResource Med.PanelAlt}" BorderThickness="0"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     DoubleTapped="ListaEfeitos_DoubleTapped">
+                                <ListBox.Styles>
+                                    <Style Selector="ListBoxItem">
+                                        <Setter Property="Padding" Value="4" />
+                                        <Setter Property="Margin" Value="2" />
+                                        <Setter Property="VerticalContentAlignment" Value="Top" />
+                                    </Style>
+                                </ListBox.Styles>
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate x:DataType="ins:LibraryEffectItem">
+                                        <StackPanel Width="132" ToolTip.Tip="{Binding Description}" AutomationProperties.Name="{Binding Name}">
+                                            <Border CornerRadius="4" ClipToBounds="True" Height="80" Margin="0,0,0,4" IsVisible="{Binding HasPreview}">
+                                                <Image Source="{Binding Key, Converter={x:Static conv:EffectPreviewConverter.Instance}}" Stretch="UniformToFill" />
+                                            </Border>
+                                            <TextBlock Text="{Binding Name}" Foreground="{DynamicResource Med.Text}" TextWrapping="Wrap"
+                                                       TextAlignment="Center" FontSize="12" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
+
+                        <!-- Área da biblioteca: lista, arrastar e soltar (RF027) -->
+                        <Border x:Name="BibliotecaArea" Grid.Row="1" Margin="0,8,0,0"
+                                Background="{DynamicResource Med.PanelAlt}" CornerRadius="6"
+                                IsVisible="{Binding IsMediaSection}"
+                                DragDrop.AllowDrop="True">
+                            <Grid>
+                                <ListBox x:Name="ListaMidias" ItemsSource="{Binding Library.ItemsView}"
+                                         SelectedItem="{Binding Library.SelectedItem}"
+                                         AutomationProperties.Name="{StaticResource Editor.Biblioteca.Midias}"
+                                         Background="Transparent" BorderThickness="0"
+                                         Margin="4"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         DoubleTapped="Biblioteca_DoubleTapped">
+                                    <ListBox.Styles>
+                                        <Style Selector="ListBoxItem">
+                                            <Setter Property="Padding" Value="4" />
+                                            <Setter Property="Margin" Value="2" />
+                                            <Setter Property="Width" Value="136" />
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                            <Setter Property="VerticalContentAlignment" Value="Top" />
+                                        </Style>
+                                    </ListBox.Styles>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.KeyBindings>
+                                        <KeyBinding Gesture="Delete" Command="{Binding Library.RemoveSelectedCommand}" />
+                                        <KeyBinding Gesture="F2" Command="{Binding Library.RenameSelectedCommand}" />
+                                    </ListBox.KeyBindings>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="{StaticResource Editor.Ferramenta.AdicionarMidia}" Command="{Binding Timeline.AddSelectedMediaCommand}" />
+                                            <Separator />
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.Renomear}" Command="{Binding Library.RenameSelectedCommand}" />
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.DefinirCategoria}" Command="{Binding Library.SetCategoryCommand}" />
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.RemoverCategoria}" Command="{Binding Library.ClearCategoryCommand}" />
+                                            <Separator />
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.GerarProxy}" Command="{Binding Library.GenerateProxyCommand}" />
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.ExcluirProxy}" Command="{Binding Library.DeleteProxyCommand}" />
+                                            <Separator />
+                                            <MenuItem Header="{StaticResource Editor.Biblioteca.RemoverDoProjeto}" Command="{Binding Library.RemoveSelectedCommand}" />
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate x:DataType="media:MediaItemViewModel">
+                                            <Grid RowDefinitions="Auto,Auto" ToolTip.Tip="{Binding ToolTip}" Background="Transparent"
+                                                  Opacity="1" Classes.ausente="{Binding IsMissing}">
+                                                <Grid.Styles>
+                                                    <Style Selector="Grid.ausente">
+                                                        <Setter Property="Opacity" Value="0.6" />
+                                                    </Style>
+                                                </Grid.Styles>
+                                                <Border Grid.Row="0" Height="72" CornerRadius="4"
+                                                        Background="{DynamicResource Med.MonitorBackground}" ClipToBounds="True">
+                                                    <Grid>
+                                                        <Image Source="{Binding Thumbnail, Converter={x:Static conv:BgraBitmaps.Instance}}" Stretch="UniformToFill" />
+                                                        <Path Data="{Binding Waveform}" Stretch="Fill" Fill="{DynamicResource Med.ClipAudio}" Margin="2,4"
+                                                              IsVisible="{Binding Waveform, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                                        <TextBlock Text="{Binding KindGlyph}" Classes="med-icon" FontSize="24"
+                                                                   HorizontalAlignment="Center" Foreground="{DynamicResource Med.TextMuted}">
+                                                            <TextBlock.IsVisible>
+                                                                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                                    <Binding Path="Thumbnail" Converter="{x:Static ObjectConverters.IsNull}" />
+                                                                    <Binding Path="Waveform" Converter="{x:Static ObjectConverters.IsNull}" />
+                                                                </MultiBinding>
+                                                            </TextBlock.IsVisible>
+                                                        </TextBlock>
+                                                        <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="3"
+                                                                Background="#99000000" Padding="3,0">
+                                                            <TextBlock Text="{Binding Badge}" FontSize="10" Foreground="White" />
+                                                        </Border>
+                                                        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3"
+                                                                Background="#CC1E6FD9" Padding="3,0" CornerRadius="2"
+                                                                IsVisible="{Binding HasProxyLabel}"
+                                                                ToolTip.Tip="Proxy de edição 540p (usado só na pré-visualização)">
+                                                            <TextBlock Text="{Binding ProxyLabel}" FontSize="10" Foreground="White"
+                                                                       AutomationProperties.Name="{Binding ProxyLabel}" />
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+
+                                                <Grid Grid.Row="1" Margin="0,4,0,0" RowDefinitions="Auto,Auto,Auto">
+                                                    <TextBlock Grid.Row="0" Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                                               Foreground="{DynamicResource Med.Text}" />
+                                                    <TextBlock Grid.Row="1" Text="{Binding Details}" Classes="med-muted" FontSize="10" TextTrimming="CharacterEllipsis" />
+                                                    <TextBlock Grid.Row="2" Text="{StaticResource Editor.Biblioteca.ArquivoNaoEncontrado}"
+                                                               Foreground="{DynamicResource Med.Danger}" FontSize="11" IsVisible="{Binding IsMissing}" />
+                                                </Grid>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                                <!-- Estado vazio -->
+                                <TextBlock Text="{Binding Library.EmptyMessage}" Classes="med-muted"
+                                           TextAlignment="Center" TextWrapping="Wrap" Margin="12"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           IsVisible="{Binding Library.VisibleCount, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}" />
+
+                                <!-- Progresso da importação -->
+                                <Border VerticalAlignment="Bottom" Background="{DynamicResource Med.Panel}" Padding="8" IsVisible="{Binding Library.IsImporting}">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Library.ImportStatus}" FontSize="11"
+                                                   Foreground="{DynamicResource Med.Text}" TextTrimming="CharacterEllipsis" />
+                                        <ProgressBar Height="4" Maximum="100" Margin="0,4,0,0"
+                                                     Value="{Binding Library.ImportPercent}"
+                                                     AutomationProperties.Name="{StaticResource Editor.Biblioteca.ProgressoImportacao}" />
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Dica ao arrastar arquivos sobre a área -->
+                                <Border x:Name="DicaSoltar" IsVisible="False" IsHitTestVisible="False"
+                                        Margin="2" BorderBrush="{DynamicResource Med.Accent}" BorderThickness="2"
+                                        CornerRadius="6" Background="#333B82F6">
+                                    <TextBlock Text="{StaticResource Editor.Biblioteca.SoltarParaImportar}"
+                                               FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <GridSplitter x:Name="DivisorBiblioteca" Grid.Column="1" Width="3" MinWidth="0" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                          ResizeBehavior="PreviousAndNext" Background="{DynamicResource Med.Background}" />
+
+            <!-- Painel B: Monitor -->
+            <Border x:Name="PainelMonitor" Grid.Column="2" Classes="med-panel editor-painel" Margin="1">
+                <Grid Margin="8,0,8,6" RowDefinitions="Auto,*,Auto,Auto">
+                    <!-- Cabeçalho: origem da imagem e qualidade da pré-visualização -->
+                    <Grid Grid.Row="0" Height="36">
+                        <Border HorizontalAlignment="Left" BorderBrush="{DynamicResource Med.Accent}" BorderThickness="0,0,0,2" Padding="2,0">
+                            <TextBlock Text="{StaticResource Editor.Monitor.LinhaDoTempo}" Foreground="{DynamicResource Med.Accent}"
+                                       FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </Border>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <ComboBox ItemsSource="{Binding Preview.Qualities}" SelectedItem="{Binding Preview.Quality}"
+                                      MinWidth="88" Margin="0,0,4,0"
+                                      AutomationProperties.Name="{StaticResource Editor.Monitor.Qualidade}"
+                                      ToolTip.Tip="{StaticResource Editor.Monitor.Qualidade}" />
+                            <ToggleButton Classes="editor-alternar" IsChecked="{Binding Preview.UseProxies}"
+                                          AutomationProperties.Name="{StaticResource Editor.Monitor.UsarProxies}"
+                                          ToolTip.Tip="{StaticResource Editor.Monitor.UsarProxies}">
+                                <TextBlock Text="Proxy" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            </ToggleButton>
+                            <!-- Maximizar: o monitor cobre a biblioteca e a linha do tempo; Propriedades continua visível -->
+                            <ToggleButton x:Name="BotaoMaximizarMonitor" Classes="editor-alternar" Margin="4,0,0,0"
+                                          IsCheckedChanged="MaximizarMonitor_Changed"
+                                          AutomationProperties.Name="{StaticResource Editor.Monitor.Maximizar}"
+                                          ToolTip.Tip="{StaticResource Editor.Monitor.Maximizar}">
+                                <TextBlock x:Name="IconeMaximizarMonitor" Classes="med-icon editor-icone" Text="&#xE740;" />
+                            </ToggleButton>
+                        </StackPanel>
+                    </Grid>
+
+                    <Border x:Name="Monitor" Grid.Row="1" Background="{DynamicResource Med.MonitorBackground}" CornerRadius="4" ClipToBounds="True"
+                            DoubleTapped="Monitor_DoubleTapped">
+                        <Grid>
+                            <!-- Nível de zoom (Visualizar): em "Ajuste" o conteúdo ocupa o monitor; nos percentuais tem tamanho fixo e rola -->
+                            <ScrollViewer x:Name="RolagemMonitor" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled"
+                                          Focusable="False" AutomationProperties.Name="{StaticResource Editor.Menu.ZoomVideo}">
+                                <Grid x:Name="ConteudoMonitor" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ctl:FrameImage x:Name="ImagemMonitor" Frame="{Binding Preview.Image}"
+                                                    AutomationProperties.Name="{StaticResource Editor.Monitor.Imagem}" />
+                                    <!-- Alças do clipe selecionado: mover, girar e redimensionar no monitor -->
+                                    <ctl:TransformOverlay Inspector="{Binding Inspector}" />
+                                    <!-- Edição de máscaras e regiões de rastreamento sobre a imagem (F9) -->
+                                    <ctl:CompositionOverlay Editor="{Binding CompositionInspector}" />
+                                    <!-- Comparar antes/depois: alça arrastável sobre a linha divisória (desenhada pelo renderizador) -->
+                                    <Canvas x:Name="CamadaComparacao" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                            Width="{Binding #ImagemMonitor.Bounds.Width}" Height="{Binding #ImagemMonitor.Bounds.Height}"
+                                            IsVisible="{Binding Preview.CompareMode}">
+                                        <Border x:Name="AlcaComparacao" Width="24" Background="Transparent" Cursor="SizeWestEast"
+                                                Height="{Binding #CamadaComparacao.Bounds.Height}"
+                                                PointerPressed="AlcaComparacao_PointerPressed" PointerMoved="AlcaComparacao_PointerMoved"
+                                                PointerReleased="AlcaComparacao_PointerReleased"
+                                                AutomationProperties.Name="{StaticResource Editor.Monitor.LinhaComparacao}"
+                                                ToolTip.Tip="{StaticResource Editor.Monitor.LinhaComparacao}">
+                                            <Border Width="28" Height="28" CornerRadius="14" Background="White" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                    Margin="-2,0">
+                                                <TextBlock Text="&#xE76B;&#xE76C;" Classes="med-icon" FontSize="9" Foreground="Black"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                        </Border>
+                                    </Canvas>
+                                    <!-- Régua (Visualizar › Régua): graduada em pixels do vídeo -->
+                                    <ctl:MonitorRuler x:Name="ReguaMonitor" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                      Width="{Binding #ImagemMonitor.Bounds.Width}" Height="{Binding #ImagemMonitor.Bounds.Height}"
+                                                      VideoWidth="{Binding Timeline.Project.Settings.Width, FallbackValue=1920}"
+                                                      VideoHeight="{Binding Timeline.Project.Settings.Height, FallbackValue=1080}" />
+                                </Grid>
+                            </ScrollViewer>
+                            <TextBlock Text="{StaticResource Editor.Monitor.PreVisualizacao}" FontSize="18" Classes="med-muted"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False"
+                                       IsVisible="{Binding !Preview.HasContent}" />
+                            <TextBlock Text="{Binding Preview.Status}" FontSize="10" Margin="6,4" Opacity="0.7" IsHitTestVisible="False"
+                                       Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                            <TextBlock Text="{Binding Preview.AutoNotice}" FontSize="11" Margin="6,4" TextWrapping="Wrap" MaxWidth="420" IsHitTestVisible="False"
+                                       Foreground="#FFD54F" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                       IsVisible="{Binding Preview.AutoNotice, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Barra de posição: arrastar move o cursor da linha do tempo -->
+                    <Grid Grid.Row="2" Margin="0,6,0,0" ColumnDefinitions="*,Auto">
+                        <Slider Grid.Column="0" Minimum="0" Maximum="{Binding Timeline.DurationSeconds}"
+                                Value="{Binding Timeline.PlayheadSeconds}" VerticalAlignment="Center"
+                                Focusable="False"
+                                AutomationProperties.Name="{StaticResource Editor.Monitor.Posicao}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Timeline.TimeDisplay}"
+                                   FontFamily="Consolas, Menlo, DejaVu Sans Mono, monospace" FontSize="12"
+                                   Foreground="{DynamicResource Med.Text}"
+                                   VerticalAlignment="Center" Margin="12,0,0,0" />
+                    </Grid>
+
+                    <!-- Controles: transporte à esquerda; volume, captura e tela cheia à direita -->
+                    <Grid Grid.Row="3" Margin="0,2,0,0" ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.IrInicio}" Classes="med-toolbar editor-controle" Command="{Binding Timeline.GoToStartCommand}" ToolTip.Tip="{StaticResource Editor.Monitor.IrInicio}">
+                                <TextBlock Classes="med-icon editor-icone" Text="&#xE892;" />
+                            </Button>
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.Retroceder}" Classes="med-toolbar editor-controle" Command="{Binding Timeline.StepBackCommand}" ToolTip.Tip="{StaticResource Editor.Monitor.Retroceder}">
+                                <TextBlock Classes="med-icon editor-icone" Text="&#xEB9E;" />
+                            </Button>
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.ReproduzirPausar}" Classes="med-toolbar editor-controle" Command="{Binding Preview.PlayPauseCommand}" ToolTip.Tip="{Binding Preview.PlayToolTip}">
+                                <TextBlock Classes="med-icon editor-icone" Text="{Binding Preview.PlayGlyph, FallbackValue=&#xE768;}" />
+                            </Button>
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.Avancar}" Classes="med-toolbar editor-controle" Command="{Binding Timeline.StepForwardCommand}" ToolTip.Tip="{StaticResource Editor.Monitor.Avancar}">
+                                <TextBlock Classes="med-icon editor-icone" Text="&#xEB9D;" />
+                            </Button>
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.IrFim}" Classes="med-toolbar editor-controle" Command="{Binding Timeline.GoToEndCommand}" ToolTip.Tip="{StaticResource Editor.Monitor.IrFim}">
+                                <TextBlock Classes="med-icon editor-icone" Text="&#xE893;" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Classes="med-icon" Text="&#xE767;" FontSize="14" Margin="0,0,6,0"
+                                       ToolTip.Tip="{StaticResource Editor.Monitor.Volume}" />
+                            <Slider Width="80" Minimum="0" Maximum="100" Value="{Binding Preview.Volume}"
+                                    AutomationProperties.Name="{StaticResource Editor.Monitor.Volume}"
+                                    VerticalAlignment="Center" ToolTip.Tip="{StaticResource Editor.Monitor.Volume}" />
+                            <Button Margin="8,0,0,0" AutomationProperties.Name="{StaticResource Editor.Monitor.CapturarQuadro}" Classes="med-toolbar editor-controle"
+                                    Command="{Binding Preview.CaptureFrameCommand}" ToolTip.Tip="{StaticResource Editor.Monitor.CapturarQuadro}">
+                                <TextBlock Classes="med-icon editor-icone" Text="&#xE722;" />
+                            </Button>
+                            <Button AutomationProperties.Name="{StaticResource Editor.Monitor.TelaCheia}" Classes="med-toolbar editor-controle"
+                                    IsEnabled="{Binding Preview.HasContent, FallbackValue=False}" Click="TelaCheia_Click"
+                                    ToolTip.Tip="{StaticResource Editor.Monitor.TelaCheia}">
+                                <TextBlock Classes="med-icon editor-icone" Text="&#xE740;" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- 4. Divisor horizontal entre a área central e a parte inferior -->
+        <GridSplitter x:Name="DivisorCentral" Grid.Row="2" Height="3" MinHeight="0" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                      ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"
+                      Background="{DynamicResource Med.Background}" />
+
+        <!-- 5 e 6. Ferramentas (E) e Linha do tempo (D) -->
+        <Grid x:Name="AreaInferior" Grid.Row="3" RowDefinitions="Auto,*">
+            <!-- Painel E: Ferramentas da linha do tempo -->
+            <Border Grid.Row="0" Classes="med-panel editor-painel" Height="40" Margin="1,1,1,0">
+                <Grid Margin="8,0" ColumnDefinitions="Auto,*,Auto">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.AdicionarMidia}" Classes="med-toolbar editor-controle"
+                                Command="{Binding Timeline.AddSelectedMediaCommand}" ToolTip.Tip="{StaticResource Editor.Ferramenta.AdicionarMidia}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE710;" />
+                        </Button>
+                        <Button x:Name="BotaoAdicionarTrilha" AutomationProperties.Name="{StaticResource Editor.Ferramenta.AdicionarTrilha}" Classes="med-toolbar editor-controle"
+                                IsEnabled="{Binding Timeline.HasSession}" ToolTip.Tip="{StaticResource Editor.Ferramenta.AdicionarTrilha}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="med-icon editor-icone" Text="&#xE8A5;" />
+                                <TextBlock Classes="med-icon editor-icone" Text="&#xE70D;" FontSize="9" Margin="3,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <Button.Flyout>
+                                <MenuFlyout Placement="Bottom">
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaVideo}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Video}" />
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaAudio}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Audio}" />
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaImagem}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Image}" />
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaTexto}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Text}" />
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaLegenda}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Subtitle}" />
+                                    <MenuItem Header="{StaticResource Editor.Timeline.TrilhaEfeitos}" Command="{Binding Timeline.AddTrackCommand}" CommandParameter="{x:Static model:TrackKind.Effect}" />
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </Button>
+                        <Rectangle Width="1" Height="20" Margin="6,0" Fill="{DynamicResource Med.Border}" />
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Dividir}" Classes="med-toolbar editor-controle"
+                                Command="{Binding Timeline.SplitCommand}" ToolTip.Tip="{StaticResource Editor.Ferramenta.Dividir}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE8C6;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Excluir}" Classes="med-toolbar editor-controle"
+                                Command="{Binding Timeline.DeleteCommand}" ToolTip.Tip="{StaticResource Editor.Ferramenta.Excluir}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE74D;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.ExcluirRipple}" Classes="med-toolbar editor-controle"
+                                Command="{Binding Timeline.RippleDeleteCommand}" ToolTip.Tip="{StaticResource Editor.Ferramenta.ExcluirRipple}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE8BB;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.TextoSimples}" Classes="med-toolbar editor-controle"
+                                Command="{Binding TextLibrary.AddPresetCommand}" CommandParameter="{Binding TextLibrary.Presets[0]}" ToolTip.Tip="{StaticResource Editor.Ferramenta.TextoSimples}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE8D2;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Desenho}" Classes="med-toolbar editor-controle"
+                                IsEnabled="{Binding Timeline.HasSession}" ToolTip.Tip="{StaticResource Editor.Ferramenta.Desenho}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="med-icon editor-icone" Text="&#x29C9;" />
+                                <TextBlock Classes="med-icon editor-icone" Text="&#xE70D;" FontSize="9" Margin="3,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <Button.Flyout>
+                                <MenuFlyout Placement="Bottom">
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Retangulo}" AutomationProperties.Name="{StaticResource Editor.Desenho.Retangulo}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[0]}">
+                                        <MenuItem.Icon><TextBlock Classes="med-icon editor-icone" Text="&#xE739;" /></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Seta}" AutomationProperties.Name="{StaticResource Editor.Desenho.Seta}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[1]}">
+                                        <MenuItem.Icon><TextBlock Classes="med-icon editor-icone" Text="&#xE72A;" /></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Elipse}" AutomationProperties.Name="{StaticResource Editor.Desenho.Elipse}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[2]}">
+                                        <MenuItem.Icon><TextBlock Classes="med-icon editor-icone" Text="&#xEA3A;" /></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Triangulo}" AutomationProperties.Name="{StaticResource Editor.Desenho.Triangulo}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[3]}">
+                                        <MenuItem.Icon><TextBlock Classes="med-icon editor-icone" Text="&#x25B3;" /></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Linha}" AutomationProperties.Name="{StaticResource Editor.Desenho.Linha}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[4]}">
+                                        <MenuItem.Icon><TextBlock Classes="med-icon editor-icone" Text="&#x2571;" /></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{StaticResource Editor.Desenho.Poligono}" AutomationProperties.Name="{StaticResource Editor.Desenho.Poligono}"
+                                              Command="{Binding GraphicsLibrary.AddPresetCommand}" CommandParameter="{Binding GraphicsLibrary.DrawingTools[5]}">
+                                        <MenuItem.Icon><TextBlock Classes="med-icon editor-icone" Text="&#x2B20;" /></MenuItem.Icon>
+                                    </MenuItem>
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.CortarAmpliar}" Classes="med-toolbar editor-controle"
+                                Click="CortarAmpliar_Click" IsEnabled="{Binding Timeline.HasSelection}" ToolTip.Tip="{StaticResource Editor.Ferramenta.CortarAmpliar}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE7A8;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Marcador}" Classes="med-toolbar editor-controle"
+                                Command="{Binding Timeline.AddMarkerCommand}" ToolTip.Tip="{StaticResource Editor.Ferramenta.Marcador}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE7C1;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.Mixer}" Classes="med-toolbar editor-controle"
+                                Click="Mixer_Click" ToolTip.Tip="{StaticResource Editor.Ferramenta.Mixer}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE9E9;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.EditorLegendas}" Classes="med-toolbar editor-controle"
+                                Click="EditorLegendas_Click" IsEnabled="{Binding Timeline.HasSession}" ToolTip.Tip="{StaticResource Editor.Ferramenta.EditorLegendas}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xED1E;" />
+                        </Button>
+                        <Rectangle Width="1" Height="20" Margin="6,0" Fill="{DynamicResource Med.Border}" />
+                        <ToggleButton AutomationProperties.Name="{StaticResource Editor.Ferramenta.Ima}" Classes="editor-alternar"
+                                      IsChecked="{Binding Timeline.SnapEnabled}" ToolTip.Tip="{StaticResource Editor.Ferramenta.Ima}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE71B;" />
+                        </ToggleButton>
+                        <ToggleButton AutomationProperties.Name="{StaticResource Editor.Ferramenta.Ripple}" Classes="editor-alternar"
+                                      IsChecked="{Binding Timeline.RippleEnabled}" ToolTip.Tip="{StaticResource Editor.Ferramenta.Ripple}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE8AB;" />
+                        </ToggleButton>
+                        <TextBlock Text="{Binding Timeline.SelectionSummary}" Classes="med-muted" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.AfastarZoom}" Classes="med-toolbar editor-controle"
+                                Command="{Binding Timeline.ZoomOutCommand}" ToolTip.Tip="{StaticResource Editor.Ferramenta.AfastarZoom}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE71F;" />
+                        </Button>
+                        <Slider Width="140" Minimum="0" Maximum="100" VerticalAlignment="Center"
+                                AutomationProperties.Name="{StaticResource Editor.Ferramenta.Zoom}"
+                                Value="{Binding Timeline.ZoomSlider}" ToolTip.Tip="{Binding Timeline.ZoomLabel}" />
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.AproximarZoom}" Classes="med-toolbar editor-controle"
+                                Command="{Binding Timeline.ZoomInCommand}" ToolTip.Tip="{StaticResource Editor.Ferramenta.AproximarZoom}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE71E;" />
+                        </Button>
+                        <Button AutomationProperties.Name="{StaticResource Editor.Ferramenta.AjustarZoom}" Classes="med-toolbar editor-controle"
+                                Command="{Binding Timeline.ZoomToFitCommand}" ToolTip.Tip="{StaticResource Editor.Ferramenta.AjustarZoom}">
+                            <TextBlock Classes="med-icon editor-icone" Text="&#xE9A6;" />
+                        </Button>
+                        <TextBlock Text="{Binding Timeline.ZoomLabel}" Classes="med-muted" Width="64" Margin="6,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Painel D: Linha do tempo -->
+            <Border Grid.Row="1" Classes="med-panel editor-painel" Margin="1" ClipToBounds="True">
+                <Grid ColumnDefinitions="176,*" RowDefinitions="28,*,Auto">
+                    <Border Grid.Row="0" Grid.Column="0" Background="{DynamicResource Med.Panel}"
+                            BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,1,1">
+                        <TextBlock Text="{Binding Timeline.TimeDisplay}" FontFamily="Consolas, Menlo, DejaVu Sans Mono, monospace" FontSize="11"
+                                   Foreground="{DynamicResource Med.TextMuted}" VerticalAlignment="Center" Margin="8,0" />
+                    </Border>
+
+                    <ctl:TimelineRuler x:Name="Regua" Grid.Row="0" Grid.Column="1" ViewModel="{Binding Timeline}"
+                                       AutomationProperties.Name="{StaticResource Editor.Timeline.Regua}">
+                        <ctl:TimelineRuler.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="{StaticResource Editor.Timeline.RenomearMarcador}" Click="RenomearMarcador_Click" />
+                                <MenuItem Header="{StaticResource Editor.Timeline.RemoverMarcador}" Click="RemoverMarcador_Click" />
+                            </ContextMenu>
+                        </ctl:TimelineRuler.ContextMenu>
+                    </ctl:TimelineRuler>
+
+                    <ScrollViewer x:Name="RolagemTrilhas" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled" Focusable="False">
+                        <Grid ColumnDefinitions="176,*">
+                            <ItemsControl Grid.Column="0" ItemsSource="{Binding Timeline.Tracks}" Focusable="False"
+                                          AutomationProperties.Name="{StaticResource Editor.Timeline.Trilhas}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="tl:TrackHeaderViewModel">
+                                        <Border Height="{Binding Height}" Background="{DynamicResource Med.Panel}"
+                                                BorderBrush="{DynamicResource Med.Border}" BorderThickness="0,0,1,1"
+                                                AutomationProperties.Name="{Binding Name}" DragDrop.AllowDrop="True" Cursor="SizeNorthSouth"
+                                                ToolTip.Tip="{StaticResource Editor.Timeline.ArrastarTrilha}"
+                                                PointerPressed="Trilha_PointerPressed" PointerMoved="Trilha_PointerMoved"
+                                                DragDrop.DragOver="Trilha_DragOver" DragDrop.Drop="Trilha_Drop">
+                                            <Border.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="{StaticResource Editor.Timeline.RenomearTrilha}" Command="{Binding RenameCommand}" />
+                                                    <MenuItem Header="{StaticResource Editor.Timeline.RemoverTrilha}" Command="{Binding RemoveCommand}" />
+                                                    <Separator />
+                                                    <MenuItem Header="{StaticResource Editor.Timeline.MoverTrilhaCima}" Command="{Binding MoveUpCommand}" />
+                                                    <MenuItem Header="{StaticResource Editor.Timeline.MoverTrilhaBaixo}" Command="{Binding MoveDownCommand}" />
+                                                </ContextMenu>
+                                            </Border.ContextMenu>
+                                            <Grid Margin="6,0,2,0" ColumnDefinitions="Auto,*,Auto,Auto,Auto">
+                                                <TextBlock Classes="med-icon" Text="{Binding KindGlyph}" FontSize="12"
+                                                           Foreground="{DynamicResource Med.TextMuted}" VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="12" Margin="6,0,2,0"
+                                                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                                <Button Grid.Column="2" Classes="editor-trilha-botao" Command="{Binding ToggleHiddenCommand}"
+                                                        AutomationProperties.Name="{Binding HideToolTip}" ToolTip.Tip="{Binding HideToolTip}"
+                                                        IsVisible="{Binding CanHide}">
+                                                    <TextBlock Classes="med-icon" Text="{Binding HideGlyph}" FontSize="12" />
+                                                </Button>
+                                                <Button Grid.Column="3" Classes="editor-trilha-botao" Command="{Binding ToggleMutedCommand}"
+                                                        AutomationProperties.Name="{Binding MuteToolTip}" ToolTip.Tip="{Binding MuteToolTip}"
+                                                        IsVisible="{Binding CanMute}">
+                                                    <TextBlock Classes="med-icon" Text="{Binding MuteGlyph}" FontSize="12" />
+                                                </Button>
+                                                <Button Grid.Column="4" Classes="editor-trilha-botao" Command="{Binding ToggleLockCommand}"
+                                                        AutomationProperties.Name="{Binding LockToolTip}" ToolTip.Tip="{Binding LockToolTip}">
+                                                    <TextBlock Classes="med-icon" Text="{Binding LockGlyph}" FontSize="12" />
+                                                </Button>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <ctl:TimelineControl x:Name="LinhaDoTempo" Grid.Column="1" ViewModel="{Binding Timeline}"
+                                                 Height="{Binding Timeline.TracksHeight}" VerticalAlignment="Top"
+                                                 AutomationProperties.Name="{StaticResource Editor.Timeline.Nome}">
+                                <ctl:TimelineControl.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Dividir}" ctl:ShortcutText.Action="linha.dividir" Command="{Binding Timeline.SplitCommand}" />
+                                        <Separator />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Recortar}" ctl:ShortcutText.Action="linha.recortar" Command="{Binding Timeline.CutCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Copiar}" ctl:ShortcutText.Action="linha.copiar" Command="{Binding Timeline.CopyCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Colar}" ctl:ShortcutText.Action="linha.colar" Command="{Binding Timeline.PasteCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Duplicar}" ctl:ShortcutText.Action="linha.duplicar" Command="{Binding Timeline.DuplicateCommand}" />
+                                        <Separator />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Velocidade}" Command="{Binding Timeline.SetSpeedCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Clipe.AoContrario}" Command="{Binding Timeline.ToggleReverseCommand}" AutomationProperties.Name="Reproduzir ao contrário" />
+                                        <MenuItem Header="{StaticResource Editor.Clipe.AtivarDesativar}" Command="{Binding Timeline.ToggleEnabledCommand}" AutomationProperties.Name="Ativar ou desativar clipe" />
+                                        <MenuItem Header="{StaticResource Editor.Menu.CriarComposto}" Command="{Binding Timeline.CreateCompoundCommand}" AutomationProperties.Name="Criar clipe composto" />
+                                        <MenuItem Header="{StaticResource Editor.Menu.DesfazerComposto}" Command="{Binding Timeline.UnpackCompoundCommand}" AutomationProperties.Name="Desfazer clipe composto" />
+                                        <MenuItem Header="{StaticResource Editor.Clipe.SalvarTitulo}" Command="{Binding CreativeTools.SaveTitleCommand}" AutomationProperties.Name="Salvar como título" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.CorClipe}">
+                                            <MenuItem Header="{StaticResource Editor.Timeline.CorAutomatica}" Command="{Binding Timeline.SetClipColorCommand}" CommandParameter="" />
+                                            <Separator />
+                                            <MenuItem Header="{StaticResource Editor.Cor.Vermelho}" Command="{Binding Timeline.SetClipColorCommand}" CommandParameter="#C0474F">
+                                                <MenuItem.Icon><Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="#C0474F" /></MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{StaticResource Editor.Cor.Laranja}" Command="{Binding Timeline.SetClipColorCommand}" CommandParameter="#D2693A">
+                                                <MenuItem.Icon><Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="#D2693A" /></MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{StaticResource Editor.Cor.Amarelo}" Command="{Binding Timeline.SetClipColorCommand}" CommandParameter="#C9A23A">
+                                                <MenuItem.Icon><Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="#C9A23A" /></MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{StaticResource Editor.Cor.Verde}" Command="{Binding Timeline.SetClipColorCommand}" CommandParameter="#3E9A55">
+                                                <MenuItem.Icon><Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="#3E9A55" /></MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{StaticResource Editor.Cor.VerdeAgua}" Command="{Binding Timeline.SetClipColorCommand}" CommandParameter="#1F9C80">
+                                                <MenuItem.Icon><Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="#1F9C80" /></MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{StaticResource Editor.Cor.Azul}" Command="{Binding Timeline.SetClipColorCommand}" CommandParameter="#2F7FA8">
+                                                <MenuItem.Icon><Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="#2F7FA8" /></MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{StaticResource Editor.Cor.Indigo}" Command="{Binding Timeline.SetClipColorCommand}" CommandParameter="#5865C8">
+                                                <MenuItem.Icon><Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="#5865C8" /></MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{StaticResource Editor.Cor.Roxo}" Command="{Binding Timeline.SetClipColorCommand}" CommandParameter="#8A5CD6">
+                                                <MenuItem.Icon><Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="#8A5CD6" /></MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{StaticResource Editor.Cor.Cinza}" Command="{Binding Timeline.SetClipColorCommand}" CommandParameter="#6E6E78">
+                                                <MenuItem.Icon><Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="#6E6E78" /></MenuItem.Icon>
+                                            </MenuItem>
+                                        </MenuItem>
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Agrupar}" ctl:ShortcutText.Action="linha.agrupar" Command="{Binding Timeline.GroupCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Desagrupar}" ctl:ShortcutText.Action="linha.desagrupar" Command="{Binding Timeline.UngroupCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Vincular}" Command="{Binding Timeline.LinkCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Desvincular}" Command="{Binding Timeline.UnlinkCommand}" />
+                                        <Separator />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.SelecionarTudo}" ctl:ShortcutText.Action="linha.selecionarTudo" Command="{Binding Timeline.SelectAllCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.Excluir}" ctl:ShortcutText.Action="linha.excluir" Command="{Binding Timeline.DeleteCommand}" />
+                                        <MenuItem Header="{StaticResource Editor.Timeline.ExcluirRipple}" ctl:ShortcutText.Action="linha.excluirFechando" Command="{Binding Timeline.RippleDeleteCommand}" />
+                                    </ContextMenu>
+                                </ctl:TimelineControl.ContextMenu>
+                            </ctl:TimelineControl>
+                        </Grid>
+                    </ScrollViewer>
+
+                    <ScrollBar x:Name="BarraRolagem" Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Minimum="0"
+                               AutomationProperties.Name="{StaticResource Editor.Timeline.Rolagem}"
+                               Maximum="{Binding Timeline.MaxHorizontalOffset, Mode=OneWay}"
+                               ViewportSize="{Binding Timeline.ViewportWidth, Mode=OneWay}"
+                               LargeChange="{Binding Timeline.ViewportWidth, Mode=OneWay}" SmallChange="40"
+                               Value="{Binding Timeline.HorizontalOffset}" />
+                </Grid>
+            </Border>
+        </Grid>
+
+        <GridSplitter x:Name="DivisorPropriedades" Grid.Row="1" Grid.RowSpan="3" Grid.Column="1" Width="3" MinWidth="0" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+                      ResizeBehavior="PreviousAndNext" Background="{DynamicResource Med.Background}" />
+
+        <!-- Painel C: Propriedades (altura total, do topo até a linha do tempo) -->
+        <Border x:Name="PainelPropriedades" Grid.Row="1" Grid.RowSpan="3" Grid.Column="2" Classes="med-panel editor-painel" Margin="1">
+            <Grid RowDefinitions="Auto,*,Auto">
+                <TabControl x:Name="AbasPropriedades" Grid.Row="1" Margin="6,6,6,6" Padding="0"
+                            Background="{DynamicResource Med.Panel}"
+                            BorderBrush="{DynamicResource Med.Border}">
+                    <TabControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </TabControl.ItemsPanel>
+                    <TabItem Classes="editor-aba" Tag="&#xE7C3;" Header="{StaticResource Editor.Propriedades.Projeto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.InfoProjeto}" IsSelected="True">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="12">
+                            <ItemsControl ItemsSource="{Binding ProjectInfoLines}" ItemTemplate="{StaticResource Editor.LinhaInfo}" />
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem Classes="editor-aba" Tag="&#xE8B9;" Header="{StaticResource Editor.Propriedades.Midia}" AutomationProperties.Name="{StaticResource Editor.Propriedades.InfoMidia}">
+                        <Grid>
+                            <TextBlock Text="{StaticResource Editor.Propriedades.SelecioneMidia}" TextWrapping="Wrap" Margin="12" Classes="med-muted"
+                                       IsVisible="{Binding !Library.HasSelection}" />
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="12" IsVisible="{Binding Library.HasSelection}">
+                                <ItemsControl ItemsSource="{Binding Library.SelectedItem.InfoLines}" ItemTemplate="{StaticResource Editor.LinhaInfo}" />
+                            </ScrollViewer>
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="AbaVideo" Classes="editor-aba" Tag="&#xE714;" Header="{StaticResource Editor.Propriedades.Video}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Video}">
+                        <panels:ClipVideoPanel DataContext="{Binding Inspector}" />
+                    </TabItem>
+                    <TabItem x:Name="AbaTexto" Classes="editor-aba" Tag="&#xE8D2;" Header="{StaticResource Editor.Propriedades.Texto}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Texto}">
+                        <panels:ClipTextPanel DataContext="{Binding TextInspector}" />
+                    </TabItem>
+                    <TabItem x:Name="AbaComposicao" Classes="editor-aba" Tag="&#xE81E;" Header="{StaticResource Editor.Propriedades.Composicao}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Composicao}">
+                        <panels:ClipCompositionPanel DataContext="{Binding CompositionInspector}" />
+                    </TabItem>
+                    <TabItem x:Name="AbaIa" Classes="editor-aba" Tag="&#xE99A;" Header="{StaticResource Editor.Propriedades.IA}" AutomationProperties.Name="Inteligência artificial">
+                        <panels:ClipAiPanel DataContext="{Binding AiInspector}" />
+                    </TabItem>
+                    <TabItem x:Name="AbaAudio" Classes="editor-aba" Tag="&#xE8D6;" Header="{StaticResource Editor.Propriedades.Audio}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Audio}">
+                        <panels:ClipAudioPanel DataContext="{Binding AudioInspector}" />
+                    </TabItem>
+                    <TabItem x:Name="AbaEfeitos" Classes="editor-aba" Tag="&#xE706;" Header="{StaticResource Editor.Propriedades.Efeitos}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Efeitos}">
+                        <panels:ClipEffectsPanel Mode="Effects" DataContext="{Binding Inspector}" />
+                    </TabItem>
+                    <TabItem x:Name="AbaCor" Classes="editor-aba" Tag="&#xE790;" Header="{StaticResource Editor.Propriedades.Cor}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Cor}">
+                        <panels:ClipEffectsPanel Mode="Color" DataContext="{Binding Inspector}" />
+                    </TabItem>
+                    <TabItem Classes="editor-aba" Tag="&#xE81C;" Header="{StaticResource Editor.Propriedades.Historico}" AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}">
+                        <ListBox ItemsSource="{Binding HistoryItems}" Background="Transparent" BorderThickness="0"
+                                 Classes="editor-lista" AutomationProperties.Name="{StaticResource Editor.Propriedades.Historico}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                </Style>
+                            </ListBox.Styles>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="vm:HistoryItem">
+                                    <Button Classes="med-toolbar" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                                            Padding="8,4" AutomationProperties.Name="{Binding Description}"
+                                            Command="{Binding $parent[UserControl].((vm:EditorViewModel)DataContext).GoToHistoryCommand}"
+                                            CommandParameter="{Binding}">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource Med.Text}"
+                                                       Classes.desfeito="{Binding IsUndone}" Classes.atual="{Binding IsCurrent}">
+                                                <TextBlock.Styles>
+                                                    <Style Selector="TextBlock.desfeito">
+                                                        <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+                                                        <Setter Property="FontStyle" Value="Italic" />
+                                                    </Style>
+                                                    <Style Selector="TextBlock.atual">
+                                                        <Setter Property="FontWeight" Value="SemiBold" />
+                                                        <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+                                                    </Style>
+                                                </TextBlock.Styles>
+                                            </TextBlock>
+                                            <TextBlock Grid.Column="1" Text="{Binding Time}" Classes="med-muted" Margin="8,0,0,0" />
+                                        </Grid>
+                                    </Button>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </TabItem>
+                </TabControl>
+
+                <!-- Atalhos de ajuda no canto inferior direito: manual do usuário e assistente virtual -->
+                <Border x:Name="AtalhosAjuda" Grid.Row="2" Margin="6,0,6,6" Padding="4" CornerRadius="6"
+                        Background="{DynamicResource Med.Background}" BorderBrush="{DynamicResource Med.Border}" BorderThickness="1">
+                    <Grid ColumnDefinitions="*,*">
+                        <Button Grid.Column="0" Margin="0,0,2,0" Padding="8,6" HorizontalAlignment="Stretch" Click="Manual_Click"
+                                AutomationProperties.Name="Manual do usuário">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="med-icon" Text="&#xE82D;" FontSize="16" Foreground="{DynamicResource Med.Accent}" />
+                                <TextBlock Text="Manual do usuário" Margin="8,0,0,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                        <Button Grid.Column="1" Margin="2,0,0,0" Padding="8,6" HorizontalAlignment="Stretch" Click="AtalhoAssistente_Click"
+                                AutomationProperties.Name="Assistente virtual">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Classes="med-icon" Text="&#xE99A;" FontSize="16" Foreground="{DynamicResource Med.Accent}" />
+                                <TextBlock Text="Assistente virtual" Margin="8,0,0,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Painel D: assistente virtual (altura total, à direita de Propriedades) -->
+        <GridSplitter x:Name="DivisorAssistente" Grid.Row="1" Grid.RowSpan="3" Grid.Column="3" Width="3" MinWidth="0" HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch" ResizeBehavior="PreviousAndNext" Background="{DynamicResource Med.Background}" IsVisible="False" />
+        <Border x:Name="PainelAssistente" Grid.Row="1" Grid.RowSpan="3" Grid.Column="4" Classes="med-panel editor-painel" Margin="1" IsVisible="False">
+            <panels:AssistantPanel x:Name="Assistente" CloseRequested="Assistente_CloseRequested" />
+        </Border>
+    </Grid>
+</UserControl>

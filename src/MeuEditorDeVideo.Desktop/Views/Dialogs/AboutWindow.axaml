@@ -1,0 +1,99 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels"
+        x:Class="MeuEditorDeVideo.Desktop.Views.Dialogs.AboutWindow"
+        x:DataType="vm:AboutViewModel"
+        Title="Sobre o Meu Editor de Vídeo"
+        Width="720"
+        Height="640"
+        MinWidth="560"
+        MinHeight="420"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        CanResize="True"
+        AutomationProperties.Name="Sobre"
+        Background="{DynamicResource Med.WindowBackground}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Informações do aplicativo (RF215). -->
+    <Window.Styles>
+        <Style Selector="TextBlock.ab-section">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+            <Setter Property="Margin" Value="0,16,0,6" />
+        </Style>
+        <!-- Link: botão sem moldura com texto sublinhado na cor de destaque. -->
+        <Style Selector="Button.ab-link">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="Button.ab-link TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+            <Setter Property="TextDecorations" Value="Underline" />
+        </Style>
+    </Window.Styles>
+    <Window.DataTemplates>
+        <DataTemplate x:DataType="vm:AboutComponent">
+            <Grid Margin="0,2" ColumnDefinitions="2*,130,2*">
+                <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Margin="0,0,10,0" />
+                <TextBlock Grid.Column="1" Text="{Binding License}" Foreground="{DynamicResource Med.Accent}" />
+                <TextBlock Grid.Column="2" Text="{Binding Use}" Foreground="{DynamicResource Med.TextMuted}" TextWrapping="Wrap" />
+            </Grid>
+        </DataTemplate>
+    </Window.DataTemplates>
+    <DockPanel Margin="18">
+        <Button DockPanel.Dock="Bottom" Content="Fechar" IsCancel="True" IsDefault="True" Click="Fechar_Click"
+                HorizontalAlignment="Right" Padding="18,4" Margin="0,12,0,0" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="0,0,12,0">
+                <DockPanel>
+                    <Image DockPanel.Dock="Left" Source="avares://MeuEditorDeVideo/Assets/logo-64.png" Width="64" Height="64"
+                           Margin="0,0,16,0" VerticalAlignment="Top" />
+                    <StackPanel>
+                        <TextBlock Text="{Binding Product}" FontSize="22" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding Version}" Foreground="{DynamicResource Med.TextMuted}" Margin="0,2,0,0" />
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <TextBlock Text="{Binding DeveloperText}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            <!-- Perfil no LinkedIn: abre no navegador padrão. -->
+                            <Button Command="{Binding OpenLinkedInCommand}" Margin="8,0,0,0" Padding="0" Cursor="Hand"
+                                    Background="Transparent" BorderThickness="0" VerticalAlignment="Center"
+                                    ToolTip.Tip="linkedin.com/in/diegomendesrodrigues"
+                                    AutomationProperties.Name="Perfil de Diego Mendes Rodrigues no LinkedIn">
+                                <Border Width="20" Height="20" CornerRadius="3" Background="#0A66C2">
+                                    <TextBlock Text="in" Foreground="White" FontWeight="Bold" FontSize="13"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0" />
+                                </Border>
+                            </Button>
+                        </StackPanel>
+                        <TextBlock Text="{Binding Copyright}" Foreground="{DynamicResource Med.TextMuted}" Margin="0,2,0,0" TextWrapping="Wrap" />
+                    </StackPanel>
+                </DockPanel>
+
+                <TextBlock Text="Visite nosso website" Classes="ab-section" />
+                <Button Classes="ab-link" Command="{Binding OpenWebsiteCommand}" AutomationProperties.Name="Visite nosso website">
+                    <TextBlock Text="{Binding WebsiteUrl}" />
+                </Button>
+
+                <TextBlock Text="Visite o GitHub do Meu Editor de Vídeo" Classes="ab-section" />
+                <Button Classes="ab-link" Command="{Binding OpenGitHubCommand}" AutomationProperties.Name="Visite o GitHub do Meu Editor de Vídeo">
+                    <TextBlock Text="{Binding GitHubUrl}" />
+                </Button>
+
+                <TextBlock Text="Licença" Classes="ab-section" />
+                <TextBlock Text="{Binding License}" TextWrapping="Wrap" />
+
+                <TextBlock Text="Privacidade" Classes="ab-section" />
+                <TextBlock Text="{Binding Privacy}" TextWrapping="Wrap" />
+
+                <TextBlock Text="Componentes de terceiros" Classes="ab-section" />
+                <ItemsControl ItemsSource="{Binding Components}" AutomationProperties.Name="Componentes de terceiros" />
+
+                <TextBlock Text="Modelos de IA" Classes="ab-section" />
+                <ItemsControl ItemsSource="{Binding Models}" AutomationProperties.Name="Modelos de IA" />
+
+                <TextBlock Text="{Binding Runtime}" Foreground="{DynamicResource Med.TextMuted}" Margin="0,16,0,0" />
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

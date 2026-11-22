@@ -1,0 +1,98 @@
+<Window x:Class="MeuEditorDeVideo.Desktop.Views.Dialogs.SubtitleEditorWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels.Timeline"
+        xmlns:dm="using:MeuEditorDeVideo.Domain.Model"
+        x:DataType="vm:SubtitleEditorViewModel"
+        Title="Editor de legendas"
+        Width="760"
+        Height="560"
+        MinWidth="520"
+        MinHeight="320"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        AutomationProperties.Name="Editor de legendas"
+        Background="{DynamicResource Med.WindowBackground}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Editor de legendas (RF143): tempos e textos editáveis, sincronizados com a linha do tempo e desfazíveis. -->
+    <Window.Styles>
+        <Style Selector="TextBox.time">
+            <Setter Property="FontFamily" Value="Cascadia Mono, Consolas, Menlo, DejaVu Sans Mono, monospace" />
+            <Setter Property="Width" Value="112" />
+            <Setter Property="Margin" Value="0,0,6,0" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
+        <!-- Legenda sob o cursor: faixa de destaque à esquerda. -->
+        <Style Selector="Border.linha.current">
+            <Setter Property="BorderBrush" Value="{DynamicResource Med.Accent}" />
+            <Setter Property="BorderThickness" Value="2,0,0,0" />
+        </Style>
+    </Window.Styles>
+    <DockPanel Margin="12">
+        <!-- Trilha e ações -->
+        <Grid DockPanel.Dock="Top" Margin="0,0,0,8" ColumnDefinitions="Auto,*,Auto">
+            <TextBlock Text="Trilha" VerticalAlignment="Center" Margin="0,0,8,0" />
+            <ComboBox Grid.Column="1" ItemsSource="{Binding Tracks}" SelectedItem="{Binding SelectedTrack}"
+                      AutomationProperties.Name="Trilha de legendas">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="dm:Track">
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="8,0,0,0">
+                <Button Content="Nova trilha" Padding="10,3" Margin="0,0,6,0" Command="{Binding NewTrackCommand}" AutomationProperties.Name="Nova trilha de legendas" />
+                <Button Content="Importar SRT/VTT…" Padding="10,3" Margin="0,0,6,0" Command="{Binding Library.ImportSubtitlesCommand}" AutomationProperties.Name="Importar legendas" />
+                <Button Content="Exportar…" Padding="10,3" Command="{Binding Library.ExportSubtitlesCommand}" AutomationProperties.Name="Exportar legendas" />
+            </StackPanel>
+        </Grid>
+
+        <Grid DockPanel.Dock="Bottom" Margin="0,8,0,0" ColumnDefinitions="Auto,*,Auto">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="+ Adicionar no cursor" Padding="10,3" Margin="0,0,6,0" Command="{Binding AddCommand}" AutomationProperties.Name="Adicionar legenda" />
+                <Button Content="Remover" Padding="10,3" Margin="0,0,6,0" Command="{Binding RemoveCommand}" AutomationProperties.Name="Remover legenda" />
+                <Button Content="Ir para" Padding="10,3" Command="{Binding GoToCommand}" AutomationProperties.Name="Ir para a legenda" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <TextBlock Text="Deslocar todas" VerticalAlignment="Center" Margin="0,0,6,0" />
+                <TextBox x:Name="DeslocarBox" Width="56"
+                         AutomationProperties.Name="Segundos para deslocar" ToolTip.Tip="Segundos; negativo adianta as legendas" />
+                <TextBlock Text="s" VerticalAlignment="Center" Margin="4,0,6,0" />
+                <Button Content="Aplicar" Padding="10,3" Command="{Binding ShiftCommand}" AutomationProperties.Name="Deslocar todas as legendas" />
+            </StackPanel>
+        </Grid>
+
+        <TextBlock DockPanel.Dock="Bottom" Text="{Binding Summary}" Classes="med-muted" Margin="0,6,0,0" />
+
+        <!-- Cabeçalho das colunas -->
+        <Grid DockPanel.Dock="Top" Margin="8,0,8,4" ColumnDefinitions="34,118,118,64,*">
+            <TextBlock Text="#" Classes="med-muted" />
+            <TextBlock Grid.Column="1" Text="Início" Classes="med-muted" />
+            <TextBlock Grid.Column="2" Text="Fim" Classes="med-muted" />
+            <TextBlock Grid.Column="3" Text="Duração" Classes="med-muted" />
+            <TextBlock Grid.Column="4" Text="Texto (Enter quebra a linha)" Classes="med-muted" />
+        </Grid>
+
+        <ListBox ItemsSource="{Binding Rows}" SelectedItem="{Binding SelectedRow}" AutomationProperties.Name="Legendas"
+                 Background="{DynamicResource Med.PanelAlt}" BorderThickness="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 DoubleTapped="Lista_DoubleTapped">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:SubtitleRowViewModel">
+                    <Border Classes="linha" Classes.current="{Binding IsCurrent}" AutomationProperties.Name="{Binding Text}">
+                    <Grid Margin="0,3" ColumnDefinitions="34,118,118,64,*">
+                        <TextBlock Text="{Binding Number}" VerticalAlignment="Top" Margin="0,3,0,0" />
+                        <TextBox Grid.Column="1" Classes="time" Text="{Binding StartText}"
+                                 AutomationProperties.Name="Início da legenda" />
+                        <TextBox Grid.Column="2" Classes="time" Text="{Binding EndText}"
+                                 AutomationProperties.Name="Fim da legenda" />
+                        <TextBlock Grid.Column="3" Text="{Binding DurationText}" VerticalAlignment="Top" Margin="0,3,0,0" Classes="med-muted" />
+                        <TextBox Grid.Column="4" Text="{Binding Text}" AcceptsReturn="True" TextWrapping="Wrap"
+                                 AutomationProperties.Name="Texto da legenda" />
+                    </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+</Window>

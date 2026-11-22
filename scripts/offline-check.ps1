@@ -29,7 +29,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-if (-not $ExePath) { $ExePath = Join-Path $root 'src\MeuEditorDeVideo.App\bin\Debug\net10.0-windows\win-x64\MeuEditorDeVideo.exe' }
+if (-not $ExePath) { $ExePath = Join-Path $root 'src\MeuEditorDeVideo.Desktop\bin\Debug\net10.0\MeuEditorDeVideo.exe' }
 
 if ($ProcessId) {
     $proc = Get-Process -Id $ProcessId

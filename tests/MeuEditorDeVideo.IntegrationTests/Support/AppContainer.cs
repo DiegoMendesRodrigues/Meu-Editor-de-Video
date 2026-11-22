@@ -11,9 +11,9 @@ using Microsoft.Extensions.Hosting;
 namespace MeuEditorDeVideo.IntegrationTests.Support;
 
 /// <summary>
-/// Container de DI com os serviços reais, montado como o aplicativo faz em <c>App.xaml.cs</c>
+/// Container de DI com os serviços reais, montado como o aplicativo faz em <c>App.axaml.cs</c>
 /// (<c>UseMeuEditorInfrastructure</c> + <c>AddProjectEngine</c>, <c>AddMediaEngine</c>, <c>AddPreviewEngine</c>,
-/// <c>AddMeuEditorApplication</c>, <c>AddAiEngine</c>), sem a camada de janela (WPF) nem o instalador de modelos pela rede.
+/// <c>AddMeuEditorApplication</c>, <c>AddAiEngine</c>), sem a camada de janela (Avalonia) nem o instalador de modelos pela rede.
 /// Os caminhos apontam para uma pasta temporária. Criar outro container com a mesma raiz simula reiniciar o aplicativo.
 /// </summary>
 internal sealed class AppContainer : IDisposable

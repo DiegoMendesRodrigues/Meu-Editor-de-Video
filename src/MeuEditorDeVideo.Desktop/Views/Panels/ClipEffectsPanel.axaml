@@ -1,0 +1,100 @@
+<UserControl x:Class="MeuEditorDeVideo.Desktop.Views.Panels.ClipEffectsPanel"
+             Classes="inspetor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ins="using:MeuEditorDeVideo.Presentation.ViewModels.Inspector"
+             xmlns:conv="using:MeuEditorDeVideo.Desktop.Converters"
+             x:DataType="ins:ClipInspectorViewModel">
+    <!--
+        Pilha de efeitos do clipe (abas "Efeitos" e "Cor" do painel C). Mode="Color" mostra correção/gradação de cor,
+        comparação antes/depois e LUT; Mode="Effects" mostra efeitos visuais e chroma key.
+    -->
+    <Grid>
+        <TextBlock x:Name="Vazio" TextWrapping="Wrap" Margin="12" Classes="med-muted" IsVisible="{Binding !HasClip}"
+                   Text="Selecione um clipe de vídeo ou imagem na linha do tempo para aplicar efeitos e corrigir a cor." />
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="10,4,10,10"
+                      IsVisible="{Binding HasClip}">
+            <StackPanel>
+                <TextBlock Text="{Binding ClipTitle}" FontWeight="SemiBold" Foreground="{DynamicResource Med.Text}" TextTrimming="CharacterEllipsis" Margin="0,6,0,0" />
+
+                <CheckBox x:Name="Comparar" Content="Comparar antes/depois no monitor" IsChecked="{Binding Preview.CompareMode}" Margin="0,10,0,0"
+                          AutomationProperties.Name="Comparar antes e depois" ToolTip.Tip="Metade esquerda do monitor sem efeitos e sem correção de cor" />
+
+                <!-- Predefinições de cor (só na aba Cor) -->
+                <StackPanel x:Name="Predefinicoes">
+                    <TextBlock Text="Predefinições" Classes="ins-section" />
+                    <ItemsControl ItemsSource="{Binding LibraryColorPresets}" AutomationProperties.Name="Predefinições de cor">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="4" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="ins:ColorPreset">
+                                <Button Classes="ins-card" ToolTip.Tip="{Binding Description}" Tag="{Binding PreviewKey}"
+                                        AutomationProperties.Name="{Binding Name, StringFormat='Aplicar predefinição {0}'}"
+                                        Command="{Binding $parent[UserControl].((ins:ClipInspectorViewModel)DataContext).ApplyColorPresetCommand}"
+                                        CommandParameter="{Binding Id}">
+                                    <StackPanel>
+                                        <Panel>
+                                            <Border Classes="ins-thumb">
+                                                <Image Source="{Binding PreviewKey, Converter={x:Static conv:EffectPreviewConverter.Instance}}" Stretch="UniformToFill" Height="46" />
+                                            </Border>
+                                            <Border Classes="ins-applied">
+                                                <Border.IsVisible>
+                                                    <MultiBinding Converter="{x:Static conv:AppliedKeyConverter.Instance}">
+                                                        <Binding Path="PreviewKey" />
+                                                        <Binding Path="$parent[UserControl].((ins:ClipInspectorViewModel)DataContext).AppliedKeys" />
+                                                    </MultiBinding>
+                                                </Border.IsVisible>
+                                            </Border>
+                                        </Panel>
+                                        <TextBlock Text="{Binding Name}" Classes="ins-card-text" />
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <TextBlock x:Name="TituloAdicionar" Classes="ins-section" />
+                <ItemsControl x:Name="Catalogo">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="ins:LibraryEffectItem">
+                            <Button Classes="ins-card" ToolTip.Tip="{Binding Description}" Tag="{Binding Key}"
+                                    AutomationProperties.Name="{Binding Name, StringFormat='Adicionar {0}'}"
+                                    Command="{Binding $parent[UserControl].((ins:ClipInspectorViewModel)DataContext).AddEffectCommand}"
+                                    CommandParameter="{Binding Key}">
+                                <StackPanel>
+                                    <Panel>
+                                        <Border Classes="ins-thumb">
+                                            <Image Source="{Binding Key, Converter={x:Static conv:EffectPreviewConverter.Instance}}" Stretch="UniformToFill" Height="46" />
+                                        </Border>
+                                        <Border Classes="ins-applied">
+                                            <Border.IsVisible>
+                                                <MultiBinding Converter="{x:Static conv:AppliedKeyConverter.Instance}">
+                                                    <Binding Path="Key" />
+                                                    <Binding Path="$parent[UserControl].((ins:ClipInspectorViewModel)DataContext).AppliedKeys" />
+                                                </MultiBinding>
+                                            </Border.IsVisible>
+                                        </Border>
+                                    </Panel>
+                                    <TextBlock Text="{Binding Name}" Classes="ins-card-text" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock x:Name="TituloPilha" Classes="ins-section" />
+                <TextBlock x:Name="PilhaVazia" Classes="ins-label" TextWrapping="Wrap" Margin="0,0,0,6" />
+                <ItemsControl x:Name="Pilha" AutomationProperties.Name="Efeitos aplicados" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

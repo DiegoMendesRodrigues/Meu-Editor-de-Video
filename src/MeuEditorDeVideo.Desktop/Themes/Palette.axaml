@@ -1,0 +1,53 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+      Paletas do aplicativo por variante de tema (RF207). O ThemeService só troca Application.RequestedThemeVariant;
+      as referências DynamicResource Med.* acompanham. Mesmas cores do App WPF (Themes/Palette.{Dark,Light}.xaml).
+    -->
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="Med.Background" Color="#0C0C0F" />
+            <!-- Fundo das janelas de diálogo (mais claro que o fundo do editor, para leitura) -->
+            <SolidColorBrush x:Key="Med.WindowBackground" Color="#2B2B33" />
+            <SolidColorBrush x:Key="Med.Panel" Color="#222228" />
+            <SolidColorBrush x:Key="Med.PanelAlt" Color="#2A2A31" />
+            <SolidColorBrush x:Key="Med.PanelHover" Color="#34343C" />
+            <SolidColorBrush x:Key="Med.Border" Color="#3A3A43" />
+            <SolidColorBrush x:Key="Med.Text" Color="#E6E6EA" />
+            <SolidColorBrush x:Key="Med.TextMuted" Color="#9A9AA6" />
+            <SolidColorBrush x:Key="Med.Accent" Color="#4D8DFF" />
+            <SolidColorBrush x:Key="Med.AccentHover" Color="#73A6FF" />
+            <SolidColorBrush x:Key="Med.OnAccent" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="Med.MonitorBackground" Color="#000000" />
+            <SolidColorBrush x:Key="Med.Playhead" Color="#FF4D5E" />
+            <SolidColorBrush x:Key="Med.ClipVideo" Color="#1F9C80" />
+            <SolidColorBrush x:Key="Med.ClipImage" Color="#3A8F4E" />
+            <SolidColorBrush x:Key="Med.ClipAudio" Color="#2F7FA8" />
+            <SolidColorBrush x:Key="Med.ClipText" Color="#8A5CD6" />
+            <SolidColorBrush x:Key="Med.Danger" Color="#F0525F" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="Med.Background" Color="#CFCFD6" />
+            <SolidColorBrush x:Key="Med.WindowBackground" Color="#F4F4F7" />
+            <SolidColorBrush x:Key="Med.Panel" Color="#FAFAFC" />
+            <SolidColorBrush x:Key="Med.PanelAlt" Color="#EFEFF3" />
+            <SolidColorBrush x:Key="Med.PanelHover" Color="#E0E0E6" />
+            <SolidColorBrush x:Key="Med.Border" Color="#CFCFD6" />
+            <SolidColorBrush x:Key="Med.Text" Color="#18181C" />
+            <SolidColorBrush x:Key="Med.TextMuted" Color="#5E5E6A" />
+            <SolidColorBrush x:Key="Med.Accent" Color="#2563EB" />
+            <SolidColorBrush x:Key="Med.AccentHover" Color="#3B7BF0" />
+            <SolidColorBrush x:Key="Med.OnAccent" Color="#FFFFFF" />
+            <SolidColorBrush x:Key="Med.MonitorBackground" Color="#101010" />
+            <SolidColorBrush x:Key="Med.Playhead" Color="#E0283A" />
+            <SolidColorBrush x:Key="Med.ClipVideo" Color="#1F9C80" />
+            <SolidColorBrush x:Key="Med.ClipImage" Color="#3E9A55" />
+            <SolidColorBrush x:Key="Med.ClipAudio" Color="#3A88B2" />
+            <SolidColorBrush x:Key="Med.ClipText" Color="#8A5CD6" />
+            <SolidColorBrush x:Key="Med.Danger" Color="#D93847" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+    <!-- Fonte de ícones própria (Fluent UI System Icons, MIT) com os mesmos pontos de código da Segoe Fluent Icons. -->
+    <FontFamily x:Key="Med.IconFont">avares://MeuEditorDeVideo/Assets/Fonts#Med Icons</FontFamily>
+</ResourceDictionary>

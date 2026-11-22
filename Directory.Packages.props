@@ -19,6 +19,13 @@
     <PackageVersion Include="SkiaSharp.HarfBuzz" Version="4.148.0" />
     <!-- Biblioteca nativa do SkiaSharp para Linux. -->
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="4.148.0" />
+    <!-- Interface multiplataforma (Avalonia, MIT). Compilado contra SkiaSharp 3.119; roda com o 4.148 acima. -->
+    <!-- Atalho global (SharpHook 8.0.1, MIT; libuiohook embutida, ver documentation/DEPENDENCIAS.md). -->
+    <PackageVersion Include="SharpHook" Version="8.0.1" />
+    <PackageVersion Include="Avalonia" Version="12.1.6" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.1.6" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.6" />
+    <PackageVersion Include="Avalonia.Headless" Version="12.1.6" />
     <PackageVersion Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.24.4" />
     <PackageVersion Include="Microsoft.ML.OnnxRuntimeGenAI.DirectML" Version="0.14.1" />
     <!-- Linux e macOS: mesmas versões sem DirectML (CPU; CoreML no macOS). -->

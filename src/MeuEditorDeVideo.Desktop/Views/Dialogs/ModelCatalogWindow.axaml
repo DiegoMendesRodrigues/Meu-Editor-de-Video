@@ -1,0 +1,114 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MeuEditorDeVideo.Presentation.ViewModels"
+        x:Class="MeuEditorDeVideo.Desktop.Views.Dialogs.ModelCatalogWindow"
+        x:DataType="vm:ModelCatalogViewModel"
+        Title="Baixar modelos de IA"
+        Width="1040"
+        Height="680"
+        MinWidth="760"
+        MinHeight="480"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        AutomationProperties.Name="Baixar modelos de IA"
+        Background="{DynamicResource Med.WindowBackground}"
+        Foreground="{DynamicResource Med.Text}">
+    <!-- Catálogo oficial: recursos de cada modelo; Instalar = baixar, conferir SHA-256, gerar .medmodel e instalar com as dependências. -->
+    <Window.Styles>
+        <Style Selector="TextBlock.mc-label">
+            <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+            <Setter Property="Margin" Value="0,3,12,3" />
+        </Style>
+        <Style Selector="TextBlock.mc-value">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,3" />
+        </Style>
+        <Style Selector="TextBlock.mc-state">
+            <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+        </Style>
+        <Style Selector="TextBlock.mc-state.installed">
+            <Setter Property="Foreground" Value="{DynamicResource Med.Accent}" />
+        </Style>
+    </Window.Styles>
+    <DockPanel Margin="14">
+        <TextBlock DockPanel.Dock="Top" Text="{Binding Notice}" Foreground="{DynamicResource Med.TextMuted}" TextWrapping="Wrap" Margin="0,0,0,12" />
+
+        <!-- Rodapé: progresso e ações (coluna dos botões em Auto para caberem sempre) -->
+        <Grid DockPanel.Dock="Bottom" Margin="0,12,0,0" ColumnDefinitions="*,Auto">
+            <StackPanel Margin="0,0,16,0" VerticalAlignment="Center">
+                <ProgressBar Height="8" Minimum="0" Maximum="100" Value="{Binding Percent}" IsVisible="{Binding IsBusy}"
+                             AutomationProperties.Name="Progresso da instalação" />
+                <TextBlock x:Name="StatusText" Text="{Binding Status}" TextWrapping="Wrap" Margin="0,6,0,0" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" Spacing="8">
+                <Button Content="Abrir pasta dos pacotes" Command="{Binding OpenPackagesFolderCommand}" Padding="12,4" />
+                <Button Content="Cancelar download" Command="{Binding CancelCommand}" Padding="12,4" />
+                <Button Content="Instalar todos" Command="{Binding InstallAllCommand}" Classes="med-accent" Padding="12,4"
+                        AutomationProperties.Name="Instalar todos os modelos" />
+                <Button Content="Fechar" IsCancel="True" Click="Fechar_Click" Padding="12,4" />
+            </StackPanel>
+        </Grid>
+
+        <Grid ColumnDefinitions="360,*">
+            <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding Selected}" AutomationProperties.Name="Modelos disponíveis"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:CatalogItemViewModel">
+                        <StackPanel Margin="2,4" AutomationProperties.Name="{Binding Name}">
+                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                            <TextBlock Foreground="{DynamicResource Med.TextMuted}" TextWrapping="Wrap">
+                                <Run Text="{Binding Capability, Mode=OneWay}" /><Run Text=" · " /><Run Text="{Binding Download, Mode=OneWay}" />
+                            </TextBlock>
+                            <TextBlock Text="{Binding StateText}" Classes="mc-state" Classes.installed="{Binding IsInstalled}" />
+                            <TextBlock Text="{Binding Progress}" Foreground="{DynamicResource Med.Accent}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <ScrollViewer Grid.Column="1" Margin="16,0,0,0" VerticalScrollBarVisibility="Auto" DataContext="{Binding Selected}"
+                          x:DataType="vm:CatalogItemViewModel">
+                <StackPanel>
+                    <DockPanel LastChildFill="True">
+                        <!-- Habilitado só com a instalação parada (IsIdle do ViewModel da janela). -->
+                        <Button x:Name="BotaoInstalar" DockPanel.Dock="Right" Content="{Binding ActionText}" Command="{Binding InstallCommand}"
+                                VerticalAlignment="Top" Classes="med-accent" Padding="18,4" Margin="12,0,0,0" />
+                        <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap" />
+                    </DockPanel>
+                    <TextBlock Text="{Binding Purpose}" TextWrapping="Wrap" Margin="0,8,0,10" />
+
+                    <TextBlock Text="Recursos do editor" FontWeight="SemiBold" Foreground="{DynamicResource Med.Accent}" Margin="0,4,0,4" />
+                    <ItemsControl ItemsSource="{Binding Features}" AutomationProperties.Name="Recursos do modelo">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <TextBlock Text="{Binding StringFormat=• {0}}" TextWrapping="Wrap" Margin="0,1" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock Text="Detalhes" FontWeight="SemiBold" Foreground="{DynamicResource Med.Accent}" Margin="0,14,0,4" />
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                        <TextBlock Text="Situação" Classes="mc-label" />
+                        <TextBlock Grid.Column="1" Text="{Binding StateText}" Classes="mc-value" />
+                        <TextBlock Grid.Row="1" Text="Versão" Classes="mc-label" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Version}" Classes="mc-value" />
+                        <TextBlock Grid.Row="2" Text="Download" Classes="mc-label" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Download}" Classes="mc-value" />
+                        <TextBlock Grid.Row="3" Text="Memória necessária" Classes="mc-label" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Memory}" Classes="mc-value" />
+                        <TextBlock Grid.Row="4" Text="Executa em" Classes="mc-label" />
+                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Device}" Classes="mc-value" />
+                        <TextBlock Grid.Row="5" Text="Dependências" Classes="mc-label" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Dependencies}" Classes="mc-value" />
+                        <TextBlock Grid.Row="6" Text="Licença" Classes="mc-label" />
+                        <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding License}" Classes="mc-value" />
+                        <TextBlock Grid.Row="7" Text="Origem" Classes="mc-label" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Source}" Classes="mc-value" />
+                        <TextBlock Grid.Row="8" Text="Baixado de" Classes="mc-label" />
+                        <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding Origin}" Classes="mc-value" />
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Window>

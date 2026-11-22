@@ -1,0 +1,63 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+      Estilos compartilhados. No WPF eram estilos com chave (Style="{StaticResource Med.X}"); aqui são classes:
+        Med.PanelBorder → Border.med-panel        Med.SectionTitle → TextBlock.med-section-title
+        Med.MutedText   → TextBlock.med-muted     Med.AccentButton → Button.med-accent
+        Med.ToolbarButton → Button.med-toolbar    Med.Icon        → TextBlock.med-icon (fonte de ícones)
+      Os estilos do Fluent continuam valendo: aqui só se acrescentam setters.
+    -->
+
+    <!-- Botões desabilitados ficam visivelmente esmaecidos (o Fluent escuro diferencia pouco). -->
+    <Style Selector="Button:disabled">
+        <Setter Property="Opacity" Value="0.45" />
+    </Style>
+
+    <Style Selector="Border.med-panel">
+        <Setter Property="Background" Value="{DynamicResource Med.Panel}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Med.Border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="8" />
+    </Style>
+
+    <Style Selector="TextBlock.med-section-title">
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+    </Style>
+
+    <Style Selector="TextBlock.med-muted">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource Med.TextMuted}" />
+    </Style>
+
+    <Style Selector="Button.med-accent">
+        <Setter Property="Background" Value="{DynamicResource Med.Accent}" />
+        <Setter Property="Foreground" Value="{DynamicResource Med.OnAccent}" />
+        <Setter Property="Padding" Value="16,8" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="Button.med-accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource Med.AccentHover}" />
+        <Setter Property="Foreground" Value="{DynamicResource Med.OnAccent}" />
+    </Style>
+    <!-- Desabilitado, o texto branco sobre o fundo claro do Fluent sumiria (ex.: Exportar sem clipes). -->
+    <Style Selector="Button.med-accent:disabled /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource Med.Text}" />
+    </Style>
+
+    <!-- Botão de barra de ferramentas: ícone (classe med-icon) + texto opcional. -->
+    <Style Selector="Button.med-toolbar">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="10,6" />
+        <Setter Property="Margin" Value="2,0" />
+    </Style>
+
+    <Style Selector="TextBlock.med-icon">
+        <Setter Property="FontFamily" Value="{StaticResource Med.IconFont}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+</Styles>
