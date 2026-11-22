@@ -10,7 +10,7 @@ namespace MeuEditorDeVideo.ModelDownloads;
 /// Consulta o serviço de versões (Ajuda › Verificar atualizações e a verificação mensal):
 /// <list type="bullet">
 /// <item>só HTTPS e só o host de <see cref="UpdateEndpoints.Host"/>, sem redirecionamentos;</item>
-/// <item>nenhum dado do usuário é enviado além do idioma da interface na URL; sem cookies, User-Agent genérico;</item>
+/// <item>nenhum dado do usuário é enviado além do idioma da interface e do sistema operacional (windows, linux ou macos) na URL; sem cookies, User-Agent genérico;</item>
 /// <item>resposta limitada a 64 KB e lida como JSON.</item>
 /// </list>
 /// </summary>

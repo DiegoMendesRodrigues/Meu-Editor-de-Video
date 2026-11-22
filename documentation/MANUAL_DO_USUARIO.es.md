@@ -661,7 +661,7 @@ Abra la configuración en **Herramientas › Configuración…** (atajo Ctrl+,).
 - **Usuario › Nombre completo**: su nombre.
 - **Idioma del sistema › Idioma**: Alemán, Español, Francés, Inglés, Portugués (Brasil) o Portugués (Portugal). En la primera ejecución, el programa usa el idioma de Windows si es uno de estos; si no, el inglés. Al guardar, el programa se reinicia en el nuevo idioma: antes pregunta por los cambios sin guardar y vuelve a abrir un proyecto guardado. El manual también se abre en el idioma elegido.
 - **Tema**: **Oscuro**, **Claro** o **Igual que Windows**. También puede cambiarlo con el botón **Tema** de la barra superior.
-- **Buscar actualizaciones › Comprobar mensualmente**: **Sí** (predeterminado) o **No**. La fecha de la última comprobación aparece al lado. Con **Sí**, al abrirse el programa comprueba por sí solo si hay una versión nueva cuando han pasado más de 30 días desde la última comprobación. La consulta solo envía el idioma de la interfaz; sin internet, no aparece nada.
+- **Buscar actualizaciones › Comprobar mensualmente**: **Sí** (predeterminado) o **No**. La fecha de la última comprobación aparece al lado. Con **Sí**, al abrirse el programa comprueba por sí solo si hay una versión nueva cuando han pasado más de 30 días desde la última comprobación. La consulta solo envía el idioma de la interfaz y el sistema operativo; sin internet, no aparece nada.
 - **Abrir el último proyecto al iniciar**.
 - **Carpetas predeterminadas**: la carpeta de los proyectos y la de las exportaciones.
 - **Guardado automático**: activar o desactivar la copia de recuperación y definir el intervalo.

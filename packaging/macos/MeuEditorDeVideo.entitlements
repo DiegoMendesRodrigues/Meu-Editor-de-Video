@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Permissões do runtime reforçado (hardened runtime), exigido para a notarização da Apple.
+  Usadas por scripts/build-macos.ps1 -Sign (opção entitlements do codesign). Sem App Sandbox: o editor abre arquivos de
+  qualquer pasta, grava a tela e chama o ffmpeg incluído.
+
+  - allow-jit e allow-unsigned-executable-memory: o .NET gera código em tempo de execução (JIT) e o runtime precisa de
+    memória executável gravável.
+  - disable-library-validation: o runtime reforçado só carrega bibliotecas assinadas pela mesma equipe da Apple. O
+    pacote traz bibliotecas nativas de terceiros (FFmpeg, ONNX Runtime, OpenCvSharp, SkiaSharp...) e o próprio libcoreclr
+    da Microsoft, que não são assinadas com a nossa identidade. Sem esta permissão o programa não abre depois de
+    assinado. Se um dia todas as bibliotecas forem reassinadas com a mesma identidade, ela pode sair.
+  - device.camera e device.audio-input: webcam e microfone da gravação (Ferramentas › Gravar tela). A gravação de tela
+    não tem permissão equivalente: o macOS pergunta sozinho (Ajustes › Privacidade e Segurança › Gravação de Tela).
+-->
+<plist version="1.0">
+<dict>
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+    <key>com.apple.security.device.camera</key>
+    <true/>
+    <key>com.apple.security.device.audio-input</key>
+    <true/>
+</dict>
+</plist>

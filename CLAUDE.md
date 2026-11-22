@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```powershell
-pwsh scripts/fetch-deps.ps1                       # FFmpeg, MODNet, VC++ redist into deps/ (SHA-256 checked against scripts/deps.lock.json)
+pwsh scripts/fetch-deps.ps1                       # deps/ for the host OS (SHA-256 checked against scripts/deps.lock.json): Windows FFmpeg+MODNet+VC++; Linux FFmpeg (BtbN shared); macOS builds FFmpeg from source (scripts/macos/build-ffmpeg.sh, needs Xcode CLT + brew cmake pkg-config nasm)
 dotnet build MeuEditorDeVideo.sln                 # TreatWarningsAsErrors: must build with 0 warnings
 dotnet test MeuEditorDeVideo.sln
 dotnet test tests/MeuEditorDeVideo.UnitTests --filter "FullyQualifiedName~RecentProjectRemovalTests"   # single class
@@ -23,14 +23,17 @@ dotnet run --project src/MeuEditorDeVideo.Desktop # exe: src/MeuEditorDeVideo.De
 pwsh scripts/build-installer.ps1                  # publish + WiX MSI (installer/Msi) + Burn Setup.exe (installer/Bundle) into artifacts/installer
 pwsh scripts/build-msix.ps1                      # MSIX for the Microsoft Store into artifacts/store (-TestSign for a local install test); see documentation/MICROSOFT_STORE.md
 pwsh scripts/generate-notices.ps1                 # regenerate THIRD-PARTY-NOTICES.txt after any dependency change (GPL text comes from LICENSE.md)
-pwsh scripts/offline-check.ps1                    # runtime check that the app opens no network connections
+pwsh scripts/build-deb.ps1 -Maintainer "Name <email>"  # Linux .deb into artifacts/linux (or env MED_DEB_MAINTAINER)
+pwsh scripts/build-macos.ps1                      # macOS .app/.dmg into artifacts/macos (-Sign/-Notarize via MED_MACOS_* env vars)
+pwsh scripts/offline-check.ps1                    # runtime check that the app opens no network connections (Windows, Linux `ss`, macOS `lsof`)
 ```
 
-- MediaTests and IntegrationTests need `deps\ffmpeg` (run `fetch-deps` first). They generate test media with `ffmpeg.exe` in a temp folder whose path has accents.
+- MediaTests and IntegrationTests need `deps\ffmpeg` (run `fetch-deps` first). They generate test media with `ffmpeg` in a temp folder whose path has accents. On Linux/macOS the layout is `deps/ffmpeg/{bin,lib}` (the ffmpeg binary finds its libraries via RPATH `$ORIGIN/../lib`; `src/AppContent.props` copies both folders).
 - AI tests (`ModelFact`/`ModeloFact`, `WhisperFact`) are skipped when their model files are absent (`%MED_MODELS_DIR%`, `deps\ai-models`, installed models).
 - IntegrationTests run sequentially and use `Support/AppContainer.cs`, which mirrors the app's DI composition (`AddMeuEditor`) without a window.
 - Package versions are central in `Directory.Packages.props`. App version is the single `<Version>` in `Directory.Build.props`.
-- Cross-platform port (Linux/macOS) in progress. Packages with per-OS native assets are conditioned on `MedPlataforma` (`windows`/`linux`/`macos`, from `-r <rid>` or the build host; `Directory.Build.props`). Check another OS's restore with `-p:MedPlataforma=linux` in a scratch copy, not in the repo's `obj/`. Projects without Windows APIs target `net10.0`; keep them that way.
+- Cross-platform port (Linux/macOS) in progress. Packages with per-OS native assets are conditioned on `MedPlataforma` (`windows`/`linux`/`macos`, from `-r <rid>` or the build host; `Directory.Build.props`). Check another OS's restore with `-p:MedPlataforma=linux` in a scratch copy, not in the repo's `obj/`. Projects without Windows APIs target `net10.0`; keep them that way. OpenCvSharp on macOS uses the `OpenCvSharp4.runtime.osx.*` packages.
+- CI (`.github/workflows/build.yml`): win-x64, linux-x64 (ubuntu-22.04), osx-arm64 (macos-14), osx-x64 (macos-15-intel); packages are built on push to main. The `.deb` step needs the repository variable `MED_DEB_MAINTAINER`; macOS signing uses the `MACOS_*`/`APPLE_*` secrets.
 
 ## Architecture
 
@@ -51,7 +54,7 @@ Layered solution, 14 projects in `src/`. The layering is **enforced by NetArchTe
 - `Desktop` (Avalonia, `net10.0`, assembly/exe `MeuEditorDeVideo`): views, controls and dialogs only. `App.axaml.cs` (`ConfigureServices`) calls `AddMeuEditor` and adds only `IThemeService`, `IDialogService` and `MainWindow`. Implementations are bound to `Core` interfaces only in these two places. Tests: `tests/MeuEditorDeVideo.DesktopTests` (Avalonia.Headless; `Support/Ui.cs` runs and captures windows).
 - `AIEngine` vision services (`Vision/`): `SegmentationService` (MODNet person matte), `CameraTracker` (head/body auto-framing), `FaceLandmarkService` + `FaceMeshDetector` (MediaPipe Face Mesh V2, 478 points) used by `FaceRetouch` (effects `ai.beauty`, `ai.makeup`). Optional models are listed in `resources/ai-models/modelos.json` (pinned URL + SHA-256, license text in `resources/ai-models/licencas/`) and installed by the user from the app; don't copy them into `deps\ai-models`.
 - Virtual assistant (Ajuda › Assistente virtual, Shift+F1): `Application/Help/ManualKnowledgeBase` (manual sections + BM25 search, no model) and `HelpAssistantService` (prompt in the UI language); `AIEngine/Assistant/GenAiAnswerGenerator` runs the optional `HelpAssistant` model (Phi-4-mini ONNX int4, ONNX Runtime GenAI, DirectML). Catalog entries can have `extraFiles` (multi-file models). The six manuals must keep identical heading lines (`ManualKnowledgeBaseTests`).
-- `ModelDownloads`: the **only** assembly allowed to use the network (HTTP to pinned URLs with SHA-256, only when the user clicks Instalar; plus `HttpUpdateChecker` for Ajuda › Verificar atualizações and the 30-day startup check, see `Core/Updates/UpdateEndpoints`). `PrivacyTests` fails the build if any other product assembly touches `System.Net.*`. Keep it that way. A new product assembly must be added to `ProductAssemblies` in those tests.
+- `ModelDownloads`: the **only** assembly allowed to use the network (HTTP to pinned URLs with SHA-256, only when the user clicks Instalar; plus `HttpUpdateChecker` for Ajuda › Verificar atualizações and the 30-day startup check, see `Core/Updates/UpdateEndpoints`; the request sends only `language` and `os`). `PrivacyTests` fails the build if any other product assembly touches `System.Net.*`. Keep it that way. A new product assembly must be added to `ProductAssemblies` in those tests.
 
 ### `.med` project format (ProjectEngine)
 

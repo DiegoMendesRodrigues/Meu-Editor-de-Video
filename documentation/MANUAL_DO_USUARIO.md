@@ -661,7 +661,7 @@ Abra as configurações em **Ferramentas › Configurações…** (atalho Ctrl+,
 - **Usuário › Nome completo**: o seu nome.
 - **Idioma do sistema › Idioma**: Alemão, Espanhol, Francês, Inglês, Português (Brasil) ou Português (Portugal). Na primeira execução, o programa usa o idioma do Windows, se for um desses, ou o inglês. Ao salvar, o programa reinicia no novo idioma: antes pergunta sobre alterações não salvas e depois reabre o projeto, se ele estiver salvo. O manual também abre no idioma escolhido.
 - **Tema**: **Escuro**, **Claro** ou **Igual ao Windows**. Você também pode alternar pelo botão **Tema** na barra superior.
-- **Verificar por atualizações › Verificar mensalmente**: **Sim** (padrão) ou **Não**. A data da última verificação aparece ao lado. Com **Sim**, ao abrir o programa ele verifica sozinho se há versão nova quando já passaram mais de 30 dias da última verificação. A consulta envia só o idioma da interface; sem internet, nada aparece.
+- **Verificar por atualizações › Verificar mensalmente**: **Sim** (padrão) ou **Não**. A data da última verificação aparece ao lado. Com **Sim**, ao abrir o programa ele verifica sozinho se há versão nova quando já passaram mais de 30 dias da última verificação. A consulta envia só o idioma da interface e o sistema operacional; sem internet, nada aparece.
 - **Abrir o último projeto ao iniciar**.
 - **Pastas padrão**: a pasta dos projetos e a pasta das exportações.
 - **Salvamento automático**: ligar ou desligar a cópia de recuperação e definir o intervalo.

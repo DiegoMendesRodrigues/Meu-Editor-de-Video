@@ -11,7 +11,7 @@ namespace MeuEditorDeVideo.Desktop.Views.Dialogs;
 
 /// <summary>
 /// Resultado de Ajuda › Verificar atualizações (e da verificação mensal ao abrir): "versão mais recente" ou os dados da
-/// nova versão, com links para a Microsoft Store e para o site. Os textos já são montados traduzidos.
+/// nova versão, com o link da Microsoft Store (só no Windows) e o do site. Os textos já são montados traduzidos.
 /// </summary>
 public sealed class UpdateWindow : Window
 {
@@ -71,7 +71,9 @@ public sealed class UpdateWindow : Window
 
         var panel = new StackPanel { Spacing = 0 };
         panel.Children.Add(text);
-        AddLink(panel, Translator.T("Link para download na Microsoft Store:"), info.MicrosoftStoreLink);
+        // A Microsoft Store existe só no Windows; no Linux e no macOS o servidor responde com o link do site para o sistema.
+        if (UpdateEndpoints.ShowsMicrosoftStoreLink)
+            AddLink(panel, Translator.T("Link para download na Microsoft Store:"), info.MicrosoftStoreLink);
         AddLink(panel, Translator.T("Link para download no site AplicativosIA.Online:"), info.InstallLink);
         var name = string.Concat(text.Inlines!.Select(i => i is Run r ? r.Text : i is Bold b ? string.Concat(b.Inlines.OfType<Run>().Select(x => x.Text)) : " "));
         return new UpdateWindow(Translator.T("Nova versão disponível"), panel, name);

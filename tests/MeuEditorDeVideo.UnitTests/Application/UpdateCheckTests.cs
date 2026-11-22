@@ -19,7 +19,24 @@ public sealed class UpdateCheckTests
     [InlineData("pt-PT", "pt")]
     [InlineData("xx", "en")]
     public void Url_depende_do_idioma(string language, string code) =>
-        Assert.Equal($"https://meueditordevideos.aplicativoia.online/version?language={code}", UpdateEndpoints.UrlFor(language).AbsoluteUri);
+        Assert.Equal($"https://meueditordevideos.aplicativoia.online/version?language={code}&os={UpdateEndpoints.CurrentOs}", UpdateEndpoints.UrlFor(language).AbsoluteUri);
+
+    [Theory]
+    [InlineData("windows", "windows")]
+    [InlineData("linux", "linux")]
+    [InlineData("macos", "macos")]
+    [InlineData("freebsd", null)]
+    [InlineData(null, null)]
+    public void Url_leva_o_sistema_operacional(string? os, string? expected)
+    {
+        var url = UpdateEndpoints.UrlFor("pt-BR", os);
+        Assert.Equal(UpdateEndpoints.Host, url.Host);
+        Assert.Equal($"?language=pt-BR&os={expected ?? UpdateEndpoints.CurrentOs}", url.Query);
+    }
+
+    [Fact]
+    public void Sistema_atual_e_um_dos_tres_valores_do_servico() =>
+        Assert.Contains(UpdateEndpoints.CurrentOs, new[] { "windows", "linux", "macos" });
 
     [Fact]
     public void Verificacao_automatica_vence_depois_de_30_dias()
@@ -92,7 +109,7 @@ public sealed class UpdateCheckTests
         });
         using (var checker = new HttpUpdateChecker(handler: ok))
             Assert.Equal("1.1.0", (await checker.CheckAsync("fr")).Version);
-        Assert.Equal("https://meueditordevideos.aplicativoia.online/version?language=fr-FR", asked!.AbsoluteUri);
+        Assert.Equal($"https://meueditordevideos.aplicativoia.online/version?language=fr-FR&os={UpdateEndpoints.CurrentOs}", asked!.AbsoluteUri);
 
         using var failing = new HttpUpdateChecker(handler: new StubHandler(_ => new HttpResponseMessage(HttpStatusCode.NotFound)));
         await Assert.ThrowsAsync<IOException>(() => failing.CheckAsync("en"));

@@ -6,15 +6,23 @@
   <PropertyGroup>
     <MedRaiz>$(MSBuildThisFileDirectory)..\</MedRaiz>
   </PropertyGroup>
-  <!-- Bibliotecas nativas do FFmpeg (baixadas por scripts\fetch-deps.ps1) copiadas para a pasta ffmpeg\ do aplicativo. -->
+  <!-- Bibliotecas nativas do FFmpeg (preparadas por scripts\fetch-deps.ps1 no sistema em que o build roda).
+       Windows: deps\ffmpeg\bin\*.dll + ffmpeg.exe, copiados soltos para ffmpeg\ ao lado do executável.
+       Linux e macOS: deps\ffmpeg\lib\libav*.so.N / libav*.N.dylib (arquivos reais, sem links) e deps\ffmpeg\bin\ffmpeg,
+       copiados para ffmpeg\lib\ e ffmpeg\bin\ (o ffmpeg tem RPATH ../lib; FFmpegRuntime procura em ffmpeg\lib). -->
   <PropertyGroup>
     <FFmpegBinDir>$(MedRaiz)deps\ffmpeg\bin\</FFmpegBinDir>
+    <FFmpegLibDir>$(MedRaiz)deps\ffmpeg\lib\</FFmpegLibDir>
   </PropertyGroup>
-  <ItemGroup Condition="Exists('$(FFmpegBinDir)')">
-    <None Include="$(FFmpegBinDir)*.dll;$(FFmpegBinDir)*.so*;$(FFmpegBinDir)*.dylib" Link="ffmpeg\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  <ItemGroup Condition="'$(MedPlataforma)' == 'windows' And Exists('$(FFmpegBinDir)')">
+    <None Include="$(FFmpegBinDir)*.dll" Link="ffmpeg\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
     <!-- Executável do ffmpeg (ffmpeg.exe no Windows): gravação de tela, webcam e microfone (Ferramentas › Gravar tela). -->
     <None Include="$(FFmpegBinDir)ffmpeg.exe" Condition="Exists('$(FFmpegBinDir)ffmpeg.exe')" Link="ffmpeg\ffmpeg.exe" CopyToOutputDirectory="PreserveNewest" Visible="false" />
-    <None Include="$(FFmpegBinDir)ffmpeg" Condition="Exists('$(FFmpegBinDir)ffmpeg')" Link="ffmpeg\ffmpeg" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(MedPlataforma)' != 'windows' And Exists('$(FFmpegLibDir)')">
+    <None Include="$(FFmpegLibDir)*.so.*;$(FFmpegLibDir)*.dylib" Link="ffmpeg\lib\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(FFmpegBinDir)ffmpeg" Condition="Exists('$(FFmpegBinDir)ffmpeg')" Link="ffmpeg\bin\ffmpeg" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(MedRaiz)deps\ffmpeg\LICENSE.txt" Condition="Exists('$(MedRaiz)deps\ffmpeg\LICENSE.txt')" Link="ffmpeg\LICENSE.txt" CopyToOutputDirectory="PreserveNewest" Visible="false" />
   </ItemGroup>
   <!-- Modelos de IA incluídos no aplicativo (MODNet): manifesto, licença e documentação do repositório + arquivo do modelo
        baixado por scripts\fetch-deps.ps1 (SHA-256 no lock), copiados para a pasta ai-models\ do aplicativo. -->

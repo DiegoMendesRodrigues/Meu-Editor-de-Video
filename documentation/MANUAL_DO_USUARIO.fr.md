@@ -661,7 +661,7 @@ Ouvrez les paramètres dans **Outils › Paramètres…** (raccourci Ctrl+,). Le
 - **Utilisateur › Nom complet** : votre nom.
 - **Langue du système › Langue** : Allemand, Espagnol, Français, Anglais, Portugais (Brésil) ou Portugais (Portugal). Au premier lancement, le programme utilise la langue de Windows si c'est l'une de celles-ci, sinon l'anglais. À l'enregistrement, le programme redémarre dans la nouvelle langue : il demande d'abord quoi faire des modifications non enregistrées et rouvre un projet enregistré. Le manuel s'ouvre aussi dans la langue choisie.
 - **Thème** : **Sombre**, **Clair** ou **Comme Windows**. Vous pouvez aussi basculer avec le bouton **Thème** de la barre supérieure.
-- **Rechercher des mises à jour › Vérifier tous les mois** : **Oui** (par défaut) ou **Non**. La date de la dernière vérification apparaît à côté. Avec **Oui**, le programme vérifie de lui-même à l'ouverture s'il existe une nouvelle version lorsque plus de 30 jours se sont écoulés depuis la dernière vérification. La requête n'envoie que la langue de l'interface ; sans internet, rien n'apparaît.
+- **Rechercher des mises à jour › Vérifier tous les mois** : **Oui** (par défaut) ou **Non**. La date de la dernière vérification apparaît à côté. Avec **Oui**, le programme vérifie de lui-même à l'ouverture s'il existe une nouvelle version lorsque plus de 30 jours se sont écoulés depuis la dernière vérification. La requête n'envoie que la langue de l'interface et le système d'exploitation ; sans internet, rien n'apparaît.
 - **Ouvrir le dernier projet au démarrage**.
 - **Dossiers par défaut** : le dossier des projets et le dossier des exportations.
 - **Enregistrement automatique** : activer ou désactiver la copie de récupération et définir l'intervalle.

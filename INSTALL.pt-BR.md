@@ -85,7 +85,7 @@ o aviso do SmartScreen não aparece. Ver [`documentation/MICROSOFT_STORE.md`](do
 ### Atualizar
 
 Use **Ajuda › Verificar atualizações**. Se a opção estiver ligada, o programa também verifica sozinho a cada 30 dias
-(enviando apenas o idioma da interface). Para atualizar, instale a nova versão por cima da atual: os projetos, as
+(enviando apenas o idioma da interface e o sistema operacional). Para atualizar, instale a nova versão por cima da atual: os projetos, as
 configurações e os modelos de IA são mantidos.
 
 ### Desinstalar
@@ -211,6 +211,56 @@ python scripts/extract-strings.py
 O `build-installer.ps1` aceita assinatura de código com `-CertificateThumbprint` ou `-CertificatePath` e
 `-CertificatePassword` (além de `-TimestampUrl` e `-SignToolPath`). Ver
 [`documentation/INSTALADOR.md`](documentation/INSTALADOR.md).
+
+### Pacotes para Linux e macOS
+
+Os dois scripts publicam o programa autocontido para o sistema de destino (`dotnet publish -r <rid> --self-contained`) e
+empacotam o resultado. Rode antes `pwsh scripts/fetch-deps.ps1` no mesmo sistema (ele preenche `deps/` com as
+bibliotecas nativas desse sistema).
+
+```powershell
+# Pacote Debian/Ubuntu (.deb) em artifacts/linux, com SHA256SUMS.txt
+pwsh scripts/build-deb.ps1 -Maintainer "Nome <email>"   # ou defina MED_DEB_MAINTAINER
+
+# Aplicativo do macOS (Meu Editor de Vídeo.app) e imagem de disco (.dmg) em artifacts/macos, uma execução por arquitetura
+pwsh scripts/build-macos.ps1 -Rid osx-arm64      # Apple silicon
+pwsh scripts/build-macos.ps1 -Rid osx-x64        # Intel
+```
+
+**`.deb` do Linux** (Debian 12+, Ubuntu 22.04+, x64). O pacote instala a pasta inteira da publicação em
+`/opt/meu-editor-de-video/`, o comando `meu-editor-de-video` em `/usr/bin`, a entrada no menu, o tipo de arquivo `.med`
+e os ícones. Usa `dpkg-deb --root-owner-group` quando existir (qualquer Debian/Ubuntu, ou `apt install dpkg`); senão o
+script grava o `.deb` por conta própria, o que também funciona no Windows e no macOS para testar a estrutura. A lista
+de dependências fica no começo de `scripts/build-deb.ps1` (veja `documentation/DEPENDENCIAS.md`). Instale com
+`sudo apt install ./meu-editor-de-video_<versão>_amd64.deb`.
+
+**`.app` / `.dmg` do macOS**. O pacote coloca a pasta inteira da publicação em `Contents/MacOS`, com o `Info.plist`, o
+ícone (`.icns`) e os textos das permissões de câmera e microfone nos seis idiomas. O tipo `.med` é declarado no
+`Info.plist`. A gravação de tela não tem chave no `Info.plist`: o macOS pergunta na primeira gravação (Ajustes do
+Sistema › Privacidade e Segurança › Gravação de Tela). O `.dmg` precisa do macOS (`hdiutil`); em outros sistemas o
+script só monta a pasta `.app` e um `.zip` para conferir a estrutura, que não é um aplicativo utilizável (sem
+`codesign` nem `plutil`).
+
+A assinatura e a notarização são opcionais e leem a configuração de variáveis de ambiente, nunca do repositório:
+
+| Variável | Usada por | Significado |
+|---|---|---|
+| `MED_MACOS_SIGN_IDENTITY` | `-Sign` | Nome do certificado, por exemplo `Developer ID Application: Nome (TEAMID)` (precisa estar no chaveiro) |
+| `MED_MACOS_NOTARY_PROFILE` | `-Notarize` | Perfil criado com `xcrun notarytool store-credentials` |
+| `MED_MACOS_NOTARY_KEYCHAIN` | `-Notarize` | Opcional: arquivo do chaveiro que guarda esse perfil, quando não é o padrão |
+
+```bash
+export MED_MACOS_SIGN_IDENTITY="Developer ID Application: Nome (TEAMID)"
+export MED_MACOS_NOTARY_PROFILE="med-notary"
+pwsh scripts/build-macos.ps1 -Rid osx-arm64 -Sign -Notarize
+```
+
+`-Sign` assina cada biblioteca nativa e a ferramenta `ffmpeg`, depois o aplicativo, com o runtime reforçado e
+`packaging/macos/MeuEditorDeVideo.entitlements`. `-Notarize` envia o aplicativo e o `.dmg` à Apple e grampeia os
+tíquetes. Sem eles, o `.dmg` fica sem assinatura e o Gatekeeper do macOS pede confirmação (botão direito › Abrir). O CI
+(`.github/workflows/build.yml`) compila os quatro destinos e, nos envios para `main`, gera estes pacotes; assina e
+notariza quando existem os segredos `MACOS_SIGN_IDENTITY`, `MACOS_CERT_P12_BASE64`, `MACOS_CERT_PASSWORD`, `APPLE_ID`,
+`APPLE_TEAM_ID` e `APPLE_APP_PASSWORD` no repositório.
 
 ### Cuidados ao testar o programa real
 

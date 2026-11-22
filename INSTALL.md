@@ -85,7 +85,7 @@ package and the SmartScreen warning does not appear. See
 ### Updating
 
 Use **Help › Check for updates**. If the option is enabled, the program also checks on its own every 30 days (sending
-only the interface language). To update, install the new version over the current one: projects, settings and AI
+only the interface language and the operating system). To update, install the new version over the current one: projects, settings and AI
 models are kept.
 
 ### Uninstalling
@@ -211,6 +211,54 @@ python scripts/extract-strings.py
 `build-installer.ps1` supports code signing with `-CertificateThumbprint`, or `-CertificatePath` and
 `-CertificatePassword` (plus `-TimestampUrl` and `-SignToolPath`). See
 [`documentation/INSTALADOR.md`](documentation/INSTALADOR.md) (in Portuguese).
+
+### Packages for Linux and macOS
+
+Both scripts publish the self-contained program for the target OS (`dotnet publish -r <rid> --self-contained`) and package
+the result. Run `pwsh scripts/fetch-deps.ps1` first on the same OS (it fills `deps/` with that OS's native libraries).
+
+```powershell
+# Debian/Ubuntu package (.deb) into artifacts/linux, with SHA256SUMS.txt
+pwsh scripts/build-deb.ps1 -Maintainer "Name <email>"   # or set MED_DEB_MAINTAINER
+
+# macOS app (Meu Editor de Vídeo.app) and disk image (.dmg) into artifacts/macos, one run per architecture
+pwsh scripts/build-macos.ps1 -Rid osx-arm64      # Apple silicon
+pwsh scripts/build-macos.ps1 -Rid osx-x64        # Intel
+```
+
+**Linux `.deb`** (Debian 12+, Ubuntu 22.04+, x64). The package installs the whole publish folder in
+`/opt/meu-editor-de-video/`, the `meu-editor-de-video` launcher in `/usr/bin`, the menu entry, the `.med` file type
+and the icons. It uses `dpkg-deb --root-owner-group` when available (any Debian/Ubuntu machine, or `apt install dpkg`);
+otherwise the script writes the `.deb` itself, which also works on Windows and macOS for testing the layout. The
+dependency list is at the top of `scripts/build-deb.ps1` (see `documentation/DEPENDENCIAS.md`). Install with
+`sudo apt install ./meu-editor-de-video_<version>_amd64.deb`.
+
+**macOS `.app` / `.dmg`**. The bundle puts the whole publish folder in `Contents/MacOS`, with `Info.plist`, the icon
+(`.icns`) and the permission texts for camera and microphone in six languages. The `.med` type is declared in
+`Info.plist`. Screen recording has no `Info.plist` key: macOS asks for it on the first recording (System Settings ›
+Privacy & Security › Screen Recording). The `.dmg` needs macOS (`hdiutil`); on other systems the script only builds
+the `.app` folder and a `.zip` to inspect its structure, which is not a usable app (no `codesign`, no `plutil`).
+
+Signing and notarization are optional and read their settings from environment variables, never from the repository:
+
+| Variable | Used by | Meaning |
+|---|---|---|
+| `MED_MACOS_SIGN_IDENTITY` | `-Sign` | Certificate name, e.g. `Developer ID Application: Name (TEAMID)` (must be in the keychain) |
+| `MED_MACOS_NOTARY_PROFILE` | `-Notarize` | Profile created with `xcrun notarytool store-credentials` |
+| `MED_MACOS_NOTARY_KEYCHAIN` | `-Notarize` | Optional: keychain file that holds that profile, when it is not the default |
+
+```bash
+export MED_MACOS_SIGN_IDENTITY="Developer ID Application: Name (TEAMID)"
+export MED_MACOS_NOTARY_PROFILE="med-notary"
+pwsh scripts/build-macos.ps1 -Rid osx-arm64 -Sign -Notarize
+```
+
+`-Sign` signs every native library and the `ffmpeg` tool, then the app, with the hardened runtime and
+`packaging/macos/MeuEditorDeVideo.entitlements`. `-Notarize` submits the app and the `.dmg` to Apple and staples the
+tickets. Without them, the `.dmg` is unsigned and macOS Gatekeeper asks for confirmation (right-click › Open). The CI
+(`.github/workflows/build.yml`) builds all four targets and, on pushes to `main`, produces these packages; it signs
+and notarizes when the repository secrets `MACOS_SIGN_IDENTITY`, `MACOS_CERT_P12_BASE64`, `MACOS_CERT_PASSWORD`,
+`APPLE_ID`, `APPLE_TEAM_ID` and `APPLE_APP_PASSWORD` exist.
 
 ### Things to watch when testing the real program
 

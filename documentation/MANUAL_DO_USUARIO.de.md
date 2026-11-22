@@ -661,7 +661,7 @@ Wenn das Programm ohne Speichern geschlossen wurde, erscheint beim erneuten Öff
 - **Benutzer › Vollständiger Name**: Ihr Name.
 - **Systemsprache › Sprache**: Deutsch, Spanisch, Französisch, Englisch, Portugiesisch (Brasilien) oder Portugiesisch (Portugal). Beim ersten Start verwendet das Programm die Windows-Sprache, wenn sie eine dieser ist, sonst Englisch. Beim Speichern wird das Programm in der neuen Sprache neu gestartet: Ungespeicherte Änderungen werden vorher abgefragt, und ein gespeichertes Projekt wird wieder geöffnet. Das Handbuch öffnet sich ebenfalls in der gewählten Sprache.
 - **Design**: **Dunkel**, **Hell** oder **Wie Windows**. Sie können auch über die Schaltfläche **Design** in der oberen Leiste umschalten.
-- **Nach Updates suchen › Monatlich prüfen**: **Ja** (Standard) oder **Nein**. Das Datum der letzten Prüfung erscheint daneben. Mit **Ja** prüft das Programm beim Öffnen selbst, ob es eine neue Version gibt, wenn seit der letzten Prüfung mehr als 30 Tage vergangen sind. Die Anfrage sendet nur die Sprache der Oberfläche; ohne Internet erscheint nichts.
+- **Nach Updates suchen › Monatlich prüfen**: **Ja** (Standard) oder **Nein**. Das Datum der letzten Prüfung erscheint daneben. Mit **Ja** prüft das Programm beim Öffnen selbst, ob es eine neue Version gibt, wenn seit der letzten Prüfung mehr als 30 Tage vergangen sind. Die Anfrage sendet nur die Sprache der Oberfläche und das Betriebssystem; ohne Internet erscheint nichts.
 - **Beim Start das letzte Projekt öffnen**.
 - **Standardordner**: der Ordner für Projekte und der Ordner für Exporte.
 - **Automatisches Speichern**: die Wiederherstellungskopie ein- oder ausschalten und das Intervall festlegen.

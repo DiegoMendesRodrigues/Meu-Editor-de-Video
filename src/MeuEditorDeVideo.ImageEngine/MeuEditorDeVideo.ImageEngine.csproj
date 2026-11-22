@@ -17,6 +17,11 @@
     <PackageReference Include="OpenCvSharp4.official.runtime.linux-x64" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" />
   </ItemGroup>
+  <!-- macOS: libOpenCvSharpExtern.dylib (OpenCV estático) publicada pelo próprio OpenCvSharp, uma por arquitetura. -->
+  <ItemGroup Condition="'$(MedPlataforma)' == 'macos'">
+    <PackageReference Include="OpenCvSharp4.runtime.osx.arm64" />
+    <PackageReference Include="OpenCvSharp4.runtime.osx.x64" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MeuEditorDeVideo.Core\MeuEditorDeVideo.Core.csproj" />
   </ItemGroup>

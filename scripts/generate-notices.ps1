@@ -7,7 +7,7 @@
     Fontes (todas locais, sem rede):
       - pacotes NuGet de "dotnet list package --include-transitive" (net10.0),
         com os .nuspec e os arquivos de licença do cache do NuGet;
-      - binários nativos: scripts/deps.lock.json e deps/ffmpeg;
+      - binários nativos: scripts/deps.lock.json (FFmpeg de cada sistema) e deps/ffmpeg;
       - modelo incluído (resources/ai-models/incluidos) e catálogo de modelos
         opcionais (resources/ai-models/modelos.json + licencas/).
     A saída é determinística (sem data de geração).
@@ -214,8 +214,27 @@ function Get-TextoPadrao([string]$spdx) {
 # 2. Binários nativos (FFmpeg)
 # ---------------------------------------------------------------------------
 $lock   = Get-Content -LiteralPath (Join-Path $repo 'scripts/deps.lock.json') -Raw -Encoding UTF8 | ConvertFrom-Json
-$ffmpeg = @($lock.dependencies) | Where-Object { $_.name -eq 'ffmpeg' } | Select-Object -First 1
-if (-not $ffmpeg) { Stop-Geracao 'FFmpeg não encontrado em scripts/deps.lock.json.' }
+# Uma entrada "ffmpeg" por sistema (platforms) e, no macOS, as fontes (kind "source") que o build compila.
+$ffmpegPorSistema = @{}
+foreach ($d in @($lock.dependencies) | Where-Object { $_.name -eq 'ffmpeg' }) {
+    foreach ($so in @($d.platforms)) { $ffmpegPorSistema[$so] = $d }
+}
+foreach ($so in 'windows', 'linux', 'macos') {
+    if (-not $ffmpegPorSistema.ContainsKey($so)) { Stop-Geracao "FFmpeg do sistema '$so' não encontrado em scripts/deps.lock.json." }
+}
+$ffmpeg = $ffmpegPorSistema['windows']
+$ffmpegFontesMac = @($lock.dependencies | Where-Object { $_.kind -eq 'source' -and @($_.platforms) -contains 'macos' })
+if ($ffmpegFontesMac.Count -eq 0) { Stop-Geracao 'Fontes do FFmpeg para macOS não encontradas em scripts/deps.lock.json.' }
+
+# Versões dos pacotes com nativos de outros sistemas (Directory.Packages.props); não entram no grafo gerado no Windows.
+$versoesPacotes = @{}
+foreach ($pv in ([xml](Get-Content -LiteralPath (Join-Path $repo 'Directory.Packages.props') -Raw)).Project.ItemGroup.PackageVersion) {
+    if ($pv) { $versoesPacotes[[string]$pv.Include] = [string]$pv.Version }
+}
+function Get-VersaoPacote([string]$id) {
+    if (-not $script:versoesPacotes.ContainsKey($id)) { Stop-Geracao "Pacote $id não encontrado em Directory.Packages.props." }
+    return $script:versoesPacotes[$id]
+}
 
 $ffmpegDir = Join-Path $repo 'deps/ffmpeg'
 $ffmpegLic = $null
@@ -289,11 +308,24 @@ foreach ($e in $entradas) {
 Add-Secao '2. BINÁRIOS NATIVOS'
 Add-Linha ''
 Add-Linha "FFmpeg $($ffmpeg.version)"
-Add-Linha '  Descrição: FFmpeg (build full_build compartilhada, GPL-3.0-or-later; inclui x264, x265, libvpx, SVT-AV1, libaom, LAME, Opus, Vorbis)'
+Add-Linha '  Descrição: FFmpeg (build compartilhada, GPL-3.0-or-later, com x264, x265, libvpx, SVT-AV1, libaom, LAME, Opus e Vorbis ligadas estaticamente)'
 Add-Linha '  Licença: GPL-3.0-or-later'
 Add-Linha '  Copyright: FFmpeg developers'
 Add-Linha '  Projeto: https://ffmpeg.org'
-Add-Linha "  Origem do build: $($ffmpeg.url)"
+Add-Linha '  Builds distribuídos, por sistema operacional:'
+Add-Linha "    - Windows x64: build full_build compartilhada de GyanD, $($ffmpegPorSistema['windows'].version)."
+Add-Linha "      Origem do build: $($ffmpegPorSistema['windows'].url)"
+Add-Linha "    - Linux x64: build linux64-gpl-shared de BtbN/FFmpeg-Builds, $($ffmpegPorSistema['linux'].version)."
+Add-Linha "      Origem do build: $($ffmpegPorSistema['linux'].url)"
+Add-Linha "    - macOS (arm64 e x64): compilado a partir do código-fonte pelo scripts/macos/build-ffmpeg.sh (FFmpeg $($ffmpegPorSistema['macos'].version) com --enable-gpl --enable-version3),"
+Add-Linha '      na arquitetura de quem compila, com as bibliotecas externas ligadas estaticamente. Fontes fixadas (endereço e SHA-256 em scripts/deps.lock.json):'
+foreach ($f in $ffmpegFontesMac) {
+    Add-Linha "        * $($f.name -replace '-src$', '') $($f.version) ($($f.license)): $($f.url)"
+    Add-Linha "          sha256 $($f.sha256)"
+}
+Add-Linha '  Oferta de código-fonte (GPL-3.0, seção 6): o código-fonte correspondente do FFmpeg e das bibliotecas externas acima está nos endereços indicados'
+Add-Linha '  (macOS) ou nos repositórios dos builds de GyanD e BtbN (Windows e Linux), e o do Meu Editor de Vídeo, no repositório do projeto, com o script de'
+Add-Linha '  compilação do macOS; também pode ser pedido aos mantenedores do projeto.'
 Add-Texto $textoFfmpeg
 # libuiohook: biblioteca nativa embutida no pacote SharpHook (atalho global F10 da gravação de tela). O pacote declara
 # MIT só para o código .NET do SharpHook e não traz a licença da libuiohook. O cabeçalho do upstream (include/uiohook.h,
@@ -311,6 +343,12 @@ Add-Linha '  A LGPL-3.0 complementa a GPL-3.0, reproduzida abaixo.'
 Add-Texto (Read-Texto (Join-Path $repo 'LICENSE.md'))
 Add-Linha ''
 Add-Linha 'As bibliotecas nativas dos pacotes NuGet (OpenCvSharp, SkiaSharp, HarfBuzzSharp, Avalonia, SDL3, ONNX Runtime, DirectML, Whisper.net) constam na seção 1.'
+Add-Linha ''
+Add-Linha 'Pacotes NuGet com bibliotecas nativas só de Linux ou macOS (não entram na lista da seção 1, gerada no Windows; o texto das licenças é o MIT ou a Apache-2.0 da seção 5):'
+Add-Linha "  - OpenCvSharp4.official.runtime.linux-x64 $(Get-VersaoPacote 'OpenCvSharp4.official.runtime.linux-x64') (Linux): OpenCvSharpExtern com OpenCV 4.13.0, Apache-2.0, https://github.com/shimat/opencvsharp"
+Add-Linha "  - OpenCvSharp4.runtime.osx.arm64 e OpenCvSharp4.runtime.osx.x64 $(Get-VersaoPacote 'OpenCvSharp4.runtime.osx.arm64') (macOS): libOpenCvSharpExtern.dylib (OpenCV 4.13.0 estático), Apache-2.0, https://github.com/shimat/opencvsharp"
+Add-Linha "  - SkiaSharp.NativeAssets.Linux $(Get-VersaoPacote 'SkiaSharp.NativeAssets.Linux') (Linux): libSkiaSharp.so e libHarfBuzzSharp.so, MIT, https://github.com/mono/SkiaSharp"
+Add-Linha "  - Microsoft.ML.OnnxRuntime $(Get-VersaoPacote 'Microsoft.ML.OnnxRuntime') e Microsoft.ML.OnnxRuntimeGenAI $(Get-VersaoPacote 'Microsoft.ML.OnnxRuntimeGenAI') (Linux e macOS, no lugar das versões DirectML): MIT, https://github.com/microsoft/onnxruntime"
 
 # 3. Modelo incluído
 Add-Secao '3. MODELO DE IA INCLUÍDO'

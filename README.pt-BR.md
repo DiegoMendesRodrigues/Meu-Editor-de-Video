@@ -124,7 +124,7 @@ Versão **1.1.0**.
 
 - Detecção do hardware com recomendações, qualidade da pré-visualização, proxies automáticos, aceleração pela placa de
   vídeo, dispositivo da IA, limite e limpeza do cache.
-- **Sem telemetria.** A rede é usada só para **Verificar atualizações** (envia apenas o idioma da interface) e para
+- **Sem telemetria.** A rede é usada só para **Verificar atualizações** (envia apenas o idioma da interface e o sistema operacional) e para
   baixar os modelos de IA quando o usuário clica em **Instalar**. Testes automatizados garantem que nenhuma outra parte
   do programa acessa a rede, e arquivos de terceiros (vídeos, SVG, projetos baixados) não conseguem abrir conexões.
 

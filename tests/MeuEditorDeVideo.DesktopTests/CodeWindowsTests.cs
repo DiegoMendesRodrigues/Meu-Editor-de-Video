@@ -241,8 +241,9 @@ public class CodeWindowsTests
             w.Show();
             AssertPng(Ui.Capture(w, "atualizacao-nova"));
             var links = w.GetVisualDescendants().OfType<HyperlinkButton>().ToList();
-            Assert.Equal(2, links.Count);
-            Assert.Equal("https://aplicativosia.online/instalar", links[1].Content);
+            // O link da Microsoft Store aparece só no Windows; o do site, sempre por último.
+            Assert.Equal(UpdateEndpoints.ShowsMicrosoftStoreLink ? 2 : 1, links.Count);
+            Assert.Equal("https://aplicativosia.online/instalar", links[^1].Content);
             Assert.Contains(w.GetVisualDescendants().OfType<TextBlock>(), t => t.Text?.Contains("Português") == true || t.Inlines?.Any(i => i is Avalonia.Controls.Documents.Run r && r.Text?.Contains("Português") == true) == true);
             Click(Btn(w, "Fechar essa janela"));
             Assert.False(w.IsVisible);

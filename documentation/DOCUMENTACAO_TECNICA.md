@@ -478,7 +478,7 @@ Arquivos: `src/MeuEditorDeVideo.AIEngine/`. Detalhes em [Inteligência artificia
 Arquivos: `src/MeuEditorDeVideo.ModelDownloads/`. É o **único** assembly do produto com rede. Ver [Privacidade e segurança](#privacidade-e-segurança).
 
 - `HttpModelDownloader.cs` (`IModelDownloader`): download com HTTPS, retomada de `.part` com `Range`, verificação de tamanho e SHA-256 antes de entregar o arquivo, e `User-Agent` genérico (`MeuEditorDeVideo/1.0`).
-- `HttpUpdateChecker.cs` (`IUpdateChecker`, Core/Updates): GET em `https://meueditordevideos.aplicativoia.online/version?language=<código>` (`UpdateEndpoints.UrlFor`: de, es, fr-FR, en, pt-BR, pt), só HTTPS, sem redirecionamentos nem cookies, resposta até 64 KB. Lê `version`, `languages`, `operatingSystem`, `author`, `microsoftStoreLink` e `installLink`; falhas viram `IOException`. No App, `Services/UpdateCheckService` compara `version` com `AppInfo.Version` (diferente = versão nova), mostra `Views/Dialogs/UpdateWindow` e, ao fechar, grava `LastUpdateCheck` (registro `LastCheck`). Roda por Ajuda › Verificar atualizações e, ao abrir, quando `CheckForNewVersions` está ligado e passaram mais de 30 dias de `LastCheck` (`UpdateEndpoints.IsDue`). Links só viram clicáveis se forem http/https.
+- `HttpUpdateChecker.cs` (`IUpdateChecker`, Core/Updates): GET em `https://meueditordevideos.aplicativoia.online/version?language=<código>&os=<sistema>` (`UpdateEndpoints.UrlFor`: idioma de, es, fr-FR, en, pt-BR, pt; `os` = `windows`, `linux` ou `macos`, vindo de `OperatingSystem.Is*`, para o servidor responder com o link de download do sistema), só HTTPS, sem redirecionamentos nem cookies, resposta até 64 KB. Lê `version`, `languages`, `operatingSystem`, `author`, `microsoftStoreLink` e `installLink`; falhas viram `IOException`. No App, `Services/UpdateCheckService` compara `version` com `AppInfo.Version` (diferente = versão nova), mostra `Views/Dialogs/UpdateWindow` e, ao fechar, grava `LastUpdateCheck` (registro `LastCheck`). Roda por Ajuda › Verificar atualizações e, ao abrir, quando `CheckForNewVersions` está ligado e passaram mais de 30 dias de `LastCheck` (`UpdateEndpoints.IsDue`). Links só viram clicáveis se forem http/https. A janela mostra o link da Microsoft Store só no Windows (`UpdateEndpoints.ShowsMicrosoftStoreLink`); no Linux e no macOS fica só o link do site.
 - `ModelDownloadsServiceCollectionExtensions.cs`: registro. A assinatura não expõe tipos de rede, para que `App` não passe a depender de `System.Net.Http`.
 
 ### Desktop
@@ -714,7 +714,7 @@ Logs (`%LOCALAPPDATA%\MeuEditorDeVideo\logs\`) ficam **somente no computador** e
 
 ### Rede: só o downloader de modelos
 
-O aplicativo não faz requisições de rede em nenhum fluxo normal de edição. A rede fica só em `MeuEditorDeVideo.ModelDownloads`, usado em dois casos: **Verificar atualizações** (Ajuda, ou ao abrir quando passaram mais de 30 dias da última verificação e a opção está ligada), que faz um GET no serviço de versões enviando só o idioma da interface; e quando o usuário clica em **Instalar** (ou **Instalar todos**) na ferramenta "Baixar modelos de IA". O download:
+O aplicativo não faz requisições de rede em nenhum fluxo normal de edição. A rede fica só em `MeuEditorDeVideo.ModelDownloads`, usado em dois casos: **Verificar atualizações** (Ajuda, ou ao abrir quando passaram mais de 30 dias da última verificação e a opção está ligada), que faz um GET no serviço de versões enviando só o idioma da interface e o sistema operacional (windows, linux ou macos); e quando o usuário clica em **Instalar** (ou **Instalar todos**) na ferramenta "Baixar modelos de IA". O download:
 
 - usa HTTPS;
 - aceita só os hosts de `ModelCatalog.AllowedHosts` (`huggingface.co`, `github.com`) **na URL inicial**, validada também ao carregar o catálogo;
@@ -937,6 +937,16 @@ O CI não baixa modelos de IA, então os testes de IA que dependem de modelo sã
 Pré-requisitos: .NET SDK 10 e `fetch-deps.ps1` executado. O SDK do WiX vem do NuGet.
 
 A orientação de assinatura está em [INSTALADOR.md](INSTALADOR.md).
+
+### Pacotes por sistema
+
+Cada sistema tem o seu script, todos partindo de `dotnet publish src/MeuEditorDeVideo.Desktop/MeuEditorDeVideo.Desktop.csproj -c Release -r <rid> --self-contained` (executável `MeuEditorDeVideo`) depois de `fetch-deps.ps1` no mesmo sistema:
+
+- **Windows**: `build-installer.ps1` (MSI e Setup.exe) e `build-msix.ps1` (Store), descritos acima.
+- **Linux**: `pwsh scripts/build-deb.ps1` (com `-Maintainer "Nome <email>"` ou a variável `MED_DEB_MAINTAINER`; no CI, a variável do repositório de mesmo nome) gera `artifacts/linux/meu-editor-de-video_<versão>_amd64.deb`. Layout: pasta da publicação em `/opt/meu-editor-de-video/`, script `/usr/bin/meu-editor-de-video`, `.desktop` com nome e comentário em seis idiomas, tipo MIME `application/x-meu-editor-de-video` (`*.med`, subclasse de `application/zip`), ícones hicolor 256 e 64 e `copyright` no formato do Debian. `DEBIAN/` tem `control`, `md5sums`, `postinst` e `postrm` (atualizam os bancos de menu, MIME e ícones). A lista `Depends` fica no topo do script e deve acompanhar `DEPENDENCIAS.md`. Usa `dpkg-deb --root-owner-group` quando existe; sem ele, um gravador próprio (arquivo `ar` + `tar` GNU de `System.Formats.Tar`, root:root, modos 0755/0644) produz o mesmo layout e roda também no Windows e no macOS.
+- **macOS**: `pwsh scripts/build-macos.ps1 -Rid osx-arm64|osx-x64` monta `Meu Editor de Vídeo.app` (`Contents/MacOS` com a publicação inteira, `Info.plist`, `Resources/*.icns` e `<idioma>.lproj/InfoPlist.strings`) e, no macOS, o `.dmg`. Identificador `online.aplicativoia.meueditordevideo`, `LSMinimumSystemVersion` 12.0 (mínimo do .NET 10) e o tipo `.med` exportado como `<identificador>.med` (conforma a `public.zip-archive`). `-Sign` e `-Notarize` leem `MED_MACOS_SIGN_IDENTITY` e `MED_MACOS_NOTARY_PROFILE` (e, opcionalmente, `MED_MACOS_NOTARY_KEYCHAIN`). O arquivo `packaging/macos/MeuEditorDeVideo.entitlements` tem as permissões do runtime reforçado (JIT e memória executável do .NET, `disable-library-validation` porque o pacote carrega bibliotecas nativas de terceiros, câmera e microfone). A gravação de tela não tem chave de permissão; o macOS pergunta sozinho.
+- **CI**: `.github/workflows/build.yml` roda `fetch-deps -Strict`, compila e testa em `windows-latest`, `ubuntu-22.04`, `macos-14` (arm64) e `macos-15-intel` (x64) e, nos envios para `main`, publica o instalador, o `.deb` e os `.dmg` como artefatos. Os segredos opcionais do macOS são `MACOS_SIGN_IDENTITY`, `MACOS_CERT_P12_BASE64`, `MACOS_CERT_PASSWORD`, `APPLE_ID`, `APPLE_TEAM_ID` e `APPLE_APP_PASSWORD`.
+- `scripts/offline-check.ps1` roda nos três sistemas (Windows: `Get-NetTCPConnection`; Linux: `ss -tunap`; macOS: `lsof -nP -i`).
 
 ---
 

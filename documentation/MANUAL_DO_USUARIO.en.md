@@ -661,7 +661,7 @@ Open the settings in **Tools › Settings…** (shortcut Ctrl+,). The settings a
 - **User › Full name**: your name.
 - **System language › Language**: German, Spanish, French, English, Portuguese (Brazil) or Portuguese (Portugal). On first run, the program uses the Windows language if it is one of these, otherwise English. When you save, the program restarts in the new language: it first asks about unsaved changes and reopens a saved project. The manual also opens in the chosen language.
 - **Theme**: **Dark**, **Light** or **Same as Windows**. You can also switch with the **Theme** button on the top bar.
-- **Check for updates › Check monthly**: **Yes** (default) or **No**. The date of the last check appears alongside. With **Yes**, the program checks for a new version by itself when it opens and more than 30 days have passed since the last check. The request only sends the interface language; without internet, nothing appears.
+- **Check for updates › Check monthly**: **Yes** (default) or **No**. The date of the last check appears alongside. With **Yes**, the program checks for a new version by itself when it opens and more than 30 days have passed since the last check. The request only sends the interface language and the operating system; without internet, nothing appears.
 - **Open the last project on startup**.
 - **Default folders**: the projects folder and the exports folder.
 - **Autosave**: turn the recovery copy on or off and set the interval.

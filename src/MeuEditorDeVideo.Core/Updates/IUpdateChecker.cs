@@ -27,8 +27,16 @@ public static class UpdateEndpoints
     /// <summary>Intervalo da verificação automática ao abrir o programa.</summary>
     public static readonly TimeSpan Interval = TimeSpan.FromDays(30);
 
-    /// <summary>URL da verificação para o idioma da interface (códigos de <c>SupportedLanguages</c>).</summary>
-    public static Uri UrlFor(string language)
+    /// <summary>Sistema em que o programa roda, no valor do parâmetro <c>os</c> da consulta: windows, linux ou macos.</summary>
+    public static string CurrentOs =>
+        OperatingSystem.IsWindows() ? "windows" : OperatingSystem.IsMacOS() ? "macos" : "linux";
+
+    /// <summary>
+    /// URL da verificação para o idioma da interface (códigos de <c>SupportedLanguages</c>) e o sistema operacional
+    /// (<c>os</c>: windows, linux ou macos; o servidor responde com o link de download desse sistema). Só esses dois
+    /// valores fixos saem do computador.
+    /// </summary>
+    public static Uri UrlFor(string language, string? os = null)
     {
         var code = language switch
         {
@@ -39,8 +47,16 @@ public static class UpdateEndpoints
             "pt-PT" => "pt",
             _ => "en",
         };
-        return new Uri($"https://{Host}/version?language={code}");
+        var system = os switch
+        {
+            "windows" or "linux" or "macos" => os,
+            _ => CurrentOs,
+        };
+        return new Uri($"https://{Host}/version?language={code}&os={system}");
     }
+
+    /// <summary>O link da Microsoft Store só faz sentido no Windows.</summary>
+    public static bool ShowsMicrosoftStoreLink => OperatingSystem.IsWindows();
 
     /// <summary>A verificação automática roda quando passaram mais de 30 dias da última (ou nunca houve uma).</summary>
     public static bool IsDue(DateTimeOffset? lastCheck, DateTimeOffset now) =>

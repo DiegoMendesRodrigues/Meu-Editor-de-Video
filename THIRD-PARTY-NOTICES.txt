@@ -40733,11 +40733,40 @@ Whisper.net.Runtime.Metal 1.9.1
 -------------------
 
 FFmpeg 9.0.2
-  Descrição: FFmpeg (build full_build compartilhada, GPL-3.0-or-later; inclui x264, x265, libvpx, SVT-AV1, libaom, LAME, Opus, Vorbis)
+  Descrição: FFmpeg (build compartilhada, GPL-3.0-or-later, com x264, x265, libvpx, SVT-AV1, libaom, LAME, Opus e Vorbis ligadas estaticamente)
   Licença: GPL-3.0-or-later
   Copyright: FFmpeg developers
   Projeto: https://ffmpeg.org
-  Origem do build: https://github.com/GyanD/codexffmpeg/releases/download/9.0.2/ffmpeg-9.0.2-full_build-shared.zip
+  Builds distribuídos, por sistema operacional:
+    - Windows x64: build full_build compartilhada de GyanD, 9.0.2.
+      Origem do build: https://github.com/GyanD/codexffmpeg/releases/download/9.0.2/ffmpeg-9.0.2-full_build-shared.zip
+    - Linux x64: build linux64-gpl-shared de BtbN/FFmpeg-Builds, 9.0.2 (BtbN autobuild-2026-11-21-12-37, n9.0.2-61-gd59078794d).
+      Origem do build: https://github.com/FFmpeg-Builds/FFmpeg-Builds/releases/download/autobuild-2026-11-21-12-37/ffmpeg-n9.0.2-61-gd59078794d-linux64-gpl-shared-9.0.tar.xz
+    - macOS (arm64 e x64): compilado a partir do código-fonte pelo scripts/macos/build-ffmpeg.sh (FFmpeg 9.0.2 com --enable-gpl --enable-version3),
+      na arquitetura de quem compila, com as bibliotecas externas ligadas estaticamente. Fontes fixadas (endereço e SHA-256 em scripts/deps.lock.json):
+        * ffmpeg 9.0.2 (LGPL-2.1-or-later; GPL-3.0-or-later quando compilado com --enable-gpl --enable-version3): https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz
+          sha256 8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e
+        * x264 branch stable, commit 0480cb05fa18 (GPL-2.0-or-later): https://code.videolan.org/videolan/x264/-/archive/0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee/x264-0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee.tar.bz2
+          sha256 f05c59f2e83d494c36307025dca2d3afc6b4d185f3a3453d06cc4fecd7094057
+        * x265 4.3 (GPL-2.0-or-later): https://github.com/Multicorewareinc/x265/archive/refs/tags/4.3.tar.gz
+          sha256 fb157f809b74dabbef5002af99489fcaebb4d0073724beffdaaf2be15cbaf7ac
+        * libvpx 1.17.0 (BSD-3-Clause): https://github.com/webmproject/libvpx/archive/refs/tags/v1.17.0.tar.gz
+          sha256 1020f184046187baa2985dbde38e0691f49c44088bca7a1842b0236c6081dc0a
+        * svtav1 4.3.1 (BSD-3-Clause-Clear + AOM Patent License 1.0): https://github.com/AOMediaCodec/SVT-AV1/archive/refs/tags/v4.3.1.tar.gz
+          sha256 ad94f481cb74821af183f37f4533fc52324b76ffbd98ec7723e282bab0cf9fc4
+        * libaom 3.15.3 (BSD-2-Clause + AOM Patent License 1.0): https://storage.googleapis.com/aom-releases/libaom-3.15.3.tar.gz
+          sha256 12c01dc731ed7b5a999e28120b45bf58a002ba3435a4ba2cfbc1e084a27c9c04
+        * lame 3.100 (LGPL-2.0-or-later): https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
+          sha256 ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
+        * opus 1.6.1 (BSD-3-Clause): https://downloads.xiph.org/releases/opus/opus-1.6.1.tar.gz
+          sha256 6ffcb593207be92584df15b32466ed64bbec99109f007c82205f0194572411a1
+        * libogg 1.3.6 (BSD-3-Clause): https://downloads.xiph.org/releases/ogg/libogg-1.3.6.tar.xz
+          sha256 5c8253428e181840cd20d41f3ca16557a9cc04bad4a3d04cce84808677fa1061
+        * libvorbis 1.3.7 (BSD-3-Clause): https://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.xz
+          sha256 b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b
+  Oferta de código-fonte (GPL-3.0, seção 6): o código-fonte correspondente do FFmpeg e das bibliotecas externas acima está nos endereços indicados
+  (macOS) ou nos repositórios dos builds de GyanD e BtbN (Windows e Linux), e o do Meu Editor de Vídeo, no repositório do projeto, com o script de
+  compilação do macOS; também pode ser pedido aos mantenedores do projeto.
 
 - - -
                     GNU GENERAL PUBLIC LICENSE
@@ -42269,6 +42298,12 @@ Public License instead of this License.  But first, please read
 - - -
 
 As bibliotecas nativas dos pacotes NuGet (OpenCvSharp, SkiaSharp, HarfBuzzSharp, Avalonia, SDL3, ONNX Runtime, DirectML, Whisper.net) constam na seção 1.
+
+Pacotes NuGet com bibliotecas nativas só de Linux ou macOS (não entram na lista da seção 1, gerada no Windows; o texto das licenças é o MIT ou a Apache-2.0 da seção 5):
+  - OpenCvSharp4.official.runtime.linux-x64 4.13.0.20260627 (Linux): OpenCvSharpExtern com OpenCV 4.13.0, Apache-2.0, https://github.com/shimat/opencvsharp
+  - OpenCvSharp4.runtime.osx.arm64 e OpenCvSharp4.runtime.osx.x64 4.13.0.20260627 (macOS): libOpenCvSharpExtern.dylib (OpenCV 4.13.0 estático), Apache-2.0, https://github.com/shimat/opencvsharp
+  - SkiaSharp.NativeAssets.Linux 4.148.0 (Linux): libSkiaSharp.so e libHarfBuzzSharp.so, MIT, https://github.com/mono/SkiaSharp
+  - Microsoft.ML.OnnxRuntime 1.24.4 e Microsoft.ML.OnnxRuntimeGenAI 0.14.1 (Linux e macOS, no lugar das versões DirectML): MIT, https://github.com/microsoft/onnxruntime
 
 3. MODELO DE IA INCLUÍDO
 ------------------------

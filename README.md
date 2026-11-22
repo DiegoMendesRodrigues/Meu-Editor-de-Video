@@ -123,7 +123,7 @@ Version **1.1.0**.
 
 - Hardware detection with recommendations, preview quality, automatic proxies, hardware acceleration, AI device,
   cache limit and cleanup.
-- **No telemetry.** The network is used only for **Check for updates** (it sends only the interface language) and to
+- **No telemetry.** The network is used only for **Check for updates** (it sends only the interface language and the operating system) and to
   download AI models when the user clicks **Install**. Automated tests ensure no other part of the program accesses the
   network, and third-party files (videos, SVGs, downloaded projects) cannot open connections.
 

@@ -1,6 +1,6 @@
 # Política de privacidade — Meu Editor de Vídeo
 
-Última atualização: 10 de novembro de 2026
+Última atualização: 22 de novembro de 2026
 
 Esta política se aplica ao aplicativo **Meu Editor de Vídeo** para Windows, desenvolvido por Diego Mendes Rodrigues,
 distribuído pela Microsoft Store e pelo instalador próprio.
@@ -22,8 +22,13 @@ processamento — inclusive os recursos de inteligência artificial — acontece
 
 ## Uso da internet
 
-O aplicativo só acessa a internet em uma situação: quando você abre a ferramenta **Baixar modelos de IA** e clica em
-**Instalar**. Nesse momento, ele baixa os arquivos dos modelos escolhidos diretamente dos endereços oficiais dos seus
+O aplicativo só acessa a internet em duas situações.
+
+**Verificar atualizações:** quando você usa **Ajuda › Verificar atualizações** ou, se a opção estiver ligada, a cada 30
+dias ao abrir o programa. A consulta envia apenas o idioma da interface e o sistema operacional (Windows, Linux ou
+macOS), para mostrar o link de download certo. Desligue a verificação automática nas configurações.
+
+**Modelos de IA:** quando você abre a ferramenta **Baixar modelos de IA** e clica em **Instalar**. Nesse momento, ele baixa os arquivos dos modelos escolhidos diretamente dos endereços oficiais dos seus
 autores (huggingface.co e github.com), por conexão segura (HTTPS), e confere a integridade de cada arquivo.
 
 Nessa conexão, nenhum dado seu ou do seu projeto é enviado. Os servidores desses sites recebem apenas as informações
