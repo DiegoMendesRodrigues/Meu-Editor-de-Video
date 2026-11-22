@@ -1693,7 +1693,7 @@ d4d595d5	Architecture
 d547c308	_Règle
 d5515f4f	Lissage entre images
 d56bab13	Le clip de la piste « {0} » référence un média inexistant.
-d5861a1a	ffmpeg.exe est introuvable dans le dossier de l'application. Réinstallez le programme.
+c88fc5d7	FFmpeg est introuvable dans le dossier de l'application. Réinstallez le programme.
 d5b35acf	Sélectionnez un clip dans la timeline et ouvrez l'onglet IA dans les propriétés. Tout est traité sur cet ordinateur.
 d5df3708	Thème
 d6399374	Renommer le marqueur…

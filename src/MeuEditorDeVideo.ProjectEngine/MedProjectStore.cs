@@ -197,7 +197,10 @@ public sealed class MedProjectStore(IAppPaths paths, ILogger<MedProjectStore> lo
     {
         var media = request.Project.Media.Select(asset =>
         {
-            var relative = RelativeOrNull(directory, asset.OriginalPath);
+            // Um caminho do Windows não se recalcula em outro sistema: mantém o relativo, que é o que localiza a mídia lá.
+            var relative = !OperatingSystem.IsWindows() && MediaLocator.IsWindowsPath(asset.OriginalPath)
+                ? asset.RelativePath
+                : RelativeOrNull(directory, asset.OriginalPath);
             string? entry = null;
             if (request.IncludeMedia)
             {

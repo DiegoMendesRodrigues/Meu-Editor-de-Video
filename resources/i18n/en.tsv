@@ -1689,7 +1689,7 @@ d4d595d5	Architecture
 d547c308	_Ruler
 d5515f4f	Frame-to-frame smoothing
 d56bab13	Clip on track '{0}' references a nonexistent media.
-d5861a1a	ffmpeg.exe was not found in the app folder. Reinstall the program.
+c88fc5d7	FFmpeg was not found in the app folder. Reinstall the program.
 d5b35acf	Select a clip on the timeline and open the AI tab in the properties. Everything is processed on this computer.
 d5df3708	Theme
 d6399374	Rename marker…

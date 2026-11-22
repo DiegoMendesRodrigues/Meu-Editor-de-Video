@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.Abstractions;
@@ -22,6 +23,8 @@ public partial class App : Avalonia.Application
 {
     private IHost? _host;
     private bool _restartRequested;
+    private bool _readyForFiles;
+    private string? _fileToOpen;
 
     /// <summary>Serviços do aplicativo; null antes da inicialização (designer, testes de interface sem host).</summary>
     public static IServiceProvider? ServicesOrNull => (Current as App)?._host?.Services;
@@ -39,6 +42,9 @@ public partial class App : Avalonia.Application
             // A janela de boas-vindas e os diálogos da inicialização não podem encerrar o programa ao fechar.
             desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             var args = desktop.Args ?? [];
+            // O Finder entrega o .med por evento, não por argumento; assinado já, porque chega durante a inicialização.
+            if (TryGetFeature(typeof(IActivatableLifetime)) is IActivatableLifetime activatable)
+                activatable.Activated += OnActivated;
             Dispatcher.UIThread.Post(async () => await StartAsync(desktop, args));
         }
         base.OnFrameworkInitializationCompleted();
@@ -89,7 +95,29 @@ public partial class App : Avalonia.Application
         Services.GetRequiredService<INavigationService>().NavigateTo<EditorViewModel>();
         window.Show();
 
-        await EditorStartup.AfterMainWindowShownAsync(Services, args, logger);
+        var requested = _fileToOpen;
+        _fileToOpen = null;
+        await EditorStartup.AfterMainWindowShownAsync(Services, requested is null ? args : [requested, .. args], logger);
+        _readyForFiles = true;
+        if (_fileToOpen is { } late)
+        {
+            _fileToOpen = null;
+            await EditorStartup.OpenProjectAsync(Services, late, logger);
+        }
+    }
+
+    /// <summary>Arquivo aberto pelo sistema (macOS): guardado até a janela ficar pronta ou aberto na hora.</summary>
+    private async void OnActivated(object? sender, ActivatedEventArgs e)
+    {
+        if (e is not FileActivatedEventArgs files) return;
+        if (StartupArguments.ProjectPath(files.Files.Select(f => f.TryGetLocalPath()).OfType<string>()) is not { } path) return;
+        if (!_readyForFiles)
+        {
+            _fileToOpen = path;
+            return;
+        }
+        if (ServicesOrNull is not { } services) return;
+        await EditorStartup.OpenProjectAsync(services, path, services.GetRequiredService<ILogger<App>>());
     }
 
     /// <summary>

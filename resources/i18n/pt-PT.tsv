@@ -577,7 +577,7 @@ d457deea	Incluir ficheiros multimédia no projeto
 d4a3d974	Seguir pessoa
 d5515f4f	Suavização entre fotogramas
 d56bab13	Clipe da faixa '{0}' referencia um ficheiro multimédia inexistente.
-d5861a1a	O ffmpeg.exe não foi encontrado na pasta da aplicação. Reinstale o programa.
+c88fc5d7	O FFmpeg não foi encontrado na pasta da aplicação. Reinstale o programa.
 d5b35acf	Selecione um clipe na linha temporal e abra o separador IA nas propriedades. Tudo é processado neste computador.
 d6399374	Mudar o nome do marcador…
 d6eafe82	Transferir

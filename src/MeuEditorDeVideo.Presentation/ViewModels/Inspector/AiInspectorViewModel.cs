@@ -485,7 +485,7 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
     private string GeneratedFolder()
     {
         var baseDir = _projects.Current?.FilePath is { } file ? Path.GetDirectoryName(file)! :
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Meu Editor de Vídeo");
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.DoNotVerify), "Meu Editor de Vídeo");
         return Path.Combine(baseDir, "Mídias geradas (IA)");
     }
 

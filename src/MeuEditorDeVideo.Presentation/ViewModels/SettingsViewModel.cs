@@ -135,10 +135,10 @@ public sealed partial class SettingsViewModel : ObservableObject
     }
 
     public static string DefaultProjectsDirectory =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "Meu Editor de Vídeo");
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos, Environment.SpecialFolderOption.DoNotVerify), "Meu Editor de Vídeo");
 
     public static string DefaultExportDirectory =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "Meu Editor de Vídeo", "Exportações");
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos, Environment.SpecialFolderOption.DoNotVerify), "Meu Editor de Vídeo", "Exportações");
 
     /// <summary>Fecha a janela (true = salvo).</summary>
     public event EventHandler<bool>? CloseRequested;

@@ -71,7 +71,12 @@ public sealed class MediaLocator(IAppPaths paths, ILogger<MediaLocator> logger) 
                 var candidates = new List<string>();
                 if (!string.IsNullOrWhiteSpace(asset.OriginalPath)) candidates.Add(asset.OriginalPath);
                 if (projectDir is not null && !string.IsNullOrWhiteSpace(asset.RelativePath))
+                {
                     candidates.Add(Path.GetFullPath(Path.Combine(projectDir, asset.RelativePath)));
+                    // Relativo gravado no Windows ("videos\clipe.mp4"), aberto no Linux ou no macOS.
+                    if (!OperatingSystem.IsWindows() && asset.RelativePath.Contains('\\'))
+                        candidates.Add(Path.GetFullPath(Path.Combine(projectDir, asset.RelativePath.Replace('\\', '/'))));
+                }
 
                 var found = candidates.FirstOrDefault(c => IsAllowedPath(c, projectFilePath, ref fromInternet) && File.Exists(c));
                 if (found is null)
@@ -114,6 +119,15 @@ public sealed class MediaLocator(IAppPaths paths, ILogger<MediaLocator> logger) 
         fromInternet ??= IsFromInternet(projectFilePath);
         return !fromInternet.Value;
     }
+
+    /// <summary>Caminho gravado no Windows (<c>C:\…</c>, <c>C:/…</c> ou <c>\\servidor\…</c>), lido em qualquer sistema.</summary>
+    internal static bool IsWindowsPath(string path) =>
+        path.StartsWith(@"\\", StringComparison.Ordinal)
+        || (path.Length >= 3 && char.IsAsciiLetter(path[0]) && path[1] == ':' && path[2] is '\\' or '/');
+
+    /// <summary>Nome do arquivo: no Linux e no macOS a barra invertida só separa pastas em caminhos do Windows.</summary>
+    private static string FileNameOf(string path) =>
+        IsWindowsPath(path) ? path[(path.LastIndexOfAny(['\\', '/']) + 1)..] : Path.GetFileName(path);
 
     private static string? UncHost(string path) =>
         path.StartsWith(@"\\", StringComparison.Ordinal) ? path[2..].Split('\\', 2)[0] : null;
@@ -172,7 +186,7 @@ public sealed class MediaLocator(IAppPaths paths, ILogger<MediaLocator> logger) 
         IEnumerable<MediaAsset> assets, string folder, CancellationToken cancellationToken = default)
     {
         var wanted = assets
-            .GroupBy(a => Path.GetFileName(a.OriginalPath), StringComparer.OrdinalIgnoreCase)
+            .GroupBy(a => FileNameOf(a.OriginalPath), StringComparer.OrdinalIgnoreCase)
             .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.OrdinalIgnoreCase);
         var result = new List<RelinkCandidate>();
         if (wanted.Count == 0 || !Directory.Exists(folder)) return result;

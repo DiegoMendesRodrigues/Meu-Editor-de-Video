@@ -57,7 +57,7 @@ public sealed partial class ExportViewModel : ObservableObject
         var project = _session.Project;
         Directory = settings.Current.DefaultExportDirectory is { Length: > 0 } d ? d
             : _session.FilePath is { } fp ? Path.GetDirectoryName(fp)!
-            : Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+            : Environment.GetFolderPath(Environment.SpecialFolder.MyVideos, Environment.SpecialFolderOption.DoNotVerify);
         FileName = project.Name;
         Background = settings.Current.BackgroundRendering;
         RangeStartText = Timecode.Format(MediaTime.Zero, project.Settings.FrameRate);

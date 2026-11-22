@@ -54,7 +54,7 @@ public static class EditorComposition
             var paths = sp.GetRequiredService<IAppPaths>();
             var settings = sp.GetRequiredService<ISettingsService>().Current;
             var projects = settings.DefaultProjectsDirectory
-                ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "Meu Editor de Vídeo");
+                ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos, Environment.SpecialFolderOption.DoNotVerify), "Meu Editor de Vídeo");
             return new Infrastructure.Hardware.HardwareDetector(
                 [("Cache", paths.Cache), ("Projetos", projects)],
                 MediaEngine.Export.EncoderCatalog.HardwareSummary,

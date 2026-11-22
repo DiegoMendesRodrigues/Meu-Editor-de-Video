@@ -6,10 +6,12 @@ public sealed class AppPaths : IAppPaths
 {
     private const string AppFolder = "MeuEditorDeVideo";
 
+    // DoNotVerify: sem ele o .NET devolve "" se a pasta ainda não existe (usuário novo no Linux) e os dados iriam
+    // para a pasta atual.
     public AppPaths()
         : this(
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppFolder),
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppFolder))
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.DoNotVerify), AppFolder),
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.DoNotVerify), AppFolder))
     {
     }
 

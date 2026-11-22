@@ -196,11 +196,11 @@ public sealed partial class CreativeToolsViewModel(
     {
         if (!recorder.IsAvailable)
         {
-            dialogs.ShowInfo("Gravar tela", "O ffmpeg.exe não foi encontrado na pasta do aplicativo. Reinstale o programa.");
+            dialogs.ShowInfo("Gravar tela", "O FFmpeg não foi encontrado na pasta do aplicativo. Reinstale o programa.");
             return;
         }
         var baseDir = projects.Current?.FilePath is { } file ? Path.GetDirectoryName(file)! :
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "Meu Editor de Vídeo");
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos, Environment.SpecialFolderOption.DoNotVerify), "Meu Editor de Vídeo");
         var output = Path.Combine(baseDir, "Gravações", $"Gravação {DateTime.Now:yyyy-MM-dd HH.mm.ss}.mp4");
         if (dialogs.RecordScreen(recorder, output) is not { } recording) return;
         var path = recording.Path;

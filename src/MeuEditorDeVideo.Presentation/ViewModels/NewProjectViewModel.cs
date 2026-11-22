@@ -46,7 +46,7 @@ public sealed partial class NewProjectViewModel : ObservableObject
     {
         _dialogs = dialogs;
         Directory = settings.Current.DefaultProjectsDirectory
-            ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "Meu Editor de Vídeo");
+            ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos, Environment.SpecialFolderOption.DoNotVerify), "Meu Editor de Vídeo");
         SelectedTemplate = Templates[0];
     }
 

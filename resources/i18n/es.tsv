@@ -1550,7 +1550,7 @@ d4d595d5	Arquitectura
 d547c308	_Regla
 d5515f4f	Suavizado entre fotogramas
 d56bab13	El clip de la pista '{0}' hace referencia a un medio inexistente.
-d5861a1a	No se encontró ffmpeg.exe en la carpeta de la aplicación. Reinstale el programa.
+c88fc5d7	No se encontró FFmpeg en la carpeta de la aplicación. Reinstale el programa.
 d5b35acf	Seleccione un clip en la línea de tiempo y abra la pestaña IA en las propiedades. Todo se procesa en este equipo.
 d6399374	Renombrar marcador…
 d6eafe82	Descargar

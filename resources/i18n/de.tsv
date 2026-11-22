@@ -1703,7 +1703,7 @@ d4d595d5	Architektur
 d547c308	_Lineal
 d5515f4f	Glättung zwischen Bildern
 d56bab13	Clip auf Spur „{0}“ verweist auf ein nicht vorhandenes Medium.
-d5861a1a	ffmpeg.exe wurde im App-Ordner nicht gefunden. Installieren Sie das Programm neu.
+c88fc5d7	FFmpeg wurde im App-Ordner nicht gefunden. Installieren Sie das Programm neu.
 d5b35acf	Wählen Sie einen Clip in der Zeitleiste und öffnen Sie die Registerkarte KI in den Eigenschaften. Alles wird auf diesem Computer verarbeitet.
 d5df3708	Design
 d6399374	Marker umbenennen…

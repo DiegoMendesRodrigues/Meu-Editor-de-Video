@@ -190,7 +190,7 @@ public static class EditorStartup
     }
 
     /// <summary>Abre um projeto na inicialização (arquivo .med aberto pelo sistema ou o último projeto).</summary>
-    private static async Task OpenProjectAsync(IServiceProvider services, string path, ILogger logger)
+    public static async Task OpenProjectAsync(IServiceProvider services, string path, ILogger logger)
     {
         try
         {

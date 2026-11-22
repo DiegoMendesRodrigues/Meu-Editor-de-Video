@@ -121,6 +121,47 @@ public sealed class MediaLocatorTests : IDisposable
         Assert.Equal(originalBytes, await File.ReadAllBytesAsync(resolved));
     }
 
+    [Theory]
+    [InlineData(@"C:\Videos\Viagem\clip.mp4")]
+    [InlineData("C:/Videos/Viagem/clip.mp4")]
+    [InlineData(@"\\servidor\videos\clip.mp4")]
+    public async Task FindCandidatesAsync_encontra_midia_de_projeto_feito_no_Windows(string original)
+    {
+        var bytes = RandomBytes(4096);
+        var busca = Path.Combine(_root, "busca-windows");
+        var copia = WriteFile(Path.Combine(busca, "clip.mp4"), bytes);
+
+        var candidato = Assert.Single(await _locator.FindCandidatesAsync([Asset(original, bytes.Length)], busca));
+
+        Assert.Equal(copia, candidato.Path);
+    }
+
+    [Fact]
+    public async Task Caminho_relativo_gravado_no_Windows_localiza_a_midia_ao_lado_do_projeto()
+    {
+        var bytes = RandomBytes(4096);
+        var copia = WriteFile(Path.Combine(_root, "projeto", "videos", "clip.mp4"), bytes);
+        var asset = Asset(@"C:\Inexistente\videos\clip.mp4", bytes.Length, @"videos\clip.mp4");
+        var projeto = Project.CreateNew("Windows", new ProjectSettings(), StorageMode.Linked, Now) with { Media = [asset] };
+
+        var resolvido = await _locator.ResolveAsync(projeto, Path.Combine(_root, "projeto", "obra.med"));
+
+        Assert.Equal(copia, resolvido.AvailablePaths[asset.Id]);
+    }
+
+    [Fact]
+    public async Task Salvar_fora_do_Windows_mantem_o_relativo_de_um_projeto_do_Windows()
+    {
+        var asset = Asset(@"C:\Inexistente\videos\clip.mp4", 10, @"videos\clip.mp4");
+        var projeto = Project.CreateNew("Windows", new ProjectSettings(), StorageMode.Linked, Now) with { Media = [asset] };
+
+        var salvo = await _store.SaveAsync(new SaveRequest(projeto, Path.Combine(_root, "obra.med"), IncludeMedia: false, new Dictionary<Guid, string>()));
+
+        // No Windows o caminho é nativo e o relativo é recalculado para a pasta nova.
+        if (!OperatingSystem.IsWindows()) Assert.Equal(asset.RelativePath, salvo.Media[0].RelativePath);
+        else Assert.NotEqual(asset.RelativePath, salvo.Media[0].RelativePath);
+    }
+
     [Fact]
     public async Task FindCandidatesAsync_encontra_copia_em_pasta_renomeada_com_mesmo_nome_e_tamanho()
     {
