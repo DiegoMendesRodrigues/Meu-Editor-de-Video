@@ -195,6 +195,9 @@ Como compilar, testar e gerar os instaladores: [`INSTALL.pt-BR.md`](INSTALL.pt-B
   **F10** global pedem a própria permissão na primeira vez que são usados.
 - **macOS, Intel**: sem ONNX Runtime (veja [Inteligência artificial](#inteligência-artificial-local)).
 - **Linux, IA** roda no processador, e a codificação por VA-API ainda não está ligada.
+- **Onde ficam os seus dados** (configurações, projetos recentes, salvamento automático, cache, modelos de IA): no
+  Windows, `%APPDATA%\MeuEditorDeVideo` e `%LOCALAPPDATA%\MeuEditorDeVideo`; no Linux, `~/.config/MeuEditorDeVideo` e
+  `~/.local/share/MeuEditorDeVideo`; no macOS, `~/Library/Application Support/MeuEditorDeVideo`. Desinstalar não os apaga.
 
 ## Perguntas Frequentes (FAQ)
 

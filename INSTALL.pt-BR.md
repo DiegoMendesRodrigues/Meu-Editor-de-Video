@@ -284,7 +284,8 @@ O `build-installer.ps1` aceita assinatura de código com `-CertificateThumbprint
 
 O CI (`.github/workflows/build.yml`) roda em `windows-latest`, `ubuntu-22.04`, `macos-15` (arm64) e `macos-15-intel`
 (x64): compila, executa a suíte inteira e, nos pushes para `main`, gera os pacotes e os instala num ambiente limpo
-(instaladores no Windows e no macOS, `.deb` em contêineres Debian 12, Ubuntu 22.04 e 24.04).
+(instaladores no Windows e no macOS, `.deb` em contêineres Debian 12, Ubuntu 22.04 e 24.04, um passo por imagem com
+limite próprio de 20 minutos, pelo `scripts/ci/testar-deb-conteiner.sh`; o `apt` tenta de novo quando um espelho falha).
 
 Os dois scripts publicam o programa autocontido para o sistema de destino (`dotnet publish -r <rid> --self-contained`) e
 empacotam o resultado. Rode antes `pwsh scripts/fetch-deps.ps1` no mesmo sistema (ele preenche `deps/` com as

@@ -194,6 +194,9 @@ How to build, test and produce the installers: [`INSTALL.md`](INSTALL.md).
   ask for their own permissions the first time they are used.
 - **macOS, Intel**: no ONNX Runtime (see [Artificial intelligence](#artificial-intelligence-local)).
 - **Linux, AI** runs on the CPU, and hardware encoding with VA-API is not enabled yet.
+- **Where your data lives** (settings, recent projects, autosave, cache, AI models): on Windows
+  `%APPDATA%\MeuEditorDeVideo` and `%LOCALAPPDATA%\MeuEditorDeVideo`; on Linux `~/.config/MeuEditorDeVideo` and
+  `~/.local/share/MeuEditorDeVideo`; on macOS `~/Library/Application Support/MeuEditorDeVideo`. Uninstalling keeps it.
 
 ## Frequently Asked Questions (FAQ)
 

@@ -281,7 +281,8 @@ python scripts/extract-strings.py
 
 The CI (`.github/workflows/build.yml`) runs on `windows-latest`, `ubuntu-22.04`, `macos-15` (arm64) and `macos-15-intel`
 (x64): it builds, runs the whole suite and, on pushes to `main`, builds the packages and installs them in a clean
-environment (installers on Windows and macOS, `.deb` in Debian 12, Ubuntu 22.04 and 24.04 containers).
+environment (installers on Windows and macOS, `.deb` in Debian 12, Ubuntu 22.04 and 24.04 containers, one step per
+image with its own 20-minute limit, through `scripts/ci/testar-deb-conteiner.sh`; `apt` retries when a mirror fails).
 
 Both scripts publish the self-contained program for the target OS (`dotnet publish -r <rid> --self-contained`) and package
 the result. Run `pwsh scripts/fetch-deps.ps1` first on the same OS (it fills `deps/` with that OS's native libraries).

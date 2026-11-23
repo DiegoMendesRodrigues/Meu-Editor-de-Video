@@ -47,7 +47,8 @@ desktop.ini
 *.msi
 *.msix
 
-# Resultados de testes e cobertura
+# Resultados de testes e cobertura (InstallerResults: logs e capturas de scripts/ci/testar-*)
+/InstallerResults/
 *.trx
 *.coverage
 coverage*/
