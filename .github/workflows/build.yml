@@ -119,20 +119,28 @@ jobs:
           MED_DEB_MAINTAINER: ${{ vars.MED_DEB_MAINTAINER || 'Teste do CI <ci@localhost>' }}
         run: ./scripts/build-deb.ps1 -Rid ${{ matrix.rid }}
 
-      # Contêineres limpos: só o que o pacote declara em Depends.
-      - name: Testar o .deb (Debian 12, Ubuntu 22.04 e 24.04)
+      # Contêineres limpos: só o que o pacote declara em Depends. Um passo por imagem, cada um com o seu limite de
+      # tempo: um espelho lento do apt numa imagem não derruba o teste das outras.
+      - name: Testar o .deb (Debian 12)
         if: ${{ !cancelled() && steps.deb.outcome == 'success' }}
-        timeout-minutes: 45
-        run: |
-          pacote="$(basename artifacts/linux/*.deb)"
-          falhou=0
-          for imagem in debian:12 ubuntu:22.04 ubuntu:24.04; do
-            echo "===== $imagem"
-            docker run --rm --init -v "$PWD:/repo:ro" -v "$PWD/InstallerResults:/saida" "$imagem" \
-              bash /repo/scripts/ci/testar-deb.sh "/repo/artifacts/linux/$pacote" /repo/tests/instaladores/projeto.med "/saida/${imagem//:/-}" \
-              || { echo "::error::o .deb falhou em $imagem"; falhou=1; }
-          done
-          exit $falhou
+        timeout-minutes: 20
+        env:
+          IMAGEM: debian:12
+        run: ./scripts/ci/testar-deb-conteiner.sh
+
+      - name: Testar o .deb (Ubuntu 22.04)
+        if: ${{ !cancelled() && steps.deb.outcome == 'success' }}
+        timeout-minutes: 20
+        env:
+          IMAGEM: ubuntu:22.04
+        run: ./scripts/ci/testar-deb-conteiner.sh
+
+      - name: Testar o .deb (Ubuntu 24.04)
+        if: ${{ !cancelled() && steps.deb.outcome == 'success' }}
+        timeout-minutes: 20
+        env:
+          IMAGEM: ubuntu:24.04
+        run: ./scripts/ci/testar-deb-conteiner.sh
 
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'push' && runner.os == 'Linux' && vars.MED_DEB_MAINTAINER != ''

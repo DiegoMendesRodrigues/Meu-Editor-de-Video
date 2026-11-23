@@ -25,8 +25,20 @@ finish() {
     exit 0
 }
 
+# Espelhos do apt às vezes ficam lentos ou caem no CI: novas tentativas e limite por conexão, em vez de esperar sem fim.
+cat > /etc/apt/apt.conf.d/80-teste-ci <<'APT'
+Acquire::Retries "5";
+Acquire::http::Timeout "30";
+Acquire::https::Timeout "30";
+APT
+
 echo "== instalar só com as dependências obrigatórias"
-apt-get update -qq
+for tentativa in 1 2 3; do
+    apt-get update -qq && break
+    [ "$tentativa" -lt 3 ] || { fail "o apt não atualizou a lista de pacotes"; finish; }
+    echo "apt-get update falhou; nova tentativa em 15 s"
+    sleep 15
+done
 if ! apt-get install -y --no-install-recommends "$DEB" > "$OUT/instalar.log" 2>&1; then
     tail -n 40 "$OUT/instalar.log"
     fail "o apt não instalou o pacote"

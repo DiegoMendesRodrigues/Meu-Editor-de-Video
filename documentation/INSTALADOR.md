@@ -126,7 +126,9 @@ A cada push para `main`, o GitHub Actions gera e testa os pacotes em máquinas d
 
 - Windows (`scripts/ci/testar-instalador.ps1`): `Setup.exe` e MSI;
 - macOS arm64 e x64 (o mesmo script): `.dmg`;
-- Linux (`scripts/ci/testar-deb.sh`): `.deb` em contêineres do Debian 12 e do Ubuntu 22.04 e 24.04.
+- Linux (`scripts/ci/testar-deb.sh`): `.deb` em contêineres do Debian 12 e do Ubuntu 22.04 e 24.04, um passo por
+  imagem (`scripts/ci/testar-deb-conteiner.sh`, com a imagem em `IMAGEM`) com limite de 20 minutos cada. Dentro do
+  contêiner, o `apt` tenta de novo quando um espelho falha ou demora a responder.
 
 Cada teste instala, confere as bibliotecas nativas e o FFmpeg, abre o programa como usuário novo, abre
 `tests/instaladores/projeto.med` pela associação de arquivos, confere o log e a rede e desinstala. Logs e capturas ficam no
