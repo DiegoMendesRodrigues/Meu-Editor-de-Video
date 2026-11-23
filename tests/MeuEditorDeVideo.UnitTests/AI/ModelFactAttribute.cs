@@ -25,7 +25,7 @@ public static class TestModels
             if (Directory.EnumerateFiles(deps, fileName, SearchOption.AllDirectories).FirstOrDefault() is { } builtIn) return builtIn;
             break;
         }
-        var installed = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MeuEditorDeVideo", "ai-models");
+        var installed = new MeuEditorDeVideo.Infrastructure.Paths.AppPaths().AiModels;
         if (!Directory.Exists(installed)) return null;
         return Directory.EnumerateFiles(installed, fileName, SearchOption.AllDirectories).FirstOrDefault();
     }

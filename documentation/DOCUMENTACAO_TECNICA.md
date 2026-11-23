@@ -775,7 +775,7 @@ Bibliotecas nativas e de terceiros também ficam sem rede quando leem arquivos q
 
 ## Dados do usuário e pastas
 
-Caminhos definidos em `src/MeuEditorDeVideo.Infrastructure/Paths/AppPaths.cs`. `%APPDATA%` e `%LOCALAPPDATA%` vêm de `Environment.SpecialFolder`.
+Caminhos definidos em `src/MeuEditorDeVideo.Infrastructure/Paths/AppPaths.cs`. No Windows, `%APPDATA%` e `%LOCALAPPDATA%` vêm de `Environment.SpecialFolder`. No Linux são `~/.config/MeuEditorDeVideo` (`RoamingData`) e `~/.local/share/MeuEditorDeVideo` (`LocalData`). No macOS as duas são `~/Library/Application Support/MeuEditorDeVideo`: o .NET devolve `~/.config` e `~/.local/share` também ali, então `AppPaths.Roots` (função pura, testada em `AppPathsTests`) usa a pasta própria do macOS. Código novo obtém as pastas só por `AppPaths`/`IAppPaths`, nunca por `Environment.GetFolderPath`.
 
 ### %APPDATA%\MeuEditorDeVideo (`RoamingData`)
 

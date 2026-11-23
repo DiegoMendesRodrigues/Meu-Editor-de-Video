@@ -9,11 +9,29 @@ public sealed class AppPaths : IAppPaths
     // DoNotVerify: sem ele o .NET devolve "" se a pasta ainda não existe (usuário novo no Linux) e os dados iriam
     // para a pasta atual.
     public AppPaths()
-        : this(
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.DoNotVerify), AppFolder),
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.DoNotVerify), AppFolder))
+        : this(Roots(
+            OperatingSystem.IsMacOS(),
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.DoNotVerify),
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.DoNotVerify),
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.DoNotVerify)))
     {
     }
+
+    private AppPaths((string Roaming, string Local) roots)
+        : this(roots.Roaming, roots.Local)
+    {
+    }
+
+    /// <summary>
+    /// Raízes dos dados do usuário. Windows: %APPDATA% e %LOCALAPPDATA%. Linux: ~/.config e ~/.local/share (XDG).
+    /// macOS: as duas em ~/Library/Application Support, a pasta própria do sistema para dados de aplicativos: o .NET
+    /// devolve ~/.config e ~/.local/share também no macOS, por isso ele não é usado ali. Pura, para testar em qualquer
+    /// sistema.
+    /// </summary>
+    public static (string Roaming, string Local) Roots(bool macOs, string home, string appData, string localAppData) =>
+        macOs
+            ? (Path.Combine(home, "Library", "Application Support", AppFolder), Path.Combine(home, "Library", "Application Support", AppFolder))
+            : (Path.Combine(appData, AppFolder), Path.Combine(localAppData, AppFolder));
 
     /// <summary>Construtor para testes, permitindo raízes isoladas.</summary>
     public AppPaths(string roamingRoot, string localRoot)

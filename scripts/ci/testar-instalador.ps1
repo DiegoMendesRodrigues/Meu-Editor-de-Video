@@ -20,8 +20,15 @@ if (-not ($IsWindows -or $IsMacOS)) { throw 'Use scripts/ci/testar-deb.sh no Lin
 $root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $ResultDir = (New-Item -ItemType Directory -Force -Path $ResultDir).FullName
 $failures = [System.Collections.Generic.List[string]]::new()
-$appData = Join-Path ([Environment]::GetFolderPath('ApplicationData', 'DoNotVerify')) 'MeuEditorDeVideo'
-$localData = Join-Path ([Environment]::GetFolderPath('LocalApplicationData', 'DoNotVerify')) 'MeuEditorDeVideo'
+# No macOS o programa usa ~/Library/Application Support (AppPaths.Roots); o .NET devolveria ~/.config e ~/.local/share.
+if ($IsMacOS) {
+    $appData = Join-Path $HOME 'Library/Application Support/MeuEditorDeVideo'
+    $localData = $appData
+}
+else {
+    $appData = Join-Path ([Environment]::GetFolderPath('ApplicationData', 'DoNotVerify')) 'MeuEditorDeVideo'
+    $localData = Join-Path ([Environment]::GetFolderPath('LocalApplicationData', 'DoNotVerify')) 'MeuEditorDeVideo'
+}
 $registryKey = 'HKCU:\Software\Meu Editor de Vídeo'
 $sample = Join-Path ([IO.Path]::GetTempPath()) 'Projeto de instalação.med'
 Copy-Item (Join-Path $root 'tests/instaladores/projeto.med') $sample -Force

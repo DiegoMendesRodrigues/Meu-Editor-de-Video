@@ -137,8 +137,9 @@ settings and AI models are kept.
 
 **Linux:** `sudo apt remove meu-editor-de-video` (the package keeps no data of yours). **macOS:** drag the app from
 **Applications** to the Trash. User data stays in both cases; to remove it, delete the user folders listed below (on
-Linux, `~/.config/MeuEditorDeVideo` and `~/.local/share/MeuEditorDeVideo`; **Help › Open logs folder** shows where the
-program keeps its data on your system).
+Linux, `~/.config/MeuEditorDeVideo` and `~/.local/share/MeuEditorDeVideo`; on macOS,
+`~/Library/Application Support/MeuEditorDeVideo`; **Help › Open logs folder** shows where the program keeps its data
+on your system).
 
 **Windows:** from Windows, in **Settings › Apps › Meu Editor de Vídeo › Uninstall**, or with:
 
@@ -337,8 +338,8 @@ and notarizes when the repository secrets `MACOS_SIGN_IDENTITY`, `MACOS_CERT_P12
   `%LOCALAPPDATA%\MeuEditorDeVideo\` (autosave, cache, AI models and render queue) and the preferences in
   `HKCU\Software\Meu Editor de Vídeo`. Back them up before testing. To test a first run (welcome window), empty that
   registry key. On Linux and macOS the same data lives in the user folders (`~/.config/MeuEditorDeVideo` and
-  `~/.local/share/MeuEditorDeVideo` on Linux), and the preferences are the `preferences.json` file in the settings
-  folder: delete it for a first run.
+  `~/.local/share/MeuEditorDeVideo` on Linux; `~/Library/Application Support/MeuEditorDeVideo` on macOS), and the
+  preferences are the `preferences.json` file in the settings folder: delete it for a first run.
 - `scripts/ci/testar-instalador.ps1` and `scripts/ci/testar-deb.sh` install the app and **wipe its user data**: they are
   for the CI or a disposable container only.
 - `pwsh scripts/offline-check.ps1` also works on Linux (`ss`) and macOS (`lsof`).

@@ -106,7 +106,7 @@ public sealed class WhisperFactAttribute : FactAttribute
     public static string InstalledModels =>
         Environment.GetEnvironmentVariable("MED_INSTALLED_MODELS_DIR") is { Length: > 0 } dir
             ? dir
-            : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MeuEditorDeVideo", "ai-models");
+            : new MeuEditorDeVideo.Infrastructure.Paths.AppPaths().AiModels;
 
     public WhisperFactAttribute()
     {

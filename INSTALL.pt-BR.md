@@ -140,8 +140,9 @@ configurações e os modelos de IA são mantidos.
 
 **Linux:** `sudo apt remove meu-editor-de-video` (o pacote não guarda dados seus). **macOS:** arraste o aplicativo de
 **Aplicativos** para a Lixeira. Nos dois casos os dados do usuário ficam; para removê-los, apague as pastas do usuário
-(no Linux, `~/.config/MeuEditorDeVideo` e `~/.local/share/MeuEditorDeVideo`; **Ajuda › Abrir pasta de logs** mostra onde o
-programa guarda os dados no seu sistema).
+(no Linux, `~/.config/MeuEditorDeVideo` e `~/.local/share/MeuEditorDeVideo`; no macOS,
+`~/Library/Application Support/MeuEditorDeVideo`; **Ajuda › Abrir pasta de logs** mostra onde o programa guarda os dados
+no seu sistema).
 
 **Windows:** pelo Windows, em **Configurações › Aplicativos › Meu Editor de Vídeo › Desinstalar**, ou com:
 
@@ -342,8 +343,9 @@ notariza quando existem os segredos `MACOS_SIGN_IDENTITY`, `MACOS_CERT_P12_BASE6
   `%LOCALAPPDATA%\MeuEditorDeVideo\` (salvamento automático, cache, modelos de IA e fila de renderização) e as
   preferências em `HKCU\Software\Meu Editor de Vídeo`. Faça cópia de segurança antes de testar. Para testar a primeira
   execução (janela de boas-vindas), esvazie essa chave do registro. No Linux e no macOS esses dados ficam nas pastas do
-  usuário (`~/.config/MeuEditorDeVideo` e `~/.local/share/MeuEditorDeVideo` no Linux) e as preferências são o arquivo
-  `preferences.json` da pasta de configurações: apague-o para testar a primeira execução.
+  usuário (`~/.config/MeuEditorDeVideo` e `~/.local/share/MeuEditorDeVideo` no Linux;
+  `~/Library/Application Support/MeuEditorDeVideo` no macOS) e as preferências são o arquivo `preferences.json` da pasta
+  de configurações: apague-o para testar a primeira execução.
 - `scripts/ci/testar-instalador.ps1` e `scripts/ci/testar-deb.sh` instalam o programa e **apagam os dados do usuário**:
   servem só para o CI ou para um contêiner descartável.
 - `pwsh scripts/offline-check.ps1` também funciona no Linux (`ss`) e no macOS (`lsof`).
