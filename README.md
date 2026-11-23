@@ -3,8 +3,9 @@
 <p align="center">
   <a href="https://learn.microsoft.com/dotnet/csharp/"><img alt="C#" src="https://img.shields.io/badge/C%23-14-68217A?style=for-the-badge&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTEyIDEgMi41IDYuNXYxMUwxMiAyM2w5LjUtNS41di0xMXoiLz48dGV4dCB4PSIxMiIgeT0iMTUuNSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iOC41IiBmb250LXdlaWdodD0iNzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNjgyMTdBIj5DIzwvdGV4dD48L3N2Zz4=&logoColor=white"></a>
   <a href="https://dotnet.microsoft.com/"><img alt=".NET 10" src="https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white"></a>
+  <a href="#installation"><img alt="Windows, Linux and macOS" src="https://img.shields.io/badge/Windows%20%C2%B7%20Linux%20%C2%B7%20macOS-platforms-444?style=for-the-badge"></a>
   <a href="https://avaloniaui.net/"><img alt="Avalonia" src="https://img.shields.io/badge/Avalonia-Fluent-0C54C2?style=for-the-badge"></a>
-  <a href="https://ffmpeg.org/"><img alt="FFmpeg 8" src="https://img.shields.io/badge/FFmpeg-8-007808?style=for-the-badge&logo=ffmpeg&logoColor=white"></a>
+  <a href="https://ffmpeg.org/"><img alt="FFmpeg 9" src="https://img.shields.io/badge/FFmpeg-9-007808?style=for-the-badge&logo=ffmpeg&logoColor=white"></a>
   <a href="https://github.com/naudio/NAudio"><img alt="NAudio 2.2" src="https://img.shields.io/badge/NAudio-2.2-E65100?style=for-the-badge&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTMgOXY2aDRsNSA1VjRMNyA5em0xMy41IDNBNC41IDQuNSAwIDAgMCAxNCA4djhhNC41IDQuNSAwIDAgMCAyLjUtNHpNMTQgMy4ydjIuMWE3IDcgMCAwIDEgMCAxMy40djIuMWE5IDkgMCAwIDAgMC0xNy42eiIvPjwvc3ZnPg==&logoColor=white"></a>
   <a href="https://github.com/shimat/opencvsharp"><img alt="OpenCvSharp 4.13" src="https://img.shields.io/badge/OpenCvSharp-4.13-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white"></a>
   <a href="https://onnxruntime.ai/"><img alt="ONNX Runtime 1.24" src="https://img.shields.io/badge/ONNX%20Runtime-1.24-005CED?style=for-the-badge&logo=onnx&logoColor=white"></a>
@@ -15,10 +16,25 @@
 
 # Meu Editor de Vídeo
 
-A non-linear video editor for **Windows 11 (64-bit)**, with its interface and manual in **six languages** and 100%
-local processing, artificial intelligence included. No video, audio, image or text ever leaves the computer.
+A non-linear video editor for **Windows 11 (64-bit)**, **Linux (64-bit)** and **macOS**, built from one code base, with
+its interface and manual in **six languages** and 100% local processing, artificial intelligence included. No video,
+audio, image or text ever leaves the computer.
 
-Version **1.1.0**.
+Version **1.4.0**.
+
+## Installation
+
+| System | Package | Requirements |
+|---|---|---|
+| Windows | `Setup.exe` (recommended) or `.msi` | Windows 11 64-bit (x64) |
+| Linux | `.deb`: `sudo apt install ./meu-editor-de-video_<version>_amd64.deb` | Debian 12+ or Ubuntu 22.04+, x64 |
+| macOS | `.dmg`: drag the app to **Applications** | macOS 12+, Apple silicon (arm64) or Intel (x64) |
+
+Step by step, silent installation, uninstalling and the development environment on each system:
+[`INSTALL.md`](INSTALL.md). Limits that depend on the system (Wayland, Gatekeeper, AI on Intel Macs) are listed in
+[Platform notes](#platform-notes).
+
+## Documentation
 
 - **Installation** (end users and development environment): [`INSTALL.md`](INSTALL.md)
 - User manual: [`documentation/MANUAL_DO_USUARIO.en.md`](documentation/MANUAL_DO_USUARIO.en.md) (also in
@@ -44,13 +60,15 @@ Version **1.1.0**.
   first run, the **welcome** window asks for your name, language, theme and whether the program should check for
   updates; changing the language restarts the program in it.
 - Opens straight into the editor with an empty project; the **File** menu lists the five most recent projects.
-- Custom title bar, **Light**, **Dark** and **Same as Windows** themes, tabbed library and a full-height
-  **Properties** panel. In the bottom-right corner, one-click shortcuts to the **User manual** and the
+- Custom title bar, **Light**, **Dark** and **Same as the system** themes, tabbed library and a full-height
+  **Properties** panel; on macOS the menus become the native menu bar. In the bottom-right corner, one-click shortcuts to the **User manual** and the
   **Virtual assistant**.
 - **View**: layout modes (Default, Timeline, Video), playback quality, monitor zoom (Fit to 400%), loop playback and a
   pixel ruler.
-- Customizable keyboard shortcuts, with conflict warnings.
-- Accessibility: screen-reader names (UI Automation) on controls, lists and grids.
+- Customizable keyboard shortcuts, with conflict warnings. On macOS they use **Cmd** and **Option** instead of Ctrl and
+  Alt, in every language.
+- Dialogs fit the usable area of small screens: they shrink, their content scrolls, and their buttons stay in view.
+- Accessibility: screen-reader names (UI Automation, NSAccessibility, AT-SPI) on controls, lists and grids.
 
 ### Media and projects
 
@@ -106,15 +124,19 @@ Version **1.1.0**.
   from the manual, in the interface language. With the optional **Phi-4-mini** model installed, it writes the answer
   in natural language and cites the manual section; without it, it shows the sections found.
 - Optional models are downloaded once, by the program itself, from their official sources (HTTPS and SHA-256). They
-  run on the graphics card (DirectML) or on the CPU.
+  run on the graphics card (DirectML on Windows, Core ML on Apple silicon Macs) or on the CPU (Linux and Intel Macs).
+  **Intel Macs have no ONNX Runtime**: there, features that depend on it (such as background removal and the virtual
+  assistant) are turned off with a notice, and only Whisper subtitles work.
 
 ### Recording and export
 
 - **Record screen, webcam and microphone** at the same time, choosing the monitor, with the webcam in a corner, a
-  countdown and **F10** to stop.
+  countdown and **F10** to stop. On Linux the screen is recorded under Xorg (X11); on Wayland, screen recording is
+  unavailable and the webcam and microphone still work.
+- **Text to speech** with the voices of the system (SAPI on Windows, `say` on macOS, `espeak-ng` on Linux).
 - **Export** with templates for YouTube, Shorts, Instagram, TikTok, WhatsApp, Facebook and more, plus your own
   templates; MP4, MOV, MKV, WebM, AVI, MPEG-2 and GIF; H.264, H.265, AV1, VP9, ProRes, FFV1 and more; hardware encoding
-  (NVENC, AMF, QSV) or software; alpha channel, range, splitting into parts and subtitles (SRT/VTT or burned in).
+  (NVENC, AMF and QSV on Windows, NVENC and QSV on Linux, VideoToolbox on macOS) or software; alpha channel, range, splitting into parts and subtitles (SRT/VTT or burned in).
 - Background **render queue** that resumes interrupted exports.
 - **Export the current frame** as PNG or JPEG.
 - Subtitles: SRT/VTT import and export and a subtitle editor.
@@ -131,19 +153,20 @@ Version **1.1.0**.
 
 | Area | Technology |
 |---|---|
-| Platform | C# and .NET 10 (`net10.0`, Windows x64 published *self-contained*; Linux and macOS port in progress) |
+| Platform | C# and .NET 10 (`net10.0`), published *self-contained* for `win-x64`, `linux-x64`, `osx-arm64` and `osx-x64` from one code base |
 | User interface | Avalonia 12 with the Fluent theme, MVVM with CommunityToolkit.Mvvm 8.4 |
 | Composition and services | Microsoft.Extensions.Hosting 10 (dependency injection), Serilog (local file logs) |
-| Video and audio | FFmpeg 8 via FFmpeg.AutoGen 9 (decoding, encoding and muxing); `ffmpeg.exe` with gdigrab and DirectShow for screen recording |
-| Audio playback | NAudio 2.2 (WASAPI, master clock of the preview) |
-| Image and vision | OpenCvSharp 4.13 (tracking and stabilization), Svg.Skia 5.2 / SkiaSharp (SVG), custom CPU compositor (2.5D) |
-| AI | ONNX Runtime 1.24 with DirectML (GPU) or CPU: MODNet, MediaPipe Face Mesh V2, Silero VAD, GTCRN, TransNetV2, Swin2SR; Whisper.net 1.9 (subtitles) |
-| Virtual assistant | Knowledge base of the six manuals with local BM25 search; ONNX Runtime GenAI 0.14 (DirectML) with Phi-4-mini-instruct int4 |
+| Video and audio | FFmpeg 9 (shared build) via FFmpeg.AutoGen 9 (decoding, encoding and muxing); the `ffmpeg` tool records the screen (gdigrab and DirectShow on Windows, x11grab on Linux, avfoundation on macOS) |
+| Audio playback | SDL3 (Linux and macOS) and NAudio 2.2 (WASAPI, Windows), master clock of the preview |
+| Image and vision | OpenCvSharp 4.13 (tracking and stabilization), SkiaSharp 4 and HarfBuzz (text and shapes), Svg.Skia 5.2 (SVG), custom CPU compositor (2.5D) |
+| AI | ONNX Runtime 1.24 with DirectML (Windows GPU), Core ML (Apple silicon) or CPU (none on Intel Macs): MODNet, MediaPipe Face Mesh V2, Silero VAD, GTCRN, TransNetV2, Swin2SR; Whisper.net 1.9 (subtitles) |
+| Virtual assistant | Knowledge base of the six manuals with local BM25 search; ONNX Runtime GenAI 0.14 (DirectML on Windows, CPU elsewhere) with Phi-4-mini-instruct int4 |
 | Project format | `.med` (ZIP with `manifest.json` and `project.json`, versioned with migrations), time in *flicks* (`long`) |
 | Languages | Translation of the visual tree at load time (`Translator`, one `.tsv` file per language) |
-| Interop | Win32 (`LibraryImport`): monitors, F10 global hotkey, Windows registry for preferences |
-| Tests | xUnit, NetArchTest (layering and privacy), coverlet; `offline-check.ps1` runtime check |
-| Installers | WiX Toolset 6 (MSI and Setup.exe with the Visual C++ Redistributable), MSIX for the Microsoft Store |
+| System integration | Code behind `OperatingSystem.Is…()`; F10 global hotkey with SharpHook; preferences in the Windows registry or, on Linux and macOS, in a JSON file |
+| Tests | xUnit, NetArchTest (layering and privacy), Avalonia.Headless (UI), coverlet; `offline-check.ps1` runtime check (Windows, Linux and macOS) |
+| Installers | Windows: WiX Toolset 6 (MSI and Setup.exe with the Visual C++ Redistributable) and MSIX for the Microsoft Store; Linux: `.deb`; macOS: `.app` and `.dmg` (signing and notarization optional) |
+| CI | GitHub Actions on win-x64, linux-x64, osx-arm64 and osx-x64: build, tests, packages and installation tests |
 
 ## Structure
 
@@ -154,10 +177,23 @@ tests/      UnitTests, IntegrationTests, MediaTests
 resources/  export templates, transitions, effects, LUTs, fonts, AI model catalog and translations
 scripts/    dependencies, third-party notices, installers, string extraction and offline check
 installer/  Msi/ (MSI), Bundle/ (Setup.exe) and Store/ (MSIX)
+packaging/  macOS (entitlements and bundle files)
 documentation/
 ```
 
 How to build, test and produce the installers: [`INSTALL.md`](INSTALL.md).
+
+## Platform notes
+
+- **Linux and macOS are validated by the CI only** (there is no local virtual machine); report any difference you find.
+- **Linux, Wayland**: the system does not let other programs capture the screen, so screen recording is unavailable
+  (with a notice) and **F10** only works while the program is in front. To record the screen, choose an **Xorg**
+  session at the login screen.
+- **macOS, first launch**: unless the package was signed and notarized, Gatekeeper blocks it. Allow it in
+  **System Settings › Privacy & Security › Open Anyway**. Screen recording, camera, microphone and the global **F10**
+  ask for their own permissions the first time they are used.
+- **macOS, Intel**: no ONNX Runtime (see [Artificial intelligence](#artificial-intelligence-local)).
+- **Linux, AI** runs on the CPU, and hardware encoding with VA-API is not enabled yet.
 
 ## Frequently Asked Questions (FAQ)
 

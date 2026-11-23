@@ -4,8 +4,9 @@
 
 Este guia tem duas partes:
 
-1. [Instalar o aplicativo (usuário final)](#instalar-o-aplicativo-usuário-final)
-2. [Preparar o ambiente de desenvolvimento](#preparar-o-ambiente-de-desenvolvimento)
+1. [Instalar o aplicativo (usuário final)](#instalar-o-aplicativo-usuário-final): [Windows](#windows),
+   [Linux](#linux-debian-e-ubuntu) e [macOS](#macos)
+2. [Preparar o ambiente de desenvolvimento](#preparar-o-ambiente-de-desenvolvimento) no Windows, no Linux e no macOS
 
 ---
 
@@ -15,15 +16,21 @@ Este guia tem duas partes:
 
 | | Mínimo | Recomendado |
 |---|---|---|
-| Sistema | Windows 11 64 bits (x64) | Windows 11 64 bits (x64) |
-| Processador | Intel Core i5 ou AMD Ryzen 5 | Intel Core i7 ou AMD Ryzen 7 |
+| Sistema | Windows 11 64 bits (x64); Debian 12+ ou Ubuntu 22.04+ (x64); macOS 12+ (Apple Silicon ou Intel) | O mesmo |
+| Processador | Intel Core i5 ou AMD Ryzen 5 (ou Apple Silicon M1) | Intel Core i7 ou AMD Ryzen 7 |
 | Memória | 16 GB | 32 GB |
-| Placa de vídeo | Compatível com Direct3D | NVIDIA RTX ou AMD Radeon com 8 GB |
+| Placa de vídeo | Compatível com Direct3D no Windows; qualquer uma no Linux e no macOS | NVIDIA RTX ou AMD Radeon com 8 GB |
 | Armazenamento | SSD | SSD NVMe de 1 TB |
 
-O programa ocupa cerca de 540 MB instalado. O .NET já vai junto: não é preciso instalá-lo à parte.
+O programa ocupa cerca de 540 MB instalado no Windows. O .NET já vai junto: não é preciso instalá-lo à parte.
 
-### Qual instalador baixar
+No Linux, os recursos de IA rodam no processador. Nos Macs com Apple Silicon usam o Core ML. **Macs com Intel não têm
+ONNX Runtime**: os recursos de IA que dependem dele (como remover fundo e o assistente virtual) ficam desativados ali,
+com aviso; as legendas com Whisper continuam funcionando.
+
+### Windows
+
+#### Qual instalador baixar
 
 Os instaladores são publicados na página **Releases** do repositório no GitHub, quando há uma versão disponível.
 
@@ -36,12 +43,12 @@ Os instaladores são publicados na página **Releases** do repositório no GitHu
 Para conferir um arquivo baixado, no PowerShell:
 
 ```powershell
-Get-FileHash .\MeuEditorDeVideo-1.1.0-Setup.exe -Algorithm SHA256
+Get-FileHash .\MeuEditorDeVideo-1.4.0-Setup.exe -Algorithm SHA256
 ```
 
 O resultado deve ser igual à linha correspondente em `SHA256SUMS.txt`.
 
-### Instalar
+#### Instalar
 
 1. Execute o `Setup.exe` (ou o `.msi`) e siga as telas.
 2. Os instaladores não têm assinatura de código. Por isso, no primeiro download o Windows SmartScreen pode mostrar
@@ -51,6 +58,46 @@ O resultado deve ser igual à linha correspondente em `SHA256SUMS.txt`.
 4. Na primeira execução, a janela de **boas-vindas** pede seu nome, o idioma, o tema e se o programa deve verificar
    atualizações.
 
+### Linux (Debian e Ubuntu)
+
+Suportados: Debian 12 ou mais novo e Ubuntu 22.04 ou mais novo, 64 bits (x64). Os pacotes são arquivos `.deb`,
+publicados na página **Releases** do repositório junto com o `SHA256SUMS.txt`.
+
+```bash
+sha256sum -c SHA256SUMS.txt --ignore-missing
+sudo apt install ./meu-editor-de-video_<versão>_amd64.deb
+```
+
+O `apt` instala junto as bibliotecas necessárias (é preciso o `./` antes do nome do arquivo). O programa vai para
+`/opt/meu-editor-de-video`, com o comando `meu-editor-de-video`, a entrada no menu de aplicativos, os ícones e o tipo
+de arquivo `.med`. Para a narração (**Texto para fala**), instale também o `espeak-ng` (o pacote o recomenda). Para
+instalar sem os pacotes recomendados: `sudo apt install --no-install-recommends ./…deb`.
+
+- **A gravação de tela exige uma sessão Xorg (X11).** No Wayland (o padrão com GNOME no Ubuntu e no Debian) o sistema
+  não deixa outros programas capturarem a tela: a gravação fica indisponível, com aviso, e o **F10** só funciona com o
+  programa em primeiro plano. Para gravar, escolha uma sessão **Xorg** na tela de entrada. A câmera e o microfone
+  funcionam nas duas.
+- A IA não usa a placa de vídeo (roda no processador), e a codificação de vídeo pela placa é NVENC ou QSV; o VA-API
+  ainda não está ligado.
+- Abra pelo menu ou pelo comando `meu-editor-de-video`; os arquivos `.med` abrem no editor.
+
+### macOS
+
+Suportados: macOS 12 ou mais novo, em Apple Silicon (`arm64`) e Intel (`x64`); cada arquitetura tem o seu `.dmg`
+(`MeuEditorDeVideo-<versão>-arm64.dmg` e `MeuEditorDeVideo-<versão>-x64.dmg`).
+
+1. Abra o `.dmg` e arraste o **Meu Editor de Vídeo** para **Aplicativos**.
+2. **Primeira abertura.** Se o pacote não foi assinado e notarizado, o Gatekeeper do macOS o bloqueia. Abra
+   **Ajustes do Sistema › Privacidade e Segurança** e clique em **Abrir mesmo assim** (no macOS 14 e anteriores: clique
+   com o botão direito no aplicativo › **Abrir**).
+3. Na primeira vez em que você gravar a tela, usar a câmera ou o microfone, ou apertar **F10** com o programa em
+   segundo plano, o macOS pede a permissão correspondente em **Ajustes do Sistema › Privacidade e Segurança**
+   (Gravação de Tela, Câmera, Microfone e Acessibilidade). Se a gravação sair preta ou o **F10** não responder,
+   confira essas permissões.
+4. Nos teclados de Mac, use **Cmd (⌘)** e **Option (⌥)** onde o manual e a lista de atalhos dizem Ctrl e Alt; F1, F10 e
+   F11 podem exigir a tecla **fn**. Os menus são a barra de menus nativa.
+5. **Macs com Intel** não têm ONNX Runtime (veja os requisitos acima).
+
 ### Modelos de IA opcionais
 
 A remoção de fundo (MODNet) já vem instalada. Os demais modelos (legendas com Whisper, isolar voz, detectar cenas,
@@ -58,23 +105,23 @@ retoque de rosto, assistente virtual com Phi-4-mini e outros) são instalados pe
 **Ferramentas › Modelos de IA… › Baixar modelos…**, com o botão **Instalar**. Cada modelo é baixado uma única vez da origem
 oficial e conferido por SHA-256. Detalhes no [manual do usuário](documentation/MANUAL_DO_USUARIO.md).
 
-### Instalação silenciosa (administradores)
+### Instalação silenciosa (Windows, administradores)
 
 ```powershell
 # Setup.exe: Visual C++ (se faltar) + programa para todos os usuários
-MeuEditorDeVideo-1.1.0-Setup.exe /quiet /norestart
+MeuEditorDeVideo-1.4.0-Setup.exe /quiet /norestart
 
 # MSI para todos os usuários
-msiexec /i MeuEditorDeVideo-1.1.0-x64.msi /qn ALLUSERS=1
+msiexec /i MeuEditorDeVideo-1.4.0-x64.msi /qn ALLUSERS=1
 
 # MSI somente para o usuário atual (sem administrador)
-msiexec /i MeuEditorDeVideo-1.1.0-x64.msi /qn ALLUSERS=2 MSIINSTALLPERUSER=1
+msiexec /i MeuEditorDeVideo-1.4.0-x64.msi /qn ALLUSERS=2 MSIINSTALLPERUSER=1
 
 # Sem o atalho na área de trabalho
-msiexec /i MeuEditorDeVideo-1.1.0-x64.msi /qn ALLUSERS=1 ADDLOCAL=Aplicativo
+msiexec /i MeuEditorDeVideo-1.4.0-x64.msi /qn ALLUSERS=1 ADDLOCAL=Aplicativo
 
 # Com registro detalhado da instalação
-msiexec /i MeuEditorDeVideo-1.1.0-x64.msi /l*v instalacao.log
+msiexec /i MeuEditorDeVideo-1.4.0-x64.msi /l*v instalacao.log
 ```
 
 ### Microsoft Store
@@ -85,15 +132,21 @@ o aviso do SmartScreen não aparece. Ver [`documentation/MICROSOFT_STORE.md`](do
 ### Atualizar
 
 Use **Ajuda › Verificar atualizações**. Se a opção estiver ligada, o programa também verifica sozinho a cada 30 dias
-(enviando apenas o idioma da interface e o sistema operacional). Para atualizar, instale a nova versão por cima da atual: os projetos, as
+(enviando apenas o idioma da interface e o sistema operacional). Para atualizar, instale a nova versão por cima da atual (instalador do Windows,
+`sudo apt install ./…deb` no Linux, ou trocando o aplicativo em **Aplicativos** no macOS): os projetos, as
 configurações e os modelos de IA são mantidos.
 
 ### Desinstalar
 
-Pelo Windows, em **Configurações › Aplicativos › Meu Editor de Vídeo › Desinstalar**, ou com:
+**Linux:** `sudo apt remove meu-editor-de-video` (o pacote não guarda dados seus). **macOS:** arraste o aplicativo de
+**Aplicativos** para a Lixeira. Nos dois casos os dados do usuário ficam; para removê-los, apague as pastas do usuário
+(no Linux, `~/.config/MeuEditorDeVideo` e `~/.local/share/MeuEditorDeVideo`; **Ajuda › Abrir pasta de logs** mostra onde o
+programa guarda os dados no seu sistema).
+
+**Windows:** pelo Windows, em **Configurações › Aplicativos › Meu Editor de Vídeo › Desinstalar**, ou com:
 
 ```powershell
-msiexec /x MeuEditorDeVideo-1.1.0-x64.msi
+msiexec /x MeuEditorDeVideo-1.4.0-x64.msi
 ```
 
 A desinstalação remove os arquivos do programa, os atalhos, a associação `.med` e as preferências do registro
@@ -114,12 +167,17 @@ Mais detalhes: [`documentation/INSTALADOR.md`](documentation/INSTALADOR.md).
 
 ### Pré-requisitos
 
+A mesma base de código compila no **Windows 11 x64**, no **Linux x64** (Debian 12+, Ubuntu 22.04+) e no **macOS** (arm64
+e x64). Linux e macOS são validados só pelo CI; os passos abaixo marcam o que muda em cada sistema.
+
 | Ferramenta | Uso |
 |---|---|
-| Windows 11 x64 | Único sistema suportado (Avalonia, DirectML, WASAPI) |
+| Windows 11 x64, Debian 12+/Ubuntu 22.04+ x64 ou macOS 12+ | Sistema em que compilar |
 | [.NET SDK 10](https://dotnet.microsoft.com/download/dotnet/10.0) (10.0.4xx) | Compilar e testar |
 | [PowerShell 7](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows) (`pwsh`) | Scripts de dependências, instaladores e verificações |
-| [Git](https://git-scm.com/download/win) | Clonar o repositório |
+| [Git](https://git-scm.com/downloads) | Clonar o repositório |
+| Xcode Command Line Tools e `brew install cmake pkg-config nasm` (só no macOS) | O `fetch-deps` compila o FFmpeg a partir do código-fonte no macOS (`nasm` só no Intel) |
+| `dpkg-deb` (Linux, opcional) | `build-deb.ps1`; sem ele o script monta o `.deb` sozinho |
 | Visual Studio 2026 ou VS Code com C# Dev Kit (opcional) | Editar e depurar |
 | Python 3 (opcional) | `scripts/extract-strings.py`, ao criar ou mudar textos visíveis |
 | Windows SDK (opcional) | `makeappx`, `makepri` e `signtool`, para gerar o pacote MSIX |
@@ -139,9 +197,16 @@ cd Meu-Editor-de-Video
 pwsh scripts/fetch-deps.ps1
 ```
 
-Baixa para `deps/` o FFmpeg, o modelo MODNet e o Visual C++ Redistributable, conferindo cada arquivo pelo SHA-256
-registrado em `scripts/deps.lock.json`. Opções: `-Force` baixa de novo; `-Strict` falha se alguma dependência não
-tiver SHA-256 registrado.
+Preenche `deps/` com as bibliotecas nativas do sistema em que roda, conferindo cada arquivo pelo SHA-256 registrado em
+`scripts/deps.lock.json`:
+
+- **Windows:** o FFmpeg, o modelo MODNet e o Visual C++ Redistributable.
+- **Linux:** o build compartilhado do FFmpeg (BtbN) e o modelo MODNet.
+- **macOS:** compila o FFmpeg a partir do código-fonte com `scripts/macos/build-ffmpeg.sh` (demora; precisa das
+  ferramentas da tabela acima) e baixa o modelo MODNet.
+
+Opções: `-Force` baixa de novo; `-Strict` falha se alguma dependência não tiver SHA-256 registrado. No Linux e no macOS
+a estrutura é `deps/ffmpeg/{bin,lib}`.
 
 ### 3. Compilar
 
@@ -180,14 +245,16 @@ dotnet test tests/MeuEditorDeVideo.MediaTests --filter "Categoria=Desempenho"
 dotnet run --project src/MeuEditorDeVideo.Desktop
 ```
 
-O executável fica em `src/MeuEditorDeVideo.Desktop/bin/Debug/net10.0/MeuEditorDeVideo.exe`.
+O executável fica em `src/MeuEditorDeVideo.Desktop/bin/Debug/net10.0/MeuEditorDeVideo.exe` (`MeuEditorDeVideo`, sem
+extensão, no Linux e no macOS).
 
 ### Variáveis de ambiente
 
 | Variável | Efeito |
 |---|---|
-| `MED_FFMPEG_DIR` | Pasta das DLLs do FFmpeg, no lugar de `deps\ffmpeg` |
+| `MED_FFMPEG_DIR` | Pasta das bibliotecas do FFmpeg, no lugar de `deps/ffmpeg` |
 | `MED_MODELS_DIR` | Pasta dos modelos de IA usados pelos testes |
+| `MED_AUDIO_BACKEND` | `sdl` usa o SDL3 para o áudio também no Windows (o padrão ali é o WASAPI); Linux e macOS sempre usam o SDL3 |
 
 ### Gerar os instaladores e outras tarefas
 
@@ -213,6 +280,10 @@ O `build-installer.ps1` aceita assinatura de código com `-CertificateThumbprint
 [`documentation/INSTALADOR.md`](documentation/INSTALADOR.md).
 
 ### Pacotes para Linux e macOS
+
+O CI (`.github/workflows/build.yml`) roda em `windows-latest`, `ubuntu-22.04`, `macos-15` (arm64) e `macos-15-intel`
+(x64): compila, executa a suíte inteira e, nos pushes para `main`, gera os pacotes e os instala num ambiente limpo
+(instaladores no Windows e no macOS, `.deb` em contêineres Debian 12, Ubuntu 22.04 e 24.04).
 
 Os dois scripts publicam o programa autocontido para o sistema de destino (`dotnet publish -r <rid> --self-contained`) e
 empacotam o resultado. Rode antes `pwsh scripts/fetch-deps.ps1` no mesmo sistema (ele preenche `deps/` com as
@@ -265,12 +336,17 @@ notariza quando existem os segredos `MACOS_SIGN_IDENTITY`, `MACOS_CERT_P12_BASE6
 
 ### Cuidados ao testar o programa real
 
-- Enquanto o programa está aberto, as DLLs em `bin\` ficam bloqueadas e `dotnet build`/`dotnet test` falham com
-  MSB3027. Feche o programa antes, ou compile numa pasta separada com `-o` só para conferir a compilação.
+- Enquanto o programa está aberto no Windows, as DLLs em `bin\` ficam bloqueadas e `dotnet build`/`dotnet test` falham
+  com MSB3027. Feche o programa antes, ou compile numa pasta separada com `-o` só para conferir a compilação.
 - O programa usa os seus dados reais: `%APPDATA%\MeuEditorDeVideo\settings.json` (projetos recentes),
   `%LOCALAPPDATA%\MeuEditorDeVideo\` (salvamento automático, cache, modelos de IA e fila de renderização) e as
   preferências em `HKCU\Software\Meu Editor de Vídeo`. Faça cópia de segurança antes de testar. Para testar a primeira
-  execução (janela de boas-vindas), esvazie essa chave do registro.
+  execução (janela de boas-vindas), esvazie essa chave do registro. No Linux e no macOS esses dados ficam nas pastas do
+  usuário (`~/.config/MeuEditorDeVideo` e `~/.local/share/MeuEditorDeVideo` no Linux) e as preferências são o arquivo
+  `preferences.json` da pasta de configurações: apague-o para testar a primeira execução.
+- `scripts/ci/testar-instalador.ps1` e `scripts/ci/testar-deb.sh` instalam o programa e **apagam os dados do usuário**:
+  servem só para o CI ou para um contêiner descartável.
+- `pwsh scripts/offline-check.ps1` também funciona no Linux (`ss`) e no macOS (`lsof`).
 
 ### Leitura recomendada
 

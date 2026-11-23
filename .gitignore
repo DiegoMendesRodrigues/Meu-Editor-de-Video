@@ -32,3 +32,29 @@ desktop.ini
 
 # Site do produto (contém o arquivo de configuração com a senha do e-mail)
 /website/
+
+# Arquivos do macOS e do Linux
+.DS_Store
+._*
+.AppleDouble
+.directory
+*~
+*.swp
+
+# Pacotes gerados fora de artifacts/ (os scripts de instalador e de pacote gravam em artifacts/)
+*.deb
+*.dmg
+*.msi
+*.msix
+
+# Resultados de testes e cobertura
+*.trx
+*.coverage
+coverage*/
+
+# Claude Code: bloqueio de tarefas agendadas e cópias de trabalho (worktrees)
+.claude/scheduled_tasks.lock
+.claude/worktrees/
+
+# Cópias de trabalho para simular outro sistema (ex.: Mac Intel) e arquivos temporários
+/scratch/
