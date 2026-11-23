@@ -152,7 +152,7 @@ public sealed class GenAiAnswerGenerator : IHelpAnswerGenerator, IDisposable
 
     private Loaded EnsureLoaded()
     {
-        var model = _registry.Find(ModelCapability.HelpAssistant)
+        var model = (IsAvailable ? _registry.Find(ModelCapability.HelpAssistant) : null)
             ?? throw new InvalidOperationException("O modelo de linguagem do assistente virtual não está instalado.");
         var gpu = model.Manifest.Gpu && GpuSupported && (_sessions?.Requested ?? AiDevice.Gpu) == AiDevice.Gpu;
         lock (_gate)
@@ -162,7 +162,15 @@ public sealed class GenAiAnswerGenerator : IHelpAnswerGenerator, IDisposable
             _loaded = null;
             _handle ??= new OgaHandle();
             var started = DateTime.UtcNow;
-            _loaded = gpu ? TryLoad(model.Directory, AiDevice.Gpu) ?? Load(model.Directory, AiDevice.Cpu) : Load(model.Directory, AiDevice.Cpu);
+            try
+            {
+                _loaded = (gpu ? TryLoad(model.Directory, AiDevice.Gpu) : null) ?? Load(model.Directory, AiDevice.Cpu);
+            }
+            catch (Exception ex) when (ex is DllNotFoundException or EntryPointNotFoundException or TypeInitializationException)
+            {
+                // A biblioteca nativa não carrega (ex.: sistema sem ONNX Runtime GenAI): quem chama recebe um erro conhecido.
+                throw new InvalidOperationException(OnnxSessionFactory.RuntimeMissing, ex);
+            }
             _log.LogInformation("Modelo de linguagem {Id} carregado na {Device} em {Seconds:0.0} s.", model.Manifest.Id,
                 _loaded.Device == AiDevice.Gpu ? "GPU (DirectML)" : "CPU", (DateTime.UtcNow - started).TotalSeconds);
             return _loaded;
@@ -175,7 +183,7 @@ public sealed class GenAiAnswerGenerator : IHelpAnswerGenerator, IDisposable
         {
             return Load(directory, device);
         }
-        catch (Exception ex) when (ex is OnnxRuntimeGenAIException or DllNotFoundException or EntryPointNotFoundException)
+        catch (Exception ex) when (ex is OnnxRuntimeGenAIException or DllNotFoundException or EntryPointNotFoundException or TypeInitializationException)
         {
             _log.LogWarning(ex, "GPU indisponível para o modelo de linguagem; usando CPU.");
             return null;

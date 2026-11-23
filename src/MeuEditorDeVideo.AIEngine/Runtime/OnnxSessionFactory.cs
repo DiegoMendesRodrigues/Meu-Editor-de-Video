@@ -38,6 +38,9 @@ public sealed class OnnxSessionFactory(ISettingsService? settings = null, ILogge
         return new OnnxModelSession(new InferenceSession(path, options), AiDevice.Cpu, Path.GetFileNameWithoutExtension(path));
     }
 
+    /// <summary>Mensagem quando a biblioteca nativa do ONNX Runtime não carrega.</summary>
+    public const string RuntimeMissing = "O ONNX Runtime não está disponível neste sistema; os recursos de IA que dependem dele não funcionam aqui.";
+
     private OnnxModelSession Create(string path, string id, bool gpu)
     {
         var provider = AiPlatform.Choose(AiPlatform.CurrentOs, RuntimeInformation.ProcessArchitecture, gpu ? AiDevice.Gpu : AiDevice.Cpu, gpu);
@@ -56,13 +59,24 @@ public sealed class OnnxSessionFactory(ISettingsService? settings = null, ILogge
                 _log.LogInformation("Modelo {Id} carregado na GPU ({Provider}).", id, AiPlatform.Name(provider));
                 return new OnnxModelSession(session, AiDevice.Gpu, id);
             }
-            catch (Exception ex) when (ex is OnnxRuntimeException or DllNotFoundException or EntryPointNotFoundException or InvalidOperationException)
+            catch (Exception ex) when (ex is OnnxRuntimeException or DllNotFoundException or EntryPointNotFoundException or InvalidOperationException
+                                           or TypeInitializationException)
             {
                 _log.LogWarning(ex, "GPU indisponível para o modelo {Id}; usando CPU.", id);
             }
         }
-        using var cpu = CpuOptions();
-        var s = new InferenceSession(path, cpu);
+        InferenceSession s;
+        try
+        {
+            using var cpu = CpuOptions();
+            s = new InferenceSession(path, cpu);
+        }
+        catch (Exception ex) when (ex is DllNotFoundException or EntryPointNotFoundException or TypeInitializationException)
+        {
+            // A biblioteca nativa não carrega (o erro chega embrulhado em TypeInitializationException): erro conhecido.
+            _log.LogError(ex, "ONNX Runtime indisponível para o modelo {Id}.", id);
+            throw new InvalidOperationException(RuntimeMissing, ex);
+        }
         _log.LogInformation("Modelo {Id} carregado na CPU.", id);
         return new OnnxModelSession(s, AiDevice.Cpu, id);
     }

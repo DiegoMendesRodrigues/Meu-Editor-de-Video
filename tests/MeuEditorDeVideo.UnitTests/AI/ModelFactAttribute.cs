@@ -1,4 +1,5 @@
 using System.IO;
+using MeuEditorDeVideo.Core.AI;
 
 namespace MeuEditorDeVideo.UnitTests.AI;
 
@@ -33,11 +34,22 @@ public static class TestModels
         Find(fileName) ?? throw new InvalidOperationException($"Modelo {fileName} não encontrado (defina MED_MODELS_DIR).");
 }
 
+/// <summary>Teste que supõe ONNX Runtime no sistema: é ignorado no macOS Intel, que não tem.</summary>
+public sealed class ComOnnxRuntimeFactAttribute : FactAttribute
+{
+    public ComOnnxRuntimeFactAttribute()
+    {
+        if (!AiPlatform.OnnxRuntimeAvailable) Skip = "Sistema sem ONNX Runtime (macOS Intel).";
+    }
+}
+
 /// <summary>Teste que depende de um modelo de IA: é ignorado (Skip) quando o arquivo não está disponível.</summary>
 public sealed class ModelFactAttribute : FactAttribute
 {
     public ModelFactAttribute(string fileName)
     {
-        if (TestModels.Find(fileName) is null) Skip = $"Modelo {fileName} não disponível (defina MED_MODELS_DIR).";
+        if (fileName.EndsWith(".onnx", StringComparison.OrdinalIgnoreCase) && !AiPlatform.OnnxRuntimeAvailable)
+            Skip = "Sistema sem ONNX Runtime (macOS Intel).";
+        else if (TestModels.Find(fileName) is null) Skip = $"Modelo {fileName} não disponível (defina MED_MODELS_DIR).";
     }
 }

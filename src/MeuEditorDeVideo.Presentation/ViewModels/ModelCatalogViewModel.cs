@@ -29,9 +29,9 @@ public sealed partial class CatalogItemViewModel(ModelCatalogEntry entry, ModelC
     public string Source => Entry.Source;
     public string Origin => Entry.Url.Host;
 
-    public string Dependencies => Entry.DependsOn.Count == 0
+    public string Dependencies => owner.DependenciesOf(Entry).Count == 0
         ? "Nenhuma"
-        : string.Join(", ", Entry.DependsOn.Select(id => Localization.Translator.T(owner.NameOf(id)))) + Localization.Translator.T(" (instalado junto)");
+        : string.Join(", ", owner.DependenciesOf(Entry).Select(id => Localization.Translator.T(owner.NameOf(id)))) + Localization.Translator.T(" (instalado junto)");
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StateText), nameof(ActionText), nameof(IsInstalled))]
@@ -120,6 +120,10 @@ public sealed partial class ModelCatalogViewModel : ObservableObject, IDisposabl
         "instalar em outro computador sem internet.";
 
     public string PackagesDirectory => _installer?.PackagesDirectory ?? "";
+
+    /// <summary>Dependências instaladas junto neste sistema.</summary>
+    public IReadOnlyList<string> DependenciesOf(ModelCatalogEntry entry) =>
+        _installer?.Catalog.DependenciesOf(entry, AiPlatform.OnnxRuntimeAvailable) ?? entry.DependsOn;
 
     public string NameOf(string id) => _installer?.Catalog.Find(id)?.Name ?? id;
 

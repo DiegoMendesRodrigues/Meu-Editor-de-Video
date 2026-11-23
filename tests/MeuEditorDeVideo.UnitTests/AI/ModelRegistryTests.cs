@@ -41,7 +41,7 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task Install_valid_package_installs_files_and_raises_Changed()
     {
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var model = FakeModel(1);
         var package = Package("valid.medmodel", Manifest(model), model, Standard());
         var changes = 0;
@@ -63,9 +63,25 @@ public sealed class ModelRegistryTests : IDisposable
     }
 
     [Fact]
+    public async Task Sem_ONNX_Runtime_o_modelo_instalado_fica_indisponivel_e_o_Whisper_continua()
+    {
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: false);
+        var modnet = FakeModel(7);
+        var whisper = FakeModel(8);
+        await registry.InstallAsync(Package("modnet.medmodel", Manifest(modnet), modnet, Standard()));
+        await registry.InstallAsync(Package("fala.medmodel",
+            Manifest(whisper, id: "fala", capability: ModelCapability.SpeechRecognition, file: "fala.bin"), whisper, Standard()));
+
+        Assert.NotNull(registry.Find(ModelCapability.PersonSegmentation)); // continua listado em Modelos de IA
+        Assert.False(registry.IsAvailable(ModelCapability.PersonSegmentation));
+        Assert.True(registry.IsAvailable(ModelCapability.SpeechRecognition));
+        Assert.Equal(AiPlatform.OnnxRuntimeAvailable, new ModelRegistry(_modelsDir).IsAvailable(ModelCapability.PersonSegmentation));
+    }
+
+    [Fact]
     public async Task Install_with_wrong_hash_is_rejected_and_leaves_nothing_behind()
     {
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var model = FakeModel(2);
         var manifest = Manifest(model) with { Sha256 = new string('0', 64) };
         var package = Package("hash.medmodel", manifest, model, Standard());
@@ -80,7 +96,7 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task Install_without_manifest_is_rejected()
     {
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var model = FakeModel(3);
         var package = BuildPackage("sem-manifesto.medmodel", [("model.onnx", model), ("LICENSE.txt", Bytes("MIT"))]);
 
@@ -93,7 +109,7 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task Install_with_path_traversal_entry_is_rejected()
     {
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var model = FakeModel(4);
         var package = Package("traversal.medmodel", Manifest(model), model, Standard().Append(("../evil.txt", Bytes("x"))).ToArray());
 
@@ -106,7 +122,7 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task Install_with_newer_package_format_is_rejected()
     {
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var model = FakeModel(5);
         var package = Package("futuro.medmodel", Manifest(model) with { PackageFormat = 2 }, model, Standard());
 
@@ -119,7 +135,7 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task Install_without_license_is_rejected()
     {
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var model = FakeModel(6);
         var package = Package("sem-licenca.medmodel", Manifest(model) with { License = " " }, model, Standard());
 
@@ -132,7 +148,7 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task Install_of_file_that_is_not_a_zip_is_rejected()
     {
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var path = Path.Combine(_packagesDir, "falso.medmodel");
         File.WriteAllText(path, "isto não é um zip");
 
@@ -144,7 +160,7 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task Reinstall_with_same_id_replaces_the_files()
     {
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var first = FakeModel(7);
         var firstPackage = Package("v1.medmodel", Manifest(first, version: "1.0.0"), first, Standard().Append(("notas.txt", Bytes("antigo"))).ToArray());
         await registry.InstallAsync(firstPackage);
@@ -163,7 +179,7 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task Find_prefers_the_higher_version_among_models_with_the_same_capability()
     {
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var a = FakeModel(9);
         var b = FakeModel(10);
         await registry.InstallAsync(Package("a.medmodel", Manifest(a, id: "fala-a", version: "1.9.0", capability: ModelCapability.SpeechRecognition, file: "a.bin"), a, Standard()));
@@ -178,7 +194,7 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task RemoveAsync_deletes_the_folder_and_raises_Changed()
     {
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var model = FakeModel(11);
         await registry.InstallAsync(Package("remover.medmodel", Manifest(model), model, Standard()));
         var changes = 0;
@@ -195,7 +211,7 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task VerifyAsync_is_true_for_intact_model_and_false_after_tampering()
     {
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var model = FakeModel(12);
         var installed = await registry.InstallAsync(Package("verificar.medmodel", Manifest(model), model, Standard()));
 
@@ -210,11 +226,11 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task Constructor_rescans_existing_folders()
     {
-        var first = new ModelRegistry(_modelsDir);
+        var first = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var model = FakeModel(13);
         await first.InstallAsync(Package("rescan.medmodel", Manifest(model), model, Standard()));
 
-        var second = new ModelRegistry(_modelsDir);
+        var second = new ModelRegistry(_modelsDir, onnxRuntime: true);
 
         var found = second.Find(ModelCapability.PersonSegmentation);
         Assert.NotNull(found);
@@ -225,14 +241,14 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public async Task Folder_with_invalid_manifest_is_ignored()
     {
-        var first = new ModelRegistry(_modelsDir);
+        var first = new ModelRegistry(_modelsDir, onnxRuntime: true);
         var model = FakeModel(14);
         await first.InstallAsync(Package("ok.medmodel", Manifest(model), model, Standard()));
         var broken = Path.Combine(_modelsDir, "quebrado");
         Directory.CreateDirectory(broken);
         File.WriteAllText(Path.Combine(broken, "manifest.json"), "{ isto não é json");
 
-        var registry = new ModelRegistry(_modelsDir);
+        var registry = new ModelRegistry(_modelsDir, onnxRuntime: true);
 
         var installed = Assert.Single(registry.Installed);
         Assert.Equal("modnet-photographic", installed.Manifest.Id);
@@ -323,7 +339,7 @@ public sealed class ModelRegistryTests : IDisposable
     public async Task Built_in_model_is_available_without_installing_and_cannot_be_removed()
     {
         var model = FakeModel(10);
-        var registry = new ModelRegistry(_modelsDir, builtInDirectory: BuiltIn(model, Manifest(model, id: "modnet-retrato")));
+        var registry = new ModelRegistry(_modelsDir, builtInDirectory: BuiltIn(model, Manifest(model, id: "modnet-retrato")), onnxRuntime: true);
 
         var found = registry.Find(ModelCapability.PersonSegmentation);
         Assert.NotNull(found);
@@ -340,7 +356,7 @@ public sealed class ModelRegistryTests : IDisposable
     public async Task User_package_with_same_id_overrides_built_in_and_removing_it_restores_built_in()
     {
         var builtInModel = FakeModel(11);
-        var registry = new ModelRegistry(_modelsDir, builtInDirectory: BuiltIn(builtInModel, Manifest(builtInModel, id: "modnet-retrato")));
+        var registry = new ModelRegistry(_modelsDir, builtInDirectory: BuiltIn(builtInModel, Manifest(builtInModel, id: "modnet-retrato")), onnxRuntime: true);
         var userModel = FakeModel(12);
         await registry.InstallAsync(Package("novo.medmodel", Manifest(userModel, id: "modnet-retrato", version: "2.0"), userModel, Standard()));
 
@@ -359,7 +375,7 @@ public sealed class ModelRegistryTests : IDisposable
         var dir = BuiltIn(model, Manifest(model, id: "modnet-retrato"));
         File.WriteAllBytes(Path.Combine(dir, "modnet-retrato", "model.onnx"), model[..100]);
 
-        var registry = new ModelRegistry(_modelsDir, builtInDirectory: dir);
+        var registry = new ModelRegistry(_modelsDir, builtInDirectory: dir, onnxRuntime: true);
         Assert.Empty(registry.Installed);
         Assert.False(registry.IsAvailable(ModelCapability.PersonSegmentation));
     }
@@ -367,7 +383,7 @@ public sealed class ModelRegistryTests : IDisposable
     [Fact]
     public void Missing_built_in_directory_is_fine()
     {
-        var registry = new ModelRegistry(_modelsDir, builtInDirectory: Path.Combine(_root, "nao-existe"));
+        var registry = new ModelRegistry(_modelsDir, builtInDirectory: Path.Combine(_root, "nao-existe"), onnxRuntime: true);
         Assert.Empty(registry.Installed);
     }
 

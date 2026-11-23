@@ -26,6 +26,9 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
     private static readonly CultureInfo Pt = CultureInfo.GetCultureInfo("pt-BR");
     private const string Install = "Indisponível — instale o modelo em Ferramentas › Modelos de IA.";
 
+    /// <summary>Recurso que precisa do ONNX Runtime num sistema sem ele (macOS Intel).</summary>
+    public const string NoOnnxRuntime = "Indisponível neste Mac: este recurso não roda em processadores Intel.";
+
     private readonly IModelRegistry _models;
     private readonly ISegmentationService _segmentation;
     private readonly ISpeechRecognitionService _speech;
@@ -217,7 +220,8 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
 
     private void OnTimelineInvalidated(object? sender, EventArgs e) => Refresh();
 
-    private static string StatusText(bool available, string ready) => available ? ready : Install;
+    private static string StatusText(bool available, string ready, ModelCapability capability) =>
+        available ? ready : AiPlatform.Supports(capability) ? Install : NoOnnxRuntime;
 
     public void Refresh()
     {
@@ -229,14 +233,16 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
             VoiceAvailable = _voice.IsAvailable;
             VadAvailable = _vad.IsAvailable;
             EnhancerAvailable = _enhancer.IsAvailable;
-            SegmentationStatus = StatusText(SegmentationAvailable, Ready(ModelCapability.PersonSegmentation));
-            SpeechStatus = StatusText(SpeechAvailable, Ready(ModelCapability.SpeechRecognition));
-            VoiceStatus = StatusText(VoiceAvailable, Ready(ModelCapability.SpeechEnhancement));
-            VadStatus = StatusText(VadAvailable, Ready(ModelCapability.VoiceActivity));
-            EnhancerStatus = StatusText(EnhancerAvailable, Ready(ModelCapability.ImageEnhancement));
+            SegmentationStatus = StatusText(SegmentationAvailable, Ready(ModelCapability.PersonSegmentation), ModelCapability.PersonSegmentation);
+            SpeechStatus = StatusText(SpeechAvailable, Ready(ModelCapability.SpeechRecognition), ModelCapability.SpeechRecognition);
+            VoiceStatus = StatusText(VoiceAvailable, Ready(ModelCapability.SpeechEnhancement), ModelCapability.SpeechEnhancement);
+            VadStatus = StatusText(VadAvailable, Ready(ModelCapability.VoiceActivity), ModelCapability.VoiceActivity);
+            EnhancerStatus = StatusText(EnhancerAvailable, Ready(ModelCapability.ImageEnhancement), ModelCapability.ImageEnhancement);
             SceneStatus = _scenes.ModelAvailable
                 ? Ready(ModelCapability.SceneDetection)
-                : "Sem modelo: usa comparação de cores entre quadros (menos precisa). Instale o modelo de cenas para melhor resultado.";
+                : AiPlatform.Supports(ModelCapability.SceneDetection)
+                    ? "Sem modelo: usa comparação de cores entre quadros (menos precisa). Instale o modelo de cenas para melhor resultado."
+                    : "Usa comparação de cores entre quadros (menos precisa): o modelo de cenas não roda em Macs com Intel.";
 
             var visual = VisualClip();
             var audio = AudioClip();
@@ -798,7 +804,8 @@ public sealed partial class AiInspectorViewModel : ObservableObject, IDisposable
             Status = "Cancelado.";
         }
         catch (Exception ex) when (ex is InvalidOperationException or IOException or UnauthorizedAccessException or InvalidDataException
-                                       or Microsoft.ML.OnnxRuntime.OnnxRuntimeException or DllNotFoundException or OpenCvSharp.OpenCVException)
+                                       or Microsoft.ML.OnnxRuntime.OnnxRuntimeException or DllNotFoundException or OpenCvSharp.OpenCVException
+                                       or TypeInitializationException)
         {
             _logger.LogWarning(ex, "Falha no recurso de IA");
             _dialogs.ShowInfo("Inteligência artificial", $"Não foi possível concluir: {ex.Message}");

@@ -4,7 +4,10 @@ using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.VisualTree;
+using MeuEditorDeVideo.Core.AI;
 using MeuEditorDeVideo.Core.Media;
+using MeuEditorDeVideo.Desktop.Views.Panels;
 using MeuEditorDeVideo.Desktop.Controls;
 using MeuEditorDeVideo.Desktop.Views;
 using MeuEditorDeVideo.Desktop.Views.Dialogs;
@@ -463,6 +466,40 @@ public class ControlsTests
             window.MouseDown(centro, MouseButton.Left, Ui.Principal);
             window.MouseUp(centro, MouseButton.Left, Ui.Principal);
             Assert.Equal(pontos + 1, editor.OverlayPoints.Count);
+            window.Close();
+        });
+    }
+
+    [Fact]
+    public void Aba_de_IA_avisa_e_desativa_o_que_nao_roda_sem_ONNX_Runtime()
+    {
+        using var fx = Ui.Run(() => new TimelineFixture());
+        Ui.Run(() =>
+        {
+            fx.Timeline.Select(fx.BeachClip, additive: false);
+            using var ia = ActivatorUtilities.CreateInstance<AiInspectorViewModel>(fx.Services, fx.Timeline);
+            ia.Refresh();
+            var window = Ui.Host(new ClipAiPanel { DataContext = ia }, 340, 900);
+            window.Show();
+            Avalonia.Threading.Dispatcher.UIThread.RunJobs();
+            Ui.Capture(window, AiPlatform.OnnxRuntimeAvailable ? "aba-ia" : "aba-ia-mac-intel");
+
+            var textos = window.GetVisualDescendants().OfType<TextBlock>().Select(t => t.Text).ToList();
+            var remover = window.GetVisualDescendants().OfType<Button>().Single(b => b.Command == ia.RemoveBackgroundCommand);
+            if (AiPlatform.OnnxRuntimeAvailable)
+            {
+                Assert.DoesNotContain(AiInspectorViewModel.NoOnnxRuntime, textos);
+                Assert.Equal(ia.SegmentationAvailable, remover.IsEffectivelyEnabled);
+            }
+            else
+            {
+                Assert.Equal(AiInspectorViewModel.NoOnnxRuntime, ia.SegmentationStatus);
+                Assert.Contains(AiInspectorViewModel.NoOnnxRuntime, textos);
+                Assert.False(remover.IsEffectivelyEnabled);
+                Assert.False(ia.IsolateVoiceCommand.CanExecute(null));
+                Assert.Contains("não roda em Macs com Intel", ia.SceneStatus);
+                Assert.NotEqual(AiInspectorViewModel.NoOnnxRuntime, ia.SpeechStatus); // o Whisper não usa ONNX
+            }
             window.Close();
         });
     }

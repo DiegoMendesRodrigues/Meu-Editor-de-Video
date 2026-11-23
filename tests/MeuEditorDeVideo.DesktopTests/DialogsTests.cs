@@ -292,7 +292,9 @@ public partial class DialogsTests
             var list = Find<ListBox>(window, l => l.ItemsSource == vm.Models);
             Assert.Equal(3, list.ItemCount);
             Assert.Equal(Enum.GetValues<ModelCapability>().Length, vm.Capabilities.Count);
-            Assert.Contains(All<TextBlock>(window), t => t.Text?.StartsWith("Disponível · MODNet") == true);
+            // Sem ONNX Runtime (macOS Intel), o MODNet instalado aparece como indisponível; o Whisper, não.
+            Assert.Contains(All<TextBlock>(window), t => t.Text?.StartsWith(AiPlatform.OnnxRuntimeAvailable ? "Disponível · MODNet" : "Indisponível em Macs com Intel") == true);
+            Assert.Contains(All<TextBlock>(window), t => t.Text?.StartsWith("Disponível · Whisper") == true);
 
             // O nome da GPU acompanha o sistema (DirectML no Windows, Core ML no macOS, só CPU no Linux).
             var gpu = Find<RadioButton>(window, r => r.Name == "OpcaoGpu");
@@ -372,6 +374,7 @@ public partial class DialogsTests
             // O catálogo só lista o que existe no sistema atual (campo "plataformas").
             var tag = AiPlatform.Tag(AiPlatform.CurrentOs);
             Assert.All(vm.Items, i => Assert.True(i.Entry.AvailableOn(tag), i.Name));
+            Assert.All(vm.Items, i => Assert.True(AiPlatform.Supports(i.Entry.Capability), i.Name));
             Assert.Contains(All<TextBlock>(window), t => t.Text == vm.Selected!.Name);
             Assert.Contains(All<TextBlock>(window), t => t.Text == vm.Selected!.Device);
 

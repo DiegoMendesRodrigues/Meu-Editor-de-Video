@@ -154,11 +154,11 @@ public sealed partial class ModelManagerViewModel : ObservableObject, IDisposabl
         foreach (var m in _registry.Installed.OrderBy(m => m.Manifest.Capability).ThenBy(m => m.Manifest.Name))
             Models.Add(new ModelItemViewModel(m, free));
         Selected = Models.FirstOrDefault(m => m.Id == id) ?? Models.FirstOrDefault();
-        Capabilities = Enum.GetValues<ModelCapability>().Select(c => _registry.Find(c) is { } m
+        Capabilities = Enum.GetValues<ModelCapability>().Select(c => _registry.Find(c) is { } m && AiPlatform.Supports(c)
                 ? new CapabilityStatus(CapabilityName(c), $"Disponível · {m.Manifest.Name} {m.Manifest.Version}", true)
                 : new CapabilityStatus(CapabilityName(c), c == ModelCapability.SceneDetection
                     ? "Sem modelo: usa comparação de cores (menos precisa)"
-                    : "Indisponível — instale em \"Baixar modelos…\"", false))
+                    : AiPlatform.Supports(c) ? "Indisponível — instale em \"Baixar modelos…\"" : "Indisponível em Macs com Intel", false))
             .ToList();
         OnPropertyChanged(nameof(MemorySummary));
     }

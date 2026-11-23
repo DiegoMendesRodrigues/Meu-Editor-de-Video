@@ -2761,3 +2761,7 @@ f6f9872c	Volume {0}
 5b066bdd	Whisper large-v3 turbo (multilingual)
 fc450a13	Xiaobin Rong / GTCRN (streaming export andrelgomes/gtcrn-stream)
 fadf924a	mv-lab/swin2sr (ONNX export Xenova/swin2SR-lightweight-x2-64)
+9132b1db	Unavailable on Intel Macs
+ad38f1e4	Unavailable on this Mac: this feature does not run on Intel processors.
+38a5658f	ONNX Runtime is not available on this system; the AI features that depend on it do not work here.
+c189fdb7	Uses color comparison between frames (less accurate): the scene model does not run on Intel Macs.

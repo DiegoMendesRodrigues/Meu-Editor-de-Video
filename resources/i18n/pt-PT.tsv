@@ -1172,3 +1172,7 @@ f06001ea	Modelo de linguagem que escreve as respostas do assistente virtual a pa
 c7ef9804	Separa a voz dos restantes sons e reduz o ruído de fundo.
 73ca49f9	TransNetV2 (deteção de cenas)
 5b066bdd	Whisper large-v3 turbo (multilingue)
+9132b1db	Indisponível em Macs com Intel
+ad38f1e4	Indisponível neste Mac: esta funcionalidade não funciona em processadores Intel.
+38a5658f	O ONNX Runtime não está disponível neste sistema; as funcionalidades de IA que dependem dele não funcionam aqui.
+c189fdb7	Usa a comparação de cores entre fotogramas (menos precisa): o modelo de cenas não funciona em Macs com Intel.

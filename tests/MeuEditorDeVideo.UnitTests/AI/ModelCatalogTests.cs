@@ -86,6 +86,21 @@ public sealed class ModelCatalogTests : IDisposable
     }
 
     [Fact]
+    public void No_macOS_Intel_o_catalogo_oferece_so_o_Whisper_e_sem_o_VAD()
+    {
+        var catalog = ModelCatalog.Load(RepoCatalog());
+        var intel = catalog.EntriesFor(AiOs.MacOs, System.Runtime.InteropServices.Architecture.X64);
+        Assert.Equal(["whisper-large-v3-turbo"], intel.Select(e => e.Id));
+        Assert.Equal(catalog.EntriesFor(AiOs.MacOs).Select(e => e.Id),
+            catalog.EntriesFor(AiOs.MacOs, System.Runtime.InteropServices.Architecture.Arm64).Select(e => e.Id));
+
+        Assert.Equal(["whisper-large-v3-turbo"], catalog.InstallOrder(["whisper-large-v3-turbo"], onnxRuntime: false).Select(e => e.Id));
+        Assert.Equal(["silero-vad", "whisper-large-v3-turbo"], catalog.InstallOrder(["whisper-large-v3-turbo"], onnxRuntime: true).Select(e => e.Id));
+        Assert.Empty(catalog.DependenciesOf(intel[0], onnxRuntime: false));
+        Assert.All(catalog.EntriesForCurrentOs, e => Assert.True(AiPlatform.Supports(e.Capability), e.Id));
+    }
+
+    [Fact]
     public void Catalogo_filtra_as_entradas_pelo_sistema()
     {
         var catalog = ModelCatalog.Load(RepoCatalog());
@@ -207,7 +222,7 @@ public sealed class ModelCatalogTests : IDisposable
     public void Ordem_de_instalacao_poe_dependencias_primeiro_sem_repetir()
     {
         var catalog = Catalog(Entry("a", Bytes(3), "b"), Entry("b", Bytes(5), "c"), Entry("c", Bytes(7)), Entry("d", Bytes(11)));
-        Assert.Equal(["c", "b", "a", "d"], catalog.InstallOrder(["a", "d", "b"]).Select(e => e.Id));
+        Assert.Equal(["c", "b", "a", "d"], catalog.InstallOrder(["a", "d", "b"], onnxRuntime: true).Select(e => e.Id));
     }
 
     [Fact]
@@ -219,7 +234,7 @@ public sealed class ModelCatalogTests : IDisposable
         Assert.Throws<InvalidDataException>(() => Catalog(Entry("a", Bytes(3)) with { File = @"..\a.onnx" }));
         Assert.Throws<InvalidDataException>(() => Catalog(Entry("a", Bytes(3)), Entry("a", Bytes(5))));
         var circular = Catalog(Entry("a", Bytes(3), "b"), Entry("b", Bytes(5), "a"));
-        Assert.Throws<InvalidDataException>(() => circular.InstallOrder(["a"]));
+        Assert.Throws<InvalidDataException>(() => circular.InstallOrder(["a"], onnxRuntime: true));
     }
 
     [Theory]
@@ -286,7 +301,7 @@ public sealed class ModelCatalogTests : IDisposable
         return (new CatalogModelInstaller(catalog, registry, downloader, Path.Combine(_dir, "trabalho")), downloader, registry);
     }
 
-    [Fact]
+    [ComOnnxRuntimeFact] // sem ONNX Runtime a dependência fica de fora (No_macOS_Intel_o_catalogo_oferece_so_o_Whisper_e_sem_o_VAD)
     public async Task Instalar_baixa_empacota_e_instala_as_dependencias_antes()
     {
         byte[] vad = Bytes(3), fala = Bytes(5);

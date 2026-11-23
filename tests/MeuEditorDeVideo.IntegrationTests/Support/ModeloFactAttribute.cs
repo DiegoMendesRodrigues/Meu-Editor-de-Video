@@ -1,3 +1,5 @@
+using MeuEditorDeVideo.Core.AI;
+
 namespace MeuEditorDeVideo.IntegrationTests.Support;
 
 /// <summary>
@@ -29,6 +31,8 @@ public sealed class ModeloFactAttribute : FactAttribute
 {
     public ModeloFactAttribute(string fileName)
     {
-        if (ModelosDeTeste.Find(fileName) is null) Skip = $"Modelo {fileName} não disponível (defina MED_MODELS_DIR).";
+        if (fileName.EndsWith(".onnx", StringComparison.OrdinalIgnoreCase) && !AiPlatform.OnnxRuntimeAvailable)
+            Skip = "Sistema sem ONNX Runtime (macOS Intel).";
+        else if (ModelosDeTeste.Find(fileName) is null) Skip = $"Modelo {fileName} não disponível (defina MED_MODELS_DIR).";
     }
 }

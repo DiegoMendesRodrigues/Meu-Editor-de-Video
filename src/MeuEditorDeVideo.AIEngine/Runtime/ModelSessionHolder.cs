@@ -38,11 +38,11 @@ public sealed class ModelSessionHolder<T> : IDisposable where T : class
         }
     }
 
-    /// <summary>Instância pronta para uso, ou null quando o modelo não está instalado.</summary>
+    /// <summary>Instância pronta para uso, ou null quando o modelo não está instalado ou não roda neste sistema.</summary>
     public T? Get()
     {
         var model = _registry.Find(_capability);
-        if (model is null || !File.Exists(model.ModelPath))
+        if (model is null || !_registry.IsAvailable(_capability))
         {
             Reset();
             return null;

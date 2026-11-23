@@ -54,4 +54,24 @@ public sealed class AiPlatformTests
         Assert.Equal(AiDevice.Cpu, AiPlatform.EffectiveDevice(AiDevice.Cpu));
         if (OperatingSystem.IsWindows()) Assert.Equal(AiOs.Windows, AiPlatform.CurrentOs);
     }
+
+    [Theory]
+    [InlineData(AiOs.Windows, Arquitetura.X64, true)]
+    [InlineData(AiOs.Windows, Arquitetura.Arm64, true)]
+    [InlineData(AiOs.Linux, Arquitetura.X64, true)]
+    [InlineData(AiOs.MacOs, Arquitetura.Arm64, true)]
+    [InlineData(AiOs.MacOs, Arquitetura.X64, false)]
+    public void ONNX_Runtime_falta_so_no_macOS_Intel(AiOs os, Arquitetura arch, bool esperado) =>
+        Assert.Equal(esperado, AiPlatform.OnnxRuntimeAvailableOn(os, arch));
+
+    [Fact]
+    public void Sem_ONNX_Runtime_so_o_reconhecimento_de_fala_funciona()
+    {
+        foreach (var c in Enum.GetValues<ModelCapability>())
+        {
+            Assert.True(AiPlatform.Supports(c, onnxRuntime: true), c.ToString());
+            Assert.Equal(c == ModelCapability.SpeechRecognition, AiPlatform.Supports(c, onnxRuntime: false));
+        }
+        if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux()) Assert.True(AiPlatform.OnnxRuntimeAvailable);
+    }
 }

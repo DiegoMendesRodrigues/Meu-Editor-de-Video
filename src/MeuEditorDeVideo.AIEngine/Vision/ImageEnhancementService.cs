@@ -135,7 +135,7 @@ public sealed class ImageEnhancementService(IModelRegistry registry, OnnxSession
     public Task EnhanceImageAsync(string inputPath, string outputPath, IProgress<double>? progress = null, CancellationToken cancellationToken = default) =>
         Task.Run(() =>
         {
-            var model = registry.Find(ModelCapability.ImageEnhancement)
+            var model = (IsAvailable ? registry.Find(ModelCapability.ImageEnhancement) : null)
                 ?? throw new InvalidOperationException("O modelo de melhoria de imagem não está instalado.");
             using var session = sessions.Create(model);
             var sr = new Swin2Sr(session.Session);

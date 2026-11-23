@@ -21,7 +21,7 @@ public class InstalacaoModelosTests
             var sha = Convert.ToHexStringLower(SHA256.HashData(conteudo));
             var entrada = new ModelCatalogEntry
             {
-                Id = "modelo", Name = "Modelo", Version = "1.0", Source = "teste", Capability = ModelCapability.VoiceActivity,
+                Id = "modelo", Name = "Modelo", Version = "1.0", Source = "teste", Capability = ModelCapability.SpeechRecognition, // oferecida em todos os sistemas
                 Purpose = "teste", Features = ["Recurso de teste"], File = "modelo.onnx", License = "MIT", LicenseFile = "lic.txt",
                 MemoryMb = 1, Url = new Uri("https://huggingface.co/x/modelo/resolve/abc/modelo.onnx"), Sha256 = sha, SizeBytes = conteudo.Length,
                 ExtraFiles =

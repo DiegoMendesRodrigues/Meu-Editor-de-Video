@@ -24,8 +24,8 @@ public enum AiProvider
 
 /// <summary>
 /// Regras puras, por sistema operacional, de qual provedor executa os modelos de IA (RF167): Windows usa DirectML; macOS
-/// (Apple Silicon) usa Core ML; Linux usa só a CPU (o pacote padrão do ONNX Runtime não traz provedor de GPU). Sem estado,
-/// para poder ser testado em qualquer sistema.
+/// (Apple Silicon) usa Core ML; Linux usa só a CPU (o pacote padrão do ONNX Runtime não traz provedor de GPU). No macOS
+/// Intel não há ONNX Runtime: só o Whisper (Whisper.net) funciona. Sem estado, para poder ser testado em qualquer sistema.
 /// </summary>
 public static class AiPlatform
 {
@@ -40,6 +40,24 @@ public static class AiPlatform
         AiOs.MacOs => "macos",
         _ => "linux",
     };
+
+    /// <summary>
+    /// O sistema tem ONNX Runtime? O ONNX Runtime 1.24.4 e o GenAI 0.14.1 não trazem biblioteca nativa para macOS Intel
+    /// (osx-x64); ali os modelos ONNX não carregam.
+    /// </summary>
+    public static bool OnnxRuntimeAvailableOn(AiOs os, Architecture arch) => !(os == AiOs.MacOs && arch == Architecture.X64);
+
+    /// <summary><see cref="OnnxRuntimeAvailableOn"/> no sistema atual.</summary>
+    public static bool OnnxRuntimeAvailable => OnnxRuntimeAvailableOn(CurrentOs, RuntimeInformation.ProcessArchitecture);
+
+    /// <summary>O modelo da capacidade roda no ONNX Runtime? Todos, menos o reconhecimento de fala (Whisper.net).</summary>
+    public static bool NeedsOnnxRuntime(ModelCapability capability) => capability != ModelCapability.SpeechRecognition;
+
+    /// <summary>A capacidade pode funcionar num sistema com (ou sem) ONNX Runtime?</summary>
+    public static bool Supports(ModelCapability capability, bool onnxRuntime) => onnxRuntime || !NeedsOnnxRuntime(capability);
+
+    /// <summary><see cref="Supports(ModelCapability, bool)"/> no sistema atual.</summary>
+    public static bool Supports(ModelCapability capability) => Supports(capability, OnnxRuntimeAvailable);
 
     /// <summary>Provedor de GPU disponível no sistema, ou <see cref="AiProvider.Cpu"/> se não houver.</summary>
     public static AiProvider GpuProvider(AiOs os, Architecture arch) => os switch

@@ -2775,3 +2775,7 @@ f6f9872c	Lautstärke {0}
 5b066bdd	Whisper large-v3 turbo (mehrsprachig)
 fc450a13	Xiaobin Rong / GTCRN (Streaming-Export andrelgomes/gtcrn-stream)
 fadf924a	mv-lab/swin2sr (ONNX-Export Xenova/swin2SR-lightweight-x2-64)
+9132b1db	Auf Intel-Macs nicht verfügbar
+ad38f1e4	Auf diesem Mac nicht verfügbar: Diese Funktion läuft nicht auf Intel-Prozessoren.
+38a5658f	ONNX Runtime ist auf diesem System nicht verfügbar; die KI-Funktionen, die davon abhängen, funktionieren hier nicht.
+c189fdb7	Verwendet den Farbvergleich zwischen Bildern (weniger genau): Das Szenenmodell läuft nicht auf Intel-Macs.

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Runtime.InteropServices;
+using System.Text.Json;
 using MeuEditorDeVideo.Core.AI;
 
 namespace MeuEditorDeVideo.AIEngine.Models;
@@ -31,8 +32,17 @@ public sealed class ModelCatalog
     public IReadOnlyList<ModelCatalogEntry> EntriesFor(AiOs os) =>
         Entries.Where(e => e.AvailableOn(AiPlatform.Tag(os))).ToList();
 
+    /// <summary>Entradas oferecidas no sistema e na arquitetura: sem ONNX Runtime (macOS Intel), só as que rodam sem ele.</summary>
+    public IReadOnlyList<ModelCatalogEntry> EntriesFor(AiOs os, Architecture arch) =>
+        EntriesFor(os).Where(e => AiPlatform.Supports(e.Capability, AiPlatform.OnnxRuntimeAvailableOn(os, arch))).ToList();
+
     /// <summary>Entradas oferecidas no sistema em que o programa roda.</summary>
-    public IReadOnlyList<ModelCatalogEntry> EntriesForCurrentOs => EntriesFor(AiPlatform.CurrentOs);
+    public IReadOnlyList<ModelCatalogEntry> EntriesForCurrentOs =>
+        AiPlatform.OnnxRuntimeAvailable ? EntriesFor(AiPlatform.CurrentOs) : [.. EntriesFor(AiPlatform.CurrentOs).Where(e => AiPlatform.Supports(e.Capability, false))];
+
+    /// <summary>Dependências de <paramref name="entry"/> que se instalam neste sistema (sem ONNX Runtime, só as que rodam sem ele).</summary>
+    public IReadOnlyList<string> DependenciesOf(ModelCatalogEntry entry, bool onnxRuntime) =>
+        [.. entry.DependsOn.Where(id => Find(id) is not { } d || AiPlatform.Supports(d.Capability, onnxRuntime))];
 
     public ModelCatalogEntry? Find(string id) => Entries.FirstOrDefault(e => e.Id == id);
 
@@ -61,7 +71,10 @@ public sealed class ModelCatalog
     /// Ordem de instalação: as dependências (recursivamente) antes de quem depende delas, sem repetições, na ordem
     /// do catálogo quando não há relação.
     /// </summary>
-    public IReadOnlyList<ModelCatalogEntry> InstallOrder(IEnumerable<string> ids)
+    public IReadOnlyList<ModelCatalogEntry> InstallOrder(IEnumerable<string> ids) => InstallOrder(ids, AiPlatform.OnnxRuntimeAvailable);
+
+    /// <param name="onnxRuntime">Sem ONNX Runtime, as dependências que precisam dele ficam de fora (o Whisper sem o VAD).</param>
+    public IReadOnlyList<ModelCatalogEntry> InstallOrder(IEnumerable<string> ids, bool onnxRuntime)
     {
         var order = new List<ModelCatalogEntry>();
         var visiting = new HashSet<string>();
@@ -70,7 +83,7 @@ public sealed class ModelCatalog
             if (order.Any(e => e.Id == id)) return;
             var entry = Find(id) ?? throw new InvalidOperationException($"Modelo '{id}' não existe no catálogo.");
             if (!visiting.Add(id)) throw new InvalidDataException($"Dependência circular no catálogo envolvendo '{id}'.");
-            foreach (var dep in entry.DependsOn) Visit(dep);
+            foreach (var dep in DependenciesOf(entry, onnxRuntime)) Visit(dep);
             visiting.Remove(id);
             order.Add(entry);
         }

@@ -28,6 +28,7 @@ public sealed class ModelRegistry : IModelRegistry
 
     private readonly string _root;
     private readonly string? _builtInRoot;
+    private readonly bool _onnxRuntime;
     private readonly ILogger<ModelRegistry> _logger;
     private readonly object _gate = new();     // protege a lista em memória
     private readonly object _ioGate = new();   // serializa instalações e remoções
@@ -36,11 +37,13 @@ public sealed class ModelRegistry : IModelRegistry
     /// <param name="modelsDirectory">Pasta raiz dos modelos instalados (criada se não existir).</param>
     /// <param name="logger">Logger opcional.</param>
     /// <param name="builtInDirectory">Pasta somente leitura dos modelos incluídos no aplicativo (opcional).</param>
-    public ModelRegistry(string modelsDirectory, ILogger<ModelRegistry>? logger = null, string? builtInDirectory = null)
+    /// <param name="onnxRuntime">O sistema tem ONNX Runtime (padrão: o atual)? Sem ele, só o Whisper fica disponível.</param>
+    public ModelRegistry(string modelsDirectory, ILogger<ModelRegistry>? logger = null, string? builtInDirectory = null, bool? onnxRuntime = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(modelsDirectory);
         _root = Path.GetFullPath(modelsDirectory);
         _builtInRoot = string.IsNullOrWhiteSpace(builtInDirectory) ? null : Path.GetFullPath(builtInDirectory);
+        _onnxRuntime = onnxRuntime ?? AiPlatform.OnnxRuntimeAvailable;
         _logger = logger ?? NullLogger<ModelRegistry>.Instance;
         Directory.CreateDirectory(_root);
         _installed = Scan();
@@ -74,7 +77,8 @@ public sealed class ModelRegistry : IModelRegistry
     }
 
     /// <inheritdoc />
-    public bool IsAvailable(ModelCapability capability) => Find(capability) is { } model && File.Exists(model.ModelPath);
+    public bool IsAvailable(ModelCapability capability) =>
+        AiPlatform.Supports(capability, _onnxRuntime) && Find(capability) is { } model && File.Exists(model.ModelPath);
 
     /// <inheritdoc />
     public Task<InstalledModel> InstallAsync(string packagePath, CancellationToken cancellationToken = default)
