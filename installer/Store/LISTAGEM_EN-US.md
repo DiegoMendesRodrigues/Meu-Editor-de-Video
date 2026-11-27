@@ -56,6 +56,9 @@ Interface and manual in English, Brazilian Portuguese, European Portuguese, Span
 SAFE AND PRIVATE
 No account, no ads and no telemetry. Autosave and project recovery after an unexpected shutdown.
 
+ALSO FOR LINUX AND MACOS
+Meu Editor de Vídeo is also available for free on Linux (Debian and Ubuntu) and macOS, from the official website.
+
 Free software, licensed under the GNU GPL version 3 or later.
 ```
 
@@ -68,15 +71,15 @@ A complete video editor with artificial intelligence that runs 100% on your comp
 ## O que há de novo nesta versão (até 1.500 caracteres)
 
 ```text
-Version 1.3.0
-• Crop and zoom, simple text and drawing tools right on the timeline toolbar.
-• Shape, pin and point-of-interest stickers, with adjustment handles on the monitor.
-• Video effects organized by category, with thumbnails and filters.
-• Audio waveform in the clip's Audio tab.
-• Record a specific window, without a black screen.
-• New tracks are added at the top and can be reordered.
-• User manual with screenshots in all six languages, and an About window with links to the website, GitHub and Technical Support.
-• Improved new-version check and bug fixes.
+Version 1.4.0
+• Rebuilt interface: lighter, with the same look, and now the same on Windows, Linux and macOS.
+• New text and shape engine, with the same result in existing projects.
+• The editor and every window adapt to small and high-scaling screens, without cutting off buttons.
+• Screen recording shortcuts (F10 to stop and Esc to cancel) shown in Help, Settings and the manual.
+• Menus, the Record screen button and sliders respond better to clicks.
+• The update check only notifies you when a newer version is available.
+• AI model installation no longer gets stuck on "Downloading…".
+• Translations reviewed in all six languages, plus several fixes.
 ```
 
 ## Recursos do produto (até 20 itens, 200 caracteres cada)

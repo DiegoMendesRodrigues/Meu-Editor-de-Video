@@ -56,6 +56,9 @@ Interface e manual em português de Portugal, português do Brasil, inglês, esp
 SEGURO E PRIVADO
 Sem conta, sem anúncios e sem telemetria. Gravação automática e recuperação do projeto após um encerramento inesperado.
 
+TAMBÉM PARA LINUX E MACOS
+O Meu Editor de Vídeo também está disponível gratuitamente para Linux (Debian e Ubuntu) e macOS, no site oficial.
+
 Software livre, licenciado ao abrigo da GNU GPL versão 3 ou posterior.
 ```
 
@@ -68,15 +71,15 @@ Editor de vídeo completo com inteligência artificial que funciona 100% no seu 
 ## O que há de novo nesta versão (até 1.500 caracteres)
 
 ```text
-Versão 1.3.0
-• Recortar e ampliar, texto simples e ferramentas de desenho diretamente na barra da linha do tempo.
-• Autocolantes de formas, pinos e pontos de interesse, com pegas de ajuste no monitor.
-• Efeitos de vídeo organizados por categoria, com miniaturas e filtros.
-• Forma de onda do áudio no separador Áudio do clipe.
-• Gravação de uma janela específica, sem ecrã preto.
-• As faixas novas entram no topo e podem ser reordenadas.
-• Manual com capturas de ecrã nos seis idiomas e janela Acerca de com ligações para o site, o GitHub e o Suporte Técnico.
-• Melhorias na verificação de novas versões e correções.
+Versão 1.4.0
+• Interface reconstruída: mais leve, com o mesmo aspeto e agora igual no Windows, no Linux e no macOS.
+• Novo motor de textos e formas, com o mesmo resultado nos projetos já existentes.
+• O editor e todas as janelas ajustam-se a ecrãs pequenos e com escala elevada, sem cortar botões.
+• Atalhos da gravação do ecrã (F10 para parar e Esc para cancelar) indicados na Ajuda, nas Definições e no manual.
+• Menus, botão Gravar ecrã e controlos de deslize respondem melhor ao clique.
+• A verificação de atualizações só avisa quando existe uma versão mais recente.
+• A instalação dos modelos de IA já não fica parada em "A transferir…".
+• Traduções revistas nos seis idiomas e várias correções.
 ```
 
 ## Recursos do produto (até 20 itens, 200 caracteres cada)

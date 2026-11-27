@@ -1,7 +1,7 @@
 # Listagem da Microsoft Store — Português (Brasil)
 
 Textos prontos para copiar em **Partner Center › (o aplicativo) › Envio › Listagens da Store › Português (Brasil)**.
-Os limites entre parênteses são os do Partner Center. A listagem em inglês está em `LISTAGEM_EN-US.md` a em espanhol em `LISTAGEM_ES-ES.md`, a em português de Portugal em `LISTAGEM_PT-PT.md` a em francês em `LISTAGEM_FR-FR.md` e a em alemão em `LISTAGEM_DE-DE.md`.
+Os limites entre parênteses são os do Partner Center. A listagem em inglês está em `LISTAGEM_EN-US.md`, a em espanhol em `LISTAGEM_ES-ES.md`, a em português de Portugal em `LISTAGEM_PT-PT.md`, a em francês em `LISTAGEM_FR-FR.md` e a em alemão em `LISTAGEM_DE-DE.md`.
 
 ---
 
@@ -10,7 +10,7 @@ Os limites entre parênteses são os do Partner Center. A listagem em inglês es
 Meu Editor de Vídeo
 
 > Precisa ser exatamente o nome reservado no Partner Center e o mesmo de `installer/Store/store.json` (`displayName`).
-> O nome é o mesmo nas duas listagens.
+> O nome é o mesmo nas seis listagens.
 
 ## Descrição (até 10.000 caracteres)
 
@@ -56,6 +56,9 @@ Interface e manual em português do Brasil, português de Portugal, inglês, esp
 SEGURO E PRIVADO
 Sem conta, sem anúncios e sem telemetria. Salvamento automático e recuperação do projeto após um fechamento inesperado.
 
+TAMBÉM PARA LINUX E MACOS
+O Meu Editor de Vídeo também está disponível gratuitamente para Linux (Debian e Ubuntu) e macOS, no site oficial.
+
 Software livre, licenciado sob a GNU GPL versão 3 ou posterior.
 ```
 
@@ -68,15 +71,15 @@ Editor de vídeo completo com inteligência artificial que roda 100% no seu comp
 ## O que há de novo nesta versão (até 1.500 caracteres)
 
 ```text
-Versão 1.3.0
-• Cortar e ampliar, texto simples e ferramentas de desenho direto na barra da linha do tempo.
-• Figurinhas de formas, pinos e pontos de interesse, com alças de ajuste no monitor.
-• Efeitos de vídeo organizados por categoria, com miniaturas e filtros.
-• Forma de onda do áudio na aba Áudio do clipe.
-• Gravação de uma janela específica, sem tela preta.
-• Trilhas novas entram no topo e podem ser reordenadas.
-• Manual com capturas de tela nos seis idiomas e janela Sobre com links para o site, o GitHub e o Suporte Técnico.
-• Melhorias na verificação de novas versões e correções.
+Versão 1.4.0
+• Interface reconstruída: mais leve, com o mesmo visual e agora igual no Windows, no Linux e no macOS.
+• Novo motor de textos e formas, com o mesmo resultado nos projetos já existentes.
+• O editor e todas as janelas se ajustam a telas pequenas e com escala alta, sem cortar botões.
+• Atalhos da gravação de tela (F10 para parar e Esc para cancelar) indicados em Ajuda, Configurações e no manual.
+• Menus, botão Gravar tela e controles deslizantes respondem melhor ao clique.
+• A verificação de atualizações só avisa quando há uma versão mais nova.
+• A instalação dos modelos de IA não fica mais parada em "Baixando…".
+• Traduções revisadas nos seis idiomas e várias correções.
 ```
 
 ## Recursos do produto (até 20 itens, 200 caracteres cada)
@@ -133,8 +136,8 @@ inteligência artificial
 |---|---|
 | Direitos autorais e marca comercial | `Copyright © 2026 Diego Mendes Rodrigues. Licenciado sob GPL-3.0-or-later.` |
 | Termos de licença adicionais | Deixe em branco (usa os termos padrão da Store) ou informe o link para o arquivo `LICENSE.md` publicado junto do código-fonte. |
-| Site | `https://meueditordevideos.aplicativoia.online/?lang=pt` |
-| Informações de contato de suporte | `https://meueditordevideos.aplicativoia.online/suporte.php?lang=pt` |
+| Site | `https://meueditordevideos.aplicativoia.online/?lang=pt-BR` |
+| Informações de contato de suporte | `https://meueditordevideos.aplicativoia.online/suporte.php?lang=pt-BR` |
 | URL da política de privacidade | Endereço público de `POLITICA_DE_PRIVACIDADE.md` (ver `documentation/MICROSOFT_STORE.md`). |
 
 ## Imagens

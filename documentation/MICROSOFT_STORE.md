@@ -122,7 +122,8 @@ Em **(o aplicativo) › Iniciar seu envio**:
 
 ### Preço e disponibilidade
 
-- Mercados: todos, ou só Brasil e países de língua portuguesa (o aplicativo existe apenas em pt-BR).
+- Mercados: todos. O programa e a página da loja existem em seis idiomas (português do Brasil, português de Portugal,
+  inglês, espanhol, francês e alemão); os demais mercados veem a listagem em inglês.
 - Preço: gratuito ou pago (a GPL permite cobrar, desde que o código-fonte continue disponível).
 
 ### Propriedades
@@ -163,18 +164,55 @@ O pacote declara a capacidade restrita `runFullTrust`, e o Partner Center pede u
 ```text
 O Meu Editor de Vídeo é um aplicativo de área de trabalho Win32 (Avalonia/.NET 10) empacotado em MSIX. A capacidade runFullTrust é necessária para executar o aplicativo de desktop, que usa FFmpeg para decodificar e codificar vídeo, Direct3D/DirectML para aceleração por GPU e WASAPI para áudio.
 
-Não é necessário login nem conta. Na primeira execução aparece a janela de boas-vindas: preencha o nome, escolha idioma e tema e clique em "Salvar as preferências". Depois o aplicativo abre direto no editor, com um projeto sem título. Para testar: importe um vídeo (Importar Mídia), adicione-o à linha do tempo e clique em "Exportar". A interface pode ser trocada para inglês em Ferramentas › Configurações… › Geral (o programa reinicia no novo idioma).
+Não é necessário login nem conta. Na primeira execução aparece a janela de boas-vindas: preencha o nome, escolha idioma e tema e clique em "Salvar as preferências". Depois o aplicativo abre direto no editor, com um projeto sem título. Para testar: importe um vídeo (Importar Mídia), adicione-o à linha do tempo e clique em "Exportar". A interface pode ser trocada para inglês, espanhol, francês, alemão ou português de Portugal em Ferramentas › Configurações… › Geral (o programa reinicia no novo idioma).
 
 O aplicativo só usa a internet quando o usuário abre Ferramentas › Baixar modelos de IA e clica em Instalar: ele baixa modelos de IA (arquivos de dados ONNX/GGML, não executáveis) de endereços HTTPS fixos em huggingface.co e github.com, conferindo o SHA-256 de cada arquivo. Ajuda › Verificar atualizações (e uma verificação a cada 30 dias, que o usuário pode desligar) apenas consulta o número da versão mais recente. Nenhum dado do usuário é enviado.
 ```
 
 Clique em **Enviar para a Store**. A certificação costuma levar de algumas horas a três dias úteis.
 
-## 8. Atualizações
+## 8. Publicar uma nova versão
 
-1. Aumente `<Version>` em `Directory.Build.props`.
-2. `pwsh scripts/build-msix.ps1`.
-3. Se a interface mudou, refaça as capturas em cada pasta de `installer/Store/capturas/`.
-4. No Partner Center: **Atualizar** a submissão e substitua o pacote.
-5. Em **cada** listagem (os seis idiomas), preencha "O que há de novo nesta versão" com o texto do
-   `LISTAGEM_*.md` do idioma, e troque as capturas se elas mudaram.
+O aplicativo já existe na Store; cada versão nova é uma **nova submissão** do mesmo produto. A identidade
+(`store.json`) não muda.
+
+### No repositório
+
+1. Aumente `<Version>` em `Directory.Build.props`. A Store recusa pacote com versão igual ou menor que a já publicada
+   (a versão 1.3.0 foi a anterior à 1.4.0).
+2. Atualize a seção "O que há de novo nesta versão" dos seis `installer/Store/LISTAGEM_*.md`, cada um no seu idioma
+   (até 1.500 caracteres).
+3. Se a interface mudou bastante, refaça as capturas de cada pasta de `installer/Store/capturas/` (PNG de 1938 × 1038,
+   com o programa no idioma da pasta).
+4. Feche o Meu Editor de Vídeo, se estiver aberto (o build não consegue substituir os arquivos em uso), e gere o
+   pacote:
+
+   ```powershell
+   pwsh scripts/build-msix.ps1
+   ```
+
+   O resultado é `artifacts/store/MeuEditorDeVideo_<versão>_x64.msix`. O script mostra o SHA-256 e o tamanho.
+5. Opcional, mas recomendado: teste o pacote como no passo 5 (`-TestSign`). Depois do teste, rode o script de novo
+   **sem** `-TestSign`, porque o pacote assinado com o certificado de teste não pode ser enviado.
+6. Faça o commit e o push das listagens e da versão.
+
+### No Partner Center
+
+1. Abra <https://partner.microsoft.com/dashboard> › **Aplicativos e jogos** › **Meu Editor de Vídeo**.
+2. Na **Visão geral do aplicativo**, clique em **Atualizar** ao lado da última submissão publicada. O Partner Center
+   cria uma cópia da submissão anterior, com tudo preenchido.
+3. **Pacotes**: arraste o `.msix` novo para a área de envio e espere a validação terminar. Remova o pacote da versão
+   anterior da lista e confira se "Desktop" continua marcado em **Família de dispositivos**. Clique em **Salvar**.
+4. **Listagens da Store**: abra cada um dos seis idiomas (Português (Brasil), Inglês (Estados Unidos), Espanhol
+   (Espanha), Português (Portugal), Francês (França) e Alemão (Alemanha)). Em cada um:
+   - substitua "O que há de novo nesta versão" pelo texto do `LISTAGEM_*.md` do idioma;
+   - confira a descrição, o site e o contato de suporte com o arquivo do idioma (os endereços usam o `?lang=` do
+     idioma);
+   - se as capturas mudaram, apague as antigas e envie as novas, na ordem dos números, com as legendas do arquivo;
+   - clique em **Salvar**.
+5. **Preço e disponibilidade**, **Propriedades** e **Classificação etária** só precisam ser revistos se algo mudou.
+6. **Opções de envio**: confira se as notas para a certificação (passo 7) continuam valendo.
+7. Clique em **Enviar para a Store**. Acompanhe em **Status da certificação**. Se a Microsoft recusar, o relatório
+   mostra o motivo; corrija, gere o pacote de novo (sem aumentar a versão, se ela ainda não foi publicada) e envie.
+8. Depois da publicação, a página da loja e os botões "Microsoft Store" do site mostram a versão nova sozinhos. Quem já
+   instalou recebe a atualização pela própria Store.

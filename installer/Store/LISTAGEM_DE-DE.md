@@ -56,6 +56,9 @@ Oberfläche und Handbuch auf Deutsch, Englisch, Spanisch, Französisch, brasilia
 SICHER UND PRIVAT
 Kein Konto, keine Werbung und keine Telemetrie. Automatisches Speichern und Projektwiederherstellung nach einem unerwarteten Absturz.
 
+AUCH FÜR LINUX UND MACOS
+Meu Editor de Vídeo ist auch kostenlos für Linux (Debian und Ubuntu) und macOS erhältlich, auf der offiziellen Website.
+
 Freie Software, lizenziert unter der GNU GPL Version 3 oder höher.
 ```
 
@@ -68,15 +71,15 @@ Ein vollständiger Videoeditor mit künstlicher Intelligenz, der zu 100 % auf Ih
 ## O que há de novo nesta versão (até 1.500 caracteres)
 
 ```text
-Version 1.3.0
-• Zuschneiden und Zoomen, einfacher Text und Zeichenwerkzeuge direkt in der Zeitleistenleiste.
-• Sticker mit Formen, Pins und Points of Interest, mit Anfassern im Monitor.
-• Videoeffekte nach Kategorien geordnet, mit Miniaturansichten und Filtern.
-• Audio-Wellenform im Tab „Audio“ des Clips.
-• Aufnahme eines einzelnen Fensters, ohne schwarzen Bildschirm.
-• Neue Spuren werden oben eingefügt und lassen sich neu anordnen.
-• Handbuch mit Screenshots in allen sechs Sprachen und Info-Fenster mit Links zur Website, zu GitHub und zum technischen Support.
-• Verbesserte Prüfung auf neue Versionen und Fehlerbehebungen.
+Version 1.4.0
+• Neu aufgebaute Oberfläche: schlanker, mit gleichem Aussehen und jetzt identisch unter Windows, Linux und macOS.
+• Neue Text- und Formen-Engine, mit gleichem Ergebnis in bestehenden Projekten.
+• Editor und alle Fenster passen sich kleinen Bildschirmen und hoher Skalierung an, ohne Schaltflächen abzuschneiden.
+• Tastenkürzel der Bildschirmaufnahme (F10 zum Beenden, Esc zum Abbrechen) in Hilfe, Einstellungen und Handbuch angegeben.
+• Menüs, die Schaltfläche „Bildschirm aufnehmen“ und Schieberegler reagieren besser auf Klicks.
+• Die Update-Prüfung meldet sich nur, wenn eine neuere Version verfügbar ist.
+• Die Installation der KI-Modelle bleibt nicht mehr bei „Wird heruntergeladen…“ stehen.
+• Überarbeitete Übersetzungen in allen sechs Sprachen und zahlreiche Fehlerbehebungen.
 ```
 
 ## Recursos do produto (até 20 itens, 200 caracteres cada)
@@ -124,8 +127,8 @@ Os requisitos são do produto, não da listagem: já ficam preenchidos pela list
 |---|---|
 | Direitos autorais e marca comercial | `Copyright © 2026 Diego Mendes Rodrigues. Lizenziert unter GPL-3.0-or-later.` |
 | Termos de licença adicionais | Deixe em branco (usa os termos padrão da Store) ou informe o link para o `LICENSE.md` publicado junto do código-fonte. |
-| Site | `https://meueditordevideos.aplicativoia.online/?lang=en` (o site não tem versão em alemão; a versão em inglês é a mais próxima) |
-| Informações de contato de suporte | `https://meueditordevideos.aplicativoia.online/suporte.php?lang=en` |
+| Site | `https://meueditordevideos.aplicativoia.online/?lang=de` |
+| Informações de contato de suporte | `https://meueditordevideos.aplicativoia.online/suporte.php?lang=de` |
 | URL da política de privacidade | O mesmo endereço usado na listagem em português. |
 
 ## Imagens
