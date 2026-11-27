@@ -1,4 +1,5 @@
-﻿#Requires -Version 7.0
+﻿# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+#Requires -Version 7.0
 <#
 .SYNOPSIS
   Prepara a pasta deps/ com as dependências nativas fixadas em scripts/deps.lock.json para o sistema em que roda

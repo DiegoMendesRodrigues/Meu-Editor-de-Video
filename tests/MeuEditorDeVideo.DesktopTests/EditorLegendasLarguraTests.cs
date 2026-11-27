@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;

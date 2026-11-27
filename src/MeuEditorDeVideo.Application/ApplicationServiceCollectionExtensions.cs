@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.Application.Export;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.Application.Export;
 using MeuEditorDeVideo.Application.Media;
 using MeuEditorDeVideo.Application.Projects;
 using Microsoft.Extensions.DependencyInjection;

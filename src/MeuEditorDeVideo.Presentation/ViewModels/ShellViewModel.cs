@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using CommunityToolkit.Mvvm.ComponentModel;
 using MeuEditorDeVideo.Presentation.Services;
 
 namespace MeuEditorDeVideo.Presentation.ViewModels;

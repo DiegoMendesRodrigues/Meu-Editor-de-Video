@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Text;
 
 namespace MeuEditorDeVideo.Presentation.Services.Help;
 

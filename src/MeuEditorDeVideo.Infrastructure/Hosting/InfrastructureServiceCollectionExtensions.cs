@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.Core.Abstractions;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.Core.Abstractions;
 using MeuEditorDeVideo.Core.Export;
 using MeuEditorDeVideo.Infrastructure.Export;
 using MeuEditorDeVideo.Infrastructure.Paths;

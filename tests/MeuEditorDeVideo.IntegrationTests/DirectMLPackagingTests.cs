@@ -1,4 +1,5 @@
-﻿namespace MeuEditorDeVideo.IntegrationTests;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+namespace MeuEditorDeVideo.IntegrationTests;
 
 /// <summary>
 /// No Windows o DirectML.dll do pacote acompanha o aplicativo. Sem ele, o ONNX Runtime carrega o do System32, que pode ser

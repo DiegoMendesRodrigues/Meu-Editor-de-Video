@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using Avalonia.Data.Converters;
 
 namespace MeuEditorDeVideo.Desktop.Converters;

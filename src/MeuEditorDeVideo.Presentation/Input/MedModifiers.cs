@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.Presentation.Input;
 
 /// <summary>Modificadores de teclado; mesmos valores do <c>ModifierKeys</c> do WPF. No macOS, <see cref="Control"/> é o Cmd.</summary>

@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;

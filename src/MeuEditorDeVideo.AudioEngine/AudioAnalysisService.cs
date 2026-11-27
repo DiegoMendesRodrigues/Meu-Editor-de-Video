@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.AudioEngine.Dsp;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.AudioEngine.Dsp;
 using MeuEditorDeVideo.AudioEngine.Speech;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Editing;

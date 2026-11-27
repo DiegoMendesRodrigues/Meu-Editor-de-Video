@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.AudioEngine.Dsp;
 
 /// <summary>Filtro biquad estéreo (fórmulas do "Audio EQ Cookbook", R. Bristow-Johnson), forma direta transposta II.</summary>

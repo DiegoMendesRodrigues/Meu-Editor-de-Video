@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;
 using V = MeuEditorDeVideo.Domain.Effects.VideoEffects;

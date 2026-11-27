@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.AIEngine.Assistant;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.AIEngine.Assistant;
 using MeuEditorDeVideo.AIEngine.Models;
 using MeuEditorDeVideo.AIEngine.Runtime;
 using MeuEditorDeVideo.AIEngine.Speech;

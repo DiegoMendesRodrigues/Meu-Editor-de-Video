@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.Core.Media;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.MediaEngine.Playback;
 using Microsoft.Extensions.DependencyInjection;
 

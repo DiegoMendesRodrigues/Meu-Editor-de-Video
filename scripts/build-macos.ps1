@@ -1,3 +1,4 @@
+# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 <#
 .SYNOPSIS
   Gera o aplicativo do macOS ("Meu Editor de Vídeo.app") e o instalador .dmg (osx-arm64 ou osx-x64).

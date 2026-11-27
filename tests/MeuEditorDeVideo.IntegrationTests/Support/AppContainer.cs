@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.Application;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.Application;
 using MeuEditorDeVideo.AIEngine;
 using MeuEditorDeVideo.Infrastructure.Hosting;
 using MeuEditorDeVideo.Infrastructure.Paths;

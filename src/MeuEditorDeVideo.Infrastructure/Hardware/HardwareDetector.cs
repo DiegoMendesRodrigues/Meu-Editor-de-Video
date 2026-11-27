@@ -1,4 +1,5 @@
-﻿using System.Runtime.Versioning;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Runtime.Versioning;
 using MeuEditorDeVideo.Core.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;

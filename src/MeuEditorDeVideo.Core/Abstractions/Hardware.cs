@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.Core.Abstractions;
 
 /// <summary>Placa de vídeo detectada (§12.3).</summary>

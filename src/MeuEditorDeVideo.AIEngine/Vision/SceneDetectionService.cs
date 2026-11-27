@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.AIEngine.Runtime;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.AIEngine.Runtime;
 using MeuEditorDeVideo.Core.AI;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Model;

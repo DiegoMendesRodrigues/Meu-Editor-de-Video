@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.IntegrationTests.Support;
 
 /// <summary>Pastas temporárias isoladas por teste. Nada é gravado em %APPDATA% ou %LOCALAPPDATA% do usuário.</summary>

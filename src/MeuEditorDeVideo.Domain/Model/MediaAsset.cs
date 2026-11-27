@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Collections.Immutable;
 using MeuEditorDeVideo.Domain.Time;
 
 namespace MeuEditorDeVideo.Domain.Model;

@@ -1,4 +1,5 @@
-﻿<#
+﻿# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+<#
 .SYNOPSIS
   Bateria offline (F12, CA015, CA016, RNF003): executa o Meu Editor de Vídeo e verifica que o processo não abre nenhuma
   conexão de rede (TCP ou UDP, exceto loopback) enquanto é usado.

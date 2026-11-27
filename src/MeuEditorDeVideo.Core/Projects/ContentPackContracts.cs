@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.Domain.Model;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.Domain.Model;
 
 namespace MeuEditorDeVideo.Core.Projects;
 

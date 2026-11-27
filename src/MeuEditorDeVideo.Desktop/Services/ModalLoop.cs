@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using Avalonia.Threading;
 
 namespace MeuEditorDeVideo.Desktop.Services;

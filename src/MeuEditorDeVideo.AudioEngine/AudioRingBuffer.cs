@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.AudioEngine;
 
 /// <summary>Fila circular de amostras entre a thread produtora (mixagem) e o dispositivo de áudio.</summary>

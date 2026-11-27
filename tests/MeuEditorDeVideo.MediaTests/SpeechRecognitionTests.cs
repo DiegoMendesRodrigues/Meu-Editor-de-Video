@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using MeuEditorDeVideo.AIEngine.Models;

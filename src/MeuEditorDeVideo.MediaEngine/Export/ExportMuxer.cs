@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using FFmpeg.AutoGen;
 using MeuEditorDeVideo.Core.Export;
 using MeuEditorDeVideo.Core.Media;

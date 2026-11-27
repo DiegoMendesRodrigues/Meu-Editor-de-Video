@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.ImageEngine.Effects;
 
 /// <summary>Curva de tons por interpolação cúbica monotônica (Fritsch–Carlson): sem "ondulações" entre pontos (RF098).</summary>

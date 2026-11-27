@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using MeuEditorDeVideo.Presentation.Media;

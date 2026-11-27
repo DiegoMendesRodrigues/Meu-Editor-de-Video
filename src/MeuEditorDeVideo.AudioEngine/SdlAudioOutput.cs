@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using System.Runtime.InteropServices;
 using MeuEditorDeVideo.Core.Media;
 using SDL;

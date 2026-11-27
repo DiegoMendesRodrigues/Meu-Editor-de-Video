@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.AIEngine.Runtime;
 
 /// <summary>Grava WAV PCM 16 bits (arquivos gerados pela IA, importados como mídia comum).</summary>

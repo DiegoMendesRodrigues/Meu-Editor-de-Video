@@ -1,3 +1,4 @@
+# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 <#
 .SYNOPSIS
   Gera o pacote .deb do Meu Editor de Vídeo para Debian 12+ e Ubuntu 22.04+ (x64).

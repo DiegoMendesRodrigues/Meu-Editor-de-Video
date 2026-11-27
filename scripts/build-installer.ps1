@@ -1,4 +1,5 @@
-﻿<#
+﻿# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+<#
 .SYNOPSIS
   Gera o instalador do Meu Editor de Vídeo (F12, CA022): publicação self-contained, MSI (WiX 6) e Setup.exe (Burn,
   com o Visual C++ Redistributable).

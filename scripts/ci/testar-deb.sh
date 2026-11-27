@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 # Testa o .deb num contêiner descartável e limpo do Debian ou do Ubuntu (roda como root dentro dele):
 #   testar-deb.sh <pacote.deb> <projeto.med> <pasta de resultados>
 # Confere as dependências ANTES de instalar as ferramentas do teste, que trariam bibliotecas junto.

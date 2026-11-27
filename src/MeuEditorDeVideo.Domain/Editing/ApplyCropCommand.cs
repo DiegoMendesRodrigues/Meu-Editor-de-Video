@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using System.Collections.Immutable;
 using MeuEditorDeVideo.Domain.Model;
 using static MeuEditorDeVideo.Domain.Editing.TimelineOps;

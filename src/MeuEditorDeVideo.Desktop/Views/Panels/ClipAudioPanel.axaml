@@ -1,3 +1,4 @@
+<!-- Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/ -->
 <UserControl x:Class="MeuEditorDeVideo.Desktop.Views.Panels.ClipAudioPanel"
              Classes="inspetor"
              xmlns="https://github.com/avaloniaui"

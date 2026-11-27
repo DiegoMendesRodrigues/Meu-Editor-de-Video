@@ -1,4 +1,5 @@
-﻿using System.IO.Compression;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.IO.Compression;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using MeuEditorDeVideo.Core.Abstractions;

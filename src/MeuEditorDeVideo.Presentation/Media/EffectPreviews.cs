@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Collections.Concurrent;
 using System.Globalization;
 using MeuEditorDeVideo.Presentation.ViewModels.Inspector;
 using MeuEditorDeVideo.Core.Media;

@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using MeuEditorDeVideo.Presentation.Media;
 using MeuEditorDeVideo.Presentation.ViewModels;
 using Microsoft.Extensions.DependencyInjection;

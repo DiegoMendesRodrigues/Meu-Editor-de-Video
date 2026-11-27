@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Reflection;
 using NetArchTest.Rules;
 
 namespace MeuEditorDeVideo.UnitTests.Architecture;

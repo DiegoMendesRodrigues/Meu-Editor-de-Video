@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 # Compila o FFmpeg 9.0.x COMPARTILHADO (GPL) para o macOS, na arquitetura do sistema em que roda (uname -m:
 # arm64 ou x86_64), a partir das fontes fixadas em scripts/deps.lock.json (entradas kind "source").
 #

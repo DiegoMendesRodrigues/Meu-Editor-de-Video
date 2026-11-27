@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using MeuEditorDeVideo.Core.AI;
 
 namespace MeuEditorDeVideo.AIEngine.Runtime;

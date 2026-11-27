@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Globalization;
 
 namespace MeuEditorDeVideo.Domain.Time;
 

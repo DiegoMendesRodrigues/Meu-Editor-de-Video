@@ -1,4 +1,5 @@
-﻿#if MED_WASAPI
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+#if MED_WASAPI
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using MeuEditorDeVideo.Core.Media;

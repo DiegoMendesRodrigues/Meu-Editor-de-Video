@@ -1,4 +1,5 @@
-﻿namespace MeuEditorDeVideo.Core.Errors;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+namespace MeuEditorDeVideo.Core.Errors;
 
 /// <summary>Catálogo de erros com mensagens em Português do Brasil (§7.4).</summary>
 public static class MedErrors

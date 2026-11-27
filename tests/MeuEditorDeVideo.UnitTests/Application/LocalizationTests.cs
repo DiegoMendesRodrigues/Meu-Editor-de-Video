@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;

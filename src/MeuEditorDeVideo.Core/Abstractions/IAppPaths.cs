@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.Core.Abstractions;
 
 /// <summary>Diretórios usados pelo aplicativo. Todos ficam no computador do usuário (RNF003).</summary>

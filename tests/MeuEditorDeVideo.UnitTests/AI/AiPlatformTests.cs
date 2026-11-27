@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using Arquitetura = System.Runtime.InteropServices.Architecture;
 using MeuEditorDeVideo.Core.AI;
 

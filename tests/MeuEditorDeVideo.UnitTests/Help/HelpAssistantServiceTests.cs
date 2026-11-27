@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using System.Runtime.CompilerServices;
 using MeuEditorDeVideo.AIEngine.Assistant;
 using MeuEditorDeVideo.Application.Help;

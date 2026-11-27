@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Reflection;
 using MeuEditorDeVideo.Core.AI;
 
 namespace MeuEditorDeVideo.Presentation.ViewModels;

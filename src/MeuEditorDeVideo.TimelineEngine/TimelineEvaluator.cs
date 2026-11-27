@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.Domain.Editing;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.Domain.Editing;
 using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;

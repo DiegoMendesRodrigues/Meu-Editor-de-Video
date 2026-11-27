@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.UnitTests.Application;
 
 /// <summary>Nomes de teclas que o programa mostra no sistema em que os testes rodam.</summary>

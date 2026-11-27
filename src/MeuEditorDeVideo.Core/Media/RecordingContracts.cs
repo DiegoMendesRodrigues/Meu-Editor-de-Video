@@ -1,4 +1,5 @@
-﻿namespace MeuEditorDeVideo.Core.Media;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+namespace MeuEditorDeVideo.Core.Media;
 
 /// <summary>Dispositivos de captura (DirectShow) disponíveis: câmeras e microfones.</summary>
 public sealed record CaptureDevices(IReadOnlyList<string> Cameras, IReadOnlyList<string> Microphones);

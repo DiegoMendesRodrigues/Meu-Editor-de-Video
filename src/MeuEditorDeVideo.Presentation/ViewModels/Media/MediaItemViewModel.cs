@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Model;

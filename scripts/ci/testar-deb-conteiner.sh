@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 # Roda testar-deb.sh num contêiner limpo da imagem $IMAGEM (debian:12, ubuntu:22.04…), a partir da raiz do repositório.
 # Uso no CI: IMAGEM=ubuntu:24.04 scripts/ci/testar-deb-conteiner.sh
 set -euo pipefail

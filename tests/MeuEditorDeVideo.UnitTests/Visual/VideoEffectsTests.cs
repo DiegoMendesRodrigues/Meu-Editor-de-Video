@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.Presentation.ViewModels.Inspector;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.Presentation.ViewModels.Inspector;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Domain.Effects;
 using MeuEditorDeVideo.Domain.Model;

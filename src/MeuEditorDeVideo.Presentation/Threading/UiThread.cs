@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.Presentation.Threading;
 
 /// <summary>Prioridade de uma ação agendada na thread da interface.</summary>

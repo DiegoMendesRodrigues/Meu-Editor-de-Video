@@ -1,4 +1,5 @@
-﻿namespace MeuEditorDeVideo.Core.Abstractions;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+namespace MeuEditorDeVideo.Core.Abstractions;
 
 /// <summary>
 /// Preferências do usuário: nome, idioma, tema e verificação de novas versões. Ficam no registro do Windows

@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using System.Security.Cryptography;
 using System.Text;
 using MeuEditorDeVideo.Core.Abstractions;

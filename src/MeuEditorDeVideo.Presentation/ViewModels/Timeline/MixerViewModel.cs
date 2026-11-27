@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using System.Collections.ObjectModel;
 using System.Globalization;
 using MeuEditorDeVideo.Presentation.Threading;

@@ -1,4 +1,5 @@
-﻿namespace MeuEditorDeVideo.Domain.Model;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+namespace MeuEditorDeVideo.Domain.Model;
 
 /// <summary>Regras de integridade do projeto, aplicadas ao abrir e antes de salvar (RNF015).</summary>
 public static class ProjectValidator

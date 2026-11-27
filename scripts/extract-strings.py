@@ -1,3 +1,4 @@
+# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 """
 Extrai os textos da interface (pt-BR, a língua de origem) para resources/i18n/origem.json.
 

@@ -1,4 +1,5 @@
-﻿"""Gera as figurinhas do pacote Básico (símbolos, formas geométricas, pinos e pontos de interesse da cidade) (arte original, desenhada aqui) em PNG 512x512 com contorno branco e sombra.
+﻿# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+"""Gera as figurinhas do pacote Básico (símbolos, formas geométricas, pinos e pontos de interesse da cidade) (arte original, desenhada aqui) em PNG 512x512 com contorno branco e sombra.
 
 Uso: python scripts/generate-stickers.py resources/stickers/basico/figurinhas   (requer Pillow e a fonte Segoe UI Bold)
 """

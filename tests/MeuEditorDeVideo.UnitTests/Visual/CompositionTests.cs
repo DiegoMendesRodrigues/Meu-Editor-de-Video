@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using System.Collections.Immutable;
 using System.Text.Json;
 using MeuEditorDeVideo.Core.Media;

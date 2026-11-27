@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 # Gera resources/fonts/MedIcons.ttf: fonte de ícones multiplataforma que mantém os
 # MESMOS codepoints das fontes do Windows (Segoe Fluent Icons / Segoe MDL2 Assets),
 # para que o XAML só precise trocar o FontFamily.

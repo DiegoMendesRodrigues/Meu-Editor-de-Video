@@ -1,4 +1,5 @@
-﻿#Requires -Version 7.0
+﻿# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+#Requires -Version 7.0
 <#
 .SYNOPSIS
     Gera THIRD-PARTY-NOTICES.txt na raiz do repositório: componentes de terceiros

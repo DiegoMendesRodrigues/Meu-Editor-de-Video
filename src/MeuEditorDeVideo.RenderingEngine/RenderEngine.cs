@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.Core.AI;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.Core.AI;
 using System.Diagnostics;
 using System.Text.Json;
 using MeuEditorDeVideo.AudioEngine;

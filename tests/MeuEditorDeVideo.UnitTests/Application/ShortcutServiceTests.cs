@@ -1,4 +1,5 @@
-﻿using MeuEditorDeVideo.Presentation.Input;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using MeuEditorDeVideo.Presentation.Input;
 using MeuEditorDeVideo.Presentation.Services;
 using MeuEditorDeVideo.Core.Abstractions;
 

@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using MeuEditorDeVideo.Core.AI;
 

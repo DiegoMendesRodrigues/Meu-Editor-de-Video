@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.Presentation.Media;
 
 /// <summary>Ponto em coordenadas de tela ou de imagem (substitui o <c>Point</c> do toolkit nos ViewModels).</summary>

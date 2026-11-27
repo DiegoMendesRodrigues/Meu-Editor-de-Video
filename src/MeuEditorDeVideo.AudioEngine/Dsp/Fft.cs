@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.AudioEngine.Dsp;
 
 /// <summary>FFT complexa radix-2 in-place (tamanho potência de 2).</summary>

@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using MeuEditorDeVideo.Application.Projects;
 using MeuEditorDeVideo.Core.Media;
 using MeuEditorDeVideo.Desktop.Services;

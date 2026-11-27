@@ -1,4 +1,5 @@
-﻿<#
+﻿# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+<#
 .SYNOPSIS
   Gera o pacote MSIX do Meu Editor de Vídeo para enviar à Microsoft Store (Partner Center).
 

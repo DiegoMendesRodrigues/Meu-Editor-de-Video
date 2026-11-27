@@ -1,4 +1,5 @@
-﻿namespace MeuEditorDeVideo.Core.AI;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+namespace MeuEditorDeVideo.Core.AI;
 
 /// <summary>
 /// Modelo do catálogo oficial (resources/ai-models/modelos.json), que o instalador de modelos pode baixar da origem,

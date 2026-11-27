@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;

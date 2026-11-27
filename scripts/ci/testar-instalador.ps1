@@ -1,3 +1,4 @@
+# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 #Requires -Version 7.0
 <#
 .SYNOPSIS

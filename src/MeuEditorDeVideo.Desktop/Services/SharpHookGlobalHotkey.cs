@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using SharpHook;

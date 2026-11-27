@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using MeuEditorDeVideo.Core.Abstractions;
 using Microsoft.Extensions.Logging;

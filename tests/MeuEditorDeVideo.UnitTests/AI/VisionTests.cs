@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.IO;
 using MeuEditorDeVideo.AIEngine;
 using MeuEditorDeVideo.AIEngine.Models;
 using MeuEditorDeVideo.AIEngine.Runtime;

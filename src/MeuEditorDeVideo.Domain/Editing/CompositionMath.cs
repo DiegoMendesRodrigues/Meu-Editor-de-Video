@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using MeuEditorDeVideo.Domain.Model;
 using MeuEditorDeVideo.Domain.Time;

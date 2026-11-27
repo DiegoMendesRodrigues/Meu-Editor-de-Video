@@ -1,4 +1,5 @@
-﻿#Requires -Version 5.1
+﻿# Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+#Requires -Version 5.1
 <#
 .SYNOPSIS
 Empacota um modelo de IA em um pacote .medmodel (zip) para instalação no Meu Editor de Vídeo.

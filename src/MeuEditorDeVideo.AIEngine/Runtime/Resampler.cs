@@ -1,3 +1,4 @@
+// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
 namespace MeuEditorDeVideo.AIEngine.Runtime;
 
 /// <summary>Conversão de taxa 48 kHz ↔ 16 kHz (fator 3) com filtro FIR janelado (corte em 7,2 kHz).</summary>

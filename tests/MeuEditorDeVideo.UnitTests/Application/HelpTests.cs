@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.IO;
 using MeuEditorDeVideo.Presentation.Input;
 using MeuEditorDeVideo.Presentation.Services;
 using MeuEditorDeVideo.Presentation.Services.Help;

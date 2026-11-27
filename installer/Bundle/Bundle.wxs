@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/ -->
 <!--
   Setup.exe (Burn) do Meu Editor de Vídeo: instala o Visual C++ Redistributable x64 (exigido pelas bibliotecas
   nativas de IA — Whisper e ONNX Runtime) quando ele ainda não existe e, em seguida, o MSI do aplicativo.

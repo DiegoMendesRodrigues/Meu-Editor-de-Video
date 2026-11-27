@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Nodes;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+using System.Text.Json.Nodes;
 using MeuEditorDeVideo.Application.Media;
 using MeuEditorDeVideo.AIEngine.Vision;
 using MeuEditorDeVideo.Application.Projects;

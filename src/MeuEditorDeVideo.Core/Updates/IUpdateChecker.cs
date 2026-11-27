@@ -1,4 +1,5 @@
-﻿namespace MeuEditorDeVideo.Core.Updates;
+﻿// Desenvolvido por Diego Mendes Rodrigues - https://www.linkedin.com/in/diegomendesrodrigues/
+namespace MeuEditorDeVideo.Core.Updates;
 
 /// <summary>Dados da versão publicada, lidos do JSON do serviço de versões.</summary>
 public sealed record UpdateInfo(
